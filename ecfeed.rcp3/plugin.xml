@@ -192,6 +192,10 @@
                name="appName"
                value="ecFeed">
          </property>
+         <property
+               name="windowImages"
+               value="icons/ecfeed-icon-16.png,icons/alt_window_32.gif,icons/ecfeed-icon-48.png,icons/ecfeed-icon-64.png,icons/ecfeed-icon-128.png,icons/ecfeed-icon-256.png">
+         </property>
       </product>
    </extension>
    <extension

@@ -3,6 +3,7 @@
 
 <product name="ecFeed" uid="com.ecfeed.rcp3.product" id="ecfeed.rcp3.product" application="ecfeed.rcp3.application" useFeatures="false" includeLaunchers="true">
 
+
    <configIni use="default">
    </configIni>
 
@@ -11,12 +12,16 @@
       </vmArgsMac>
    </launcherArgs>
 
+   <windowImages i16="/ecfeed.rcp3/icons/ecfeed-icon-16.png" i32="/ecfeed.rcp3/icons/alt_window_32.gif" i48="/ecfeed.rcp3/icons/ecfeed-icon-48.png" i64="/ecfeed.rcp3/icons/ecfeed-icon-64.png" i128="/ecfeed.rcp3/icons/ecfeed-icon-128.png" i256="/ecfeed.rcp3/icons/ecfeed-icon-256.png"/>
+
+
    <launcher>
       <solaris/>
       <win useIco="false">
          <bmp/>
       </win>
    </launcher>
+
 
    <vm>
    </vm>
