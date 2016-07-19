@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.jface.viewers.StructuredViewer;
+import org.eclipse.jface.viewers.TreeViewer;
 
 import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.model.AbstractNode;
@@ -46,6 +47,9 @@ public class AddChildActionProvider {
 	private StructuredViewer fViewer;
 	private IModelUpdateContext fContext;
 	private IFileInfoProvider fFileInfoProvider;
+	private static final boolean CHILD_SELECT_ON = true;
+	private static final boolean CHILD_SELECT_OFF = false;
+
 
 	private void reportExceptionInvalidNodeType() {
 		final String MSG = "Invalid type of selected node.";
@@ -68,12 +72,24 @@ public class AddChildActionProvider {
 		abstractNodeInterface.setTarget(abstractNode);
 	}
 
+	private void expandCurrentTreeViewerNode() {
+		if (!(fViewer instanceof TreeViewer)) {
+			return;
+		}
+
+		TreeViewer treeViewer = (TreeViewer)fViewer;
+		ExpandAction expandAction = new ExpandAction(treeViewer);
+		expandAction.run();
+	}
+
 	private class AddGlobalParameterAction extends AbstractAddChildAction{
 		private GlobalParametersParentInterface fParentIf;
+		private boolean fSelectChild;
 
-		public AddGlobalParameterAction() {
+		public AddGlobalParameterAction(boolean selectChild) {
 			super(ADD_GLOBAL_PARAMETER_ACTION_ID, ADD_GLOBAL_PARAMETER_ACTION_NAME, fViewer, fContext);
 			fParentIf = new GlobalParametersParentInterface(fContext, fFileInfoProvider);
+			fSelectChild = selectChild;
 		}
 
 		@Override
@@ -85,7 +101,13 @@ public class AddChildActionProvider {
 			}
 
 			setTargetNode(selectedNode, fParentIf);
-			select(fParentIf.addNewParameter());
+
+			AbstractNode newNode = fParentIf.addNewParameter();
+			if (fSelectChild) {
+				select(newNode);
+			} else {
+				expandCurrentTreeViewerNode();
+			}
 		}
 
 		@Override
@@ -97,10 +119,12 @@ public class AddChildActionProvider {
 
 	private class AddClassAction extends AbstractAddChildAction{
 		private RootInterface fParentIf;
+		private boolean fSelectChild; 
 
-		public AddClassAction(){
+		public AddClassAction(boolean selectChild){
 			super(ADD_CLASS_ACTION_ID, ADD_CLASS_ACTION_NAME, fViewer, fContext);
 			fParentIf = new RootInterface(fContext, fFileInfoProvider);
+			fSelectChild = selectChild;
 		}
 
 		@Override
@@ -117,16 +141,24 @@ public class AddChildActionProvider {
 			}
 
 			setTargetNode(selectedNode, fParentIf);
-			select(getParentInterface().addNewClass());
+
+			AbstractNode node = getParentInterface().addNewClass();
+			if (fSelectChild) {
+				select(node);
+			} else {
+				expandCurrentTreeViewerNode();
+			}
 		}
 	}
 
 	private class AddMethodAction extends AbstractAddChildAction{
 		private ClassInterface fParentIf;
+		private boolean fSelectChild;
 
-		public AddMethodAction(){
+		public AddMethodAction(boolean selectChild) {
 			super(ADD_METHOD_ACTION_ID, ADD_METHOD_ACTION_NAME, fViewer, fContext);
 			fParentIf = new ClassInterface(fContext, fFileInfoProvider);
+			fSelectChild = selectChild;
 		}
 
 		@Override
@@ -143,7 +175,13 @@ public class AddChildActionProvider {
 			}
 
 			setTargetNode(selectedNode, fParentIf);
-			select(getParentInterface().addNewMethod());
+
+			AbstractNode node = getParentInterface().addNewMethod();
+			if (fSelectChild) {
+				select(node);
+			} else {
+				expandCurrentTreeViewerNode();
+			}
 		}
 	}
 
@@ -172,38 +210,64 @@ public class AddChildActionProvider {
 	}
 
 	private class AddMethodParameterAction extends AddMethodChildAction{
-		public AddMethodParameterAction() {
+		private boolean fSelectChild;
+
+		public AddMethodParameterAction(boolean selectChild) {
 			super(ADD_METHOD_PARAMETER_ACTION_ID, ADD_METHOD_PARAMETER_ACTION_NAME);
+			fSelectChild = selectChild;
 		}
 
 		@Override
 		public void run() {
 			prepareRun();
-			select(getParentInterface().addNewParameter());
+
+			AbstractNode node = getParentInterface().addNewParameter();
+			if (fSelectChild) {
+				select(node);
+			} else {
+				expandCurrentTreeViewerNode();
+			}
 		}
 	}
 
 	private class AddConstraintAction extends AddMethodChildAction{
-		public AddConstraintAction() {
+		private boolean fSelectChild;
+
+		public AddConstraintAction(boolean selectChild) {
 			super(ADD_CONSTRAINT_ACTION_ID, ADD_CONSTRAINT_ACTION_NAME);
+			fSelectChild = selectChild;
 		}
 
 		@Override
 		public void run() {
 			prepareRun();
-			select(getParentInterface().addNewConstraint());
+
+			AbstractNode node = getParentInterface().addNewConstraint();
+			if (fSelectChild) {
+				select(node);
+			} else {
+				expandCurrentTreeViewerNode();
+			}
 		}
 	}
 
 	private class AddTestCaseAction extends AddMethodChildAction{
-		public AddTestCaseAction() {
+		private boolean fSelectChild;
+		public AddTestCaseAction(boolean selectChild) {
 			super(ADD_TEST_CASE_ACTION_ID, ADD_TEST_CASE_ACTION_NAME);
+			fSelectChild = selectChild;
 		}
 
 		@Override
 		public void run() {
 			prepareRun();
-			select(getParentInterface().addTestCase());
+
+			AbstractNode node = getParentInterface().addTestCase();
+			if (fSelectChild) {
+				select(node);
+			} else {
+				expandCurrentTreeViewerNode();
+			}
 		}
 	}
 
@@ -221,6 +285,7 @@ public class AddChildActionProvider {
 
 	private class AddChoiceAction extends AbstractAddChildAction{
 		private ChoicesParentInterface fParentIf;
+		private boolean fSelectChild;
 
 		private class EnableVisitor implements IParameterVisitor{
 
@@ -236,9 +301,10 @@ public class AddChildActionProvider {
 
 		}
 
-		public AddChoiceAction(IFileInfoProvider fileInfoProvider){
+		public AddChoiceAction(IFileInfoProvider fileInfoProvider, boolean selectChild){
 			super(ADD_PARTITION_ACTION_ID, ADD_PARTITION_ACTION_NAME, fViewer, fContext);
 			fParentIf = new ChoicesParentInterface(fContext, fileInfoProvider);
+			fSelectChild = selectChild;
 		}
 
 		@Override
@@ -255,7 +321,13 @@ public class AddChildActionProvider {
 			}
 
 			setTargetNode(selectedNode, fParentIf);
-			select(fParentIf.addNewChoice());
+
+			AbstractNode node = fParentIf.addNewChoice();
+			if (fSelectChild) {
+				select(node);
+			} else {
+				expandCurrentTreeViewerNode();
+			}
 		}
 
 		@Override
@@ -280,25 +352,25 @@ public class AddChildActionProvider {
 		@Override
 		public Object visit(RootNode node) throws Exception {
 			return Arrays.asList(new AbstractAddChildAction[]{
-					new AddClassAction(),
-					new AddGlobalParameterAction()
+					new AddClassAction(CHILD_SELECT_ON),
+					new AddGlobalParameterAction(CHILD_SELECT_ON)
 			});
 		}
 
 		@Override
 		public Object visit(ClassNode node) throws Exception {
 			return Arrays.asList(new AbstractAddChildAction[]{
-					new AddMethodAction(),
-					new AddGlobalParameterAction()
+					new AddMethodAction(CHILD_SELECT_ON),
+					new AddGlobalParameterAction(CHILD_SELECT_ON)
 			});
 		}
 
 		@Override
 		public Object visit(MethodNode node) throws Exception {
 			return Arrays.asList(new AbstractAddChildAction[]{
-					new AddMethodParameterAction(),
-					new AddConstraintAction(),
-					new AddTestCaseAction(),
+					new AddMethodParameterAction(CHILD_SELECT_ON),
+					new AddConstraintAction(CHILD_SELECT_ON),
+					new AddTestCaseAction(CHILD_SELECT_ON),
 					new AddTestSuiteAction()
 			});
 		}
@@ -306,14 +378,14 @@ public class AddChildActionProvider {
 		@Override
 		public Object visit(MethodParameterNode node) throws Exception {
 			return Arrays.asList(new AbstractAddChildAction[]{
-					new AddChoiceAction(fFileInfoProvider)
+					new AddChoiceAction(fFileInfoProvider, CHILD_SELECT_ON)
 			});
 		}
 
 		@Override
 		public Object visit(GlobalParameterNode node) throws Exception {
 			return Arrays.asList(new AbstractAddChildAction[]{
-					new AddChoiceAction(fFileInfoProvider)
+					new AddChoiceAction(fFileInfoProvider, CHILD_SELECT_ON)
 			});
 		}
 
@@ -330,7 +402,7 @@ public class AddChildActionProvider {
 		@Override
 		public Object visit(ChoiceNode node) throws Exception {
 			return Arrays.asList(new AbstractAddChildAction[]{
-					new AddChoiceAction(fFileInfoProvider)
+					new AddChoiceAction(fFileInfoProvider, CHILD_SELECT_ON)
 			});
 		}
 	}
@@ -359,27 +431,27 @@ public class AddChildActionProvider {
 
 		@Override
 		public Object visit(RootNode node) throws Exception {
-			return new AddClassAction();
+			return new AddClassAction(CHILD_SELECT_OFF);
 		}
 
 		@Override
 		public Object visit(ClassNode node) throws Exception {
-			return new AddMethodAction();
+			return new AddMethodAction(CHILD_SELECT_OFF);
 		}
 
 		@Override
 		public Object visit(MethodNode node) throws Exception {
-			return new AddMethodParameterAction();
+			return new AddMethodParameterAction(CHILD_SELECT_OFF);
 		}
 
 		@Override
 		public Object visit(MethodParameterNode node) throws Exception {
-			return new AddChoiceAction(fFileInfoProvider);
+			return new AddChoiceAction(fFileInfoProvider, CHILD_SELECT_OFF);
 		}
 
 		@Override
 		public Object visit(GlobalParameterNode node) throws Exception {
-			return new AddChoiceAction(fFileInfoProvider);
+			return new AddChoiceAction(fFileInfoProvider, CHILD_SELECT_OFF); 
 		}
 
 		@Override
@@ -394,7 +466,7 @@ public class AddChildActionProvider {
 
 		@Override
 		public Object visit(ChoiceNode node) throws Exception {
-			return new AddChoiceAction(fFileInfoProvider);
+			return new AddChoiceAction(fFileInfoProvider, CHILD_SELECT_OFF);
 		}
 	}
 
