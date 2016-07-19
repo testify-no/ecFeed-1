@@ -545,7 +545,11 @@ public class ModelMasterSection extends TreeViewerSection{
 		fMasterDetailsBlock = parentBlock;
 		fFileInfoProvider = fileInfoProvider;
 
-		setActionProvider(new ModelViewerActionProvider(getTreeViewer(), this, parentBlock.getPage().getEditor(), false), false);
+		boolean includeDeleteAction = false;
+		if (ApplicationContext.isStandaloneApplication()) {
+			includeDeleteAction = true;
+		}
+		setActionProvider(new ModelViewerActionProvider(getTreeViewer(), this, parentBlock.getPage().getEditor(), false), includeDeleteAction);		
 
 		getTreeViewer().addDragSupport(DND.DROP_COPY|DND.DROP_MOVE|DND.DROP_LINK, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDragListener(getTreeViewer()));
 		getTreeViewer().addDropSupport(DND.DROP_COPY|DND.DROP_MOVE|DND.DROP_LINK, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDropListener(getTreeViewer(), this, fFileInfoProvider));
