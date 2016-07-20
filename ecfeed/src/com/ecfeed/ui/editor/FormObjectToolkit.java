@@ -24,20 +24,12 @@ import com.ecfeed.core.utils.StringHelper;
 	
 public class FormObjectToolkit {
 	
-	private static FormObjectToolkit fInstance = null;
-	private static FormToolkit fFormToolkit = null;
+	private FormToolkit fFormToolkit = null;
 
-	protected FormObjectToolkit() {
+	protected FormObjectToolkit(FormToolkit formToolkit) {
+		fFormToolkit = formToolkit;
 	}
 	
-	public static FormObjectToolkit getInstance(FormToolkit formToolkit) {
-		if (fInstance == null) {
-			fInstance = new FormObjectToolkit();
-			fFormToolkit = formToolkit;
-		}
-		return fInstance;
-	}
-
 	public void paintBorders(Composite composite) {
 		fFormToolkit.paintBordersFor(composite);
 	}

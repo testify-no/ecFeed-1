@@ -120,33 +120,33 @@ public class MethodDetailsPage extends BasicDetailsPage {
 			++gridColumns;
 		}
 
-		Composite gridComposite = getFormObjectFactory().createGridComposite(
+		Composite gridComposite = getFormObjectToolkit().createGridComposite(
 				getMainComposite(), gridColumns);
 
-		getFormObjectFactory().createLabel(gridComposite, "Method name ");
-		fMethodNameText = getFormObjectFactory().createGridText(gridComposite,
+		getFormObjectToolkit().createLabel(gridComposite, "Method name ");
+		fMethodNameText = getFormObjectToolkit().createGridText(gridComposite,
 				new RenameMethodAdapter());
 
 		if (fileInfoProvider.isProjectAvailable()) {
-			fBrowseButton = getFormObjectFactory().createButton(gridComposite,
+			fBrowseButton = getFormObjectToolkit().createButton(gridComposite,
 					"Browse...", new ReassignAdapter());
 		}
 
-		getFormObjectFactory().paintBorders(gridComposite);
+		getFormObjectToolkit().paintBorders(gridComposite);
 	}
 
 	private void createTestAndExportButtons(IFileInfoProvider fileInfoProvider) {
-		Composite childComposite = getFormObjectFactory().createRowComposite(
+		Composite childComposite = getFormObjectToolkit().createRowComposite(
 				getMainComposite());
 
 		if (fileInfoProvider.isProjectAvailable()) {
-			fTestOnlineButton = getFormObjectFactory().createButton(
+			fTestOnlineButton = getFormObjectToolkit().createButton(
 					childComposite, "Test online...", new OnlineTestAdapter());
 		}
 
-		fExportOnlineButton = getFormObjectFactory().createButton(
+		fExportOnlineButton = getFormObjectToolkit().createButton(
 				childComposite, "Export online...", new OnlineExportAdapter());
-		getFormObjectFactory().paintBorders(childComposite);
+		getFormObjectToolkit().paintBorders(childComposite);
 	}
 
 	@Override

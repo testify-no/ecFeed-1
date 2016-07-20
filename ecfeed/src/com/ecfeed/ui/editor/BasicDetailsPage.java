@@ -81,6 +81,7 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 	private Section fMainSection;
 	private Composite fMainComposite;
 	private IManagedForm fManagedForm;
+	private FormObjectToolkit fFormObjectToolkit;
 
 	private List<IFormPart> fForms;
 	private List<ViewerSection> fViewerSections;
@@ -108,6 +109,7 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 	@Override
 	public void initialize(IManagedForm form) {
 		fManagedForm = form;
+		fFormObjectToolkit = new FormObjectToolkit(form.getToolkit());
 	}
 
 	@Override
@@ -229,8 +231,8 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 		return fManagedForm.getToolkit();
 	}
 	
-	public FormObjectToolkit getFormObjectFactory() {
-		return FormObjectToolkit.getInstance(getToolkit());
+	protected FormObjectToolkit getFormObjectToolkit() {
+		return fFormObjectToolkit;
 	}
 
 	protected Section getMainSection(){
