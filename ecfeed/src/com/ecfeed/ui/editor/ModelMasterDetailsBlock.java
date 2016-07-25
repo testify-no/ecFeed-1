@@ -114,11 +114,17 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 				return false;
 			}
 
-			Action action = getFocusedSection().getAction(fActionId);
-			if(action  != null){
-				return action.isEnabled();
+			BasicSection focusedSection = getFocusedSection();
+			if (focusedSection == null) {
+				return false;
 			}
-			return false;
+
+			Action action = focusedSection.getAction(fActionId);
+			if(action == null){
+				return false;
+			}
+
+			return action.isEnabled();
 		}
 
 		@Override
