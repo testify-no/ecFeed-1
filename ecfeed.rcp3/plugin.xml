@@ -134,6 +134,10 @@
             id="ecfeed.rcp3.close"
             name="Close">
       </command>
+      <command
+            id="ecfeed.rcp3.empty"
+            name=" ">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
@@ -181,6 +185,10 @@
             class="com.ecfeed.rcp3.handlers.CloseEctRcpHandler"
             commandId="ecfeed.rcp3.close">
       </handler>
+      <handler
+            class="com.ecfeed.rcp3.handlers.EmptyRcpHandler"
+            commandId="ecfeed.rcp3.empty">
+      </handler>
    </extension>
    <extension
          id="product"
@@ -205,27 +213,28 @@
             name="ecFeedScheme">
       </scheme>
       <key
-            commandId="ecfeed.rcp3.open"
+            commandId="ecfeed.rcp3.empty"
             schemeId="ecFeedScheme"
             sequence="M1+O">
       </key>
       <key
-            commandId="ecfeed.rcp3.newMem"
+            commandId="ecfeed.rcp3.empty"
             schemeId="ecFeedScheme"
             sequence="M1+N">
       </key>
       <key
-            commandId="ecfeed.rcp3.save"
+            commandId="ecfeed.rcp3.empty"
             schemeId="ecFeedScheme"
             sequence="M1+S">
       </key>
       <key
-            commandId="ecfeed.rcp3.close"
+            commandId="ecfeed.rcp3.empty"
             schemeId="ecFeedScheme"
             sequence="M1+W">
       </key>
       <key
             commandId="org.eclipse.ui.file.closeAll"
+            platform="ecfeed.rcp3.empty"
             schemeId="ecFeedScheme"
             sequence="SHIFT+M1+W">
       </key>
