@@ -100,22 +100,22 @@ public class MethodParameterNode extends AbstractParameterNode {
 				return fChoicesCopy;
 			}
 			List<ChoiceNode> temp = fLink.getChoicesCopy();
-			if(!choiceListsMatch(fChoicesCopy, temp))
+//			if(!choiceListsMatch(fChoicesCopy, temp))
 				fChoicesCopy = temp;
 			return fChoicesCopy;
 		}
 		return super.getChoices();
 	}
 
-	private boolean choiceListsMatch(List<ChoiceNode> list1,
-			List<ChoiceNode> list2) {
-		if(list1.size() != list2.size())
-			return false;
-		for(int i=0; i< list1.size(); i++)
-			if(list1.get(i).getName() != list2.get(i).getName() || list1.get(i).getValueString() != list2.get(i).getValueString())
-				return false;
-		return true;
-	}
+//	private boolean choiceListsMatch(List<ChoiceNode> list1,
+//			List<ChoiceNode> list2) {
+//		if(list1.size() != list2.size())
+//			return false;
+//		for(int i=0; i< list1.size(); i++)
+//			if(list1.get(i).getName() != list2.get(i).getName() || list1.get(i).getValueString() != list2.get(i).getValueString())
+//				return false;
+//		return true;
+//	}
 
 	//	@Override
 	//	public ChoiceNode getChoice(String qualifiedName) {
