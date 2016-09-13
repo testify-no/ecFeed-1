@@ -55,8 +55,8 @@ public abstract class ChoicesParentNode extends AbstractNode{
 	}
 
 	public void addChoice(ChoiceNode choice, int index) {
-			fChoices.add(index, choice);
-			choice.setParent(this);
+		fChoices.add(index, choice);
+		choice.setParent(this);
 	}
 
 	public void addChoices(List<ChoiceNode> choices) {
@@ -69,6 +69,10 @@ public abstract class ChoicesParentNode extends AbstractNode{
 		return fChoices;
 	}
 
+	public List<ChoiceNode> getChoicesWithCopies() {
+		return fChoices;
+	}
+
 	public ChoiceNode getChoice(String qualifiedName) {
 		return (ChoiceNode)getChild(qualifiedName);
 	}
@@ -76,6 +80,10 @@ public abstract class ChoicesParentNode extends AbstractNode{
 	public List<ChoiceNode> getLeafChoices() {
 		return getLeafChoices(getChoices());
 	}
+
+	public List<ChoiceNode> getLeafChoicesWithCopies() {
+		return getLeafChoices(getChoicesWithCopies());
+	}	
 
 	public Set<ChoiceNode> getAllChoices() {
 		return getAllChoices(getChoices());
