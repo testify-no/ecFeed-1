@@ -93,7 +93,15 @@ public class MethodParameterNode extends AbstractParameterNode {
 	}
 
 	@Override
-	public List<ChoiceNode> getChoices() {
+	public List<ChoiceNode> getChoices(){
+		if(isLinked() && fLink != null){
+			return fLink.getChoices();
+		}
+		return super.getChoices();
+	}
+
+	@Override
+	public List<ChoiceNode> getChoicesWithCopies() {
 		if (isLinked() && fLink != null) {
 			if (fChoicesCopy == null) {
 				fChoicesCopy = fLink.getChoicesCopy();

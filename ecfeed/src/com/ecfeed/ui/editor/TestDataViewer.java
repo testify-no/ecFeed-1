@@ -10,6 +10,7 @@
 
 package com.ecfeed.ui.editor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.viewers.TableViewerColumn;
@@ -20,7 +21,10 @@ import org.eclipse.ui.forms.widgets.Section;
 import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ChoiceNode;
+import com.ecfeed.core.model.MethodNode;
+import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.TestCaseNode;
+import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.ui.common.ColorConstants;
 import com.ecfeed.ui.common.ColorManager;
 import com.ecfeed.ui.common.ITestDataEditorListener;
@@ -54,8 +58,8 @@ public class TestDataViewer extends TableViewerSection implements ITestDataEdito
 		addColumn("Parameter", 150, new NodeViewerColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
-				ChoiceNode testValue = (ChoiceNode)element;
-				AbstractParameterNode parent = testValue.getParameter();
+				ChoiceNode choice = (ChoiceNode)element;
+				AbstractParameterNode parent = choice.getParameter();
 				return parent.toString();
 			}
 
@@ -68,16 +72,21 @@ public class TestDataViewer extends TableViewerSection implements ITestDataEdito
 		TableViewerColumn valueColumn = addColumn("Value", 150, new NodeViewerColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
-				ChoiceNode testValue = (ChoiceNode)element;
-				if(fTestCaseIf.isExpected(testValue)){
-					return testValue.getValueString();
+				ChoiceNode choice = (ChoiceNode)element;
+				if(isExpected(choice)){
+					return choice.getValueString();
 				}
-				return testValue.toString();
+				return choice.toString();
 			}
 
 			@Override
 			public Color getForeground(Object element){
 				return getColor(element);
+			}
+
+			private boolean isExpected(ChoiceNode choice) {
+				MethodParameterNode parameter = (MethodParameterNode)choice.getParameter();
+				return parameter.isExpected();
 			}
 		});
 
@@ -94,15 +103,56 @@ public class TestDataViewer extends TableViewerSection implements ITestDataEdito
 
 	public void setInput(TestCaseNode testCase){
 		List<ChoiceNode> testData = testCase.getTestData();
+		MethodNode methodNode = testCase.getMethod();		
 		fValueEditingSupport.setMethod(testCase.getMethod());
 		fTestCaseIf.setTarget(testCase);
 		//target and data support must be updated prior to calling super
-		super.setInput(testData);
+		List<ChoiceNode> convertedChoices = convertChoices(testData, methodNode);
+		super.setInput(convertedChoices);
+	}
+
+	private List<ChoiceNode> convertChoices(List<ChoiceNode> choices, MethodNode methodNode) {
+
+		List<AbstractParameterNode> parameters = methodNode.getParameters();
+
+		List<ChoiceNode> newChoices = new ArrayList<ChoiceNode>();
+		int maxIndex = choices.size();
+
+		for(int index = 0; index < maxIndex; index++) {
+			MethodParameterNode parameter = (MethodParameterNode)parameters.get(index);
+			ChoiceNode choice = choices.get(index);
+			ChoiceNode newChoice = choice.getQualifiedCopy(parameter);
+			newChoices.add(newChoice);
+		}
+
+		return newChoices;
 	}
 
 	@Override
-	public void testDataChanged(int index, ChoiceNode value) {
-		fTestCaseIf.updateTestData(index, value);
+	public void testDataChanged(int index, ChoiceNode choiceToUpdate) {
+		ChoiceNode originalChoice = getOriginalChoiceByName(index, choiceToUpdate.getName());
+		fTestCaseIf.updateTestData(index, originalChoice);
+	}
+
+	private ChoiceNode getOriginalChoiceByName(int index, String choiceName) {
+		List<ChoiceNode> originalChoices = getOriginalChoices(index);
+
+		for (ChoiceNode choiceOfParent : originalChoices) {
+			if (choiceOfParent.getName().equals(choiceName)) {
+				return choiceOfParent;
+			}
+		}
+
+		ExceptionHelper.reportRuntimeException("Can not find original choice by name : " + choiceName);
+		return null;
+	}
+
+	private List<ChoiceNode> getOriginalChoices(int index) {
+		TestCaseNode testCase = fTestCaseIf.getTarget();
+		MethodNode method = testCase.getMethod();
+		List<AbstractParameterNode> parameters = method.getParameters();
+		AbstractParameterNode parameter = parameters.get(index);
+		return parameter.getLeafChoices();
 	}
 
 	@Override
@@ -123,4 +173,5 @@ public class TestDataViewer extends TableViewerSection implements ITestDataEdito
 		}
 		return null;
 	}
+
 }

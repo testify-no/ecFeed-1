@@ -67,6 +67,10 @@ public class ChoiceNode extends ChoicesParentNode{
 		return copy;
 	}
 
+	public ChoiceNode getQualifiedCopy(MethodParameterNode parameter) {
+		return ChoiceNodeHelper.createSubstitutePath(this, parameter);
+	}
+
 	public String getQualifiedName(){
 		if(parentChoice() != null){
 			return parentChoice().getQualifiedName() + ":" + getName();

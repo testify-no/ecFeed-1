@@ -10,7 +10,9 @@
 
 package com.ecfeed.ui.common;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -25,6 +27,7 @@ import org.eclipse.swt.widgets.Display;
 
 import com.ecfeed.core.adapter.ITypeAdapter;
 import com.ecfeed.core.adapter.java.JavaUtils;
+import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
@@ -56,34 +59,87 @@ public class TestDataValueEditingSupport extends EditingSupport {
 	}
 
 	private CellEditor getComboCellEditor(ChoiceNode choice) {
+		MethodParameterNode parameter = fMethod.getMethodParameter(choice);
+
+		if (parameter.isExpected()) {
+			return getEditorForExpectedParameter(choice, parameter);
+		} 
+		return getEditorForInputParameter(choice);
+	}
+
+	private CellEditor getEditorForExpectedParameter(ChoiceNode choice, MethodParameterNode parameter) {
 		String type = choice.getParameter().getType();
 		EclipseModelBuilder builder = new EclipseModelBuilder();
-		MethodParameterNode parameter = fMethod.getMethodParameter(choice);
-		if (parameter.isExpected()) {
-			Set<String> expectedValues = new HashSet<String>(builder.getSpecialValues(type));
-			if (expectedValues.contains(choice.getValueString()) == false) {
-				expectedValues.add(choice.getValueString());
-			}
-			if(JavaUtils.isUserType(parameter.getType())){
-				expectedValues.addAll(parameter.getLeafChoiceValues());
-			}
-			fComboCellEditor.setInput(expectedValues);
+		Set<String> expectedValues = new HashSet<String>(builder.getSpecialValues(type));
+		if (expectedValues.contains(choice.getValueString()) == false) {
+			expectedValues.add(choice.getValueString());
+		}
+		if(JavaUtils.isUserType(parameter.getType())){
+			expectedValues.addAll(parameter.getLeafChoiceValues());
+		}
+		fComboCellEditor.setInput(expectedValues);
 
-			if (JavaUtils.hasLimitedValuesSet(type) == false) {
-				fComboCellEditor.getViewer().getCCombo().setEditable(true);
-			} else {
-				fComboCellEditor.setActivationStyle(ComboBoxViewerCellEditor.DROP_DOWN_ON_KEY_ACTIVATION |
-						ComboBoxViewerCellEditor.DROP_DOWN_ON_MOUSE_ACTIVATION);
-				fComboCellEditor.getViewer().getCCombo().setEditable(false);
-			}
+		if (JavaUtils.hasLimitedValuesSet(type) == false) {
+			fComboCellEditor.getViewer().getCCombo().setEditable(true);
 		} else {
 			fComboCellEditor.setActivationStyle(ComboBoxViewerCellEditor.DROP_DOWN_ON_KEY_ACTIVATION |
 					ComboBoxViewerCellEditor.DROP_DOWN_ON_MOUSE_ACTIVATION);
-			fComboCellEditor.setInput(choice.getParameter().getLeafChoices());
 			fComboCellEditor.getViewer().getCCombo().setEditable(false);
-			fComboCellEditor.setValue(choice);
 		}
+
 		return fComboCellEditor;
+	}
+
+	private CellEditor getEditorForInputParameter(ChoiceNode choice) {
+		fComboCellEditor.setActivationStyle(ComboBoxViewerCellEditor.DROP_DOWN_ON_KEY_ACTIVATION |
+				ComboBoxViewerCellEditor.DROP_DOWN_ON_MOUSE_ACTIVATION);
+		List<ChoiceNode> choices = getListOfChoices(choice);
+
+		fComboCellEditor.setInput(choices);
+		fComboCellEditor.getViewer().getCCombo().setEditable(false);
+		fComboCellEditor.setValue(getChoiceFromList(choice, choices)); 
+
+		return fComboCellEditor;
+	}
+
+	private List<ChoiceNode> getListOfChoices(ChoiceNode choice) {
+		List<ChoiceNode> leafChoices = choice.getParameter().getLeafChoices();
+
+		AbstractParameterNode abstractParameter = choice.getParameter();
+
+		if (!(abstractParameter instanceof MethodParameterNode)) {
+			return leafChoices;
+		}
+
+		MethodParameterNode parameter = (MethodParameterNode)choice.getParameter(); 
+		if (parameter.isLinked()) {
+			return getReparentedListOfChoices(leafChoices, parameter);
+		}
+
+		return leafChoices;
+	}
+
+	private List<ChoiceNode> getReparentedListOfChoices(List<ChoiceNode> choices, MethodParameterNode parameter) {
+		List<ChoiceNode> newChoices = new ArrayList<ChoiceNode>();
+
+		for (ChoiceNode choice : choices) {
+			ChoiceNode tmp = choice.getQualifiedCopy(parameter);
+			newChoices.add(tmp);
+		}
+		return newChoices;
+	}
+
+	private ChoiceNode getChoiceFromList(ChoiceNode choiceToFind, List<ChoiceNode> choices) {
+		String nameToFind = choiceToFind.getName();
+
+		for (ChoiceNode choice : choices) {
+			String name = choice.getName();
+			if (name.equals(nameToFind)) {
+				return choice;
+			}
+		}
+
+		return null;
 	}
 
 	@Override
@@ -97,15 +153,18 @@ public class TestDataValueEditingSupport extends EditingSupport {
 		if(fMethod.getMethodParameter(choice).isExpected()){
 			return choice.getValueString();
 		}
+
 		return choice.toString();
 	}
 
 	@Override
 	protected void setValue(Object element, Object value) {
 		ChoiceNode current = (ChoiceNode)element;
+
 		MethodParameterNode parameter = fMethod.getMethodParameter(current);
 		int index = parameter.getIndex();
 		ChoiceNode newValue = null;
+
 		if(parameter.isExpected()){
 			String valueString = fComboCellEditor.getViewer().getCCombo().getText();
 			String type = parameter.getType();
@@ -126,6 +185,7 @@ public class TestDataValueEditingSupport extends EditingSupport {
 				newValue = (ChoiceNode)value;
 			}
 		}
+
 		if(newValue != null){
 			fSetValueListener.testDataChanged(index, newValue);
 		}

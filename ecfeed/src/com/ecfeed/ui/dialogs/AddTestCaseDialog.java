@@ -61,27 +61,35 @@ public class AddTestCaseDialog extends TitleAreaDialog implements ITestDataEdito
 	 */
 	public AddTestCaseDialog(Shell parentShell, MethodNode method) {
 		super(parentShell);
+
 		setHelpAvailable(false);
 		setShellStyle(SWT.BORDER | SWT.RESIZE | SWT.TITLE | SWT.APPLICATION_MODAL);
 		fTestData = new ArrayList<ChoiceNode>();
+
 		List<MethodParameterNode> parameters = method.getMethodParameters();
 		for(MethodParameterNode parameter : parameters){
 			if(parameter.isExpected()){
-				fTestData.add(createAnonymuousChoice(parameter));
-			}
-			else{
-
-				ChoiceNode testValue = parameter.getChoices().get(0);
-				while(testValue.isAbstract()){
-					testValue = testValue.getChoices().get(0);
+				fTestData.add(createExpectedChoice(parameter));
+			} else {
+				ChoiceNode choice = parameter.getChoices().get(0);
+				while(choice.isAbstract()){
+					choice = choice.getChoices().get(0);
 				}
-				fTestData.add(testValue);
+
+				if (parameter.isLinked()) {
+					ChoiceNode choiceCopyWithPath = choice.getQualifiedCopy(parameter);
+					fTestData.add(choiceCopyWithPath);
+				} else {
+					fTestData.add(choice);
+				}
 			}
 		}
+
 		fMethod = method;
 	}
 
-	private ChoiceNode createAnonymuousChoice(MethodParameterNode parent) {
+
+	private ChoiceNode createExpectedChoice(MethodParameterNode parent) {
 		ChoiceNode choice = new ChoiceNode("@expected", parent.getDefaultValue());
 		choice.setParent(parent);
 		return choice;
@@ -136,12 +144,12 @@ public class AddTestCaseDialog extends TitleAreaDialog implements ITestDataEdito
 		choiceViewerColumn.setLabelProvider(new ColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
-				ChoiceNode testValue = (ChoiceNode)element;
-				MethodParameterNode parameter = fMethod.getMethodParameters().get(fTestData.indexOf(testValue));
+				ChoiceNode choice = (ChoiceNode)element;
+				MethodParameterNode parameter = fMethod.getMethodParameters().get(fTestData.indexOf(choice));
 				if(parameter.isExpected()){
-					return testValue.getValueString();
+					return choice.getValueString();
 				}
-				return testValue.toString();
+				return choice.toString();
 			}
 			@Override
 			public Color getForeground(Object element){
@@ -222,8 +230,8 @@ public class AddTestCaseDialog extends TitleAreaDialog implements ITestDataEdito
 	}
 
 	@Override
-	public void testDataChanged(int index, ChoiceNode newValue) {
-		fTestData.set(index, newValue);
+	public void testDataChanged(int index, ChoiceNode newChoice) {
+		fTestData.set(index, newChoice);
 		fTestDataViewer.refresh();
 	}
 

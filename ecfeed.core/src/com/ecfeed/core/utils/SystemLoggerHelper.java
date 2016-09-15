@@ -14,6 +14,7 @@ import java.util.List;
 
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ChoiceNode;
+import com.ecfeed.core.model.ChoicesParentNode;
 import com.ecfeed.core.model.TestCaseNode;
 
 
@@ -30,9 +31,42 @@ public class SystemLoggerHelper {
 		if (message != null && message.length() > 0) {
 			System.out.println("message: " + message);
 		}
-		System.out.println("hasCode: " + choice.hashCode());
-		System.out.println("getName(): " + choice.getName());
-		System.out.println("getParameter().getName(): " + choice.getParameter().getName());
+		System.out.println("hashCode: " + choice.hashCode());
+		System.out.println("name: " + choice.getName());
+		System.out.println("parameter: " + choice.getParameter().getName());
+	}
+
+	public static void printChoiceParentsNode(String message, ChoicesParentNode choicesParentNode) {
+		if (message != null && message.length() > 0) {
+			System.out.println("message: " + message);
+		}
+		System.out.println("hashCode: " + choicesParentNode.hashCode());
+		System.out.println("class: " + choicesParentNode.getClass().getName());
+		System.out.println("name: " + choicesParentNode.getName());
+	}	
+
+	public static void printChoiceWithParents(String message, ChoiceNode choice) {
+
+		SystemLogger.logLine("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv");
+		ChoicesParentNode current = choice;
+
+		for(;;) {
+			printChoiceParentsNode(message, current);
+
+			AbstractNode parent = current.getParent();
+
+			if (parent == null) {
+				break;
+			}
+
+			if (!(parent instanceof ChoicesParentNode)) {
+				break;
+			}
+
+			ChoicesParentNode choicesParent =	 (ChoicesParentNode)parent;
+			current = choicesParent; 
+		}
+		SystemLogger.logLine("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
 	}	
 
 	private static AbstractNode findRoot(AbstractNode startNode) {

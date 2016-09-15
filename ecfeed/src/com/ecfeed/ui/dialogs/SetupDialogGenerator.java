@@ -156,11 +156,11 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 	public void okPressed() {
 		if (fTargetFileText != null) {
 			fTargetFile = fTargetFileText.getText();
-			
+
 			if (!TestCasesExportDialog.canOverwriteFile(fTargetFile)) {
 				return;
 			}
-			
+
 		} else {
 			fTargetFile = null;
 		}
@@ -188,7 +188,7 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 			}
 		} else {
 			for (MethodParameterNode parameter : fMethod.getMethodParameters()) {
-				if (parameter.getChoices().isEmpty()
+				if (parameter.getChoicesWithCopies().isEmpty()
 						&& (parameter.isExpected() == false || JavaUtils
 						.isUserType(parameter.getType()))) {
 					setOkButtonStatus(false);
@@ -459,7 +459,7 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 		boolean checkedChoiceFound = false;
 		boolean choiceFound = false;
 
-		for (ChoiceNode choice : parameter.getLeafChoices()) {
+		for (ChoiceNode choice : parameter.getLeafChoicesWithCopies()) {
 			choiceFound = true;
 			checkedChoiceFound |= fParametersViewer.getChecked(choice);
 
@@ -782,7 +782,7 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 			if (parameters.get(i).isExpected()) {
 				choices.add(expectedValueChoice(parameters.get(i)));
 			} else {
-				for (ChoiceNode choice : parameters.get(i).getLeafChoices()) {
+				for (ChoiceNode choice : parameters.get(i).getLeafChoicesWithCopies()) {
 					if (fParametersViewer.getChecked(choice)) {
 						choices.add(choice);
 					}
@@ -858,7 +858,7 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 				return children;
 			}
 
-			children.addAll(parent.getChoices());
+			children.addAll(parent.getChoicesWithCopies());
 			return children;
 		}
 
