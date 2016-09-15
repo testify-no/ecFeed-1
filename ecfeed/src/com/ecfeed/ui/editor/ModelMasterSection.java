@@ -456,7 +456,7 @@ public class ModelMasterSection extends TreeViewerSection{
 		protected void populateMenu() {
 			List<AbstractNode> selectedNodes = getSelectedNodes();
 
-			if(selectedNodes.size() != 1) {
+			if(selectedNodes.size() == 0) {
 				return;
 			}
 
