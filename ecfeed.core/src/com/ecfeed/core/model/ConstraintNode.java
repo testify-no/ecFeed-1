@@ -144,13 +144,16 @@ public class ConstraintNode extends AbstractNode{
 		for(ChoiceNode choice : getConstraint().getReferencedChoices()){
 			AbstractParameterNode parameter = choice.getParameter();
 			if(parameter == null || parameter.getChoice(choice.getQualifiedName()) == null){
-				return false;
+				if(false == (parameter instanceof MethodParameterNode && ((MethodParameterNode)parameter).isExpected())){
+					return false;
+				}
 			}
 			//check if the choices parent parameter is still part of the method
 			if(parameter.getMethods().contains(getMethod()) == false){
 				return false;
 			}
-			// of course 2nd parameter is linked, so... Also, above 2nd parameter passed equals because it points to same link...
+			// of course 2nd parameter is linked, so... Also, above 2nd parameter passed equals 
+			// because it points to same link...
 			// looks like we have to check by name or something?
 		}
 
