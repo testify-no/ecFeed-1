@@ -33,7 +33,7 @@ public class TestCaseInterface extends AbstractNodeInterface {
 	}
 
 	@Override
-	protected TestCaseNode getTarget() {
+	public TestCaseNode getTarget() {
 		return (TestCaseNode)super.getTarget();
 	}
 
