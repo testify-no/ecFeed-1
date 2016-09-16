@@ -24,6 +24,7 @@ import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.TestCaseNode;
+import com.ecfeed.core.serialization.ect.Constants;
 import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.ui.common.ColorConstants;
 import com.ecfeed.ui.common.ColorManager;
@@ -130,6 +131,10 @@ public class TestDataViewer extends TableViewerSection implements ITestDataEdito
 
 	@Override
 	public void testDataChanged(int index, ChoiceNode choiceToUpdate) {
+		if (choiceToUpdate.getName().equals(Constants.EXPECTED_VALUE_CHOICE_NAME)) { 
+			fTestCaseIf.updateTestData(index, choiceToUpdate);
+			return;
+		}
 		ChoiceNode originalChoice = getOriginalChoiceByName(index, choiceToUpdate.getName());
 		fTestCaseIf.updateTestData(index, originalChoice);
 	}
