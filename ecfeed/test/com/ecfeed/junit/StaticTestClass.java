@@ -11,28 +11,28 @@
 package com.ecfeed.junit;
 
 //import static org.junit.Assert.*;
-//import org.junit.Test;
-//import org.junit.runner.RunWith;
-//import com.ecfeed.runner.annotations.EcModel;
-//@RunWith(StaticRunner.class)
-//@EcModel("test/com/ecfeed/runner/junit/testModel.ect")
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import com.ecfeed.junit.annotations.EcModel;
+@RunWith(StaticRunner.class)
+@EcModel("test/com/ecfeed/junit/testModel.ect")
 public class StaticTestClass {
 
-//	@Test
+	@Test
 	public void testFunction1(int arg1, int arg2){
-//		System.out.println("testFunction1(" + arg1 + ", " + arg2 + ")");
+		System.out.println("testFunction1(" + arg1 + ", " + arg2 + ")");
 //		fail("fail");
 	}
 	
-//	@Test
+	@Test
 	public void testFunction2(int arg1, int arg2){
-//		System.out.println("testFunction2(" + arg1 + ", " + arg2 + ")");
+		System.out.println("testFunction2(" + arg1 + ", " + arg2 + ")");
 //		assertEquals(2, 1);
 	}
 
-//	@Test
+	@Test
 	public void testFunction3(int arg1, int arg2){
-//		System.out.println("testFunction3(" + arg1 + ", " + arg2 + ")");
+		System.out.println("testFunction3(" + arg1 + ", " + arg2 + ")");
 //		assertTrue(false);
 	}
 }
