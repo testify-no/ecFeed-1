@@ -23,6 +23,7 @@ import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.widgets.Display;
 
 import com.ecfeed.core.adapter.ITypeAdapter;
@@ -46,28 +47,27 @@ public class TestDataValueEditingSupport extends EditingSupport {
 		fViewer = viewer;
 		fSetValueListener = setValueListener;
 		fMethod = method;
-
-		fComboCellEditor = new ComboBoxViewerCellEditor(fViewer.getTable(), SWT.TRAIL);
-		fComboCellEditor.setLabelProvider(new LabelProvider());
-		fComboCellEditor.setContentProvider(new ArrayContentProvider());
 	}
 
 	@Override
 	protected CellEditor getCellEditor(Object element) {
 		ChoiceNode choice = (ChoiceNode)element;
-		return getComboCellEditor(choice);
-	}
-
-	private CellEditor getComboCellEditor(ChoiceNode choice) {
 		MethodParameterNode parameter = fMethod.getMethodParameter(choice);
 
+		fComboCellEditor = getCellEditorForChoice(choice, parameter);
+		return fComboCellEditor;
+	}
+	
+	private ComboBoxViewerCellEditor getCellEditorForChoice(ChoiceNode choice, MethodParameterNode parameter) {
 		if (parameter.isExpected()) {
 			return getEditorForExpectedParameter(choice, parameter);
 		} 
 		return getEditorForInputParameter(choice);
 	}
 
-	private CellEditor getEditorForExpectedParameter(ChoiceNode choice, MethodParameterNode parameter) {
+	private ComboBoxViewerCellEditor getEditorForExpectedParameter(ChoiceNode choice, MethodParameterNode parameter) {
+		ComboBoxViewerCellEditor editor = createBasicCellEditor();
+
 		String type = choice.getParameter().getType();
 		EclipseModelBuilder builder = new EclipseModelBuilder();
 		Set<String> expectedValues = new HashSet<String>(builder.getSpecialValues(type));
@@ -77,29 +77,40 @@ public class TestDataValueEditingSupport extends EditingSupport {
 		if(JavaUtils.isUserType(parameter.getType())){
 			expectedValues.addAll(parameter.getLeafChoiceValues());
 		}
-		fComboCellEditor.setInput(expectedValues);
+		editor.setInput(expectedValues);
 
-		if (JavaUtils.hasLimitedValuesSet(type) == false) {
-			fComboCellEditor.getViewer().getCCombo().setEditable(true);
+		CCombo combo = editor.getViewer().getCCombo();
+
+		if (!JavaUtils.hasLimitedValuesSet(type)) {
+			combo.setEditable(true);
 		} else {
-			fComboCellEditor.setActivationStyle(ComboBoxViewerCellEditor.DROP_DOWN_ON_KEY_ACTIVATION |
+			editor.setActivationStyle(ComboBoxViewerCellEditor.DROP_DOWN_ON_KEY_ACTIVATION |
 					ComboBoxViewerCellEditor.DROP_DOWN_ON_MOUSE_ACTIVATION);
-			fComboCellEditor.getViewer().getCCombo().setEditable(false);
+			combo.setEditable(false);
 		}
 
-		return fComboCellEditor;
+		return editor;
 	}
 
-	private CellEditor getEditorForInputParameter(ChoiceNode choice) {
-		fComboCellEditor.setActivationStyle(ComboBoxViewerCellEditor.DROP_DOWN_ON_KEY_ACTIVATION |
+	private ComboBoxViewerCellEditor getEditorForInputParameter(ChoiceNode choice) {
+		ComboBoxViewerCellEditor editor = createBasicCellEditor();
+
+		editor.setActivationStyle(ComboBoxViewerCellEditor.DROP_DOWN_ON_KEY_ACTIVATION |
 				ComboBoxViewerCellEditor.DROP_DOWN_ON_MOUSE_ACTIVATION);
 		List<ChoiceNode> choices = getListOfChoices(choice);
 
-		fComboCellEditor.setInput(choices);
-		fComboCellEditor.getViewer().getCCombo().setEditable(false);
-		fComboCellEditor.setValue(getChoiceFromList(choice, choices)); 
+		editor.setInput(choices);
+		editor.getViewer().getCCombo().setEditable(false);
+		editor.setValue(getChoiceFromList(choice, choices)); 
 
-		return fComboCellEditor;
+		return editor;
+	}
+
+	private ComboBoxViewerCellEditor createBasicCellEditor() {
+		ComboBoxViewerCellEditor comboCellEditor = new ComboBoxViewerCellEditor(fViewer.getTable(), SWT.TRAIL);
+		comboCellEditor.setLabelProvider(new LabelProvider());
+		comboCellEditor.setContentProvider(new ArrayContentProvider());
+		return comboCellEditor;
 	}
 
 	private List<ChoiceNode> getListOfChoices(ChoiceNode choice) {
