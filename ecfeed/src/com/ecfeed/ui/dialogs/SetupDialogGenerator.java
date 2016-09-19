@@ -863,7 +863,7 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 		}
 
 		private void addImplementedChoices(ChoicesParentNode parent, List<Object> children) {
-			for (ChoiceNode child : parent.getChoices()) {
+			for (ChoiceNode child : parent.getChoicesWithCopies()) {
 				if (fStatusResolver.getImplementationStatus(child) != EImplementationStatus.NOT_IMPLEMENTED) {
 					children.add(child);
 				}
