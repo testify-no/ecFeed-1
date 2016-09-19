@@ -130,7 +130,15 @@ public class ChoiceNode extends ChoicesParentNode{
 	}
 
 	public boolean is(ChoiceNode choice){
-		return (this == (choice)) || (parentChoice() != null ? parentChoice().is(choice) : false);
+//		return (this == (choice)) || (parentChoice() != null ? parentChoice().is(choice) : false);
+		boolean result = (this == choice);
+		if (result == false){
+			result = (getParameter() == choice.getParameter()) && (getQualifiedName() == choice.getQualifiedName());
+		}
+		if(result == false){
+			result = parentChoice() != null ? parentChoice().is(choice) : false;
+		}
+		return result;
 	}
 
 	public int level(){
