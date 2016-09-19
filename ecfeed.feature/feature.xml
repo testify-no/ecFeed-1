@@ -2,19 +2,22 @@
 <feature
       id="com.ecfeed"
       label="ecFeed"
-      version="1.10.1.qualifier"
+      version="1.10.2.qualifier"
       provider-name="ecFeed AS">
 
    <description url="https://github.com/testify-no/ecFeed">
       Test data generator and jUnit test execution framework based
 on Equivalence Class model.
+
 Changelog:
+Version 1.10.2
+ - bugfixes
 Version 1.10.1
- - Fixes
- - Shortcut key (Insert) to add default node 
+- Fixes
+- Shortcut key (Insert) to add default node 
 Version 1.10.0
- - Export data to custom text format
- - minor bugfixes
+- Export data to custom text format
+- minor bugfixes
 Version 1.9.0
 - Android support for interactive test execution
 - &quot;source&quot; tab in the editor
