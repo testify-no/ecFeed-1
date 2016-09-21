@@ -63,8 +63,6 @@ public class Constants {
 	public static final String RELATION_NOT = "\u2260";
 	public static final String RELATION_NOT_ASCII = "!=";
 
-	public static final String EXPECTED_VALUE_CHOICE_NAME = "@expected";
-
 	public static final String TYPE_NAME_BOOLEAN = "boolean";
 	public static final String TYPE_NAME_BYTE = "byte";
 	public static final String TYPE_NAME_CHAR = "char";

@@ -24,7 +24,7 @@ import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.TestCaseNode;
-import com.ecfeed.core.serialization.ect.Constants;
+import com.ecfeed.core.model.Constants;
 import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.ui.common.ColorConstants;
 import com.ecfeed.ui.common.ColorManager;
