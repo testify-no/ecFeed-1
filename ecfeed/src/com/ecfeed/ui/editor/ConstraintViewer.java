@@ -360,7 +360,11 @@ public class ConstraintViewer extends TreeViewerSection {
 			@Override
 			public Object visit(StaticStatement statement) throws Exception {
 				fRelationCombo.setVisible(false);
-				fRightOperandComposite.setVisible(false);
+				
+				if (fRightOperandComposite != null) {
+					fRightOperandComposite.setVisible(false);
+				}
+				
 				StatementEditor.this.redraw();
 				return null;
 			}
