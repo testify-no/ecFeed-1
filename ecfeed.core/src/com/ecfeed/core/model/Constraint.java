@@ -290,4 +290,14 @@ public class Constraint implements IConstraint<ChoiceNode> {
 			return new HashSet<String>();
 		}
 	}
+
+	boolean mentionsParameter(MethodParameterNode methodParameter) {
+		if (fPremise.mentions(methodParameter)) {
+			return true;
+		}
+		if (fConsequence.mentions(methodParameter)) {
+			return true;
+		}
+		return false;
+	}
 }

@@ -10,6 +10,8 @@
 
 package com.ecfeed.ui.editor;
 
+import java.util.Set;
+
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -20,6 +22,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ConstraintNode;
+import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.modelif.ConstraintInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
@@ -72,19 +75,24 @@ public class ConstraintDetailsPage extends BasicDetailsPage {
 
 	@Override
 	public void refresh(){
-		if(getSelectedElement() instanceof ConstraintNode){
-			ConstraintNode constraint = (ConstraintNode)getSelectedElement();
+		Object selectedElement = getSelectedElement();
 
-			getMainSection().setText(constraint.toString());
-			fNameCombo.setItems(constraint.getMethod().getConstraintsNames().toArray(new String[]{}));
-			fNameCombo.setText(constraint.getName());
-			fConstraintViewer.setInput(constraint);
-
-			if (fFileInfoProvider.isProjectAvailable()) {
-				fCommentsSection.setInput(constraint);
-			}
-			fConstraintIf.setTarget(constraint);
+		if(!(selectedElement instanceof ConstraintNode)){
+			return;
 		}
+
+		ConstraintNode constraint = (ConstraintNode)selectedElement;
+		getMainSection().setText(constraint.toString());
+		MethodNode methodNode = constraint.getMethod();
+		Set<String> constraintNames = methodNode.getConstraintsNames();
+		fNameCombo.setItems(constraintNames.toArray(new String[]{}));
+		fNameCombo.setText(constraint.getName());
+		fConstraintViewer.setInput(constraint);
+
+		if (fFileInfoProvider.isProjectAvailable()) {
+			fCommentsSection.setInput(constraint);
+		}
+		fConstraintIf.setTarget(constraint);
 	}
 
 	@Override
