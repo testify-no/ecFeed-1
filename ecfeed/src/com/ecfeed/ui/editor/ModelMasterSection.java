@@ -454,16 +454,13 @@ public class ModelMasterSection extends TreeViewerSection{
 
 		@Override
 		protected void populateMenu() {
-			List<AbstractNode> selectedNodes = getSelectedNodes();
-
-			if(selectedNodes.size() == 0) {
+			AbstractNode firstSelectedNode = getFirstSelectedNode();
+			if (firstSelectedNode == null) {
 				return;
 			}
 
-			AbstractNode abstractNode = selectedNodes.get(0);
-
-			addChildAddingActions(abstractNode);
-			addActionsForMethod(abstractNode);
+			addChildAddingActions(firstSelectedNode);
+			addActionsForMethod(firstSelectedNode);
 			super.populateMenu();
 		}
 

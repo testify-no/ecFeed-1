@@ -42,6 +42,16 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.actions.ActionFactory;
 
 import com.ecfeed.core.model.AbstractNode;
+import com.ecfeed.core.model.ChoiceNode;
+import com.ecfeed.core.model.ClassNode;
+import com.ecfeed.core.model.ConstraintNode;
+import com.ecfeed.core.model.GlobalParameterNode;
+import com.ecfeed.core.model.IModelVisitor;
+import com.ecfeed.core.model.MethodNode;
+import com.ecfeed.core.model.MethodParameterNode;
+import com.ecfeed.core.model.RootNode;
+import com.ecfeed.core.model.TestCaseNode;
+import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.editor.actions.IActionProvider;
@@ -145,17 +155,92 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 		}
 
 		protected void populateMenu() {
+
 			IActionProvider provider = getActionProvider();
-			if(provider != null){
-				Iterator<String> groupIt = provider.getGroups().iterator();
-				while(groupIt.hasNext()){
-					for(NamedAction action : provider.getActions(groupIt.next())){
-						addMenuItem(action.getName(), action);
-					}
-					if(groupIt.hasNext()){
-						new MenuItem(fMenu, SWT.SEPARATOR);
-					}
+			if(provider == null) {
+				return;
+			}
+
+			AbstractNode firstSelectedNode = getFirstSelectedNode();
+			if (firstSelectedNode == null) {
+				return;
+			}
+
+			Iterator<String> groupIt = provider.getGroups().iterator();
+
+			while(groupIt.hasNext()){
+				for(NamedAction action : provider.getActions(groupIt.next())){
+					String convertedName = convertActionName(action.getName(), firstSelectedNode); 
+					addMenuItem(convertedName, action);
 				}
+				if(groupIt.hasNext()){
+					new MenuItem(fMenu, SWT.SEPARATOR);
+				}
+			}
+		}
+
+		private String convertActionName(String oldName, AbstractNode selectedNode) {
+			if (!oldName.equals(NamedAction.INSERT_ACTION_NAME)) {
+				return oldName;
+			}
+
+			String newName = null;
+			ConvertInsertNameVisitor visitor = new ConvertInsertNameVisitor();
+			try {
+				newName = (String)selectedNode.accept(visitor);
+			} catch (Exception e) {
+				SystemLogger.logCatch(e.getMessage());
+			}
+
+			final String insertKey = "INS";
+			return newName + "\t" + insertKey;
+		}
+
+		private class ConvertInsertNameVisitor implements IModelVisitor{
+
+			private final static String insertClass = "Insert class";
+			private final static String insertMethod = "Insert method";
+			private final static String insertParameter = "Insert parameter";
+			private final static String insertChoice = "Insert choice";
+
+			@Override
+			public Object visit(RootNode node) throws Exception {
+				return insertClass;
+			}
+
+			@Override
+			public Object visit(ClassNode node) throws Exception {
+				return insertMethod;
+			}
+
+			@Override
+			public Object visit(MethodNode node) throws Exception {
+				return insertParameter;
+			}
+
+			@Override
+			public Object visit(MethodParameterNode node) throws Exception {
+				return insertChoice;
+			}
+
+			@Override
+			public Object visit(GlobalParameterNode node) throws Exception {
+				return insertChoice;
+			}
+
+			@Override
+			public Object visit(TestCaseNode node) throws Exception {
+				return null;
+			}
+
+			@Override
+			public Object visit(ConstraintNode node) throws Exception {
+				return null;
+			}
+
+			@Override
+			public Object visit(ChoiceNode node) throws Exception {
+				return insertChoice;
 			}
 		}
 
@@ -225,10 +310,20 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 		List<AbstractNode> result = new ArrayList<>();
 		for(Object o : getSelection().toList()){
 			if(o instanceof AbstractNode){
-				result .add((AbstractNode)o);
+				result.add((AbstractNode)o);
 			}
 		}
 		return result;
+	}
+
+	public AbstractNode getFirstSelectedNode() {
+		List<AbstractNode> selectedNodes = getSelectedNodes();
+
+		if(selectedNodes.size() == 0) {
+			return null;
+		}
+
+		return selectedNodes.get(0);
 	}
 
 	@Override
