@@ -472,11 +472,15 @@ public class ModelMasterSection extends TreeViewerSection{
 					new AddChildActionProvider(getTreeViewer(), ModelMasterSection.this, fFileInfoProvider);
 			List<AbstractAddChildAction> actions = actionProvider.getPossibleActions(abstractNode);
 
+			boolean menuItemAdded = false;
 			for(AbstractAddChildAction action : actions) {
 				addMenuItem(action.getName(), action);
+				menuItemAdded = true;
 			}
 
-			new MenuItem(getMenu(), SWT.SEPARATOR);
+			if (menuItemAdded) {
+				new MenuItem(getMenu(), SWT.SEPARATOR);
+			}
 		}
 
 		private void addActionsForMethod(AbstractNode abstractNode) {
