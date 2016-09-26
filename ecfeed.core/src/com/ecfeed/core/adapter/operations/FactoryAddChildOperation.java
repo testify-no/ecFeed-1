@@ -59,7 +59,8 @@ public class FactoryAddChildOperation implements IModelVisitor{
 			}
 			return new GenericOperationAddParameter(node, globalParameter, fIndex);
 		}
-		ModelOperationException.report(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
+
+		reportOperationNotSupportedException();
 		return null;
 	}
 
@@ -77,7 +78,8 @@ public class FactoryAddChildOperation implements IModelVisitor{
 			}
 			return new GenericOperationAddParameter(node, globalParameter, fIndex);
 		}
-		ModelOperationException.report(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
+
+		reportOperationNotSupportedException();
 		return null;
 	}
 
@@ -111,11 +113,8 @@ public class FactoryAddChildOperation implements IModelVisitor{
 			}
 			return new MethodOperationAddTestCase(node, (TestCaseNode)fChild, fAdapterProvider, fIndex);
 		}
-		
-		if (!fValidate) {
-			ModelOperationException.report(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
-		}
-		
+
+		reportOperationNotSupportedException();
 		return null;
 	}
 
@@ -127,7 +126,8 @@ public class FactoryAddChildOperation implements IModelVisitor{
 			}
 			return new GenericOperationAddChoice(node, (ChoiceNode)fChild, fAdapterProvider, fIndex, fValidate);
 		}
-		ModelOperationException.report(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
+
+		reportOperationNotSupportedException();
 		return null;
 	}
 
@@ -139,19 +139,20 @@ public class FactoryAddChildOperation implements IModelVisitor{
 			}
 			return new GenericOperationAddChoice(node, (ChoiceNode)fChild, fAdapterProvider, fIndex, fValidate);
 		}
-		ModelOperationException.report(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
+
+		reportOperationNotSupportedException();
 		return null;
 	}
 
 	@Override
 	public Object visit(TestCaseNode node) throws Exception {
-		ModelOperationException.report(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
+		reportOperationNotSupportedException();
 		return null;
 	}
 
 	@Override
 	public Object visit(ConstraintNode node) throws Exception {
-		ModelOperationException.report(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
+		reportOperationNotSupportedException();
 		return null;
 	}
 
@@ -163,8 +164,16 @@ public class FactoryAddChildOperation implements IModelVisitor{
 			}
 			return new GenericOperationAddChoice(node, (ChoiceNode)fChild, fAdapterProvider, fIndex, fValidate);
 		}
-		ModelOperationException.report(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
+
+		reportOperationNotSupportedException();
 		return null;
 	}
 
+	private void reportOperationNotSupportedException() throws Exception {
+		if (fValidate) {
+			return;
+		}
+
+		ModelOperationException.report(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
+	}
 }
