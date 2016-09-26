@@ -111,7 +111,11 @@ public class FactoryAddChildOperation implements IModelVisitor{
 			}
 			return new MethodOperationAddTestCase(node, (TestCaseNode)fChild, fAdapterProvider, fIndex);
 		}
-		ModelOperationException.report(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
+		
+		if (!fValidate) {
+			ModelOperationException.report(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
+		}
+		
 		return null;
 	}
 
