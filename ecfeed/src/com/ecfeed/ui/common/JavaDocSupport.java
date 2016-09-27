@@ -115,8 +115,12 @@ public class JavaDocSupport {
 		@Override
 		public Object visit(ChoiceNode node) throws Exception {
 			try{
-				if(node.isAbstract() == false && JavaUtils.isUserType(node.getParameter().getType())){
+				if(node.isAbstract() == false && JavaUtils.isUserType(node.getParameter().getType())) {
 					IType type = JavaModelAnalyser.getIType(node.getParameter().getType());
+					if (type == null) {
+						return EMPTY_STRING;
+					}
+					
 					for(IField field : type.getFields()){
 						if(field.isEnumConstant() && field.getElementName().equals(node.getValueString())){
 							return getJavadoc(field);
