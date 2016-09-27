@@ -153,14 +153,15 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 	}
 
 	public BasicDetailsPage getCurrentPage(){
-		if(detailsPart != null){
-			try {
-				return (BasicDetailsPage)detailsPart.getCurrentPage();
-			} catch(SWTException e)	{
-				SystemLogger.logCatch(e.getMessage());
-			}
+		if(detailsPart == null) {
+			return null;
 		}
-		return null;
+
+		try {
+			return (BasicDetailsPage)detailsPart.getCurrentPage();
+		} catch(SWTException e)	{
+			return null;
+		}		
 	}
 
 	public ModelPage getPage(){
