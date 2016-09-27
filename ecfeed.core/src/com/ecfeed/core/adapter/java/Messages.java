@@ -19,7 +19,7 @@ public class Messages {
 				"Choice value must fit to type and range of the represented parameter.\n" +
 				"Choices of user defined type must follow Java enum defining rules.";
 	}
-	public static final String PROBLEM_WITH_BULK_OPERATION(String operation){return "Some problems occured during the operation " + operation;}
+	public static final String PROBLEM_WITH_BULK_OPERATION(String operation){return "Can not perform operation: " + operation;}
 	public static final String NEGATIVE_INDEX_PROBLEM = "The index of the element must be non-negative";
 	public static final String TOO_HIGH_INDEX_PROBLEM = "The index of the element is too high";
 	public static final String NAME_DUPLICATE_PROBLEM = "Two elements with the same name are not allowed for this parent";
@@ -29,7 +29,7 @@ public class Messages {
 	public static final String CLASS_NAME_DUPLICATE_PROBLEM = "The model already contains a class with this name";
 	public static final String MISSING_PARENT_PROBLEM = "Missing current or new parent of moved class";
 	public static final String METHOD_NAME_REGEX_PROBLEM = "The method name should fulfill all rules for naming method in Java";
-	public static final String METHOD_SIGNATURE_DUPLICATE_PROBLEM(String className, String methodName){return "The class " + className + " already contains model of a method " + methodName + " with identical signature";}
+	public static final String METHOD_SIGNATURE_DUPLICATE_PROBLEM(String className, String methodName){return "The class: " + className + " already contains model of a method: " + methodName + " with identical signature";}
 	public static final String METHOD_GLOBAL_PARAMETER_SIGNATURE_DUPLICATE_PROBLEM(String className, String methodName, String types1, String types2){
 		return "This action would result in duplicate methods in class:\n" + className + "\nmethods:\n" + methodName + types1 + "\n" + methodName + types2; 
 	}
