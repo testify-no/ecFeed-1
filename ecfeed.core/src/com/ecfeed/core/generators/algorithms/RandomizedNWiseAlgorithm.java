@@ -38,7 +38,7 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 	// constraints cannot be evaluated).
 	private Set<List<Variable<E>>> fRemainingTuples = null;
 
-	private int ignoreCount = 0;
+	private int fIgnoreCount = 0;
 
 	final private int CONSISTENCY_LOOP_LIM = 10;
 
@@ -54,7 +54,7 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 			fRemainingTuples = nTuples.get(true);
 			fRemainingTuples.addAll(fPotentiallyRemainingTuples);
 
-			ignoreCount = fRemainingTuples.size() * (100 - getCoverage());
+			fIgnoreCount = fRemainingTuples.size() * (100 - getCoverage()) / 100;
 
 		} catch (GeneratorException e) {
 			throw new RuntimeErrorException(new Error(e));
@@ -66,8 +66,8 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 	public List<E> getNext() throws GeneratorException {
 
 		while (true) {
-			
-			if (fRemainingTuples.size() <= ignoreCount)
+
+			if (fRemainingTuples.size() <= fIgnoreCount)
 				return null;
 
 
@@ -77,7 +77,7 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 			List<E> randomTest = generateRandomTest(nTuple);
 
 			if (randomTest != null) {
-				if (fRemainingTuples.size() <= ignoreCount) {
+				if (fRemainingTuples.size() <= fIgnoreCount) {
 					// no need for optimization
 					progress(1);
 					return randomTest;
@@ -226,7 +226,7 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 			} while (!checkConstraints(candidate) && ++itr < CONSISTENCY_LOOP_LIM);
 
 			if (itr < CONSISTENCY_LOOP_LIM) {
-				if (fRemainingTuples.size() <= ignoreCount)
+				if (fRemainingTuples.size() <= fIgnoreCount)
 					return candidate;
 				// one extra point for the current tuple
 				int cov = getCoverage(candidate) + 1;
