@@ -23,8 +23,11 @@ public class ModelOperationException extends Exception {
 		super(message);
 	}
 
+	public static void reportNoLogging(String message) throws ModelOperationException {
+		throw new ModelOperationException(message);
+	}	
 	public static void report(String message) throws ModelOperationException {
 		SystemLogger.logThrow(message);
-		throw new ModelOperationException(message);
+		reportNoLogging(message);
 	}	
 }
