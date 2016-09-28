@@ -48,7 +48,10 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	private TestCasesViewerContentProvider fContentProvider;
 	private Button fExecuteSelectedButton;
 	private Button fExportTestCasesButton;
+	private Button fRenameSuiteButton;
 	private Button fGenerateSuiteButton;
+	private Button fCalculateCoverageButton;
+	private Button fRemoveSelectedButton;
 	private MethodInterface fMethodIf;
 	private MethodNode fParentMethod;
 
@@ -156,10 +159,10 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 		getSection().setText("Test cases");
 
 		addButton("Add test case", new AddTestCaseAdapter());
-		addButton("Rename suite", new RenameSuiteAdapter());
 		fGenerateSuiteButton = addButton("Generate test suite", new GenerateTestSuiteAdapter());
-		addButton("Calculate coverage", new CalculateCoverageAdapter(fileInfoProvider));
-		addButton("Remove selected", new RemoveSelectedAdapter(Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
+		fRenameSuiteButton = addButton("Rename suite", new RenameSuiteAdapter());
+		fCalculateCoverageButton = addButton("Calculate coverage", new CalculateCoverageAdapter(fileInfoProvider));
+		fRemoveSelectedButton = addButton("Remove selected", new RemoveSelectedAdapter(Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
 
 		if (getFileInfoProvider().isProjectAvailable()) {
 			fExecuteSelectedButton = addButton("Execute selected", new ExecuteStaticTestAdapter());
@@ -173,12 +176,19 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	@Override
 	public void refresh() {
 		fGenerateSuiteButton.setEnabled(getSelectedMethod().getParameters().size() > 0);
+		
+		boolean testCasesExist = getSelectedMethod().hasTestCases();
+		fRenameSuiteButton.setEnabled(testCasesExist);
+		fCalculateCoverageButton.setEnabled(testCasesExist);
 
 		if (getFileInfoProvider().isProjectAvailable()) {
 			fExecuteSelectedButton.setEnabled(executionEnabled());
 		}
 
-		fExportTestCasesButton.setEnabled(anyTestCaseSelected());
+		boolean anySelected = anyTestCaseSelected();
+		fExportTestCasesButton.setEnabled(anySelected);
+		fRemoveSelectedButton.setEnabled(anySelected);
+
 		fLabelProvider.refresh();
 	}
 
@@ -220,7 +230,10 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 				if (event.detail == SWT.CHECK && getFileInfoProvider().isProjectAvailable()) {
 					fExecuteSelectedButton.setEnabled(executionEnabled());
 				}
-				fExportTestCasesButton.setEnabled(anyTestCaseSelected());
+
+				boolean anySelected = anyTestCaseSelected();
+				fExportTestCasesButton.setEnabled(anySelected);
+				fRemoveSelectedButton.setEnabled(anySelected);
 			}
 		});
 		return treeViewer;

@@ -178,6 +178,13 @@ public class MethodNode extends ParametersParentNode {
 		return fTestCases;
 	}
 
+	public boolean hasTestCases() {
+		if (fTestCases.isEmpty()) {
+			return false;
+		}
+		return true;
+	}
+
 	public Collection<TestCaseNode> getTestCases(String testSuite) {
 		ArrayList<TestCaseNode> testCases = new ArrayList<TestCaseNode>();
 		for(TestCaseNode testCase : getTestCases()){
