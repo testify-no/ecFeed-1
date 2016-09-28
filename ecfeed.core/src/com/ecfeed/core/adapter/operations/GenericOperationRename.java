@@ -157,7 +157,12 @@ public class GenericOperationRename extends AbstractModelOperation {
 
 	protected void verifyNameWithRegex() throws ModelOperationException{
 		if(fNewName.matches(fNameRegex) == false){
-			ModelOperationException.reportNoLogging(getRegexProblemMessage());
+			try {
+				ModelOperationException.pushLoggingState(false);
+				ModelOperationException.report(getRegexProblemMessage());
+			} finally {
+				ModelOperationException.popLoggingState();
+			}
 		}
 	}
 

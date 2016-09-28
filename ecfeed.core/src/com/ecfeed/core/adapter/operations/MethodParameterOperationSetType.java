@@ -209,9 +209,9 @@ public class MethodParameterOperationSetType extends BulkOperation {
 			List<String> types = method.getParametersTypes();
 			types.set(fTarget.getIndex(), getNewType());
 			if(method.getClassNode().getMethod(method.getName(), types) != null && method.getClassNode().getMethod(method.getName(), types) != method){
-				ModelOperationException.reportNoLogging(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM(method.getClassNode().getName(), method.getName()));
+				ModelOperationException.report(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM(method.getClassNode().getName(), method.getName()));
 			}
-			
+
 			super.execute();
 			fOriginalTestCases = new ArrayList<>(fTarget.getMethod().getTestCases());
 			fOriginalConstraints = new ArrayList<>(fTarget.getMethod().getConstraintNodes());
@@ -296,16 +296,16 @@ public class MethodParameterOperationSetType extends BulkOperation {
 				Constraint constraint = it.next().getConstraint();
 				IStatementVisitor statementAdapter = new StatementAdapter();
 				try{
-				if((boolean)constraint.getPremise().accept(statementAdapter) == false ||
-						(boolean)constraint.getConsequence().accept(statementAdapter) == false){
-					it.remove();
-				}
+					if((boolean)constraint.getPremise().accept(statementAdapter) == false ||
+							(boolean)constraint.getConsequence().accept(statementAdapter) == false){
+						it.remove();
+					}
 				}catch(Exception e){
 					it.remove();
 				}
 			}
 		}
-}
+	}
 
 	public MethodParameterOperationSetType(MethodParameterNode target, String newType, ITypeAdapterProvider adapterProvider) {
 		super(OperationNames.SET_TYPE, true);

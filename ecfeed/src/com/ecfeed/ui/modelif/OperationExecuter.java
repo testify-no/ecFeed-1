@@ -71,7 +71,8 @@ public class OperationExecuter {
 
 		private IStatus executeOperation(IModelOperation operation, IProgressMonitor monitor, IAdaptable info){
 			try {
-				operation.execute();
+				executeWithoutExceptionLogging(operation);
+
 				CachedImplementationStatusResolver.clearCache();
 				updateListeners();
 				return Status.OK_STATUS;
@@ -82,6 +83,15 @@ public class OperationExecuter {
 						e.getMessage());
 
 				return operation.modelUpdated()?Status.OK_STATUS:Status.CANCEL_STATUS;
+			}
+		}
+
+		private void executeWithoutExceptionLogging(IModelOperation operation) throws ModelOperationException {
+			try {
+				ModelOperationException.pushLoggingState(false);
+				operation.execute();
+			} finally {
+				ModelOperationException.popLoggingState();
 			}
 		}
 

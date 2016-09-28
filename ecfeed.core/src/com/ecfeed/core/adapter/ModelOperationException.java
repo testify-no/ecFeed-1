@@ -10,6 +10,9 @@
 
 package com.ecfeed.core.adapter;
 
+import java.util.Stack;
+
+import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.SystemLogger;
 
 public class ModelOperationException extends Exception {
@@ -18,16 +21,32 @@ public class ModelOperationException extends Exception {
 	 * 
 	 */
 	private static final long serialVersionUID = -2841889790004375884L;
+	private static Boolean fLoggingEnabledState = true;
+	private static Stack<Boolean> fLoggingStates = new Stack<Boolean>();
+
 
 	private ModelOperationException(String message){
 		super(message);
 	}
 
-	public static void reportNoLogging(String message) throws ModelOperationException {
-		throw new ModelOperationException(message);
-	}	
 	public static void report(String message) throws ModelOperationException {
-		SystemLogger.logThrow(message);
-		reportNoLogging(message);
-	}	
+		if (fLoggingEnabledState) {
+			SystemLogger.logThrow(message);
+		}
+		throw new ModelOperationException(message);
+	}
+
+	public static void pushLoggingState(boolean newLoggingEnabledState) {
+		fLoggingStates.push(fLoggingEnabledState);
+		fLoggingEnabledState = newLoggingEnabledState;
+	}
+
+	public static void popLoggingState() {
+		if (fLoggingStates.isEmpty()) {
+			ExceptionHelper.reportRuntimeException("Invalid remove of logging state.");
+		}
+
+		fLoggingEnabledState = fLoggingStates.peek();
+		fLoggingStates.pop();
+	}
 }
