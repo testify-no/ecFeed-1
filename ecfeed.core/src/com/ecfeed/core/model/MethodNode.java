@@ -178,6 +178,13 @@ public class MethodNode extends ParametersParentNode {
 		return fTestCases;
 	}
 
+	public boolean hasParameters() {
+		if (getParameters().isEmpty()) {
+			return false; 
+		}
+		return true;
+	}
+
 	public boolean hasTestCases() {
 		if (fTestCases.isEmpty()) {
 			return false;

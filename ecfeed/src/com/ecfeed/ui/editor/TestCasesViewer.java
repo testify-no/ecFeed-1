@@ -175,19 +175,20 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 
 	@Override
 	public void refresh() {
-		fGenerateSuiteButton.setEnabled(getSelectedMethod().getParameters().size() > 0);
-		
+		boolean parametersExist = getSelectedMethod().hasParameters();
+		fGenerateSuiteButton.setEnabled(parametersExist);
+
 		boolean testCasesExist = getSelectedMethod().hasTestCases();
 		fRenameSuiteButton.setEnabled(testCasesExist);
-		fCalculateCoverageButton.setEnabled(testCasesExist);
+		fCalculateCoverageButton.setEnabled(testCasesExist && parametersExist);
 
 		if (getFileInfoProvider().isProjectAvailable()) {
 			fExecuteSelectedButton.setEnabled(executionEnabled());
 		}
 
-		boolean anySelected = anyTestCaseSelected();
-		fExportTestCasesButton.setEnabled(anySelected);
-		fRemoveSelectedButton.setEnabled(anySelected);
+		boolean selectedTestCasesExist = anyTestCaseSelected();
+		fExportTestCasesButton.setEnabled(selectedTestCasesExist);
+		fRemoveSelectedButton.setEnabled(selectedTestCasesExist);
 
 		fLabelProvider.refresh();
 	}
