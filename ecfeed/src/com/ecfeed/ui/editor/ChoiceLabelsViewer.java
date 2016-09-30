@@ -29,10 +29,12 @@ import org.eclipse.swt.graphics.FontData;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.ecfeed.core.model.ChoiceNode;
+import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.ui.common.ColorConstants;
 import com.ecfeed.ui.common.ColorManager;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.dialogs.basic.ErrorDialog;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.editor.actions.ActionGroups;
 import com.ecfeed.ui.editor.actions.CutAction;
@@ -176,6 +178,13 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 
 		@Override
 		protected void setValue(Object element, Object value) {
+			String strValue = (String)value;
+			if (StringHelper.isNullOrEmpty(strValue)) {
+				final String INVALID_LABEL = "Invalid label"; 
+				final String LABEL_NOT_EMPTY = "Label must not be empty.";
+				ErrorDialog.open(INVALID_LABEL, LABEL_NOT_EMPTY);
+				return;
+			}
 			fChoiceIf.renameLabel((String)element, (String)value);
 		}
 	}
