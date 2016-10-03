@@ -7,6 +7,11 @@
 #                                                                                  
 #-------------------------------------------------------------------------------
 
+Version 1.10.3
+ - more bugfixes about global parameters
+ - fixed label editor for standalone version
+ - improved error reporting
+
 Version 1.10.2
  - bugfixes
 

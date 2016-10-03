@@ -2,16 +2,19 @@
 <feature
       id="com.ecfeed"
       label="ecFeed"
-      version="1.10.2.qualifier"
+      version="1.10.3.qualifier"
       provider-name="ecFeed AS">
 
    <description url="https://github.com/testify-no/ecFeed">
       Test data generator and jUnit test execution framework based
 on Equivalence Class model.
-
 Changelog:
+Version 1.10.3
+ - more bugfixes about global parameters
+ - fixed label editor for standalone version
+ - improved error reporting
 Version 1.10.2
- - bugfixes
+- bugfixes
 Version 1.10.1
 - Fixes
 - Shortcut key (Insert) to add default node 
@@ -84,15 +87,17 @@ Version 1.0.0
 
    <copyright>
       /*******************************************************************************
- * Copyright (c) 2013 Testify AS
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *   Patryk Chamuczynski (p.chamuczynski AT radytek.com) - initial implementation
- *******************************************************************************/
+* Copyright (c) 2016 ecFeed AS
+* All rights reserved. This program and the accompanying materials
+* are made available under the terms of the Eclipse Public License
+v1.0
+* which accompanies this distribution, and is available at
+* http://www.eclipse.org/legal/epl-v10.html
+*
+* Contributors:
+*   Patryk Chamuczynski (p.chamuczynski AT radytek.com) - initial
+implementation
+*******************************************************************************/
    </copyright>
 
    <license url="http://www.example.com/license">
