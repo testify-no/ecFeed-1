@@ -293,6 +293,7 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 		if (!fileInfoProvider.isProjectAvailable()) {
 			AbstractSelectionAdapter adapter = new LabelTextSelectionAdapter();
 			fSelectedLabelText = addText("", adapter);
+			fSelectedLabelText.setEnabled(false);
 			addSelectionChangedListener(new LabelSelectionChangedListener());
 		}
 
