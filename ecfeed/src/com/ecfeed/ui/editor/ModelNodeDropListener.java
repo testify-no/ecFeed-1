@@ -331,13 +331,26 @@ public class ModelNodeDropListener extends ViewerDropAdapter{
 
 	@Override
 	public boolean validateDrop(Object target, int operation, TransferData transferType) {
-		if(fEnabled == false) return false;
+		if (!fEnabled) { 
+			return false;
+		}
+
 		AbstractNode parent = determineNewParent(target, getCurrentLocation());
-		SelectionInterface selectionIf = new SelectionInterface(fUpdateContext);
+		if (parent == null) {
+			return false;
+		}
+
 		List<AbstractNode>dragged = NodeDnDBuffer.getInstance().getDraggedNodes();
+		if (dragged.isEmpty()) {
+			return false;
+		}
+
+		SelectionInterface selectionIf = new SelectionInterface(fUpdateContext);
 		selectionIf.setTarget(dragged);
-		if(dragged.size() == 0) return false;
-		if(selectionIf.isSingleType() == false) return false;
+		if (!selectionIf.isSingleType()) {
+			return false;
+		}
+
 		try {
 			return (boolean)parent.accept(new DropValidator(operation));
 		} catch (Exception e) {

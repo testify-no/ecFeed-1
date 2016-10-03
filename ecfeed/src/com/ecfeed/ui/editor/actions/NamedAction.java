@@ -36,7 +36,7 @@ public class NamedAction extends Action {
 	public static final String COPY_ACTION_NAME = "Copy\tCtrl+C";
 	public static final String CUT_ACTION_NAME = "Cut\tCtrl+X";
 	public static final String PASTE_ACTION_NAME = "Paste\tCtrl+V";
-	public static final String INSERT_ACTION_NAME = "Insert\tInsert";
+	public static final String INSERT_ACTION_NAME = "INSERT";
 	public static final String DELETE_ACTION_NAME = "Delete\tDEL";
 	public static final String SELECT_ALL_ACTION_NAME = "Select All\tCtrl+A";
 	public static final String UNDO_ACTION_NAME = "Undo\tCtrl+Z";

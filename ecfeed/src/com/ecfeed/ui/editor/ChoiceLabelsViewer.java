@@ -17,6 +17,10 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.EditingSupport;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
@@ -26,13 +30,16 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.ecfeed.core.model.ChoiceNode;
+import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.ui.common.ColorConstants;
 import com.ecfeed.ui.common.ColorManager;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.dialogs.basic.ErrorDialog;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.editor.actions.ActionGroups;
 import com.ecfeed.ui.editor.actions.CutAction;
@@ -47,6 +54,8 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 	private static final int STYLE = Section.TITLE_BAR | Section.EXPANDED;
 
 	private ChoiceInterface fChoiceIf;
+	private Text fSelectedLabelText;
+	private String fSelectedLabel;
 
 	private static class LabelClipboard{
 		private static List<String> fLabels = new ArrayList<>();
@@ -176,6 +185,13 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 
 		@Override
 		protected void setValue(Object element, Object value) {
+			String strValue = (String)value;
+			if (StringHelper.isNullOrEmpty(strValue)) {
+				final String INVALID_LABEL = "Invalid label"; 
+				final String LABEL_NOT_EMPTY = "Label must not be empty.";
+				ErrorDialog.open(INVALID_LABEL, LABEL_NOT_EMPTY);
+				return;
+			}
 			fChoiceIf.renameLabel((String)element, (String)value);
 		}
 	}
@@ -215,6 +231,50 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 		}
 	}
 
+	private class LabelTextSelectionAdapter extends AbstractSelectionAdapter { 
+		@Override
+		public void widgetSelected(SelectionEvent e){
+			if (fSelectedLabel == null) {
+				return;
+			}
+			fChoiceIf.renameLabel(fSelectedLabel, fSelectedLabelText.getText());
+			fSelectedLabel = null;
+			fSelectedLabelText.setText("");
+			fSelectedLabelText.setEnabled(false);
+		}
+	}
+
+	private class LabelSelectionChangedListener implements ISelectionChangedListener {
+
+		@Override
+		public void selectionChanged(SelectionChangedEvent event) {
+			ISelection selection = event.getSelection();
+
+			IStructuredSelection strSelection = getStructuredSelection(selection);
+			if (strSelection == null) {
+				fSelectedLabel = null;
+				return;
+			}
+
+			fSelectedLabel = strSelection.getFirstElement().toString();
+			fSelectedLabelText.setText(fSelectedLabel);
+			fSelectedLabelText.setEnabled(true);
+		}
+
+		private IStructuredSelection getStructuredSelection(ISelection selection) {
+			if (selection == null) {
+				return null;
+			}			
+			if (selection.isEmpty()) {
+				return null;
+			}
+			if (!(selection instanceof IStructuredSelection)) {
+				return null;
+			}
+			return (IStructuredSelection)selection;
+		}
+	}
+
 	public ChoiceLabelsViewer(
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext, 
@@ -229,6 +289,13 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 				new ActionSelectionAdapter(
 						new LabelDeleteAction(updateContext), 
 						Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
+
+		if (!fileInfoProvider.isProjectAvailable()) {
+			AbstractSelectionAdapter adapter = new LabelTextSelectionAdapter();
+			fSelectedLabelText = addText("", adapter);
+			fSelectedLabelText.setEnabled(false);
+			addSelectionChangedListener(new LabelSelectionChangedListener());
+		}
 
 		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
 		setActionProvider(new LabelsViewerActionProvider());

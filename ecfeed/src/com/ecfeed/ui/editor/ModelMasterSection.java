@@ -454,16 +454,13 @@ public class ModelMasterSection extends TreeViewerSection{
 
 		@Override
 		protected void populateMenu() {
-			List<AbstractNode> selectedNodes = getSelectedNodes();
-
-			if(selectedNodes.size() == 0) {
+			AbstractNode firstSelectedNode = getFirstSelectedNode();
+			if (firstSelectedNode == null) {
 				return;
 			}
 
-			AbstractNode abstractNode = selectedNodes.get(0);
-
-			addChildAddingActions(abstractNode);
-			addActionsForMethod(abstractNode);
+			addChildAddingActions(firstSelectedNode);
+			addActionsForMethod(firstSelectedNode);
 			super.populateMenu();
 		}
 
@@ -472,11 +469,15 @@ public class ModelMasterSection extends TreeViewerSection{
 					new AddChildActionProvider(getTreeViewer(), ModelMasterSection.this, fFileInfoProvider);
 			List<AbstractAddChildAction> actions = actionProvider.getPossibleActions(abstractNode);
 
+			boolean menuItemAdded = false;
 			for(AbstractAddChildAction action : actions) {
 				addMenuItem(action.getName(), action);
+				menuItemAdded = true;
 			}
 
-			new MenuItem(getMenu(), SWT.SEPARATOR);
+			if (menuItemAdded) {
+				new MenuItem(getMenu(), SWT.SEPARATOR);
+			}
 		}
 
 		private void addActionsForMethod(AbstractNode abstractNode) {

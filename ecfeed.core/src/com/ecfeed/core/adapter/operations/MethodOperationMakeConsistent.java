@@ -65,7 +65,7 @@ public class MethodOperationMakeConsistent extends AbstractModelOperation {
 		}
 		Iterator<ConstraintNode> cIt = fTarget.getConstraintNodes().iterator();
 		while(cIt.hasNext()){
-			if(cIt.next().isConsistent() == false){
+			if(!cIt.next().isConsistent()){
 				cIt.remove();
 				modelUpdated = true;
 			}

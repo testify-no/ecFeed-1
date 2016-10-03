@@ -41,7 +41,6 @@ import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.TestCaseNode;
-import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
@@ -153,14 +152,15 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 	}
 
 	public BasicDetailsPage getCurrentPage(){
-		if(detailsPart != null){
-			try {
-				return (BasicDetailsPage)detailsPart.getCurrentPage();
-			} catch(SWTException e)	{
-				SystemLogger.logCatch(e.getMessage());
-			}
+		if(detailsPart == null) {
+			return null;
 		}
-		return null;
+
+		try {
+			return (BasicDetailsPage)detailsPart.getCurrentPage();
+		} catch(SWTException e)	{
+			return null;
+		}		
 	}
 
 	public ModelPage getPage(){

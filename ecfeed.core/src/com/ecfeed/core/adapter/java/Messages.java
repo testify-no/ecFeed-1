@@ -19,7 +19,7 @@ public class Messages {
 				"Choice value must fit to type and range of the represented parameter.\n" +
 				"Choices of user defined type must follow Java enum defining rules.";
 	}
-	public static final String PROBLEM_WITH_BULK_OPERATION(String operation){return "Some problems occured during the operation " + operation;}
+	public static final String PROBLEM_WITH_BULK_OPERATION(String operation){return "Can not perform operation: " + operation;}
 	public static final String NEGATIVE_INDEX_PROBLEM = "The index of the element must be non-negative";
 	public static final String TOO_HIGH_INDEX_PROBLEM = "The index of the element is too high";
 	public static final String NAME_DUPLICATE_PROBLEM = "Two elements with the same name are not allowed for this parent";
@@ -29,7 +29,7 @@ public class Messages {
 	public static final String CLASS_NAME_DUPLICATE_PROBLEM = "The model already contains a class with this name";
 	public static final String MISSING_PARENT_PROBLEM = "Missing current or new parent of moved class";
 	public static final String METHOD_NAME_REGEX_PROBLEM = "The method name should fulfill all rules for naming method in Java";
-	public static final String METHOD_SIGNATURE_DUPLICATE_PROBLEM(String className, String methodName){return "The class " + className + " already contains model of a method " + methodName + " with identical signature";}
+	public static final String METHOD_SIGNATURE_DUPLICATE_PROBLEM(String className, String methodName){return "The class: " + className + " already contains model of a method: " + methodName + " with identical signature";}
 	public static final String METHOD_GLOBAL_PARAMETER_SIGNATURE_DUPLICATE_PROBLEM(String className, String methodName, String types1, String types2){
 		return "This action would result in duplicate methods in class:\n" + className + "\nmethods:\n" + methodName + types1 + "\n" + methodName + types2; 
 	}
@@ -37,7 +37,7 @@ public class Messages {
 	public static final String UNEXPECTED_PROBLEM_WHILE_REMOVING_ELEMENT = "Element could not be removed from the model";
 	public static final String METHODS_INCOMPATIBLE_PROBLEM = "The converted methods do not have the same parameter count and types";
 	public static final String CATEGORY_NAME_DUPLICATE_PROBLEM = "A parameter with this name already exists in the element.";
-	public static final String CATEGORY_NAME_REGEX_PROBLEM = "Parameter name must be a valid java identifier";
+	public static final String CATEGORY_NAME_REGEX_PROBLEM = "Parameter name must be a valid Java identifier (only alphanumeric characters or underscore, no spaces, should not begin with a digit).";
 	public static final String CATEGORY_TYPE_REGEX_PROBLEM = "Parameter type must be a valid type identifier in Java, i.e. it must be either a primitive type name or String or a valid qualified type name of user type";
 	public static final String CATEGORY_DEFAULT_VALUE_REGEX_PROBLEM = "The entered value is not compatible with parameter type";
 	public static final String CONSTRAINT_NAME_REGEX_PROBLEM = "Constraint name not allowed";

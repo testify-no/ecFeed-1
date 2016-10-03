@@ -29,6 +29,7 @@ import static com.ecfeed.core.serialization.ect.Constants.TEST_CASE_NODE_NAME;
 import static com.ecfeed.core.serialization.ect.Constants.TEST_SUITE_NAME_ATTRIBUTE;
 import static com.ecfeed.core.serialization.ect.Constants.TYPE_NAME_ATTRIBUTE;
 import static com.ecfeed.core.serialization.ect.Constants.VALUE_ATTRIBUTE;
+import static com.ecfeed.core.model.Constants.EXPECTED_VALUE_CHOICE_NAME;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -263,7 +264,7 @@ public abstract class XomAnalyser {
 				if(valueString == null){
 					ParserException.report(Messages.MISSING_VALUE_ATTRIBUTE_IN_TEST_CASE_ELEMENT);
 				}
-				testValue = new ChoiceNode(Constants.EXPECTED_VALUE_CHOICE_NAME, valueString);
+				testValue = new ChoiceNode(EXPECTED_VALUE_CHOICE_NAME, valueString);
 				testValue.setParent(parameter);
 			}
 			testData.add(testValue);

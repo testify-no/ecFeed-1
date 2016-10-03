@@ -13,61 +13,24 @@ package com.ecfeed.core.utils;
 import java.util.List;
 
 import com.ecfeed.core.model.AbstractNode;
+import com.ecfeed.core.model.AbstractStatement;
 import com.ecfeed.core.model.ChoiceNode;
-import com.ecfeed.core.model.ChoicesParentNode;
+import com.ecfeed.core.model.ConstraintNode;
+import com.ecfeed.core.model.GlobalParameterNode;
+import com.ecfeed.core.model.MethodNode;
+import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.TestCaseNode;
 
 
 public class SystemLoggerHelper {
 
-	public static void printListOfChoices(String message, List<ChoiceNode> choices) {
-		System.out.println("printArrayOfChoices 01 " + " - " + message + " ----------------------------------------------------------------");
-		for (ChoiceNode choice : choices) {
-			printChoice("", choice);
-		}
-	}
+	private static final int indentIncrement = 4;
 
-	public static void printChoice(String message, ChoiceNode choice) {
-		if (message != null && message.length() > 0) {
-			System.out.println("message: " + message);
-		}
-		System.out.println("hashCode: " + choice.hashCode());
-		System.out.println("name: " + choice.getName());
-		System.out.println("parameter: " + choice.getParameter().getName());
-	}
-
-	public static void printChoiceParentsNode(String message, ChoicesParentNode choicesParentNode) {
-		if (message != null && message.length() > 0) {
-			System.out.println("message: " + message);
-		}
-		System.out.println("hashCode: " + choicesParentNode.hashCode());
-		System.out.println("class: " + choicesParentNode.getClass().getName());
-		System.out.println("name: " + choicesParentNode.getName());
-	}	
-
-	public static void printChoiceWithParents(String message, ChoiceNode choice) {
-
-		SystemLogger.logLine("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv");
-		ChoicesParentNode current = choice;
-
-		for(;;) {
-			printChoiceParentsNode(message, current);
-
-			AbstractNode parent = current.getParent();
-
-			if (parent == null) {
-				break;
-			}
-
-			if (!(parent instanceof ChoicesParentNode)) {
-				break;
-			}
-
-			ChoicesParentNode choicesParent =	 (ChoicesParentNode)parent;
-			current = choicesParent; 
-		}
-		SystemLogger.logLine("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-	}	
+	//	public static void printListOfChoices(String message, List<ChoiceNode> choices, int indent) {
+	//		for (ChoiceNode choice : choices) {
+	//			printChoiceNode(choice, indent);
+	//		}
+	//	}
 
 	private static AbstractNode findRoot(AbstractNode startNode) {
 
@@ -85,15 +48,16 @@ public class SystemLoggerHelper {
 		return null;
 	}
 
-	public static void printModel(AbstractNode someNodeOfModel) {
+	public static void printModel(String message, AbstractNode someNodeOfModel) {
 		AbstractNode root = findRoot(someNodeOfModel);
 
 		if (root == null) {
-			System.out.println("ROOT NOT FOUND.");
+			System.out.println("Root not found.");
 		}
-		System.out.println("Model BEG ---------------------------------------------------------");
+		System.out.println("Model vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv");
+		System.out.println("Message: " + message);
 		printChildren(root, 0);
-		System.out.println("Model END ---------------------------------------------------------");
+		System.out.println("Model ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
 	}
 
 	private static void printChildren(AbstractNode abstractNode, int indent) {
@@ -107,28 +71,143 @@ public class SystemLoggerHelper {
 		}
 
 		for (AbstractNode child : children) {
-			printChildren(child, indent + 4);
+			printChildren(child, indent + indentIncrement);
 		}
+	}
+
+	private static void printIndentedLine(String line, int indent) {
+		String indentStr = new String(new char[indent]).replace("\0", " ");
+		System.out.println(indentStr + line);
+
+	}
+
+	private static void printFieldLine(String line, int indent) {
+		printIndentedLine("F:" + line, indent);
+	}	
+
+	private static void printObjectLine(AbstractNode abstractNode, String fieldName, int indent) {
+		printIndentedLine(
+				getIsFieldStr(fieldName) + 
+				abstractNode.getClass().getSimpleName() +
+				getFieldStr(fieldName) +
+				", " + abstractNode.getName()+ 
+				", #" + abstractNode.hashCode(), indent);
 	}
 
 	private static void printAbstractNode(AbstractNode abstractNode, int indent) {
 
-		String repeated = new String(new char[indent]).replace("\0", " ");
-
-		System.out.println(repeated + abstractNode.getClass().getSimpleName() + ": " + abstractNode.getName());
-		System.out.println(repeated + "        " + "*hashCode(): " + abstractNode.hashCode());
-
-		if (abstractNode instanceof TestCaseNode) {
-			printTestCaseNode((TestCaseNode)abstractNode, indent + 4);
+		if (abstractNode == null) {
+			printIndentedLine("Abstract node is null", indent);
+			return;
 		}
+		if (abstractNode instanceof TestCaseNode) {
+			printTestCaseNode((TestCaseNode)abstractNode, null, indent);
+			return;
+		}
+		if (abstractNode instanceof ConstraintNode) {
+			printConstraintNode((ConstraintNode)abstractNode, null, indent);
+			return;
+		}
+		if (abstractNode instanceof MethodNode) {
+			printMethodNode((MethodNode)abstractNode, null, indent);
+			return;
+		}
+		if (abstractNode instanceof MethodParameterNode) {
+			printMethodParameterNode((MethodParameterNode)abstractNode, null, indent);
+			return;
+		}		
+		if (abstractNode instanceof ChoiceNode) {
+			printChoiceNode((ChoiceNode)abstractNode, null, indent);
+			return;
+		}
+		printObjectLine(abstractNode, null, indent);
 	}
 
-	private static void printTestCaseNode(TestCaseNode testCaseNode, int indent) {
+
+	private static void printTestCaseNode(TestCaseNode testCaseNode, String fieldName, int indent) {
+		printObjectLine(testCaseNode, fieldName, indent);
+
 		List<ChoiceNode> choices = testCaseNode.getTestData();
 
 		for (ChoiceNode choice : choices) {
-			printAbstractNode(choice, indent);
+			printAbstractNode(choice, indent + indentIncrement);
 		}
 	}
 
+	private static void printConstraintNode(ConstraintNode constraintNode, String fieldName, int indent) {
+		if (constraintNode == null) {
+			printIndentedLine("ConstraintNode is null", indent);
+			return;
+		}		
+		printObjectLine(constraintNode, fieldName, indent);
+
+		AbstractNode parent = constraintNode.getParent();
+		printMethodNode((MethodNode)parent, "parentMethod", indent + indentIncrement);
+
+		AbstractStatement premise = constraintNode.getConstraint().getPremise();
+		printAbstractStatement(premise, "Premise", indent + indentIncrement);
+
+		AbstractStatement consequence = constraintNode.getConstraint().getConsequence();
+		printAbstractStatement(consequence, "Consequence", indent + indentIncrement);
+	}
+
+	private static void printMethodNode(MethodNode methodNode, String fieldName, int indent) {
+		if (methodNode == null) {
+			printIndentedLine("MethodNode is null", indent);
+			return;
+		}
+
+		printObjectLine(methodNode, fieldName, indent);
+	}
+
+	private static void printMethodParameterNode(MethodParameterNode methodParameterNode, String fieldName, int indent) {
+		if (methodParameterNode == null) {
+			printIndentedLine("MethodNode is null", indent);
+			return;
+		}
+		printObjectLine(methodParameterNode, fieldName, indent);
+
+		boolean isLinked = methodParameterNode.isLinked();
+		printFieldLine("boolean[isLinked], " + isLinked, indent + indentIncrement);
+
+		if (isLinked) {
+			GlobalParameterNode globalParameterNode = methodParameterNode.getLink();
+			if (globalParameterNode == null) {
+				printIndentedLine("GlobalParameterNode is null", indent + indentIncrement);
+			} else {
+				printAbstractNode(globalParameterNode, indent + indentIncrement);
+			}
+		}
+	}	
+
+	private static void printChoiceNode(ChoiceNode choiceNode, String fieldName, int indent) {
+		printObjectLine(choiceNode, fieldName, indent);
+		printObjectLine(choiceNode.getParameter(), "Parameter", indent + indentIncrement);
+	}
+
+	private static void printAbstractStatement(AbstractStatement abstractStatement, String fieldName, int indent) {
+		printIndentedLine(
+				getIsFieldStr(fieldName) + 
+				abstractStatement.getClass().getSimpleName() +
+				getFieldStr(fieldName) +
+				", #" + abstractStatement.hashCode() +
+				"  (" + abstractStatement.toString() + ")", 
+				indent);
+	}
+
+	private static String getIsFieldStr(String fieldName) {
+		String isFieldStr = "";
+		if (fieldName != null) {
+			isFieldStr = "F:";
+		}
+		return isFieldStr;
+	}
+
+	private static String getFieldStr(String fieldName) {
+		String fieldStr = "";
+		if (fieldName != null) {
+			fieldStr = "[" + fieldName + "]";
+		}
+		return fieldStr;
+	}	
 }

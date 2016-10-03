@@ -11,6 +11,7 @@
 package com.ecfeed.core.model;
 
 import java.util.List;
+import java.util.Set;
 
 public class ConstraintNode extends AbstractNode{
 
@@ -44,8 +45,12 @@ public class ConstraintNode extends AbstractNode{
 	}
 
 	public MethodNode getMethod() {
-		if(getParent() != null && getParent() instanceof MethodNode){
-			return (MethodNode)getParent();
+		AbstractNode parent = getParent();
+		if(parent == null) {
+			return null;
+		}
+		if (parent instanceof MethodNode){
+			return (MethodNode)parent;
 		}
 		return null;
 	}
@@ -71,7 +76,7 @@ public class ConstraintNode extends AbstractNode{
 	public boolean mentions(MethodParameterNode parameter) {
 		return fConstraint.mentions(parameter);
 	}
-	
+
 	public boolean mentions(AbstractParameterNode parameter) {
 		if(parameter instanceof MethodParameterNode){
 			MethodParameterNode param = (MethodParameterNode)parameter;
@@ -128,19 +133,43 @@ public class ConstraintNode extends AbstractNode{
 	}
 
 	public boolean isConsistent() {
-		for(AbstractParameterNode parameter : getConstraint().getReferencedParameters()){ // wow it really does point to global instead of pointing to method param WHICH would then point to global, if linked...
+		if (!parametersConsistent()) {
+			return false;
+		}
+
+		if (!choicesConsistent()) {
+			return false;
+		}
+
+		if (!constraintsConsistent()) {
+			return false;
+		}
+
+		return true;
+	}
+
+	private boolean parametersConsistent() {
+		Set<AbstractParameterNode> referencedParameters = getConstraint().getReferencedParameters(); 
+		for(AbstractParameterNode parameter : referencedParameters){ // wow it really does point to global instead of pointing to method param WHICH would then point to global, if linked...
 			boolean isLinked = false;
-			for(AbstractParameterNode param : getMethod().getParameters()){
+
+			List<AbstractParameterNode> methodParameters = getMethod().getParameters(); 
+			for(AbstractParameterNode param : methodParameters){
 				MethodParameterNode methodParam = (MethodParameterNode) param;
 				if(methodParam.isLinked() && methodParam.getLink().equals(parameter)){
 					isLinked = true;
 					break;
 				}
 			}
-			if(!isLinked && getMethod().getParameters().contains(parameter) == false){
+
+			if(!isLinked && !methodParameters.contains(parameter)){
 				return false;
 			}
 		}
+		return true;
+	}
+
+	private boolean choicesConsistent() {
 		for(ChoiceNode choice : getConstraint().getReferencedChoices()){
 			AbstractParameterNode parameter = choice.getParameter();
 			if(parameter == null || parameter.getChoice(choice.getQualifiedName()) == null){
@@ -156,7 +185,10 @@ public class ConstraintNode extends AbstractNode{
 			// because it points to same link...
 			// looks like we have to check by name or something?
 		}
+		return true;
+	}
 
+	private boolean constraintsConsistent() {
 		for(MethodParameterNode parameter : getMethod().getMethodParameters()){
 			for(String label : getConstraint().getReferencedLabels(parameter)){
 				if(parameter.getLeafLabels().contains(label) == false){
@@ -173,5 +205,9 @@ public class ConstraintNode extends AbstractNode{
 			return getMethod().getConstraintNodes().size();
 		}
 		return -1;
+	}
+
+	boolean mentionsParameter(MethodParameterNode methodParameter) {
+		return fConstraint.mentionsParameter(methodParameter);
 	}
 }

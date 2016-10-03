@@ -171,7 +171,7 @@ public abstract class AbstractParametersViewer extends TableViewerSection {
 		gd.minimumHeight = 250;
 		getSection().setLayoutData(gd);
 
-		addButton("New parameter", new AddNewParameterAdapter());
+		addButton("Add parameter", new AddNewParameterAdapter());
 		addButton("Remove selected", new ActionSelectionAdapter(new DeleteAction(getViewer(), this), Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
 
 		fNameColumn.setEditingSupport(new ParameterNameEditingSupport());
