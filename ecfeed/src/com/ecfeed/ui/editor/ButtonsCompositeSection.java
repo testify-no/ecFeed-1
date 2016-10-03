@@ -18,6 +18,7 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Layout;
+import org.eclipse.swt.widgets.Text;
 
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
@@ -87,6 +88,14 @@ public class ButtonsCompositeSection extends BasicSection {
 			button.setLayoutData(buttonLayoutData());
 		}
 		return button;
+	}
+
+	protected Text addText(String text, SelectionAdapter adapter) {
+		Text txt = getToolkit().createText(fButtonsComposite, text, SWT.BORDER);
+		if(adapter != null) {
+			txt.addSelectionListener(adapter);
+		}
+		return txt;
 	}
 
 	protected Composite createButtonsComposite(Composite parent) {
