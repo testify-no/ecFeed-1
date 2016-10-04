@@ -17,4 +17,17 @@ public class SystemHelper {
 		return System.getProperty("java.io.tmpdir");
 	}
 
+	public static String getOperatingSystem() { 
+		return System.getProperty("os.name");
+	}	
+
+	public static boolean isOperatingSystemLinux() { 
+		String os = System.getProperty("os.name");
+
+		if (os.equals("Linux")) {
+			return true;
+		}
+		return false;
+	}	
+
 }

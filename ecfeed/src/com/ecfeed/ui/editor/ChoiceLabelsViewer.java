@@ -35,6 +35,7 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.utils.StringHelper;
+import com.ecfeed.core.utils.SystemHelper;
 import com.ecfeed.ui.common.ColorConstants;
 import com.ecfeed.ui.common.ColorManager;
 import com.ecfeed.ui.common.Messages;
@@ -290,7 +291,7 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 						new LabelDeleteAction(updateContext), 
 						Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
 
-		if (!fileInfoProvider.isProjectAvailable()) {
+		if (isLabelEditionInTextField(fileInfoProvider)) {
 			AbstractSelectionAdapter adapter = new LabelTextSelectionAdapter();
 			fSelectedLabelText = addText("", adapter);
 			fSelectedLabelText.setEnabled(false);
@@ -299,6 +300,17 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 
 		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
 		setActionProvider(new LabelsViewerActionProvider());
+	}
+
+	private boolean isLabelEditionInTextField(IFileInfoProvider fileInfoProvider) {
+		if (SystemHelper.isOperatingSystemLinux()) {
+			if (fileInfoProvider.isProjectAvailable()) {
+				return false;
+			}
+			return true;			
+		} else {
+			return false;
+		}
 	}
 
 	@Override
