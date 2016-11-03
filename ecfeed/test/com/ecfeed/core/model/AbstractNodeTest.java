@@ -16,6 +16,7 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 import org.junit.Test;
 
@@ -76,6 +77,28 @@ public class AbstractNodeTest{
 		assertEquals(null, child.getParent());
 		child.setParent(parent);
 		assertEquals(parent, child.getParent());
+	}
+
+	@Test
+	public void testAttributes() {
+		AbstractNode node = new AbstractNodeImpl("name");
+		assertEquals(0, node.getAttributesCount());
+
+		Attribute inAttribute = new Attribute("String", "Name");
+		node.putAttribute("NameKey", inAttribute);
+		assertEquals(1, node.getAttributesCount());
+
+		Set<String> keys = node.getAttributeKeys();
+		assertEquals(1, keys.size());
+
+		Attribute outAttribute = node.getAttribute("NameKey");
+		assertNotEquals(null, outAttribute);
+
+		assertEquals("String", outAttribute.getType());
+		assertEquals("Name", outAttribute.getName());
+
+		node.remove("NameKey");
+		assertEquals(0, node.getAttributesCount());
 	}
 
 	@Test

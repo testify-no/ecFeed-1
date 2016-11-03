@@ -20,7 +20,7 @@ public abstract class AbstractNode{
 	private String fName;
 	private AbstractNode fParent;
 	private String fDescription;
-	private Attributes fAttributes;
+	private Attributes fAttributes = new Attributes();
 	private final int fId;
 	private static int fLastId = 0;
 	protected final List<AbstractNode> EMPTY_CHILDREN_ARRAY = new ArrayList<AbstractNode>();
@@ -178,20 +178,24 @@ public abstract class AbstractNode{
 	public int getMaxChildIndex(AbstractNode potentialChild) {
 		return getChildren().size();
 	}
-	
+
 	public void putAttribute(String key, Attribute attribute) {
 		fAttributes.put(key, attribute);
 	}
-	
+
 	public Attribute getAttribute(String key) {
 		return fAttributes.get(key);
 	}	
-	
+
 	public Set<String> getAttributeKeys() {
 		return fAttributes.getKeys();
 	}
-	
+
 	public int getAttributesCount() {
 		return fAttributes.size();
+	}
+
+	public void remove(String key) {
+		fAttributes.remove(key);
 	}
 }
