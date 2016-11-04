@@ -30,65 +30,65 @@ import com.ecfeed.core.serialization.IModelSerializer;
 public class EctSerializer implements IModelSerializer{
 
 	private OutputStream fOutputStream;
-	private XomBuilder fConverter;
+	private XomBuilder fXomBuilder;
 
 	public EctSerializer(OutputStream ostream, int modelVersion){
 		fOutputStream = ostream;
-		fConverter = XomBuilderFactory.createXomBuilder(modelVersion);
+		fXomBuilder = XomBuilderFactory.createXomBuilder(modelVersion);
 	}
 
 	@Override
 	public Object serialize(RootNode node) throws Exception{
-		Element element = (Element)node.accept(fConverter);
+		Element element = (Element)node.accept(fXomBuilder);
 		writeDocument(element);
 		return null;
 	}
 
 	@Override
 	public Object serialize(ClassNode node) throws Exception {
-		Element element = (Element)node.accept(fConverter);
+		Element element = (Element)node.accept(fXomBuilder);
 		writeDocument(element);
 		return null;
 	}
 
 	@Override
 	public Object serialize(MethodNode node) throws Exception {
-		Element element = (Element)node.accept(fConverter);
+		Element element = (Element)node.accept(fXomBuilder);
 		writeDocument(element);
 		return null;
 	}
 
 	@Override
 	public Object serialize(MethodParameterNode node) throws Exception {
-		Element element = (Element)node.accept(fConverter);
+		Element element = (Element)node.accept(fXomBuilder);
 		writeDocument(element);
 		return null;
 	}
 
 	@Override
 	public Object serialize(GlobalParameterNode node) throws Exception {
-		Element element = (Element)node.accept(fConverter);
+		Element element = (Element)node.accept(fXomBuilder);
 		writeDocument(element);
 		return null;
 	}
 
 	@Override
 	public Object serialize(TestCaseNode node) throws Exception {
-		Element element = (Element)node.accept(fConverter);
+		Element element = (Element)node.accept(fXomBuilder);
 		writeDocument(element);
 		return null;
 	}
 
 	@Override
 	public Object serialize(ConstraintNode node) throws Exception {
-		Element element = (Element)node.accept(fConverter);
+		Element element = (Element)node.accept(fXomBuilder);
 		writeDocument(element);
 		return null;
 	}
 
 	@Override
 	public Object serialize(ChoiceNode node) throws Exception {
-		Element element = (Element)node.accept(fConverter);
+		Element element = (Element)node.accept(fXomBuilder);
 		writeDocument(element);
 		return null;
 	}

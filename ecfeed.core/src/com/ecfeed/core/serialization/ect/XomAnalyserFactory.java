@@ -16,6 +16,9 @@ public class XomAnalyserFactory {
 		if (version == 0) {
 			return new XomAnalyserVersion0();
 		}
-		return new XomAnalyserVersion1();
+		if (version == 1) {
+			return new XomAnalyserVersion1();
+		}
+		return new XomAnalyserVersion2();
 	}
 }

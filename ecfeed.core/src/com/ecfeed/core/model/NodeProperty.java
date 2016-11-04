@@ -8,13 +8,33 @@
  *  
  *******************************************************************************/
 
-package com.ecfeed.core.serialization.ect;
+package com.ecfeed.core.model;
 
-public class XomAnalyserVersion1 extends XomAnalyserWithNewNodeNames {
 
-	@Override
-	protected int getModelVersion() {
-		return 1;
+public class NodeProperty{
+	private String fType;
+	private String fValue;
+
+	public NodeProperty(String type, String value) {
+		fType = type;
+		fValue = value;
 	}
 
+	public String getType() {
+		return fType;
+	}
+
+	public String getValue() {
+		return fValue;
+	}
+
+	public boolean isMatch(NodeProperty other) {
+		if (!fType.equals(other.fType)) {
+			return false;
+		}
+		if (!fValue.equals(other.fValue)) {
+			return false;
+		}
+		return true;
+	}
 }

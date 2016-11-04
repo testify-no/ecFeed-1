@@ -12,6 +12,14 @@ package com.ecfeed.core.model;
 
 public class ModelVersionDistributor {
 	public static int getCurrentVersion() {
-		return 1;
+		return 2;
+	}
+
+	public static boolean nodesHaveCommonProperties(int version) {
+		if (version >= 2) {
+			return true;
+		}
+
+		return false;
 	}
 }

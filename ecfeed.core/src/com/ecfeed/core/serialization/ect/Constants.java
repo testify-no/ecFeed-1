@@ -31,7 +31,11 @@ public class Constants {
 	public static final String COMMENTS_BLOCK_TAG_NAME = "Comments";
 	public static final String BASIC_COMMENTS_BLOCK_TAG_NAME = "BasicComments";
 	public static final String TYPE_COMMENTS_BLOCK_TAG_NAME = "TypeComments";
-
+	public static final String PROPERTIES_BLOCK_TAG_NAME = "Properties";
+	public static final String PROPERTY_TAG_NAME = "Property";
+	public static final String PROPERTY_ATTRIBUTE_NAME = "name";
+	public static final String PROPERTY_ATTRIBUTE_TYPE = "type";
+	public static final String PROPERTY_ATTRIBUTE_VALUE = "value";
 	public static final String NODE_NAME_ATTRIBUTE = "name";
 	public static final String VERSION_ATTRIBUTE = "version";
 	public static final String QUALIFIED_NAME_ATTRIBUTE = "qualifiedName";

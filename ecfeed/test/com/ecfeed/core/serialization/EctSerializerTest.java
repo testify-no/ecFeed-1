@@ -33,8 +33,6 @@ import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelConverter;
 import com.ecfeed.core.model.ModelVersionDistributor;
 import com.ecfeed.core.model.RootNode;
-import com.ecfeed.core.serialization.IModelParser;
-import com.ecfeed.core.serialization.IModelSerializer;
 import com.ecfeed.core.serialization.ect.EctParser;
 import com.ecfeed.core.serialization.ect.EctSerializer;
 import com.ecfeed.testutils.RandomModelGenerator;
@@ -43,8 +41,16 @@ public class EctSerializerTest {
 
 	RandomModelGenerator fGenerator = new RandomModelGenerator();
 
-	public void modelSerializerTest(int version) { 
+	@Test
+	public void modelSerializerTest() {
+		for (int version = 0; version <= ModelVersionDistributor.getCurrentVersion(); version++) {
+			modelSerializerTest(version);
+		}
+	}
+
+	private void modelSerializerTest(int version) { 
 		RootNode model = new RootNode("model", version);
+
 		model.addClass(new ClassNode("com.example.TestClass1"));
 		model.addClass(new ClassNode("com.example.TestClass2"));
 		model.addParameter(new GlobalParameterNode("globalParameter1", "int"));
@@ -65,15 +71,23 @@ public class EctSerializerTest {
 		}
 	}
 
+
 	@Test
-	public void modelSerializerTestVersion0() {
-		modelSerializerTest(0);
+	public void classSerializerTestWithAndroidBaseRunner(){
+		classSerializerTest(true, "com.example.AndroidBaseRunner", 0);
 	}
 
 	@Test
-	public void modelSerializerTestVersion1() {
-		modelSerializerTest(1);
-	}	
+	public void classSerializerTestWithoutAndroidBaseRunner(){
+		classSerializerTest(false, null, 0);
+	}
+
+	@Test
+	public void classSerializerTest() {
+		for (int version = 0; version <= ModelVersionDistributor.getCurrentVersion(); version++) {
+			classSerializerTest(false, null, version);
+		}
+	}
 
 	private void classSerializerTest(boolean runOnAndroid, String androidBaseRunner, int version){
 		ClassNode classNode = new ClassNode("com.example.TestClass", runOnAndroid, androidBaseRunner);
@@ -99,21 +113,6 @@ public class EctSerializerTest {
 			fail("Unexpected exception: " + e.getMessage());
 		}
 	}
-
-	@Test
-	public void classSerializerTestWithAndroidBaseRunner(){
-		classSerializerTest(true, "com.example.AndroidBaseRunner", 0);
-	}
-
-	@Test
-	public void classSerializerTestWithoutAndroidBaseRunner(){
-		classSerializerTest(false, null, 0);
-	}
-
-	@Test
-	public void classSerializerTestVersion1(){
-		classSerializerTest(false, null, 1);
-	}	
 
 	@Test
 	public void wrongTypeStreamTest(){
@@ -197,18 +196,18 @@ public class EctSerializerTest {
 		return model;
 	}
 
-	private String getSerializedString(RootNode convertedModel) {
-		OutputStream convertedModelStream = new ByteArrayOutputStream();
-		IModelSerializer convertedSerializer = 
-				new EctSerializer(convertedModelStream, ModelVersionDistributor.getCurrentVersion());
+	private String getSerializedString(RootNode model) {
+		OutputStream modelStream = new ByteArrayOutputStream();
+		IModelSerializer serializer = 
+				new EctSerializer(modelStream, ModelVersionDistributor.getCurrentVersion());
 
 		try {
-			convertedSerializer.serialize(convertedModel);
+			serializer.serialize(model);
 		} catch (Exception e) {
 			fail("Unexpected exception: " + e.getMessage());
 		}
 
-		return convertedModelStream.toString();
+		return modelStream.toString();
 	}
 
 	@Test

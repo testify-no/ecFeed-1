@@ -16,6 +16,9 @@ public class XomBuilderFactory {
 		if (modelVersion == 0) {
 			return new XomBuilderVersion0();
 		}
-		return new XomBuilderVersion1();
+		if (modelVersion == 1) {
+			return new XomBuilderVersion1();
+		}
+		return new XomBuilderVersion2();
 	}
 }

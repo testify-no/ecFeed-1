@@ -14,6 +14,11 @@ import static com.ecfeed.core.serialization.ect.Constants.ANDROID_RUNNER_ATTRIBU
 import static com.ecfeed.core.serialization.ect.Constants.BASIC_COMMENTS_BLOCK_TAG_NAME;
 import static com.ecfeed.core.serialization.ect.Constants.CLASS_NODE_NAME;
 import static com.ecfeed.core.serialization.ect.Constants.COMMENTS_BLOCK_TAG_NAME;
+import static com.ecfeed.core.serialization.ect.Constants.PROPERTIES_BLOCK_TAG_NAME;
+import static com.ecfeed.core.serialization.ect.Constants.PROPERTY_TAG_NAME;
+import static com.ecfeed.core.serialization.ect.Constants.PROPERTY_ATTRIBUTE_NAME;
+import static com.ecfeed.core.serialization.ect.Constants.PROPERTY_ATTRIBUTE_TYPE;
+import static com.ecfeed.core.serialization.ect.Constants.PROPERTY_ATTRIBUTE_VALUE;
 import static com.ecfeed.core.serialization.ect.Constants.CONSTRAINT_CHOICE_STATEMENT_NODE_NAME;
 import static com.ecfeed.core.serialization.ect.Constants.CONSTRAINT_CONSEQUENCE_NODE_NAME;
 import static com.ecfeed.core.serialization.ect.Constants.CONSTRAINT_EXPECTED_STATEMENT_NODE_NAME;
@@ -50,6 +55,9 @@ import static com.ecfeed.core.serialization.ect.Constants.TYPE_NAME_ATTRIBUTE;
 import static com.ecfeed.core.serialization.ect.Constants.VALUE_ATTRIBUTE;
 import static com.ecfeed.core.serialization.ect.Constants.VALUE_ATTRIBUTE_NAME;
 import static com.ecfeed.core.serialization.ect.Constants.VERSION_ATTRIBUTE;
+
+import java.util.Set;
+
 import nu.xom.Attribute;
 import nu.xom.Element;
 import nu.xom.Elements;
@@ -67,6 +75,8 @@ import com.ecfeed.core.model.IModelVisitor;
 import com.ecfeed.core.model.IStatementVisitor;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
+import com.ecfeed.core.model.ModelVersionDistributor;
+import com.ecfeed.core.model.NodeProperty;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.StatementArray;
 import com.ecfeed.core.model.StaticStatement;
@@ -86,6 +96,7 @@ public abstract class XomBuilder implements IModelVisitor, IStatementVisitor {
 	protected abstract String getChoiceNodeName();
 	protected abstract String getChoiceAttributeName();
 	protected abstract String getStatementChoiceAttributeName();
+	protected abstract int getModelVersion();
 
 	@Override
 	public Object visit(RootNode node) throws Exception{
@@ -95,9 +106,8 @@ public abstract class XomBuilder implements IModelVisitor, IStatementVisitor {
 		Attribute versionAttr = new Attribute(VERSION_ATTRIBUTE, versionStr);
 		element.addAttribute(versionAttr);
 
-
-		for(ClassNode _class : node.getClasses()){
-			element.appendChild((Element)visit(_class));
+		for(ClassNode classNode : node.getClasses()){
+			element.appendChild((Element)visit(classNode));
 		}
 
 		for(GlobalParameterNode parameter : node.getGlobalParameters()){
@@ -110,7 +120,6 @@ public abstract class XomBuilder implements IModelVisitor, IStatementVisitor {
 	@Override
 	public Object visit(ClassNode classNode) throws Exception {
 		Element element = createAbstractElement(CLASS_NODE_NAME, classNode);
-
 		addAndroidAttributes(classNode, element);
 
 		for(MethodNode method : classNode.getMethods()){
@@ -206,6 +215,7 @@ public abstract class XomBuilder implements IModelVisitor, IStatementVisitor {
 		Element element = new Element(TEST_CASE_NODE_NAME);
 		encodeAndAddAttribute(element, new Attribute(TEST_SUITE_NAME_ATTRIBUTE, node.getName()));
 		appendComments(element, node);
+
 		for(ChoiceNode testParameter : node.getTestData()){
 			if(testParameter.getParameter() != null && node.getMethodParameter(testParameter).isExpected()){
 				Element expectedParameterElement = new Element(EXPECTED_PARAMETER_NODE_NAME);
@@ -227,9 +237,9 @@ public abstract class XomBuilder implements IModelVisitor, IStatementVisitor {
 	@Override
 	public Object visit(ConstraintNode node) throws Exception{
 		Element element = createAbstractElement(CONSTRAINT_NODE_NAME, node);
+
 		AbstractStatement premise = node.getConstraint().getPremise();
 		AbstractStatement consequence = node.getConstraint().getConsequence();
-
 
 		Element premiseElement = new Element(CONSTRAINT_PREMISE_NODE_NAME);
 		premiseElement.appendChild((Element)premise.accept(this));
@@ -359,7 +369,19 @@ public abstract class XomBuilder implements IModelVisitor, IStatementVisitor {
 		Attribute nameAttr = new Attribute(NODE_NAME_ATTRIBUTE, node.getName());
 		encodeAndAddAttribute(element, nameAttr);
 		appendComments(element, node);
+
+		if (nodesHaveCommonProperties()) {
+			appendCommonPropertiesOfNode(element, node);
+		}
+
 		return element;
+	}
+
+	private boolean nodesHaveCommonProperties() {
+		if (ModelVersionDistributor.nodesHaveCommonProperties(getModelVersion())) {
+			return true;
+		}
+		return false;
 	}
 
 	private Element appendComments(Element element, AbstractNode node) {
@@ -400,5 +422,40 @@ public abstract class XomBuilder implements IModelVisitor, IStatementVisitor {
 	private void encodeAndAddAttribute(Element element, Attribute attribute) {
 		attribute.setValue(fWhiteCharConverter.encode(attribute.getValue()));
 		element.addAttribute(attribute);
+	}
+
+	private void appendCommonPropertiesOfNode(Element parentElement, AbstractNode node) {
+		int count = node.getPropertyCount();
+
+		if (count == 0) {
+			return;
+		}
+
+		Set<String> attributeKeys = node.getPropertyKeys();
+
+		Element propertiesBlock = new Element(PROPERTIES_BLOCK_TAG_NAME);
+
+		for (String key : attributeKeys) {
+			NodeProperty property = node.getProperty(key);
+			Element propertyElement = createCommonPropertyElement(key, property.getType(), property.getValue());
+			propertiesBlock.appendChild(propertyElement);
+		}
+
+		parentElement.appendChild(propertiesBlock);
+	}
+
+	private Element createCommonPropertyElement(String name, String type, String value) {
+		Element propertyElement = new Element(PROPERTY_TAG_NAME);
+
+		Attribute attributeName = new Attribute(PROPERTY_ATTRIBUTE_NAME, name);
+		propertyElement.addAttribute(attributeName);
+
+		Attribute attributeType = new Attribute(PROPERTY_ATTRIBUTE_TYPE, type);
+		propertyElement.addAttribute(attributeType);
+
+		Attribute attributeValue = new Attribute(PROPERTY_ATTRIBUTE_VALUE, value);
+		propertyElement.addAttribute(attributeValue);
+
+		return propertyElement;
 	}
 }

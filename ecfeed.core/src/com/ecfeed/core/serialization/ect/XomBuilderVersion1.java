@@ -10,30 +10,11 @@
 
 package com.ecfeed.core.serialization.ect;
 
-public class XomBuilderVersion1 extends XomBuilder {
+public class XomBuilderVersion1 extends XomBuilderVersionWithNewNodeNames {
 
 	@Override
-	protected String getChoiceNodeName() {
-		return SerializationHelperVersion1.getChoiceNodeName();
+	protected int getModelVersion() {
+		return 1;
 	}
 
-	@Override	
-	protected String getChoiceAttributeName() {
-		return SerializationHelperVersion1.getChoiceAttributeName();
-	}
-
-	@Override
-	protected String getStatementChoiceAttributeName() {
-		return SerializationHelperVersion1.getStatementChoiceAttributeName();
-	}
-
-	@Override
-	protected String getParameterNodeName() {
-		return SerializationHelperVersion1.getParameterNodeName();
-	}
-
-	@Override
-	protected String getStatementParameterAttributeName() {
-		return SerializationHelperVersion1.getStatementParameterAttributeName();
-	}
 }

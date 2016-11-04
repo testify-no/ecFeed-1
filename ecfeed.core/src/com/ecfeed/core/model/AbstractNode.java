@@ -20,7 +20,7 @@ public abstract class AbstractNode{
 	private String fName;
 	private AbstractNode fParent;
 	private String fDescription;
-	private Attributes fAttributes = new Attributes();
+	private NodeProperties fProperties = new NodeProperties();
 	private final int fId;
 	private static int fLastId = 0;
 	protected final List<AbstractNode> EMPTY_CHILDREN_ARRAY = new ArrayList<AbstractNode>();
@@ -162,7 +162,13 @@ public abstract class AbstractNode{
 	}
 
 	public boolean compare(AbstractNode node){
-		return getName().equals(node.getName());
+		if (!getName().equals(node.getName())) {
+			return false;
+		}
+		if (!fProperties.isMatch(node.fProperties)) {
+			return false;
+		}
+		return true;
 	}
 
 	public int getMaxIndex() {
@@ -179,23 +185,23 @@ public abstract class AbstractNode{
 		return getChildren().size();
 	}
 
-	public void putAttribute(String key, Attribute attribute) {
-		fAttributes.put(key, attribute);
+	public void putProperty(String key, NodeProperty property) {
+		fProperties.put(key, property);
 	}
 
-	public Attribute getAttribute(String key) {
-		return fAttributes.get(key);
+	public NodeProperty getProperty(String key) {
+		return fProperties.get(key);
 	}	
 
-	public Set<String> getAttributeKeys() {
-		return fAttributes.getKeys();
+	public Set<String> getPropertyKeys() {
+		return fProperties.getKeys();
 	}
 
-	public int getAttributesCount() {
-		return fAttributes.size();
+	public int getPropertyCount() {
+		return fProperties.size();
 	}
 
 	public void remove(String key) {
-		fAttributes.remove(key);
+		fProperties.remove(key);
 	}
 }

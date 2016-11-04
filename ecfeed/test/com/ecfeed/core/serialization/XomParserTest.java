@@ -33,6 +33,8 @@ import com.ecfeed.core.model.ConstraintNode;
 import com.ecfeed.core.model.ExpectedValueStatement;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
+import com.ecfeed.core.model.ModelVersionDistributor;
+import com.ecfeed.core.model.NodeProperty;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.StatementArray;
 import com.ecfeed.core.model.StaticStatement;
@@ -50,48 +52,78 @@ public class XomParserTest {
 	private final boolean DEBUG = false;
 
 	RandomModelGenerator fModelGenerator = new RandomModelGenerator();
-
-	int version = 0;
-	XomBuilder fConverter = XomBuilderFactory.createXomBuilder(version);
-	XomAnalyser fXomAnalyser = XomAnalyserFactory.createXomAnalyser(version);
 	ModelStringifier fStringifier = new ModelStringifier();
-	Random rand = new Random();
+	Random fRandom = new Random();
 
 	@Test
-	public void parseRootTest(){
+	public void parseRootTest() {
+		for (int version = 0; version <= ModelVersionDistributor.getCurrentVersion(); version++) {
+			parseRootTest(version);
+		}
+	}
+
+	private void parseRootTest(int version) {
 		try {
-			RootNode r = fModelGenerator.generateModel(3);
-			Element rootElement = (Element)r.accept(fConverter);
+			RootNode rootNode = fModelGenerator.generateModel(3);
+			addCommonProperties(version, rootNode);
+
+			XomBuilder builder = XomBuilderFactory.createXomBuilder(version);
+			Element rootElement = (Element)rootNode.accept(builder);
 			TRACE(rootElement);
-			RootNode parsedR = fXomAnalyser.parseRoot(rootElement);
-			assertElementsEqual(r, parsedR);
+
+			XomAnalyser analyser = XomAnalyserFactory.createXomAnalyser(version);
+			RootNode parsedRootNode = analyser.parseRoot(rootElement);
+			assertElementsEqual(rootNode, parsedRootNode);
+
 		} catch (Exception e) {
 			fail("Unexpected exception: " + e.getMessage());
 		}
 	}
 
 	@Test
-	public void parseClassTest(){
+	public void parseClassTest() {
+		for (int version = 0; version <= ModelVersionDistributor.getCurrentVersion(); version++) {
+			parseClassTest(version);
+		}
+	}
+
+	private void parseClassTest(int version){
 		try {
-			ClassNode _class = fModelGenerator.generateClass(3);
-			Element element = (Element)_class.accept(fConverter);
+			ClassNode classNode = fModelGenerator.generateClass(3);
+			addCommonProperties(version, classNode);
+
+			XomBuilder builder = XomBuilderFactory.createXomBuilder(version);
+			Element element = (Element)classNode.accept(builder);
 			TRACE(element);
-			ClassNode parsedClass = fXomAnalyser.parseClass(element, null);
-			assertElementsEqual(_class, parsedClass);
+			XomAnalyser analyser = XomAnalyserFactory.createXomAnalyser(version);
+			ClassNode parsedClass = analyser.parseClass(element, null);
+			assertElementsEqual(classNode, parsedClass);
 		} catch (Exception e) {
 			fail("Unexpected exception: " + e.getMessage());
 		}
 	}
 
+
 	@Test
-	public void parseMethodTest(){
+	public void parseMethodTest() {
+		for (int version = 0; version <= ModelVersionDistributor.getCurrentVersion(); version++) {
+			parseMethodTest(version);
+		}
+	}
+
+	private void parseMethodTest(int version){
 		for(int i = 0; i < 10; i++){
 			try{
-				MethodNode m = fModelGenerator.generateMethod(5, 5, 5);
-				Element element = (Element)m.accept(fConverter);
+				MethodNode methodNode = fModelGenerator.generateMethod(5, 5, 5);
+				addCommonProperties(version, methodNode);
+
+				XomBuilder builder = XomBuilderFactory.createXomBuilder(version);
+				Element element = (Element)methodNode.accept(builder);
 				TRACE(element);
-				MethodNode m1 = fXomAnalyser.parseMethod(element, null);
-				assertElementsEqual(m, m1);
+
+				XomAnalyser analyser = XomAnalyserFactory.createXomAnalyser(version);
+				MethodNode parsedMethodNode = analyser.parseMethod(element, null);
+				assertElementsEqual(methodNode, parsedMethodNode);
 			}
 			catch (Exception e) {
 				fail("Unexpected exception: " + e.getMessage());
@@ -100,17 +132,28 @@ public class XomParserTest {
 	}
 
 	@Test
-	public void parseParameterTest(){
+	public void parseParameterTest() {
+		for (int version = 0; version <= ModelVersionDistributor.getCurrentVersion(); version++) {
+			parseParameterTest(version);
+		}
+	}
+
+	private void parseParameterTest(int version){
 		for(String type : SUPPORTED_TYPES){
 			try{
 				for(boolean expected : new Boolean[]{true, false}){
-					MethodNode m = new MethodNode("method");
-					MethodParameterNode c = fModelGenerator.generateParameter(type, expected, 3, 3, 3);
-					m.addParameter(c);
-					Element element = (Element)c.accept(fConverter);
+					MethodNode methodNode = new MethodNode("method");
+					MethodParameterNode methodParameterNode = fModelGenerator.generateParameter(type, expected, 3, 3, 3);
+					addCommonProperties(version, methodParameterNode);
+					methodNode.addParameter(methodParameterNode);
+
+					XomBuilder builder = XomBuilderFactory.createXomBuilder(version);
+					Element element = (Element)methodParameterNode.accept(builder);
 					TRACE(element);
-					MethodParameterNode c1 = fXomAnalyser.parseMethodParameter(element, m);
-					assertElementsEqual(c, c1);
+
+					XomAnalyser analyser = XomAnalyserFactory.createXomAnalyser(version);
+					MethodParameterNode parsedMethodParameterNode = analyser.parseMethodParameter(element, methodNode);
+					assertElementsEqual(methodParameterNode, parsedMethodParameterNode);
 				}
 			}
 			catch (Exception e) {
@@ -120,16 +163,25 @@ public class XomParserTest {
 	}
 
 	@Test
-	public void parseTestCaseTest(){
+	public void parseTestCaseTest() {
+		for (int version = 0; version <= ModelVersionDistributor.getCurrentVersion(); version++) {
+			parseTestCaseTest(version);
+		}
+	}
+
+	private void parseTestCaseTest(int version){
 		for(int i = 0; i < 10; i++){
 			MethodNode m = fModelGenerator.generateMethod(5, 0, 0);
 			for(int j = 0; j < 100; j++){
 				try {
-					TestCaseNode tc = fModelGenerator.generateTestCase(m);
-					Element element = (Element)tc.accept(fConverter);
+					TestCaseNode testCaseNode = fModelGenerator.generateTestCase(m);
+					XomBuilder builder = XomBuilderFactory.createXomBuilder(version);
+					Element element = (Element)testCaseNode.accept(builder);
 					TRACE(element);
-					TestCaseNode tc1 = fXomAnalyser.parseTestCase(element, m);
-					assertElementsEqual(tc, tc1);
+
+					XomAnalyser analyser = XomAnalyserFactory.createXomAnalyser(version);
+					TestCaseNode tc1 = analyser.parseTestCase(element, m);
+					assertElementsEqual(testCaseNode, tc1);
 				} catch (Exception e) {
 					fail("Unexpected exception: " + e.getMessage());
 				}
@@ -138,15 +190,25 @@ public class XomParserTest {
 	}
 
 	@Test
-	public void parseConstraintTest(){
+	public void parseConstraintTest() {
+		for (int version = 0; version <= ModelVersionDistributor.getCurrentVersion(); version++) {
+			parseConstraintTest(version);
+		}
+	}
+
+	private void parseConstraintTest(int version) {
 		for(int i = 0; i < 10; i++){
 			MethodNode m = fModelGenerator.generateMethod(3, 0, 0);
 			for(int j = 0; j < 10; j++){
 				try {
 					ConstraintNode c = fModelGenerator.generateConstraint(m);
-					Element element = (Element)c.accept(fConverter);
+
+					XomBuilder builder = XomBuilderFactory.createXomBuilder(version);
+					Element element = (Element)c.accept(builder);
 					TRACE(element);
-					ConstraintNode c1 = fXomAnalyser.parseConstraint(element, m);
+
+					XomAnalyser analyser = XomAnalyserFactory.createXomAnalyser(version);
+					ConstraintNode c1 = analyser.parseConstraint(element, m);
 					assertElementsEqual(c, c1);
 				} catch (Exception e) {
 					fail("Unexpected exception: " + e.getMessage() + "\nMethod\n" + new ModelStringifier().stringify(m, 0));
@@ -155,14 +217,25 @@ public class XomParserTest {
 		}
 	}
 
+
 	@Test
-	public void parseChoiceTest(){
+	public void parseChoiceTest() {
+		for (int version = 0; version <= ModelVersionDistributor.getCurrentVersion(); version++) {
+			parseChoiceTest(version);
+		}
+	}
+
+	private void parseChoiceTest(int version){
 		for(String type: SUPPORTED_TYPES){
 			try {
 				ChoiceNode p = fModelGenerator.generateChoice(3, 3, 3, type);
-				Element element = (Element)p.accept(fConverter);
+
+				XomBuilder builder = XomBuilderFactory.createXomBuilder(version);
+				Element element = (Element)p.accept(builder);
 				TRACE(element);
-				ChoiceNode p1 = fXomAnalyser.parseChoice(element);
+
+				XomAnalyser analyser = XomAnalyserFactory.createXomAnalyser(version);
+				ChoiceNode p1 = analyser.parseChoice(element);
 				assertElementsEqual(p, p1);
 			} catch (Exception e) {
 				fail("Unexpected exception: " + e.getMessage());
@@ -170,18 +243,29 @@ public class XomParserTest {
 		}
 	}
 
+
 	@Test
-	public void parseStaticStatementTest(){
+	public void parseStaticStatementTest() {
+		for (int version = 0; version <= ModelVersionDistributor.getCurrentVersion(); version++) {
+			parseStaticStatementTest(version);
+		}
+	}
+
+	private void parseStaticStatementTest(int version) {
 		StaticStatement trueStatement = new StaticStatement(true);
 		StaticStatement falseStatement = new StaticStatement(false);
 		try{
-			Element trueElement = (Element)trueStatement.accept(fConverter);
-			Element falseElement = (Element)falseStatement.accept(fConverter);
+
+			XomBuilder builder = XomBuilderFactory.createXomBuilder(version);
+
+			Element trueElement = (Element)trueStatement.accept(builder);
+			Element falseElement = (Element)falseStatement.accept(builder);
 			TRACE(trueElement);
 			TRACE(falseElement);
 
-			StaticStatement parsedTrue = fXomAnalyser.parseStaticStatement(trueElement);
-			StaticStatement parsedFalse = fXomAnalyser.parseStaticStatement(falseElement);
+			XomAnalyser analyser = XomAnalyserFactory.createXomAnalyser(version);
+			StaticStatement parsedTrue = analyser.parseStaticStatement(trueElement);
+			StaticStatement parsedFalse = analyser.parseStaticStatement(falseElement);
 
 			assertStatementsEqual(trueStatement, parsedTrue);
 			assertStatementsEqual(falseStatement, parsedFalse);
@@ -190,21 +274,32 @@ public class XomParserTest {
 		}
 	}
 
+
 	@Test
-	public void parseChoiceStatementTest(){
+	public void parseChoiceStatementTest() {
+		for (int version = 0; version <= ModelVersionDistributor.getCurrentVersion(); version++) {
+			parseChoiceStatementTest(version);
+		}
+	}
+
+	private void parseChoiceStatementTest(int version){
 		for(int i = 0; i < 10; i++){
 			try{
 				MethodNode m = fModelGenerator.generateMethod(5, 0, 0);
 				ChoicesParentStatement s = fModelGenerator.generateChoicesParentStatement(m);
-				Element element = (Element)s.accept(fConverter);
+
+				XomBuilder builder = XomBuilderFactory.createXomBuilder(version);
+				Element element = (Element)s.accept(builder);
 				TRACE(element);
+				XomAnalyser analyser = XomAnalyserFactory.createXomAnalyser(version);
+
 				ChoicesParentStatement parsedS = null;
 				switch(element.getLocalName()){
 				case Constants.CONSTRAINT_LABEL_STATEMENT_NODE_NAME:
-					parsedS = fXomAnalyser.parseLabelStatement(element, m);
+					parsedS = analyser.parseLabelStatement(element, m);
 					break;
 				case Constants.CONSTRAINT_CHOICE_STATEMENT_NODE_NAME:
-					parsedS = fXomAnalyser.parseChoiceStatement(element, m);
+					parsedS = analyser.parseChoiceStatement(element, m);
 					break;
 				}
 
@@ -216,14 +311,24 @@ public class XomParserTest {
 	}
 
 	@Test
-	public void parseExpectedValueStatementTest(){
+	public void parseExpectedValueStatementTest() {
+		for (int version = 0; version <= ModelVersionDistributor.getCurrentVersion(); version++) {
+			parseExpectedValueStatementTest(version);
+		}
+	}	
+
+	private void parseExpectedValueStatementTest(int version){
 		for(int i = 0; i < 10; i++){
 			try{
 				MethodNode m = fModelGenerator.generateMethod(10, 0, 0);
 				ExpectedValueStatement s = fModelGenerator.generateExpectedValueStatement(m);
-				Element element = (Element)s.accept(fConverter);
+
+				XomBuilder builder = XomBuilderFactory.createXomBuilder(version);
+				Element element = (Element)s.accept(builder);
 				TRACE(element);
-				ExpectedValueStatement parsedS = fXomAnalyser.parseExpectedValueStatement(element, m);
+
+				XomAnalyser analyser = XomAnalyserFactory.createXomAnalyser(version);
+				ExpectedValueStatement parsedS = analyser.parseExpectedValueStatement(element, m);
 				assertStatementsEqual(s, parsedS);
 			} catch (Exception e) {
 				fail("Unexpected exception: " + e.getMessage());
@@ -232,13 +337,22 @@ public class XomParserTest {
 	}
 
 	@Test
-	public void parseStatementArrayTest(){
+	public void parseStatementArrayTest() {
+		for (int version = 0; version <= ModelVersionDistributor.getCurrentVersion(); version++) {
+			parseStatementArrayTest(version);
+		}
+	}	
+
+	private void parseStatementArrayTest(int version) {
 		try{
 			MethodNode m = fModelGenerator.generateMethod(10, 0, 0);
 			StatementArray s = fModelGenerator.generateStatementArray(m, 4);
-			Element element = (Element)s.accept(fConverter);
+			XomBuilder builder = XomBuilderFactory.createXomBuilder(version);
+			Element element = (Element)s.accept(builder);
 			TRACE(element);
-			StatementArray parsedS = fXomAnalyser.parseStatementArray(element, m);
+
+			XomAnalyser analyser = XomAnalyserFactory.createXomAnalyser(version);
+			StatementArray parsedS = analyser.parseStatementArray(element, m);
 			assertStatementsEqual(s, parsedS);
 		} catch (Exception e) {
 			fail("Unexpected exception: " + e.getMessage());
@@ -246,31 +360,40 @@ public class XomParserTest {
 
 	}
 
+
 	@Test
-	public void assertTypeTest(){
+	public void assertTypeTest() {
+		for (int version = 0; version <= ModelVersionDistributor.getCurrentVersion(); version++) {
+			assertTypeTest(version);
+		}
+	}
+
+	private void assertTypeTest(int version){
 		try{
 			RootNode root = fModelGenerator.generateModel(3);
 			ClassNode _class = fModelGenerator.generateClass(3);
 
-			Element rootElement = (Element)root.accept(fConverter);
-			Element classElement = (Element)_class.accept(fConverter);
+			XomBuilder builder = XomBuilderFactory.createXomBuilder(version);
+			Element rootElement = (Element)root.accept(builder);
+			Element classElement = (Element)_class.accept(builder);
 
-			fXomAnalyser.parseRoot(rootElement);
+			XomAnalyser analyser = XomAnalyserFactory.createXomAnalyser(version);
+			analyser.parseRoot(rootElement);
 
 			try {
-				fXomAnalyser.parseClass(classElement, null);
+				analyser.parseClass(classElement, null);
 			} catch (Exception e) {
 				fail("Unexpected exception: " + e.getMessage());
 			}
 
 			try {
-				fXomAnalyser.parseClass(rootElement, null);
+				analyser.parseClass(rootElement, null);
 				fail("exception expected");
 			} catch (Exception e) {
 			}
 
 			try {
-				fXomAnalyser.parseRoot(classElement);
+				analyser.parseRoot(classElement);
 				fail("exception expected");
 			} catch (Exception e) {
 			}
@@ -293,8 +416,23 @@ public class XomParserTest {
 		}
 	}
 
+	private void addCommonProperties(int version, AbstractNode targetNode) {
+		if (!ModelVersionDistributor.nodesHaveCommonProperties(version)) {
+			return;
+		}
+
+		int maxProperties = fRandom.nextInt(3);
+
+		for (int propertyNum = 0; propertyNum < maxProperties; propertyNum++) {
+			NodeProperty nodeProperty = new NodeProperty("String", "value" + propertyNum);
+			targetNode.putProperty("key" + propertyNum, nodeProperty);			
+		}
+	}
+
 	private void TRACE(Element element){
-		if(!DEBUG) return;
+		if (!DEBUG) {
+			return;
+		}
 
 		Document document = new Document(element);
 		OutputStream ostream = new ByteArrayOutputStream();

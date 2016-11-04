@@ -71,16 +71,16 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 			fExecuted.add(executed);
 		}
 	}
-	
+
 	public static Set<Map<Integer,String>> getCoveredNTuples(Set<List<String>> tests, int n){
 		Set<Map<Integer,String>> nTuples = new HashSet<>();
-		
+
 		List<Integer> indices = new ArrayList<>();
 		for(int i=0; i< tests.iterator().next().size(); i++)
 			indices.add(i);
 		Tuples<Integer> combinationGenerator = new Tuples<>(indices, n);
 		Set<List<Integer>> allCombs = combinationGenerator.getAll();
-		
+
 		for(List<String> test : tests) 
 			for(List<Integer> comb : allCombs) {
 				Map<Integer, String> nTuple = new HashMap<>();
@@ -88,8 +88,8 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 					nTuple.put(ind, test.get(ind));
 				nTuples.add(nTuple);
 			}
-			
-		
+
+
 		return nTuples;
 	}
 
@@ -190,6 +190,7 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 			fail("Unexpected exception: " + e.getMessage());
 		}
 	}
+
 
 	@Test
 	public void testGlobalConstraints(){

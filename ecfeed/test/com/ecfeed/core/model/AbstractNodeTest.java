@@ -82,23 +82,23 @@ public class AbstractNodeTest{
 	@Test
 	public void testAttributes() {
 		AbstractNode node = new AbstractNodeImpl("name");
-		assertEquals(0, node.getAttributesCount());
+		assertEquals(0, node.getPropertyCount());
 
-		Attribute inAttribute = new Attribute("String", "Name");
-		node.putAttribute("NameKey", inAttribute);
-		assertEquals(1, node.getAttributesCount());
+		NodeProperty inAttribute = new NodeProperty("String", "Name");
+		node.putProperty("NameKey", inAttribute);
+		assertEquals(1, node.getPropertyCount());
 
-		Set<String> keys = node.getAttributeKeys();
+		Set<String> keys = node.getPropertyKeys();
 		assertEquals(1, keys.size());
 
-		Attribute outAttribute = node.getAttribute("NameKey");
+		NodeProperty outAttribute = node.getProperty("NameKey");
 		assertNotEquals(null, outAttribute);
 
 		assertEquals("String", outAttribute.getType());
-		assertEquals("Name", outAttribute.getName());
+		assertEquals("Name", outAttribute.getValue());
 
 		node.remove("NameKey");
-		assertEquals(0, node.getAttributesCount());
+		assertEquals(0, node.getPropertyCount());
 	}
 
 	@Test

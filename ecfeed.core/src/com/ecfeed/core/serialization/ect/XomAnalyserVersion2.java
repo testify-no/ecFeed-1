@@ -8,23 +8,13 @@
  *  
  *******************************************************************************/
 
-package com.ecfeed.core.model;
+package com.ecfeed.core.serialization.ect;
 
+public class XomAnalyserVersion2 extends XomAnalyserWithNewNodeNames {
 
-public class Attribute{
-	private String fType;
-	private String fName;
-	
-	public Attribute(String type, String name) {
-		fType = type;
-		fName = name;
+	@Override
+	protected int getModelVersion() {
+		return 2;
 	}
-	
-	public String getType() {
-		return fType;
-	}
-	
-	public String getName() {
-		return fName;
-	}
+
 }

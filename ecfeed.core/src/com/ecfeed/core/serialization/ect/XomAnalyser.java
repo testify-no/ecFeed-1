@@ -40,6 +40,7 @@ import nu.xom.Elements;
 import nu.xom.Node;
 
 import com.ecfeed.core.adapter.java.JavaPrimitiveTypePredicate;
+import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.AbstractStatement;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.ChoicesParentStatement;
@@ -52,6 +53,7 @@ import com.ecfeed.core.model.ExpectedValueStatement;
 import com.ecfeed.core.model.GlobalParameterNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
+import com.ecfeed.core.model.NodeProperty;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.StatementArray;
 import com.ecfeed.core.model.StaticStatement;
@@ -75,6 +77,8 @@ public abstract class XomAnalyser {
 		String name = getElementName(element);
 
 		RootNode root = new RootNode(name, getModelVersion());
+
+		parseCommonProperties(element, root);
 		root.setDescription(parseComments(element));
 
 		//parameters must be parsed before classes
@@ -106,41 +110,43 @@ public abstract class XomAnalyser {
 
 		String androidBaseRunner = element.getAttributeValue(ANDROID_RUNNER_ATTRIBUTE_NAME);
 
-		ClassNode _class = new ClassNode(name, runOnAndroid, androidBaseRunner);
+		ClassNode classNode = new ClassNode(name, runOnAndroid, androidBaseRunner);
+		parseCommonProperties(element, classNode);
 
-		_class.setDescription(parseComments(element));
+		classNode.setDescription(parseComments(element));
 		//we need to do it here, so the backward search for global parameters will work
-		_class.setParent(parent);
+		classNode.setParent(parent);
 
 		//parameters must be parsed before classes
 		for(Element child : getIterableChildren(element, getParameterNodeName())){
 			try{
-				_class.addParameter(parseGlobalParameter(child));
+				classNode.addParameter(parseGlobalParameter(child));
 			}catch(ParserException e){
 				System.err.println("Exception: " + e.getMessage());
 			}
 		}
 		for(Element child : getIterableChildren(element, Constants.METHOD_NODE_NAME)){
 			try{
-				_class.addMethod(parseMethod(child, _class));
+				classNode.addMethod(parseMethod(child, classNode));
 			}catch(ParserException e){
 				System.err.println("Exception: " + e.getMessage());
 			}
 		}
 
-		return _class;
+		return classNode;
 	}
 
 	public MethodNode parseMethod(Element element, ClassNode parent) throws ParserException{
 		assertNodeTag(element.getQualifiedName(), METHOD_NODE_NAME);
 		String name = getElementName(element);
 
-		MethodNode method = new MethodNode(name);
-		method.setParent(parent);
+		MethodNode methodNode = new MethodNode(name);
+		methodNode.setParent(parent);
+		parseCommonProperties(element, methodNode);
 
 		for(Element child : getIterableChildren(element, getParameterNodeName())){
 			try{
-				method.addParameter(parseMethodParameter(child, method));
+				methodNode.addParameter(parseMethodParameter(child, methodNode));
 			}catch(ParserException e){
 				System.err.println("Exception: " + e.getMessage());
 			}
@@ -148,7 +154,7 @@ public abstract class XomAnalyser {
 
 		for(Element child : getIterableChildren(element, Constants.TEST_CASE_NODE_NAME)){
 			try{
-				method.addTestCase(parseTestCase(child, method));
+				methodNode.addTestCase(parseTestCase(child, methodNode));
 			}catch(ParserException e){
 				System.err.println("Exception: " + e.getMessage());
 			}
@@ -156,15 +162,15 @@ public abstract class XomAnalyser {
 
 		for(Element child : getIterableChildren(element, Constants.CONSTRAINT_NODE_NAME)){
 			try{
-				method.addConstraint(parseConstraint(child, method));
+				methodNode.addConstraint(parseConstraint(child, methodNode));
 			}catch(ParserException e){
 				System.err.println("Exception: " + e.getMessage());
 			}
 		}
 
-		method.setDescription(parseComments(element));
+		methodNode.setDescription(parseComments(element));
 
-		return method;
+		return methodNode;
 	}
 
 	public MethodParameterNode parseMethodParameter(Element element, MethodNode method) throws ParserException{
@@ -178,40 +184,41 @@ public abstract class XomAnalyser {
 			expected = getAttributeValue(element, PARAMETER_IS_EXPECTED_ATTRIBUTE_NAME);
 			defaultValue = getAttributeValue(element, DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME);
 		}
-		MethodParameterNode parameter = new MethodParameterNode(name, type, defaultValue, Boolean.parseBoolean(expected));
+		MethodParameterNode methodParameterNode = new MethodParameterNode(name, type, defaultValue, Boolean.parseBoolean(expected));
+		parseCommonProperties(element, methodParameterNode);
 
 		if(element.getAttribute(PARAMETER_IS_LINKED_ATTRIBUTE_NAME) != null){
 			boolean linked = Boolean.parseBoolean(getAttributeValue(element, PARAMETER_IS_LINKED_ATTRIBUTE_NAME));
-			parameter.setLinked(linked);
+			methodParameterNode.setLinked(linked);
 		}
 
 		if(element.getAttribute(PARAMETER_LINK_ATTRIBUTE_NAME) != null && method != null && method.getClassNode() != null){
 			String linkPath = getAttributeValue(element, PARAMETER_LINK_ATTRIBUTE_NAME);
 			GlobalParameterNode link = method.getClassNode().findGlobalParameter(linkPath);
 			if(link != null){
-				parameter.setLink(link);
+				methodParameterNode.setLink(link);
 			}
 			else{
-				parameter.setLinked(false);
+				methodParameterNode.setLinked(false);
 			}
 		}else{
-			parameter.setLinked(false);
+			methodParameterNode.setLinked(false);
 		}
 
 		for(Element child : getIterableChildren(element, getChoiceNodeName())){
 			try{
-				parameter.addChoice(parseChoice(child));
+				methodParameterNode.addChoice(parseChoice(child));
 			}catch(ParserException e){
 				System.err.println("Exception: " + e.getMessage());
 			}
 		}
 
-		parameter.setDescription(parseComments(element));
-		if(parameter.isLinked() == false){
-			parameter.setTypeComments(parseTypeComments(element));
+		methodParameterNode.setDescription(parseComments(element));
+		if(methodParameterNode.isLinked() == false){
+			methodParameterNode.setTypeComments(parseTypeComments(element));
 		}
 
-		return parameter;
+		return methodParameterNode;
 	}
 
 	public GlobalParameterNode parseGlobalParameter(Element element) throws ParserException{
@@ -270,9 +277,9 @@ public abstract class XomAnalyser {
 			testData.add(testValue);
 		}
 
-		TestCaseNode testCase = new TestCaseNode(name, testData);
-		testCase.setDescription(parseComments(element));
-		return testCase;
+		TestCaseNode testCaseNode = new TestCaseNode(name, testData);
+		testCaseNode.setDescription(parseComments(element));
+		return testCaseNode;
 	}
 
 	public ConstraintNode parseConstraint(Element element, MethodNode method) throws ParserException{
@@ -512,6 +519,40 @@ public abstract class XomAnalyser {
 			ParserException.report(Messages.WRONG_OR_MISSING_RELATION_FORMAT(relationName));
 		}
 		return relation;
+	}
+
+	private void parseCommonProperties(Element parentElement, AbstractNode targetNode) {
+		Elements propertyElements = getPropertyElements(parentElement);
+
+		if (propertyElements == null) {
+			return;
+		}
+
+		int propertiesSize = propertyElements.size();
+
+		for (int cnt = 0; cnt < propertiesSize; cnt++) {
+			Element property = propertyElements.get(cnt);
+			appendProperty(property, targetNode);
+		}
+	}
+
+	private Elements getPropertyElements(Element parentElement) {
+		Elements propertyBlockElements = parentElement.getChildElements(Constants.PROPERTIES_BLOCK_TAG_NAME);
+		if (propertyBlockElements.size() == 0) {
+			return null;
+		}
+
+		Element firstBlockElement = propertyBlockElements.get(0);
+		return firstBlockElement.getChildElements(Constants.PROPERTY_TAG_NAME);
+	}
+
+	private void appendProperty(Element property, AbstractNode targetNode) {
+		String name = property.getAttributeValue(Constants.PROPERTY_ATTRIBUTE_NAME);
+		String type = property.getAttributeValue(Constants.PROPERTY_ATTRIBUTE_TYPE);
+		String value = property.getAttributeValue(Constants.PROPERTY_ATTRIBUTE_VALUE);
+
+		NodeProperty nodeProperty = new NodeProperty(type, value);
+		targetNode.putProperty(name, nodeProperty);
 	}
 
 	protected String parseComments(Element element) {
