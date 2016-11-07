@@ -14,12 +14,12 @@ import java.util.List;
 
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.ITypeAdapterProvider;
-import com.ecfeed.core.adapter.ModelOperationException;
 import com.ecfeed.core.adapter.operations.FactoryShiftOperation;
 import com.ecfeed.core.adapter.operations.GenericMoveOperation;
 import com.ecfeed.core.adapter.operations.GenericRemoveNodesOperation;
 import com.ecfeed.core.adapter.operations.GenericShiftOperation;
 import com.ecfeed.core.model.AbstractNode;
+import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.EclipseTypeAdapterProvider;
 import com.ecfeed.ui.common.Messages;

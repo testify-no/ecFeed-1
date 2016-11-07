@@ -29,8 +29,8 @@ import org.eclipse.ui.dialogs.SaveAsDialog;
 import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.part.FileEditorInput;
 
-import com.ecfeed.core.adapter.ModelOperationException;
 import com.ecfeed.core.model.ModelConverter;
+import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.serialization.IModelParser;
 import com.ecfeed.core.serialization.ParserException;

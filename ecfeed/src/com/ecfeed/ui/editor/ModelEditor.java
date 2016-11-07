@@ -52,8 +52,8 @@ import org.eclipse.ui.part.FileEditorInput;
 
 import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.adapter.CachedImplementationStatusResolver;
-import com.ecfeed.core.adapter.ModelOperationException;
 import com.ecfeed.core.adapter.ModelOperationManager;
+import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.model.ModelVersionDistributor;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.serialization.IModelSerializer;

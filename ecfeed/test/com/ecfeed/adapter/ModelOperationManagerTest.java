@@ -22,8 +22,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.ecfeed.core.adapter.IModelOperation;
-import com.ecfeed.core.adapter.ModelOperationException;
 import com.ecfeed.core.adapter.ModelOperationManager;
+import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.junit.StaticRunner;
 import com.ecfeed.junit.annotations.EcModel;
 

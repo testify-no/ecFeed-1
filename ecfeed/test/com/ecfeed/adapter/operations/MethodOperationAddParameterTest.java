@@ -20,7 +20,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.ecfeed.core.adapter.IModelOperation;
-import com.ecfeed.core.adapter.ModelOperationException;
 import com.ecfeed.core.adapter.ModelOperationManager;
 import com.ecfeed.core.adapter.operations.MethodOperationAddParameter;
 import com.ecfeed.core.generators.CartesianProductGenerator;
@@ -28,6 +27,7 @@ import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
+import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.junit.OnlineRunner;
 import com.ecfeed.junit.annotations.Constraints;

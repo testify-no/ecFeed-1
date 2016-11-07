@@ -11,10 +11,10 @@
 package com.ecfeed.core.adapter.operations;
 
 import com.ecfeed.core.adapter.IModelOperation;
-import com.ecfeed.core.adapter.ModelOperationException;
 import com.ecfeed.core.adapter.java.Messages;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
+import com.ecfeed.core.model.ModelOperationException;
 
 public class MethodOperationConvertTo extends AbstractModelOperation {
 

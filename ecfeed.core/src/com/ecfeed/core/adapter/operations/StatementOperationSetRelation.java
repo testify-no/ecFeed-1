@@ -13,10 +13,10 @@ package com.ecfeed.core.adapter.operations;
 import java.util.Arrays;
 
 import com.ecfeed.core.adapter.IModelOperation;
-import com.ecfeed.core.adapter.ModelOperationException;
 import com.ecfeed.core.adapter.java.Messages;
 import com.ecfeed.core.model.EStatementRelation;
 import com.ecfeed.core.model.IRelationalStatement;
+import com.ecfeed.core.model.ModelOperationException;
 
 public class StatementOperationSetRelation extends AbstractModelOperation {
 

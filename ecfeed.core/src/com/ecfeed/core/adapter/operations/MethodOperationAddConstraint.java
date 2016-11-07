@@ -11,11 +11,11 @@
 package com.ecfeed.core.adapter.operations;
 
 import com.ecfeed.core.adapter.IModelOperation;
-import com.ecfeed.core.adapter.ModelOperationException;
 import com.ecfeed.core.adapter.java.Constants;
 import com.ecfeed.core.adapter.java.Messages;
 import com.ecfeed.core.model.ConstraintNode;
 import com.ecfeed.core.model.MethodNode;
+import com.ecfeed.core.model.ModelOperationException;
 
 public class MethodOperationAddConstraint extends AbstractModelOperation {
 

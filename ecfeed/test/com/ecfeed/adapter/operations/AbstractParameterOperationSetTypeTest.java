@@ -22,7 +22,6 @@ import org.junit.runner.RunWith;
 
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.ITypeAdapterProvider;
-import com.ecfeed.core.adapter.ModelOperationException;
 import com.ecfeed.core.adapter.ModelOperationManager;
 import com.ecfeed.core.adapter.operations.AbstractParameterOperationSetType;
 import com.ecfeed.core.generators.CartesianProductGenerator;
@@ -34,6 +33,7 @@ import com.ecfeed.core.model.IChoicesParentVisitor;
 import com.ecfeed.core.model.IModelVisitor;
 import com.ecfeed.core.model.IParameterVisitor;
 import com.ecfeed.core.model.MethodNode;
+import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.junit.OnlineRunner;
 import com.ecfeed.junit.annotations.Constraints;
 import com.ecfeed.junit.annotations.EcModel;

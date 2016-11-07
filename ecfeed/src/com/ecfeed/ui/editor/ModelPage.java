@@ -13,7 +13,7 @@ package com.ecfeed.ui.editor;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
 
-import com.ecfeed.core.adapter.ModelOperationException;
+import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 

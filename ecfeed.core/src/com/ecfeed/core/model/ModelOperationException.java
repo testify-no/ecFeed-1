@@ -8,7 +8,7 @@
  *  
  *******************************************************************************/
 
-package com.ecfeed.core.adapter;
+package com.ecfeed.core.model;
 
 import java.util.Stack;
 

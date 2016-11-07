@@ -12,9 +12,9 @@ package com.ecfeed.core.adapter.operations;
 
 import java.util.Collection;
 
-import com.ecfeed.core.adapter.ModelOperationException;
 import com.ecfeed.core.adapter.java.Constants;
 import com.ecfeed.core.adapter.java.Messages;
+import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.model.TestCaseNode;
 
 public class MethodOperationRenameTestCases extends BulkOperation {

@@ -22,11 +22,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.ecfeed.core.adapter.IModelOperation;
-import com.ecfeed.core.adapter.ModelOperationException;
 import com.ecfeed.core.adapter.ModelOperationManager;
 import com.ecfeed.core.adapter.operations.GenericOperationAddParameter;
 import com.ecfeed.core.generators.CartesianProductGenerator;
 import com.ecfeed.core.model.MethodParameterNode;
+import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.model.ModelVersionDistributor;
 import com.ecfeed.core.model.ParametersParentNode;
 import com.ecfeed.core.model.RootNode;

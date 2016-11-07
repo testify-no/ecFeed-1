@@ -10,8 +10,8 @@
 package com.ecfeed.core.adapter.operations;
 
 import com.ecfeed.core.adapter.IModelOperation;
-import com.ecfeed.core.adapter.ModelOperationException;
 import com.ecfeed.core.model.ClassNode;
+import com.ecfeed.core.model.ModelOperationException;
 
 public class ClassOperationSetRunOnAndroid extends AbstractModelOperation {
 

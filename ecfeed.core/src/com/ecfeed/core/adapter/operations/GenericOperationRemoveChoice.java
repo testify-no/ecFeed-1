@@ -15,7 +15,6 @@ import java.util.Set;
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.ITypeAdapter;
 import com.ecfeed.core.adapter.ITypeAdapterProvider;
-import com.ecfeed.core.adapter.ModelOperationException;
 import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.adapter.java.Messages;
 import com.ecfeed.core.model.ChoiceNode;
@@ -24,6 +23,7 @@ import com.ecfeed.core.model.GlobalParameterNode;
 import com.ecfeed.core.model.IParameterVisitor;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
+import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.utils.SystemLogger;
 
 public class GenericOperationRemoveChoice extends BulkOperation {

@@ -13,6 +13,8 @@ package com.ecfeed.core.adapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ecfeed.core.model.ModelOperationException;
+
 public class ModelOperationManager {
 	private List<IModelOperation> fHistory;
 	private int fHistoryIndex = 0;

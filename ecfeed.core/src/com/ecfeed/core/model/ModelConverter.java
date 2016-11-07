@@ -10,7 +10,6 @@
 
 package com.ecfeed.core.model;
 
-import com.ecfeed.core.adapter.ModelOperationException;
 
 
 public class ModelConverter {

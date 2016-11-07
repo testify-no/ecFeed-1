@@ -10,6 +10,8 @@
 
 package com.ecfeed.core.adapter;
 
+import com.ecfeed.core.model.ModelOperationException;
+
 
 public interface IModelOperation {
 	public void execute() throws ModelOperationException;
