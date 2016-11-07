@@ -147,14 +147,23 @@ public class ModelEditorHelper {
 	}
 
 	public static RootNode parseModel(InputStream iStream) {
-		try {
 			IModelParser parser = new EctParser();
-			return ModelConverter.convertToCurrentVersion(parser.parseModel(iStream));
+			
+			RootNode parsedModel = null;
+			try {
+				parsedModel = parser.parseModel(iStream);
+			} catch (ParserException e) {
+				ExceptionCatchDialog.open("Can not parse model. ", e.getMessage());
+			}
+			
+			RootNode convertedModel = null;
+			try {
+				convertedModel = ModelConverter.convertToCurrentVersion(parsedModel);
+			} catch (ModelOperationException e) {
+				ExceptionCatchDialog.open("Can not convert model to current version. ", e.getMessage());
+			}
 
-		} catch (ParserException e) {
-			ExceptionCatchDialog.open("Can not parse model.", e.getMessage());
-			return null;
-		}
+			return convertedModel;
 	}	
 
 	public static String selectFileForSaveAs(IEditorInput editorInput, Shell shell) {

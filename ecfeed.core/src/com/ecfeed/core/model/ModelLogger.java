@@ -8,21 +8,12 @@
  *  
  *******************************************************************************/
 
-package com.ecfeed.core.utils;
+package com.ecfeed.core.model;
 
 import java.util.List;
 
-import com.ecfeed.core.model.AbstractNode;
-import com.ecfeed.core.model.AbstractStatement;
-import com.ecfeed.core.model.ChoiceNode;
-import com.ecfeed.core.model.ConstraintNode;
-import com.ecfeed.core.model.GlobalParameterNode;
-import com.ecfeed.core.model.MethodNode;
-import com.ecfeed.core.model.MethodParameterNode;
-import com.ecfeed.core.model.TestCaseNode;
 
-
-public class SystemLoggerHelper {
+public class ModelLogger {
 
 	private static final int indentIncrement = 4;
 

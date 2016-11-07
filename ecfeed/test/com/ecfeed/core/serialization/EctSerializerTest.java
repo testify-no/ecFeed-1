@@ -21,6 +21,7 @@ import java.io.OutputStream;
 
 import org.junit.Test;
 
+import com.ecfeed.core.adapter.ModelOperationException;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.ChoicesParentStatement;
 import com.ecfeed.core.model.ClassNode;
@@ -212,7 +213,12 @@ public class EctSerializerTest {
 
 	@Test
 	public void serializerTestWithModelConversion(){
-		RootNode convertedModel  = ModelConverter.convertToCurrentVersion(createModel(0));
+		RootNode convertedModel = null;
+		try {
+			convertedModel = ModelConverter.convertToCurrentVersion(createModel(0));
+		} catch (ModelOperationException e) {
+			fail();
+		}
 		String convertedString = getSerializedString(convertedModel);
 
 		RootNode currentModel = createModel(ModelVersionDistributor.getCurrentVersion());
