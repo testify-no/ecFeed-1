@@ -14,11 +14,6 @@ import static com.ecfeed.core.serialization.ect.Constants.ANDROID_RUNNER_ATTRIBU
 import static com.ecfeed.core.serialization.ect.Constants.BASIC_COMMENTS_BLOCK_TAG_NAME;
 import static com.ecfeed.core.serialization.ect.Constants.CLASS_NODE_NAME;
 import static com.ecfeed.core.serialization.ect.Constants.COMMENTS_BLOCK_TAG_NAME;
-import static com.ecfeed.core.serialization.ect.Constants.PROPERTIES_BLOCK_TAG_NAME;
-import static com.ecfeed.core.serialization.ect.Constants.PROPERTY_TAG_NAME;
-import static com.ecfeed.core.serialization.ect.Constants.PROPERTY_ATTRIBUTE_NAME;
-import static com.ecfeed.core.serialization.ect.Constants.PROPERTY_ATTRIBUTE_TYPE;
-import static com.ecfeed.core.serialization.ect.Constants.PROPERTY_ATTRIBUTE_VALUE;
 import static com.ecfeed.core.serialization.ect.Constants.CONSTRAINT_CHOICE_STATEMENT_NODE_NAME;
 import static com.ecfeed.core.serialization.ect.Constants.CONSTRAINT_CONSEQUENCE_NODE_NAME;
 import static com.ecfeed.core.serialization.ect.Constants.CONSTRAINT_EXPECTED_STATEMENT_NODE_NAME;
@@ -35,9 +30,14 @@ import static com.ecfeed.core.serialization.ect.Constants.METHOD_NODE_NAME;
 import static com.ecfeed.core.serialization.ect.Constants.NODE_NAME_ATTRIBUTE;
 import static com.ecfeed.core.serialization.ect.Constants.PARAMETER_IS_EXPECTED_ATTRIBUTE_NAME;
 import static com.ecfeed.core.serialization.ect.Constants.PARAMETER_IS_LINKED_ATTRIBUTE_NAME;
-import static com.ecfeed.core.serialization.ect.Constants.PARAMETER_IS_RUN_ON_ANDROID_ATTRIBUTE_NAME;
 import static com.ecfeed.core.serialization.ect.Constants.PARAMETER_LINK_ATTRIBUTE_NAME;
+import static com.ecfeed.core.serialization.ect.Constants.PROPERTIES_BLOCK_TAG_NAME;
+import static com.ecfeed.core.serialization.ect.Constants.PROPERTY_ATTRIBUTE_NAME;
+import static com.ecfeed.core.serialization.ect.Constants.PROPERTY_ATTRIBUTE_TYPE;
+import static com.ecfeed.core.serialization.ect.Constants.PROPERTY_ATTRIBUTE_VALUE;
+import static com.ecfeed.core.serialization.ect.Constants.PROPERTY_TAG_NAME;
 import static com.ecfeed.core.serialization.ect.Constants.ROOT_NODE_NAME;
+import static com.ecfeed.core.serialization.ect.Constants.RUN_ON_ANDROID_ATTRIBUTE_NAME;
 import static com.ecfeed.core.serialization.ect.Constants.STATEMENT_EXPECTED_VALUE_ATTRIBUTE_NAME;
 import static com.ecfeed.core.serialization.ect.Constants.STATEMENT_LABEL_ATTRIBUTE_NAME;
 import static com.ecfeed.core.serialization.ect.Constants.STATEMENT_OPERATOR_AND_ATTRIBUTE_VALUE;
@@ -55,9 +55,6 @@ import static com.ecfeed.core.serialization.ect.Constants.TYPE_NAME_ATTRIBUTE;
 import static com.ecfeed.core.serialization.ect.Constants.VALUE_ATTRIBUTE;
 import static com.ecfeed.core.serialization.ect.Constants.VALUE_ATTRIBUTE_NAME;
 import static com.ecfeed.core.serialization.ect.Constants.VERSION_ATTRIBUTE;
-
-import java.util.Set;
-
 import nu.xom.Attribute;
 import nu.xom.Element;
 import nu.xom.Elements;
@@ -67,6 +64,9 @@ import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.AbstractStatement;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.ChoicesParentStatement;
+import com.ecfeed.core.model.ChoicesParentStatement.ChoiceCondition;
+import com.ecfeed.core.model.ChoicesParentStatement.ICondition;
+import com.ecfeed.core.model.ChoicesParentStatement.LabelCondition;
 import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.ConstraintNode;
 import com.ecfeed.core.model.ExpectedValueStatement;
@@ -76,15 +76,13 @@ import com.ecfeed.core.model.IStatementVisitor;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelVersionDistributor;
-import com.ecfeed.core.model.NodeProperty;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.StatementArray;
 import com.ecfeed.core.model.StaticStatement;
 import com.ecfeed.core.model.TestCaseNode;
-import com.ecfeed.core.model.ChoicesParentStatement.ChoiceCondition;
-import com.ecfeed.core.model.ChoicesParentStatement.ICondition;
-import com.ecfeed.core.model.ChoicesParentStatement.LabelCondition;
 import com.ecfeed.core.serialization.WhiteCharConverter;
+import com.ecfeed.core.utils.BooleanHelper;
+import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.StringHelper;
 
 public abstract class XomBuilder implements IModelVisitor, IStatementVisitor {
@@ -120,7 +118,8 @@ public abstract class XomBuilder implements IModelVisitor, IStatementVisitor {
 	@Override
 	public Object visit(ClassNode classNode) throws Exception {
 		Element element = createAbstractElement(CLASS_NODE_NAME, classNode);
-		addAndroidAttributes(classNode, element);
+
+		addAndroidValues(classNode, element);
 
 		for(MethodNode method : classNode.getMethods()){
 			element.appendChild((Element)visit(method));
@@ -133,16 +132,24 @@ public abstract class XomBuilder implements IModelVisitor, IStatementVisitor {
 		return element;
 	}
 
-	private void addAndroidAttributes(ClassNode classNode, Element element) {
+	private void addAndroidValues(ClassNode classNode, Element classElement) {
 
+		if (ModelVersionDistributor.isAndroidAttributeInTheClass(getModelVersion())) {
+			addAndroidValuesAsAttributes(classNode, classElement);
+		} else {
+			addAndroidValuesAsProperties(classNode, classElement);
+		}
+	}
+
+	private void addAndroidValuesAsAttributes(ClassNode classNode, Element classElement) {
 		boolean runOnAndroid = classNode.getRunOnAndroid();
 
-		element.addAttribute(
+		classElement.addAttribute(
 				new Attribute(
-						PARAMETER_IS_RUN_ON_ANDROID_ATTRIBUTE_NAME,  
+						RUN_ON_ANDROID_ATTRIBUTE_NAME,  
 						Boolean.toString(runOnAndroid)));
 
-		String androidBaseRunner = classNode.getAndroidBaseRunner();
+		String androidBaseRunner = classNode.getAndroidRunner();
 
 		if (!runOnAndroid && StringHelper.isNullOrEmpty(androidBaseRunner)) {
 			return;
@@ -152,8 +159,59 @@ public abstract class XomBuilder implements IModelVisitor, IStatementVisitor {
 			androidBaseRunner = "";
 		}
 
-		element.addAttribute(new Attribute(ANDROID_RUNNER_ATTRIBUTE_NAME, androidBaseRunner));
+		classElement.addAttribute(new Attribute(ANDROID_RUNNER_ATTRIBUTE_NAME, androidBaseRunner));
 	}
+
+	private void addAndroidValuesAsProperties(ClassNode classNode, Element targetElement) {
+		boolean runOnAndroid = classNode.getRunOnAndroid();
+		appendProperty(
+				RUN_ON_ANDROID_ATTRIBUTE_NAME, 
+				JavaTypeHelper.TYPE_NAME_BOOLEAN, 
+				BooleanHelper.toString(runOnAndroid), targetElement);
+
+		String androidBaseRunner = classNode.getAndroidRunner();
+		if (androidBaseRunner != null) {
+			appendProperty(
+					ANDROID_RUNNER_ATTRIBUTE_NAME, 
+					JavaTypeHelper.TYPE_NAME_STRING, 
+					androidBaseRunner, targetElement);
+		}
+	}
+
+	private void appendProperty(String key, String type, String value, Element targetElement) {
+		Element propertiesBlock = getPropertiesBlock(targetElement);
+		Element propertyElement = createCommonPropertyElement(key, type, value);
+		propertiesBlock.appendChild(propertyElement);
+	}
+
+	private Element getPropertiesBlock(Element parentElement) {
+		Elements propiertiesBlocks = parentElement.getChildElements(PROPERTIES_BLOCK_TAG_NAME);
+
+		if (propiertiesBlocks.size() == 0) {
+			Element propertiesBlock = new Element(PROPERTIES_BLOCK_TAG_NAME);
+			parentElement.appendChild(propertiesBlock);
+			return propertiesBlock;
+		}
+
+		return propiertiesBlocks.get(0);
+	}
+
+	private Element createCommonPropertyElement(String name, String type, String value) {
+		Element propertyElement = new Element(PROPERTY_TAG_NAME);
+
+		Attribute attributeName = new Attribute(PROPERTY_ATTRIBUTE_NAME, name);
+		propertyElement.addAttribute(attributeName);
+
+		Attribute attributeType = new Attribute(PROPERTY_ATTRIBUTE_TYPE, type);
+		propertyElement.addAttribute(attributeType);
+
+		Attribute attributeValue = new Attribute(PROPERTY_ATTRIBUTE_VALUE, value);
+		propertyElement.addAttribute(attributeValue);
+
+		return propertyElement;
+	}
+
+
 
 	@Override
 	public Object visit(MethodNode node) throws Exception {
@@ -370,18 +428,7 @@ public abstract class XomBuilder implements IModelVisitor, IStatementVisitor {
 		encodeAndAddAttribute(element, nameAttr);
 		appendComments(element, node);
 
-		if (nodesHaveCommonProperties()) {
-			appendCommonPropertiesOfNode(element, node);
-		}
-
 		return element;
-	}
-
-	private boolean nodesHaveCommonProperties() {
-		if (ModelVersionDistributor.nodesHaveCommonProperties(getModelVersion())) {
-			return true;
-		}
-		return false;
 	}
 
 	private Element appendComments(Element element, AbstractNode node) {
@@ -424,38 +471,4 @@ public abstract class XomBuilder implements IModelVisitor, IStatementVisitor {
 		element.addAttribute(attribute);
 	}
 
-	private void appendCommonPropertiesOfNode(Element parentElement, AbstractNode node) {
-		int count = node.getPropertyCount();
-
-		if (count == 0) {
-			return;
-		}
-
-		Set<String> attributeKeys = node.getPropertyKeys();
-
-		Element propertiesBlock = new Element(PROPERTIES_BLOCK_TAG_NAME);
-
-		for (String key : attributeKeys) {
-			NodeProperty property = node.getProperty(key);
-			Element propertyElement = createCommonPropertyElement(key, property.getType(), property.getValue());
-			propertiesBlock.appendChild(propertyElement);
-		}
-
-		parentElement.appendChild(propertiesBlock);
-	}
-
-	private Element createCommonPropertyElement(String name, String type, String value) {
-		Element propertyElement = new Element(PROPERTY_TAG_NAME);
-
-		Attribute attributeName = new Attribute(PROPERTY_ATTRIBUTE_NAME, name);
-		propertyElement.addAttribute(attributeName);
-
-		Attribute attributeType = new Attribute(PROPERTY_ATTRIBUTE_TYPE, type);
-		propertyElement.addAttribute(attributeType);
-
-		Attribute attributeValue = new Attribute(PROPERTY_ATTRIBUTE_VALUE, value);
-		propertyElement.addAttribute(attributeValue);
-
-		return propertyElement;
-	}
 }

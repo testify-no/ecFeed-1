@@ -53,6 +53,7 @@ import com.ecfeed.core.serialization.ParserException;
 import com.ecfeed.core.serialization.ect.Constants;
 import com.ecfeed.core.serialization.ect.EctParser;
 import com.ecfeed.core.serialization.ect.EctSerializer;
+import com.ecfeed.core.utils.JavaTypeHelper;
 
 public class XmlParserSerializerTest {
 	private final int TEST_RUNS = 10;
@@ -125,7 +126,7 @@ public class XmlParserSerializerTest {
 			RootNode root = new RootNode("root", version);
 			ClassNode classNode = new ClassNode("classNode");
 			MethodNode method = new MethodNode("method");
-			MethodParameterNode parameter = new MethodParameterNode("parameter", com.ecfeed.core.adapter.java.Constants.TYPE_NAME_STRING, "0", false);
+			MethodParameterNode parameter = new MethodParameterNode("parameter", JavaTypeHelper.TYPE_NAME_STRING, "0", false);
 			ChoiceNode choice = new ChoiceNode("choice", "A                 B");
 			List<ChoiceNode> testData = new ArrayList<ChoiceNode>();
 			testData.add(choice);
@@ -163,9 +164,9 @@ public class XmlParserSerializerTest {
 			ClassNode classNode = new ClassNode("classNode");
 			MethodNode method = new MethodNode("method");
 			MethodParameterNode choicesParentParameter =
-					new MethodParameterNode("choicesParentParameter", com.ecfeed.core.adapter.java.Constants.TYPE_NAME_STRING, "0", false);
+					new MethodParameterNode("choicesParentParameter", JavaTypeHelper.TYPE_NAME_STRING, "0", false);
 			MethodParameterNode expectedParameter =
-					new MethodParameterNode("expectedParameter", com.ecfeed.core.adapter.java.Constants.TYPE_NAME_CHAR, "0", true);
+					new MethodParameterNode("expectedParameter", JavaTypeHelper.TYPE_NAME_CHAR, "0", true);
 			expectedParameter.setDefaultValueString("d");
 			ChoiceNode choice1 = new ChoiceNode("choice", "p");
 			choice1.setParent(choicesParentParameter);

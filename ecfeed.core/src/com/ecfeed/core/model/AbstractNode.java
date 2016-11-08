@@ -189,8 +189,21 @@ public abstract class AbstractNode{
 		fProperties.put(key, property);
 	}
 
+	public void putProperty(String key, String type, String value) {
+		NodeProperty nodeProperty = new NodeProperty(type, value);
+		putProperty(key, nodeProperty);
+	}
+
 	public NodeProperty getProperty(String key) {
 		return fProperties.get(key);
+	}	
+
+	public String getPropertyValue(String key) {
+		NodeProperty nodeProperty = fProperties.get(key);
+		if (nodeProperty == null) {
+			return null;
+		}
+		return nodeProperty.getValue();
 	}	
 
 	public Set<String> getPropertyKeys() {

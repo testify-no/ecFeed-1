@@ -10,29 +10,16 @@
 
 package com.ecfeed.core.utils;
 
-public class ItemHolder<Type> {
-	private Type fItem;
+public class JavaTypeHelper {
 
-	public ItemHolder(Type initialValue) {
-		set(initialValue);
-	}
+	public static final String TYPE_NAME_BOOLEAN = "boolean";
+	public static final String TYPE_NAME_BYTE = "byte";
+	public static final String TYPE_NAME_CHAR = "char";
+	public static final String TYPE_NAME_DOUBLE = "double";
+	public static final String TYPE_NAME_FLOAT = "float";
+	public static final String TYPE_NAME_INT = "int";
+	public static final String TYPE_NAME_LONG = "long";
+	public static final String TYPE_NAME_SHORT = "short";
+	public static final String TYPE_NAME_STRING = "String";
 
-	public ItemHolder() {
-		set(null);
-	}
-
-	public Type get() {
-		return fItem;
-	}
-
-	public void set(Type str) {
-		fItem = str;
-	}
-
-	public boolean isNull() {
-		if (fItem == null) {
-			return true;
-		}
-		return false;
-	}
 }

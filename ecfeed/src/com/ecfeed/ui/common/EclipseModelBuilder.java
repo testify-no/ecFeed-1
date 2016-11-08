@@ -28,13 +28,14 @@ import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelOperationException;
+import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.SystemLogger;
 
 public class EclipseModelBuilder extends JavaModelAnalyser{
 
 	public ClassNode buildClassModel(String qualifiedName, boolean testOnly) throws ModelOperationException{
 		IType type = getIType(qualifiedName);
-		
+
 		if(type == null) {
 			ModelOperationException.report(Messages.EXCEPTION_TYPE_DOES_NOT_EXIST_IN_THE_PROJECT);
 		}
@@ -100,23 +101,23 @@ public class EclipseModelBuilder extends JavaModelAnalyser{
 	public List<String> getSpecialValues(String typeName) {
 		List<String> result = new ArrayList<String>();
 		switch(typeName){
-		case com.ecfeed.core.adapter.java.Constants.TYPE_NAME_BOOLEAN:
+		case JavaTypeHelper.TYPE_NAME_BOOLEAN:
 			result.addAll(Arrays.asList(Constants.BOOLEAN_SPECIAL_VALUES));
 			break;
-		case com.ecfeed.core.adapter.java.Constants.TYPE_NAME_CHAR:
+		case JavaTypeHelper.TYPE_NAME_CHAR:
 			result.addAll(Arrays.asList(Constants.DEFAULT_EXPECTED_CHAR_VALUE));
 			break;
-		case com.ecfeed.core.adapter.java.Constants.TYPE_NAME_BYTE:
-		case com.ecfeed.core.adapter.java.Constants.TYPE_NAME_INT:
-		case com.ecfeed.core.adapter.java.Constants.TYPE_NAME_LONG:
-		case com.ecfeed.core.adapter.java.Constants.TYPE_NAME_SHORT:
+		case JavaTypeHelper.TYPE_NAME_BYTE:
+		case JavaTypeHelper.TYPE_NAME_INT:
+		case JavaTypeHelper.TYPE_NAME_LONG:
+		case JavaTypeHelper.TYPE_NAME_SHORT:
 			result.addAll(Arrays.asList(Constants.INTEGER_SPECIAL_VALUES));
 			break;
-		case com.ecfeed.core.adapter.java.Constants.TYPE_NAME_DOUBLE:
-		case com.ecfeed.core.adapter.java.Constants.TYPE_NAME_FLOAT:
+		case JavaTypeHelper.TYPE_NAME_DOUBLE:
+		case JavaTypeHelper.TYPE_NAME_FLOAT:
 			result.addAll(Arrays.asList(Constants.FLOAT_SPECIAL_VALUES));
 			break;
-		case com.ecfeed.core.adapter.java.Constants.TYPE_NAME_STRING:
+		case JavaTypeHelper.TYPE_NAME_STRING:
 			result.addAll(Arrays.asList(Constants.STRING_SPECIAL_VALUES));
 			break;
 		default:
@@ -129,23 +130,23 @@ public class EclipseModelBuilder extends JavaModelAnalyser{
 
 	public String getDefaultExpectedValue(String type) {
 		switch(type){
-		case com.ecfeed.core.adapter.java.Constants.TYPE_NAME_BYTE:
+		case JavaTypeHelper.TYPE_NAME_BYTE:
 			return Constants.DEFAULT_EXPECTED_BYTE_VALUE;
-		case com.ecfeed.core.adapter.java.Constants.TYPE_NAME_BOOLEAN:
+		case JavaTypeHelper.TYPE_NAME_BOOLEAN:
 			return Constants.DEFAULT_EXPECTED_BOOLEAN_VALUE;
-		case com.ecfeed.core.adapter.java.Constants.TYPE_NAME_CHAR:
+		case JavaTypeHelper.TYPE_NAME_CHAR:
 			return Constants.DEFAULT_EXPECTED_CHAR_VALUE;
-		case com.ecfeed.core.adapter.java.Constants.TYPE_NAME_DOUBLE:
+		case JavaTypeHelper.TYPE_NAME_DOUBLE:
 			return Constants.DEFAULT_EXPECTED_DOUBLE_VALUE;
-		case com.ecfeed.core.adapter.java.Constants.TYPE_NAME_FLOAT:
+		case JavaTypeHelper.TYPE_NAME_FLOAT:
 			return Constants.DEFAULT_EXPECTED_FLOAT_VALUE;
-		case com.ecfeed.core.adapter.java.Constants.TYPE_NAME_INT:
+		case JavaTypeHelper.TYPE_NAME_INT:
 			return Constants.DEFAULT_EXPECTED_INT_VALUE;
-		case com.ecfeed.core.adapter.java.Constants.TYPE_NAME_LONG:
+		case JavaTypeHelper.TYPE_NAME_LONG:
 			return Constants.DEFAULT_EXPECTED_LONG_VALUE;
-		case com.ecfeed.core.adapter.java.Constants.TYPE_NAME_SHORT:
+		case JavaTypeHelper.TYPE_NAME_SHORT:
 			return Constants.DEFAULT_EXPECTED_SHORT_VALUE;
-		case com.ecfeed.core.adapter.java.Constants.TYPE_NAME_STRING:
+		case JavaTypeHelper.TYPE_NAME_STRING:
 			return Constants.DEFAULT_EXPECTED_STRING_VALUE;
 		default:
 			return defaultEnumExpectedValue(type);

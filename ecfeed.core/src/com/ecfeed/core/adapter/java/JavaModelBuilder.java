@@ -22,16 +22,17 @@ import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelOperationException;
+import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.SystemLogger;
 
 public class JavaModelBuilder {
-	
+
 	private ModelClassLoader fLoader;
 
 	public JavaModelBuilder(ILoaderProvider loaderProvider){
 		fLoader = loaderProvider.getLoader(true, null);
 	}
-	
+
 	public ClassNode buildClassModel(String qualifiedName, boolean testOnly) throws ModelOperationException{
 		ClassNode classNode = new ClassNode(qualifiedName);
 		try{
@@ -54,7 +55,7 @@ public class JavaModelBuilder {
 		}
 		return classNode;
 	}
-	
+
 	public MethodNode buildMethodModel(Method method){
 		MethodNode methodNode = new MethodNode(method.getName());
 		Class<?> parameterTypes[] = method.getParameterTypes();
@@ -65,7 +66,7 @@ public class JavaModelBuilder {
 		}
 		return methodNode;
 	}
-	
+
 	public MethodParameterNode buildParameterModel(String name, Class<?>type, boolean expected){
 		String typeName = JavaUtils.getTypeName(type.getName());
 		String defaultValue = getDefaultExpectedValueString(typeName);
@@ -82,23 +83,23 @@ public class JavaModelBuilder {
 
 	public List<ChoiceNode> getDefaultChoices(String typeSignature) {
 		switch(typeSignature){
-		case com.ecfeed.core.adapter.java.Constants.TYPE_NAME_BOOLEAN:
+		case JavaTypeHelper.TYPE_NAME_BOOLEAN:
 			return defaultBooleanChoices();
-		case com.ecfeed.core.adapter.java.Constants.TYPE_NAME_BYTE:
+		case JavaTypeHelper.TYPE_NAME_BYTE:
 			return defaultIntegerChoices();
-		case com.ecfeed.core.adapter.java.Constants.TYPE_NAME_CHAR:
+		case JavaTypeHelper.TYPE_NAME_CHAR:
 			return defaultIntegerChoices();
-		case com.ecfeed.core.adapter.java.Constants.TYPE_NAME_DOUBLE:
+		case JavaTypeHelper.TYPE_NAME_DOUBLE:
 			return defaultFloatChoices();
-		case com.ecfeed.core.adapter.java.Constants.TYPE_NAME_FLOAT:
+		case JavaTypeHelper.TYPE_NAME_FLOAT:
 			return defaultFloatChoices();
-		case com.ecfeed.core.adapter.java.Constants.TYPE_NAME_INT:
+		case JavaTypeHelper.TYPE_NAME_INT:
 			return defaultIntegerChoices();
-		case com.ecfeed.core.adapter.java.Constants.TYPE_NAME_LONG:
+		case JavaTypeHelper.TYPE_NAME_LONG:
 			return defaultIntegerChoices();
-		case com.ecfeed.core.adapter.java.Constants.TYPE_NAME_SHORT:
+		case JavaTypeHelper.TYPE_NAME_SHORT:
 			return defaultIntegerChoices();
-		case com.ecfeed.core.adapter.java.Constants.TYPE_NAME_STRING:
+		case JavaTypeHelper.TYPE_NAME_STRING:
 			return defaultStringChoices();
 		default:
 			return defaultEnumChoices(typeSignature);
@@ -118,28 +119,28 @@ public class JavaModelBuilder {
 
 	protected String getDefaultExpectedValueString(String type) {
 		return "0";
-//		switch(type){
-//		case com.ecfeed.modelif.java.Constants.TYPE_NAME_BYTE:
-//			return Constants.DEFAULT_EXPECTED_BYTE_VALUE;
-//		case com.ecfeed.modelif.java.Constants.TYPE_NAME_BOOLEAN:
-//			return Constants.DEFAULT_EXPECTED_BOOLEAN_VALUE;
-//		case com.ecfeed.modelif.java.Constants.TYPE_NAME_CHAR:
-//			return Constants.DEFAULT_EXPECTED_CHAR_VALUE;
-//		case com.ecfeed.modelif.java.Constants.TYPE_NAME_DOUBLE:
-//			return Constants.DEFAULT_EXPECTED_DOUBLE_VALUE;
-//		case com.ecfeed.modelif.java.Constants.TYPE_NAME_FLOAT:
-//			return Constants.DEFAULT_EXPECTED_FLOAT_VALUE;
-//		case com.ecfeed.modelif.java.Constants.TYPE_NAME_INT:
-//			return Constants.DEFAULT_EXPECTED_INT_VALUE;
-//		case com.ecfeed.modelif.java.Constants.TYPE_NAME_LONG:
-//			return Constants.DEFAULT_EXPECTED_LONG_VALUE;
-//		case com.ecfeed.modelif.java.Constants.TYPE_NAME_SHORT:
-//			return Constants.DEFAULT_EXPECTED_SHORT_VALUE;
-//		case com.ecfeed.modelif.java.Constants.TYPE_NAME_STRING:
-//			return Constants.DEFAULT_EXPECTED_STRING_VALUE;
-//		default:
-//			return ClassUtils.defaultEnumExpectedValueString(type);
-//		}
+		//		switch(type){
+		//		case com.ecfeed.modelif.java.Constants.TYPE_NAME_BYTE:
+		//			return Constants.DEFAULT_EXPECTED_BYTE_VALUE;
+		//		case com.ecfeed.modelif.java.Constants.TYPE_NAME_BOOLEAN:
+		//			return Constants.DEFAULT_EXPECTED_BOOLEAN_VALUE;
+		//		case com.ecfeed.modelif.java.Constants.TYPE_NAME_CHAR:
+		//			return Constants.DEFAULT_EXPECTED_CHAR_VALUE;
+		//		case com.ecfeed.modelif.java.Constants.TYPE_NAME_DOUBLE:
+		//			return Constants.DEFAULT_EXPECTED_DOUBLE_VALUE;
+		//		case com.ecfeed.modelif.java.Constants.TYPE_NAME_FLOAT:
+		//			return Constants.DEFAULT_EXPECTED_FLOAT_VALUE;
+		//		case com.ecfeed.modelif.java.Constants.TYPE_NAME_INT:
+		//			return Constants.DEFAULT_EXPECTED_INT_VALUE;
+		//		case com.ecfeed.modelif.java.Constants.TYPE_NAME_LONG:
+		//			return Constants.DEFAULT_EXPECTED_LONG_VALUE;
+		//		case com.ecfeed.modelif.java.Constants.TYPE_NAME_SHORT:
+		//			return Constants.DEFAULT_EXPECTED_SHORT_VALUE;
+		//		case com.ecfeed.modelif.java.Constants.TYPE_NAME_STRING:
+		//			return Constants.DEFAULT_EXPECTED_STRING_VALUE;
+		//		default:
+		//			return ClassUtils.defaultEnumExpectedValueString(type);
+		//		}
 	}
 
 	protected String defaultEnumExpectedValueString(String typeName) {
@@ -162,8 +163,8 @@ public class JavaModelBuilder {
 
 	protected HashMap<String, String> predefinedBooleanValues() {
 		HashMap<String, String> values = new HashMap<String, String>();
-//		values.put("true", Constants.BOOLEAN_TRUE_STRING_REPRESENTATION);
-//		values.put("false", Constants.BOOLEAN_FALSE_STRING_REPRESENTATION);
+		//		values.put("true", Constants.BOOLEAN_TRUE_STRING_REPRESENTATION);
+		//		values.put("false", Constants.BOOLEAN_FALSE_STRING_REPRESENTATION);
 		return values;
 	}
 
@@ -178,8 +179,8 @@ public class JavaModelBuilder {
 
 	protected HashMap<String, String> predefinedIntegerValues() {
 		HashMap<String, String> values = new HashMap<String, String>();
-//		values.put("min", Constants.MIN_VALUE_STRING_REPRESENTATION);
-//		values.put("max", Constants.MAX_VALUE_STRING_REPRESENTATION);
+		//		values.put("min", Constants.MIN_VALUE_STRING_REPRESENTATION);
+		//		values.put("max", Constants.MAX_VALUE_STRING_REPRESENTATION);
 		return values;
 	}
 
@@ -194,10 +195,10 @@ public class JavaModelBuilder {
 
 	protected HashMap<String, String> predefinedFloatValues() {
 		HashMap<String, String> values = new HashMap<String, String>();
-//		values.put("min", Constants.MIN_VALUE_STRING_REPRESENTATION);
-//		values.put("max", Constants.MAX_VALUE_STRING_REPRESENTATION);
-//		values.put("positive infinity", Constants.POSITIVE_INFINITY_STRING_REPRESENTATION);
-//		values.put("negative infinity", Constants.NEGATIVE_INFINITY_STRING_REPRESENTATION);
+		//		values.put("min", Constants.MIN_VALUE_STRING_REPRESENTATION);
+		//		values.put("max", Constants.MAX_VALUE_STRING_REPRESENTATION);
+		//		values.put("positive infinity", Constants.POSITIVE_INFINITY_STRING_REPRESENTATION);
+		//		values.put("negative infinity", Constants.NEGATIVE_INFINITY_STRING_REPRESENTATION);
 		return values;
 	}
 
@@ -212,7 +213,7 @@ public class JavaModelBuilder {
 
 	protected HashMap<String, String> predefinedStringValues() {
 		HashMap<String, String> values = new HashMap<String, String>();
-//		values.put("null", Constants.NULL_VALUE_STRING_REPRESENTATION);
+		//		values.put("null", Constants.NULL_VALUE_STRING_REPRESENTATION);
 		return values;
 	}
 

@@ -34,7 +34,6 @@ import com.ecfeed.core.model.ExpectedValueStatement;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelVersionDistributor;
-import com.ecfeed.core.model.NodeProperty;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.StatementArray;
 import com.ecfeed.core.model.StaticStatement;
@@ -49,7 +48,7 @@ import com.ecfeed.testutils.RandomModelGenerator;
 
 public class XomParserTest {
 
-	private final boolean DEBUG = false;
+	private final boolean DEBUG = true;
 
 	RandomModelGenerator fModelGenerator = new RandomModelGenerator();
 	ModelStringifier fStringifier = new ModelStringifier();
@@ -65,7 +64,6 @@ public class XomParserTest {
 	private void parseRootTest(int version) {
 		try {
 			RootNode rootNode = fModelGenerator.generateModel(3);
-			addCommonProperties(version, rootNode);
 
 			XomBuilder builder = XomBuilderFactory.createXomBuilder(version);
 			Element rootElement = (Element)rootNode.accept(builder);
@@ -74,7 +72,6 @@ public class XomParserTest {
 			XomAnalyser analyser = XomAnalyserFactory.createXomAnalyser(version);
 			RootNode parsedRootNode = analyser.parseRoot(rootElement);
 			assertElementsEqual(rootNode, parsedRootNode);
-
 		} catch (Exception e) {
 			fail("Unexpected exception: " + e.getMessage());
 		}
@@ -90,7 +87,7 @@ public class XomParserTest {
 	private void parseClassTest(int version){
 		try {
 			ClassNode classNode = fModelGenerator.generateClass(3);
-			addCommonProperties(version, classNode);
+			classNode.setRunOnAndroid(true);
 
 			XomBuilder builder = XomBuilderFactory.createXomBuilder(version);
 			Element element = (Element)classNode.accept(builder);
@@ -103,7 +100,6 @@ public class XomParserTest {
 		}
 	}
 
-
 	@Test
 	public void parseMethodTest() {
 		for (int version = 0; version <= ModelVersionDistributor.getCurrentVersion(); version++) {
@@ -115,7 +111,6 @@ public class XomParserTest {
 		for(int i = 0; i < 10; i++){
 			try{
 				MethodNode methodNode = fModelGenerator.generateMethod(5, 5, 5);
-				addCommonProperties(version, methodNode);
 
 				XomBuilder builder = XomBuilderFactory.createXomBuilder(version);
 				Element element = (Element)methodNode.accept(builder);
@@ -144,7 +139,6 @@ public class XomParserTest {
 				for(boolean expected : new Boolean[]{true, false}){
 					MethodNode methodNode = new MethodNode("method");
 					MethodParameterNode methodParameterNode = fModelGenerator.generateParameter(type, expected, 3, 3, 3);
-					addCommonProperties(version, methodParameterNode);
 					methodNode.addParameter(methodParameterNode);
 
 					XomBuilder builder = XomBuilderFactory.createXomBuilder(version);
@@ -413,19 +407,6 @@ public class XomParserTest {
 	private void assertElementsEqual(AbstractNode n, AbstractNode n1) {
 		if(n.compare(n1) == false){
 			fail("Parsed element differs from original\n" + fStringifier.stringify(n, 0) + "\n" + fStringifier.stringify(n1, 0));
-		}
-	}
-
-	private void addCommonProperties(int version, AbstractNode targetNode) {
-		if (!ModelVersionDistributor.nodesHaveCommonProperties(version)) {
-			return;
-		}
-
-		int maxProperties = fRandom.nextInt(3);
-
-		for (int propertyNum = 0; propertyNum < maxProperties; propertyNum++) {
-			NodeProperty nodeProperty = new NodeProperty("String", "value" + propertyNum);
-			targetNode.putProperty("key" + propertyNum, nodeProperty);			
 		}
 	}
 

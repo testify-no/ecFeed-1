@@ -8,13 +8,17 @@
  *  
  *******************************************************************************/
 
-package com.ecfeed.core.serialization.ect;
+package com.ecfeed.core.utils;
 
-public class XomBuilderVersion2 extends XomBuilderVersionWithNewNodeNames {
+public class BooleanHelper {
 
-	@Override
-	protected int getModelVersion() {
-		return 2;
+	public static String toString(boolean boolSimple) {
+		Boolean boolWrapped = boolSimple;
+		return boolWrapped.toString();
+	}
+
+	public static boolean parseBoolean(String str) {
+		return Boolean.parseBoolean(str);
 	}
 
 }

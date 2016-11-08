@@ -27,6 +27,7 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.Signature;
 
 import com.ecfeed.core.model.MethodNode;
+import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.SystemLogger;
 
 public class JavaModelAnalyser {
@@ -174,23 +175,23 @@ public class JavaModelAnalyser {
 		String typeSignaure = parameter.getTypeSignature();
 		switch(typeSignaure){
 		case Signature.SIG_BOOLEAN:
-			return com.ecfeed.core.adapter.java.Constants.TYPE_NAME_BOOLEAN;
+			return JavaTypeHelper.TYPE_NAME_BOOLEAN;
 		case Signature.SIG_BYTE:
-			return com.ecfeed.core.adapter.java.Constants.TYPE_NAME_BYTE;
+			return JavaTypeHelper.TYPE_NAME_BYTE;
 		case Signature.SIG_CHAR:
-			return com.ecfeed.core.adapter.java.Constants.TYPE_NAME_CHAR;
+			return JavaTypeHelper.TYPE_NAME_CHAR;
 		case Signature.SIG_DOUBLE:
-			return com.ecfeed.core.adapter.java.Constants.TYPE_NAME_DOUBLE;
+			return JavaTypeHelper.TYPE_NAME_DOUBLE;
 		case Signature.SIG_FLOAT:
-			return com.ecfeed.core.adapter.java.Constants.TYPE_NAME_FLOAT;
+			return JavaTypeHelper.TYPE_NAME_FLOAT;
 		case Signature.SIG_INT:
-			return com.ecfeed.core.adapter.java.Constants.TYPE_NAME_INT;
+			return JavaTypeHelper.TYPE_NAME_INT;
 		case Signature.SIG_LONG:
-			return com.ecfeed.core.adapter.java.Constants.TYPE_NAME_LONG;
+			return JavaTypeHelper.TYPE_NAME_LONG;
 		case Signature.SIG_SHORT:
-			return com.ecfeed.core.adapter.java.Constants.TYPE_NAME_SHORT;
+			return JavaTypeHelper.TYPE_NAME_SHORT;
 		case "QString;":
-			return com.ecfeed.core.adapter.java.Constants.TYPE_NAME_STRING;
+			return JavaTypeHelper.TYPE_NAME_STRING;
 		default:
 			return getVariableType(method, parameter).getFullyQualifiedName().replaceAll("\\$",	"\\.");
 		}

@@ -10,32 +10,25 @@
 
 package com.ecfeed.core.adapter.java;
 
+import com.ecfeed.core.utils.JavaTypeHelper;
+
 public class Constants {
 
 	public static final int MAX_NODE_NAME_LENGTH = 64;
 	public static final int MAX_PARTITION_VALUE_STRING_LENGTH = 512;
 
-	public static final String TYPE_NAME_BOOLEAN = "boolean";
-	public static final String TYPE_NAME_BYTE = "byte";
-	public static final String TYPE_NAME_CHAR = "char";
-	public static final String TYPE_NAME_DOUBLE = "double";
-	public static final String TYPE_NAME_FLOAT = "float";
-	public static final String TYPE_NAME_INT = "int";
-	public static final String TYPE_NAME_LONG = "long";
-	public static final String TYPE_NAME_SHORT = "short";
-	public static final String TYPE_NAME_STRING = "String";
 	public static final String TYPE_NAME_UNSUPPORTED = "unsupported";
 
 	public static final String[] SUPPORTED_PRIMITIVE_TYPES = new String[]{
-		TYPE_NAME_INT,
-		TYPE_NAME_BOOLEAN,
-		TYPE_NAME_LONG,
-		TYPE_NAME_SHORT,
-		TYPE_NAME_BYTE,
-		TYPE_NAME_DOUBLE,
-		TYPE_NAME_FLOAT,
-		TYPE_NAME_CHAR,
-		TYPE_NAME_STRING
+		JavaTypeHelper.TYPE_NAME_INT,
+		JavaTypeHelper.TYPE_NAME_BOOLEAN,
+		JavaTypeHelper.TYPE_NAME_LONG,
+		JavaTypeHelper.TYPE_NAME_SHORT,
+		JavaTypeHelper.TYPE_NAME_BYTE,
+		JavaTypeHelper.TYPE_NAME_DOUBLE,
+		JavaTypeHelper.TYPE_NAME_FLOAT,
+		JavaTypeHelper.TYPE_NAME_CHAR,
+		JavaTypeHelper.TYPE_NAME_STRING
 	};
 
 	public static final String REGEX_JAVA_IDENTIFIER = "[A-Za-z_$][A-Za-z0-9_$]*";

@@ -41,4 +41,5 @@ public class XomBuilderVersion0 extends XomBuilder {
 	protected String getStatementParameterAttributeName() {
 		return SerializationHelperVersion0.getStatementParameterAttributeName();
 	}
+
 }

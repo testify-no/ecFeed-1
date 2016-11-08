@@ -383,7 +383,7 @@ public class MethodInterface extends ParametersParentInterface {
 	}
 
 	private boolean emptyAndroidBaseRunner(ClassNode classNode) {
-		String androidBaseRunner = classNode.getAndroidBaseRunner();
+		String androidBaseRunner = classNode.getAndroidRunner();
 		return StringHelper.isNullOrEmpty(androidBaseRunner);
 	}
 

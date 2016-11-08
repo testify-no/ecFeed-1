@@ -9,48 +9,40 @@
  *******************************************************************************/
 package com.ecfeed.testutils;
 
-import static com.ecfeed.core.adapter.java.Constants.TYPE_NAME_BOOLEAN;
-import static com.ecfeed.core.adapter.java.Constants.TYPE_NAME_BYTE;
-import static com.ecfeed.core.adapter.java.Constants.TYPE_NAME_CHAR;
-import static com.ecfeed.core.adapter.java.Constants.TYPE_NAME_DOUBLE;
-import static com.ecfeed.core.adapter.java.Constants.TYPE_NAME_FLOAT;
-import static com.ecfeed.core.adapter.java.Constants.TYPE_NAME_INT;
-import static com.ecfeed.core.adapter.java.Constants.TYPE_NAME_LONG;
-import static com.ecfeed.core.adapter.java.Constants.TYPE_NAME_SHORT;
-import static com.ecfeed.core.adapter.java.Constants.TYPE_NAME_STRING;
+import com.ecfeed.core.utils.JavaTypeHelper;
 
 public enum ETypeName {
-	BOOLEAN(TYPE_NAME_BOOLEAN), 
-	BYTE(TYPE_NAME_BYTE), 
-	CHAR(TYPE_NAME_CHAR), 
-	SHORT(TYPE_NAME_SHORT), 
-	INT(TYPE_NAME_INT), 
-	LONG(TYPE_NAME_LONG), 
-	FLOAT(TYPE_NAME_FLOAT), 
-	DOUBLE(TYPE_NAME_DOUBLE), 
-	STRING(TYPE_NAME_STRING), 
+	BOOLEAN(JavaTypeHelper.TYPE_NAME_BOOLEAN), 
+	BYTE(JavaTypeHelper.TYPE_NAME_BYTE), 
+	CHAR(JavaTypeHelper.TYPE_NAME_CHAR), 
+	SHORT(JavaTypeHelper.TYPE_NAME_SHORT), 
+	INT(JavaTypeHelper.TYPE_NAME_INT), 
+	LONG(JavaTypeHelper.TYPE_NAME_LONG), 
+	FLOAT(JavaTypeHelper.TYPE_NAME_FLOAT), 
+	DOUBLE(JavaTypeHelper.TYPE_NAME_DOUBLE), 
+	STRING(JavaTypeHelper.TYPE_NAME_STRING), 
 	USER_TYPE("user.type");
-	
+
 	private String fName;
 
 	private ETypeName(String name){
 		fName = name;
 	}
-	
+
 	public String getTypeName(){
 		return fName;
 	}
-	
+
 	public static final String[] SUPPORTED_TYPES = {
-		TYPE_NAME_BOOLEAN,
-		TYPE_NAME_BYTE,
-		TYPE_NAME_CHAR,
-		TYPE_NAME_DOUBLE,
-		TYPE_NAME_FLOAT,
-		TYPE_NAME_INT,
-		TYPE_NAME_LONG,
-		TYPE_NAME_SHORT,
-		TYPE_NAME_STRING,
-};
+		JavaTypeHelper.TYPE_NAME_BOOLEAN,
+		JavaTypeHelper.TYPE_NAME_BYTE,
+		JavaTypeHelper.TYPE_NAME_CHAR,
+		JavaTypeHelper.TYPE_NAME_DOUBLE,
+		JavaTypeHelper.TYPE_NAME_FLOAT,
+		JavaTypeHelper.TYPE_NAME_INT,
+		JavaTypeHelper.TYPE_NAME_LONG,
+		JavaTypeHelper.TYPE_NAME_SHORT,
+		JavaTypeHelper.TYPE_NAME_STRING,
+	};
 
 }

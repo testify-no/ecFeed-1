@@ -12,4 +12,12 @@ package com.ecfeed.core.utils;
 
 public class StringHolder extends ItemHolder<String> {
 
+	public StringHolder(String initialValue) {
+		super(initialValue);
+	}	
+
+	public StringHolder() {
+		super();
+	}	
+
 }

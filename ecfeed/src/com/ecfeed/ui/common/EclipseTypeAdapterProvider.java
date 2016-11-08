@@ -10,58 +10,49 @@
 
 package com.ecfeed.ui.common;
 
-import static com.ecfeed.core.adapter.java.Constants.TYPE_NAME_BOOLEAN;
-import static com.ecfeed.core.adapter.java.Constants.TYPE_NAME_BYTE;
-import static com.ecfeed.core.adapter.java.Constants.TYPE_NAME_CHAR;
-import static com.ecfeed.core.adapter.java.Constants.TYPE_NAME_DOUBLE;
-import static com.ecfeed.core.adapter.java.Constants.TYPE_NAME_FLOAT;
-import static com.ecfeed.core.adapter.java.Constants.TYPE_NAME_INT;
-import static com.ecfeed.core.adapter.java.Constants.TYPE_NAME_LONG;
-import static com.ecfeed.core.adapter.java.Constants.TYPE_NAME_SHORT;
-import static com.ecfeed.core.adapter.java.Constants.TYPE_NAME_STRING;
-
 import java.util.Arrays;
 
 import com.ecfeed.core.adapter.ITypeAdapter;
 import com.ecfeed.core.adapter.ITypeAdapterProvider;
 import com.ecfeed.core.adapter.java.JavaUtils;
+import com.ecfeed.core.utils.JavaTypeHelper;
 
 public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 
 	private final String USER_TYPE = "USER_TYPE";
 	private final String[] TYPES_CONVERTABLE_TO_BOOLEAN = new String[]{
-			TYPE_NAME_STRING
+			JavaTypeHelper.TYPE_NAME_STRING
 	};
 	private final String[] TYPES_CONVERTABLE_TO_NUMBERS = new String[]{
-			TYPE_NAME_INT, 
-			TYPE_NAME_FLOAT, 
-			TYPE_NAME_DOUBLE, 
-			TYPE_NAME_LONG, 
-			TYPE_NAME_SHORT, 
-			TYPE_NAME_STRING, 
-			TYPE_NAME_BYTE, 
-			TYPE_NAME_CHAR
+			JavaTypeHelper.TYPE_NAME_INT, 
+			JavaTypeHelper.TYPE_NAME_FLOAT, 
+			JavaTypeHelper.TYPE_NAME_DOUBLE, 
+			JavaTypeHelper.TYPE_NAME_LONG, 
+			JavaTypeHelper.TYPE_NAME_SHORT, 
+			JavaTypeHelper.TYPE_NAME_STRING, 
+			JavaTypeHelper.TYPE_NAME_BYTE, 
+			JavaTypeHelper.TYPE_NAME_CHAR
 	};
 	private final String[] TYPES_CONVERTABLE_TO_STRING = new String[]{
-			TYPE_NAME_INT, 
-			TYPE_NAME_FLOAT, 
-			TYPE_NAME_DOUBLE, 
-			TYPE_NAME_LONG, 
-			TYPE_NAME_SHORT, 
-			TYPE_NAME_STRING, 
-			TYPE_NAME_BYTE,
-			TYPE_NAME_CHAR,
-			TYPE_NAME_BOOLEAN,
+			JavaTypeHelper.TYPE_NAME_INT, 
+			JavaTypeHelper.TYPE_NAME_FLOAT, 
+			JavaTypeHelper.TYPE_NAME_DOUBLE, 
+			JavaTypeHelper.TYPE_NAME_LONG, 
+			JavaTypeHelper.TYPE_NAME_SHORT, 
+			JavaTypeHelper.TYPE_NAME_STRING, 
+			JavaTypeHelper.TYPE_NAME_BYTE,
+			JavaTypeHelper.TYPE_NAME_CHAR,
+			JavaTypeHelper.TYPE_NAME_BOOLEAN,
 			USER_TYPE
 	};
 	private final String[] TYPES_CONVERTABLE_TO_USER_TYPE = new String[]{
-			TYPE_NAME_STRING 
+			JavaTypeHelper.TYPE_NAME_STRING 
 	};
 	private final String[] TYPES_CONVERTABLE_TO_CHAR = new String[]{
-			TYPE_NAME_STRING, 
-			TYPE_NAME_SHORT, 
-			TYPE_NAME_BYTE,
-			TYPE_NAME_INT
+			JavaTypeHelper.TYPE_NAME_STRING, 
+			JavaTypeHelper.TYPE_NAME_SHORT, 
+			JavaTypeHelper.TYPE_NAME_BYTE,
+			JavaTypeHelper.TYPE_NAME_INT
 	};
 
 	private class BooleanTypeAdapter implements ITypeAdapter{
@@ -150,12 +141,12 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 			if(value.length() == 1){
 				return value;
 			}
-			
+
 			String avalue = value;
 			if(value.length() > 1 && value.charAt(0) == '\\'){
 				avalue = value.substring(1);
 			}
-			
+
 			try{
 				int number = Integer.parseInt(avalue);
 				return  String.valueOf(Character.toChars(number));
@@ -164,7 +155,7 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 			}
 			catch(IllegalArgumentException i){	
 			}
-				
+
 			return null;
 		}
 
@@ -352,23 +343,23 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 			type = USER_TYPE;
 		}
 		switch(type){
-		case TYPE_NAME_BOOLEAN:
+		case JavaTypeHelper.TYPE_NAME_BOOLEAN:
 			return new BooleanTypeAdapter();
-		case TYPE_NAME_BYTE:
+		case JavaTypeHelper.TYPE_NAME_BYTE:
 			return new ByteTypeAdapter();
-		case TYPE_NAME_CHAR:
+		case JavaTypeHelper.TYPE_NAME_CHAR:
 			return new CharTypeAdapter();
-		case TYPE_NAME_DOUBLE:
+		case JavaTypeHelper.TYPE_NAME_DOUBLE:
 			return new DoubleTypeAdapter();
-		case TYPE_NAME_FLOAT:
+		case JavaTypeHelper.TYPE_NAME_FLOAT:
 			return new FloatTypeAdapter();
-		case TYPE_NAME_INT:
+		case JavaTypeHelper.TYPE_NAME_INT:
 			return new IntTypeAdapter();
-		case TYPE_NAME_LONG:
+		case JavaTypeHelper.TYPE_NAME_LONG:
 			return new LongTypeAdapter();
-		case TYPE_NAME_SHORT:
+		case JavaTypeHelper.TYPE_NAME_SHORT:
 			return new ShortTypeAdapter();
-		case TYPE_NAME_STRING:
+		case JavaTypeHelper.TYPE_NAME_STRING:
 			return new StringTypeAdapter();
 		default:
 			return new UserTypeTypeAdapter(type);

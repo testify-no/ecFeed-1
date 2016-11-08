@@ -11,7 +11,6 @@
 package com.ecfeed.core.model;
 
 
-
 public class ModelConverter {
 
 	private static final String INVALID_MODEL_VERSION = "Invalid model version.";
@@ -35,7 +34,7 @@ public class ModelConverter {
 			model = convertFrom1To2(model);
 			break;			
 		default:
-			 ModelOperationException.report(INVALID_MODEL_VERSION); 
+			ModelOperationException.report(INVALID_MODEL_VERSION); 
 			break;
 		}
 
@@ -48,6 +47,8 @@ public class ModelConverter {
 	}
 
 	private static RootNode convertFrom1To2(RootNode model) {
-		return model; // no changes in model internal structure  
+		// Flag of the ClassNode: RunOnAndroid moved to properties in ClassNode constructor.
+		// Serializer in version 2 writes the RunOnAndroid flag to NodeProperties of the ClassNode. 
+		return model;
 	}	
 }

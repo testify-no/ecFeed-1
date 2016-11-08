@@ -11,6 +11,7 @@
 package com.ecfeed.core.adapter.java;
 
 import com.ecfeed.core.model.ChoiceNode;
+import com.ecfeed.core.utils.JavaTypeHelper;
 
 public class ChoiceValueParser {
 	private ModelClassLoader fLoader;
@@ -47,23 +48,23 @@ public class ChoiceValueParser {
 			return null;
 		}
 		switch(typeName){
-		case Constants.TYPE_NAME_BOOLEAN:
+		case JavaTypeHelper.TYPE_NAME_BOOLEAN:
 			return parseBooleanValue(valueString);
-		case Constants.TYPE_NAME_BYTE:
+		case JavaTypeHelper.TYPE_NAME_BYTE:
 			return parseByteValue(valueString);
-		case Constants.TYPE_NAME_CHAR:
+		case JavaTypeHelper.TYPE_NAME_CHAR:
 			return parseCharValue(valueString);
-		case Constants.TYPE_NAME_DOUBLE:
+		case JavaTypeHelper.TYPE_NAME_DOUBLE:
 			return parseDoubleValue(valueString);
-		case Constants.TYPE_NAME_FLOAT:
+		case JavaTypeHelper.TYPE_NAME_FLOAT:
 			return parseFloatValue(valueString);
-		case Constants.TYPE_NAME_INT:
+		case JavaTypeHelper.TYPE_NAME_INT:
 			return parseIntValue(valueString);
-		case Constants.TYPE_NAME_LONG:
+		case JavaTypeHelper.TYPE_NAME_LONG:
 			return parseLongValue(valueString);
-		case Constants.TYPE_NAME_SHORT:
+		case JavaTypeHelper.TYPE_NAME_SHORT:
 			return parseShortValue(valueString);
-		case Constants.TYPE_NAME_STRING:
+		case JavaTypeHelper.TYPE_NAME_STRING:
 			return parseStringValue(valueString);
 		default:
 			if (fIsExport) {

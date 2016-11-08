@@ -22,15 +22,6 @@ import static com.ecfeed.core.adapter.java.Constants.REGEX_ROOT_NODE_NAME;
 import static com.ecfeed.core.adapter.java.Constants.REGEX_STRING_TYPE_VALUE;
 import static com.ecfeed.core.adapter.java.Constants.REGEX_TEST_CASE_NODE_NAME;
 import static com.ecfeed.core.adapter.java.Constants.REGEX_USER_TYPE_VALUE;
-import static com.ecfeed.core.adapter.java.Constants.TYPE_NAME_BOOLEAN;
-import static com.ecfeed.core.adapter.java.Constants.TYPE_NAME_BYTE;
-import static com.ecfeed.core.adapter.java.Constants.TYPE_NAME_CHAR;
-import static com.ecfeed.core.adapter.java.Constants.TYPE_NAME_DOUBLE;
-import static com.ecfeed.core.adapter.java.Constants.TYPE_NAME_FLOAT;
-import static com.ecfeed.core.adapter.java.Constants.TYPE_NAME_INT;
-import static com.ecfeed.core.adapter.java.Constants.TYPE_NAME_LONG;
-import static com.ecfeed.core.adapter.java.Constants.TYPE_NAME_SHORT;
-import static com.ecfeed.core.adapter.java.Constants.TYPE_NAME_STRING;
 import static com.ecfeed.testutils.Constants.SUPPORTED_TYPES;
 
 import java.util.ArrayList;
@@ -58,6 +49,7 @@ import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.StatementArray;
 import com.ecfeed.core.model.StaticStatement;
 import com.ecfeed.core.model.TestCaseNode;
+import com.ecfeed.core.utils.JavaTypeHelper;
 
 public class RandomModelGenerator {
 
@@ -240,7 +232,7 @@ public class RandomModelGenerator {
 		}
 
 		if(parameters.size() == 0){
-			MethodParameterNode parameter = generateParameter(TYPE_NAME_INT, false, 0, 1, 1);
+			MethodParameterNode parameter = generateParameter(JavaTypeHelper.TYPE_NAME_INT, false, 0, 1, 1);
 			method.addParameter(parameter);
 			parameters.add(parameter);
 		}
@@ -303,7 +295,7 @@ public class RandomModelGenerator {
 
 	public AbstractStatement generateConsequence(MethodNode method) {
 		if(method.getParameters().size() == 0){
-			method.addParameter(generateParameter(TYPE_NAME_INT, false, 0, 1, 1));
+			method.addParameter(generateParameter(JavaTypeHelper.TYPE_NAME_INT, false, 0, 1, 1));
 		}
 
 		List<MethodParameterNode> parameters = method.getMethodParameters();
@@ -346,23 +338,23 @@ public class RandomModelGenerator {
 
 	private String randomChoiceValue(String type){
 		switch(type){
-		case TYPE_NAME_BOOLEAN:
+		case JavaTypeHelper.TYPE_NAME_BOOLEAN:
 			return randomBooleanValue();
-		case TYPE_NAME_BYTE:
+		case JavaTypeHelper.TYPE_NAME_BYTE:
 			return randomByteValue();
-		case TYPE_NAME_CHAR:
+		case JavaTypeHelper.TYPE_NAME_CHAR:
 			return randomCharValue();
-		case TYPE_NAME_DOUBLE:
+		case JavaTypeHelper.TYPE_NAME_DOUBLE:
 			return randomDoubleValue();
-		case TYPE_NAME_FLOAT:
+		case JavaTypeHelper.TYPE_NAME_FLOAT:
 			return randomFloatValue();
-		case TYPE_NAME_INT:
+		case JavaTypeHelper.TYPE_NAME_INT:
 			return randomIntValue();
-		case TYPE_NAME_LONG:
+		case JavaTypeHelper.TYPE_NAME_LONG:
 			return randomLongValue();
-		case TYPE_NAME_SHORT:
+		case JavaTypeHelper.TYPE_NAME_SHORT:
 			return randomShortValue();
-		case TYPE_NAME_STRING:
+		case JavaTypeHelper.TYPE_NAME_STRING:
 			return randomStringValue();
 		default:
 			return randomUserTypeValue();

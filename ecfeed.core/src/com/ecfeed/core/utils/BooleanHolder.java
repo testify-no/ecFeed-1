@@ -8,13 +8,12 @@
  *  
  *******************************************************************************/
 
-package com.ecfeed.core.serialization.ect;
+package com.ecfeed.core.utils;
 
-public class XomBuilderVersion2 extends XomBuilderVersionWithNewNodeNames {
+public class BooleanHolder extends ItemHolder<Boolean> {
 
-	@Override
-	protected int getModelVersion() {
-		return 2;
+	public BooleanHolder(boolean initialValue) {
+		super(initialValue);
 	}
 
 }

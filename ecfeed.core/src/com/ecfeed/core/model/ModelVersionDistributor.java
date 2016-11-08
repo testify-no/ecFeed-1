@@ -15,11 +15,10 @@ public class ModelVersionDistributor {
 		return 2;
 	}
 
-	public static boolean nodesHaveCommonProperties(int version) {
-		if (version >= 2) {
+	public static boolean isAndroidAttributeInTheClass(int version) {
+		if (version < 2) {
 			return true;
 		}
-
 		return false;
-	}
+	}	
 }

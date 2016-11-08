@@ -83,7 +83,7 @@ public class ClassInterface extends GlobalParametersParentInterface {
 	}
 
 	public String getAndroidBaseRunner(){
-		return getTarget().getAndroidBaseRunner();
+		return getTarget().getAndroidRunner();
 	}
 
 	@Override

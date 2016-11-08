@@ -23,12 +23,12 @@ public class ClassOperationSetAndroidBaseRunner extends AbstractModelOperation {
 		super(OperationNames.SET_ANDROID_BASE_RUNNER);
 		fTarget = target;
 		fNewValue = newValue;
-		fOriginalValue = target.getAndroidBaseRunner();
+		fOriginalValue = target.getAndroidRunner();
 	}
 
 	@Override
 	public void execute() throws ModelOperationException {
-		fTarget.setAndroidBaseRunner(fNewValue);
+		fTarget.setAndroidRunner(fNewValue);
 		markModelUpdated();
 	}
 

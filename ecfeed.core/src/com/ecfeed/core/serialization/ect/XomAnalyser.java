@@ -10,6 +10,7 @@
 
 package com.ecfeed.core.serialization.ect;
 
+import static com.ecfeed.core.model.Constants.EXPECTED_VALUE_CHOICE_NAME;
 import static com.ecfeed.core.serialization.ect.Constants.ANDROID_RUNNER_ATTRIBUTE_NAME;
 import static com.ecfeed.core.serialization.ect.Constants.CLASS_NODE_NAME;
 import static com.ecfeed.core.serialization.ect.Constants.CONSTRAINT_CHOICE_STATEMENT_NODE_NAME;
@@ -22,14 +23,13 @@ import static com.ecfeed.core.serialization.ect.Constants.DEFAULT_EXPECTED_VALUE
 import static com.ecfeed.core.serialization.ect.Constants.METHOD_NODE_NAME;
 import static com.ecfeed.core.serialization.ect.Constants.PARAMETER_IS_EXPECTED_ATTRIBUTE_NAME;
 import static com.ecfeed.core.serialization.ect.Constants.PARAMETER_IS_LINKED_ATTRIBUTE_NAME;
-import static com.ecfeed.core.serialization.ect.Constants.PARAMETER_IS_RUN_ON_ANDROID_ATTRIBUTE_NAME;
 import static com.ecfeed.core.serialization.ect.Constants.PARAMETER_LINK_ATTRIBUTE_NAME;
 import static com.ecfeed.core.serialization.ect.Constants.ROOT_NODE_NAME;
+import static com.ecfeed.core.serialization.ect.Constants.RUN_ON_ANDROID_ATTRIBUTE_NAME;
 import static com.ecfeed.core.serialization.ect.Constants.TEST_CASE_NODE_NAME;
 import static com.ecfeed.core.serialization.ect.Constants.TEST_SUITE_NAME_ATTRIBUTE;
 import static com.ecfeed.core.serialization.ect.Constants.TYPE_NAME_ATTRIBUTE;
 import static com.ecfeed.core.serialization.ect.Constants.VALUE_ATTRIBUTE;
-import static com.ecfeed.core.model.Constants.EXPECTED_VALUE_CHOICE_NAME;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -40,7 +40,6 @@ import nu.xom.Elements;
 import nu.xom.Node;
 
 import com.ecfeed.core.adapter.java.JavaPrimitiveTypePredicate;
-import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.AbstractStatement;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.ChoicesParentStatement;
@@ -53,13 +52,17 @@ import com.ecfeed.core.model.ExpectedValueStatement;
 import com.ecfeed.core.model.GlobalParameterNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
-import com.ecfeed.core.model.NodeProperty;
+import com.ecfeed.core.model.ModelVersionDistributor;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.StatementArray;
 import com.ecfeed.core.model.StaticStatement;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.serialization.ParserException;
 import com.ecfeed.core.serialization.WhiteCharConverter;
+import com.ecfeed.core.utils.BooleanHelper;
+import com.ecfeed.core.utils.BooleanHolder;
+import com.ecfeed.core.utils.StringHelper;
+import com.ecfeed.core.utils.StringHolder;
 
 public abstract class XomAnalyser {
 
@@ -78,7 +81,6 @@ public abstract class XomAnalyser {
 
 		RootNode root = new RootNode(name, getModelVersion());
 
-		parseCommonProperties(element, root);
 		root.setDescription(parseComments(element));
 
 		//parameters must be parsed before classes
@@ -100,32 +102,30 @@ public abstract class XomAnalyser {
 		return root;
 	}
 
-	public ClassNode parseClass(Element element, RootNode parent) throws ParserException{
-		assertNodeTag(element.getQualifiedName(), CLASS_NODE_NAME);
+	public ClassNode parseClass(Element classElement, RootNode parent) throws ParserException{
+		assertNodeTag(classElement.getQualifiedName(), CLASS_NODE_NAME);
 
-		String name = getElementName(element);
+		String name = getElementName(classElement);
 
-		boolean runOnAndroid = Boolean.parseBoolean(
-				element.getAttributeValue(PARAMETER_IS_RUN_ON_ANDROID_ATTRIBUTE_NAME));
+		BooleanHolder runOnAndroidHolder = new BooleanHolder(false);
+		StringHolder androidBaseRunnerHolder = new StringHolder(); 
+		parseAndroidValues(classElement, runOnAndroidHolder, androidBaseRunnerHolder);
+		ClassNode classNode = new ClassNode(name, runOnAndroidHolder.get(), androidBaseRunnerHolder.get());
 
-		String androidBaseRunner = element.getAttributeValue(ANDROID_RUNNER_ATTRIBUTE_NAME);
-
-		ClassNode classNode = new ClassNode(name, runOnAndroid, androidBaseRunner);
-		parseCommonProperties(element, classNode);
-
-		classNode.setDescription(parseComments(element));
+		classNode.setDescription(parseComments(classElement));
 		//we need to do it here, so the backward search for global parameters will work
 		classNode.setParent(parent);
 
 		//parameters must be parsed before classes
-		for(Element child : getIterableChildren(element, getParameterNodeName())){
+		for(Element child : getIterableChildren(classElement, getParameterNodeName())){
 			try{
 				classNode.addParameter(parseGlobalParameter(child));
 			}catch(ParserException e){
 				System.err.println("Exception: " + e.getMessage());
 			}
 		}
-		for(Element child : getIterableChildren(element, Constants.METHOD_NODE_NAME)){
+
+		for(Element child : getIterableChildren(classElement, Constants.METHOD_NODE_NAME)){
 			try{
 				classNode.addMethod(parseMethod(child, classNode));
 			}catch(ParserException e){
@@ -136,13 +136,89 @@ public abstract class XomAnalyser {
 		return classNode;
 	}
 
+	private void parseAndroidValues(
+			Element classElement, 
+			BooleanHolder runOnAndroidHolder, 
+			StringHolder androidBaseRunnerHolder) {
+
+		if (ModelVersionDistributor.isAndroidAttributeInTheClass(getModelVersion())) {
+			parseAndroidAttributes(classElement, runOnAndroidHolder, androidBaseRunnerHolder);
+		} else {
+			parseAndroidProperties(classElement, runOnAndroidHolder, androidBaseRunnerHolder);
+		}
+	}
+
+	private void parseAndroidAttributes(
+			Element classElement, BooleanHolder runOnAndroidHolder, StringHolder androidBaseRunnerHolder) {
+
+		String runOnAndroidStr = classElement.getAttributeValue(RUN_ON_ANDROID_ATTRIBUTE_NAME);
+		runOnAndroidHolder.set(BooleanHelper.parseBoolean(runOnAndroidStr));
+
+		String androidBaseRunnerStr = classElement.getAttributeValue(ANDROID_RUNNER_ATTRIBUTE_NAME);
+
+		if (StringHelper.isNullOrEmpty(androidBaseRunnerStr)) {
+			return;
+		}
+
+		androidBaseRunnerHolder.set(androidBaseRunnerStr);
+	}
+
+	private void parseAndroidProperties(
+			Element classElement, BooleanHolder runOnAndroidHolder, StringHolder androidBaseRunnerHolder) {
+
+		String runOnAndroidStr = getPropertyValue(classElement, RUN_ON_ANDROID_ATTRIBUTE_NAME);
+		runOnAndroidHolder.set(BooleanHelper.parseBoolean(runOnAndroidStr));
+
+		String androidBaseRunnerStr = getPropertyValue(classElement, ANDROID_RUNNER_ATTRIBUTE_NAME);
+		androidBaseRunnerHolder.set(androidBaseRunnerStr);		
+	}
+
+	private String getPropertyValue(Element classElement, String propertyNameToFind) {
+
+		Elements propertyElements = getPropertyElements(classElement);
+		if (propertyElements == null) {
+			return null;
+		}
+
+		int propertiesSize = propertyElements.size();
+
+		for (int cnt = 0; cnt < propertiesSize; cnt++) {
+			Element property = propertyElements.get(cnt);
+
+			String name = getPropertyName(property);
+
+			if (name.equals(propertyNameToFind)) {
+				return getPropertyValue(property);
+			}
+		}
+
+		return null;
+	}
+
+	private Elements getPropertyElements(Element parentElement) {
+		Elements propertyBlockElements = parentElement.getChildElements(Constants.PROPERTIES_BLOCK_TAG_NAME);
+		if (propertyBlockElements.size() == 0) {
+			return null;
+		}
+
+		Element firstBlockElement = propertyBlockElements.get(0);
+		return firstBlockElement.getChildElements(Constants.PROPERTY_TAG_NAME);
+	}
+
+	private String getPropertyName(Element property) {
+		return property.getAttributeValue(Constants.PROPERTY_ATTRIBUTE_NAME);
+	}
+
+	private String getPropertyValue(Element property) {
+		return property.getAttributeValue(Constants.PROPERTY_ATTRIBUTE_VALUE);
+	}	
+
 	public MethodNode parseMethod(Element element, ClassNode parent) throws ParserException{
 		assertNodeTag(element.getQualifiedName(), METHOD_NODE_NAME);
 		String name = getElementName(element);
 
 		MethodNode methodNode = new MethodNode(name);
 		methodNode.setParent(parent);
-		parseCommonProperties(element, methodNode);
 
 		for(Element child : getIterableChildren(element, getParameterNodeName())){
 			try{
@@ -185,7 +261,6 @@ public abstract class XomAnalyser {
 			defaultValue = getAttributeValue(element, DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME);
 		}
 		MethodParameterNode methodParameterNode = new MethodParameterNode(name, type, defaultValue, Boolean.parseBoolean(expected));
-		parseCommonProperties(element, methodParameterNode);
 
 		if(element.getAttribute(PARAMETER_IS_LINKED_ATTRIBUTE_NAME) != null){
 			boolean linked = Boolean.parseBoolean(getAttributeValue(element, PARAMETER_IS_LINKED_ATTRIBUTE_NAME));
@@ -519,40 +594,6 @@ public abstract class XomAnalyser {
 			ParserException.report(Messages.WRONG_OR_MISSING_RELATION_FORMAT(relationName));
 		}
 		return relation;
-	}
-
-	private void parseCommonProperties(Element parentElement, AbstractNode targetNode) {
-		Elements propertyElements = getPropertyElements(parentElement);
-
-		if (propertyElements == null) {
-			return;
-		}
-
-		int propertiesSize = propertyElements.size();
-
-		for (int cnt = 0; cnt < propertiesSize; cnt++) {
-			Element property = propertyElements.get(cnt);
-			appendProperty(property, targetNode);
-		}
-	}
-
-	private Elements getPropertyElements(Element parentElement) {
-		Elements propertyBlockElements = parentElement.getChildElements(Constants.PROPERTIES_BLOCK_TAG_NAME);
-		if (propertyBlockElements.size() == 0) {
-			return null;
-		}
-
-		Element firstBlockElement = propertyBlockElements.get(0);
-		return firstBlockElement.getChildElements(Constants.PROPERTY_TAG_NAME);
-	}
-
-	private void appendProperty(Element property, AbstractNode targetNode) {
-		String name = property.getAttributeValue(Constants.PROPERTY_ATTRIBUTE_NAME);
-		String type = property.getAttributeValue(Constants.PROPERTY_ATTRIBUTE_TYPE);
-		String value = property.getAttributeValue(Constants.PROPERTY_ATTRIBUTE_VALUE);
-
-		NodeProperty nodeProperty = new NodeProperty(type, value);
-		targetNode.putProperty(name, nodeProperty);
 	}
 
 	protected String parseComments(Element element) {

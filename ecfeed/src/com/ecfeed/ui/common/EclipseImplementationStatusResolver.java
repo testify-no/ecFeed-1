@@ -37,7 +37,7 @@ public class EclipseImplementationStatusResolver extends AbstractJavaImplementat
 
 	@Override
 	protected boolean androidCodeImplemented(ClassNode classNode) throws EcException {
-		String baseRunner = classNode.getAndroidBaseRunner();
+		String baseRunner = classNode.getAndroidRunner();
 
 		IProjectHelper projectHelper = new EclipseProjectHelper(fFileInfoProvider);
 		IClassImplementHelper classImplementHelper = new EclipseClassImplementHelper(fFileInfoProvider);

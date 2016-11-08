@@ -586,7 +586,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 	}
 
 	private ImplementerExt createImplementer(ClassNode classNode) {
-		String baseRunner = classNode.getAndroidBaseRunner(); 
+		String baseRunner = classNode.getAndroidRunner(); 
 
 		IProjectHelper projectHelper = new EclipseProjectHelper(fFileInfoProvider);
 		IClassImplementHelper classImplementHelper = new EclipseClassImplementHelper(fFileInfoProvider);
