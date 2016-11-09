@@ -155,7 +155,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 
 
 	private void createRunnerSection(IFileInfoProvider fileInfoProvider) {
-		fRunnerSection = new RunnerSection(this, this, fileInfoProvider);
+		fRunnerSection = new RunnerSection(this, this, fMethodIf, fileInfoProvider);
 	}
 
 	@Override

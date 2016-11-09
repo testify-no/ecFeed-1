@@ -53,6 +53,7 @@ import com.ecfeed.core.model.GlobalParameterNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelVersionDistributor;
+import com.ecfeed.core.model.NodePropertyDescriptions;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.StatementArray;
 import com.ecfeed.core.model.StaticStatement;
@@ -164,14 +165,21 @@ public abstract class XomAnalyser {
 	}
 
 	private void parseAndroidProperties(
-			Element classElement, BooleanHolder runOnAndroidHolder, StringHolder androidBaseRunnerHolder) {
+			Element classElement, 
+			BooleanHolder runOnAndroidHolder, 
+			StringHolder androidBaseRunnerHolder) {
 
-		String runOnAndroidStr = getPropertyValue(classElement, RUN_ON_ANDROID_ATTRIBUTE_NAME);
+		String runOnAndroidStr = getProperty(NodePropertyDescriptions.PropertyId.RUN_ON_ANDROID, classElement);
 		runOnAndroidHolder.set(BooleanHelper.parseBoolean(runOnAndroidStr));
-
-		String androidBaseRunnerStr = getPropertyValue(classElement, ANDROID_RUNNER_ATTRIBUTE_NAME);
+		
+		String androidBaseRunnerStr = getProperty(NodePropertyDescriptions.PropertyId.ANDROID_RUNNER, classElement);
 		androidBaseRunnerHolder.set(androidBaseRunnerStr);		
 	}
+	
+	private String getProperty(NodePropertyDescriptions.PropertyId propertyId, Element classElement) {
+		String propertyName = NodePropertyDescriptions.getPropertyName(propertyId);
+		return getPropertyValue(classElement, propertyName);		
+	}	
 
 	private String getPropertyValue(Element classElement, String propertyNameToFind) {
 

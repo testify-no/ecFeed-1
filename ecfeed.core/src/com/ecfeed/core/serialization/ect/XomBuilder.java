@@ -76,13 +76,13 @@ import com.ecfeed.core.model.IStatementVisitor;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelVersionDistributor;
+import com.ecfeed.core.model.NodePropertyDescriptions;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.StatementArray;
 import com.ecfeed.core.model.StaticStatement;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.serialization.WhiteCharConverter;
 import com.ecfeed.core.utils.BooleanHelper;
-import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.StringHelper;
 
 public abstract class XomBuilder implements IModelVisitor, IStatementVisitor {
@@ -164,19 +164,30 @@ public abstract class XomBuilder implements IModelVisitor, IStatementVisitor {
 
 	private void addAndroidValuesAsProperties(ClassNode classNode, Element targetElement) {
 		boolean runOnAndroid = classNode.getRunOnAndroid();
+
 		appendProperty(
-				RUN_ON_ANDROID_ATTRIBUTE_NAME, 
-				JavaTypeHelper.TYPE_NAME_BOOLEAN, 
+				getPropertyName(NodePropertyDescriptions.PropertyId.RUN_ON_ANDROID),
+				getPropertyType(NodePropertyDescriptions.PropertyId.RUN_ON_ANDROID), 
 				BooleanHelper.toString(runOnAndroid), targetElement);
 
 		String androidBaseRunner = classNode.getAndroidRunner();
-		if (androidBaseRunner != null) {
-			appendProperty(
-					ANDROID_RUNNER_ATTRIBUTE_NAME, 
-					JavaTypeHelper.TYPE_NAME_STRING, 
-					androidBaseRunner, targetElement);
+		if (androidBaseRunner == null) {
+			return;
 		}
+
+		appendProperty(
+				getPropertyName(NodePropertyDescriptions.PropertyId.ANDROID_RUNNER), 
+				getPropertyType(NodePropertyDescriptions.PropertyId.ANDROID_RUNNER),  
+				androidBaseRunner, targetElement);
 	}
+
+	private String getPropertyName(NodePropertyDescriptions.PropertyId propertyId) {
+		return NodePropertyDescriptions.getPropertyName(propertyId);
+	}
+
+	private String getPropertyType(NodePropertyDescriptions.PropertyId propertyId) {
+		return NodePropertyDescriptions.getPropertyType(propertyId);
+	}	
 
 	private void appendProperty(String key, String type, String value, Element targetElement) {
 		Element propertiesBlock = getPropertiesBlock(targetElement);

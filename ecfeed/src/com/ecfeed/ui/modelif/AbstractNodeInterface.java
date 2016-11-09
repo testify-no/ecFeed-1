@@ -140,6 +140,10 @@ public class AbstractNodeInterface extends OperationExecuter{
 		}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
 		return execute(FactoryRenameOperation.getRenameOperation(fTarget, newName), problemTitle);
 	}
+	
+	public boolean setProperty(String name, String type, String value){
+		return false; // TODO
+	}	
 
 	public boolean editComments() {
 		TextAreaDialog dialog = new TextAreaDialog(Display.getCurrent().getActiveShell(),
