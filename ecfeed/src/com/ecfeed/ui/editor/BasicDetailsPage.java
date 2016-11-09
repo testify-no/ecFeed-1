@@ -48,8 +48,6 @@ import com.ecfeed.ui.modelif.IModelUpdateListener;
 
 public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateListener, ISectionContext, IModelUpdateContext{
 
-	private static final int MAIN_SECTION_STYLE = Section.EXPANDED | Section.TITLE_BAR;
-
 	protected class ImplementToolbarAction extends ImplementAction{
 
 		public ImplementToolbarAction() {
@@ -120,7 +118,7 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 	@Override
 	public void createContents(Composite parent) {
 		parent.setLayout(new FillLayout());
-		fMainSection = getToolkit().createSection(parent, MAIN_SECTION_STYLE);
+		fMainSection = getToolkit().createSection(parent, StyleDistributor.getSectionStyle());
 		Composite textClient = createTextClientComposite();
 		fMainSection.setTextClient(textClient);
 
@@ -230,7 +228,7 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 	public FormToolkit getToolkit(){
 		return fManagedForm.getToolkit();
 	}
-	
+
 	protected FormObjectToolkit getFormObjectToolkit() {
 		return fFormObjectToolkit;
 	}

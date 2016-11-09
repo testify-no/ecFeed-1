@@ -28,7 +28,6 @@ import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.ui.forms.widgets.Section;
 
 import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.model.AbstractParameterNode;
@@ -49,8 +48,6 @@ import com.ecfeed.ui.modelif.ModelNodesTransfer;
 import com.ecfeed.ui.modelif.NodeInterfaceFactory;
 
 public class ChoicesViewer extends TableViewerSection {
-
-	private final static int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 
 	public IFileInfoProvider fFileInfoProvider;
 
@@ -229,7 +226,7 @@ public class ChoicesViewer extends TableViewerSection {
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext, 
 			IFileInfoProvider fileInfoProvider) {
-		super(sectionContext, updateContext, fileInfoProvider, STYLE);
+		super(sectionContext, updateContext, fileInfoProvider, StyleDistributor.getSectionStyle());
 
 		fFileInfoProvider = fileInfoProvider;
 

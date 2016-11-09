@@ -31,6 +31,8 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	private Button fTestOnlineButton;
 	private Button fExportOnlineButton;
 	private Button fBrowseButton;
+	@SuppressWarnings("unused")
+	private RunnerSection fRunnerSection;
 	private MethodParametersViewer fParemetersSection;
 	private ConstraintsListViewer fConstraintsSection;
 	private TestCasesViewer fTestCasesSection;
@@ -92,6 +94,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 
 		createMethodNameWidgets(fileInfoProvider);
 		createTestAndExportButtons(fileInfoProvider);
+		createRunnerSection(fileInfoProvider);
 
 		if (fileInfoProvider.isProjectAvailable()) {
 			addForm(fCommentsSection = new JavaDocCommentsSection(this, this,
@@ -136,6 +139,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	}
 
 	private void createTestAndExportButtons(IFileInfoProvider fileInfoProvider) {
+
 		Composite childComposite = getFormObjectToolkit().createRowComposite(
 				getMainComposite());
 
@@ -147,6 +151,11 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		fExportOnlineButton = getFormObjectToolkit().createButton(
 				childComposite, "Export online...", new OnlineExportAdapter());
 		getFormObjectToolkit().paintBorders(childComposite);
+	}
+
+
+	private void createRunnerSection(IFileInfoProvider fileInfoProvider) {
+		fRunnerSection = new RunnerSection(this, this, fileInfoProvider);
 	}
 
 	@Override
@@ -170,7 +179,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 
 		if (fileInfoProvider.isProjectAvailable()) {
 			fTestOnlineButton
-					.setEnabled(methodStatus != EImplementationStatus.NOT_IMPLEMENTED);
+			.setEnabled(methodStatus != EImplementationStatus.NOT_IMPLEMENTED);
 		}
 
 		if (selectedMethod.getParametersCount() > 0) {
@@ -192,8 +201,8 @@ public class MethodDetailsPage extends BasicDetailsPage {
 			EImplementationStatus parentStatus = fMethodIf
 					.getImplementationStatus(selectedMethod.getClassNode());
 			fBrowseButton
-					.setEnabled((parentStatus == EImplementationStatus.IMPLEMENTED || parentStatus == EImplementationStatus.PARTIALLY_IMPLEMENTED)
-							&& fMethodIf.getCompatibleMethods().isEmpty() == false);
+			.setEnabled((parentStatus == EImplementationStatus.IMPLEMENTED || parentStatus == EImplementationStatus.PARTIALLY_IMPLEMENTED)
+					&& fMethodIf.getCompatibleMethods().isEmpty() == false);
 		}
 	}
 

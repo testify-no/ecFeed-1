@@ -21,59 +21,63 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.ecfeed.core.utils.StringHelper;
-	
+
 public class FormObjectToolkit {
-	
+
 	private FormToolkit fFormToolkit = null;
 
 	protected FormObjectToolkit(FormToolkit formToolkit) {
 		fFormToolkit = formToolkit;
 	}
-	
+
 	public void paintBorders(Composite composite) {
 		fFormToolkit.paintBordersFor(composite);
 	}
 
 	public Composite createGridComposite(Composite parentComposite, int countOfColumns) {
 		Composite composite = fFormToolkit.createComposite(parentComposite);
-		
+
 		composite.setLayout(new GridLayout(countOfColumns, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
-		
+
 		return composite;
 	}
-	
+
 	public Composite createRowComposite(Composite parentComposite) {
 		Composite composite = fFormToolkit.createComposite(parentComposite);
-		
+
 		RowLayout rowLayout = new RowLayout();
 		composite.setLayout(rowLayout);
-		
+
 		return composite;
 	}	
 
 	public Label createLabel(Composite parentComposite, String text) {
 		return fFormToolkit.createLabel(parentComposite, text, SWT.NONE);
 	}
-	
+
 	public Label createSpacer(Composite parentComposite, int size) {
 		return createLabel(parentComposite, StringHelper.createString(" ", size));
 	}
-	
-	public Text createGridText(Composite parentGridComposite, SelectionListener listener) {
+
+	public Text createGridText(Composite parentGridComposite, SelectionListener selectionListener) {
 		Text text = fFormToolkit.createText(parentGridComposite, null, SWT.NONE);
 		text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		text.addSelectionListener(listener);
+
+		if (selectionListener != null) {
+			text.addSelectionListener(selectionListener);
+		}
+
 		return text;
 	}
-	
+
 	public Button createButton(Composite parentComposite, String text, SelectionListener selectionListener) {
 		Button button = fFormToolkit.createButton(parentComposite, text, SWT.NONE);
-		
+
 		if (selectionListener != null) {
 			button.addSelectionListener(selectionListener);
 		}
-		
+
 		return button;
 	}
 }

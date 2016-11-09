@@ -35,7 +35,6 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.forms.AbstractFormPart;
 import org.eclipse.ui.forms.IDetailsPage;
-import org.eclipse.ui.forms.widgets.Section;
 
 import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.adapter.EImplementationStatus;
@@ -68,7 +67,7 @@ import com.ecfeed.ui.modelif.ModelNodesTransfer;
 import com.ecfeed.ui.modelif.NodeInterfaceFactory;
 
 public class ModelMasterSection extends TreeViewerSection{
-	private static final int STYLE = Section.EXPANDED | Section.TITLE_BAR;
+
 	private static final int AUTO_EXPAND_LEVEL = 3;
 
 	private final ModelMasterDetailsBlock fMasterDetailsBlock;
@@ -542,7 +541,7 @@ public class ModelMasterSection extends TreeViewerSection{
 	}
 
 	public ModelMasterSection(ModelMasterDetailsBlock parentBlock, IFileInfoProvider fileInfoProvider) {
-		super(parentBlock.getMasterSectionContext(), parentBlock.getModelUpdateContext(), fileInfoProvider, STYLE);
+		super(parentBlock.getMasterSectionContext(), parentBlock.getModelUpdateContext(), fileInfoProvider, StyleDistributor.getSectionStyle());
 		fMasterDetailsBlock = parentBlock;
 		fFileInfoProvider = fileInfoProvider;
 

@@ -20,7 +20,6 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TreeNodeContentProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.ui.forms.widgets.Section;
 
 import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.model.AbstractNode;
@@ -32,8 +31,6 @@ import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class LinkingMethodsViewer extends TreeViewerSection {
-
-	private final static int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 
 	private GlobalParameterNode fParameter;
 
@@ -107,7 +104,7 @@ public class LinkingMethodsViewer extends TreeViewerSection {
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext,
 			IFileInfoProvider fileInfoProvider) {
-		super(sectionContext, updateContext, fileInfoProvider, STYLE);
+		super(sectionContext, updateContext, fileInfoProvider, StyleDistributor.getSectionStyle());
 
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gd.minimumHeight = 250;

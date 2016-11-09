@@ -25,7 +25,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Tree;
-import org.eclipse.ui.forms.widgets.Section;
 
 import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.model.MethodNode;
@@ -41,7 +40,6 @@ import com.ecfeed.ui.modelif.MethodInterface;
 
 public class TestCasesViewer extends CheckboxTreeViewerSection {
 
-	private final static int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 	private final static int VIEWER_STYLE = SWT.BORDER;
 
 	private TestCasesViewerLabelProvider fLabelProvider;
@@ -146,7 +144,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext,
 			IFileInfoProvider fileInfoProvider) {
-		super(sectionContext, updateContext, fileInfoProvider, STYLE);
+		super(sectionContext, updateContext, fileInfoProvider, StyleDistributor.getSectionStyle());
 
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gd.minimumHeight = 250;

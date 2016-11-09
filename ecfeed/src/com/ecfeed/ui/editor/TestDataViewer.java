@@ -16,15 +16,14 @@ import java.util.List;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.ui.forms.widgets.Section;
 
 import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ChoiceNode;
+import com.ecfeed.core.model.Constants;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.TestCaseNode;
-import com.ecfeed.core.model.Constants;
 import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.ui.common.ColorConstants;
 import com.ecfeed.ui.common.ColorManager;
@@ -37,7 +36,6 @@ import com.ecfeed.ui.modelif.TestCaseInterface;
 
 public class TestDataViewer extends TableViewerSection implements ITestDataEditorListener{
 
-	private static final int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 	private final static int VIEWER_STYLE = SWT.BORDER;
 
 	private IFileInfoProvider fFileInfoProvider;
@@ -48,7 +46,7 @@ public class TestDataViewer extends TableViewerSection implements ITestDataEdito
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext, 
 			IFileInfoProvider fileInfoProvider) {
-		super(sectionContext, updateContext, fileInfoProvider, STYLE);
+		super(sectionContext, updateContext, fileInfoProvider, StyleDistributor.getSectionStyle()	);
 		fFileInfoProvider = fileInfoProvider;
 		getTestCaseInterface();
 		getSection().setText("Test data");
