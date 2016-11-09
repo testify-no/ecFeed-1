@@ -15,6 +15,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
@@ -79,5 +80,16 @@ public class FormObjectToolkit {
 		}
 
 		return button;
+	}
+
+	public Combo createGridCombo(Composite parentComposite, SelectionListener selectionListener) {
+		Combo combo = new Combo(parentComposite, SWT.DROP_DOWN);
+		combo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+
+		if (selectionListener != null) {
+			combo.addSelectionListener(selectionListener);
+		}
+
+		return combo;
 	}
 }

@@ -10,6 +10,7 @@
 
 package com.ecfeed.ui.editor;
 
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
@@ -18,6 +19,10 @@ import com.ecfeed.ui.modelif.IModelUpdateContext;
 public class RunnerSection extends BasicSection  {
 
 	private FormObjectToolkit fFormObjectToolkit;
+	Combo fTypeCombo;
+
+	private static final String JAVA_RUNNER = "JavaRunner";
+	private static final String WEB_DRIVER = "WebDriver";
 
 	public RunnerSection(ISectionContext sectionContext, 
 			IModelUpdateContext updateContext,
@@ -33,7 +38,19 @@ public class RunnerSection extends BasicSection  {
 		fFormObjectToolkit.paintBorders(gridComposite);
 
 		fFormObjectToolkit.createLabel(gridComposite, "Runner");
-		fFormObjectToolkit.createGridText(gridComposite, null);
+		fTypeCombo = fFormObjectToolkit.createGridCombo(gridComposite, null);
+
+		fTypeCombo.setItems(availableRunners()); 
+		fTypeCombo.setText(JAVA_RUNNER);		
 	}
+
+	private static String[] availableRunners() {
+		final String[] TYPES = new String[]{
+				JAVA_RUNNER,
+				WEB_DRIVER,
+		};
+
+		return TYPES;
+	}	
 
 }
