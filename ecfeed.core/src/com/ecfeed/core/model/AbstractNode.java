@@ -185,26 +185,28 @@ public abstract class AbstractNode{
 		return getChildren().size();
 	}
 
-	public void putProperty(String key, NodeProperty property) {
-		fProperties.put(key, property);
+	public void setPropertyValue(NodePropertyDefs.PropertyId propertyId, String value) {
+		NodeProperty nodeProperty = new NodeProperty(NodePropertyDefs.getPropertyType(propertyId), value);
+		fProperties.put(NodePropertyDefs.getPropertyName(propertyId), nodeProperty);
 	}
 
-	public void putProperty(String key, String type, String value) {
-		NodeProperty nodeProperty = new NodeProperty(type, value);
-		putProperty(key, nodeProperty);
-	}
+	public void setPropertyDefaultValue(NodePropertyDefs.PropertyId propertyId) {
 
-	public NodeProperty getProperty(String key) {
-		return fProperties.get(key);
+		NodeProperty nodeProperty = 
+				new NodeProperty(
+						NodePropertyDefs.getPropertyType(propertyId), 
+						NodePropertyDefs.getPropertyDefaultValue(propertyId));
+
+		fProperties.put(NodePropertyDefs.getPropertyName(propertyId), nodeProperty);
 	}	
 
-	public String getPropertyValue(String key) {
-		NodeProperty nodeProperty = fProperties.get(key);
+	public String getPropertyValue(NodePropertyDefs.PropertyId propertyId) {
+		NodeProperty nodeProperty = fProperties.get(NodePropertyDefs.getPropertyName(propertyId));
 		if (nodeProperty == null) {
 			return null;
 		}
 		return nodeProperty.getValue();
-	}	
+	}
 
 	public Set<String> getPropertyKeys() {
 		return fProperties.getKeys();
@@ -214,7 +216,7 @@ public abstract class AbstractNode{
 		return fProperties.size();
 	}
 
-	public void remove(String key) {
-		fProperties.remove(key);
+	public void removeProperty(NodePropertyDefs.PropertyId propertyId) {
+		fProperties.remove(NodePropertyDefs.getPropertyName(propertyId));
 	}
 }

@@ -14,7 +14,8 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
-import com.ecfeed.core.model.NodePropertyDescriptions;
+import com.ecfeed.core.model.MethodNode;
+import com.ecfeed.core.model.NodePropertyDefs;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.MethodInterface;
@@ -24,21 +25,19 @@ public class RunnerSection extends BasicSection  {
 	MethodInterface fMethodInterface;
 	private FormObjectToolkit fFormObjectToolkit;
 	private Combo fRunnersCombo;
-	
-	private static final String RUNNER_JAVA = "JavaRunner";
-	private static final String RUNNER_WEB = "WebDriver";
+	private final NodePropertyDefs.PropertyId fRunnerPropertyId = NodePropertyDefs.PropertyId.METHOD_RUNNER;
 
 	public RunnerSection(ISectionContext sectionContext, 
 			IModelUpdateContext updateContext,
 			MethodInterface methodIf,
 			IFileInfoProvider fileInfoProvider) {
 		super(sectionContext, updateContext, fileInfoProvider, StyleDistributor.getSectionStyle());
-		
+
 		fMethodInterface = methodIf;
 		fFormObjectToolkit = new FormObjectToolkit(getToolkit());
 
 		setText("Runner");
-		
+
 		Composite clientComposite = getClientComposite();
 
 		Composite gridComposite = fFormObjectToolkit.createGridComposite(clientComposite, 2);
@@ -47,28 +46,19 @@ public class RunnerSection extends BasicSection  {
 		fFormObjectToolkit.createLabel(gridComposite, "Runner");
 		fRunnersCombo = fFormObjectToolkit.createGridCombo(gridComposite, new RunnerChangedAdapter());
 
-		fRunnersCombo.setItems(availableRunners()); 
-		fRunnersCombo.setText(RUNNER_JAVA);		
+		fRunnersCombo.setItems(NodePropertyDefs.getPropertyPossibleValues(fRunnerPropertyId)); 
+		fRunnersCombo.setText(NodePropertyDefs.getPropertyDefaultValue(fRunnerPropertyId));		
 	}
 
-	private static String[] availableRunners() {
-		final String[] TYPES = new String[]{
-				RUNNER_JAVA,
-				RUNNER_WEB,
-		};
+	public void refresh() {
+		MethodNode methodNode = fMethodInterface.getTarget();
+		fRunnersCombo.setText(methodNode.getPropertyValue(fRunnerPropertyId));
+	}
 
-		return TYPES;
-	}	
-	
 	private class RunnerChangedAdapter extends AbstractSelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			NodePropertyDescriptions.PropertyId propertyId = NodePropertyDescriptions.PropertyId.METHOD_RUNNER;
-			
-			String name = NodePropertyDescriptions.getPropertyName(propertyId);
-			String type = NodePropertyDescriptions.getPropertyType(propertyId);
-			
-			fMethodInterface.setProperty(name, type, fRunnersCombo.getText());
+			fMethodInterface.setProperty(fRunnerPropertyId, fRunnersCombo.getText());
 		}
 	}
 

@@ -161,4 +161,20 @@ public class StringHelper {
 
 		return builder.toString();
 	}
+
+	public static boolean stringsEqualWithNulls(String s1, String s2) {
+		if (s1 == null && s2 == null) {
+			return true;
+		}
+		if (s1 == null && s2 != null) {
+			return false;
+		}
+		if (s1 != null && s2 == null) {
+			return false;
+		}
+		if (s1.equals(s2)) {
+			return true;
+		}
+		return false;
+	}
 }

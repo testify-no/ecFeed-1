@@ -50,7 +50,7 @@ public abstract class ParametersParentInterface extends AbstractNodeInterface {
 	}
 
 	@Override
-	protected ParametersParentNode getTarget(){
+	public ParametersParentNode getTarget(){
 		return (ParametersParentNode)super.getTarget();
 	}
 }

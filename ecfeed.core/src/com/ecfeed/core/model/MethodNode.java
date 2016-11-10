@@ -29,6 +29,12 @@ public class MethodNode extends ParametersParentNode {
 		super(name);
 		fTestCases = new ArrayList<TestCaseNode>();
 		fConstraints = new ArrayList<ConstraintNode>();
+
+		createDefaultProperties();
+	}
+
+	private void createDefaultProperties() {
+		setPropertyDefaultValue(NodePropertyDefs.PropertyId.METHOD_RUNNER);
 	}
 
 	@Override

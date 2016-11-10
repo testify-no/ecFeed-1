@@ -151,7 +151,7 @@ public class ChoiceInterface extends ChoicesParentInterface{
 	}
 
 	@Override
-	protected ChoiceNode getTarget(){
+	public ChoiceNode getTarget(){
 		return (ChoiceNode)super.getTarget();
 	}
 

@@ -84,20 +84,19 @@ public class AbstractNodeTest{
 		AbstractNode node = new AbstractNodeImpl("name");
 		assertEquals(0, node.getPropertyCount());
 
-		NodeProperty inAttribute = new NodeProperty("String", "Name");
-		node.putProperty("NameKey", inAttribute);
+		NodePropertyDefs.PropertyId propertyId = NodePropertyDefs.PropertyId.METHOD_RUNNER;
+
+		node.setPropertyValue(propertyId, "Value");
 		assertEquals(1, node.getPropertyCount());
 
 		Set<String> keys = node.getPropertyKeys();
 		assertEquals(1, keys.size());
 
-		NodeProperty outAttribute = node.getProperty("NameKey");
-		assertNotEquals(null, outAttribute);
 
-		assertEquals("String", outAttribute.getType());
-		assertEquals("Name", outAttribute.getValue());
+		String outValue = node.getPropertyValue(propertyId);
+		assertEquals("Value", outValue);
 
-		node.remove("NameKey");
+		node.removeProperty(propertyId);
 		assertEquals(0, node.getPropertyCount());
 	}
 

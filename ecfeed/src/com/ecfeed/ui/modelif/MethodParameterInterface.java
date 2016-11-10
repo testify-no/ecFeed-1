@@ -161,7 +161,7 @@ public class MethodParameterInterface extends AbstractParameterInterface {
 	}
 
 	@Override
-	protected MethodParameterNode getTarget(){
+	public MethodParameterNode getTarget(){
 		return (MethodParameterNode)super.getTarget();
 	}
 

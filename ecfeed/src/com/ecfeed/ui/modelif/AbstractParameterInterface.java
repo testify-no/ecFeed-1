@@ -38,7 +38,7 @@ import com.ecfeed.ui.dialogs.TextAreaDialog;
 import com.ecfeed.ui.dialogs.UserTypeSelectionDialog;
 
 public abstract class AbstractParameterInterface extends ChoicesParentInterface {
-	
+
 	IFileInfoProvider fFileInfoProvider;
 
 	public AbstractParameterInterface(IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider) {
@@ -145,7 +145,7 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 	}
 
 	@Override
-	protected AbstractParameterNode getTarget(){
+	public AbstractParameterNode getTarget(){
 		return (AbstractParameterNode)super.getTarget();
 	}
 

@@ -31,7 +31,6 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	private Button fTestOnlineButton;
 	private Button fExportOnlineButton;
 	private Button fBrowseButton;
-	@SuppressWarnings("unused")
 	private RunnerSection fRunnerSection;
 	private MethodParametersViewer fParemetersSection;
 	private ConstraintsListViewer fConstraintsSection;
@@ -170,6 +169,8 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		fMethodIf.setTarget(selectedMethod);
 
 		IFileInfoProvider fileInfoProvider = getFileInfoProvider();
+
+		fRunnerSection.refresh();
 
 		EImplementationStatus methodStatus = null;
 		if (fileInfoProvider.isProjectAvailable()) {

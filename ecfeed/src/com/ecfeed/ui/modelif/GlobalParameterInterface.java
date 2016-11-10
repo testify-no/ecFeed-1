@@ -30,7 +30,7 @@ public class GlobalParameterInterface extends AbstractParameterInterface {
 	}
 
 	@Override
-	protected GlobalParameterNode getTarget(){
+	public GlobalParameterNode getTarget(){
 		return (GlobalParameterNode)super.getTarget();
 	}
 

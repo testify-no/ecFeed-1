@@ -146,6 +146,7 @@ public class Messages {
 	public static final String DIALOG_REPLACE_PARAMETERS_WITH_LINKS_TITLE = "Cannot replace parameters with links";
 	public static final String DIALOG_ANDROID_RUNNER_SET_PROBLEM_TITLE = "Cannot set Android base runner";
 	public static final String DIALOG_RUN_ON_ANDROID_SET_PROBLEM_TITLE = "Cannot set run on android flag";
+	public static final String DIALOG_SET_PROPERTY_PROBLEM_TITLE = "Cannot set property";
 
 	//CONFIRMATIONS AND WARNINGS
 	public static final String DIALOG_REMOVE_CLASSES_TITLE = "Remove classes";

@@ -76,7 +76,7 @@ import com.ecfeed.core.model.IStatementVisitor;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelVersionDistributor;
-import com.ecfeed.core.model.NodePropertyDescriptions;
+import com.ecfeed.core.model.NodePropertyDefs;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.StatementArray;
 import com.ecfeed.core.model.StaticStatement;
@@ -166,8 +166,8 @@ public abstract class XomBuilder implements IModelVisitor, IStatementVisitor {
 		boolean runOnAndroid = classNode.getRunOnAndroid();
 
 		appendProperty(
-				getPropertyName(NodePropertyDescriptions.PropertyId.RUN_ON_ANDROID),
-				getPropertyType(NodePropertyDescriptions.PropertyId.RUN_ON_ANDROID), 
+				getPropertyName(NodePropertyDefs.PropertyId.RUN_ON_ANDROID),
+				getPropertyType(NodePropertyDefs.PropertyId.RUN_ON_ANDROID), 
 				BooleanHelper.toString(runOnAndroid), targetElement);
 
 		String androidBaseRunner = classNode.getAndroidRunner();
@@ -176,17 +176,17 @@ public abstract class XomBuilder implements IModelVisitor, IStatementVisitor {
 		}
 
 		appendProperty(
-				getPropertyName(NodePropertyDescriptions.PropertyId.ANDROID_RUNNER), 
-				getPropertyType(NodePropertyDescriptions.PropertyId.ANDROID_RUNNER),  
+				getPropertyName(NodePropertyDefs.PropertyId.ANDROID_RUNNER), 
+				getPropertyType(NodePropertyDefs.PropertyId.ANDROID_RUNNER),  
 				androidBaseRunner, targetElement);
 	}
 
-	private String getPropertyName(NodePropertyDescriptions.PropertyId propertyId) {
-		return NodePropertyDescriptions.getPropertyName(propertyId);
+	private String getPropertyName(NodePropertyDefs.PropertyId propertyId) {
+		return NodePropertyDefs.getPropertyName(propertyId);
 	}
 
-	private String getPropertyType(NodePropertyDescriptions.PropertyId propertyId) {
-		return NodePropertyDescriptions.getPropertyType(propertyId);
+	private String getPropertyType(NodePropertyDefs.PropertyId propertyId) {
+		return NodePropertyDefs.getPropertyType(propertyId);
 	}	
 
 	private void appendProperty(String key, String type, String value, Element targetElement) {

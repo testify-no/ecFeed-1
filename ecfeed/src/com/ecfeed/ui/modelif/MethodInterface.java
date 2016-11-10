@@ -443,7 +443,7 @@ public class MethodInterface extends ParametersParentInterface {
 	}
 
 	@Override
-	protected MethodNode getTarget() {
+	public MethodNode getTarget() {
 		return (MethodNode) super.getTarget();
 	}
 

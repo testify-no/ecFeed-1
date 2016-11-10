@@ -24,7 +24,7 @@ public class ConstraintInterface extends AbstractNodeInterface {
 	}
 
 	@Override
-	protected ConstraintNode getTarget(){
+	public ConstraintNode getTarget(){
 		return (ConstraintNode)super.getTarget();
 	}
 

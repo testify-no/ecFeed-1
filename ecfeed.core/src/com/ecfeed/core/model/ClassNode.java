@@ -16,15 +16,11 @@ import java.util.List;
 import java.util.Set;
 
 import com.ecfeed.core.utils.BooleanHelper;
-import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.StringHelper;
 
 public class ClassNode extends GlobalParametersParentNode {
 
 	private List<MethodNode> fMethods;
-
-	private static final String RUN_ON_ANDROID_PROPERTY_KEY = "runOnAndroid";
-	private static final String ANDROID_RUNNER_PROPERTY_KEY = "androidRunner";
 
 	@Override
 	public List<? extends AbstractNode> getChildren(){
@@ -76,15 +72,15 @@ public class ClassNode extends GlobalParametersParentNode {
 	}
 
 	public String getAndroidRunner() {
-		return getPropertyValue(ANDROID_RUNNER_PROPERTY_KEY);
+		return getPropertyValue(NodePropertyDefs.PropertyId.ANDROID_RUNNER);
 	}
 
 	public void setAndroidRunner(String androidRunner) {
-		putProperty(ANDROID_RUNNER_PROPERTY_KEY, JavaTypeHelper.TYPE_NAME_STRING, androidRunner);
+		setPropertyValue(NodePropertyDefs.PropertyId.ANDROID_RUNNER, androidRunner);
 	}	
 
 	public boolean getRunOnAndroid() {
-		String value = getPropertyValue(RUN_ON_ANDROID_PROPERTY_KEY);
+		String value = getPropertyValue(NodePropertyDefs.PropertyId.RUN_ON_ANDROID);
 
 		if (value == null) {
 			return false;
@@ -94,7 +90,7 @@ public class ClassNode extends GlobalParametersParentNode {
 	}
 
 	public void setRunOnAndroid(boolean runOnAndroid) {
-		putProperty(RUN_ON_ANDROID_PROPERTY_KEY, JavaTypeHelper.TYPE_NAME_BOOLEAN, BooleanHelper.toString(runOnAndroid));
+		setPropertyValue(NodePropertyDefs.PropertyId.RUN_ON_ANDROID, BooleanHelper.toString(runOnAndroid));
 	}	
 
 	public boolean addMethod(MethodNode method) {
