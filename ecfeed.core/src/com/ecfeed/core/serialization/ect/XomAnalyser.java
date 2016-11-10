@@ -80,27 +80,27 @@ public abstract class XomAnalyser {
 		assertNodeTag(element.getQualifiedName(), ROOT_NODE_NAME);
 		String name = getElementName(element);
 
-		RootNode root = new RootNode(name, getModelVersion());
+		RootNode targetRootNode = new RootNode(name, getModelVersion());
 
-		root.setDescription(parseComments(element));
+		targetRootNode.setDescription(parseComments(element));
 
 		//parameters must be parsed before classes
 		for(Element child : getIterableChildren(element, getParameterNodeName())){
 			try{
-				root.addParameter(parseGlobalParameter(child));
+				targetRootNode.addParameter(parseGlobalParameter(child));
 			}catch(ParserException e){
 				System.err.println("Exception: " + e.getMessage());
 			}
 		}
 		for(Element child : getIterableChildren(element, Constants.CLASS_NODE_NAME)){
 			try{
-				root.addClass(parseClass(child, root));
+				targetRootNode.addClass(parseClass(child, targetRootNode));
 			}catch(ParserException e){
 				System.err.println("Exception: " + e.getMessage());
 			}
 		}
 
-		return root;
+		return targetRootNode;
 	}
 
 	public ClassNode parseClass(Element classElement, RootNode parent) throws ParserException{
@@ -111,16 +111,16 @@ public abstract class XomAnalyser {
 		BooleanHolder runOnAndroidHolder = new BooleanHolder(false);
 		StringHolder androidBaseRunnerHolder = new StringHolder(); 
 		parseAndroidValues(classElement, runOnAndroidHolder, androidBaseRunnerHolder);
-		ClassNode classNode = new ClassNode(name, runOnAndroidHolder.get(), androidBaseRunnerHolder.get());
+		ClassNode targetClassNode = new ClassNode(name, runOnAndroidHolder.get(), androidBaseRunnerHolder.get());
 
-		classNode.setDescription(parseComments(classElement));
+		targetClassNode.setDescription(parseComments(classElement));
 		//we need to do it here, so the backward search for global parameters will work
-		classNode.setParent(parent);
+		targetClassNode.setParent(parent);
 
 		//parameters must be parsed before classes
 		for(Element child : getIterableChildren(classElement, getParameterNodeName())){
 			try{
-				classNode.addParameter(parseGlobalParameter(child));
+				targetClassNode.addParameter(parseGlobalParameter(child));
 			}catch(ParserException e){
 				System.err.println("Exception: " + e.getMessage());
 			}
@@ -128,13 +128,13 @@ public abstract class XomAnalyser {
 
 		for(Element child : getIterableChildren(classElement, Constants.METHOD_NODE_NAME)){
 			try{
-				classNode.addMethod(parseMethod(child, classNode));
+				targetClassNode.addMethod(parseMethod(child, targetClassNode));
 			}catch(ParserException e){
 				System.err.println("Exception: " + e.getMessage());
 			}
 		}
 
-		return classNode;
+		return targetClassNode;
 	}
 
 	private void parseAndroidValues(
@@ -149,7 +149,7 @@ public abstract class XomAnalyser {
 		}
 	}
 
-	private void parseAndroidAttributes(
+	private static void parseAndroidAttributes(
 			Element classElement, BooleanHolder runOnAndroidHolder, StringHolder androidBaseRunnerHolder) {
 
 		String runOnAndroidStr = classElement.getAttributeValue(RUN_ON_ANDROID_ATTRIBUTE_NAME);
@@ -164,97 +164,62 @@ public abstract class XomAnalyser {
 		androidBaseRunnerHolder.set(androidBaseRunnerStr);
 	}
 
-	private void parseAndroidProperties(
+	private static void parseAndroidProperties(
 			Element classElement, 
 			BooleanHolder runOnAndroidHolder, 
 			StringHolder androidBaseRunnerHolder) {
 
-		String runOnAndroidStr = getProperty(NodePropertyDefs.PropertyId.RUN_ON_ANDROID, classElement);
+		String runOnAndroidStr = getPropertyValue(NodePropertyDefs.PropertyId.RUN_ON_ANDROID, classElement);
 		runOnAndroidHolder.set(BooleanHelper.parseBoolean(runOnAndroidStr));
 
-		String androidBaseRunnerStr = getProperty(NodePropertyDefs.PropertyId.ANDROID_RUNNER, classElement);
+		String androidBaseRunnerStr = getPropertyValue(NodePropertyDefs.PropertyId.ANDROID_RUNNER, classElement);
 		androidBaseRunnerHolder.set(androidBaseRunnerStr);		
 	}
 
-	private String getProperty(NodePropertyDefs.PropertyId propertyId, Element classElement) {
-		String propertyName = NodePropertyDefs.getPropertyName(propertyId);
-		return getPropertyValue(classElement, propertyName);		
-	}	
+	public MethodNode parseMethod(Element methodElement, ClassNode parent) throws ParserException{
+		assertNodeTag(methodElement.getQualifiedName(), METHOD_NODE_NAME);
+		String name = getElementName(methodElement);
 
-	private String getPropertyValue(Element classElement, String propertyNameToFind) {
+		MethodNode targetMethodNode = new MethodNode(name);
+		targetMethodNode.setParent(parent);
 
-		Elements propertyElements = getPropertyElements(classElement);
-		if (propertyElements == null) {
-			return null;
-		}
+		parseMethodProperties(methodElement, targetMethodNode);
 
-		int propertiesSize = propertyElements.size();
-
-		for (int cnt = 0; cnt < propertiesSize; cnt++) {
-			Element property = propertyElements.get(cnt);
-
-			String name = getPropertyName(property);
-
-			if (name.equals(propertyNameToFind)) {
-				return getPropertyValue(property);
-			}
-		}
-
-		return null;
-	}
-
-	private Elements getPropertyElements(Element parentElement) {
-		Elements propertyBlockElements = parentElement.getChildElements(Constants.PROPERTIES_BLOCK_TAG_NAME);
-		if (propertyBlockElements.size() == 0) {
-			return null;
-		}
-
-		Element firstBlockElement = propertyBlockElements.get(0);
-		return firstBlockElement.getChildElements(Constants.PROPERTY_TAG_NAME);
-	}
-
-	private String getPropertyName(Element property) {
-		return property.getAttributeValue(Constants.PROPERTY_ATTRIBUTE_NAME);
-	}
-
-	private String getPropertyValue(Element property) {
-		return property.getAttributeValue(Constants.PROPERTY_ATTRIBUTE_VALUE);
-	}	
-
-	public MethodNode parseMethod(Element element, ClassNode parent) throws ParserException{
-		assertNodeTag(element.getQualifiedName(), METHOD_NODE_NAME);
-		String name = getElementName(element);
-
-		MethodNode methodNode = new MethodNode(name);
-		methodNode.setParent(parent);
-
-		for(Element child : getIterableChildren(element, getParameterNodeName())){
+		for(Element child : getIterableChildren(methodElement, getParameterNodeName())){
 			try{
-				methodNode.addParameter(parseMethodParameter(child, methodNode));
+				targetMethodNode.addParameter(parseMethodParameter(child, targetMethodNode));
 			}catch(ParserException e){
 				System.err.println("Exception: " + e.getMessage());
 			}
 		}
 
-		for(Element child : getIterableChildren(element, Constants.TEST_CASE_NODE_NAME)){
+		for(Element child : getIterableChildren(methodElement, Constants.TEST_CASE_NODE_NAME)){
 			try{
-				methodNode.addTestCase(parseTestCase(child, methodNode));
+				targetMethodNode.addTestCase(parseTestCase(child, targetMethodNode));
 			}catch(ParserException e){
 				System.err.println("Exception: " + e.getMessage());
 			}
 		}
 
-		for(Element child : getIterableChildren(element, Constants.CONSTRAINT_NODE_NAME)){
+		for(Element child : getIterableChildren(methodElement, Constants.CONSTRAINT_NODE_NAME)){
 			try{
-				methodNode.addConstraint(parseConstraint(child, methodNode));
+				targetMethodNode.addConstraint(parseConstraint(child, targetMethodNode));
 			}catch(ParserException e){
 				System.err.println("Exception: " + e.getMessage());
 			}
 		}
 
-		methodNode.setDescription(parseComments(element));
+		targetMethodNode.setDescription(parseComments(methodElement));
 
-		return methodNode;
+		return targetMethodNode;
+	}
+
+	private void parseMethodProperties(Element methodElement, MethodNode targetMethodNode) {
+		String methodRunner = getPropertyValue(NodePropertyDefs.PropertyId.METHOD_RUNNER, methodElement);
+		if (StringHelper.isNullOrEmpty(methodRunner)) {
+			return;
+		}
+		targetMethodNode.setPropertyValue(NodePropertyDefs.PropertyId.METHOD_RUNNER, methodRunner);
 	}
 
 	public MethodParameterNode parseMethodParameter(Element element, MethodNode method) throws ParserException{
@@ -360,9 +325,9 @@ public abstract class XomAnalyser {
 			testData.add(testValue);
 		}
 
-		TestCaseNode testCaseNode = new TestCaseNode(name, testData);
-		testCaseNode.setDescription(parseComments(element));
-		return testCaseNode;
+		TestCaseNode targetTestCaseNode = new TestCaseNode(name, testData);
+		targetTestCaseNode.setDescription(parseComments(element));
+		return targetTestCaseNode;
 	}
 
 	public ConstraintNode parseConstraint(Element element, MethodNode method) throws ParserException{
@@ -405,11 +370,11 @@ public abstract class XomAnalyser {
 			ParserException.report(Messages.MALFORMED_CONSTRAINT_NODE_DEFINITION(method.getName(), name));
 		}
 
-		ConstraintNode constraint = new ConstraintNode(name, new Constraint(premise, consequence));
+		ConstraintNode targetConstraint = new ConstraintNode(name, new Constraint(premise, consequence));
 
-		constraint.setDescription(parseComments(element));
+		targetConstraint.setDescription(parseComments(element));
 
-		return constraint;
+		return targetConstraint;
 	}
 
 	public AbstractStatement parseStatement(Element element, MethodNode method) throws ParserException {
@@ -543,13 +508,13 @@ public abstract class XomAnalyser {
 		return choice;
 	}
 
-	private void assertNodeTag(String qualifiedName, String expectedName) throws ParserException {
+	private static void assertNodeTag(String qualifiedName, String expectedName) throws ParserException {
 		if(qualifiedName.equals(expectedName) == false){
 			ParserException.report("Unexpected node name: " + qualifiedName + " instead of " + expectedName);
 		}
 	}
 
-	protected List<Element> getIterableChildren(Element element){
+	protected static List<Element> getIterableChildren(Element element){
 		ArrayList<Element> list = new ArrayList<Element>();
 		Elements children = element.getChildElements();
 		for(int i = 0; i < children.size(); i++){
@@ -561,7 +526,7 @@ public abstract class XomAnalyser {
 		return list;
 	}
 
-	protected List<Element> getIterableChildren(Element element, String name){
+	protected static List<Element> getIterableChildren(Element element, String name){
 		List<Element> elements = getIterableChildren(element);
 		Iterator<Element> it = elements.iterator();
 		while(it.hasNext()){
@@ -625,4 +590,46 @@ public abstract class XomAnalyser {
 		}
 		return null;
 	}
+
+	private static String getPropertyValue(NodePropertyDefs.PropertyId propertyId, Element classElement) {
+		String propertyName = NodePropertyDefs.getPropertyName(propertyId);
+
+		Elements propertyElements = getPropertyElements(classElement);
+		if (propertyElements == null) {
+			return null;
+		}
+
+		int propertiesSize = propertyElements.size();
+
+		for (int cnt = 0; cnt < propertiesSize; cnt++) {
+			Element propertyElement = propertyElements.get(cnt);
+
+			String name = getNameFromPropertyElem(propertyElement);
+
+			if (name.equals(propertyName)) {
+				return getValueFromPropertyElem(propertyElement);
+			}
+		}
+
+		return null;		
+	}	
+
+	private static Elements getPropertyElements(Element parentElement) {
+		Elements propertyBlockElements = parentElement.getChildElements(Constants.PROPERTIES_BLOCK_TAG_NAME);
+		if (propertyBlockElements.size() == 0) {
+			return null;
+		}
+
+		Element firstBlockElement = propertyBlockElements.get(0);
+		return firstBlockElement.getChildElements(Constants.PROPERTY_TAG_NAME);
+	}
+
+	private static String getNameFromPropertyElem(Element property) {
+		return property.getAttributeValue(Constants.PROPERTY_ATTRIBUTE_NAME);
+	}
+
+	private static String getValueFromPropertyElem(Element property) {
+		return property.getAttributeValue(Constants.PROPERTY_ATTRIBUTE_VALUE);
+	}	
+
 }
