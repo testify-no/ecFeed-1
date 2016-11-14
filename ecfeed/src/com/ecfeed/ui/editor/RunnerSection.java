@@ -13,6 +13,7 @@ package com.ecfeed.ui.editor;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Text;
 
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.NodePropertyDefs;
@@ -24,8 +25,13 @@ public class RunnerSection extends BasicSection  {
 
 	MethodInterface fMethodInterface;
 	private FormObjectToolkit fFormObjectToolkit;
-	private Combo fRunnersCombo;
+	private Combo fRunnerCombo;
+	private Combo fBrowserCombo;
+	private Text fStartUrlText;
+
 	private final NodePropertyDefs.PropertyId fRunnerPropertyId = NodePropertyDefs.PropertyId.METHOD_RUNNER;
+	private final NodePropertyDefs.PropertyId fBrowserPropertyId = NodePropertyDefs.PropertyId.WEB_BROWSER;
+	private final NodePropertyDefs.PropertyId fStartUrlPropertyId = NodePropertyDefs.PropertyId.START_URL;
 
 	public RunnerSection(ISectionContext sectionContext, 
 			IModelUpdateContext updateContext,
@@ -44,21 +50,46 @@ public class RunnerSection extends BasicSection  {
 		fFormObjectToolkit.paintBorders(gridComposite);
 
 		fFormObjectToolkit.createLabel(gridComposite, "Runner");
-		fRunnersCombo = fFormObjectToolkit.createGridCombo(gridComposite, new RunnerChangedAdapter());
+		fRunnerCombo = fFormObjectToolkit.createGridCombo(gridComposite, new RunnerChangedAdapter());
+		fRunnerCombo.setItems(NodePropertyDefs.getPropertyPossibleValues(fRunnerPropertyId)); 
+		fRunnerCombo.setText(NodePropertyDefs.getPropertyDefaultValue(fRunnerPropertyId));
 
-		fRunnersCombo.setItems(NodePropertyDefs.getPropertyPossibleValues(fRunnerPropertyId)); 
-		fRunnersCombo.setText(NodePropertyDefs.getPropertyDefaultValue(fRunnerPropertyId));		
+		fFormObjectToolkit.createLabel(gridComposite, "Browser");
+		fBrowserCombo = fFormObjectToolkit.createGridCombo(gridComposite, new BrowserChangedAdapter());
+		fBrowserCombo.setItems(NodePropertyDefs.getPropertyPossibleValues(fBrowserPropertyId)); 
+
+		fFormObjectToolkit.createLabel(gridComposite, "URL");
+		fStartUrlText = fFormObjectToolkit.createGridText(gridComposite, new UrlChangedAdapter());
+
+
 	}
 
 	public void refresh() {
 		MethodNode methodNode = fMethodInterface.getTarget();
-		fRunnersCombo.setText(methodNode.getPropertyValue(fRunnerPropertyId));
+		fRunnerCombo.setText(methodNode.getPropertyValue(fRunnerPropertyId));
+		fBrowserCombo.setText(methodNode.getPropertyValue(fBrowserPropertyId));
+		fStartUrlText.setText(methodNode.getPropertyValue(fStartUrlPropertyId));
 	}
 
 	private class RunnerChangedAdapter extends AbstractSelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			fMethodInterface.setProperty(fRunnerPropertyId, fRunnersCombo.getText());
+			fMethodInterface.setProperty(fRunnerPropertyId, fRunnerCombo.getText());
+		}
+	}
+
+	private class BrowserChangedAdapter extends AbstractSelectionAdapter {
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			fMethodInterface.setProperty(fBrowserPropertyId, fBrowserCombo.getText());
+		}
+	}
+
+
+	private class UrlChangedAdapter extends AbstractSelectionAdapter {
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			fMethodInterface.setProperty(fStartUrlPropertyId, fStartUrlText.getText());
 		}
 	}
 

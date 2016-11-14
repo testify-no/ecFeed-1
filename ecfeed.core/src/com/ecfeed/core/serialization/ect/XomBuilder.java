@@ -203,9 +203,17 @@ public abstract class XomBuilder implements IModelVisitor, IStatementVisitor {
 	}
 
 	private void addMethodProperties(MethodNode methodNode, Element targetElement) {
+		addMethodProperty(NodePropertyDefs.PropertyId.METHOD_RUNNER,  methodNode, targetElement);
+		addMethodProperty(NodePropertyDefs.PropertyId.WEB_BROWSER,  methodNode, targetElement);
+		addMethodProperty(NodePropertyDefs.PropertyId.START_URL,  methodNode, targetElement);
+	}
 
-		NodePropertyDefs.PropertyId propertyId = NodePropertyDefs.PropertyId.METHOD_RUNNER;
+	private void addMethodProperty(NodePropertyDefs.PropertyId propertyId,  MethodNode methodNode, Element targetElement) {
 		String value = methodNode.getPropertyValue(propertyId);
+
+		if (value == null) {
+			return;
+		}
 
 		appendProperty(
 				getPropertyName(propertyId), 

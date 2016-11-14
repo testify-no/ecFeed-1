@@ -48,7 +48,9 @@ public class NodePropertyDefs {
 	public enum PropertyId {
 		RUN_ON_ANDROID(0),
 		ANDROID_RUNNER(1),
-		METHOD_RUNNER(2);
+		METHOD_RUNNER(2),
+		WEB_BROWSER(3),
+		START_URL(4);
 
 		private final int fIndex; 
 
@@ -61,18 +63,37 @@ public class NodePropertyDefs {
 		}
 	}
 
+
+
+	static PropertyDef runOnAndroid = 
+			new PropertyDef("runOnAndroid", JavaTypeHelper.TYPE_NAME_BOOLEAN, "false", new String[]{"false", "true"});
+
+	static PropertyDef androidRunner = 
+			new PropertyDef("androidRunner", JavaTypeHelper.TYPE_NAME_STRING, null, null);	
+
+	static PropertyDef methodRunner = 
+			new PropertyDef(
+					"methodRunner", JavaTypeHelper.TYPE_NAME_STRING, "Java Runner", 
+					new String[]{"Java Runner", "Web Driver"});
+
+	static PropertyDef webBrowser = 
+			new PropertyDef(
+					"webBrowser", JavaTypeHelper.TYPE_NAME_STRING, null, 
+					new String[]{"Chrome", "Firefox", "IExplorer"});
+
+	static PropertyDef startUrl = new PropertyDef("startUrl", JavaTypeHelper.TYPE_NAME_STRING, null, null);
+
+
 	static PropertyDef[] fPropertyDefs = 
 		{
-		new PropertyDef(
-				"runOnAndroid", JavaTypeHelper.TYPE_NAME_BOOLEAN, "false", new String[]{"false", "true"}),
-
-				new PropertyDef(
-						"androidRunner", JavaTypeHelper.TYPE_NAME_STRING, null, null),
-
-						new PropertyDef(
-								"methodRunner", JavaTypeHelper.TYPE_NAME_STRING, "Java Runner", 
-								new String[]{"Java Runner", "Web Driver"}),
+		runOnAndroid,
+		androidRunner,
+		methodRunner,
+		webBrowser,
+		startUrl				
 		};
+
+
 
 	public static String getPropertyName(PropertyId propertyId) {
 		return getDefinition(propertyId).getName();

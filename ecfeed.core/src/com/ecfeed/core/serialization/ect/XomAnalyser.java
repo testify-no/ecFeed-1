@@ -215,11 +215,20 @@ public abstract class XomAnalyser {
 	}
 
 	private void parseMethodProperties(Element methodElement, MethodNode targetMethodNode) {
-		String methodRunner = getPropertyValue(NodePropertyDefs.PropertyId.METHOD_RUNNER, methodElement);
+		parseMethodProperty(NodePropertyDefs.PropertyId.METHOD_RUNNER, methodElement, targetMethodNode);
+		parseMethodProperty(NodePropertyDefs.PropertyId.WEB_BROWSER, methodElement, targetMethodNode);
+		parseMethodProperty(NodePropertyDefs.PropertyId.START_URL, methodElement, targetMethodNode);
+	}
+
+	private void parseMethodProperty(
+			NodePropertyDefs.PropertyId propertyId, 
+			Element methodElement, 
+			MethodNode targetMethodNode) {
+		String methodRunner = getPropertyValue(propertyId, methodElement);
 		if (StringHelper.isNullOrEmpty(methodRunner)) {
 			return;
 		}
-		targetMethodNode.setPropertyValue(NodePropertyDefs.PropertyId.METHOD_RUNNER, methodRunner);
+		targetMethodNode.setPropertyValue(propertyId, methodRunner);		
 	}
 
 	public MethodParameterNode parseMethodParameter(Element element, MethodNode method) throws ParserException{
