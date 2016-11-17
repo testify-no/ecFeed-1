@@ -8,19 +8,26 @@
  *  
  *******************************************************************************/
 
-package com.ecfeed.core.runner;
+package com.ecfeed.ui.modelif;
 
-import java.lang.reflect.Method;
+import com.ecfeed.core.model.ClassNode;
+import com.ecfeed.core.model.MethodNode;
+import com.ecfeed.utils.SeleniumHelper;
 
-public interface ITestMethodInvoker {
+public class TestRunModeHelper {
 
-	boolean isClassInstanceRequired();
+	public static TestRunMode getTestRunMode(MethodNode methodNode) {
+		ClassNode classNode = methodNode.getClassNode();
 
-	void invoke(
-			Method testMethod,
-			String className,
-			Object instance,
-			Object[] arguments, 
-			String argumentsDescription
-			) throws RuntimeException;
+		if (classNode.getRunOnAndroid()) {
+			return TestRunMode.ANDROID;
+		}
+
+		if (SeleniumHelper.isSeleniumRunnerMethod(methodNode)) {
+			return TestRunMode.SELENIUM_RUNNER;
+		}
+
+		return TestRunMode.JUNIT;
+	}
+
 }

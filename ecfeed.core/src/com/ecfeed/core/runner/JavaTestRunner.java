@@ -34,20 +34,19 @@ public class JavaTestRunner {
 	public JavaTestRunner(ModelClassLoader loader, boolean isExport, ITestMethodInvoker testMethodInvoker) {
 		fLoader = loader;
 		fIsExport = isExport;
-		fTestMethodInvoker = testMethodInvoker; 
-	}
-
-	public void setTargetForTest(MethodNode target) throws RunnerException {
-		fTarget = target;
-		ClassNode classNode = fTarget.getClassNode();
-		fTestClass = getTestClass(classNode.getName());
-		fTestMethod = getTestMethod(fTestClass, fTarget);
-	}
-
-	public void setTargetForExport(MethodNode target) {
-		fTarget = target;
+		fTestMethodInvoker = testMethodInvoker;
 		fTestClass = null;
 		fTestMethod = null;
+	}
+
+	public void setTarget(MethodNode target) throws RunnerException {
+		fTarget = target;
+	}
+
+	public void createTestClassAndMethod(MethodNode methodNode) throws RunnerException {
+		ClassNode classNode = methodNode.getClassNode();
+		fTestClass = getTestClass(classNode.getName());
+		fTestMethod = getTestMethod(fTestClass, fTarget);
 	}	
 
 	public void runTestCase(List<ChoiceNode> testData) throws RunnerException{
@@ -56,7 +55,7 @@ public class JavaTestRunner {
 
 		Object instance = null;
 
-		if (!fTestMethodInvoker.isRemote())	{
+		if (fTestMethodInvoker.isClassInstanceRequired())	{
 			try {
 				instance = fTestClass.newInstance();
 			} catch (InstantiationException | IllegalAccessException e) {
@@ -68,14 +67,20 @@ public class JavaTestRunner {
 			}
 		}
 
-		String className = fTestClass.getName();
 		Object[] arguments = getArguments(testData);
 
 		try {
-			fTestMethodInvoker.invoke(fTestMethod, className, instance, arguments, testData.toString());
+			fTestMethodInvoker.invoke(fTestMethod, getClassName(fTestClass), instance, arguments, testData.toString());
 		} catch (Exception e) {
 			RunnerException.report(e.getMessage());
 		}
+	}
+
+	private static String getClassName(Class<?> theClass) {
+		if (theClass == null) {
+			return null;
+		}
+		return theClass.getName();
 	}
 
 	public void prepareTestCaseForExport(List<ChoiceNode> testData) throws RunnerException{

@@ -65,6 +65,9 @@ public class NodePropertyDefs {
 
 
 
+	private static final String JAVA_RUNNER = "Java Runner";
+	private static final String WEB_DRIVER = "Web Driver";
+
 	static PropertyDef runOnAndroid = 
 			new PropertyDef("runOnAndroid", JavaTypeHelper.TYPE_NAME_BOOLEAN, "false", new String[]{"false", "true"});
 
@@ -73,8 +76,8 @@ public class NodePropertyDefs {
 
 	static PropertyDef methodRunner = 
 			new PropertyDef(
-					"methodRunner", JavaTypeHelper.TYPE_NAME_STRING, "Java Runner", 
-					new String[]{"Java Runner", "Web Driver"});
+					"methodRunner", JavaTypeHelper.TYPE_NAME_STRING, JAVA_RUNNER,
+					new String[]{JAVA_RUNNER, WEB_DRIVER});
 
 	static PropertyDef webBrowser = 
 			new PropertyDef(
@@ -115,4 +118,10 @@ public class NodePropertyDefs {
 		return fPropertyDefs[propertyId.getIndex()];
 	}
 
+	public static boolean isSeleniumRunnerMethod(String value) {
+		if (value.equals(WEB_DRIVER)) {
+			return true;
+		}
+		return false;
+	}
 }

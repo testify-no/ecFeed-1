@@ -8,19 +8,10 @@
  *  
  *******************************************************************************/
 
-package com.ecfeed.core.runner;
+package com.ecfeed.ui.modelif;
 
-import java.lang.reflect.Method;
-
-public interface ITestMethodInvoker {
-
-	boolean isClassInstanceRequired();
-
-	void invoke(
-			Method testMethod,
-			String className,
-			Object instance,
-			Object[] arguments, 
-			String argumentsDescription
-			) throws RuntimeException;
+public enum TestRunMode {
+	JUNIT,
+	ANDROID,
+	SELENIUM_RUNNER
 }

@@ -24,6 +24,7 @@ import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.MethodInterface;
+import com.ecfeed.utils.SeleniumHelper;
 
 public class MethodDetailsPage extends BasicDetailsPage {
 
@@ -142,10 +143,8 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		Composite childComposite = getFormObjectToolkit().createRowComposite(
 				getMainComposite());
 
-		if (fileInfoProvider.isProjectAvailable()) {
-			fTestOnlineButton = getFormObjectToolkit().createButton(
-					childComposite, "Test online...", new OnlineTestAdapter());
-		}
+		fTestOnlineButton = getFormObjectToolkit().createButton(
+				childComposite, "Test online...", new OnlineTestAdapter());
 
 		fExportOnlineButton = getFormObjectToolkit().createButton(
 				childComposite, "Export online...", new OnlineExportAdapter());
@@ -178,10 +177,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		}
 		getMainSection().setText(JavaUtils.simplifiedToString(selectedMethod));
 
-		if (fileInfoProvider.isProjectAvailable()) {
-			fTestOnlineButton
-			.setEnabled(methodStatus != EImplementationStatus.NOT_IMPLEMENTED);
-		}
+		fTestOnlineButton.setEnabled(isTestOnlineButtonEnabled(fileInfoProvider, methodStatus));
 
 		if (selectedMethod.getParametersCount() > 0) {
 			fExportOnlineButton.setEnabled(true);
@@ -206,6 +202,21 @@ public class MethodDetailsPage extends BasicDetailsPage {
 					&& fMethodIf.getCompatibleMethods().isEmpty() == false);
 		}
 	}
+
+	private boolean isTestOnlineButtonEnabled(IFileInfoProvider fileInfoProvider, EImplementationStatus methodStatus) {
+
+		MethodNode methodNode = fMethodIf.getTarget();
+
+		if (SeleniumHelper.isSeleniumRunnerMethod(methodNode)) {
+			return true;
+		}		
+
+		if (fileInfoProvider.isProjectAvailable()) {
+			return methodStatus != EImplementationStatus.NOT_IMPLEMENTED;
+		}
+
+		return false;
+	}	
 
 	@Override
 	protected Class<? extends AbstractNode> getNodeType() {

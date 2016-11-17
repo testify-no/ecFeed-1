@@ -8,19 +8,23 @@
  *  
  *******************************************************************************/
 
-package com.ecfeed.core.runner;
+package com.ecfeed.utils;
 
-import java.lang.reflect.Method;
+import com.ecfeed.core.model.MethodNode;
+import com.ecfeed.core.model.NodePropertyDefs;
 
-public interface ITestMethodInvoker {
 
-	boolean isClassInstanceRequired();
+public class SeleniumHelper {
 
-	void invoke(
-			Method testMethod,
-			String className,
-			Object instance,
-			Object[] arguments, 
-			String argumentsDescription
-			) throws RuntimeException;
+	public static boolean isSeleniumRunnerMethod(MethodNode methodNode) {
+
+		if (methodNode == null) {
+			return false;
+		}
+
+		String value = methodNode.getPropertyValue(NodePropertyDefs.PropertyId.METHOD_RUNNER);
+
+		return NodePropertyDefs.isSeleniumRunnerMethod(value);
+	}	
+
 }

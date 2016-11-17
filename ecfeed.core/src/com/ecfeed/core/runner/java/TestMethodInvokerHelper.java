@@ -7,20 +7,12 @@
  * http://www.eclipse.org/legal/epl-v10.html 
  *  
  *******************************************************************************/
+package com.ecfeed.core.runner.java;
 
-package com.ecfeed.core.runner;
 
-import java.lang.reflect.Method;
+public class TestMethodInvokerHelper {
 
-public interface ITestMethodInvoker {
-
-	boolean isClassInstanceRequired();
-
-	void invoke(
-			Method testMethod,
-			String className,
-			Object instance,
-			Object[] arguments, 
-			String argumentsDescription
-			) throws RuntimeException;
+	public static String createErrorMessage(String testMethodName, String argumentsDescription, String exceptionMessage) {
+		return testMethodName + " " + argumentsDescription + ": " + exceptionMessage;
+	}
 }

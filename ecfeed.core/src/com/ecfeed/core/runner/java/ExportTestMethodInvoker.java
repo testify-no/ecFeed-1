@@ -27,8 +27,8 @@ public class ExportTestMethodInvoker implements ITestMethodInvoker {
 	ArrayList<TestCaseNode> fTestCaseNodes;
 
 	@Override
-	public boolean isRemote() {
-		return false;
+	public boolean isClassInstanceRequired() {
+		return false;	
 	}
 
 	public ExportTestMethodInvoker(MethodNode methodNode) {
@@ -48,7 +48,7 @@ public class ExportTestMethodInvoker implements ITestMethodInvoker {
 		fTestCaseNodes.add(createTestCase(arguments));
 	}
 
-	TestCaseNode createTestCase(Object[] arguments) {
+	private TestCaseNode createTestCase(Object[] arguments) {
 		List<ChoiceNode> choiceNodes = new ArrayList<ChoiceNode>();
 
 		for (int cnt = 0; cnt < fMethodNode.getParametersCount(); ++cnt) {

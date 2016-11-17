@@ -48,6 +48,7 @@ import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.runner.ITestMethodInvoker;
 import com.ecfeed.core.runner.java.ExportTestMethodInvoker;
 import com.ecfeed.core.runner.java.JUnitTestMethodInvoker;
+import com.ecfeed.core.runner.java.SeleniumTestMethodInvoker;
 import com.ecfeed.core.serialization.export.ExportTemplateParser;
 import com.ecfeed.core.utils.EcException;
 import com.ecfeed.core.utils.StringHelper;
@@ -68,6 +69,7 @@ import com.ecfeed.ui.dialogs.TestCasesExportDialog;
 import com.ecfeed.ui.dialogs.TestCasesExportDialog.FileCompositeVisibility;
 import com.ecfeed.ui.dialogs.basic.ErrorDialog;
 import com.ecfeed.ui.dialogs.basic.InfoDialog;
+import com.ecfeed.utils.SeleniumHelper;
 
 public class MethodInterface extends ParametersParentInterface {
 
@@ -250,9 +252,9 @@ public class MethodInterface extends ParametersParentInterface {
 		if (!isValidClassConfiguration(classNode))
 			return;
 
-		OnlineTestRunningSupport testSupport = new OnlineTestRunningSupport(
-				getTarget(), createTestMethodInvoker(fileInfoProvider), 
-				fileInfoProvider, classNode.getRunOnAndroid());
+		OnlineTestRunningSupport testSupport = 
+				new OnlineTestRunningSupport(
+						getTarget(), createTestMethodInvoker(fileInfoProvider), fileInfoProvider);
 
 		testSupport.proceed();
 	}
@@ -304,14 +306,18 @@ public class MethodInterface extends ParametersParentInterface {
 
 	public void executeStaticTests(Collection<TestCaseNode> testCases,
 			IFileInfoProvider fileInfoProvider) throws EcException {
-		ClassNode classNode = getTarget().getClassNode();
+		MethodNode methodNode = getTarget();
+		ClassNode classNode = methodNode.getClassNode();
 
 		if (!isValidClassConfiguration(classNode))
 			return;
 
+
 		StaticTestExecutionSupport support = new StaticTestExecutionSupport(
 				testCases, createTestMethodInvoker(fileInfoProvider),
-				fileInfoProvider, classNode.getRunOnAndroid());
+				fileInfoProvider, 
+				TestRunModeHelper.getTestRunMode(methodNode));
+
 		support.proceed();
 	}
 
@@ -368,17 +374,23 @@ public class MethodInterface extends ParametersParentInterface {
 
 	private ITestMethodInvoker createTestMethodInvoker(
 			IFileInfoProvider fileInfoProvider) throws EcException {
-		ClassNode classNode = getTarget().getClassNode();
+		MethodNode methodNode = getTarget();
+		ClassNode classNode = methodNode.getClassNode();
 
-		if (!classNode.getRunOnAndroid()) {
-			return new JUnitTestMethodInvoker();
+		if (classNode.getRunOnAndroid()) {
+			return createAndroidTestMethodInvoker(fileInfoProvider);
 		}
 
-		String projectPath = new EclipseProjectHelper(fileInfoProvider)
-		.getProjectPath();
-		String androidRunner = AndroidBaseRunnerHelper
-				.createFullAndroidRunnerName(projectPath);
+		if (SeleniumHelper.isSeleniumRunnerMethod(methodNode)) {
+			return new SeleniumTestMethodInvoker(methodNode); 
+		}
 
+		return new JUnitTestMethodInvoker();
+	}
+
+	ITestMethodInvoker createAndroidTestMethodInvoker(IFileInfoProvider fileInfoProvider) throws EcException {
+		String projectPath = new EclipseProjectHelper(fileInfoProvider).getProjectPath();
+		String androidRunner = AndroidBaseRunnerHelper.createFullAndroidRunnerName(projectPath);
 		return TestMethodInvokerExt.createInvoker(androidRunner);
 	}
 

@@ -26,6 +26,7 @@ import com.ecfeed.android.external.DeviceCheckerExt;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.runner.ITestMethodInvoker;
+import com.ecfeed.core.runner.JavaTestRunner;
 import com.ecfeed.core.runner.RunnerException;
 import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.SystemLogger;
@@ -37,23 +38,25 @@ import com.ecfeed.ui.dialogs.SetupDialogOnline;
 
 public class OnlineTestRunningSupport extends AbstractOnlineSupport {
 
-	boolean fRunOnAndroid;
-	IFileInfoProvider fFileInfoProvider;
+	private IFileInfoProvider fFileInfoProvider;
+
 
 	public OnlineTestRunningSupport(
 			MethodNode methodNode,
 			ITestMethodInvoker testMethodInvoker,
-			IFileInfoProvider fileInfoProvider, 
-			boolean runOnAndroid) {
+			IFileInfoProvider fileInfoProvider) {
 		super(methodNode, testMethodInvoker, fileInfoProvider);
-
-		fRunOnAndroid = runOnAndroid;
 		fFileInfoProvider = fileInfoProvider;
 	}
 
 	@Override
-	protected void setRunnerTarget(MethodNode target) throws RunnerException {
-		getRunner().setTargetForTest(target);
+	protected void prepareRunner(MethodNode target) throws RunnerException {
+		JavaTestRunner runner = getRunner();
+		runner.setTarget(target);
+
+		if (getTestRunMode() == TestRunMode.JUNIT) {
+			runner.createTestClassAndMethod(target);
+		}
 	}
 
 	@Override
@@ -66,7 +69,7 @@ public class OnlineTestRunningSupport extends AbstractOnlineSupport {
 
 	@Override
 	protected void prepareRun() throws InvocationTargetException {
-		if (!fRunOnAndroid) {
+		if (getTestRunMode() != TestRunMode.ANDROID) {
 			return;
 		}
 		DeviceCheckerExt.checkIfOneDeviceAttached();
@@ -126,7 +129,7 @@ public class OnlineTestRunningSupport extends AbstractOnlineSupport {
 		public void run(IProgressMonitor monitor)
 				throws InvocationTargetException, InterruptedException {
 
-			if (fRunOnAndroid) {
+			if (getTestRunMode() == TestRunMode.ANDROID) {
 				runNonParametrizedAndroidTest(monitor);
 				return;
 			}
