@@ -63,8 +63,6 @@ public class NodePropertyDefs {
 		}
 	}
 
-
-
 	private static final String JAVA_RUNNER = "Java Runner";
 	private static final String WEB_DRIVER = "Web Driver";
 

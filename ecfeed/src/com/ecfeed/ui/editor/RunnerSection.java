@@ -66,9 +66,21 @@ public class RunnerSection extends BasicSection  {
 
 	public void refresh() {
 		MethodNode methodNode = fMethodInterface.getTarget();
-		fRunnerCombo.setText(methodNode.getPropertyValue(fRunnerPropertyId));
-		fBrowserCombo.setText(methodNode.getPropertyValue(fBrowserPropertyId));
-		fStartUrlText.setText(methodNode.getPropertyValue(fStartUrlPropertyId));
+
+		String runner = methodNode.getPropertyValue(fRunnerPropertyId);
+		if (runner != null) {
+			fRunnerCombo.setText(runner);
+		}
+
+		String browser = methodNode.getPropertyValue(fBrowserPropertyId);
+		if (browser != null) {
+			fBrowserCombo.setText(browser);
+		}
+
+		String url = methodNode.getPropertyValue(fStartUrlPropertyId);
+		if (url!= null) {
+			fStartUrlText.setText(url);
+		}
 	}
 
 	private class RunnerChangedAdapter extends AbstractSelectionAdapter {

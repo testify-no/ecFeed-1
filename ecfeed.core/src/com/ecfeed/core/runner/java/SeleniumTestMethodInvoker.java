@@ -20,6 +20,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
+import com.ecfeed.core.model.NodePropertyDefs;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.runner.ITestMethodInvoker;
 import com.ecfeed.core.utils.ExceptionHelper;
@@ -55,11 +56,24 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 
 		try {
 			fArgumentsDescription = argumentsDescription;
+			processStartupProperties();
 			processArguments(arguments, argumentsDescription);
 		} finally {
 			if (fDriver != null) {
 				fDriver.quit();
 			}
+		}
+	}
+
+	private void processStartupProperties() {
+		String webBrowser = fMethodNode.getPropertyValue(NodePropertyDefs.PropertyId.WEB_BROWSER);
+		if (!StringHelper.isNullOrEmpty(webBrowser)) {
+			setDriver(webBrowser, "/home/marekq/Selenium WebDriver/ChromeDriver/chromedriver"); // TODO
+		}
+
+		String startupPage = fMethodNode.getPropertyValue(NodePropertyDefs.PropertyId.START_URL);
+		if (!StringHelper.isNullOrEmpty(startupPage)) {
+			goToPage(startupPage);
 		}
 	}
 
@@ -100,14 +114,23 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 			return false;
 		}
 
-		if (argument.endsWith("chromedriver")) {
-			System.setProperty("webdriver.chrome.driver", argument);
-			fDriver = new ChromeDriver();
+		if (argument.endsWith("chromedriver")) { // TODO REFACTOR
+			setDriver("chromedriver", argument);
 			return true;
 		}
 
-		reportException("WebDriver is not supported: " + argument);
 		return true;
+	}
+
+	private void setDriver(String driverName, String driverProperty) {
+		if (StringHelper.stringsEqualWithNulls(driverName, "Chrome")) {
+			System.setProperty("webdriver.chrome.driver", driverProperty);
+			fDriver = new ChromeDriver();
+			return;
+		}
+
+		reportException("WebDriver is not supported: " + driverName);
+
 	}
 
 	private boolean processCmdGoToPage(String parameterName, String argument) {
@@ -116,9 +139,13 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		if (!parameterName.startsWith(CMD_GO_TO_PAGE)) {
 			return false;
 		}
-		checkWebDriver();
-		fDriver.get(argument);
+		goToPage(argument);
 		return true;
+	}
+
+	private void goToPage(String url) {
+		checkWebDriver();
+		fDriver.get(url);
 	}
 
 	private boolean processCmdSetInputById(String parameterName, String argument) {
