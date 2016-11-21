@@ -92,4 +92,16 @@ public class FormObjectToolkit {
 
 		return combo;
 	}
+
+	public Button createGridCheckBox(Composite parentComposite, String checkboxLabel, SelectionListener selectionListener) {
+		Button checkbox = fFormToolkit.createButton(parentComposite, checkboxLabel, SWT.CHECK);
+		GridData checkboxGridData = new GridData(SWT.FILL,  SWT.CENTER, true, false);
+		checkbox.setLayoutData(checkboxGridData);
+
+		if (selectionListener != null) {
+			checkbox.addSelectionListener(selectionListener);
+		}
+
+		return checkbox;
+	}
 }

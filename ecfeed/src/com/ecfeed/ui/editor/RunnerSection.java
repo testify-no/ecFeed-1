@@ -11,12 +11,14 @@
 package com.ecfeed.ui.editor;
 
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.NodePropertyDefs;
+import com.ecfeed.core.utils.BooleanHelper;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.MethodInterface;
@@ -26,10 +28,12 @@ public class RunnerSection extends BasicSection  {
 	MethodInterface fMethodInterface;
 	private FormObjectToolkit fFormObjectToolkit;
 	private Combo fRunnerCombo;
+	private Button fMapBrowserCheckbox;
 	private Combo fBrowserCombo;
 	private Text fStartUrlText;
 
 	private final NodePropertyDefs.PropertyId fRunnerPropertyId = NodePropertyDefs.PropertyId.METHOD_RUNNER;
+	private final NodePropertyDefs.PropertyId fMapBrowserPropertyId = NodePropertyDefs.PropertyId.MAP_BROWSER_TO_PARAM;
 	private final NodePropertyDefs.PropertyId fBrowserPropertyId = NodePropertyDefs.PropertyId.WEB_BROWSER;
 	private final NodePropertyDefs.PropertyId fStartUrlPropertyId = NodePropertyDefs.PropertyId.START_URL;
 
@@ -54,14 +58,17 @@ public class RunnerSection extends BasicSection  {
 		fRunnerCombo.setItems(NodePropertyDefs.getPropertyPossibleValues(fRunnerPropertyId)); 
 		fRunnerCombo.setText(NodePropertyDefs.getPropertyDefaultValue(fRunnerPropertyId));
 
+		fFormObjectToolkit.createLabel(gridComposite, " ");
+		fMapBrowserCheckbox = 
+				fFormObjectToolkit.createGridCheckBox(
+						gridComposite, "Map map browser to method parameter", new SetMapBrowserListener());
+
 		fFormObjectToolkit.createLabel(gridComposite, "Browser");
 		fBrowserCombo = fFormObjectToolkit.createGridCombo(gridComposite, new BrowserChangedAdapter());
 		fBrowserCombo.setItems(NodePropertyDefs.getPropertyPossibleValues(fBrowserPropertyId)); 
 
 		fFormObjectToolkit.createLabel(gridComposite, "URL");
 		fStartUrlText = fFormObjectToolkit.createGridText(gridComposite, new UrlChangedAdapter());
-
-
 	}
 
 	public void refresh() {
@@ -71,6 +78,10 @@ public class RunnerSection extends BasicSection  {
 		if (runner != null) {
 			fRunnerCombo.setText(runner);
 		}
+
+		String mapBrowserToParam = methodNode.getPropertyValue(fMapBrowserPropertyId);
+		setCheckbox(fMapBrowserCheckbox, mapBrowserToParam);
+		fBrowserCombo.setEnabled(!BooleanHelper.parseBoolean(mapBrowserToParam));
 
 		String browser = methodNode.getPropertyValue(fBrowserPropertyId);
 		if (browser != null) {
@@ -83,12 +94,31 @@ public class RunnerSection extends BasicSection  {
 		}
 	}
 
+	private void setCheckbox(Button checkBox, String value) {
+		if (value == null) {
+			checkBox.setSelection(false);
+			return;
+		}
+
+		boolean isSelected = BooleanHelper.parseBoolean(value);
+		checkBox.setSelection(isSelected);
+	}
+
 	private class RunnerChangedAdapter extends AbstractSelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			fMethodInterface.setProperty(fRunnerPropertyId, fRunnerCombo.getText());
 		}
 	}
+
+	private class SetMapBrowserListener extends AbstractSelectionAdapter{
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			boolean selected = fMapBrowserCheckbox.getSelection();
+			fBrowserCombo.setEnabled(!selected);
+			fMethodInterface.setProperty(fMapBrowserPropertyId, BooleanHelper.toString(selected));
+		}
+	}	
 
 	private class BrowserChangedAdapter extends AbstractSelectionAdapter {
 		@Override

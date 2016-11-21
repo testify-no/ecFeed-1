@@ -104,7 +104,6 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		if (processCmdPageAddress(parameterName, argument)) {
 			return;
 		}
-		reportException("Invalid parameter name: " + parameterName);
 	}
 
 	private boolean processCmdSetDriver(String parameterName, String argument) {
