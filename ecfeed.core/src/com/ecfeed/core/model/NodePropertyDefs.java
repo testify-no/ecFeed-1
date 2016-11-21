@@ -48,8 +48,13 @@ public class NodePropertyDefs {
 	private static final String JAVA_RUNNER = "Java Runner";
 	private static final String WEB_DRIVER = "Web Driver";
 
+	private static final String FALSE_VALUE = "false";
+	private static final String TRUE_VALUE = "true";
+
+	private static String[] falseTrueArray = new String[]{FALSE_VALUE, TRUE_VALUE};
+
 	static PropertyDef runOnAndroid = 
-			new PropertyDef("runOnAndroid", JavaTypeHelper.TYPE_NAME_BOOLEAN, "false", new String[]{"false", "true"});
+			new PropertyDef("runOnAndroid", JavaTypeHelper.TYPE_NAME_BOOLEAN, FALSE_VALUE, falseTrueArray);
 
 	static PropertyDef androidRunner = 
 			new PropertyDef("androidRunner", JavaTypeHelper.TYPE_NAME_STRING, null, null);	
@@ -59,13 +64,16 @@ public class NodePropertyDefs {
 					"methodRunner", JavaTypeHelper.TYPE_NAME_STRING, JAVA_RUNNER,
 					new String[]{JAVA_RUNNER, WEB_DRIVER});
 
-	static PropertyDef mapBrowserToParam = 
-			new PropertyDef("mapBrowserToParam", JavaTypeHelper.TYPE_NAME_BOOLEAN, "false", new String[]{"false", "true"});
+	static PropertyDef mapBrowserToParam =  
+			new PropertyDef("mapBrowserToParam", JavaTypeHelper.TYPE_NAME_BOOLEAN, FALSE_VALUE, falseTrueArray);
 
 	static PropertyDef webBrowser = 
 			new PropertyDef(
 					"webBrowser", JavaTypeHelper.TYPE_NAME_STRING, null, 
 					new String[]{"Chrome", "Firefox", "IExplorer"});
+
+	static PropertyDef mapStartUrlToParam = 
+			new PropertyDef("mapStartUrlToParam", JavaTypeHelper.TYPE_NAME_BOOLEAN, FALSE_VALUE, falseTrueArray);
 
 	static PropertyDef startUrl = new PropertyDef("startUrl", JavaTypeHelper.TYPE_NAME_STRING, null, null);
 
@@ -76,7 +84,8 @@ public class NodePropertyDefs {
 		METHOD_RUNNER(2),
 		MAP_BROWSER_TO_PARAM(3),
 		WEB_BROWSER(4),
-		START_URL(5);
+		MAP_START_URL_TO_PARAM(5),
+		START_URL(6);
 
 		private final int fIndex; 
 
@@ -96,6 +105,7 @@ public class NodePropertyDefs {
 		methodRunner,
 		mapBrowserToParam,
 		webBrowser,
+		mapStartUrlToParam,
 		startUrl				
 		};
 
