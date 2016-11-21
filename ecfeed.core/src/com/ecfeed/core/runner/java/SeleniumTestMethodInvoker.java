@@ -67,8 +67,10 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 
 	private void processStartupProperties() {
 		String webBrowser = fMethodNode.getPropertyValue(NodePropertyDefs.PropertyId.WEB_BROWSER);
+		String browserDriver = fMethodNode.getPropertyValue(NodePropertyDefs.PropertyId.BROWSER_DRIVER);
+
 		if (!StringHelper.isNullOrEmpty(webBrowser)) {
-			setDriver(webBrowser, "/home/marekq/Selenium WebDriver/ChromeDriver/chromedriver"); // TODO
+			setDriver(webBrowser, browserDriver);
 		}
 
 		String startupPage = fMethodNode.getPropertyValue(NodePropertyDefs.PropertyId.START_URL);

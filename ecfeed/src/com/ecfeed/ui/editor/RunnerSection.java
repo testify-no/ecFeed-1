@@ -31,12 +31,14 @@ public class RunnerSection extends BasicSection  {
 	private Combo fRunnerCombo;
 	private Button fMapBrowserCheckbox;
 	private Combo fBrowserCombo;
+	private Text fBrowserDriverText;
 	private Button fMapStartUrlCheckbox;
 	private Text fStartUrlText;
 
 	private final NodePropertyDefs.PropertyId fRunnerPropertyId = NodePropertyDefs.PropertyId.METHOD_RUNNER;
 	private final NodePropertyDefs.PropertyId fMapBrowserPropertyId = NodePropertyDefs.PropertyId.MAP_BROWSER_TO_PARAM;
 	private final NodePropertyDefs.PropertyId fBrowserPropertyId = NodePropertyDefs.PropertyId.WEB_BROWSER;
+	private final NodePropertyDefs.PropertyId fBrowserDriverPropertyId = NodePropertyDefs.PropertyId.BROWSER_DRIVER;
 	private final NodePropertyDefs.PropertyId fMapStartUrlPropertyId = NodePropertyDefs.PropertyId.MAP_START_URL_TO_PARAM;
 	private final NodePropertyDefs.PropertyId fStartUrlPropertyId = NodePropertyDefs.PropertyId.START_URL;
 
@@ -58,6 +60,7 @@ public class RunnerSection extends BasicSection  {
 		createRunnerCombo(gridComposite);
 		createMapBrowserCheckBox(gridComposite);
 		createBrowserCombo(gridComposite);
+		createBrowserDriverPathText(gridComposite);
 		createMapStartUrlCheckBox(gridComposite);		
 		createUrlText(gridComposite);
 	}
@@ -82,6 +85,11 @@ public class RunnerSection extends BasicSection  {
 		fBrowserCombo.setItems(NodePropertyDefs.getPropertyPossibleValues(fBrowserPropertyId)); 
 	}
 
+	private void createBrowserDriverPathText(Composite gridComposite) {
+		fFormObjectToolkit.createLabel(gridComposite, "Driver  ");
+		fBrowserDriverText = fFormObjectToolkit.createGridText(gridComposite, new BrowserDriverChangedAdapter());
+	}
+
 	private void createMapStartUrlCheckBox(Composite gridComposite) {
 		fFormObjectToolkit.createLabel(gridComposite, " ");
 		fMapStartUrlCheckbox = 
@@ -99,10 +107,11 @@ public class RunnerSection extends BasicSection  {
 
 		refreshComboByProperty(fRunnerPropertyId, fRunnerCombo, methodNode);
 
-		refreshCheckboxByProperty(fMapBrowserPropertyId, fMapBrowserCheckbox, methodNode, fBrowserCombo);
+		refreshCheckboxByProperty(fMapBrowserPropertyId, fMapBrowserCheckbox, methodNode, new Control[]{fBrowserCombo, fBrowserDriverText});
 		refreshComboByProperty(fBrowserPropertyId, fBrowserCombo, methodNode);
+		refreshTextByProperty(fBrowserDriverPropertyId, fBrowserDriverText, methodNode);
 
-		refreshCheckboxByProperty(fMapStartUrlPropertyId, fMapStartUrlCheckbox, methodNode, fStartUrlText);
+		refreshCheckboxByProperty(fMapStartUrlPropertyId, fMapStartUrlCheckbox, methodNode, new Control[]{fStartUrlText});
 		refreshTextByProperty(fStartUrlPropertyId, fStartUrlText, methodNode);
 	}
 
@@ -121,10 +130,13 @@ public class RunnerSection extends BasicSection  {
 	}	
 
 	private void refreshCheckboxByProperty(
-			NodePropertyDefs.PropertyId propertyId, Button checkBox, MethodNode methodNode, Control additionalControl) {
+			NodePropertyDefs.PropertyId propertyId, Button checkBox, MethodNode methodNode, Control[] additionalControls) {
 		String mapBrowserToParam = methodNode.getPropertyValue(propertyId);
 		setCheckbox(checkBox, mapBrowserToParam);
-		additionalControl.setEnabled(!BooleanHelper.parseBoolean(mapBrowserToParam));
+
+		for (Control control : additionalControls) {
+			control.setEnabled(!BooleanHelper.parseBoolean(mapBrowserToParam));
+		}
 	}
 
 	private void setCheckbox(Button checkBox, String value) {
@@ -168,6 +180,13 @@ public class RunnerSection extends BasicSection  {
 			fMethodInterface.setProperty(fBrowserPropertyId, fBrowserCombo.getText());
 		}
 	}
+
+	private class BrowserDriverChangedAdapter extends AbstractSelectionAdapter {
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			fMethodInterface.setProperty(fBrowserDriverPropertyId, fBrowserDriverText.getText());
+		}
+	}	
 
 	private class UrlChangedAdapter extends AbstractSelectionAdapter {
 		@Override

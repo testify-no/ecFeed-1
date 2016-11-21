@@ -218,6 +218,7 @@ public abstract class XomAnalyser {
 		parseMethodProperty(NodePropertyDefs.PropertyId.METHOD_RUNNER, methodElement, targetMethodNode);
 		parseMethodProperty(NodePropertyDefs.PropertyId.MAP_BROWSER_TO_PARAM, methodElement, targetMethodNode);
 		parseMethodProperty(NodePropertyDefs.PropertyId.WEB_BROWSER, methodElement, targetMethodNode);
+		parseMethodProperty(NodePropertyDefs.PropertyId.BROWSER_DRIVER, methodElement, targetMethodNode);
 		parseMethodProperty(NodePropertyDefs.PropertyId.MAP_START_URL_TO_PARAM, methodElement, targetMethodNode);
 		parseMethodProperty(NodePropertyDefs.PropertyId.START_URL, methodElement, targetMethodNode);
 	}

@@ -203,11 +203,12 @@ public abstract class XomBuilder implements IModelVisitor, IStatementVisitor {
 	}
 
 	private void addMethodProperties(MethodNode methodNode, Element targetElement) {
-		addMethodProperty(NodePropertyDefs.PropertyId.METHOD_RUNNER,  methodNode, targetElement);
+		addMethodProperty(NodePropertyDefs.PropertyId.METHOD_RUNNER, methodNode, targetElement);
 		addMethodProperty(NodePropertyDefs.PropertyId.MAP_BROWSER_TO_PARAM,  methodNode, targetElement);
-		addMethodProperty(NodePropertyDefs.PropertyId.WEB_BROWSER,  methodNode, targetElement);
-		addMethodProperty(NodePropertyDefs.PropertyId.MAP_START_URL_TO_PARAM,  methodNode, targetElement);
-		addMethodProperty(NodePropertyDefs.PropertyId.START_URL,  methodNode, targetElement);
+		addMethodProperty(NodePropertyDefs.PropertyId.WEB_BROWSER, methodNode, targetElement);
+		addMethodProperty(NodePropertyDefs.PropertyId.BROWSER_DRIVER, methodNode, targetElement);
+		addMethodProperty(NodePropertyDefs.PropertyId.MAP_START_URL_TO_PARAM, methodNode, targetElement);
+		addMethodProperty(NodePropertyDefs.PropertyId.START_URL, methodNode, targetElement);
 	}
 
 	private void addMethodProperty(NodePropertyDefs.PropertyId propertyId,  MethodNode methodNode, Element targetElement) {

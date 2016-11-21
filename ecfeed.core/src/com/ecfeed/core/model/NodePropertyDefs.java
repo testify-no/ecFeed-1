@@ -72,6 +72,8 @@ public class NodePropertyDefs {
 					"webBrowser", JavaTypeHelper.TYPE_NAME_STRING, null, 
 					new String[]{"Chrome", "Firefox", "IExplorer"});
 
+	static PropertyDef browserDriver = new PropertyDef("browserDriver", JavaTypeHelper.TYPE_NAME_STRING, null, null);	
+
 	static PropertyDef mapStartUrlToParam = 
 			new PropertyDef("mapStartUrlToParam", JavaTypeHelper.TYPE_NAME_BOOLEAN, FALSE_VALUE, falseTrueArray);
 
@@ -84,8 +86,9 @@ public class NodePropertyDefs {
 		METHOD_RUNNER(2),
 		MAP_BROWSER_TO_PARAM(3),
 		WEB_BROWSER(4),
-		MAP_START_URL_TO_PARAM(5),
-		START_URL(6);
+		BROWSER_DRIVER(5),
+		MAP_START_URL_TO_PARAM(6),
+		START_URL(7);
 
 		private final int fIndex; 
 
@@ -105,6 +108,7 @@ public class NodePropertyDefs {
 		methodRunner,
 		mapBrowserToParam,
 		webBrowser,
+		browserDriver,
 		mapStartUrlToParam,
 		startUrl				
 		};
