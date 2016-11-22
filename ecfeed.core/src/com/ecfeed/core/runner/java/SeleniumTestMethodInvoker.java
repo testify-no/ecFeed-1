@@ -66,9 +66,13 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 	}
 
 	private void processStartupProperties() {
-		String webBrowser = fMethodNode.getPropertyValue(NodePropertyDefs.PropertyId.WEB_BROWSER);
-		String browserDriver = fMethodNode.getPropertyValue(NodePropertyDefs.PropertyId.BROWSER_DRIVER);
 
+		String browserDriver = decodeDriverPath(fMethodNode.getPropertyValue(NodePropertyDefs.PropertyId.BROWSER_DRIVER));
+		if (StringHelper.isNullOrEmpty(browserDriver)) {
+			return;
+		}
+
+		String webBrowser = fMethodNode.getPropertyValue(NodePropertyDefs.PropertyId.WEB_BROWSER);
 		if (!StringHelper.isNullOrEmpty(webBrowser)) {
 			setDriver(webBrowser, browserDriver);
 		}
@@ -77,6 +81,23 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		if (!StringHelper.isNullOrEmpty(startupPage)) {
 			goToPage(startupPage);
 		}
+	}
+
+	private String decodeDriverPath(String driverPath) {
+
+		String envWithBoundaries = StringHelper.getSubstringWithBoundaries(driverPath, '%');
+		if (envWithBoundaries == null) {
+			return driverPath;
+		}
+
+		String env = StringHelper.removeStrgAtEnd("%", StringHelper.removePrefix("%", envWithBoundaries));
+
+		String path = System.getenv(env);
+		if (path == null) {
+			return null;
+		}
+
+		return driverPath.replace(envWithBoundaries, path);
 	}
 
 	private void processArguments(Object[] arguments, String argumentsDescription) {

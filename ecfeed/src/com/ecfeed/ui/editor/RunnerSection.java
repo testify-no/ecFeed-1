@@ -86,7 +86,7 @@ public class RunnerSection extends BasicSection  {
 	}
 
 	private void createBrowserDriverPathText(Composite gridComposite) {
-		fFormObjectToolkit.createLabel(gridComposite, "Driver  ");
+		fFormObjectToolkit.createLabel(gridComposite, "Web driver  ");
 		fBrowserDriverText = fFormObjectToolkit.createGridText(gridComposite, new BrowserDriverChangedAdapter());
 	}
 
