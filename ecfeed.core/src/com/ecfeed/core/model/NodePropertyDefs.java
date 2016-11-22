@@ -46,7 +46,7 @@ public class NodePropertyDefs {
 	}
 
 	private static final String JAVA_RUNNER = "Java Runner";
-	private static final String WEB_DRIVER = "Web Driver";
+	private static final String WEB_DRIVER = "Web Runner";
 
 	private static final String FALSE_VALUE = "false";
 	private static final String TRUE_VALUE = "true";
@@ -145,6 +145,13 @@ public class NodePropertyDefs {
 		}
 		return false;
 	}
+
+	public static boolean isJavaRunnerMethod(String value) {
+		if (value.equals(JAVA_RUNNER)) {
+			return true;
+		}
+		return false;
+	}	
 
 	public static String browserNameChrome() {
 		return BROWSER_CHROME;

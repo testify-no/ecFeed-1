@@ -34,6 +34,7 @@ public class RunnerSection extends BasicSection  {
 	private Text fBrowserDriverText;
 	private Button fMapStartUrlCheckbox;
 	private Text fStartUrlText;
+	private Composite fWebDriverPropertiesComposite;
 
 	private final NodePropertyDefs.PropertyId fRunnerPropertyId = NodePropertyDefs.PropertyId.METHOD_RUNNER;
 	private final NodePropertyDefs.PropertyId fMapBrowserPropertyId = NodePropertyDefs.PropertyId.MAP_BROWSER_TO_PARAM;
@@ -54,15 +55,22 @@ public class RunnerSection extends BasicSection  {
 		setText("Runner");
 
 		Composite clientComposite = getClientComposite();
-		Composite gridComposite = fFormObjectToolkit.createGridComposite(clientComposite, 2);
-		fFormObjectToolkit.paintBorders(gridComposite);
 
-		createRunnerCombo(gridComposite);
-		createMapBrowserCheckBox(gridComposite);
-		createBrowserCombo(gridComposite);
-		createBrowserDriverPathText(gridComposite);
-		createMapStartUrlCheckBox(gridComposite);		
-		createUrlText(gridComposite);
+		Composite gridComposite1 = fFormObjectToolkit.createGridComposite(clientComposite, 2);
+		fFormObjectToolkit.paintBorders(gridComposite1);
+		createRunnerCombo(gridComposite1);
+
+		createWebDriverPropertiesComposite(clientComposite);
+	}
+
+	private void createWebDriverPropertiesComposite(Composite parentComposite) {
+		fWebDriverPropertiesComposite = fFormObjectToolkit.createGridComposite(parentComposite, 2);
+		fFormObjectToolkit.paintBorders(fWebDriverPropertiesComposite);
+		createMapBrowserCheckBox(fWebDriverPropertiesComposite);
+		createBrowserCombo(fWebDriverPropertiesComposite);
+		createBrowserDriverPathText(fWebDriverPropertiesComposite);
+		createMapStartUrlCheckBox(fWebDriverPropertiesComposite);		
+		createUrlText(fWebDriverPropertiesComposite);
 	}
 
 	private void createRunnerCombo(Composite gridComposite) {
@@ -107,12 +115,20 @@ public class RunnerSection extends BasicSection  {
 
 		refreshComboByProperty(fRunnerPropertyId, fRunnerCombo, methodNode);
 
-		refreshCheckboxByProperty(fMapBrowserPropertyId, fMapBrowserCheckbox, methodNode, new Control[]{fBrowserCombo, fBrowserDriverText});
-		refreshComboByProperty(fBrowserPropertyId, fBrowserCombo, methodNode);
-		refreshTextByProperty(fBrowserDriverPropertyId, fBrowserDriverText, methodNode);
+		String runner = methodNode.getPropertyValue(fRunnerPropertyId);
 
-		refreshCheckboxByProperty(fMapStartUrlPropertyId, fMapStartUrlCheckbox, methodNode, new Control[]{fStartUrlText});
-		refreshTextByProperty(fStartUrlPropertyId, fStartUrlText, methodNode);
+		if (NodePropertyDefs.isJavaRunnerMethod(runner)) {
+			FormObjectToolkit.setVisibilityOfGridComposite(fWebDriverPropertiesComposite, false);
+		} else {
+			FormObjectToolkit.setVisibilityOfGridComposite(fWebDriverPropertiesComposite, true);
+
+			refreshCheckboxByProperty(fMapBrowserPropertyId, fMapBrowserCheckbox, methodNode, new Control[]{fBrowserCombo, fBrowserDriverText});
+			refreshComboByProperty(fBrowserPropertyId, fBrowserCombo, methodNode);
+			refreshTextByProperty(fBrowserDriverPropertyId, fBrowserDriverText, methodNode);
+
+			refreshCheckboxByProperty(fMapStartUrlPropertyId, fMapStartUrlCheckbox, methodNode, new Control[]{fStartUrlText});
+			refreshTextByProperty(fStartUrlPropertyId, fStartUrlText, methodNode);
+		}
 	}
 
 	private void refreshComboByProperty(NodePropertyDefs.PropertyId propertyId, Combo combo, MethodNode methodNode) {
