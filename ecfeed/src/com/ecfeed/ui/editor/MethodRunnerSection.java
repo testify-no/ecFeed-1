@@ -24,7 +24,7 @@ import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.MethodInterface;
 
-public class RunnerSection extends BasicSection  {
+public class MethodRunnerSection extends BasicSection  {
 
 	MethodInterface fMethodInterface;
 	private FormObjectToolkit fFormObjectToolkit;
@@ -43,7 +43,7 @@ public class RunnerSection extends BasicSection  {
 	private final NodePropertyDefs.PropertyId fMapStartUrlPropertyId = NodePropertyDefs.PropertyId.MAP_START_URL_TO_PARAM;
 	private final NodePropertyDefs.PropertyId fStartUrlPropertyId = NodePropertyDefs.PropertyId.START_URL;
 
-	public RunnerSection(ISectionContext sectionContext, 
+	public MethodRunnerSection(ISectionContext sectionContext, 
 			IModelUpdateContext updateContext,
 			MethodInterface methodIf,
 			IFileInfoProvider fileInfoProvider) {
