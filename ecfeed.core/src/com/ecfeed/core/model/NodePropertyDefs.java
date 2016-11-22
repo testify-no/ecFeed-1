@@ -85,16 +85,24 @@ public class NodePropertyDefs {
 
 	static PropertyDef startUrl = new PropertyDef("startUrl", JavaTypeHelper.TYPE_NAME_STRING, null, null);
 
+	static PropertyDef parameterType = 
+			new PropertyDef(
+					"parameterType", JavaTypeHelper.TYPE_NAME_STRING, "XXX",
+					new String[]{"XXX", "YYY"});
+
 
 	public enum PropertyId {
 		RUN_ON_ANDROID(0),
 		ANDROID_RUNNER(1),
+
 		METHOD_RUNNER(2),
 		MAP_BROWSER_TO_PARAM(3),
 		WEB_BROWSER(4),
 		BROWSER_DRIVER(5),
 		MAP_START_URL_TO_PARAM(6),
-		START_URL(7);
+		START_URL(7),
+
+		PARAMETER_TYPE(8);
 
 		private final int fIndex; 
 
@@ -116,7 +124,8 @@ public class NodePropertyDefs {
 		webBrowser,
 		browserDriver,
 		mapStartUrlToParam,
-		startUrl				
+		startUrl,
+		parameterType
 		};
 
 	public static String getPropertyName(PropertyId propertyId) {
