@@ -51,6 +51,12 @@ public class NodePropertyDefs {
 	private static final String FALSE_VALUE = "false";
 	private static final String TRUE_VALUE = "true";
 
+	private static final String BROWSER_CHROME = "Chrome";
+	private static final String BROWSER_FIREFOX = "Firefox";
+	private static final String BROWSER_IEXPLORER = "IExplorer";
+	private static final String BROWSER_OPERA = "Opera";
+	private static final String BROWSER_SAFARI = "Safari";
+
 	private static String[] falseTrueArray = new String[]{FALSE_VALUE, TRUE_VALUE};
 
 	static PropertyDef runOnAndroid = 
@@ -70,7 +76,7 @@ public class NodePropertyDefs {
 	static PropertyDef webBrowser = 
 			new PropertyDef(
 					"webBrowser", JavaTypeHelper.TYPE_NAME_STRING, null, 
-					new String[]{"Chrome", "Firefox", "IExplorer"});
+					new String[]{BROWSER_CHROME, BROWSER_FIREFOX, BROWSER_IEXPLORER, BROWSER_OPERA, BROWSER_SAFARI});
 
 	static PropertyDef browserDriver = new PropertyDef("browserDriver", JavaTypeHelper.TYPE_NAME_STRING, null, null);	
 
@@ -139,4 +145,25 @@ public class NodePropertyDefs {
 		}
 		return false;
 	}
+
+	public static String browserNameChrome() {
+		return BROWSER_CHROME;
+	}
+
+	public static String browserNameFirefox() {
+		return BROWSER_FIREFOX;
+	}
+
+	public static String browserNameIExplorer() {
+		return BROWSER_IEXPLORER;
+	}
+
+	public static String browserNameOpera() {
+		return BROWSER_OPERA;
+	}	
+
+	public static String browserNameSafari() {
+		return BROWSER_SAFARI;
+	}	
+
 }

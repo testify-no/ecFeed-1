@@ -17,6 +17,10 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.opera.OperaDriver;
+import org.openqa.selenium.safari.SafariDriver;
 
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
@@ -145,14 +149,37 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 	}
 
 	private void setDriver(String driverName, String driverProperty) {
-		if (StringHelper.stringsEqualWithNulls(driverName, "Chrome")) {
+		if (driverName == null) {
+			reportException("WebDriver name is empty.");
+			return;
+		}
+		if (driverName.equals(NodePropertyDefs.browserNameChrome())) {
 			System.setProperty("webdriver.chrome.driver", driverProperty);
 			fDriver = new ChromeDriver();
 			return;
 		}
+		if (driverName.equals(NodePropertyDefs.browserNameFirefox())) {
+			System.setProperty("webdriver.firefox.driver", driverProperty);
+			fDriver = new FirefoxDriver();
+			return;
+		}		
+		if (driverName.equals(NodePropertyDefs.browserNameIExplorer())) {
+			System.setProperty("webdriver.ie.driver", driverProperty);
+			fDriver = new InternetExplorerDriver();
+			return;
+		}		
+		if (driverName.equals(NodePropertyDefs.browserNameOpera())) {
+			System.setProperty("webdriver.opera.driver", driverProperty);
+			fDriver = new OperaDriver();
+			return;
+		}
+		if (driverName.equals(NodePropertyDefs.browserNameSafari())) {
+			System.setProperty("webdriver.safari.driver", driverProperty);
+			fDriver = new SafariDriver();
+			return;
+		}		
 
 		reportException("WebDriver is not supported: " + driverName);
-
 	}
 
 	private boolean processCmdGoToPage(String parameterName, String argument) {
