@@ -35,7 +35,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	private Button fExportOnlineButton;
 	private Button fBrowseButton;
 	private Combo fRunnerCombo;
-	private MethodRunnerSection fRunnerSection;
+	private WebRunnerSection fRunnerSection;
 	private MethodParametersViewer fParemetersSection;
 	private ConstraintsListViewer fConstraintsSection;
 	private TestCasesViewer fTestCasesSection;
@@ -176,7 +176,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	}	
 
 	private void createRunnerSection(IFileInfoProvider fileInfoProvider) {
-		fRunnerSection = new MethodRunnerSection(this, this, fMethodInterface, fileInfoProvider);
+		fRunnerSection = new WebRunnerSection(this, this, fMethodInterface, fileInfoProvider);
 	}
 
 	@Override
