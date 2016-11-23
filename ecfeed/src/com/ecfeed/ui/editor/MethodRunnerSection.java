@@ -28,15 +28,12 @@ public class MethodRunnerSection extends BasicSection  {
 
 	MethodInterface fMethodInterface;
 	private FormObjectToolkit fFormObjectToolkit;
-	private Combo fRunnerCombo;
 	private Button fMapBrowserCheckbox;
 	private Combo fBrowserCombo;
 	private Text fBrowserDriverText;
 	private Button fMapStartUrlCheckbox;
 	private Text fStartUrlText;
-	private Composite fWebDriverPropertiesComposite;
 
-	private final NodePropertyDefs.PropertyId fRunnerPropertyId = NodePropertyDefs.PropertyId.METHOD_RUNNER;
 	private final NodePropertyDefs.PropertyId fMapBrowserPropertyId = NodePropertyDefs.PropertyId.MAP_BROWSER_TO_PARAM;
 	private final NodePropertyDefs.PropertyId fBrowserPropertyId = NodePropertyDefs.PropertyId.WEB_BROWSER;
 	private final NodePropertyDefs.PropertyId fBrowserDriverPropertyId = NodePropertyDefs.PropertyId.BROWSER_DRIVER;
@@ -55,29 +52,18 @@ public class MethodRunnerSection extends BasicSection  {
 		setText("Runner");
 
 		Composite clientComposite = getClientComposite();
-
-		Composite gridComposite1 = fFormObjectToolkit.createGridComposite(clientComposite, 2);
-		fFormObjectToolkit.paintBorders(gridComposite1);
-		createRunnerCombo(gridComposite1);
-
+		fFormObjectToolkit.paintBorders(clientComposite);
 		createWebDriverPropertiesComposite(clientComposite);
 	}
 
 	private void createWebDriverPropertiesComposite(Composite parentComposite) {
-		fWebDriverPropertiesComposite = fFormObjectToolkit.createGridComposite(parentComposite, 2);
+		Composite fWebDriverPropertiesComposite = fFormObjectToolkit.createGridComposite(parentComposite, 2);
 		fFormObjectToolkit.paintBorders(fWebDriverPropertiesComposite);
 		createMapBrowserCheckBox(fWebDriverPropertiesComposite);
 		createBrowserCombo(fWebDriverPropertiesComposite);
 		createBrowserDriverPathText(fWebDriverPropertiesComposite);
 		createMapStartUrlCheckBox(fWebDriverPropertiesComposite);		
 		createUrlText(fWebDriverPropertiesComposite);
-	}
-
-	private void createRunnerCombo(Composite gridComposite) {
-		fFormObjectToolkit.createLabel(gridComposite, "Runner");
-		fRunnerCombo = fFormObjectToolkit.createGridCombo(gridComposite, new RunnerChangedAdapter());
-		fRunnerCombo.setItems(NodePropertyDefs.getPropertyPossibleValues(fRunnerPropertyId)); 
-		fRunnerCombo.setText(NodePropertyDefs.getPropertyDefaultValue(fRunnerPropertyId));
 	}
 
 	private void createMapBrowserCheckBox(Composite gridComposite) {
@@ -113,22 +99,12 @@ public class MethodRunnerSection extends BasicSection  {
 	public void refresh() {
 		MethodNode methodNode = fMethodInterface.getTarget();
 
-		refreshComboByProperty(fRunnerPropertyId, fRunnerCombo, methodNode);
+		refreshCheckboxByProperty(fMapBrowserPropertyId, fMapBrowserCheckbox, methodNode, new Control[]{fBrowserCombo, fBrowserDriverText});
+		refreshComboByProperty(fBrowserPropertyId, fBrowserCombo, methodNode);
+		refreshTextByProperty(fBrowserDriverPropertyId, fBrowserDriverText, methodNode);
 
-		String runner = methodNode.getPropertyValue(fRunnerPropertyId);
-
-		if (NodePropertyDefs.isJavaRunnerMethod(runner)) {
-			FormObjectToolkit.setVisibilityOfGridComposite(fWebDriverPropertiesComposite, false);
-		} else {
-			FormObjectToolkit.setVisibilityOfGridComposite(fWebDriverPropertiesComposite, true);
-
-			refreshCheckboxByProperty(fMapBrowserPropertyId, fMapBrowserCheckbox, methodNode, new Control[]{fBrowserCombo, fBrowserDriverText});
-			refreshComboByProperty(fBrowserPropertyId, fBrowserCombo, methodNode);
-			refreshTextByProperty(fBrowserDriverPropertyId, fBrowserDriverText, methodNode);
-
-			refreshCheckboxByProperty(fMapStartUrlPropertyId, fMapStartUrlCheckbox, methodNode, new Control[]{fStartUrlText});
-			refreshTextByProperty(fStartUrlPropertyId, fStartUrlText, methodNode);
-		}
+		refreshCheckboxByProperty(fMapStartUrlPropertyId, fMapStartUrlCheckbox, methodNode, new Control[]{fStartUrlText});
+		refreshTextByProperty(fStartUrlPropertyId, fStartUrlText, methodNode);
 	}
 
 	private void refreshComboByProperty(NodePropertyDefs.PropertyId propertyId, Combo combo, MethodNode methodNode) {
@@ -163,13 +139,6 @@ public class MethodRunnerSection extends BasicSection  {
 
 		boolean isSelected = BooleanHelper.parseBoolean(value);
 		checkBox.setSelection(isSelected);
-	}
-
-	private class RunnerChangedAdapter extends AbstractSelectionAdapter {
-		@Override
-		public void widgetSelected(SelectionEvent e) {
-			fMethodInterface.setProperty(fRunnerPropertyId, fRunnerCombo.getText());
-		}
 	}
 
 	private class SetMapBrowserListener extends AbstractSelectionAdapter{
