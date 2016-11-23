@@ -22,7 +22,7 @@ public class SeleniumHelper {
 			return false;
 		}
 
-		String value = methodNode.getPropertyValue(NodePropertyDefs.PropertyId.METHOD_RUNNER);
+		String value = methodNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_METHOD_RUNNER);
 
 		return NodePropertyDefs.isSeleniumRunnerMethod(value);
 	}	

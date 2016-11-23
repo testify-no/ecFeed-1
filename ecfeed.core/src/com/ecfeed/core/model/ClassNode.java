@@ -72,15 +72,15 @@ public class ClassNode extends GlobalParametersParentNode {
 	}
 
 	public String getAndroidRunner() {
-		return getPropertyValue(NodePropertyDefs.PropertyId.ANDROID_RUNNER);
+		return getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_ANDROID_RUNNER);
 	}
 
 	public void setAndroidRunner(String androidRunner) {
-		setPropertyValue(NodePropertyDefs.PropertyId.ANDROID_RUNNER, androidRunner);
+		setPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_ANDROID_RUNNER, androidRunner);
 	}	
 
 	public boolean getRunOnAndroid() {
-		String value = getPropertyValue(NodePropertyDefs.PropertyId.RUN_ON_ANDROID);
+		String value = getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_RUN_ON_ANDROID);
 
 		if (value == null) {
 			return false;
@@ -90,7 +90,7 @@ public class ClassNode extends GlobalParametersParentNode {
 	}
 
 	public void setRunOnAndroid(boolean runOnAndroid) {
-		setPropertyValue(NodePropertyDefs.PropertyId.RUN_ON_ANDROID, BooleanHelper.toString(runOnAndroid));
+		setPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_RUN_ON_ANDROID, BooleanHelper.toString(runOnAndroid));
 	}	
 
 	public boolean addMethod(MethodNode method) {

@@ -84,7 +84,7 @@ public class AbstractNodeTest{
 		AbstractNode node = new AbstractNodeImpl("name");
 		assertEquals(0, node.getPropertyCount());
 
-		NodePropertyDefs.PropertyId propertyId = NodePropertyDefs.PropertyId.METHOD_RUNNER;
+		NodePropertyDefs.PropertyId propertyId = NodePropertyDefs.PropertyId.PROPERTY_METHOD_RUNNER;
 
 		node.setPropertyValue(propertyId, "Value");
 		assertEquals(1, node.getPropertyCount());

@@ -34,11 +34,11 @@ public class WebRunnerSection extends BasicSection  {
 	private Button fMapStartUrlCheckbox;
 	private Text fStartUrlText;
 
-	private final NodePropertyDefs.PropertyId fMapBrowserPropertyId = NodePropertyDefs.PropertyId.MAP_BROWSER_TO_PARAM;
-	private final NodePropertyDefs.PropertyId fBrowserPropertyId = NodePropertyDefs.PropertyId.WEB_BROWSER;
-	private final NodePropertyDefs.PropertyId fBrowserDriverPropertyId = NodePropertyDefs.PropertyId.BROWSER_DRIVER;
-	private final NodePropertyDefs.PropertyId fMapStartUrlPropertyId = NodePropertyDefs.PropertyId.MAP_START_URL_TO_PARAM;
-	private final NodePropertyDefs.PropertyId fStartUrlPropertyId = NodePropertyDefs.PropertyId.START_URL;
+	private final NodePropertyDefs.PropertyId fMapBrowserPropertyId = NodePropertyDefs.PropertyId.PROPERTY_MAP_BROWSER_TO_PARAM;
+	private final NodePropertyDefs.PropertyId fBrowserPropertyId = NodePropertyDefs.PropertyId.PROPERTY_WEB_BROWSER;
+	private final NodePropertyDefs.PropertyId fBrowserDriverPropertyId = NodePropertyDefs.PropertyId.PROPERTY_BROWSER_DRIVER;
+	private final NodePropertyDefs.PropertyId fMapStartUrlPropertyId = NodePropertyDefs.PropertyId.PROPERTY_MAP_START_URL_TO_PARAM;
+	private final NodePropertyDefs.PropertyId fStartUrlPropertyId = NodePropertyDefs.PropertyId.PROPERTY_START_URL;
 
 	public WebRunnerSection(ISectionContext sectionContext, 
 			IModelUpdateContext updateContext,

@@ -43,7 +43,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	private MethodInterface fMethodInterface;
 	private JavaDocCommentsSection fCommentsSection;
 
-	private final NodePropertyDefs.PropertyId fRunnerPropertyId = NodePropertyDefs.PropertyId.METHOD_RUNNER;
+	private final NodePropertyDefs.PropertyId fRunnerPropertyId = NodePropertyDefs.PropertyId.PROPERTY_METHOD_RUNNER;
 
 	private class OnlineTestAdapter extends SelectionAdapter {
 		@Override

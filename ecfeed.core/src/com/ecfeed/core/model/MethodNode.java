@@ -34,9 +34,9 @@ public class MethodNode extends ParametersParentNode {
 	}
 
 	private void createDefaultProperties() {
-		setPropertyDefaultValue(NodePropertyDefs.PropertyId.METHOD_RUNNER);
-		setPropertyDefaultValue(NodePropertyDefs.PropertyId.MAP_BROWSER_TO_PARAM);
-		setPropertyDefaultValue(NodePropertyDefs.PropertyId.MAP_START_URL_TO_PARAM);
+		setPropertyDefaultValue(NodePropertyDefs.PropertyId.PROPERTY_METHOD_RUNNER);
+		setPropertyDefaultValue(NodePropertyDefs.PropertyId.PROPERTY_MAP_BROWSER_TO_PARAM);
+		setPropertyDefaultValue(NodePropertyDefs.PropertyId.PROPERTY_MAP_START_URL_TO_PARAM);
 	}
 
 	@Override

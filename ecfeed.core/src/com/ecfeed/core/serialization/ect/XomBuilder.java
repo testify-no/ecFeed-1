@@ -166,8 +166,8 @@ public abstract class XomBuilder implements IModelVisitor, IStatementVisitor {
 		boolean runOnAndroid = classNode.getRunOnAndroid();
 
 		appendProperty(
-				getPropertyName(NodePropertyDefs.PropertyId.RUN_ON_ANDROID),
-				getPropertyType(NodePropertyDefs.PropertyId.RUN_ON_ANDROID), 
+				getPropertyName(NodePropertyDefs.PropertyId.PROPERTY_RUN_ON_ANDROID),
+				getPropertyType(NodePropertyDefs.PropertyId.PROPERTY_RUN_ON_ANDROID), 
 				BooleanHelper.toString(runOnAndroid), targetElement);
 
 		String androidBaseRunner = classNode.getAndroidRunner();
@@ -176,8 +176,8 @@ public abstract class XomBuilder implements IModelVisitor, IStatementVisitor {
 		}
 
 		appendProperty(
-				getPropertyName(NodePropertyDefs.PropertyId.ANDROID_RUNNER), 
-				getPropertyType(NodePropertyDefs.PropertyId.ANDROID_RUNNER),  
+				getPropertyName(NodePropertyDefs.PropertyId.PROPERTY_ANDROID_RUNNER), 
+				getPropertyType(NodePropertyDefs.PropertyId.PROPERTY_ANDROID_RUNNER),  
 				androidBaseRunner, targetElement);
 	}
 
@@ -203,12 +203,12 @@ public abstract class XomBuilder implements IModelVisitor, IStatementVisitor {
 	}
 
 	private void addMethodProperties(MethodNode methodNode, Element targetElement) {
-		addMethodProperty(NodePropertyDefs.PropertyId.METHOD_RUNNER, methodNode, targetElement);
-		addMethodProperty(NodePropertyDefs.PropertyId.MAP_BROWSER_TO_PARAM,  methodNode, targetElement);
-		addMethodProperty(NodePropertyDefs.PropertyId.WEB_BROWSER, methodNode, targetElement);
-		addMethodProperty(NodePropertyDefs.PropertyId.BROWSER_DRIVER, methodNode, targetElement);
-		addMethodProperty(NodePropertyDefs.PropertyId.MAP_START_URL_TO_PARAM, methodNode, targetElement);
-		addMethodProperty(NodePropertyDefs.PropertyId.START_URL, methodNode, targetElement);
+		addMethodProperty(NodePropertyDefs.PropertyId.PROPERTY_METHOD_RUNNER, methodNode, targetElement);
+		addMethodProperty(NodePropertyDefs.PropertyId.PROPERTY_MAP_BROWSER_TO_PARAM,  methodNode, targetElement);
+		addMethodProperty(NodePropertyDefs.PropertyId.PROPERTY_WEB_BROWSER, methodNode, targetElement);
+		addMethodProperty(NodePropertyDefs.PropertyId.PROPERTY_BROWSER_DRIVER, methodNode, targetElement);
+		addMethodProperty(NodePropertyDefs.PropertyId.PROPERTY_MAP_START_URL_TO_PARAM, methodNode, targetElement);
+		addMethodProperty(NodePropertyDefs.PropertyId.PROPERTY_START_URL, methodNode, targetElement);
 	}
 
 	private void addMethodProperty(NodePropertyDefs.PropertyId propertyId,  MethodNode methodNode, Element targetElement) {

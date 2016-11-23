@@ -29,7 +29,7 @@ public class WebParameterSection extends BasicSection {
 	private Combo fFindByCombo;
 
 	private final NodePropertyDefs.PropertyId fParameterTypePropertyId = NodePropertyDefs.PropertyId.PROPERTY_PARAMETER_TYPE;
-	private final NodePropertyDefs.PropertyId fFindByPropertyId = NodePropertyDefs.PropertyId.FIND_BY;
+	private final NodePropertyDefs.PropertyId fFindByPropertyId = NodePropertyDefs.PropertyId.PROPERTY_FIND_BY;
 
 
 	public WebParameterSection(ISectionContext sectionContext, 

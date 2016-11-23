@@ -169,10 +169,10 @@ public abstract class XomAnalyser {
 			BooleanHolder runOnAndroidHolder, 
 			StringHolder androidBaseRunnerHolder) {
 
-		String runOnAndroidStr = getPropertyValue(NodePropertyDefs.PropertyId.RUN_ON_ANDROID, classElement);
+		String runOnAndroidStr = getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_RUN_ON_ANDROID, classElement);
 		runOnAndroidHolder.set(BooleanHelper.parseBoolean(runOnAndroidStr));
 
-		String androidBaseRunnerStr = getPropertyValue(NodePropertyDefs.PropertyId.ANDROID_RUNNER, classElement);
+		String androidBaseRunnerStr = getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_ANDROID_RUNNER, classElement);
 		androidBaseRunnerHolder.set(androidBaseRunnerStr);		
 	}
 
@@ -215,12 +215,12 @@ public abstract class XomAnalyser {
 	}
 
 	private void parseMethodProperties(Element methodElement, MethodNode targetMethodNode) {
-		parseMethodProperty(NodePropertyDefs.PropertyId.METHOD_RUNNER, methodElement, targetMethodNode);
-		parseMethodProperty(NodePropertyDefs.PropertyId.MAP_BROWSER_TO_PARAM, methodElement, targetMethodNode);
-		parseMethodProperty(NodePropertyDefs.PropertyId.WEB_BROWSER, methodElement, targetMethodNode);
-		parseMethodProperty(NodePropertyDefs.PropertyId.BROWSER_DRIVER, methodElement, targetMethodNode);
-		parseMethodProperty(NodePropertyDefs.PropertyId.MAP_START_URL_TO_PARAM, methodElement, targetMethodNode);
-		parseMethodProperty(NodePropertyDefs.PropertyId.START_URL, methodElement, targetMethodNode);
+		parseMethodProperty(NodePropertyDefs.PropertyId.PROPERTY_METHOD_RUNNER, methodElement, targetMethodNode);
+		parseMethodProperty(NodePropertyDefs.PropertyId.PROPERTY_MAP_BROWSER_TO_PARAM, methodElement, targetMethodNode);
+		parseMethodProperty(NodePropertyDefs.PropertyId.PROPERTY_WEB_BROWSER, methodElement, targetMethodNode);
+		parseMethodProperty(NodePropertyDefs.PropertyId.PROPERTY_BROWSER_DRIVER, methodElement, targetMethodNode);
+		parseMethodProperty(NodePropertyDefs.PropertyId.PROPERTY_MAP_START_URL_TO_PARAM, methodElement, targetMethodNode);
+		parseMethodProperty(NodePropertyDefs.PropertyId.PROPERTY_START_URL, methodElement, targetMethodNode);
 	}
 
 	private void parseMethodProperty(
