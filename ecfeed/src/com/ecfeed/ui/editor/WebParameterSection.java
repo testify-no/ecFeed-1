@@ -20,7 +20,7 @@ import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 
-public class ParameterWebSection extends BasicSection { // TODO RENAME
+public class WebParameterSection extends BasicSection {
 
 	AbstractParameterInterface fAbstractParameterInterface;
 
@@ -32,7 +32,7 @@ public class ParameterWebSection extends BasicSection { // TODO RENAME
 	private final NodePropertyDefs.PropertyId fFindByPropertyId = NodePropertyDefs.PropertyId.FIND_BY;
 
 
-	public ParameterWebSection(ISectionContext sectionContext, 
+	public WebParameterSection(ISectionContext sectionContext, 
 			IModelUpdateContext updateContext,
 			AbstractParameterInterface abstractParameterInterface,
 			IFileInfoProvider fileInfoProvider) {

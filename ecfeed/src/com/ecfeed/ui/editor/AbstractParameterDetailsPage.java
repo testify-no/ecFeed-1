@@ -34,7 +34,7 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 	private ChoicesViewer fChoicesViewer;
 	private Button fBrowseUserTypeButton;
 	@SuppressWarnings("unused")
-	private ParameterWebSection fParameterWebSection;
+	private WebParameterSection fParameterWebSection;
 	private AbstractParameterCommentsSection fCommentsSection;
 
 	private class SetNameListener extends AbstractSelectionAdapter{
@@ -79,7 +79,7 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 			addForm(fCommentsSection = getParameterCommentsSection(this, this));
 		}
 
-		fParameterWebSection = new ParameterWebSection(this, this, getParameterIf(), fFileInfoProvider);
+		fParameterWebSection = new WebParameterSection(this, this, getParameterIf(), fFileInfoProvider);
 
 		addForm(fChoicesViewer = new ChoicesViewer(this, this, fFileInfoProvider));
 
