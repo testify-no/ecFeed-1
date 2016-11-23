@@ -79,7 +79,7 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 			addForm(fCommentsSection = getParameterCommentsSection(this, this));
 		}
 
-		fParameterWebSection = new ParameterWebSection(this, this, fFileInfoProvider);
+		fParameterWebSection = new ParameterWebSection(this, this, getParameterIf(), fFileInfoProvider);
 
 		addForm(fChoicesViewer = new ChoicesViewer(this, this, fFileInfoProvider));
 

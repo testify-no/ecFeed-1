@@ -57,6 +57,8 @@ public class NodePropertyDefs {
 	private static final String BROWSER_OPERA = "Opera";
 	private static final String BROWSER_SAFARI = "Safari";
 
+	private static final String PAGE_ELEMENT = "Page element";	
+
 	private static String[] falseTrueArray = new String[]{FALSE_VALUE, TRUE_VALUE};
 
 	static PropertyDef runOnAndroid = 
@@ -87,8 +89,13 @@ public class NodePropertyDefs {
 
 	static PropertyDef parameterType = 
 			new PropertyDef(
-					"parameterType", JavaTypeHelper.TYPE_NAME_STRING, "XXX",
-					new String[]{"XXX", "YYY"});
+					"parameterType", JavaTypeHelper.TYPE_NAME_STRING, PAGE_ELEMENT,
+					new String[]{PAGE_ELEMENT, "Browser" });
+
+	static PropertyDef findBy = 
+			new PropertyDef(
+					"findPageElementBy", JavaTypeHelper.TYPE_NAME_STRING, null,
+					new String[]{ "Id", "Class name", "Tag name", "Name", "Link text", "Partial link text", "CSS selector", "Xpath" });	
 
 
 	public enum PropertyId {
@@ -102,7 +109,8 @@ public class NodePropertyDefs {
 		MAP_START_URL_TO_PARAM(6),
 		START_URL(7),
 
-		PARAMETER_TYPE(8);
+		PROPERTY_PARAMETER_TYPE(8),
+		FIND_BY(9);
 
 		private final int fIndex; 
 
@@ -125,7 +133,8 @@ public class NodePropertyDefs {
 		browserDriver,
 		mapStartUrlToParam,
 		startUrl,
-		parameterType
+		parameterType,
+		findBy
 		};
 
 	public static String getPropertyName(PropertyId propertyId) {

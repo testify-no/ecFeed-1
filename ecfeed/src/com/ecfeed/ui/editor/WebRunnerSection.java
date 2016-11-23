@@ -42,11 +42,11 @@ public class WebRunnerSection extends BasicSection  {
 
 	public WebRunnerSection(ISectionContext sectionContext, 
 			IModelUpdateContext updateContext,
-			MethodInterface methodIf,
+			MethodInterface methodInterface,
 			IFileInfoProvider fileInfoProvider) {
 		super(sectionContext, updateContext, fileInfoProvider, StyleDistributor.getSectionStyle());
 
-		fMethodInterface = methodIf;
+		fMethodInterface = methodInterface;
 		fFormObjectToolkit = new FormObjectToolkit(getToolkit());
 
 		setText("Web runner properties");
@@ -78,7 +78,7 @@ public class WebRunnerSection extends BasicSection  {
 	private void createBrowserCombo(Composite gridComposite) {
 		fFormObjectToolkit.createLabel(gridComposite, "Browser");
 		fBrowserCombo = fFormObjectToolkit.createGridCombo(gridComposite, new BrowserChangedAdapter());
-		fBrowserCombo.setItems(NodePropertyDefs.getPropertyPossibleValues(fBrowserPropertyId)); 
+		fBrowserCombo.setItems(NodePropertyDefs.getPropertyPossibleValues(fBrowserPropertyId));
 	}
 
 	private void createBrowserDriverPathText(Composite gridComposite) {
