@@ -49,7 +49,7 @@ public class WebRunnerSection extends BasicSection  {
 		fMethodInterface = methodIf;
 		fFormObjectToolkit = new FormObjectToolkit(getToolkit());
 
-		setText("Runner");
+		setText("Web runner properties");
 
 		Composite clientComposite = getClientComposite();
 		fFormObjectToolkit.paintBorders(clientComposite);
@@ -57,17 +57,19 @@ public class WebRunnerSection extends BasicSection  {
 	}
 
 	private void createWebDriverPropertiesComposite(Composite parentComposite) {
-		Composite fWebDriverPropertiesComposite = fFormObjectToolkit.createGridComposite(parentComposite, 2);
-		fFormObjectToolkit.paintBorders(fWebDriverPropertiesComposite);
-		createMapBrowserCheckBox(fWebDriverPropertiesComposite);
-		createBrowserCombo(fWebDriverPropertiesComposite);
-		createBrowserDriverPathText(fWebDriverPropertiesComposite);
-		createMapStartUrlCheckBox(fWebDriverPropertiesComposite);		
-		createUrlText(fWebDriverPropertiesComposite);
+		Composite composite = fFormObjectToolkit.createGridComposite(parentComposite, 2);
+		fFormObjectToolkit.paintBorders(composite);
+
+		createMapBrowserCheckBox(composite);
+		createBrowserCombo(composite);
+		createBrowserDriverPathText(composite);
+		createMapStartUrlCheckBox(composite);		
+		createUrlText(composite);
+		fFormObjectToolkit.createEmptyLabel(composite);
 	}
 
 	private void createMapBrowserCheckBox(Composite gridComposite) {
-		fFormObjectToolkit.createLabel(gridComposite, " ");
+		fFormObjectToolkit.createEmptyLabel(gridComposite);
 		fMapBrowserCheckbox = 
 				fFormObjectToolkit.createGridCheckBox(
 						gridComposite, "Map browser to method parameter", new SetMapBrowserListener());
@@ -85,7 +87,7 @@ public class WebRunnerSection extends BasicSection  {
 	}
 
 	private void createMapStartUrlCheckBox(Composite gridComposite) {
-		fFormObjectToolkit.createLabel(gridComposite, " ");
+		fFormObjectToolkit.createEmptyLabel(gridComposite);
 		fMapStartUrlCheckbox = 
 				fFormObjectToolkit.createGridCheckBox(
 						gridComposite, "Map start URL to method parameter", new SetMapStartUrlListener());

@@ -187,55 +187,87 @@ public class MethodDetailsPage extends BasicDetailsPage {
 			return;
 		}
 
-		MethodNode selectedMethod = (MethodNode) getSelectedElement();
-		fMethodInterface.setTarget(selectedMethod);
-
 		IFileInfoProvider fileInfoProvider = getFileInfoProvider();
+		MethodNode methodNode = (MethodNode)getSelectedElement();
+		fMethodInterface.setTarget(methodNode);
 
-		String methodRunner = selectedMethod.getPropertyValue(fRunnerPropertyId);
+		refreshMethodNameAndSignature(methodNode);
+
+		refreshRunnerCombo(methodNode);		
+		refreshRunnerSection(methodNode);
+
+		refrestTestOnlineButton(fileInfoProvider);
+		refreshExportOnlineButton(methodNode);
+
+		setInputForOtherSections(fileInfoProvider, methodNode);
+
+		refreshBrowseButton(fileInfoProvider, methodNode);
+	}
+
+	private void refreshMethodNameAndSignature(MethodNode methodNode) {
+		getMainSection().setText(JavaUtils.simplifiedToString(methodNode));
+		fMethodNameText.setText(fMethodInterface.getName());
+	}
+
+	private void refreshRunnerCombo(MethodNode methodNode) {
+		String methodRunner = methodNode.getPropertyValue(fRunnerPropertyId);
 		if (methodRunner != null) {
 			fRunnerCombo.setText(methodRunner);
 		}		
+	}
 
+	private void refreshRunnerSection(MethodNode methodNode) {
 		fRunnerSection.refresh();
 
-		String runner = selectedMethod.getPropertyValue(fRunnerPropertyId);
+		String runner = methodNode.getPropertyValue(fRunnerPropertyId);
 		if (NodePropertyDefs.isJavaRunnerMethod(runner)) {
 			fRunnerSection.setVisible(false);
 		} else {
 			fRunnerSection.setVisible(true);
 		}
+	}
 
-		EImplementationStatus methodStatus = null;
+	private void refrestTestOnlineButton(IFileInfoProvider fileInfoProvider) {
+		EImplementationStatus methodImplementationStatus = null;
 		if (fileInfoProvider.isProjectAvailable()) {
-			methodStatus = fMethodInterface.getImplementationStatus();
+			methodImplementationStatus = fMethodInterface.getImplementationStatus();
 		}
-		getMainSection().setText(JavaUtils.simplifiedToString(selectedMethod));
 
-		fTestOnlineButton.setEnabled(isTestOnlineButtonEnabled(fileInfoProvider, methodStatus));
+		fTestOnlineButton.setEnabled(isTestOnlineButtonEnabled(fileInfoProvider, methodImplementationStatus));
+	}
 
-		if (selectedMethod.getParametersCount() > 0) {
+	private void refreshExportOnlineButton(MethodNode methodNode) {
+		if (methodNode.getParametersCount() > 0) {
 			fExportOnlineButton.setEnabled(true);
 		} else {
 			fExportOnlineButton.setEnabled(false);
 		}
+	}
 
-		fParemetersSection.setInput(selectedMethod);
-		fConstraintsSection.setInput(selectedMethod);
-		fTestCasesSection.setInput(selectedMethod);
-
-		if (fileInfoProvider.isProjectAvailable()) {
-			fCommentsSection.setInput(selectedMethod);
-		}
-		fMethodNameText.setText(fMethodInterface.getName());
+	private void setInputForOtherSections(IFileInfoProvider fileInfoProvider, MethodNode methodNode) {
+		fParemetersSection.setInput(methodNode);
+		fConstraintsSection.setInput(methodNode);
+		fTestCasesSection.setInput(methodNode);
 
 		if (fileInfoProvider.isProjectAvailable()) {
-			EImplementationStatus parentStatus = fMethodInterface
-					.getImplementationStatus(selectedMethod.getClassNode());
-			fBrowseButton
-			.setEnabled((parentStatus == EImplementationStatus.IMPLEMENTED || parentStatus == EImplementationStatus.PARTIALLY_IMPLEMENTED)
-					&& fMethodInterface.getCompatibleMethods().isEmpty() == false);
+			fCommentsSection.setInput(methodNode);
 		}
+	}
+
+	private void refreshBrowseButton(IFileInfoProvider fileInfoProvider, MethodNode methodNode) {
+		if (!fileInfoProvider.isProjectAvailable()) {
+			return;
+		}
+
+		EImplementationStatus parentStatus = fMethodInterface.getImplementationStatus(methodNode.getClassNode());
+
+		boolean parentImplemented = 
+				parentStatus == EImplementationStatus.IMPLEMENTED
+				|| parentStatus == EImplementationStatus.PARTIALLY_IMPLEMENTED; 
+
+		boolean isEnabled = parentImplemented && (!fMethodInterface.getCompatibleMethods().isEmpty());
+
+		fBrowseButton.setEnabled(isEnabled);
 	}
 
 	private boolean isTestOnlineButtonEnabled(IFileInfoProvider fileInfoProvider, EImplementationStatus methodStatus) {

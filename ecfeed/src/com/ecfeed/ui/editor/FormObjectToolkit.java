@@ -44,14 +44,6 @@ public class FormObjectToolkit {
 		return composite;
 	}
 
-	public static void setVisibilityOfGridComposite(Composite composite, boolean isVisible) {
-		composite.setVisible(isVisible); 
-		//		GridData gridData = (GridData)composite.getLayoutData();
-		//		gridData.exclude = !isVisible;	
-		//		composite.pack();
-		//		composite.getParent().pack();
-	}	
-
 	public Composite createRowComposite(Composite parentComposite) {
 		Composite composite = fFormToolkit.createComposite(parentComposite);
 
@@ -64,6 +56,10 @@ public class FormObjectToolkit {
 	public Label createLabel(Composite parentComposite, String text) {
 		return fFormToolkit.createLabel(parentComposite, text, SWT.NONE);
 	}
+
+	public Label createEmptyLabel(Composite parentComposite) {
+		return fFormToolkit.createLabel(parentComposite, " ", SWT.NONE);
+	}	
 
 	public Label createSpacer(Composite parentComposite, int size) {
 		return createLabel(parentComposite, StringHelper.createString(" ", size));
