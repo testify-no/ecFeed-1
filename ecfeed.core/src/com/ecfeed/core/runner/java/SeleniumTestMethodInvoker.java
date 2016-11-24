@@ -62,13 +62,6 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 			fArgumentsDescription = argumentsDescription;
 			processStartupProperties();
 			processArguments(arguments, argumentsDescription);
-
-			try {
-
-				Thread.sleep((long)(1000 * 3));
-			} catch (InterruptedException e) {
-			}
-
 		} finally {
 			if (fDriver != null) {
 				fDriver.quit();
@@ -135,7 +128,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		if (processCmdClickButtonById(parameterName, argument)) {
 			return;
 		}
-		if (processCmdWait(parameterName, argument)) {
+		if (processCmdWait(methodParameterNode, argument)) {
 			return;
 		}
 		if (processCmdPageAddress(methodParameterNode, argument)) {
@@ -210,7 +203,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 	private boolean processCmdSetInputById(MethodParameterNode methodParameterNode, String argument) {
 		String parameterType 
 		= methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_PARAMETER_TYPE);
-		if (!NodePropertyDefs.isPageElement(parameterType)) {
+		if (!NodePropertyDefs.isElementTypePageElement(parameterType)) {
 			return false;
 		}
 
@@ -253,10 +246,10 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		return true;
 	}	
 
-	private boolean processCmdWait(String parameterName, String argument) {
-		final String CMD_WAIT = "WAIT";
+	private boolean processCmdWait(MethodParameterNode methodParameterNode, String argument) {
 
-		if (!parameterName.startsWith(CMD_WAIT)) {
+		String parameterType = methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_PARAMETER_TYPE);
+		if (!NodePropertyDefs.isElementTypeWaitTime(parameterType)) {
 			return false;
 		}
 
@@ -268,11 +261,11 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		}
 
 		return true;
-	}	
+	}
 
 	private boolean processCmdPageAddress(MethodParameterNode methodParameterNode, String argument) {	
 		String parameterType = methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_PARAMETER_TYPE);
-		if (!NodePropertyDefs.isPageUrl(parameterType)) {
+		if (!NodePropertyDefs.isElementTypePageUrl(parameterType)) {
 			return false;
 		}
 

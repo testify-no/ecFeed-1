@@ -59,6 +59,7 @@ public class NodePropertyDefs {
 
 	private static final String PAGE_ELEMENT = "Page element";
 	private static final String PAGE_URL = "Page URL";
+	private static final String WAIT_TIME = "Wait";
 
 	private static final String EMPTY_STR = "";
 
@@ -93,7 +94,7 @@ public class NodePropertyDefs {
 	static PropertyDef parameterType = 
 			new PropertyDef(
 					"parameterType", JavaTypeHelper.TYPE_NAME_STRING, PAGE_ELEMENT,
-					new String[]{EMPTY_STR, PAGE_ELEMENT, PAGE_URL, "Browser" });
+					new String[]{EMPTY_STR, PAGE_ELEMENT, PAGE_URL, WAIT_TIME, "Browser" });
 
 	static PropertyDef findByTypeOfElement = 
 			new PropertyDef(
@@ -210,15 +211,22 @@ public class NodePropertyDefs {
 		return BROWSER_SAFARI;
 	}
 
-	public static boolean isPageElement(String value) {
+	public static boolean isElementTypePageElement(String value) {
 		if (value.equals(PAGE_ELEMENT)) {
 			return true;
 		}
 		return false;
 	}
 
-	public static boolean isPageUrl(String value) {
+	public static boolean isElementTypePageUrl(String value) {
 		if (value.equals(PAGE_URL)) {
+			return true;
+		}
+		return false;
+	}	
+
+	public static boolean isElementTypeWaitTime(String value) {
+		if (value.equals(WAIT_TIME)) {
 			return true;
 		}
 		return false;
