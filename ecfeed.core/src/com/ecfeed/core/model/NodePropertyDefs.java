@@ -86,8 +86,8 @@ public class NodePropertyDefs {
 
 	static PropertyDef webBrowser = 
 			new PropertyDef(
-					"webBrowser", JavaTypeHelper.TYPE_NAME_STRING, null, 
-					new String[]{BROWSER_CHROME, BROWSER_FIREFOX, BROWSER_IEXPLORER, BROWSER_OPERA, BROWSER_SAFARI});
+					"webBrowser", JavaTypeHelper.TYPE_NAME_STRING, EMPTY_STR, 
+					new String[]{EMPTY_STR, BROWSER_CHROME, BROWSER_FIREFOX, BROWSER_IEXPLORER, BROWSER_OPERA, BROWSER_SAFARI});
 
 	static PropertyDef browserDriver = new PropertyDef("browserDriver", JavaTypeHelper.TYPE_NAME_STRING, null, null);	
 
@@ -98,19 +98,19 @@ public class NodePropertyDefs {
 
 	static PropertyDef parameterType = 
 			new PropertyDef(
-					"parameterType", JavaTypeHelper.TYPE_NAME_STRING, PAGE_ELEMENT,
+					"parameterType", JavaTypeHelper.TYPE_NAME_STRING, EMPTY_STR,
 					new String[]{EMPTY_STR, PAGE_ELEMENT, PAGE_URL, WAIT_TIME, "Browser" });
 
 	static PropertyDef findByTypeOfElement = 
 			new PropertyDef(
-					"findByTypeOfElement", JavaTypeHelper.TYPE_NAME_STRING, null,
+					"findByTypeOfElement", JavaTypeHelper.TYPE_NAME_STRING, EMPTY_STR,
 					new String[]{ EMPTY_STR, "Id", "Class name", "Tag name", "Name", "Link text", "Partial link text", "CSS selector", "Xpath" });
 
 	static PropertyDef findByValueOfElement = new PropertyDef("findByValueOfElement", JavaTypeHelper.TYPE_NAME_STRING, null, null);
 
 	static PropertyDef action = 
 			new PropertyDef(
-					"action", JavaTypeHelper.TYPE_NAME_STRING, null,
+					"action", JavaTypeHelper.TYPE_NAME_STRING, EMPTY_STR,
 					new String[]{ EMPTY_STR, ACTION_SEND_KEYS, ACTION_CLICK, ACTION_SUBMIT });
 
 
@@ -202,7 +202,6 @@ public class NodePropertyDefs {
 	public static String getEmptyElement() {
 		return EMPTY_STR;
 	}
-
 
 	public static String browserNameIExplorer() {
 		return BROWSER_IEXPLORER;
