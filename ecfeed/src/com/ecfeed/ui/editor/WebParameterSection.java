@@ -13,6 +13,7 @@ package com.ecfeed.ui.editor;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Text;
 
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.NodePropertyDefs;
@@ -26,10 +27,12 @@ public class WebParameterSection extends BasicSection {
 
 	private FormObjectToolkit fFormObjectToolkit;
 	private Combo fElementTypeCombo;
-	private Combo fFindByCombo;
+	private Combo fFindByElemTypeCombo;
+	private Text fFindByElemValueText;
 
 	private final NodePropertyDefs.PropertyId fParameterTypePropertyId = NodePropertyDefs.PropertyId.PROPERTY_PARAMETER_TYPE;
-	private final NodePropertyDefs.PropertyId fFindByPropertyId = NodePropertyDefs.PropertyId.PROPERTY_FIND_BY;
+	private final NodePropertyDefs.PropertyId fFindByElemTypePropertyId = NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_TYPE_OF_ELEMENT;
+	private final NodePropertyDefs.PropertyId fFindByElemValuePropertyId = NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_VALUE_OF_ELEMENT;
 
 
 	public WebParameterSection(ISectionContext sectionContext, 
@@ -55,9 +58,12 @@ public class WebParameterSection extends BasicSection {
 		fElementTypeCombo = fFormObjectToolkit.createGridCombo(gridComposite, new ElementTypeChangedAdapter());
 		initializeComboByProperty(fElementTypeCombo, fParameterTypePropertyId);
 
-		fFormObjectToolkit.createLabel(gridComposite, "Find by");
-		fFindByCombo = fFormObjectToolkit.createGridCombo(gridComposite, new FindByChangedAdapter());
-		initializeComboByProperty(fFindByCombo, fFindByPropertyId);
+		fFormObjectToolkit.createLabel(gridComposite, "Find element by ");
+		fFindByElemTypeCombo = fFormObjectToolkit.createGridCombo(gridComposite, new FindByChangedAdapter());
+		initializeComboByProperty(fFindByElemTypeCombo, fFindByElemTypePropertyId);
+
+		fFormObjectToolkit.createLabel(gridComposite, "Using ");
+		fFindByElemValueText = fFormObjectToolkit.createGridText(gridComposite, new FindByValueChangedAdapter());
 	}
 
 	public static void initializeComboByProperty(Combo combo, NodePropertyDefs.PropertyId propertyId) {
@@ -73,7 +79,8 @@ public class WebParameterSection extends BasicSection {
 		AbstractParameterNode abstractParameterNode = fAbstractParameterInterface.getTarget();
 
 		refreshComboByProperty(fParameterTypePropertyId, fElementTypeCombo, abstractParameterNode);
-		refreshComboByProperty(fFindByPropertyId, fFindByCombo, abstractParameterNode);
+		refreshComboByProperty(fFindByElemTypePropertyId, fFindByElemTypeCombo, abstractParameterNode);
+		refreshTextByProperty(fFindByElemValuePropertyId, fFindByElemValueText, abstractParameterNode);
 	}
 
 	private void refreshComboByProperty(
@@ -82,6 +89,13 @@ public class WebParameterSection extends BasicSection {
 		String value = abstractParameterNode.getPropertyValue(propertyId);
 		if (value != null) {
 			combo.setText(value);
+		}		
+	}	
+
+	private void refreshTextByProperty(NodePropertyDefs.PropertyId propertyId, Text text, AbstractParameterNode abstractParameterNode) {
+		String value = abstractParameterNode.getPropertyValue(propertyId);
+		if (value != null) {
+			text.setText(value);
 		}		
 	}	
 
@@ -95,7 +109,14 @@ public class WebParameterSection extends BasicSection {
 	private class FindByChangedAdapter extends AbstractSelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			fAbstractParameterInterface.setProperty(fFindByPropertyId, fFindByCombo.getText());
+			fAbstractParameterInterface.setProperty(fFindByElemTypePropertyId, fFindByElemTypeCombo.getText());
+		}
+	}
+
+	private class FindByValueChangedAdapter extends AbstractSelectionAdapter {
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			fAbstractParameterInterface.setProperty(fFindByElemValuePropertyId, fFindByElemValueText.getText());
 		}
 	}	
 

@@ -21,6 +21,12 @@ public abstract class AbstractParameterNode extends ChoicesParentNode {
 	public AbstractParameterNode(String name, String type) {
 		super(name);
 		fType = type;
+
+		createDefaultProperties();
+	}
+
+	private void createDefaultProperties() {
+		setPropertyDefaultValue(NodePropertyDefs.PropertyId.PROPERTY_PARAMETER_TYPE);
 	}
 
 	@Override

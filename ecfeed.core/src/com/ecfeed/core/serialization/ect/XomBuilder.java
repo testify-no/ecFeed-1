@@ -218,22 +218,18 @@ public abstract class XomBuilder implements IModelVisitor, IStatementVisitor {
 			return;
 		}
 
-		appendProperty(
-				getPropertyName(propertyId), 
-				getPropertyType(propertyId),  
-				value, targetElement);
+		appendProperty(getPropertyName(propertyId), getPropertyType(propertyId), value, targetElement);
 	}
 
 	@Override
 	public Object visit(MethodParameterNode node)  throws Exception {
 		Element targetParameterElement = createAbstractElement(getParameterNodeName(), node);
 
+		addParameterProperties(node, targetParameterElement);
 		appendTypeComments(targetParameterElement, node);
 
 		encodeAndAddAttribute(targetParameterElement, new Attribute(TYPE_NAME_ATTRIBUTE, node.getRealType()));
-
 		encodeAndAddAttribute(targetParameterElement, new Attribute(PARAMETER_IS_EXPECTED_ATTRIBUTE_NAME, Boolean.toString(node.isExpected())));
-
 		encodeAndAddAttribute(targetParameterElement, new Attribute(DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME, node.getDefaultValueForSerialization()));
 		encodeAndAddAttribute(targetParameterElement, new Attribute(PARAMETER_IS_LINKED_ATTRIBUTE_NAME, Boolean.toString(node.isLinked())));
 
@@ -251,13 +247,30 @@ public abstract class XomBuilder implements IModelVisitor, IStatementVisitor {
 	@Override
 	public Object visit(GlobalParameterNode node) throws Exception {
 		Element targetGlobalParamElement = createAbstractElement(getParameterNodeName(), node);
+
+		addParameterProperties(node, targetGlobalParamElement);
 		appendTypeComments(targetGlobalParamElement, node);
+
 		encodeAndAddAttribute(targetGlobalParamElement, new Attribute(TYPE_NAME_ATTRIBUTE, node.getType()));
 
 		for(ChoiceNode child : node.getChoices()){
 			targetGlobalParamElement.appendChild((Element)child.accept(this));
 		}
 		return targetGlobalParamElement;
+	}
+
+	private void addParameterProperties(AbstractParameterNode abstractParameterNode, Element targetElement) {
+		addParameterProperty(NodePropertyDefs.PropertyId.PROPERTY_PARAMETER_TYPE, abstractParameterNode, targetElement);
+		addParameterProperty(NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_TYPE_OF_ELEMENT, abstractParameterNode, targetElement);
+		addParameterProperty(NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_VALUE_OF_ELEMENT, abstractParameterNode, targetElement);
+	}
+
+	private void addParameterProperty(NodePropertyDefs.PropertyId propertyId, AbstractParameterNode abstractParameterNode, Element targetElement) {
+		String value = abstractParameterNode.getPropertyValue(propertyId);
+		if (value == null) {
+			return;
+		}
+		appendProperty(getPropertyName(propertyId), getPropertyType(propertyId), value, targetElement);
 	}
 
 	@Override

@@ -33,8 +33,7 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 	private Combo fTypeCombo;
 	private ChoicesViewer fChoicesViewer;
 	private Button fBrowseUserTypeButton;
-	@SuppressWarnings("unused")
-	private WebParameterSection fParameterWebSection;
+	private WebParameterSection fWebParameterSection;
 	private AbstractParameterCommentsSection fCommentsSection;
 
 	private class SetNameListener extends AbstractSelectionAdapter{
@@ -79,7 +78,7 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 			addForm(fCommentsSection = getParameterCommentsSection(this, this));
 		}
 
-		fParameterWebSection = new WebParameterSection(this, this, getParameterIf(), fFileInfoProvider);
+		fWebParameterSection = new WebParameterSection(this, this, getParameterIf(), fFileInfoProvider);
 
 		addForm(fChoicesViewer = new ChoicesViewer(this, this, fFileInfoProvider));
 
@@ -103,6 +102,8 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 			fNameText.setText(parameter.getName());
 			fTypeCombo.setItems(AbstractParameterInterface.supportedPrimitiveTypes());
 			fTypeCombo.setText(parameter.getType());
+
+			fWebParameterSection.refresh();
 
 			if (fFileInfoProvider.isProjectAvailable()) {
 				fCommentsSection.setInput(parameter);

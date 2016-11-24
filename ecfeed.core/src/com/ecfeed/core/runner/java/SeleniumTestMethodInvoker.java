@@ -62,6 +62,13 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 			fArgumentsDescription = argumentsDescription;
 			processStartupProperties();
 			processArguments(arguments, argumentsDescription);
+
+			try {
+
+				Thread.sleep((long)(1000 * 3));
+			} catch (InterruptedException e) {
+			}
+
 		} finally {
 			if (fDriver != null) {
 				fDriver.quit();

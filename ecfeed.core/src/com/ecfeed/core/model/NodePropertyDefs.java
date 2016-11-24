@@ -92,10 +92,12 @@ public class NodePropertyDefs {
 					"parameterType", JavaTypeHelper.TYPE_NAME_STRING, PAGE_ELEMENT,
 					new String[]{PAGE_ELEMENT, "Browser" });
 
-	static PropertyDef findBy = 
+	static PropertyDef findByTypeOfElement = 
 			new PropertyDef(
-					"findPageElementBy", JavaTypeHelper.TYPE_NAME_STRING, null,
-					new String[]{ "Id", "Class name", "Tag name", "Name", "Link text", "Partial link text", "CSS selector", "Xpath" });	
+					"findByTypeOfElement", JavaTypeHelper.TYPE_NAME_STRING, null,
+					new String[]{ "Id", "Class name", "Tag name", "Name", "Link text", "Partial link text", "CSS selector", "Xpath" });
+
+	static PropertyDef findByValueOfElement = new PropertyDef("findByValueOfElement", JavaTypeHelper.TYPE_NAME_STRING, null, null);	
 
 
 	public enum PropertyId {
@@ -110,7 +112,8 @@ public class NodePropertyDefs {
 		PROPERTY_START_URL(7),
 
 		PROPERTY_PARAMETER_TYPE(8),
-		PROPERTY_FIND_BY(9);
+		PROPERTY_FIND_BY_TYPE_OF_ELEMENT(9),
+		PROPERTY_FIND_BY_VALUE_OF_ELEMENT(10);
 
 		private final int fIndex; 
 
@@ -134,7 +137,8 @@ public class NodePropertyDefs {
 		mapStartUrlToParam,
 		startUrl,
 		parameterType,
-		findBy
+		findByTypeOfElement,
+		findByValueOfElement
 		};
 
 	public static String getPropertyName(PropertyId propertyId) {

@@ -40,6 +40,7 @@ import nu.xom.Elements;
 import nu.xom.Node;
 
 import com.ecfeed.core.adapter.java.JavaPrimitiveTypePredicate;
+import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.AbstractStatement;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.ChoicesParentStatement;
@@ -234,71 +235,105 @@ public abstract class XomAnalyser {
 		targetMethodNode.setPropertyValue(propertyId, value);		
 	}
 
-	public MethodParameterNode parseMethodParameter(Element element, MethodNode method) throws ParserException{
-		assertNodeTag(element.getQualifiedName(), getParameterNodeName());
-		String name = getElementName(element);
-		String type = getAttributeValue(element, TYPE_NAME_ATTRIBUTE);
+	public MethodParameterNode parseMethodParameter(Element parameterElement, MethodNode method) throws ParserException{
+		assertNodeTag(parameterElement.getQualifiedName(), getParameterNodeName());
+		String name = getElementName(parameterElement);
+		String type = getAttributeValue(parameterElement, TYPE_NAME_ATTRIBUTE);
 		String defaultValue = null;
 		String expected = String.valueOf(false);
 
-		if(element.getAttribute(PARAMETER_IS_EXPECTED_ATTRIBUTE_NAME) != null){
-			expected = getAttributeValue(element, PARAMETER_IS_EXPECTED_ATTRIBUTE_NAME);
-			defaultValue = getAttributeValue(element, DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME);
-		}
-		MethodParameterNode methodParameterNode = new MethodParameterNode(name, type, defaultValue, Boolean.parseBoolean(expected));
-
-		if(element.getAttribute(PARAMETER_IS_LINKED_ATTRIBUTE_NAME) != null){
-			boolean linked = Boolean.parseBoolean(getAttributeValue(element, PARAMETER_IS_LINKED_ATTRIBUTE_NAME));
-			methodParameterNode.setLinked(linked);
+		if(parameterElement.getAttribute(PARAMETER_IS_EXPECTED_ATTRIBUTE_NAME) != null){
+			expected = getAttributeValue(parameterElement, PARAMETER_IS_EXPECTED_ATTRIBUTE_NAME);
+			defaultValue = getAttributeValue(parameterElement, DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME);
 		}
 
-		if(element.getAttribute(PARAMETER_LINK_ATTRIBUTE_NAME) != null && method != null && method.getClassNode() != null){
-			String linkPath = getAttributeValue(element, PARAMETER_LINK_ATTRIBUTE_NAME);
+		MethodParameterNode targetMethodParameterNode = new MethodParameterNode(name, type, defaultValue, Boolean.parseBoolean(expected));
+
+		parseParameterProperties(parameterElement, targetMethodParameterNode);
+
+		if(parameterElement.getAttribute(PARAMETER_IS_LINKED_ATTRIBUTE_NAME) != null){
+			boolean linked = Boolean.parseBoolean(getAttributeValue(parameterElement, PARAMETER_IS_LINKED_ATTRIBUTE_NAME));
+			targetMethodParameterNode.setLinked(linked);
+		}
+
+		if(parameterElement.getAttribute(PARAMETER_LINK_ATTRIBUTE_NAME) != null && method != null && method.getClassNode() != null){
+			String linkPath = getAttributeValue(parameterElement, PARAMETER_LINK_ATTRIBUTE_NAME);
 			GlobalParameterNode link = method.getClassNode().findGlobalParameter(linkPath);
 			if(link != null){
-				methodParameterNode.setLink(link);
+				targetMethodParameterNode.setLink(link);
 			}
 			else{
-				methodParameterNode.setLinked(false);
+				targetMethodParameterNode.setLinked(false);
 			}
 		}else{
-			methodParameterNode.setLinked(false);
+			targetMethodParameterNode.setLinked(false);
 		}
 
-		for(Element child : getIterableChildren(element, getChoiceNodeName())){
+		for(Element child : getIterableChildren(parameterElement, getChoiceNodeName())){
 			try{
-				methodParameterNode.addChoice(parseChoice(child));
+				targetMethodParameterNode.addChoice(parseChoice(child));
 			}catch(ParserException e){
 				System.err.println("Exception: " + e.getMessage());
 			}
 		}
 
-		methodParameterNode.setDescription(parseComments(element));
-		if(methodParameterNode.isLinked() == false){
-			methodParameterNode.setTypeComments(parseTypeComments(element));
+		targetMethodParameterNode.setDescription(parseComments(parameterElement));
+		if(targetMethodParameterNode.isLinked() == false){
+			targetMethodParameterNode.setTypeComments(parseTypeComments(parameterElement));
 		}
 
-		return methodParameterNode;
+		return targetMethodParameterNode;
 	}
+
+	private void parseParameterProperties(Element parameterElement, AbstractParameterNode targetAbstractParameterNode) {
+		parseParameterProperty(
+				NodePropertyDefs.PropertyId.PROPERTY_PARAMETER_TYPE, 
+				parameterElement, 
+				targetAbstractParameterNode);
+
+		parseParameterProperty(
+				NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_TYPE_OF_ELEMENT, 
+				parameterElement, 
+				targetAbstractParameterNode);
+
+		parseParameterProperty(
+				NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_VALUE_OF_ELEMENT, 
+				parameterElement, 
+				targetAbstractParameterNode);
+	}
+
+	private void parseParameterProperty(
+			NodePropertyDefs.PropertyId propertyId, 
+			Element methodElement, 
+			AbstractParameterNode targetAbstractParameterNode) {
+		String value = getPropertyValue(propertyId, methodElement);
+		if (StringHelper.isNullOrEmpty(value)) {
+			return;
+		}
+		targetAbstractParameterNode.setPropertyValue(propertyId, value);		
+	}
+
 
 	public GlobalParameterNode parseGlobalParameter(Element element) throws ParserException{
 		assertNodeTag(element.getQualifiedName(), getParameterNodeName());
 		String name = getElementName(element);
 		String type = getAttributeValue(element, TYPE_NAME_ATTRIBUTE);
-		GlobalParameterNode parameter = new GlobalParameterNode(name, type);
+		GlobalParameterNode targetGlobalParameterNode = new GlobalParameterNode(name, type);
+
+		parseParameterProperties(element, targetGlobalParameterNode);
 
 		for(Element child : getIterableChildren(element, getChoiceNodeName())){
 			try{
-				parameter.addChoice(parseChoice(child));
+				targetGlobalParameterNode.addChoice(parseChoice(child));
 			}catch(ParserException e){
 				System.err.println("Exception: " + e.getMessage());
 			}
 		}
 
-		parameter.setDescription(parseComments(element));
-		parameter.setTypeComments(parseTypeComments(element));
+		targetGlobalParameterNode.setDescription(parseComments(element));
+		targetGlobalParameterNode.setTypeComments(parseTypeComments(element));
 
-		return parameter;
+		return targetGlobalParameterNode;
 	}
 
 	public TestCaseNode parseTestCase(Element element, MethodNode method) throws ParserException{
