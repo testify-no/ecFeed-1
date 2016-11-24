@@ -115,18 +115,21 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		for (int cnt = 0; cnt < fMethodNode.getParametersCount(); ++cnt) {
 			MethodParameterNode methodParameterNode = fMethodParameters.get(cnt);
 			String argument = arguments[cnt].toString();
-			processOneArgument(methodParameterNode.getName(), argument);
+			processOneArgument(methodParameterNode, argument);
 		}		
 	}
 
-	private void processOneArgument(String parameterName, String argument) {
+	private void processOneArgument(
+			MethodParameterNode methodParameterNode, String argument) {
+		String parameterName = methodParameterNode.getName();
+
 		if (processCmdSetDriver(parameterName, argument)) {
 			return;
 		}
 		if (processCmdGoToPage(parameterName, argument)) {
 			return;
 		}
-		if (processCmdSetInputById(parameterName, argument)) {
+		if (processCmdSetInputById(methodParameterNode, argument)) {
 			return;
 		}
 		if (processCmdClickButtonById(parameterName, argument)) {
@@ -135,7 +138,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		if (processCmdWait(parameterName, argument)) {
 			return;
 		}
-		if (processCmdPageAddress(parameterName, argument)) {
+		if (processCmdPageAddress(methodParameterNode, argument)) {
 			return;
 		}
 	}
@@ -204,19 +207,34 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		fDriver.get(url);
 	}
 
-	private boolean processCmdSetInputById(String parameterName, String argument) {
-		final String CMD_SET_INPUT_BY_ID = "SET_INPUT_BY_ID";
-
-		if (!parameterName.startsWith(CMD_SET_INPUT_BY_ID)) {
+	private boolean processCmdSetInputById(MethodParameterNode methodParameterNode, String argument) {
+		String parameterType 
+		= methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_PARAMETER_TYPE);
+		if (!NodePropertyDefs.isPageElement(parameterType)) {
 			return false;
 		}
 
-		String id = getParameterLabel(parameterName, CMD_SET_INPUT_BY_ID);
-		checkWebDriver();
-		WebElement webElement = fDriver.findElement(By.id(id));
+		String findByType 
+		= methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_TYPE_OF_ELEMENT);
+
+		String findByValue 
+		= methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_VALUE_OF_ELEMENT);
+
+		WebElement webElement = findWebElement(findByType, findByValue);
+		if (webElement == null) {
+			return false;
+		}
+
+		// TODO add various actions
 		webElement.sendKeys(argument);
 		return true;
-	}	
+	}
+
+	private WebElement findWebElement(String findByType, String findByValue) {
+		// TODO add various types of By
+		checkWebDriver();
+		return fDriver.findElement(By.id(findByValue));
+	}
 
 	private boolean processCmdClickButtonById(String parameterName, String argument) {
 		final String CMD_CLICK_BUTTON_BY_ID = "CLICK_BUTTON_BY_ID";
@@ -252,11 +270,9 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		return true;
 	}	
 
-	private boolean processCmdPageAddress(String parameterName, String argument) {
-
-		final String CMD_PAGE_ADDRESS = "PAGE_ADDRESS";
-
-		if (!parameterName.equals(CMD_PAGE_ADDRESS)) {
+	private boolean processCmdPageAddress(MethodParameterNode methodParameterNode, String argument) {	
+		String parameterType = methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_PARAMETER_TYPE);
+		if (!NodePropertyDefs.isPageUrl(parameterType)) {
 			return false;
 		}
 
@@ -272,7 +288,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 
 		reportException("Page address does not match. Expected: " + argument + " Current: " + currentUrl);
 		return true;
-	}	
+	}
 
 	private void checkWebDriver() {
 		if (fDriver == null) {

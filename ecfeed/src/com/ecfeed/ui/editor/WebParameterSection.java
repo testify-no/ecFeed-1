@@ -29,11 +29,12 @@ public class WebParameterSection extends BasicSection {
 	private Combo fElementTypeCombo;
 	private Combo fFindByElemTypeCombo;
 	private Text fFindByElemValueText;
+	private Combo fActionCombo;
 
 	private final NodePropertyDefs.PropertyId fParameterTypePropertyId = NodePropertyDefs.PropertyId.PROPERTY_PARAMETER_TYPE;
 	private final NodePropertyDefs.PropertyId fFindByElemTypePropertyId = NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_TYPE_OF_ELEMENT;
 	private final NodePropertyDefs.PropertyId fFindByElemValuePropertyId = NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_VALUE_OF_ELEMENT;
-
+	private final NodePropertyDefs.PropertyId fActionPropertyId = NodePropertyDefs.PropertyId.PROPERTY_ACTION;
 
 	public WebParameterSection(ISectionContext sectionContext, 
 			IModelUpdateContext updateContext,
@@ -64,6 +65,12 @@ public class WebParameterSection extends BasicSection {
 
 		fFormObjectToolkit.createLabel(gridComposite, "Using ");
 		fFindByElemValueText = fFormObjectToolkit.createGridText(gridComposite, new FindByValueChangedAdapter());
+
+
+		fFormObjectToolkit.createLabel(gridComposite, "Action ");
+		fActionCombo = fFormObjectToolkit.createGridCombo(gridComposite, new ActionChangedAdapter());
+		initializeComboByProperty(fActionCombo, fActionPropertyId);
+
 	}
 
 	public static void initializeComboByProperty(Combo combo, NodePropertyDefs.PropertyId propertyId) {
@@ -81,6 +88,7 @@ public class WebParameterSection extends BasicSection {
 		refreshComboByProperty(fParameterTypePropertyId, fElementTypeCombo, abstractParameterNode);
 		refreshComboByProperty(fFindByElemTypePropertyId, fFindByElemTypeCombo, abstractParameterNode);
 		refreshTextByProperty(fFindByElemValuePropertyId, fFindByElemValueText, abstractParameterNode);
+		refreshComboByProperty(fActionPropertyId, fActionCombo, abstractParameterNode);
 	}
 
 	private void refreshComboByProperty(
@@ -89,14 +97,18 @@ public class WebParameterSection extends BasicSection {
 		String value = abstractParameterNode.getPropertyValue(propertyId);
 		if (value != null) {
 			combo.setText(value);
-		}		
+			return;
+		}
+		combo.setText(NodePropertyDefs.getEmptyElement());
 	}	
 
 	private void refreshTextByProperty(NodePropertyDefs.PropertyId propertyId, Text text, AbstractParameterNode abstractParameterNode) {
 		String value = abstractParameterNode.getPropertyValue(propertyId);
 		if (value != null) {
 			text.setText(value);
+			return;
 		}		
+		text.setText(NodePropertyDefs.getEmptyElement());
 	}	
 
 	private class ElementTypeChangedAdapter extends AbstractSelectionAdapter {
@@ -120,4 +132,10 @@ public class WebParameterSection extends BasicSection {
 		}
 	}	
 
+	private class ActionChangedAdapter extends AbstractSelectionAdapter {
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			fAbstractParameterInterface.setProperty(fActionPropertyId, fActionCombo.getText());
+		}
+	}	
 }

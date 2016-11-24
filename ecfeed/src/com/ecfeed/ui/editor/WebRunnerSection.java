@@ -113,14 +113,18 @@ public class WebRunnerSection extends BasicSection  {
 		String value = methodNode.getPropertyValue(propertyId);
 		if (value != null) {
 			combo.setText(value);
+			return;
 		}		
+		combo.setText(NodePropertyDefs.getEmptyElement());
 	}
 
 	private void refreshTextByProperty(NodePropertyDefs.PropertyId propertyId, Text text, MethodNode methodNode) {
 		String value = methodNode.getPropertyValue(propertyId);
 		if (value != null) {
 			text.setText(value);
+			return;
 		}		
+		text.setText(NodePropertyDefs.getEmptyElement());
 	}	
 
 	private void refreshCheckboxByProperty(

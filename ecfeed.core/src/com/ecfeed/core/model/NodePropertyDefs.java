@@ -57,7 +57,10 @@ public class NodePropertyDefs {
 	private static final String BROWSER_OPERA = "Opera";
 	private static final String BROWSER_SAFARI = "Safari";
 
-	private static final String PAGE_ELEMENT = "Page element";	
+	private static final String PAGE_ELEMENT = "Page element";
+	private static final String PAGE_URL = "Page URL";
+
+	private static final String EMPTY_STR = "";
 
 	private static String[] falseTrueArray = new String[]{FALSE_VALUE, TRUE_VALUE};
 
@@ -90,14 +93,19 @@ public class NodePropertyDefs {
 	static PropertyDef parameterType = 
 			new PropertyDef(
 					"parameterType", JavaTypeHelper.TYPE_NAME_STRING, PAGE_ELEMENT,
-					new String[]{PAGE_ELEMENT, "Browser" });
+					new String[]{EMPTY_STR, PAGE_ELEMENT, PAGE_URL, "Browser" });
 
 	static PropertyDef findByTypeOfElement = 
 			new PropertyDef(
 					"findByTypeOfElement", JavaTypeHelper.TYPE_NAME_STRING, null,
-					new String[]{ "Id", "Class name", "Tag name", "Name", "Link text", "Partial link text", "CSS selector", "Xpath" });
+					new String[]{ EMPTY_STR, "Id", "Class name", "Tag name", "Name", "Link text", "Partial link text", "CSS selector", "Xpath" });
 
-	static PropertyDef findByValueOfElement = new PropertyDef("findByValueOfElement", JavaTypeHelper.TYPE_NAME_STRING, null, null);	
+	static PropertyDef findByValueOfElement = new PropertyDef("findByValueOfElement", JavaTypeHelper.TYPE_NAME_STRING, null, null);
+
+	static PropertyDef action = 
+			new PropertyDef(
+					"action", JavaTypeHelper.TYPE_NAME_STRING, null,
+					new String[]{ EMPTY_STR, "Send keys", "Click", "Submit" });
 
 
 	public enum PropertyId {
@@ -113,7 +121,8 @@ public class NodePropertyDefs {
 
 		PROPERTY_PARAMETER_TYPE(8),
 		PROPERTY_FIND_BY_TYPE_OF_ELEMENT(9),
-		PROPERTY_FIND_BY_VALUE_OF_ELEMENT(10);
+		PROPERTY_FIND_BY_VALUE_OF_ELEMENT(10),
+		PROPERTY_ACTION(11);
 
 		private final int fIndex; 
 
@@ -138,7 +147,8 @@ public class NodePropertyDefs {
 		startUrl,
 		parameterType,
 		findByTypeOfElement,
-		findByValueOfElement
+		findByValueOfElement,
+		action
 		};
 
 	public static String getPropertyName(PropertyId propertyId) {
@@ -183,6 +193,11 @@ public class NodePropertyDefs {
 		return BROWSER_FIREFOX;
 	}
 
+	public static String getEmptyElement() {
+		return EMPTY_STR;
+	}
+
+
 	public static String browserNameIExplorer() {
 		return BROWSER_IEXPLORER;
 	}
@@ -193,6 +208,19 @@ public class NodePropertyDefs {
 
 	public static String browserNameSafari() {
 		return BROWSER_SAFARI;
-	}	
+	}
 
+	public static boolean isPageElement(String value) {
+		if (value.equals(PAGE_ELEMENT)) {
+			return true;
+		}
+		return false;
+	}
+
+	public static boolean isPageUrl(String value) {
+		if (value.equals(PAGE_URL)) {
+			return true;
+		}
+		return false;
+	}	
 }

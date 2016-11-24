@@ -300,6 +300,11 @@ public abstract class XomAnalyser {
 				NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_VALUE_OF_ELEMENT, 
 				parameterElement, 
 				targetAbstractParameterNode);
+
+		parseParameterProperty(
+				NodePropertyDefs.PropertyId.PROPERTY_ACTION, 
+				parameterElement, 
+				targetAbstractParameterNode);
 	}
 
 	private void parseParameterProperty(
