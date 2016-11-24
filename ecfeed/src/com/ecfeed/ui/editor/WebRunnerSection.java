@@ -77,7 +77,7 @@ public class WebRunnerSection extends BasicSection  {
 
 	private void createBrowserCombo(Composite gridComposite) {
 		fFormObjectToolkit.createLabel(gridComposite, "Browser");
-		fBrowserCombo = fFormObjectToolkit.createGridCombo(gridComposite, new BrowserChangedAdapter());
+		fBrowserCombo = fFormObjectToolkit.createReadOnlyGridCombo(gridComposite, new BrowserChangedAdapter());
 		fBrowserCombo.setItems(NodePropertyDefs.getPropertyPossibleValues(fBrowserPropertyId));
 	}
 

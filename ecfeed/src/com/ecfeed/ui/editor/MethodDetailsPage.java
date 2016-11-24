@@ -163,7 +163,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 
 		formObjectToolkit.createLabel(gridComposite, "Runner");
 
-		fRunnerCombo = formObjectToolkit.createGridCombo(gridComposite, new RunnerChangedAdapter());
+		fRunnerCombo = formObjectToolkit.createReadOnlyGridCombo(gridComposite, new RunnerChangedAdapter());
 		fRunnerCombo.setItems(NodePropertyDefs.getPropertyPossibleValues(fRunnerPropertyId)); 
 		fRunnerCombo.setText(NodePropertyDefs.getPropertyDefaultValue(fRunnerPropertyId));
 	}	

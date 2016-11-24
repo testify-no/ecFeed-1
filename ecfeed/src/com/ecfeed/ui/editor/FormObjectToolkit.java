@@ -86,8 +86,8 @@ public class FormObjectToolkit {
 		return button;
 	}
 
-	public Combo createGridCombo(Composite parentComposite, SelectionListener selectionListener) {
-		Combo combo = new Combo(parentComposite, SWT.DROP_DOWN);
+	public Combo createReadOnlyGridCombo(Composite parentComposite, SelectionListener selectionListener) {
+		Combo combo = new Combo(parentComposite, SWT.DROP_DOWN | SWT.READ_ONLY);
 		combo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
 		if (selectionListener != null) {

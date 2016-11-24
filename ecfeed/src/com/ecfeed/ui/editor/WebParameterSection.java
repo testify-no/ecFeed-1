@@ -56,11 +56,11 @@ public class WebParameterSection extends BasicSection {
 
 	private void createElementTypeCombo(Composite gridComposite) {
 		fFormObjectToolkit.createLabel(gridComposite, "Element type");
-		fElementTypeCombo = fFormObjectToolkit.createGridCombo(gridComposite, new ElementTypeChangedAdapter());
+		fElementTypeCombo = fFormObjectToolkit.createReadOnlyGridCombo(gridComposite, new ElementTypeChangedAdapter());
 		initializeComboByProperty(fElementTypeCombo, fParameterTypePropertyId);
 
 		fFormObjectToolkit.createLabel(gridComposite, "Find element by ");
-		fFindByElemTypeCombo = fFormObjectToolkit.createGridCombo(gridComposite, new FindByChangedAdapter());
+		fFindByElemTypeCombo = fFormObjectToolkit.createReadOnlyGridCombo(gridComposite, new FindByChangedAdapter());
 		initializeComboByProperty(fFindByElemTypeCombo, fFindByElemTypePropertyId);
 
 		fFormObjectToolkit.createLabel(gridComposite, "Using ");
@@ -68,7 +68,7 @@ public class WebParameterSection extends BasicSection {
 
 
 		fFormObjectToolkit.createLabel(gridComposite, "Action ");
-		fActionCombo = fFormObjectToolkit.createGridCombo(gridComposite, new ActionChangedAdapter());
+		fActionCombo = fFormObjectToolkit.createReadOnlyGridCombo(gridComposite, new ActionChangedAdapter());
 		initializeComboByProperty(fActionCombo, fActionPropertyId);
 
 	}
