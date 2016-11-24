@@ -114,18 +114,8 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 
 	private void processOneArgument(
 			MethodParameterNode methodParameterNode, String argument) {
-		String parameterName = methodParameterNode.getName();
 
-		if (processCmdSetDriver(parameterName, argument)) {
-			return;
-		}
-		if (processCmdGoToPage(parameterName, argument)) {
-			return;
-		}
-		if (processCmdSetInputById(methodParameterNode, argument)) {
-			return;
-		}
-		if (processCmdClickButtonById(parameterName, argument)) {
+		if (processPageElement(methodParameterNode, argument)) {
 			return;
 		}
 		if (processCmdWait(methodParameterNode, argument)) {
@@ -134,21 +124,6 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		if (processCmdPageAddress(methodParameterNode, argument)) {
 			return;
 		}
-	}
-
-	private boolean processCmdSetDriver(String parameterName, String argument) {
-		final String CMD_SET_DRIVER = "SET_DRIVER";
-
-		if (!parameterName.equals(CMD_SET_DRIVER)) {
-			return false;
-		}
-
-		if (argument.endsWith("chromedriver")) { // TODO REFACTOR
-			setDriver("chromedriver", argument);
-			return true;
-		}
-
-		return true;
 	}
 
 	private void setDriver(String driverName, String driverProperty) {
@@ -185,41 +160,34 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		reportException("WebDriver is not supported: " + driverName);
 	}
 
-	private boolean processCmdGoToPage(String parameterName, String argument) {
-		final String CMD_GO_TO_PAGE = "GO_TO_PAGE";
-
-		if (!parameterName.startsWith(CMD_GO_TO_PAGE)) {
-			return false;
-		}
-		goToPage(argument);
-		return true;
-	}
-
 	private void goToPage(String url) {
 		checkWebDriver();
 		fDriver.get(url);
 	}
 
-	private boolean processCmdSetInputById(MethodParameterNode methodParameterNode, String argument) {
-		String parameterType 
-		= methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_PARAMETER_TYPE);
+	private boolean processPageElement(MethodParameterNode methodParameterNode, String argument) {
+		String parameterType = 
+				methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_PARAMETER_TYPE);
+
 		if (!NodePropertyDefs.isElementTypePageElement(parameterType)) {
 			return false;
 		}
 
-		String findByType 
-		= methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_TYPE_OF_ELEMENT);
+		String findByType = 
+				methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_TYPE_OF_ELEMENT);
 
-		String findByValue 
-		= methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_VALUE_OF_ELEMENT);
+		String findByValue = 
+				methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_VALUE_OF_ELEMENT);
 
 		WebElement webElement = findWebElement(findByType, findByValue);
 		if (webElement == null) {
 			return false;
 		}
 
-		// TODO add various actions
-		webElement.sendKeys(argument);
+		if (!performAction(webElement, argument, methodParameterNode)) {
+			return false; 
+		}
+
 		return true;
 	}
 
@@ -229,22 +197,28 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		return fDriver.findElement(By.id(findByValue));
 	}
 
-	private boolean processCmdClickButtonById(String parameterName, String argument) {
-		final String CMD_CLICK_BUTTON_BY_ID = "CLICK_BUTTON_BY_ID";
+	private boolean performAction(WebElement webElement, String argument, MethodParameterNode methodParameterNode) {
 
-		if (!parameterName.startsWith(CMD_CLICK_BUTTON_BY_ID)) {
-			return false;
+		String action = 
+				methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_ACTION);
+
+		if (NodePropertyDefs.isActionSendKeys(action)) {
+			webElement.sendKeys(argument);
+			return true;
 		}
 
-		if (argument.equals("true")) {
-			String id = getParameterLabel(parameterName, CMD_CLICK_BUTTON_BY_ID);
-			checkWebDriver();
-			WebElement webElement = fDriver.findElement(By.id(id));
+		if (NodePropertyDefs.isActionClick(action)) {
 			webElement.click();
-		}
+			return true;
+		}		
 
-		return true;
-	}	
+		if (NodePropertyDefs.isActionSubmit(action)) {
+			webElement.submit();
+			return true;
+		}		
+
+		return false;
+	}
 
 	private boolean processCmdWait(MethodParameterNode methodParameterNode, String argument) {
 
@@ -293,10 +267,6 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		String exceptionMessage = TestMethodInvokerHelper.createErrorMessage(
 				fMethodNode.getName(), fArgumentsDescription, message);
 		ExceptionHelper.reportRuntimeException(exceptionMessage);
-	}
-
-	private static String getParameterLabel(String parameterName, String prefix) {
-		return StringHelper.removePrefix(prefix + "_", parameterName);
 	}
 
 }

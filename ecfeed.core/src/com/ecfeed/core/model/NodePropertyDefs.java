@@ -61,7 +61,12 @@ public class NodePropertyDefs {
 	private static final String PAGE_URL = "Page URL";
 	private static final String WAIT_TIME = "Wait";
 
+	private static final String ACTION_SEND_KEYS = "Send keys";
+	private static final String ACTION_CLICK = "Click";
+	private static final String ACTION_SUBMIT = "Submit";
+
 	private static final String EMPTY_STR = "";
+
 
 	private static String[] falseTrueArray = new String[]{FALSE_VALUE, TRUE_VALUE};
 
@@ -106,7 +111,7 @@ public class NodePropertyDefs {
 	static PropertyDef action = 
 			new PropertyDef(
 					"action", JavaTypeHelper.TYPE_NAME_STRING, null,
-					new String[]{ EMPTY_STR, "Send keys", "Click", "Submit" });
+					new String[]{ EMPTY_STR, ACTION_SEND_KEYS, ACTION_CLICK, ACTION_SUBMIT });
 
 
 	public enum PropertyId {
@@ -227,6 +232,27 @@ public class NodePropertyDefs {
 
 	public static boolean isElementTypeWaitTime(String value) {
 		if (value.equals(WAIT_TIME)) {
+			return true;
+		}
+		return false;
+	}
+
+	public static boolean isActionSendKeys(String value) {
+		if (value.equals(ACTION_SEND_KEYS)) {
+			return true;
+		}
+		return false;
+	}	
+
+	public static boolean isActionClick(String value) {
+		if (value.equals(ACTION_CLICK)) {
+			return true;
+		}
+		return false;
+	}
+
+	public static boolean isActionSubmit(String value) {
+		if (value.equals(ACTION_SUBMIT)) {
 			return true;
 		}
 		return false;
