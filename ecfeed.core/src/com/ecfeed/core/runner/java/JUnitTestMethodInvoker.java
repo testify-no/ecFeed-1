@@ -28,7 +28,8 @@ public class JUnitTestMethodInvoker implements ITestMethodInvoker {
 			Method testMethod, 
 			String className, 
 			Object instance,
-			Object[] arguments, 
+			Object[] arguments,
+			Object[] choiceNames,
 			String argumentsDescription) throws RuntimeException {
 		try {
 			testMethod.invoke(instance, arguments);

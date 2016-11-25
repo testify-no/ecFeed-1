@@ -21,6 +21,7 @@ public interface ITestMethodInvoker {
 			String className,
 			Object instance,
 			Object[] arguments, 
+			Object[] choiceNames,
 			String argumentsDescription
 			) throws RuntimeException;
 }

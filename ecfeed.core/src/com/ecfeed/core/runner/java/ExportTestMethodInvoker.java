@@ -43,6 +43,7 @@ public class ExportTestMethodInvoker implements ITestMethodInvoker {
 			String className, 
 			Object instance,
 			Object[] arguments, 
+			Object[] choiceNames,
 			String argumentsDescription) throws RuntimeException {
 
 		fTestCaseNodes.add(createTestCase(arguments));

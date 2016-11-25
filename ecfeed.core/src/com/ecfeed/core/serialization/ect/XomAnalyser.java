@@ -287,7 +287,7 @@ public abstract class XomAnalyser {
 
 	private void parseParameterProperties(Element parameterElement, AbstractParameterNode targetAbstractParameterNode) {
 		parseParameterProperty(
-				NodePropertyDefs.PropertyId.PROPERTY_PARAMETER_TYPE, 
+				NodePropertyDefs.PropertyId.PROPERTY_ELEMENT_TYPE, 
 				parameterElement, 
 				targetAbstractParameterNode);
 

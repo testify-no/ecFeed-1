@@ -68,9 +68,10 @@ public class JavaTestRunner {
 		}
 
 		Object[] arguments = getArguments(testData);
+		Object[] choiceNames = getChoiceNames(testData);
 
 		try {
-			fTestMethodInvoker.invoke(fTestMethod, getClassName(fTestClass), instance, arguments, testData.toString());
+			fTestMethodInvoker.invoke(fTestMethod, getClassName(fTestClass), instance, arguments, choiceNames, testData.toString());
 		} catch (Exception e) {
 			RunnerException.report(e.getMessage());
 		}
@@ -86,7 +87,7 @@ public class JavaTestRunner {
 	public void prepareTestCaseForExport(List<ChoiceNode> testData) throws RunnerException{
 		validateTestData(testData);
 		Object[] arguments = getArguments(testData);
-		fTestMethodInvoker.invoke(null, null, null, arguments, null);
+		fTestMethodInvoker.invoke(null, null, null, arguments, null, null);
 	}
 
 	protected Method getTestMethod(Class<?> testClass, MethodNode methodModel) throws RunnerException {
@@ -128,6 +129,15 @@ public class JavaTestRunner {
 		}
 		return args.toArray();
 	}
+
+	protected Object[] getChoiceNames(List<ChoiceNode> testData) throws RunnerException {
+		List<String> args = new ArrayList<String>();
+
+		for(ChoiceNode choice : testData){
+			args.add(choice.getName());
+		}
+		return args.toArray();
+	}	
 
 	private void validateTestData(List<ChoiceNode> testData) throws RunnerException {
 		List<String> dataTypes = new ArrayList<String>();

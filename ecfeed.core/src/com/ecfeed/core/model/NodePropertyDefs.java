@@ -43,6 +43,16 @@ public class NodePropertyDefs {
 		String[] getPossibleValues() {
 			return fPossibleValues;
 		}
+
+		boolean matchesPossibleValue(String valueToMatch) {
+			for (String possibleValue : fPossibleValues) {
+				if (possibleValue.equals(valueToMatch)) {
+					return true;
+				}
+			}
+
+			return false;
+		}
 	}
 
 	private static final String JAVA_RUNNER = "Java Runner";
@@ -60,6 +70,7 @@ public class NodePropertyDefs {
 	private static final String PAGE_ELEMENT = "Page element";
 	private static final String PAGE_URL = "Page URL";
 	private static final String WAIT_TIME = "Wait";
+	private static final String BROWSER = "Browser";
 
 	private static final String ACTION_SEND_KEYS = "Send keys";
 	private static final String ACTION_CLICK = "Click";
@@ -99,7 +110,7 @@ public class NodePropertyDefs {
 	static PropertyDef parameterType = 
 			new PropertyDef(
 					"parameterType", JavaTypeHelper.TYPE_NAME_STRING, EMPTY_STR,
-					new String[]{EMPTY_STR, PAGE_ELEMENT, PAGE_URL, WAIT_TIME, "Browser" });
+					new String[]{EMPTY_STR, PAGE_ELEMENT, PAGE_URL, WAIT_TIME, BROWSER });
 
 	static PropertyDef findByTypeOfElement = 
 			new PropertyDef(
@@ -125,7 +136,7 @@ public class NodePropertyDefs {
 		PROPERTY_MAP_START_URL_TO_PARAM(6),
 		PROPERTY_START_URL(7),
 
-		PROPERTY_PARAMETER_TYPE(8),
+		PROPERTY_ELEMENT_TYPE(8),
 		PROPERTY_FIND_BY_TYPE_OF_ELEMENT(9),
 		PROPERTY_FIND_BY_VALUE_OF_ELEMENT(10),
 		PROPERTY_ACTION(11);
@@ -215,6 +226,13 @@ public class NodePropertyDefs {
 		return BROWSER_SAFARI;
 	}
 
+	public static boolean isValidBrowser(String browserName) {
+		if (webBrowser.matchesPossibleValue(browserName)) {
+			return true;
+		}
+		return false;
+	}
+
 	public static boolean isElementTypePageElement(String value) {
 		if (value.equals(PAGE_ELEMENT)) {
 			return true;
@@ -231,6 +249,13 @@ public class NodePropertyDefs {
 
 	public static boolean isElementTypeWaitTime(String value) {
 		if (value.equals(WAIT_TIME)) {
+			return true;
+		}
+		return false;
+	}
+
+	public static boolean isElementTypeBrowser(String value) {
+		if (value.equals(BROWSER)) {
 			return true;
 		}
 		return false;

@@ -27,12 +27,15 @@ import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.NodePropertyDefs;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.runner.ITestMethodInvoker;
+import com.ecfeed.core.utils.BooleanHelper;
 import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.StringHelper;
 
 public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 
 	WebDriver fDriver;
+	String fStartupPage = null;
+	boolean fBrowserDefined = false;
 	MethodNode fMethodNode;
 	List<MethodParameterNode> fMethodParameters;
 	ArrayList<TestCaseNode> fTestCaseNodes;
@@ -55,13 +58,14 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 			Method testMethod, 
 			String className, 
 			Object instance,
-			Object[] arguments, 
+			Object[] arguments,
+			Object[] choiceNames,
 			String argumentsDescription) throws RuntimeException {
 
 		try {
 			fArgumentsDescription = argumentsDescription;
 			processStartupProperties();
-			processArguments(arguments, argumentsDescription);
+			processArguments(arguments, choiceNames, argumentsDescription);
 		} finally {
 			if (fDriver != null) {
 				fDriver.quit();
@@ -71,6 +75,17 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 
 	private void processStartupProperties() {
 
+		fStartupPage = fMethodNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_START_URL);
+
+		String mapBrowserToParamStr = fMethodNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_MAP_BROWSER_TO_PARAM);
+		boolean mapBrowserToParam = BooleanHelper.parseBoolean(mapBrowserToParamStr);
+
+		if (!mapBrowserToParam) {
+			processWebBrowserProperty();
+		}
+	}
+
+	private void processWebBrowserProperty() {
 		String browserDriver = decodeDriverPath(fMethodNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_BROWSER_DRIVER));
 		if (StringHelper.isNullOrEmpty(browserDriver)) {
 			return;
@@ -79,11 +94,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		String webBrowser = fMethodNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_WEB_BROWSER);
 		if (!StringHelper.isNullOrEmpty(webBrowser)) {
 			setDriver(webBrowser, browserDriver);
-		}
-
-		String startupPage = fMethodNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_START_URL);
-		if (!StringHelper.isNullOrEmpty(startupPage)) {
-			goToPage(startupPage);
+			goToPage(fStartupPage);
 		}
 	}
 
@@ -104,16 +115,17 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		return driverPath.replace(envWithBoundaries, path);
 	}
 
-	private void processArguments(Object[] arguments, String argumentsDescription) {
+	private void processArguments(Object[] arguments, Object[] choiceNames, String argumentsDescription) {
 		for (int cnt = 0; cnt < fMethodNode.getParametersCount(); ++cnt) {
 			MethodParameterNode methodParameterNode = fMethodParameters.get(cnt);
 			String argument = arguments[cnt].toString();
-			processOneArgument(methodParameterNode, argument);
+			String choiceName = choiceNames[cnt].toString();
+			processOneArgument(methodParameterNode, argument, choiceName);
 		}		
 	}
 
 	private void processOneArgument(
-			MethodParameterNode methodParameterNode, String argument) {
+			MethodParameterNode methodParameterNode, String argument, String choiceName) {
 
 		if (processPageElement(methodParameterNode, argument)) {
 			return;
@@ -121,12 +133,15 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		if (processCmdWait(methodParameterNode, argument)) {
 			return;
 		}
+		if (processWebBrowser(methodParameterNode, argument, choiceName)) {
+			return;
+		}		
 		if (processCmdPageAddress(methodParameterNode, argument)) {
 			return;
 		}
 	}
 
-	private void setDriver(String driverName, String driverProperty) {
+	private void setDriverIntr(String driverName, String driverProperty) {
 		if (driverName == null) {
 			reportException("WebDriver name is empty.");
 			return;
@@ -160,24 +175,21 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		reportException("WebDriver is not supported: " + driverName);
 	}
 
-	private void goToPage(String url) {
-		checkWebDriver();
-		fDriver.get(url);
+	private void setDriver(String driverName, String driverProperty) {
+		setDriverIntr(driverName, driverProperty);
+		fBrowserDefined = true;
 	}
 
 	private boolean processPageElement(MethodParameterNode methodParameterNode, String argument) {
-		String parameterType = 
-				methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_PARAMETER_TYPE);
+		String elementType = methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_ELEMENT_TYPE);
 
-		if (!NodePropertyDefs.isElementTypePageElement(parameterType)) {
+		if (!NodePropertyDefs.isElementTypePageElement(elementType)) {
 			return false;
 		}
 
-		String findByType = 
-				methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_TYPE_OF_ELEMENT);
+		String findByType = methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_TYPE_OF_ELEMENT);
 
-		String findByValue = 
-				methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_VALUE_OF_ELEMENT);
+		String findByValue = methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_VALUE_OF_ELEMENT);
 
 		WebElement webElement = findWebElement(findByType, findByValue);
 		if (webElement == null) {
@@ -222,7 +234,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 
 	private boolean processCmdWait(MethodParameterNode methodParameterNode, String argument) {
 
-		String parameterType = methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_PARAMETER_TYPE);
+		String parameterType = methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_ELEMENT_TYPE);
 		if (!NodePropertyDefs.isElementTypeWaitTime(parameterType)) {
 			return false;
 		}
@@ -237,8 +249,38 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		return true;
 	}
 
+	private boolean processWebBrowser(MethodParameterNode methodParameterNode, String argument, String choiceName) {
+		String elementType = methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_ELEMENT_TYPE);
+		boolean isElementTypeBrowser = NodePropertyDefs.isElementTypeBrowser(elementType);
+
+		if (fBrowserDefined && isElementTypeBrowser) {
+			ExceptionHelper.reportRuntimeException(
+					"Web browser was already defined. Can not redefine it in parameter: " + methodParameterNode.getName());
+		}
+
+		if (!isElementTypeBrowser) {
+			return false;
+		}
+		if (!NodePropertyDefs.isValidBrowser(choiceName)) {
+			ExceptionHelper.reportRuntimeException("Invalid web browser name: " + choiceName);
+		}
+		String driverPath = decodeDriverPath(argument);
+		setDriver(choiceName, driverPath);
+
+		if (fStartupPage != null) {
+			goToPage(fStartupPage);
+		}
+
+		return true;
+	}
+
+	private void goToPage(String url) {
+		checkWebDriver();
+		fDriver.get(url);
+	}	
+
 	private boolean processCmdPageAddress(MethodParameterNode methodParameterNode, String argument) {	
-		String parameterType = methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_PARAMETER_TYPE);
+		String parameterType = methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_ELEMENT_TYPE);
 		if (!NodePropertyDefs.isElementTypePageUrl(parameterType)) {
 			return false;
 		}
