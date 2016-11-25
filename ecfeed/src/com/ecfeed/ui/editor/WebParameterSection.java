@@ -61,16 +61,16 @@ public class WebParameterSection extends BasicSection {
 		fElementTypeCombo = fFormObjectToolkit.createReadOnlyGridCombo(gridComposite, new ElementTypeChangedAdapter());
 		initializeComboByProperty(fElementTypeCombo, fParameterTypePropertyId);
 
-		//		fFormObjectToolkit.createLabel(gridComposite, "Find element by ");
-		//		fFindByElemTypeCombo = fFormObjectToolkit.createReadOnlyGridCombo(gridComposite, new FindByChangedAdapter());
-		//		initializeComboByProperty(fFindByElemTypeCombo, fFindByElemTypePropertyId);
-		//
-		//		fFormObjectToolkit.createLabel(gridComposite, "Using ");
-		//		fFindByElemValueText = fFormObjectToolkit.createGridText(gridComposite, new FindByValueChangedAdapter());
-		//
-		//		fFormObjectToolkit.createLabel(gridComposite, "Action ");
-		//		fActionCombo = fFormObjectToolkit.createReadOnlyGridCombo(gridComposite, new ActionChangedAdapter());
-		//		initializeComboByProperty(fActionCombo, fActionPropertyId);
+		fFormObjectToolkit.createLabel(gridComposite, "Find element by ");
+		fFindByElemTypeCombo = fFormObjectToolkit.createReadOnlyGridCombo(gridComposite, new FindByChangedAdapter());
+		initializeComboByProperty(fFindByElemTypeCombo, fFindByElemTypePropertyId);
+
+		fFormObjectToolkit.createLabel(gridComposite, "Using ");
+		fFindByElemValueText = fFormObjectToolkit.createGridText(gridComposite, new FindByValueChangedAdapter());
+
+		fFormObjectToolkit.createLabel(gridComposite, "Action ");
+		fActionCombo = fFormObjectToolkit.createReadOnlyGridCombo(gridComposite, new ActionChangedAdapter());
+		initializeComboByProperty(fActionCombo, fActionPropertyId);
 	}
 
 	public static void initializeComboByProperty(Combo combo, NodePropertyDefs.PropertyId propertyId) {
@@ -128,7 +128,6 @@ public class WebParameterSection extends BasicSection {
 		}
 	}
 
-	@SuppressWarnings("unused")
 	private class FindByChangedAdapter extends AbstractSelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
@@ -136,7 +135,6 @@ public class WebParameterSection extends BasicSection {
 		}
 	}
 
-	@SuppressWarnings("unused")
 	private class FindByValueChangedAdapter extends AbstractSelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
@@ -144,7 +142,6 @@ public class WebParameterSection extends BasicSection {
 		}
 	}	
 
-	@SuppressWarnings("unused")
 	private class ActionChangedAdapter extends AbstractSelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {

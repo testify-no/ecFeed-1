@@ -16,6 +16,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+import com.ecfeed.core.utils.BooleanHelper;
+
 public abstract class AbstractNode{
 	private String fName;
 	private AbstractNode fParent;
@@ -207,6 +209,11 @@ public abstract class AbstractNode{
 		}
 		return nodeProperty.getValue();
 	}
+
+	public boolean getPropertyValueBoolean(NodePropertyDefs.PropertyId propertyId) {
+		String str = getPropertyValue(propertyId);
+		return BooleanHelper.parseBoolean(str);
+	}	
 
 	public Set<String> getPropertyKeys() {
 		return fProperties.getKeys();

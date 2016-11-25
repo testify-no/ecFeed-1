@@ -27,7 +27,6 @@ import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.NodePropertyDefs;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.runner.ITestMethodInvoker;
-import com.ecfeed.core.utils.BooleanHelper;
 import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.StringHelper;
 
@@ -64,6 +63,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 
 		try {
 			fArgumentsDescription = argumentsDescription;
+			fBrowserDefined = false;
 			processStartupProperties();
 			processArguments(arguments, choiceNames, argumentsDescription);
 		} finally {
@@ -75,10 +75,15 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 
 	private void processStartupProperties() {
 
-		fStartupPage = fMethodNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_START_URL);
+		boolean mapStartUrlToParam 
+		= fMethodNode.getPropertyValueBoolean(NodePropertyDefs.PropertyId.PROPERTY_MAP_START_URL_TO_PARAM);
 
-		String mapBrowserToParamStr = fMethodNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_MAP_BROWSER_TO_PARAM);
-		boolean mapBrowserToParam = BooleanHelper.parseBoolean(mapBrowserToParamStr);
+		if (!mapStartUrlToParam) {
+			fStartupPage = fMethodNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_START_URL);
+		}
+
+		boolean mapBrowserToParam 
+		= fMethodNode.getPropertyValueBoolean(NodePropertyDefs.PropertyId.PROPERTY_MAP_BROWSER_TO_PARAM);
 
 		if (!mapBrowserToParam) {
 			processWebBrowserProperty();
@@ -136,7 +141,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		if (processWebBrowser(methodParameterNode, argument, choiceName)) {
 			return;
 		}		
-		if (processCmdPageAddress(methodParameterNode, argument)) {
+		if (processPageAddress(methodParameterNode, argument)) {
 			return;
 		}
 	}
@@ -253,13 +258,12 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		String elementType = methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_ELEMENT_TYPE);
 		boolean isElementTypeBrowser = NodePropertyDefs.isElementTypeBrowser(elementType);
 
-		if (fBrowserDefined && isElementTypeBrowser) {
-			ExceptionHelper.reportRuntimeException(
-					"Web browser was already defined. Can not redefine it in parameter: " + methodParameterNode.getName());
-		}
-
 		if (!isElementTypeBrowser) {
 			return false;
+		}
+		if (fBrowserDefined) {
+			ExceptionHelper.reportRuntimeException(
+					"Web browser was already defined. Can not redefine it in parameter: " + methodParameterNode.getName());
 		}
 		if (!NodePropertyDefs.isValidBrowser(choiceName)) {
 			ExceptionHelper.reportRuntimeException("Invalid web browser name: " + choiceName);
@@ -275,16 +279,29 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 	}
 
 	private void goToPage(String url) {
+		if (url == null) {
+			return;
+		}
 		checkWebDriver();
 		fDriver.get(url);
 	}	
 
-	private boolean processCmdPageAddress(MethodParameterNode methodParameterNode, String argument) {	
+	private boolean processPageAddress(MethodParameterNode methodParameterNode, String argument) {	
 		String parameterType = methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_ELEMENT_TYPE);
 		if (!NodePropertyDefs.isElementTypePageUrl(parameterType)) {
 			return false;
 		}
 
+		if (methodParameterNode.isExpected()) {
+			processExpectedPageAddress(argument);
+		} else {
+			goToPage(argument);
+		}
+
+		return true;
+	}
+
+	private void processExpectedPageAddress(String argument) {
 		checkWebDriver();
 		String currentUrl = fDriver.getCurrentUrl();
 
@@ -292,11 +309,10 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		currentUrl = StringHelper.removeFromPostfix(HTTP_POSTFIX, currentUrl);
 
 		if (currentUrl.equals(argument)) {
-			return true;
+			return;
 		}
 
 		reportException("Page address does not match. Expected: " + argument + " Current: " + currentUrl);
-		return true;
 	}
 
 	private void checkWebDriver() {
