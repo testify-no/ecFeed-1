@@ -157,7 +157,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 			return;
 		}
 		if (driverName.equals(NodePropertyDefs.browserNameFirefox())) {
-			System.setProperty("webdriver.firefox.driver", driverProperty);
+			System.setProperty("webdriver.gecko.driver", driverProperty);
 			fDriver = new FirefoxDriver();
 			return;
 		}		
