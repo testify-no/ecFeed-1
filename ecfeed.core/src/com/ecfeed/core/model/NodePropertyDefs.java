@@ -67,6 +67,7 @@ public class NodePropertyDefs {
 	private static final String BROWSER_OPERA = "Opera";
 	private static final String BROWSER_SAFARI = "Safari";
 
+	private static final String UNDEFINED = "Undefined";
 	private static final String PAGE_ELEMENT = "Page element";
 	private static final String PAGE_URL = "Page URL";
 	private static final String DELAY = "Delay";
@@ -97,8 +98,8 @@ public class NodePropertyDefs {
 
 	static PropertyDef webBrowser = 
 			new PropertyDef(
-					"webBrowser", JavaTypeHelper.TYPE_NAME_STRING, EMPTY_STR, 
-					new String[]{EMPTY_STR, BROWSER_CHROME, BROWSER_FIREFOX, BROWSER_IEXPLORER, BROWSER_OPERA, BROWSER_SAFARI});
+					"webBrowser", JavaTypeHelper.TYPE_NAME_STRING, BROWSER_CHROME, 
+					new String[]{BROWSER_CHROME, BROWSER_FIREFOX, BROWSER_IEXPLORER, BROWSER_OPERA, BROWSER_SAFARI});
 
 	static PropertyDef browserDriver = new PropertyDef("browserDriver", JavaTypeHelper.TYPE_NAME_STRING, null, null);	
 
@@ -109,8 +110,8 @@ public class NodePropertyDefs {
 
 	static PropertyDef parameterType = 
 			new PropertyDef(
-					"parameterType", JavaTypeHelper.TYPE_NAME_STRING, EMPTY_STR,
-					new String[]{EMPTY_STR, PAGE_ELEMENT, PAGE_URL, DELAY, BROWSER });
+					"parameterType", JavaTypeHelper.TYPE_NAME_STRING, UNDEFINED,
+					new String[]{UNDEFINED, PAGE_ELEMENT, PAGE_URL, DELAY, BROWSER });
 
 	static PropertyDef findByTypeOfElement = 
 			new PropertyDef(
