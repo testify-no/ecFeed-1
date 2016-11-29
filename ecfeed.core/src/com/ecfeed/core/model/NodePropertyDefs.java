@@ -69,7 +69,7 @@ public class NodePropertyDefs {
 
 	private static final String PAGE_ELEMENT = "Page element";
 	private static final String PAGE_URL = "Page URL";
-	private static final String WAIT_TIME = "Wait";
+	private static final String DELAY = "Delay";
 	private static final String BROWSER = "Browser";
 
 	private static final String ACTION_SEND_KEYS = "Send keys";
@@ -110,7 +110,7 @@ public class NodePropertyDefs {
 	static PropertyDef parameterType = 
 			new PropertyDef(
 					"parameterType", JavaTypeHelper.TYPE_NAME_STRING, EMPTY_STR,
-					new String[]{EMPTY_STR, PAGE_ELEMENT, PAGE_URL, WAIT_TIME, BROWSER });
+					new String[]{EMPTY_STR, PAGE_ELEMENT, PAGE_URL, DELAY, BROWSER });
 
 	static PropertyDef findByTypeOfElement = 
 			new PropertyDef(
@@ -248,7 +248,7 @@ public class NodePropertyDefs {
 	}	
 
 	public static boolean isElementTypeWaitTime(String value) {
-		if (value.equals(WAIT_TIME)) {
+		if (value.equals(DELAY)) {
 			return true;
 		}
 		return false;
