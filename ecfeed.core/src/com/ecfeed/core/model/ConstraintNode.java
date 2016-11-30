@@ -113,7 +113,7 @@ public class ConstraintNode extends AbstractNode{
 	}
 
 	@Override
-	public boolean compare(AbstractNode node){
+	public boolean isMatch(AbstractNode node){
 		if(node instanceof ConstraintNode == false){
 			return false;
 		}
@@ -126,7 +126,7 @@ public class ConstraintNode extends AbstractNode{
 			return false;
 		}
 
-		return super.compare(node);
+		return super.isMatch(node);
 	}
 
 	@Override

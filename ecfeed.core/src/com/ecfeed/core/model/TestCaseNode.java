@@ -147,7 +147,7 @@ public class TestCaseNode extends AbstractNode {
 	}
 
 	@Override
-	public boolean compare(AbstractNode node){
+	public boolean isMatch(AbstractNode node){
 		if(node instanceof TestCaseNode == false){
 			return false;
 		}
@@ -159,12 +159,12 @@ public class TestCaseNode extends AbstractNode {
 		}
 
 		for(int i = 0; i < getTestData().size(); i++){
-			if(getTestData().get(i).compare(compared.getTestData().get(i)) == false){
+			if(getTestData().get(i).isMatch(compared.getTestData().get(i)) == false){
 				return false;
 			}
 		}
 
-		return super.compare(node);
+		return super.isMatch(node);
 	}
 
 	@Override

@@ -80,7 +80,7 @@ public abstract class ParametersParentNode extends AbstractNode {
 	}
 
 	@Override
-	public boolean compare(AbstractNode node){
+	public boolean isMatch(AbstractNode node){
 		if(node instanceof ParametersParentNode == false){
 			return false;
 		}
@@ -90,11 +90,11 @@ public abstract class ParametersParentNode extends AbstractNode {
 			return false;
 		}
 		for(int i = 0; i < getParameters().size(); ++i){
-			if(getParameters().get(i).compare(comparedParent.getParameters().get(i)) == false){
+			if(getParameters().get(i).isMatch(comparedParent.getParameters().get(i)) == false){
 				return false;
 			}
 		}
-		return super.compare(node);
+		return super.isMatch(node);
 	}
 
 	public abstract List<MethodNode> getMethods(AbstractParameterNode parameter);

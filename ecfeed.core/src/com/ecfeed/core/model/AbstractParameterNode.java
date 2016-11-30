@@ -71,7 +71,7 @@ public abstract class AbstractParameterNode extends ChoicesParentNode {
 	}
 
 	@Override
-	public boolean compare(AbstractNode compared){
+	public boolean isMatch(AbstractNode compared){
 		if(compared instanceof AbstractParameterNode == false){
 			return false;
 		}
@@ -79,7 +79,7 @@ public abstract class AbstractParameterNode extends ChoicesParentNode {
 		if(comparedParameter.getType().equals(fType) == false){
 			return false;
 		}
-		return super.compare(compared);
+		return super.isMatch(compared);
 	}
 
 	public abstract List<MethodNode> getMethods();

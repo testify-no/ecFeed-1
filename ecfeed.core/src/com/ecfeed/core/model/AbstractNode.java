@@ -163,7 +163,7 @@ public abstract class AbstractNode{
 		return false;
 	}
 
-	public boolean compare(AbstractNode node){
+	public boolean isMatch(AbstractNode node){
 		if (!getName().equals(node.getName())) {
 			return false;
 		}

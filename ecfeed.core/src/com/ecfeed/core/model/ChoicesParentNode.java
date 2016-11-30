@@ -31,7 +31,7 @@ public abstract class ChoicesParentNode extends AbstractNode{
 	}
 
 	@Override
-	public boolean compare(AbstractNode node){
+	public boolean isMatch(AbstractNode node){
 		if(node instanceof ChoicesParentNode == false){
 			return false;
 		}
@@ -41,11 +41,11 @@ public abstract class ChoicesParentNode extends AbstractNode{
 		}
 
 		for(int i = 0; i < getChoices().size(); i++){
-			if(getChoices().get(i).compare(comparedChoiceParent.getChoices().get(i)) == false){
+			if(getChoices().get(i).isMatch(comparedChoiceParent.getChoices().get(i)) == false){
 				return false;
 			}
 		}
-		return super.compare(node);
+		return super.isMatch(node);
 	}
 
 	public abstract AbstractParameterNode getParameter();

@@ -146,7 +146,7 @@ public class ClassNode extends GlobalParametersParentNode {
 	}
 
 	@Override
-	public boolean compare(AbstractNode node){
+	public boolean isMatch(AbstractNode node){
 		if(node instanceof ClassNode == false){
 			return false;
 		}
@@ -158,12 +158,12 @@ public class ClassNode extends GlobalParametersParentNode {
 		}
 
 		for(int i = 0; i < comparedMethods.size(); i++){
-			if(getMethods().get(i).compare(comparedMethods.get(i)) == false){
+			if(getMethods().get(i).isMatch(comparedMethods.get(i)) == false){
 				return false;
 			}
 		}
 
-		return super.compare(node);
+		return super.isMatch(node);
 	}
 
 	@Override

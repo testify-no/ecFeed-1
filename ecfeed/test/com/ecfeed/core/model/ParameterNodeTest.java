@@ -259,7 +259,7 @@ public class ParameterNodeTest{
 			for(Boolean expected : new Boolean[]{true, false}){
 				MethodParameterNode c = new RandomModelGenerator().generateParameter(type, expected, 3, 3, 3);
 
-				assertTrue(c.compare(c));
+				assertTrue(c.isMatch(c));
 			}
 		}
 	}
@@ -269,12 +269,12 @@ public class ParameterNodeTest{
 		MethodParameterNode c1 = new MethodParameterNode("c", "type", "0", true);
 		MethodParameterNode c2 = new MethodParameterNode("c", "type", "0", true);
 
-		assertTrue(c1.compare(c2));
+		assertTrue(c1.isMatch(c2));
 
 		c1.setName("c1");
-		assertFalse(c1.compare(c2));
+		assertFalse(c1.isMatch(c2));
 		c2.setName("c1");
-		assertTrue(c1.compare(c2));
+		assertTrue(c1.isMatch(c2));
 	}
 
 	@Test
@@ -282,12 +282,12 @@ public class ParameterNodeTest{
 		MethodParameterNode c1 = new MethodParameterNode("c", "type", "0", true);
 		MethodParameterNode c2 = new MethodParameterNode("c", "type", "0", true);
 
-		assertTrue(c1.compare(c2));
+		assertTrue(c1.isMatch(c2));
 
 		c1.setType("type1");
-		assertFalse(c1.compare(c2));
+		assertFalse(c1.isMatch(c2));
 		c2.setType("type1");
-		assertTrue(c1.compare(c2));
+		assertTrue(c1.isMatch(c2));
 	}
 
 	@Test
@@ -295,12 +295,12 @@ public class ParameterNodeTest{
 		MethodParameterNode c1 = new MethodParameterNode("c", "type", "0", true);
 		MethodParameterNode c2 = new MethodParameterNode("c", "type", "0", true);
 
-		assertTrue(c1.compare(c2));
+		assertTrue(c1.isMatch(c2));
 
 		c1.setExpected(false);
-		assertFalse(c1.compare(c2));
+		assertFalse(c1.isMatch(c2));
 		c2.setExpected(false);
-		assertTrue(c1.compare(c2));
+		assertTrue(c1.isMatch(c2));
 	}
 
 	@Test
@@ -308,12 +308,12 @@ public class ParameterNodeTest{
 		MethodParameterNode c1 = new MethodParameterNode("c", "type", "0", true);
 		MethodParameterNode c2 = new MethodParameterNode("c", "type", "0", true);
 
-		assertTrue(c1.compare(c2));
+		assertTrue(c1.isMatch(c2));
 
 		c1.setDefaultValueString("new default value");
-		assertFalse(c1.compare(c2));
+		assertFalse(c1.isMatch(c2));
 		c2.setDefaultValueString("new default value");
-		assertTrue(c1.compare(c2));
+		assertTrue(c1.isMatch(c2));
 	}
 
 	@Test
@@ -321,47 +321,47 @@ public class ParameterNodeTest{
 		MethodParameterNode c1 = new MethodParameterNode("c", "type", "0", true);
 		MethodParameterNode c2 = new MethodParameterNode("c", "type", "0", true);
 
-		assertTrue(c1.compare(c2));
+		assertTrue(c1.isMatch(c2));
 
 		ChoiceNode p1 = new ChoiceNode("p", "value");
 		ChoiceNode p2 = new ChoiceNode("p", "value");
 
 		c1.addChoice(p1);
-		assertFalse(c1.compare(c2));
+		assertFalse(c1.isMatch(c2));
 		c2.addChoice(p2);
-		assertTrue(c1.compare(c2));
+		assertTrue(c1.isMatch(c2));
 
 		p1.setName("p1");
-		assertFalse(c1.compare(c2));
+		assertFalse(c1.isMatch(c2));
 		p2.setName("p1");
-		assertTrue(c1.compare(c2));
+		assertTrue(c1.isMatch(c2));
 	}
 
 
 	@Test
 	public void compareTest(){
-		assertTrue(new MethodParameterNode("c", "int", "0", true).compare(new MethodParameterNode("c", "int", "0", true)));
-		assertTrue(new MethodParameterNode("c", "int", "0", false).compare(new MethodParameterNode("c", "int", "0", false)));
+		assertTrue(new MethodParameterNode("c", "int", "0", true).isMatch(new MethodParameterNode("c", "int", "0", true)));
+		assertTrue(new MethodParameterNode("c", "int", "0", false).isMatch(new MethodParameterNode("c", "int", "0", false)));
 
-		assertFalse(new MethodParameterNode("c1", "int", "0", false).compare(new MethodParameterNode("c", "int","0",  false)));
-		assertFalse(new MethodParameterNode("c", "boolean", "0", false).compare(new MethodParameterNode("c", "int", "0", false)));
-		assertFalse(new MethodParameterNode("c", "int", "0", true).compare(new MethodParameterNode("c", "int", "0", false)));
+		assertFalse(new MethodParameterNode("c1", "int", "0", false).isMatch(new MethodParameterNode("c", "int","0",  false)));
+		assertFalse(new MethodParameterNode("c", "boolean", "0", false).isMatch(new MethodParameterNode("c", "int", "0", false)));
+		assertFalse(new MethodParameterNode("c", "int", "0", true).isMatch(new MethodParameterNode("c", "int", "0", false)));
 
 		MethodParameterNode c1 = new MethodParameterNode("c", "int", "0", false);
 		MethodParameterNode c2 = new MethodParameterNode("c", "int", "0", false);
-		assertTrue(c1.compare(c2));
+		assertTrue(c1.isMatch(c2));
 
 		c1.setDefaultValueString("cc");
-		assertFalse(c1.compare(c2));
+		assertFalse(c1.isMatch(c2));
 		c2.setDefaultValueString("cc");
-		assertTrue(c1.compare(c2));
+		assertTrue(c1.isMatch(c2));
 
 		c1.addChoice(new ChoiceNode("p", "x"));
 		c1.setDefaultValueString("cc");
-		assertFalse(c1.compare(c2));
+		assertFalse(c1.isMatch(c2));
 		c2.addChoice(new ChoiceNode("p1", "x"));
-		assertFalse(c1.compare(c2));
+		assertFalse(c1.isMatch(c2));
 		c2.getChoice("p1").setName("p");
-		assertTrue(c1.compare(c2));
+		assertTrue(c1.isMatch(c2));
 	}
 }

@@ -202,7 +202,7 @@ public class MethodParameterNode extends AbstractParameterNode {
 	}
 
 	@Override
-	public boolean compare(AbstractNode node) {
+	public boolean isMatch(AbstractNode node) {
 		if (node instanceof MethodParameterNode == false) {
 			return false;
 		}
@@ -228,12 +228,12 @@ public class MethodParameterNode extends AbstractParameterNode {
 
 		for (int i = 0; i < choicesCount; i++) {
 			if (getChoices().get(i)
-					.compare(comparedParameter.getChoices().get(i)) == false) {
+					.isMatch(comparedParameter.getChoices().get(i)) == false) {
 				return false;
 			}
 		}
 
-		return super.compare(node);
+		return super.isMatch(node);
 	}
 
 	@Override

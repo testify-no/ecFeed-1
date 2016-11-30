@@ -324,12 +324,12 @@ public class ChoiceNodeTest{
 		ChoiceNode p1 = new ChoiceNode("p", "VALUE");
 		ChoiceNode p2 = new ChoiceNode("p", "VALUE");
 
-		assertTrue(p1.compare(p2));
+		assertTrue(p1.isMatch(p2));
 
 		p1.setName("p1");
-		assertFalse(p1.compare(p2));
+		assertFalse(p1.isMatch(p2));
 		p2.setName("p1");
-		assertTrue(p1.compare(p2));
+		assertTrue(p1.isMatch(p2));
 	}
 
 	@Test
@@ -337,12 +337,12 @@ public class ChoiceNodeTest{
 		ChoiceNode p1 = new ChoiceNode("p", "VALUE");
 		ChoiceNode p2 = new ChoiceNode("p", "VALUE");
 
-		assertTrue(p1.compare(p2));
+		assertTrue(p1.isMatch(p2));
 
 		p1.setValueString("NEW VALUE");
-		assertFalse(p1.compare(p2));
+		assertFalse(p1.isMatch(p2));
 		p2.setValueString("NEW VALUE");
-		assertTrue(p1.compare(p2));
+		assertTrue(p1.isMatch(p2));
 	}
 
 	@Test
@@ -350,17 +350,17 @@ public class ChoiceNodeTest{
 		ChoiceNode p1 = new ChoiceNode("p", "VALUE");
 		ChoiceNode p2 = new ChoiceNode("p", "VALUE");
 
-		assertTrue(p1.compare(p2));
+		assertTrue(p1.isMatch(p2));
 
 		p1.addLabel("label");
-		assertFalse(p1.compare(p2));
+		assertFalse(p1.isMatch(p2));
 		p2.addLabel("label");
-		assertTrue(p1.compare(p2));
+		assertTrue(p1.isMatch(p2));
 
 		p1.addLabel("label1");
-		assertFalse(p1.compare(p2));
+		assertFalse(p1.isMatch(p2));
 		p2.addLabel("label1");
-		assertTrue(p1.compare(p2));
+		assertTrue(p1.isMatch(p2));
 	}
 
 	@Test
@@ -371,17 +371,17 @@ public class ChoiceNodeTest{
 		ChoiceNode p11 = new ChoiceNode("p", "VALUE");
 		ChoiceNode p21 = new ChoiceNode("p", "VALUE");
 
-		assertTrue(p1.compare(p2));
+		assertTrue(p1.isMatch(p2));
 
 		p1.addChoice(p11);
-		assertFalse(p1.compare(p2));
+		assertFalse(p1.isMatch(p2));
 		p2.addChoice(p21);
-		assertTrue(p1.compare(p2));
+		assertTrue(p1.isMatch(p2));
 
 		p11.setName("p11");
-		assertFalse(p1.compare(p2));
+		assertFalse(p1.isMatch(p2));
 		p21.setName("p11");
-		assertTrue(p1.compare(p2));
+		assertTrue(p1.isMatch(p2));
 	}
 
 }

@@ -152,7 +152,7 @@ public class ChoiceNode extends ChoicesParentNode{
 	}
 
 	@Override
-	public boolean compare(AbstractNode node){
+	public boolean isMatch(AbstractNode node){
 		if(node instanceof ChoiceNode == false){
 			return false;
 		}
@@ -172,12 +172,12 @@ public class ChoiceNode extends ChoicesParentNode{
 		}
 
 		for(int i = 0; i < getChoices().size(); i++){
-			if(getChoices().get(i).compare(compared.getChoices().get(i)) == false){
+			if(getChoices().get(i).isMatch(compared.getChoices().get(i)) == false){
 				return false;
 			}
 		}
 
-		return super.compare(node);
+		return super.isMatch(node);
 	}
 
 	@Override

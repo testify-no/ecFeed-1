@@ -264,13 +264,13 @@ public class AbstractNodeTest{
 		AbstractNode n1 = new AbstractNodeImpl("n");
 		AbstractNode n2 = new AbstractNodeImpl("n");
 
-		assertTrue(n1.compare(n2));
+		assertTrue(n1.isMatch(n2));
 
 		n2.setName("nn");
-		assertFalse(n1.compare(n2));
+		assertFalse(n1.isMatch(n2));
 
 		n1.setName("nn");
-		assertTrue(n1.compare(n2));
+		assertTrue(n1.isMatch(n2));
 
 	}
 }
