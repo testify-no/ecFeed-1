@@ -259,7 +259,7 @@ public class JavaModelBuilder {
 	private boolean hasSupportedParameterTypes(Method method) {
 		for(Class<?> type : method.getParameterTypes()){
 			String typeName = JavaUtils.getTypeName(type.getCanonicalName()); 
-			if(JavaUtils.isPrimitive(typeName)){
+			if(JavaTypeHelper.isPrimitive(typeName)){
 				return false;
 			}
 			else if(type.isEnum() == false){

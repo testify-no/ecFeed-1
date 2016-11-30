@@ -22,7 +22,6 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.Signature;
 
-import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.MethodNode;
@@ -254,7 +253,7 @@ public class EclipseModelBuilder extends JavaModelAnalyser{
 	protected boolean hasSupportedParameters(IMethod method) {
 		try {
 			for(ILocalVariable var : method.getParameters()){
-				if(JavaUtils.isPrimitive(getTypeName(method, var)) == false && isEnumType(method, var) == false){
+				if(JavaTypeHelper.isPrimitive(getTypeName(method, var)) == false && isEnumType(method, var) == false){
 					return false;
 				}
 			}

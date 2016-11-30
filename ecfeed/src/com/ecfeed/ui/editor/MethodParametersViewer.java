@@ -23,11 +23,11 @@ import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.Transfer;
 
-import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.GlobalParameterNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
+import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.ui.common.NodeViewerColumnLabelProvider;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.modelif.AbstractParameterInterface;
@@ -80,7 +80,7 @@ public class MethodParametersViewer extends AbstractParametersViewer {
 		@Override
 		protected boolean canEdit(Object element) {
 			MethodParameterNode parameter = (MethodParameterNode)element;
-			return parameter.isLinked() == false || JavaUtils.isUserType(parameter.getType());
+			return parameter.isLinked() == false || JavaTypeHelper.isUserType(parameter.getType());
 		}
 
 		@Override
@@ -113,7 +113,7 @@ public class MethodParametersViewer extends AbstractParametersViewer {
 			if(expectedValues.contains(parameter.getDefaultValue()) == false){
 				expectedValues.add(parameter.getDefaultValue());
 			}
-			if(JavaUtils.isUserType(parameter.getType())){
+			if(JavaTypeHelper.isUserType(parameter.getType())){
 				for(ChoiceNode leaf : parameter.getLeafChoices()){
 					if(!expectedValues.contains(leaf.getValueString())){
 						expectedValues.add(leaf.getValueString());

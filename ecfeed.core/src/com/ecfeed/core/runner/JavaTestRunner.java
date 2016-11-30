@@ -21,6 +21,7 @@ import com.ecfeed.core.adapter.java.ModelClassLoader;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.MethodNode;
+import com.ecfeed.core.utils.JavaTypeHelper;
 
 public class JavaTestRunner {
 
@@ -118,7 +119,7 @@ public class JavaTestRunner {
 			if(value == null){
 				String type = choice.getParameter().getType();
 				//check if null value acceptable
-				if(JavaUtils.isString(type) || JavaUtils.isUserType(type)){
+				if(JavaUtils.isString(type) || JavaTypeHelper.isUserType(type)){
 					if(choice.getValueString().equals(Constants.VALUE_REPRESENTATION_NULL) == false){
 						RunnerException.report(Messages.CANNOT_PARSE_PARAMETER(type, choice.getValueString()));
 					}

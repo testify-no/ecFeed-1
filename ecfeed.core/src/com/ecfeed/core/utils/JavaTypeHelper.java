@@ -10,6 +10,8 @@
 
 package com.ecfeed.core.utils;
 
+import java.util.Arrays;
+
 public class JavaTypeHelper {
 
 	public static final String TYPE_NAME_BOOLEAN = "boolean";
@@ -22,4 +24,40 @@ public class JavaTypeHelper {
 	public static final String TYPE_NAME_SHORT = "short";
 	public static final String TYPE_NAME_STRING = "String";
 
+	public static final String[] SUPPORTED_PRIMITIVE_TYPES = new String[]{
+		TYPE_NAME_INT,
+		TYPE_NAME_BOOLEAN,
+		TYPE_NAME_LONG,
+		TYPE_NAME_SHORT,
+		TYPE_NAME_BYTE,
+		TYPE_NAME_DOUBLE,
+		TYPE_NAME_FLOAT,
+		TYPE_NAME_CHAR,
+		TYPE_NAME_STRING
+	};
+	
+	public static boolean isPrimitive(String typeName) {
+		return Arrays.asList(SUPPORTED_PRIMITIVE_TYPES).contains(typeName);
+	}
+	
+	public static boolean isUserType(String typeName) {
+		if (isPrimitive(typeName)) {
+			return false;
+		}
+		return true;
+	}
+	
+	public static String[] supportedPrimitiveTypes() {
+		return SUPPORTED_PRIMITIVE_TYPES;
+	}
+	
+	public static boolean hasLimitedValuesSet(String type){
+		return isPrimitive(type) == false || type.equals(getBooleanTypeName());
+	}
+	
+	public static String getBooleanTypeName(){
+		return JavaTypeHelper.TYPE_NAME_BOOLEAN;
+	}
+	
+	
 }

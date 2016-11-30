@@ -61,6 +61,7 @@ import com.ecfeed.core.model.Constraint;
 import com.ecfeed.core.model.ConstraintNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
+import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.StringHolder;
 import com.ecfeed.ui.common.Constants;
 import com.ecfeed.ui.common.EclipseImplementationStatusResolver;
@@ -179,8 +180,7 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 				EImplementationStatus parameterStatus = fStatusResolver
 						.getImplementationStatus(parameter);
 				if ((parameter.getChoices().isEmpty() && (parameter
-						.isExpected() == false || JavaUtils
-						.isUserType(parameter.getType())))
+						.isExpected() == false || JavaTypeHelper.isUserType(parameter.getType())))
 						|| parameterStatus == EImplementationStatus.NOT_IMPLEMENTED) {
 					setOkButtonStatus(false);
 					break;
@@ -189,8 +189,7 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 		} else {
 			for (MethodParameterNode parameter : fMethod.getMethodParameters()) {
 				if (parameter.getChoicesWithCopies().isEmpty()
-						&& (parameter.isExpected() == false || JavaUtils
-						.isUserType(parameter.getType()))) {
+						&& (parameter.isExpected() == false || JavaTypeHelper.isUserType(parameter.getType()))) {
 					setOkButtonStatus(false);
 					break;
 				}

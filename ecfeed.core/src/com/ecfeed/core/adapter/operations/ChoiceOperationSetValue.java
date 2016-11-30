@@ -13,7 +13,6 @@ package com.ecfeed.core.adapter.operations;
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.ITypeAdapterProvider;
 import com.ecfeed.core.adapter.java.Constants;
-import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.adapter.java.Messages;
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ChoiceNode;
@@ -21,6 +20,7 @@ import com.ecfeed.core.model.GlobalParameterNode;
 import com.ecfeed.core.model.IParameterVisitor;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelOperationException;
+import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.SystemLogger;
 
 public class ChoiceOperationSetValue extends AbstractModelOperation {
@@ -37,7 +37,7 @@ public class ChoiceOperationSetValue extends AbstractModelOperation {
 		@Override
 		public Object visit(MethodParameterNode parameter) throws Exception {
 			fOriginalDefaultValue = parameter.getDefaultValue();
-			if(parameter != null && JavaUtils.isUserType(parameter.getType())){
+			if(parameter != null && JavaTypeHelper.isUserType(parameter.getType())){
 				if(parameter.getLeafChoiceValues().contains(parameter.getDefaultValue()) == false){
 					parameter.setDefaultValueString(fNewValue);
 				}

@@ -13,10 +13,10 @@ package com.ecfeed.ui.modelif;
 import java.util.List;
 
 import com.ecfeed.core.adapter.IModelOperation;
-import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.adapter.operations.GlobalParameterOperationSetType;
 import com.ecfeed.core.model.GlobalParameterNode;
 import com.ecfeed.core.model.MethodParameterNode;
+import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 
 public class GlobalParameterInterface extends AbstractParameterInterface {
@@ -41,7 +41,7 @@ public class GlobalParameterInterface extends AbstractParameterInterface {
 
 	@Override
 	public boolean commentsImportExportEnabled(){
-		return super.commentsImportExportEnabled() && JavaUtils.isUserType(getType());
+		return super.commentsImportExportEnabled() && JavaTypeHelper.isUserType(getType());
 	}
 
 	@Override

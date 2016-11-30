@@ -51,6 +51,7 @@ import com.ecfeed.core.runner.java.JUnitTestMethodInvoker;
 import com.ecfeed.core.runner.java.SeleniumTestMethodInvoker;
 import com.ecfeed.core.serialization.export.ExportTemplateParser;
 import com.ecfeed.core.utils.EcException;
+import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.serialization.export.TestCasesExporter;
@@ -461,7 +462,7 @@ public class MethodInterface extends ParametersParentInterface {
 
 	@Override
 	protected String generateNewParameterType() {
-		for (String type : JavaUtils.supportedPrimitiveTypes()) {
+		for (String type : JavaTypeHelper.supportedPrimitiveTypes()) {
 			List<String> newTypes = getTarget().getParametersTypes();
 			newTypes.add(type);
 			if (getTarget().getClassNode().getMethod(getTarget().getName(),

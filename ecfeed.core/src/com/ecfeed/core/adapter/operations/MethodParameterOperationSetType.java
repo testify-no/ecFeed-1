@@ -19,12 +19,13 @@ import java.util.Map;
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.ITypeAdapter;
 import com.ecfeed.core.adapter.ITypeAdapterProvider;
-import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.adapter.java.Messages;
 import com.ecfeed.core.model.AbstractStatement;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.ChoicesParentNode;
 import com.ecfeed.core.model.ChoicesParentStatement;
+import com.ecfeed.core.model.ChoicesParentStatement.ChoiceCondition;
+import com.ecfeed.core.model.ChoicesParentStatement.LabelCondition;
 import com.ecfeed.core.model.Constraint;
 import com.ecfeed.core.model.ConstraintNode;
 import com.ecfeed.core.model.ExpectedValueStatement;
@@ -37,8 +38,7 @@ import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.model.StatementArray;
 import com.ecfeed.core.model.StaticStatement;
 import com.ecfeed.core.model.TestCaseNode;
-import com.ecfeed.core.model.ChoicesParentStatement.ChoiceCondition;
-import com.ecfeed.core.model.ChoicesParentStatement.LabelCondition;
+import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.SystemLogger;
 
 public class MethodParameterOperationSetType extends BulkOperation {
@@ -96,7 +96,7 @@ public class MethodParameterOperationSetType extends BulkOperation {
 				String newValue = adapter.convert(statement.getCondition().getValueString());
 				fOriginalStatementValues.put(statement, statement.getCondition().getValueString());
 				statement.getCondition().setValueString(newValue);
-				if(JavaUtils.isUserType(getNewType())){
+				if(JavaTypeHelper.isUserType(getNewType())){
 					success = newValue != null && fTarget.getLeafChoiceValues().contains(newValue);
 				}
 				else{
@@ -250,7 +250,7 @@ public class MethodParameterOperationSetType extends BulkOperation {
 					defaultValue = adapter.defaultValue();
 				}
 			}
-			if(JavaUtils.isUserType(getNewType())){
+			if(JavaTypeHelper.isUserType(getNewType())){
 				if(fTarget.getLeafChoices().size() > 0){
 					if(fTarget.getLeafChoiceValues().contains(defaultValue) == false){
 						defaultValue = fTarget.getLeafChoiceValues().toArray(new String[]{})[0];
@@ -271,7 +271,7 @@ public class MethodParameterOperationSetType extends BulkOperation {
 				while(tcIt.hasNext()){
 					ChoiceNode expectedValue = tcIt.next().getTestData().get(fTarget.getIndex());
 					String newValue = adapter.convert(expectedValue.getValueString());
-					if(JavaUtils.isUserType(getNewType())){
+					if(JavaTypeHelper.isUserType(getNewType())){
 						if(fTarget.getLeafChoiceValues().contains(newValue) == false){
 							tcIt.remove();
 							continue;

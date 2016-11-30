@@ -27,11 +27,11 @@ import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.widgets.Display;
 
 import com.ecfeed.core.adapter.ITypeAdapter;
-import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
+import com.ecfeed.core.utils.JavaTypeHelper;
 
 public class TestDataValueEditingSupport extends EditingSupport {
 	private final TableViewer fViewer;
@@ -74,14 +74,14 @@ public class TestDataValueEditingSupport extends EditingSupport {
 		if (expectedValues.contains(choice.getValueString()) == false) {
 			expectedValues.add(choice.getValueString());
 		}
-		if(JavaUtils.isUserType(parameter.getType())){
+		if(JavaTypeHelper.isUserType(parameter.getType())){
 			expectedValues.addAll(parameter.getLeafChoiceValues());
 		}
 		editor.setInput(expectedValues);
 
 		CCombo combo = editor.getViewer().getCCombo();
 
-		if (!JavaUtils.hasLimitedValuesSet(type)) {
+		if (!JavaTypeHelper.hasLimitedValuesSet(type)) {
 			combo.setEditable(true);
 		} else {
 			editor.setActivationStyle(ComboBoxViewerCellEditor.DROP_DOWN_ON_KEY_ACTIVATION |

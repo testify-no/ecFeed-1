@@ -29,10 +29,10 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 
-import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.ChoicesParentNode;
+import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
@@ -138,7 +138,7 @@ public class ChoicesViewer extends TableViewerSection {
 				fCellEditor.setActivationStyle(SWT.NONE);
 			}
 			List<String> items = AbstractParameterInterface.getSpecialValues(node.getParameter().getType());
-			if(JavaUtils.isUserType(parameter.getType())){
+			if(JavaTypeHelper.isUserType(parameter.getType())){
 				Set<String> usedValues = parameter.getLeafChoiceValues();
 				usedValues.removeAll(items);
 				items.addAll(usedValues);
