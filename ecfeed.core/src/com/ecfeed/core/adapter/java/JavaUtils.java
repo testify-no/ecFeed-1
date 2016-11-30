@@ -26,7 +26,7 @@ public class JavaUtils {
 
 	public static boolean isValidTypeName(String name){
 		if(name == null) return false;
-		if(JavaTypeHelper.isPrimitive(name)) return true;
+		if(JavaTypeHelper.isJavaType(name)) return true;
 		if(name.matches(Constants.REGEX_CLASS_NODE_NAME) == false) return false;
 		StringTokenizer tokenizer = new StringTokenizer(name, ".");
 		while(tokenizer.hasMoreTokens()){

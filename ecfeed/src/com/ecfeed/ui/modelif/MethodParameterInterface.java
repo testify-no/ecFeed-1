@@ -89,7 +89,7 @@ public class MethodParameterInterface extends AbstractParameterInterface {
 
 	public String[] defaultValueSuggestions(){
 		Set<String> items = new HashSet<String>(getSpecialValues());
-		if(JavaTypeHelper.isPrimitive(getType()) == false){
+		if(JavaTypeHelper.isJavaType(getType()) == false){
 			for(ChoiceNode p : getTarget().getLeafChoices()){
 				items.add(p.getValueString());
 			}

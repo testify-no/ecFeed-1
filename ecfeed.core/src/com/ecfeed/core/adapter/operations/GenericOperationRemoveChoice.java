@@ -81,7 +81,7 @@ public class GenericOperationRemoveChoice extends BulkOperation {
 
 			@Override
 			public Object visit(MethodParameterNode parameter) throws Exception {
-				if(parameter.isExpected() && JavaTypeHelper.isPrimitive(parameter.getType()) == false && parameter.getChoices().size() == 1 && parameter.getChoices().get(0) == fChoice){
+				if(parameter.isExpected() && JavaTypeHelper.isJavaType(parameter.getType()) == false && parameter.getChoices().size() == 1 && parameter.getChoices().get(0) == fChoice){
 					// We are removing the only choice of expected parameter.
 					// The last parameter must represent the default expected value
 					ModelOperationException.report(Messages.EXPECTED_USER_TYPE_CATEGORY_LAST_PARTITION_PROBLEM);

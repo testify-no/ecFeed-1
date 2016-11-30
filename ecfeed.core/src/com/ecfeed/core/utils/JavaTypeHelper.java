@@ -24,7 +24,7 @@ public class JavaTypeHelper {
 	public static final String TYPE_NAME_SHORT = "short";
 	public static final String TYPE_NAME_STRING = "String";
 
-	public static final String[] SUPPORTED_PRIMITIVE_TYPES = new String[]{
+	private static final String[] SUPPORTED_PRIMITIVE_TYPES = new String[]{
 		TYPE_NAME_INT,
 		TYPE_NAME_BOOLEAN,
 		TYPE_NAME_LONG,
@@ -35,29 +35,29 @@ public class JavaTypeHelper {
 		TYPE_NAME_CHAR,
 		TYPE_NAME_STRING
 	};
-	
-	public static boolean isPrimitive(String typeName) {
+
+	public static boolean isJavaType(String typeName) {
 		return Arrays.asList(SUPPORTED_PRIMITIVE_TYPES).contains(typeName);
 	}
-	
+
 	public static boolean isUserType(String typeName) {
-		if (isPrimitive(typeName)) {
+		if (isJavaType(typeName)) {
 			return false;
 		}
 		return true;
 	}
-	
+
 	public static String[] supportedPrimitiveTypes() {
 		return SUPPORTED_PRIMITIVE_TYPES;
 	}
-	
+
 	public static boolean hasLimitedValuesSet(String type){
-		return isPrimitive(type) == false || type.equals(getBooleanTypeName());
+		return isJavaType(type) == false || type.equals(getBooleanTypeName());
 	}
-	
+
 	public static String getBooleanTypeName(){
 		return JavaTypeHelper.TYPE_NAME_BOOLEAN;
 	}
-	
-	
+
+
 }

@@ -253,7 +253,7 @@ public class EclipseModelBuilder extends JavaModelAnalyser{
 	protected boolean hasSupportedParameters(IMethod method) {
 		try {
 			for(ILocalVariable var : method.getParameters()){
-				if(JavaTypeHelper.isPrimitive(getTypeName(method, var)) == false && isEnumType(method, var) == false){
+				if(JavaTypeHelper.isJavaType(getTypeName(method, var)) == false && isEnumType(method, var) == false){
 					return false;
 				}
 			}

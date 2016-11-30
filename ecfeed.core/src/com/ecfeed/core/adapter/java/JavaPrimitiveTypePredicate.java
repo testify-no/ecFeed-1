@@ -16,7 +16,7 @@ import com.ecfeed.core.utils.JavaTypeHelper;
 public class JavaPrimitiveTypePredicate implements IPrimitiveTypePredicate{
 	@Override
 	public boolean isPrimitive(String type){
-		return JavaTypeHelper.isPrimitive(type);
+		return JavaTypeHelper.isJavaType(type);
 	}
 }
 

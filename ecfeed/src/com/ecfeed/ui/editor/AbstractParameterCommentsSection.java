@@ -136,7 +136,7 @@ public abstract class AbstractParameterCommentsSection extends JavaDocCommentsSe
 		TabItem activeItem = getActiveItem();
 		boolean enabled = true;
 		if(activeItem == getTypeCommentsTab() || activeItem == getTypeJavadocTab()){
-			if(JavaTypeHelper.isPrimitive(getTarget().getType())){
+			if(JavaTypeHelper.isJavaType(getTarget().getType())){
 				enabled = false;
 			}
 		}

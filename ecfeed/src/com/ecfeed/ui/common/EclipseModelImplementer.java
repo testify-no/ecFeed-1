@@ -193,7 +193,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 
 	protected void implementParameterDefinition(AbstractParameterNode node, Set<String> fields) throws CoreException, EcException {
 		String typeName = node.getType();
-		if(JavaTypeHelper.isPrimitive(typeName)){
+		if(JavaTypeHelper.isJavaType(typeName)){
 			return;
 		}
 		if(JavaUtils.isValidTypeName(typeName) == false){
@@ -498,7 +498,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 	private boolean parameterDefinitionImplementable(AbstractParameterNode parameter) {
 		try {
 			String type = parameter.getType();
-			if(JavaTypeHelper.isPrimitive(type)){
+			if(JavaTypeHelper.isJavaType(type)){
 				return false;
 			}
 			else{
