@@ -24,6 +24,7 @@ import org.openqa.selenium.safari.SafariDriver;
 
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
+import com.ecfeed.core.model.NodePropertyDefElemType;
 import com.ecfeed.core.model.NodePropertyDefs;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.runner.ITestMethodInvoker;
@@ -188,7 +189,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 	private boolean processPageElement(MethodParameterNode methodParameterNode, String argument) {
 		String elementType = methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_ELEMENT_TYPE);
 
-		if (!NodePropertyDefs.isElementTypePageElement(elementType)) {
+		if (!NodePropertyDefElemType.isPageElement(elementType)) {
 			return false;
 		}
 
@@ -240,7 +241,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 	private boolean processCmdWait(MethodParameterNode methodParameterNode, String argument) {
 
 		String parameterType = methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_ELEMENT_TYPE);
-		if (!NodePropertyDefs.isElementTypeWaitTime(parameterType)) {
+		if (!NodePropertyDefElemType.isDelay(parameterType)) {
 			return false;
 		}
 
@@ -256,7 +257,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 
 	private boolean processWebBrowser(MethodParameterNode methodParameterNode, String argument, String choiceName) {
 		String elementType = methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_ELEMENT_TYPE);
-		boolean isElementTypeBrowser = NodePropertyDefs.isElementTypeBrowser(elementType);
+		boolean isElementTypeBrowser = NodePropertyDefElemType.isBrowser(elementType);
 
 		if (!isElementTypeBrowser) {
 			return false;
@@ -288,7 +289,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 
 	private boolean processPageAddress(MethodParameterNode methodParameterNode, String argument) {	
 		String parameterType = methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_ELEMENT_TYPE);
-		if (!NodePropertyDefs.isElementTypePageUrl(parameterType)) {
+		if (!NodePropertyDefElemType.isPageUrl(parameterType)) {
 			return false;
 		}
 

@@ -59,5 +59,12 @@ public class JavaTypeHelper {
 		return JavaTypeHelper.TYPE_NAME_BOOLEAN;
 	}
 
+	public static boolean isStringTypeName(String typeName) {
+		if (typeName.equals(TYPE_NAME_STRING)) {
+			return true;
+		}
+		return false;
+	}
+
 
 }

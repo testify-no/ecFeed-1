@@ -15,46 +15,6 @@ import com.ecfeed.core.utils.JavaTypeHelper;
 
 public class NodePropertyDefs {
 
-	static class PropertyDef {
-		private String fName;
-		private String fType;
-		private String fDefaultValue;
-		private String[] fPossibleValues;
-
-		PropertyDef(String name, String type, String defaultValue, String[] possibleValues) {
-			fName = name;
-			fType = type;
-			fDefaultValue = defaultValue;
-			fPossibleValues = possibleValues;
-		}
-
-		String getName() {
-			return fName;
-		}
-
-		String getType() {
-			return fType;
-		}
-
-		String getDefaultValue() {
-			return fDefaultValue;
-		}	
-
-		String[] getPossibleValues() {
-			return fPossibleValues;
-		}
-
-		boolean matchesPossibleValue(String valueToMatch) {
-			for (String possibleValue : fPossibleValues) {
-				if (possibleValue.equals(valueToMatch)) {
-					return true;
-				}
-			}
-
-			return false;
-		}
-	}
-
 	private static final String JAVA_RUNNER = "Java Runner";
 	private static final String WEB_DRIVER = "Web Runner";
 
@@ -67,12 +27,6 @@ public class NodePropertyDefs {
 	private static final String BROWSER_OPERA = "Opera";
 	private static final String BROWSER_SAFARI = "Safari";
 
-	private static final String UNDEFINED = "Undefined";
-	private static final String PAGE_ELEMENT = "Page element";
-	private static final String PAGE_URL = "Page URL";
-	private static final String DELAY = "Delay";
-	private static final String BROWSER = "Browser";
-
 	private static final String ACTION_SEND_KEYS = "Send keys";
 	private static final String ACTION_CLICK = "Click";
 	private static final String ACTION_SUBMIT = "Submit";
@@ -82,46 +36,41 @@ public class NodePropertyDefs {
 
 	private static String[] falseTrueArray = new String[]{FALSE_VALUE, TRUE_VALUE};
 
-	static PropertyDef runOnAndroid = 
-			new PropertyDef("runOnAndroid", JavaTypeHelper.TYPE_NAME_BOOLEAN, FALSE_VALUE, falseTrueArray);
+	static NodePropertyDef runOnAndroid = 
+			new NodePropertyDef("runOnAndroid", JavaTypeHelper.TYPE_NAME_BOOLEAN, FALSE_VALUE, falseTrueArray);
 
-	static PropertyDef androidRunner = 
-			new PropertyDef("androidRunner", JavaTypeHelper.TYPE_NAME_STRING, null, null);	
+	static NodePropertyDef androidRunner = 
+			new NodePropertyDef("androidRunner", JavaTypeHelper.TYPE_NAME_STRING, null, null);	
 
-	static PropertyDef methodRunner = 
-			new PropertyDef(
+	static NodePropertyDef methodRunner = 
+			new NodePropertyDef(
 					"methodRunner", JavaTypeHelper.TYPE_NAME_STRING, JAVA_RUNNER,
 					new String[]{JAVA_RUNNER, WEB_DRIVER});
 
-	static PropertyDef mapBrowserToParam =  
-			new PropertyDef("mapBrowserToParam", JavaTypeHelper.TYPE_NAME_BOOLEAN, FALSE_VALUE, falseTrueArray);
+	static NodePropertyDef mapBrowserToParam =  
+			new NodePropertyDef("mapBrowserToParam", JavaTypeHelper.TYPE_NAME_BOOLEAN, FALSE_VALUE, falseTrueArray);
 
-	static PropertyDef webBrowser = 
-			new PropertyDef(
+	static NodePropertyDef webBrowser = 
+			new NodePropertyDef(
 					"webBrowser", JavaTypeHelper.TYPE_NAME_STRING, BROWSER_CHROME, 
 					new String[]{BROWSER_CHROME, BROWSER_FIREFOX, BROWSER_IEXPLORER, BROWSER_OPERA, BROWSER_SAFARI});
 
-	static PropertyDef browserDriver = new PropertyDef("browserDriver", JavaTypeHelper.TYPE_NAME_STRING, null, null);	
+	static NodePropertyDef browserDriver = new NodePropertyDef("browserDriver", JavaTypeHelper.TYPE_NAME_STRING, null, null);	
 
-	static PropertyDef mapStartUrlToParam = 
-			new PropertyDef("mapStartUrlToParam", JavaTypeHelper.TYPE_NAME_BOOLEAN, FALSE_VALUE, falseTrueArray);
+	static NodePropertyDef mapStartUrlToParam = 
+			new NodePropertyDef("mapStartUrlToParam", JavaTypeHelper.TYPE_NAME_BOOLEAN, FALSE_VALUE, falseTrueArray);
 
-	static PropertyDef startUrl = new PropertyDef("startUrl", JavaTypeHelper.TYPE_NAME_STRING, null, null);
+	static NodePropertyDef startUrl = new NodePropertyDef("startUrl", JavaTypeHelper.TYPE_NAME_STRING, null, null);
 
-	static PropertyDef parameterType = 
-			new PropertyDef(
-					"parameterType", JavaTypeHelper.TYPE_NAME_STRING, UNDEFINED,
-					new String[]{UNDEFINED, PAGE_ELEMENT, PAGE_URL, DELAY, BROWSER });
-
-	static PropertyDef findByTypeOfElement = 
-			new PropertyDef(
+	static NodePropertyDef findByTypeOfElement = 
+			new NodePropertyDef(
 					"findByTypeOfElement", JavaTypeHelper.TYPE_NAME_STRING, EMPTY_STR,
 					new String[]{ EMPTY_STR, "Id", "Class name", "Tag name", "Name", "Link text", "Partial link text", "CSS selector", "Xpath" });
 
-	static PropertyDef findByValueOfElement = new PropertyDef("findByValueOfElement", JavaTypeHelper.TYPE_NAME_STRING, null, null);
+	static NodePropertyDef findByValueOfElement = new NodePropertyDef("findByValueOfElement", JavaTypeHelper.TYPE_NAME_STRING, null, null);
 
-	static PropertyDef action = 
-			new PropertyDef(
+	static NodePropertyDef action = 
+			new NodePropertyDef(
 					"action", JavaTypeHelper.TYPE_NAME_STRING, EMPTY_STR,
 					new String[]{ EMPTY_STR, ACTION_SEND_KEYS, ACTION_CLICK, ACTION_SUBMIT });
 
@@ -153,7 +102,7 @@ public class NodePropertyDefs {
 		}
 	}
 
-	static PropertyDef[] fPropertyDefs = 
+	static NodePropertyDef[] fPropertyDefs = 
 		{
 		runOnAndroid,
 		androidRunner,
@@ -163,7 +112,7 @@ public class NodePropertyDefs {
 		browserDriver,
 		mapStartUrlToParam,
 		startUrl,
-		parameterType,
+		NodePropertyDefElemType.parameterType,
 		findByTypeOfElement,
 		findByValueOfElement,
 		action
@@ -185,7 +134,7 @@ public class NodePropertyDefs {
 		return getDefinition(propertyId).getPossibleValues();
 	}	
 
-	private static PropertyDef getDefinition(PropertyId propertyId) {
+	private static NodePropertyDef getDefinition(PropertyId propertyId) {
 		return fPropertyDefs[propertyId.getIndex()];
 	}
 
@@ -234,34 +183,6 @@ public class NodePropertyDefs {
 		return false;
 	}
 
-	public static boolean isElementTypePageElement(String value) {
-		if (value.equals(PAGE_ELEMENT)) {
-			return true;
-		}
-		return false;
-	}
-
-	public static boolean isElementTypePageUrl(String value) {
-		if (value.equals(PAGE_URL)) {
-			return true;
-		}
-		return false;
-	}	
-
-	public static boolean isElementTypeWaitTime(String value) {
-		if (value.equals(DELAY)) {
-			return true;
-		}
-		return false;
-	}
-
-	public static boolean isElementTypeBrowser(String value) {
-		if (value.equals(BROWSER)) {
-			return true;
-		}
-		return false;
-	}
-
 	public static boolean isActionSendKeys(String value) {
 		if (value.equals(ACTION_SEND_KEYS)) {
 			return true;
@@ -283,4 +204,10 @@ public class NodePropertyDefs {
 		return false;
 	}
 
+	public void getPossibleElementTypes(String parameterType) {
+		if (JavaTypeHelper.isStringTypeName(parameterType)) {
+
+		}
+
+	}
 }
