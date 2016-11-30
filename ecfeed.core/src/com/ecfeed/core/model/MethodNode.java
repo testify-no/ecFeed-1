@@ -75,6 +75,8 @@ public class MethodNode extends ParametersParentNode {
 	public MethodNode getCopy(){
 		MethodNode copy = new MethodNode(this.getName());
 
+		copy.setProperties(getProperties());
+
 		for(MethodParameterNode parameter : getMethodParameters()){
 			copy.addParameter(parameter.getCopy());
 		}

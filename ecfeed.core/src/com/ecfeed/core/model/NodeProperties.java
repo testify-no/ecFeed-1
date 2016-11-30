@@ -43,6 +43,10 @@ public class NodeProperties {
 			return false;
 		}
 
+		if (size() == 0) {
+			return true;
+		}
+
 		Set<String> keys = getKeys();
 
 		for (String key : keys) {
@@ -57,7 +61,7 @@ public class NodeProperties {
 	private static boolean elementsMatch(String key, Map<String, NodeProperty> map1, Map<String, NodeProperty> map2) {
 		NodeProperty property1 = map1.get(key);
 		NodeProperty property2 = map2.get(key);
-		
+
 		if (property1 == null && property2 == null) {
 			return true;
 		}		
@@ -75,5 +79,18 @@ public class NodeProperties {
 		}
 
 		return true;
+	}
+
+	NodeProperties getCopy() {
+		NodeProperties copy = new NodeProperties();
+
+		Set<String> keys = getKeys();
+
+		for (String key : keys) {
+			NodeProperty property = get(key);
+			copy.put(key, property);
+		}
+
+		return copy;
 	}
 }

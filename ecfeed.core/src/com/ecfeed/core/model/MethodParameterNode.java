@@ -60,16 +60,21 @@ public class MethodParameterNode extends AbstractParameterNode {
 
 	@Override
 	public MethodParameterNode getCopy() {
-		MethodParameterNode parameter = new MethodParameterNode(getName(),
+		MethodParameterNode copy = new MethodParameterNode(getName(),
 				getType(), getDefaultValue(), isExpected());
-		parameter.setParent(this.getParent());
+
+		copy.setProperties(getProperties());
+		copy.setParent(this.getParent());
+
 		if (getDefaultValue() != null)
-			parameter.setDefaultValueString(getDefaultValue());
+			copy.setDefaultValueString(getDefaultValue());
+
 		for (ChoiceNode choice : fChoices) {
-			parameter.addChoice(choice.getCopy());
+			copy.addChoice(choice.getCopy());
 		}
-		parameter.setParent(getParent());
-		return parameter;
+
+		copy.setParent(getParent());
+		return copy;
 	}
 
 	@Override

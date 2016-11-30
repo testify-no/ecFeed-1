@@ -183,6 +183,15 @@ public abstract class AbstractNode{
 	public abstract AbstractNode getCopy();
 	public abstract Object accept(IModelVisitor visitor) throws Exception;
 
+	public void setProperties(NodeProperties nodeProperties) {
+		fProperties = nodeProperties.getCopy(); 
+	}
+
+	public NodeProperties getProperties() {
+		return fProperties; 
+	}
+
+
 	public int getMaxChildIndex(AbstractNode potentialChild) {
 		return getChildren().size();
 	}

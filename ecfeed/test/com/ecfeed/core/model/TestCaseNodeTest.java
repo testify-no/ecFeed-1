@@ -54,7 +54,7 @@ public class TestCaseNodeTest {
 		assertTrue(tc1.compare(tc2));
 	}
 
-//	@Test
+	//	@Test
 	public void compareSmokeTest(){
 		for(int i = 0; i < 5; i++){
 			RandomModelGenerator gen = new RandomModelGenerator();

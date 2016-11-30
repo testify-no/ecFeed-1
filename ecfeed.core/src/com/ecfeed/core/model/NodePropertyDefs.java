@@ -281,5 +281,6 @@ public class NodePropertyDefs {
 			return true;
 		}
 		return false;
-	}	
+	}
+
 }

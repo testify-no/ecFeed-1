@@ -32,6 +32,9 @@ public class GlobalParameterNode extends AbstractParameterNode {
 	@Override
 	public GlobalParameterNode getCopy() {
 		GlobalParameterNode copy = new GlobalParameterNode(getName(), getType());
+
+		copy.setProperties(getProperties());
+
 		for(ChoiceNode choice : getChoices()){
 			copy.addChoice(choice.getCopy());
 		}

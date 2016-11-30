@@ -213,14 +213,14 @@ public class ParameterNodeTest{
 		ChoiceNode p21 = new ChoiceNode("p21", "0");
 		p21.addLabel("l211");
 		p21.addLabel("l212");//	protected Set<String> getAllChoiceNames(List<ChoiceNode> choices) {
-//		Set<String> result = new LinkedHashSet<String>();
-//		for(ChoiceNode p : choices){
-//			result.add(p.getQualifiedName());
-//			result.addAll(p.getAllChoiceNames());
-//		}
-//		return result;
-//	}
-//
+		//		Set<String> result = new LinkedHashSet<String>();
+		//		for(ChoiceNode p : choices){
+		//			result.add(p.getQualifiedName());
+		//			result.addAll(p.getAllChoiceNames());
+		//		}
+		//		return result;
+		//	}
+		//
 
 		ChoiceNode p22 = new ChoiceNode("p22", "0");
 		p22.addLabel("l221");
@@ -253,7 +253,7 @@ public class ParameterNodeTest{
 	}
 
 	/*****************compare()************************/
-//	@Test
+	//	@Test
 	public void compareSmokeTest(){
 		for(String type : SUPPORTED_TYPES){
 			for(Boolean expected : new Boolean[]{true, false}){

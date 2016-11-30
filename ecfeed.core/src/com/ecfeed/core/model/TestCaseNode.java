@@ -48,7 +48,9 @@ public class TestCaseNode extends AbstractNode {
 		for(ChoiceNode choice : fTestData){
 			testdata.add(choice);
 		}
-		return new TestCaseNode(this.getName(), testdata);
+		TestCaseNode copy = new TestCaseNode(this.getName(), testdata);
+		copy.setProperties(getProperties());
+		return copy;
 	}
 
 	public TestCaseNode(String name, List<ChoiceNode> testData) {

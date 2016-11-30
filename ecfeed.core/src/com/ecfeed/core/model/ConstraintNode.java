@@ -32,7 +32,9 @@ public class ConstraintNode extends AbstractNode{
 
 	@Override
 	public ConstraintNode getCopy(){
-		return new ConstraintNode(getName(), fConstraint.getCopy());
+		ConstraintNode copy = new ConstraintNode(getName(), fConstraint.getCopy());
+		copy.setProperties(getProperties());
+		return copy;
 	}
 
 	public ConstraintNode(String name, Constraint constraint) {

@@ -32,12 +32,17 @@ public class ClassNode extends GlobalParametersParentNode {
 	@Override
 	public ClassNode getCopy(){
 		ClassNode copy = new ClassNode(getName());
+
+		copy.setProperties(getProperties());
+
 		for(GlobalParameterNode parameter : getGlobalParameters()){
 			copy.addParameter(parameter.getCopy());
 		}
+
 		for(MethodNode method : fMethods){
 			copy.addMethod(method.getCopy());
 		}
+
 		copy.setParent(getParent());
 		return copy;
 	}

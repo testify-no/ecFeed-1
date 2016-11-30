@@ -129,12 +129,14 @@ public class RootNodeTest{
 		assertTrue(r1.compare(r2));
 	}
 
-//	@Test
+	@Test
 	public void getCopyTest(){
 		RandomModelGenerator generator = new RandomModelGenerator();
 		for(int i = 0; i < 1; i++){
 			RootNode root = generator.generateModel(3);
-			System.out.println(root);
+			RootNode copy = root.getCopy();
+
+			assertTrue(copy.compare(root));
 		}
 	}
 

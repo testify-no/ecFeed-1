@@ -36,6 +36,8 @@ public class RootNode extends GlobalParametersParentNode {
 	public RootNode getCopy(){
 		RootNode copy = new RootNode(this.getName(), this.fModelVersion);
 
+		copy.setProperties(getProperties());
+
 		for(GlobalParameterNode parameter : getGlobalParameters()){
 			copy.addParameter(parameter.getCopy());
 		}

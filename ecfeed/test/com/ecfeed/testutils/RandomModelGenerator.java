@@ -45,6 +45,7 @@ import com.ecfeed.core.model.ExpectedValueStatement;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelVersionDistributor;
+import com.ecfeed.core.model.NodePropertyDefs;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.StatementArray;
 import com.ecfeed.core.model.StaticStatement;
@@ -109,25 +110,34 @@ public class RandomModelGenerator {
 	public ClassNode generateClass(int methods) {
 		String name = generateString(REGEX_CLASS_NODE_NAME);
 
-		ClassNode _class = new ClassNode(name);
+		ClassNode theClass = new ClassNode(name);
+
+		theClass.setPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_RUN_ON_ANDROID, "true");
+		theClass.setPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_ANDROID_RUNNER, "runner");
 
 		for(int i = 0; i < methods; i++){
 			int parameters = rand.nextInt(MAX_PARAMETERS);
 			int constraints = rand.nextInt(MAX_CONSTRAINTS);
 			int testCases = rand.nextInt(MAX_TEST_CASES);
 
-			_class.addMethod(generateMethod(parameters, constraints, testCases));
+			theClass.addMethod(generateMethod(parameters, constraints, testCases));
 		}
 
-		return _class;
+		return theClass;
 	}
 
 	public MethodNode generateMethod(int parameters, int constraints, int testCases){
 		String name = generateString(REGEX_METHOD_NODE_NAME);
 
 		MethodNode method = new MethodNode(name);
+		method.setPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_METHOD_RUNNER, "runner");
+		method.setPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_MAP_BROWSER_TO_PARAM, "false");
+		method.setPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_WEB_BROWSER, "Chrome");
+		method.setPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_BROWSER_DRIVER, "driver");
+		method.setPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_MAP_START_URL_TO_PARAM, "false");
+		method.setPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_START_URL, "startUrl");
 
-		for(int i = 0; i < parameters; i++){
+		for (int i = 0; i < parameters; i++) {
 			boolean expected = rand.nextInt(4) < 3 ? false : true;
 			String type = randomType(true);
 
@@ -151,6 +161,11 @@ public class RandomModelGenerator {
 		String name = generateString(REGEX_CATEGORY_NODE_NAME);
 
 		MethodParameterNode parameter = new MethodParameterNode(name, type, randomChoiceValue(type), expected);
+
+		parameter.setPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_ELEMENT_TYPE, "X");
+		parameter.setPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_TYPE_OF_ELEMENT, "Y");
+		parameter.setPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_VALUE_OF_ELEMENT, "Z");
+		parameter.setPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_ACTION, "V");
 
 		if(choices > 0){
 			for(int i = 0; i < rand.nextInt(choices) + 1; i++){
@@ -185,9 +200,10 @@ public class RandomModelGenerator {
 			}
 		}
 
-		TestCaseNode result = new TestCaseNode(name, testData);
-		method.addTestCase(result);
-		return result;
+		TestCaseNode targetTestCaseNode = new TestCaseNode(name, testData);
+
+		method.addTestCase(targetTestCaseNode);
+		return targetTestCaseNode;
 	}
 
 	public ConstraintNode generateConstraint(MethodNode method){
