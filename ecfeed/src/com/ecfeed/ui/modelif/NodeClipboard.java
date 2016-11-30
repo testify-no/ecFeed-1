@@ -27,21 +27,21 @@ public class NodeClipboard{
 	public static List<AbstractNode> getContentCopy(){
 		List<AbstractNode> copy = new ArrayList<AbstractNode>();
 		for(AbstractNode node : fClipboardNodes){
-			copy.add(node.getCopy());
+			copy.add(node.makeClone());
 		}
 		return copy;
 	}
 	
 	public static void setContent(AbstractNode node){
 		fClipboardNodes.clear();
-		fClipboardNodes.add(node.getCopy());
+		fClipboardNodes.add(node.makeClone());
 	}
 	
 	public static void setContent(List<AbstractNode> nodes){
 		fClipboardNodes.clear();
 		for(AbstractNode node : nodes){
 			if(isPredecessorInCollection(node, nodes) == false){
-				fClipboardNodes.add(node.getCopy());
+				fClipboardNodes.add(node.makeClone());
 			}
 		}
 	}

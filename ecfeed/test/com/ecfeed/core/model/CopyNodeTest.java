@@ -49,7 +49,7 @@ public class CopyNodeTest{
 		root.addParameter(par1);
 		root.addParameter(par2);
 
-		RootNode copy = root.getCopy();
+		RootNode copy = root.makeClone();
 		assertTrue(root.compare(copy));
 	}
 
@@ -65,7 +65,7 @@ public class CopyNodeTest{
 		classNode.addParameter(par1);
 		classNode.addParameter(par2);
 
-		ClassNode copy = classNode.getCopy();
+		ClassNode copy = classNode.makeClone();
 		assertTrue(classNode.compare(copy));
 	}
 
@@ -92,7 +92,7 @@ public class CopyNodeTest{
 		method.addTestCase(testCase1);
 		method.addTestCase(testCase2);
 
-		MethodNode copy = method.getCopy();
+		MethodNode copy = method.makeClone();
 		assertTrue(method.compare(copy));
 	}
 
@@ -112,7 +112,7 @@ public class CopyNodeTest{
 		parameter.addChoice(choice1);
 		parameter.addChoice(choice2);
 
-		GlobalParameterNode copy = parameter.getCopy();
+		GlobalParameterNode copy = parameter.makeClone();
 		assertTrue(parameter.compare(copy));
 	}
 
@@ -132,7 +132,7 @@ public class CopyNodeTest{
 		parameter.addChoice(choice1);
 		parameter.addChoice(choice2);
 
-		MethodParameterNode copy = parameter.getCopy();
+		MethodParameterNode copy = parameter.makeClone();
 		assertTrue(parameter.compare(copy));
 	}
 
@@ -160,7 +160,7 @@ public class CopyNodeTest{
 		ConstraintNode constraint = new ConstraintNode("constraint", new Constraint(premise, consequence));
 		method.addConstraint(constraint);
 
-		ConstraintNode copy = constraint.getCopy();
+		ConstraintNode copy = constraint.makeClone();
 		assertTrue(constraint.compare(copy));
 	}
 
@@ -181,7 +181,7 @@ public class CopyNodeTest{
 		method.addParameter(par2);
 		method.addTestCase(testCase);
 
-		TestCaseNode copy = testCase.getCopy();
+		TestCaseNode copy = testCase.makeClone();
 		assertTrue(testCase.compare(copy));
 	}
 
@@ -202,7 +202,7 @@ public class CopyNodeTest{
 		choice2.addChoice(choice21);
 		choice2.addChoice(choice22);
 
-		ChoiceNode copy = choice.getCopy();
+		ChoiceNode copy = choice.makeClone();
 		assertTrue(choice.compare(copy));
 	}
 

@@ -55,14 +55,14 @@ public class ChoiceNode extends ChoicesParentNode{
 	}
 
 	@Override
-	public ChoiceNode getCopy(){
+	public ChoiceNode makeClone(){
 		ChoiceNode copy = new ChoiceNode(getName(), fValueString);
 
 		copy.setProperties(getProperties());
 		copy.setParent(fParent);
 
 		for(ChoiceNode choice : getChoices()){
-			copy.addChoice(choice.getCopy());
+			copy.addChoice(choice.makeClone());
 		}
 		for(String label : fLabels){
 			copy.addLabel(label);

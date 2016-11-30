@@ -134,7 +134,7 @@ public class RootNodeTest{
 		RandomModelGenerator generator = new RandomModelGenerator();
 		for(int i = 0; i < 1; i++){
 			RootNode root = generator.generateModel(3);
-			RootNode copy = root.getCopy();
+			RootNode copy = root.makeClone();
 
 			assertTrue(copy.compare(root));
 		}

@@ -187,7 +187,7 @@ public class TestDataValueEditingSupport extends EditingSupport {
 				return;
 			}
 			else if(valueString.equals(current.getValueString()) == false){
-				newValue = current.getCopy();
+				newValue = current.makeClone();
 				newValue.setValueString(valueString);
 			}
 		}

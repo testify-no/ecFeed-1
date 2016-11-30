@@ -55,7 +55,7 @@ public class TestSuiteGenerationSupport {
 			for(ChoiceNode p : values){
 				MethodParameterNode parameter = fTarget.getMethodParameters().get(values.indexOf(p));
 				if(parameter.isExpected()){
-					values.set(p.getParameter().getIndex(), p.getCopy());
+					values.set(p.getParameter().getIndex(), p.makeClone());
 				}
 			}
 			return true;

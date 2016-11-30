@@ -62,7 +62,7 @@ public class AbstractParameterOperationSetTypeTest{
 		}
 
 		@Override
-		public AbstractNode getCopy() {
+		public AbstractNode makeClone() {
 			return null;
 		}
 

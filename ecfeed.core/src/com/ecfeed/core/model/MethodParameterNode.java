@@ -59,7 +59,7 @@ public class MethodParameterNode extends AbstractParameterNode {
 	}
 
 	@Override
-	public MethodParameterNode getCopy() {
+	public MethodParameterNode makeClone() {
 		MethodParameterNode copy = new MethodParameterNode(getName(),
 				getType(), getDefaultValue(), isExpected());
 
@@ -70,7 +70,7 @@ public class MethodParameterNode extends AbstractParameterNode {
 			copy.setDefaultValueString(getDefaultValue());
 
 		for (ChoiceNode choice : fChoices) {
-			copy.addChoice(choice.getCopy());
+			copy.addChoice(choice.makeClone());
 		}
 
 		copy.setParent(getParent());

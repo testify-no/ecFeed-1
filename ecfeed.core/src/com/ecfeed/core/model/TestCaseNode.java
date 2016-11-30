@@ -43,7 +43,7 @@ public class TestCaseNode extends AbstractNode {
 	}
 
 	@Override
-	public TestCaseNode getCopy(){
+	public TestCaseNode makeClone(){
 		List<ChoiceNode> testdata = new ArrayList<>();
 		for(ChoiceNode choice : fTestData){
 			testdata.add(choice);
@@ -112,7 +112,7 @@ public class TestCaseNode extends AbstractNode {
 	}
 
 	public TestCaseNode getCopy(MethodNode method){
-		TestCaseNode tcase = getCopy();
+		TestCaseNode tcase = makeClone();
 		if(tcase.updateReferences(method)){
 			tcase.setParent(method);
 			return tcase;

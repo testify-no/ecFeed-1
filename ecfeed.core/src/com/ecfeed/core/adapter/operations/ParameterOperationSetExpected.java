@@ -108,9 +108,9 @@ public class ParameterOperationSetExpected extends AbstractModelOperation {
 				if(fExpected){
 					ChoiceNode p = new ChoiceNode(Constants.EXPECTED_VALUE_CHOICE_NAME, fTarget.getDefaultValue());
 					p.setParent(fTarget);
-					TestCaseNode newTestCase = testCase.getCopy();
+					TestCaseNode newTestCase = testCase.makeClone();
 					newTestCase.setParent(method);
-					newTestCase.getTestData().set(index, p.getCopy());
+					newTestCase.getTestData().set(index, p.makeClone());
 					tcIt.set(newTestCase);
 				}
 				else{

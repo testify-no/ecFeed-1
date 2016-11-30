@@ -31,7 +31,7 @@ public class ConstraintNode extends AbstractNode{
 	}
 
 	@Override
-	public ConstraintNode getCopy(){
+	public ConstraintNode makeClone(){
 		ConstraintNode copy = new ConstraintNode(getName(), fConstraint.getCopy());
 		copy.setProperties(getProperties());
 		return copy;
@@ -105,7 +105,7 @@ public class ConstraintNode extends AbstractNode{
 	}
 
 	public ConstraintNode getCopy(MethodNode method){
-		ConstraintNode copy = getCopy();
+		ConstraintNode copy = makeClone();
 		if(copy.updateReferences(method))
 			return copy;
 		else

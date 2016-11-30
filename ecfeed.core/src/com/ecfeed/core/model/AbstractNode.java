@@ -180,7 +180,7 @@ public abstract class AbstractNode{
 		return -1;
 	}
 
-	public abstract AbstractNode getCopy();
+	public abstract AbstractNode makeClone();
 	public abstract Object accept(IModelVisitor visitor) throws Exception;
 
 	public void setProperties(NodeProperties nodeProperties) {

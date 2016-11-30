@@ -30,17 +30,17 @@ public class ClassNode extends GlobalParametersParentNode {
 	}
 
 	@Override
-	public ClassNode getCopy(){
+	public ClassNode makeClone(){
 		ClassNode copy = new ClassNode(getName());
 
 		copy.setProperties(getProperties());
 
 		for(GlobalParameterNode parameter : getGlobalParameters()){
-			copy.addParameter(parameter.getCopy());
+			copy.addParameter(parameter.makeClone());
 		}
 
 		for(MethodNode method : fMethods){
-			copy.addMethod(method.getCopy());
+			copy.addMethod(method.makeClone());
 		}
 
 		copy.setParent(getParent());

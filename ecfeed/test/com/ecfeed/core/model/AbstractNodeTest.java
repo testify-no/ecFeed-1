@@ -42,7 +42,7 @@ public class AbstractNodeTest{
 		}
 
 		@Override
-		public AbstractNode getCopy() {
+		public AbstractNode makeClone() {
 			return null;
 		}
 

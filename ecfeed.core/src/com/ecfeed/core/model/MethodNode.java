@@ -72,13 +72,13 @@ public class MethodNode extends ParametersParentNode {
 	}
 
 	@Override
-	public MethodNode getCopy(){
+	public MethodNode makeClone(){
 		MethodNode copy = new MethodNode(this.getName());
 
 		copy.setProperties(getProperties());
 
 		for(MethodParameterNode parameter : getMethodParameters()){
-			copy.addParameter(parameter.getCopy());
+			copy.addParameter(parameter.makeClone());
 		}
 
 		for(TestCaseNode testcase : fTestCases){
