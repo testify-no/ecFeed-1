@@ -98,7 +98,7 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 	}
 
 	public static boolean isPrimitive(String type) {
-		return Arrays.asList(JavaTypeHelper.supportedPrimitiveTypes()).contains(type);
+		return Arrays.asList(JavaTypeHelper.getSupportedJavaTypes()).contains(type);
 	}
 
 	public static boolean isUserType(String type) {
@@ -114,7 +114,7 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 	}
 
 	public static String[] supportedPrimitiveTypes() {
-		return JavaTypeHelper.supportedPrimitiveTypes();
+		return JavaTypeHelper.getSupportedJavaTypes();
 	}
 
 	@Override

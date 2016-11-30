@@ -462,7 +462,7 @@ public class MethodInterface extends ParametersParentInterface {
 
 	@Override
 	protected String generateNewParameterType() {
-		for (String type : JavaTypeHelper.supportedPrimitiveTypes()) {
+		for (String type : JavaTypeHelper.getSupportedJavaTypes()) {
 			List<String> newTypes = getTarget().getParametersTypes();
 			newTypes.add(type);
 			if (getTarget().getClassNode().getMethod(getTarget().getName(),

@@ -47,7 +47,7 @@ public class JavaTypeHelper {
 		return true;
 	}
 
-	public static String[] supportedPrimitiveTypes() {
+	public static String[] getSupportedJavaTypes() {
 		return SUPPORTED_PRIMITIVE_TYPES;
 	}
 

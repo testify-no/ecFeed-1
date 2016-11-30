@@ -37,7 +37,7 @@ public abstract class ParametersParentInterface extends AbstractNodeInterface {
 	}
 
 	protected String generateNewParameterType() {
-		return JavaTypeHelper.supportedPrimitiveTypes()[0];
+		return JavaTypeHelper.getSupportedJavaTypes()[0];
 	}
 
 	protected String generateNewParameterName() {
