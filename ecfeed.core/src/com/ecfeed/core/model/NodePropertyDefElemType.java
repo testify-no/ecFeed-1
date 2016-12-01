@@ -18,6 +18,7 @@ public class NodePropertyDefElemType {
 	private static final String PARAMETER_TYPE = "parameterType";
 	private static final String UNDEFINED = "Undefined";
 	private static final String PAGE_ELEMENT = "Page element";
+	private static final String BUTTON = "Button";
 	private static final String TEXT = "Text";
 	private static final String PAGE_URL = "Page URL";
 	private static final String DELAY = "Delay";
@@ -28,35 +29,40 @@ public class NodePropertyDefElemType {
 					PARAMETER_TYPE, JavaTypeHelper.TYPE_NAME_STRING, UNDEFINED,
 					new String[]{UNDEFINED, TEXT, PAGE_ELEMENT, PAGE_URL, DELAY, BROWSER });
 
-	private static String[] TAB_BASIC= new String[] {TEXT, PAGE_ELEMENT};
 
+	private static NodePropertyValueSet VALUE_SET_FOR_STRING = 
+			new NodePropertyValueSet(TEXT, new String[] {TEXT, PAGE_ELEMENT, PAGE_URL, BROWSER});
+	
+	private static NodePropertyValueSet VALUE_SET_FOR_CHAR = 
+			new NodePropertyValueSet(TEXT, new String[] {TEXT, PAGE_ELEMENT});
+	
+	private static NodePropertyValueSet VALUE_SET_FOR_BOOLEAN = 
+			new NodePropertyValueSet(BUTTON, new String[] {BUTTON, PAGE_ELEMENT});
+	
+	private static NodePropertyValueSet VALUE_SET_FOR_NUMERIC_TYPES = 
+			new NodePropertyValueSet(TEXT, new String[] {TEXT, DELAY, PAGE_ELEMENT});	
+	
 	public static String[] getPossibleValues(String parameterType) {
-		
-		if (JavaTypeHelper.isStringTypeName(parameterType)) {
-			return new String[] {TEXT, PAGE_ELEMENT, PAGE_URL, BROWSER};
-		}
-		if (JavaTypeHelper.isBooleanTypeName(parameterType)) {
-			return new String[] {PAGE_ELEMENT};
-		}		
-		if (	JavaTypeHelper.isCharTypeName(parameterType) ||
-				JavaTypeHelper.isBooleanTypeName(parameterType) ||
-				JavaTypeHelper.isNumericTypeName(parameterType) ) {
-			return TAB_BASIC;
-		}
-		return null;
+		return getValueSet(parameterType).getPossibleValues();
 	}
 	
 	public static String getDefaultValue(String parameterType) {
-		
-		if (JavaTypeHelper.isBooleanTypeName(parameterType)) {
-			return PAGE_ELEMENT;
-		}		
-		if (	JavaTypeHelper.isStringTypeName(parameterType) ||
-				JavaTypeHelper.isCharTypeName(parameterType) ||
-				JavaTypeHelper.isBooleanTypeName(parameterType) ||
-				JavaTypeHelper.isNumericTypeName(parameterType) ) {
-			return TEXT;
+		return getValueSet(parameterType).getDefaultValue();
+	}
+	
+	private static NodePropertyValueSet getValueSet(String parameterType) {
+		if (JavaTypeHelper.isStringTypeName(parameterType)) {
+			return VALUE_SET_FOR_STRING;
 		}
+		if (JavaTypeHelper.isCharTypeName(parameterType)) {
+			return VALUE_SET_FOR_CHAR;
+		}
+		if (JavaTypeHelper.isBooleanTypeName(parameterType)) {
+			return VALUE_SET_FOR_BOOLEAN;
+		}		
+		if (JavaTypeHelper.isNumericTypeName(parameterType)) {
+			return VALUE_SET_FOR_NUMERIC_TYPES;
+		}		
 		return null;
 	}
 
