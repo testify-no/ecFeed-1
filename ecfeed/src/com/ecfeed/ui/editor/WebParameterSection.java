@@ -108,25 +108,28 @@ public class WebParameterSection extends BasicSection {
 		}
 
 		String parameterType = abstractParameterNode.getType();
-		if (parameterType == fLastParameterType) {
-			return;
+		if (parameterType != fLastParameterType) {
+			refreshCombo(fWebElementTypeCombo, NodePropertyDefs.PropertyId.PROPERTY_WEB_ELEMENT_TYPE, abstractParameterNode);
 		}
-
-		NodePropertyDefs.PropertyId propertyId = NodePropertyDefs.PropertyId.PROPERTY_WEB_ELEMENT_TYPE;
-				
 		fLastParameterType = parameterType;
-		fWebElementTypeCombo.setItems(NodePropertyDefs.getPossibleValues(propertyId, parameterType));
+	}
+	
+	private static void refreshCombo(Combo combo, NodePropertyDefs.PropertyId propertyId, AbstractParameterNode abstractParameterNode) {
+		
+		String parameterType = abstractParameterNode.getType();
+		
+		combo.setItems(NodePropertyDefs.getPossibleValues(propertyId, parameterType));
 
 		String value = abstractParameterNode.getPropertyValue(propertyId);
 		
 		if (value != null && NodePropertyDefs.isOneOfPossibleValues(value, propertyId, parameterType)) {
-			fWebElementTypeCombo.setText(value);
+			combo.setText(value);
 			return;
 		}
 
 		String defaultValue = NodePropertyDefs.getPropertyDefaultValue(propertyId, parameterType);
 		if (defaultValue != null) {
-			fWebElementTypeCombo.setText(defaultValue);
+			combo.setText(defaultValue);
 		}		
 	}
 	
