@@ -10,34 +10,31 @@
 
 package com.ecfeed.core.model;
 
-class NodePropertyDef {
-	private String fName;
-	private String fType;
-	NodePropertyValueSet fValueSet;
+class NodePropertyValueSet {
+	private String fDefaultValue;
+	private String[] fPossibleValues;
 
-	NodePropertyDef(String name, String type, String defaultValue, String[] possibleValues) {
-		fName = name;
-		fType = type;
-		fValueSet = new NodePropertyValueSet(defaultValue, possibleValues);
+	NodePropertyValueSet(String defaultValue, String[] possibleValues) {
+		fDefaultValue = defaultValue;
+		fPossibleValues = possibleValues;
 	}
-
-	String getName() {
-		return fName;
-	}
-
-	String getType() {
-		return fType;
-	}
-
+	
 	String getDefaultValue() {
-		return fValueSet.getDefaultValue();
+		return fDefaultValue;
 	}	
 
 	String[] getPossibleValues() {
-		return fValueSet.getPossibleValues();
+		return fPossibleValues;
 	}
-
+	
 	boolean matchesPossibleValue(String valueToMatch) {
-		return fValueSet.matchesPossibleValue(valueToMatch);
+		for (String possibleValue : fPossibleValues) {
+			if (possibleValue.equals(valueToMatch)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 }
+
