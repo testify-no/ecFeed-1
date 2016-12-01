@@ -130,10 +130,10 @@ public class NodePropertyDefs {
 		return getDefinition(propertyId).getDefaultValue();
 	}	
 
-	public static String[] getPropertyPossibleValues(PropertyId propertyId) {
+	public static String[] getPossibleValues(PropertyId propertyId) {
 		return getDefinition(propertyId).getPossibleValues();
 	}	
-
+	
 	private static NodePropertyDef getDefinition(PropertyId propertyId) {
 		return fPropertyDefs[propertyId.getIndex()];
 	}
