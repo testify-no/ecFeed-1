@@ -126,13 +126,27 @@ public class NodePropertyDefs {
 		return getDefinition(propertyId).getType();
 	}	
 
-	public static String getPropertyDefaultValue(PropertyId propertyId) {
+	public static String getPropertyDefaultValue(PropertyId propertyId, String parentValue) {
+		if (propertyId == NodePropertyDefs.PropertyId.PROPERTY_WEB_ELEMENT_TYPE) {
+			return NodePropertyDefElemType.getDefaultValue(parentValue);
+		}
+		
 		return getDefinition(propertyId).getDefaultValue();
 	}	
 
-	public static String[] getPossibleValues(PropertyId propertyId) {
+	public static String[] getPossibleValues(PropertyId propertyId, String parentValue) {
+		if (propertyId == NodePropertyDefs.PropertyId.PROPERTY_WEB_ELEMENT_TYPE) {
+			return NodePropertyDefElemType.getPossibleValues(parentValue);
+		}
+		
 		return getDefinition(propertyId).getPossibleValues();
 	}	
+	
+	public static boolean isOneOfPossibleValues(String value, PropertyId propertyId, String parentValue) {
+		String[] possibleValues = getPossibleValues(propertyId, parentValue);
+		NodePropertyValueSet valueSet = new NodePropertyValueSet(null, possibleValues);
+		return valueSet.isOneOfPossibleValues(value);
+	}
 	
 	private static NodePropertyDef getDefinition(PropertyId propertyId) {
 		return fPropertyDefs[propertyId.getIndex()];

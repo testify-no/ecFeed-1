@@ -206,7 +206,7 @@ public abstract class AbstractNode{
 		NodeProperty nodeProperty = 
 				new NodeProperty(
 						NodePropertyDefs.getPropertyType(propertyId), 
-						NodePropertyDefs.getPropertyDefaultValue(propertyId));
+						NodePropertyDefs.getPropertyDefaultValue(propertyId, null));
 
 		fProperties.put(NodePropertyDefs.getPropertyName(propertyId), nodeProperty);
 	}	

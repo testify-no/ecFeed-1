@@ -14,12 +14,9 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 //import org.eclipse.swt.widgets.Text; TODO
-
-
 import org.eclipse.swt.widgets.Label;
 
 import com.ecfeed.core.model.AbstractParameterNode;
-import com.ecfeed.core.model.NodePropertyDefElemType;
 import com.ecfeed.core.model.NodePropertyDefs;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.modelif.AbstractParameterInterface;
@@ -115,21 +112,24 @@ public class WebParameterSection extends BasicSection {
 			return;
 		}
 
+		NodePropertyDefs.PropertyId propertyId = NodePropertyDefs.PropertyId.PROPERTY_WEB_ELEMENT_TYPE;
+				
 		fLastParameterType = parameterType;
-		fWebElementTypeCombo.setItems(NodePropertyDefElemType.getPossibleValues(parameterType));
+		fWebElementTypeCombo.setItems(NodePropertyDefs.getPossibleValues(propertyId, parameterType));
 
-		String value = abstractParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_WEB_ELEMENT_TYPE);
-		if (value != null) {
+		String value = abstractParameterNode.getPropertyValue(propertyId);
+		
+		if (value != null && NodePropertyDefs.isOneOfPossibleValues(value, propertyId, parameterType)) {
 			fWebElementTypeCombo.setText(value);
 			return;
 		}
 
-		String defaultValue = NodePropertyDefElemType.getDefaultValue(parameterType);
+		String defaultValue = NodePropertyDefs.getPropertyDefaultValue(propertyId, parameterType);
 		if (defaultValue != null) {
 			fWebElementTypeCombo.setText(defaultValue);
 		}		
 	}
-
+	
 	//	private void refreshComboByProperty(
 	//			NodePropertyDefs.PropertyId propertyId, Combo combo, AbstractParameterNode abstractParameterNode) {
 	//

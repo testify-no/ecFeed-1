@@ -38,6 +38,6 @@ class NodePropertyDef {
 	}
 
 	boolean matchesPossibleValue(String valueToMatch) {
-		return fValueSet.matchesPossibleValue(valueToMatch);
+		return fValueSet.isOneOfPossibleValues(valueToMatch);
 	}
 }

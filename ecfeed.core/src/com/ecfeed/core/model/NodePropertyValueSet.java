@@ -27,7 +27,7 @@ class NodePropertyValueSet {
 		return fPossibleValues;
 	}
 	
-	boolean matchesPossibleValue(String valueToMatch) {
+	boolean isOneOfPossibleValues(String valueToMatch) {
 		for (String possibleValue : fPossibleValues) {
 			if (possibleValue.equals(valueToMatch)) {
 				return true;

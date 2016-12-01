@@ -47,6 +47,9 @@ public class NodePropertyDefElemType {
 	}
 	
 	public static String getDefaultValue(String parameterType) {
+		if (parameterType == null) {
+			return null;
+		}
 		return getValueSet(parameterType).getDefaultValue();
 	}
 	

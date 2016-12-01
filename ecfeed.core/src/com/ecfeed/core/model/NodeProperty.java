@@ -10,6 +10,8 @@
 
 package com.ecfeed.core.model;
 
+import com.ecfeed.core.utils.StringHelper;
+
 
 public class NodeProperty{
 	private String fType;
@@ -32,7 +34,7 @@ public class NodeProperty{
 		if (!fType.equals(other.fType)) {
 			return false;
 		}
-		if (!fValue.equals(other.fValue)) {
+		if (!StringHelper.stringsEqualWithNulls(fValue, other.fValue)) {
 			return false;
 		}
 		return true;

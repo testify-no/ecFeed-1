@@ -78,7 +78,7 @@ public class WebRunnerSection extends BasicSection  {
 	private void createBrowserCombo(Composite gridComposite) {
 		fFormObjectToolkit.createLabel(gridComposite, "Browser");
 		fBrowserCombo = fFormObjectToolkit.createReadOnlyGridCombo(gridComposite, new BrowserChangedAdapter());
-		fBrowserCombo.setItems(NodePropertyDefs.getPossibleValues(fBrowserPropertyId));
+		fBrowserCombo.setItems(NodePropertyDefs.getPossibleValues(fBrowserPropertyId, null));
 	}
 
 	private void createBrowserDriverPathText(Composite gridComposite) {
