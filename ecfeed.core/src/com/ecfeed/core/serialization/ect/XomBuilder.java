@@ -260,7 +260,7 @@ public abstract class XomBuilder implements IModelVisitor, IStatementVisitor {
 	}
 
 	private void addParameterProperties(AbstractParameterNode abstractParameterNode, Element targetElement) {
-		addParameterProperty(NodePropertyDefs.PropertyId.PROPERTY_ELEMENT_TYPE, abstractParameterNode, targetElement);
+		addParameterProperty(NodePropertyDefs.PropertyId.PROPERTY_WEB_ELEMENT_TYPE, abstractParameterNode, targetElement);
 		addParameterProperty(NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_TYPE_OF_ELEMENT, abstractParameterNode, targetElement);
 		addParameterProperty(NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_VALUE_OF_ELEMENT, abstractParameterNode, targetElement);
 		addParameterProperty(NodePropertyDefs.PropertyId.PROPERTY_ACTION, abstractParameterNode, targetElement);

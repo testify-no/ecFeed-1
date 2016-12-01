@@ -162,7 +162,7 @@ public class RandomModelGenerator {
 
 		MethodParameterNode parameter = new MethodParameterNode(name, type, randomChoiceValue(type), expected);
 
-		parameter.setPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_ELEMENT_TYPE, "X");
+		parameter.setPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_WEB_ELEMENT_TYPE, "X");
 		parameter.setPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_TYPE_OF_ELEMENT, "Y");
 		parameter.setPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_VALUE_OF_ELEMENT, "Z");
 		parameter.setPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_ACTION, "V");

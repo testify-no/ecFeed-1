@@ -187,7 +187,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 	}
 
 	private boolean processPageElement(MethodParameterNode methodParameterNode, String argument) {
-		String elementType = methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_ELEMENT_TYPE);
+		String elementType = methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_WEB_ELEMENT_TYPE);
 
 		if (!NodePropertyDefElemType.isPageElement(elementType)) {
 			return false;
@@ -240,7 +240,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 
 	private boolean processCmdWait(MethodParameterNode methodParameterNode, String argument) {
 
-		String parameterType = methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_ELEMENT_TYPE);
+		String parameterType = methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_WEB_ELEMENT_TYPE);
 		if (!NodePropertyDefElemType.isDelay(parameterType)) {
 			return false;
 		}
@@ -256,7 +256,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 	}
 
 	private boolean processWebBrowser(MethodParameterNode methodParameterNode, String argument, String choiceName) {
-		String elementType = methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_ELEMENT_TYPE);
+		String elementType = methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_WEB_ELEMENT_TYPE);
 		boolean isElementTypeBrowser = NodePropertyDefElemType.isBrowser(elementType);
 
 		if (!isElementTypeBrowser) {
@@ -288,7 +288,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 	}	
 
 	private boolean processPageAddress(MethodParameterNode methodParameterNode, String argument) {	
-		String parameterType = methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_ELEMENT_TYPE);
+		String parameterType = methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_WEB_ELEMENT_TYPE);
 		if (!NodePropertyDefElemType.isPageUrl(parameterType)) {
 			return false;
 		}
