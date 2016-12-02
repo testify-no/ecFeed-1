@@ -219,6 +219,10 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 
 		String action = 
 				methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_ACTION);
+		
+		if (action == null) {
+			ExceptionHelper.reportRuntimeException("Action is undefined.");
+		}
 
 		if (NodePropertyDefs.isActionSendKeys(action)) {
 			webElement.sendKeys(argument);

@@ -15,6 +15,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 //import org.eclipse.swt.widgets.Text; TODO
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
 
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.NodePropertyDefs;
@@ -32,18 +33,19 @@ public class WebParameterSection extends BasicSection {
 	private Composite fClientComposite;
 	private Composite fGridComposite;
 
-	private Combo fWebElementTypeCombo = null;
+	private Combo fWebElementTypeCombo;
 
-	private Label fFindByLabel = null;
-	private Combo fFindByElemTypeCombo = null;
+	private Label fFindByLabel;
+	private Combo fFindByElemTypeCombo;
 
-	//	private Text fFindByElemValueText = null;
+	private Label fFindByElemValueLabel;
+	private Text fFindByElemValueText;
 	//	private Combo fActionCombo = null;
 
 	private final NodePropertyDefs.PropertyId fWebElementTypePropertyId = NodePropertyDefs.PropertyId.PROPERTY_WEB_ELEMENT_TYPE;
 
 	private final NodePropertyDefs.PropertyId fFindByElemTypePropertyId = NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_TYPE_OF_ELEMENT;
-	//	private final NodePropertyDefs.PropertyId fFindByElemValuePropertyId = NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_VALUE_OF_ELEMENT;
+	private final NodePropertyDefs.PropertyId fFindByElemValuePropertyId = NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_VALUE_OF_ELEMENT;
 	//	private final NodePropertyDefs.PropertyId fActionPropertyId = NodePropertyDefs.PropertyId.PROPERTY_ACTION;
 
 	public WebParameterSection(ISectionContext sectionContext, 
@@ -108,7 +110,8 @@ public class WebParameterSection extends BasicSection {
 		String parameterType = fAbstractParameterNode.getType();
 		String webElementType = getWebElementValue(parameterType);
 		refreshWebElementTypeCombo(webElementType);
-		refreshFindBy(webElementType);
+		refreshFindByType(webElementType);
+		refreshFindByValue(webElementType);
 	}
 
 	private String getWebElementValue(String parameterType) {
@@ -128,14 +131,11 @@ public class WebParameterSection extends BasicSection {
 				fAbstractParameterNode.getType(), webElementValue);
 	}
 
-	private void refreshFindBy(String webElementType) {
+	private void refreshFindByType(String webElementType) {
 
 		disposeFindByElemControls();
 
-		if (StringHelper.isNullOrEmpty(webElementType)) {
-			return;
-		}
-		if (!NodePropertyDefs.isFindByAvailable(webElementType)) {
+		if (!isChildOfWebElementAvailable(webElementType)) {
 			return;
 		}
 
@@ -183,6 +183,56 @@ public class WebParameterSection extends BasicSection {
 		}		
 	}
 
+	private void refreshFindByValue(String webElementType) {
+
+		disposeFindByValueControls();
+
+		if (!isChildOfWebElementAvailable(webElementType)) {
+			return;
+		}
+
+		createFindByValueControls();
+		refreshfFindByValueText();
+
+		fGridComposite.pack();
+		fGridComposite.layout(true);		
+	}	
+
+	private boolean isChildOfWebElementAvailable(String webElementType) {
+		if (StringHelper.isNullOrEmpty(webElementType)) {
+			return false;
+		}
+		if (!NodePropertyDefs.isFindByAvailable(webElementType)) {
+			return false;
+		}
+		return true;
+	}
+
+	private void disposeFindByValueControls() {
+
+		if (fFindByElemValueLabel != null) {
+			fFindByElemValueLabel.dispose();
+		}
+		if (fFindByElemValueText != null) {
+			fFindByElemValueText.dispose();
+		}
+	}
+
+	private void createFindByValueControls() {
+		fFindByElemValueLabel = fFormObjectToolkit.createLabel(fGridComposite, "Using ");
+		fFindByElemValueText = fFormObjectToolkit.createGridText(fGridComposite, new FindByValueChangedAdapter());
+	}
+
+	private void refreshfFindByValueText() {
+		String value = fAbstractParameterNode.getPropertyValue(fFindByElemValuePropertyId);
+
+		if (value == null) {
+			fFindByElemValueText.setText("");
+		} else {
+			fFindByElemValueText.setText(value);
+		}
+	}
+
 	//	private void refreshComboByProperty(
 	//			NodePropertyDefs.PropertyId propertyId, Combo combo, AbstractParameterNode abstractParameterNode) {
 	//
@@ -218,7 +268,8 @@ public class WebParameterSection extends BasicSection {
 		public void widgetSelected(SelectionEvent e) {
 			String webElementType = fWebElementTypeCombo.getText();
 			fAbstractParameterInterface.setProperty(fWebElementTypePropertyId, webElementType);
-			refreshFindBy(webElementType);
+			refreshFindByType(webElementType);
+			refreshFindByValue(webElementType);
 		}
 	}
 
@@ -229,12 +280,12 @@ public class WebParameterSection extends BasicSection {
 		}
 	}
 
-	//	private class FindByValueChangedAdapter extends AbstractSelectionAdapter {
-	//		@Override
-	//		public void widgetSelected(SelectionEvent e) {
-	//			fAbstractParameterInterface.setProperty(fFindByElemValuePropertyId, fFindByElemValueText.getText());
-	//		}
-	//	}	
+	private class FindByValueChangedAdapter extends AbstractSelectionAdapter {
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			fAbstractParameterInterface.setProperty(fFindByElemValuePropertyId, fFindByElemValueText.getText());
+		}
+	}	
 
 	//	private class ActionChangedAdapter extends AbstractSelectionAdapter {
 	//		@Override
