@@ -130,7 +130,7 @@ public class NodePropertyDefs {
 		if (propertyId == NodePropertyDefs.PropertyId.PROPERTY_WEB_ELEMENT_TYPE) {
 			return NodePropertyDefElemType.getDefaultValue(parentValue);
 		}
-		
+
 		return getDefinition(propertyId).getDefaultValue();
 	}	
 
@@ -138,16 +138,16 @@ public class NodePropertyDefs {
 		if (propertyId == NodePropertyDefs.PropertyId.PROPERTY_WEB_ELEMENT_TYPE) {
 			return NodePropertyDefElemType.getPossibleValues(parentValue);
 		}
-		
+
 		return getDefinition(propertyId).getPossibleValues();
 	}	
-	
+
 	public static boolean isOneOfPossibleValues(String value, PropertyId propertyId, String parentValue) {
 		String[] possibleValues = getPossibleValues(propertyId, parentValue);
 		NodePropertyValueSet valueSet = new NodePropertyValueSet(null, possibleValues);
 		return valueSet.isOneOfPossibleValues(value);
 	}
-	
+
 	private static NodePropertyDef getDefinition(PropertyId propertyId) {
 		return fPropertyDefs[propertyId.getIndex()];
 	}
@@ -218,10 +218,11 @@ public class NodePropertyDefs {
 		return false;
 	}
 
-	public void getPossibleElementTypes(String parameterType) {
-		if (JavaTypeHelper.isStringTypeName(parameterType)) {
-
+	public static boolean isFindByAvailable(String webElementType) {
+		if (NodePropertyDefElemType.isChildElementAvailable(webElementType)) {
+			return true;
 		}
-
+		return false;
 	}
+
 }
