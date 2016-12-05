@@ -23,6 +23,7 @@ public class NodePropertyDefElemType {
 	private static final String DELAY = "Delay";
 	private static final String BROWSER = "Browser";
 	private static final String EMPTY_STR = "";
+	private static final String UNMAPPED = "Unmapped";
 
 	public static NodePropertyDef parameterType = 
 			new NodePropertyDef(
@@ -31,16 +32,16 @@ public class NodePropertyDefElemType {
 
 
 	private static NodePropertyValueSet VALUE_SET_FOR_STRING = 
-			new NodePropertyValueSet(EMPTY_STR, new String[] {EMPTY_STR, TEXT, PAGE_ELEMENT, PAGE_URL, BROWSER});
+			new NodePropertyValueSet(UNMAPPED, new String[] {UNMAPPED, TEXT, PAGE_ELEMENT, PAGE_URL, BROWSER});
 
 	private static NodePropertyValueSet VALUE_SET_FOR_CHAR = 
-			new NodePropertyValueSet(EMPTY_STR, new String[] {EMPTY_STR, TEXT, PAGE_ELEMENT});
+			new NodePropertyValueSet(UNMAPPED, new String[] {UNMAPPED, TEXT, PAGE_ELEMENT});
 
 	private static NodePropertyValueSet VALUE_SET_FOR_BOOLEAN = 
-			new NodePropertyValueSet(EMPTY_STR, new String[] {EMPTY_STR, BUTTON, PAGE_ELEMENT});
+			new NodePropertyValueSet(UNMAPPED, new String[] {UNMAPPED, BUTTON, PAGE_ELEMENT});
 
 	private static NodePropertyValueSet VALUE_SET_FOR_NUMERIC_TYPES = 
-			new NodePropertyValueSet(EMPTY_STR, new String[] {EMPTY_STR, TEXT, DELAY, PAGE_ELEMENT});	
+			new NodePropertyValueSet(UNMAPPED, new String[] {UNMAPPED, TEXT, DELAY, PAGE_ELEMENT});	
 
 	public static String[] getPossibleValues(String parameterType) {
 		return getValueSet(parameterType).getPossibleValues();

@@ -32,6 +32,7 @@ public class NodePropertyDefs {
 	private static final String ACTION_SUBMIT = "Submit";
 
 	private static final String EMPTY_STR = "";
+	private static final String UNMAPPED = "Unmapped";
 
 
 	private static String[] falseTrueArray = new String[]{FALSE_VALUE, TRUE_VALUE};
@@ -64,15 +65,15 @@ public class NodePropertyDefs {
 
 	static NodePropertyDef findByTypeOfElement = 
 			new NodePropertyDef(
-					"findByTypeOfElement", JavaTypeHelper.TYPE_NAME_STRING, EMPTY_STR,
-					new String[]{ EMPTY_STR, "Id", "Class name", "Tag name", "Name", "Link text", "Partial link text", "CSS selector", "Xpath" });
+					"findByTypeOfElement", JavaTypeHelper.TYPE_NAME_STRING, UNMAPPED,
+					new String[]{ UNMAPPED, "Id", "Class name", "Tag name", "Name", "Link text", "Partial link text", "CSS selector", "Xpath" });
 
 	static NodePropertyDef findByValueOfElement = new NodePropertyDef("findByValueOfElement", JavaTypeHelper.TYPE_NAME_STRING, null, null);
 
 	static NodePropertyDef action = 
 			new NodePropertyDef(
-					"action", JavaTypeHelper.TYPE_NAME_STRING, EMPTY_STR,
-					new String[]{ EMPTY_STR, ACTION_SEND_KEYS, ACTION_CLICK, ACTION_SUBMIT });
+					"action", JavaTypeHelper.TYPE_NAME_STRING, UNMAPPED,
+					new String[]{ UNMAPPED, ACTION_SEND_KEYS, ACTION_CLICK, ACTION_SUBMIT });
 
 
 	public enum PropertyId {

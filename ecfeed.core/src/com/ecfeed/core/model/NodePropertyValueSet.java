@@ -18,7 +18,7 @@ class NodePropertyValueSet {
 		fDefaultValue = defaultValue;
 		fPossibleValues = possibleValues;
 	}
-	
+
 	String getDefaultValue() {
 		return fDefaultValue;
 	}	
@@ -26,7 +26,7 @@ class NodePropertyValueSet {
 	String[] getPossibleValues() {
 		return fPossibleValues;
 	}
-	
+
 	boolean isOneOfPossibleValues(String valueToMatch) {
 		for (String possibleValue : fPossibleValues) {
 			if (possibleValue.equals(valueToMatch)) {
