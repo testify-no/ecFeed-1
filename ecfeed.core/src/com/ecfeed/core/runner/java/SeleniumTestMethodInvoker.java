@@ -220,7 +220,17 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 
 		WebElement webElement = findWebElement(methodParameterNode);
 
-		performActionSendKeys(webElement, argument);
+		if (!methodParameterNode.isExpected()) {
+			performActionSendKeys(webElement, argument);
+			return true;
+		}
+
+		String currentText = webElement.getText();
+		if (currentText.equals(argument)) {
+			return true;
+		}
+
+		reportException("Text does not match. Expected: " + argument + " Current: " + currentText);
 		return true;
 	}
 
