@@ -25,6 +25,7 @@ import org.openqa.selenium.safari.SafariDriver;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.NodePropertyDefElemType;
+import com.ecfeed.core.model.NodePropertyDefFindByType;
 import com.ecfeed.core.model.NodePropertyDefs;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.runner.ITestMethodInvoker;
@@ -274,9 +275,45 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 	}
 
 	private WebElement findWebElementBy(String findByType, String findByValue) {
-		// TODO add various types of By
+
 		checkWebDriver();
-		return fDriver.findElement(By.id(findByValue));
+
+		if (NodePropertyDefFindByType.isId(findByType)) {
+			return fDriver.findElement(By.id(findByValue));
+		}
+
+		if (NodePropertyDefFindByType.isClassName(findByType)) {
+			return fDriver.findElement(By.className(findByValue));
+		}
+
+		if (NodePropertyDefFindByType.isTagName(findByType)) {
+			return fDriver.findElement(By.tagName(findByValue));
+		}
+
+		if (NodePropertyDefFindByType.isTagName(findByType)) {
+			return fDriver.findElement(By.tagName(findByValue));
+		}		
+
+		if (NodePropertyDefFindByType.isName(findByType)) {
+			return fDriver.findElement(By.name(findByValue));
+		}
+
+		if (NodePropertyDefFindByType.isLinkText(findByType)) {
+			return fDriver.findElement(By.linkText(findByValue));
+		}
+
+		if (NodePropertyDefFindByType.isPartialLinkText(findByType)) {
+			return fDriver.findElement(By.partialLinkText(findByValue));
+		}		
+
+		if (NodePropertyDefFindByType.isCssSelector(findByType)) {
+			return fDriver.findElement(By.cssSelector(findByValue));
+		}		
+
+		if (NodePropertyDefFindByType.isXPath(findByType)) {
+			return fDriver.findElement(By.xpath(findByValue));
+		}		
+		return null;
 	}
 
 	private boolean performAction(WebElement webElement, String argument, MethodParameterNode methodParameterNode) {

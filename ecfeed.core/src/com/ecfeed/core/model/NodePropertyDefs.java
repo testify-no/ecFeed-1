@@ -63,10 +63,6 @@ public class NodePropertyDefs {
 
 	static NodePropertyDef startUrl = new NodePropertyDef("startUrl", JavaTypeHelper.TYPE_NAME_STRING, null, null);
 
-	static NodePropertyDef findByTypeOfElement = 
-			new NodePropertyDef(
-					"findByTypeOfElement", JavaTypeHelper.TYPE_NAME_STRING, UNMAPPED,
-					new String[]{ UNMAPPED, "Id", "Class name", "Tag name", "Name", "Link text", "Partial link text", "CSS selector", "Xpath" });
 
 	static NodePropertyDef findByValueOfElement = new NodePropertyDef("findByValueOfElement", JavaTypeHelper.TYPE_NAME_STRING, null, null);
 
@@ -114,7 +110,7 @@ public class NodePropertyDefs {
 		mapStartUrlToParam,
 		startUrl,
 		NodePropertyDefElemType.parameterType,
-		findByTypeOfElement,
+		NodePropertyDefFindByType.findByTypeOfElement,
 		findByValueOfElement,
 		action
 		};
