@@ -91,6 +91,11 @@ public class WebParameterSection extends BasicSection {
 		NodePropertyDefs.PropertyId propertyId = NodePropertyDefs.PropertyId.PROPERTY_WEB_ELEMENT_TYPE;
 
 		String webElementValue = fAbstractParameterNode.getPropertyValue(propertyId);
+
+		if (!NodePropertyDefs.isOneOfPossibleValues(webElementValue, propertyId, parameterType)) {
+			webElementValue = null;
+		}
+
 		if (webElementValue == null) {
 			webElementValue = NodePropertyDefs.getPropertyDefaultValue(propertyId, parameterType);
 			fAbstractParameterNode.setPropertyValue(fWebElementTypePropertyId, webElementValue);
