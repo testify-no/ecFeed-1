@@ -13,7 +13,6 @@ package com.ecfeed.ui.editor;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-//import org.eclipse.swt.widgets.Text; TODO
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
@@ -40,13 +39,15 @@ public class WebParameterSection extends BasicSection {
 
 	private Label fFindByElemValueLabel;
 	private Text fFindByElemValueText;
-	//	private Combo fActionCombo = null;
+
+	private Label fActionLabel = null;
+	private Combo fActionCombo = null;
 
 	private final NodePropertyDefs.PropertyId fWebElementTypePropertyId = NodePropertyDefs.PropertyId.PROPERTY_WEB_ELEMENT_TYPE;
 
 	private final NodePropertyDefs.PropertyId fFindByElemTypePropertyId = NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_TYPE_OF_ELEMENT;
 	private final NodePropertyDefs.PropertyId fFindByElemValuePropertyId = NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_VALUE_OF_ELEMENT;
-	//	private final NodePropertyDefs.PropertyId fActionPropertyId = NodePropertyDefs.PropertyId.PROPERTY_ACTION;
+	private final NodePropertyDefs.PropertyId fActionPropertyId = NodePropertyDefs.PropertyId.PROPERTY_ACTION;
 
 	public WebParameterSection(ISectionContext sectionContext, 
 			IModelUpdateContext updateContext,
@@ -112,6 +113,7 @@ public class WebParameterSection extends BasicSection {
 		refreshWebElementTypeCombo(webElementType);
 		refreshFindByType(webElementType);
 		refreshFindByValue(webElementType);
+		refreshAction(webElementType);
 	}
 
 	private String getWebElementValue(String parameterType) {
@@ -233,6 +235,48 @@ public class WebParameterSection extends BasicSection {
 		}
 	}
 
+	private void refreshAction(String webElementType) {
+
+		disposeActionControls();
+
+		if (!isChildOfWebElementAvailable(webElementType)) {
+			return;
+		}
+
+		if (!NodePropertyDefs.isActionAvailable(webElementType)) {
+			return;
+		}		
+
+		createActionControls();
+		refreshActionCombo(webElementType);
+
+		fGridComposite.pack();
+		fGridComposite.layout(true);		
+	}
+
+	private void disposeActionControls() {
+
+		if (fActionLabel != null) {
+			fActionLabel.dispose();
+		}
+		if (fActionLabel != null) {
+			fActionCombo.dispose();
+		}
+	}
+
+	private void createActionControls() {
+		fActionLabel = fFormObjectToolkit.createLabel(fGridComposite, "Using ");
+		fActionCombo = fFormObjectToolkit.createReadOnlyGridCombo(fGridComposite, new ActionChangedAdapter());
+	}	
+
+	private void refreshActionCombo(String webElementType) {
+		String currentPropertyValue = 
+				fAbstractParameterNode.getPropertyValue(fActionPropertyId);
+
+		refreshCombo(fActionCombo, fActionPropertyId, 
+				webElementType, currentPropertyValue);
+	}	
+
 	//	private void refreshComboByProperty(
 	//			NodePropertyDefs.PropertyId propertyId, Combo combo, AbstractParameterNode abstractParameterNode) {
 	//
@@ -270,6 +314,7 @@ public class WebParameterSection extends BasicSection {
 			fAbstractParameterInterface.setProperty(fWebElementTypePropertyId, webElementType);
 			refreshFindByType(webElementType);
 			refreshFindByValue(webElementType);
+			refreshAction(webElementType);
 		}
 	}
 
@@ -287,10 +332,10 @@ public class WebParameterSection extends BasicSection {
 		}
 	}	
 
-	//	private class ActionChangedAdapter extends AbstractSelectionAdapter {
-	//		@Override
-	//		public void widgetSelected(SelectionEvent e) {
-	//			fAbstractParameterInterface.setProperty(fActionPropertyId, fActionCombo.getText());
-	//		}
-	//	}	
+	private class ActionChangedAdapter extends AbstractSelectionAdapter {
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			fAbstractParameterInterface.setProperty(fActionPropertyId, fActionCombo.getText());
+		}
+	}	
 }

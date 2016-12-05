@@ -110,4 +110,11 @@ public class NodePropertyDefElemType {
 		}
 		return false;
 	}
+
+	public static boolean isActionAvailable(String value) {
+		if (isPageElement(value)) {
+			return true;
+		}
+		return false;
+	}	
 }

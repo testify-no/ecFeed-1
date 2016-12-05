@@ -133,6 +133,9 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 	private void processOneArgument(
 			MethodParameterNode methodParameterNode, String argument, String choiceName) {
 
+		if (processTextElement(methodParameterNode, argument)) {
+			return;
+		}
 		if (processPageElement(methodParameterNode, argument)) {
 			return;
 		}
@@ -186,6 +189,30 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		fBrowserDefined = true;
 	}
 
+	private boolean processTextElement(MethodParameterNode methodParameterNode, String argument) {
+		String elementType = methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_WEB_ELEMENT_TYPE);
+
+		if (!NodePropertyDefElemType.isText(elementType)) {
+			return false;
+		}
+
+		String findByType = methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_TYPE_OF_ELEMENT);
+
+		String findByValue = methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_VALUE_OF_ELEMENT);
+
+		WebElement webElement = findWebElement(findByType, findByValue);
+		if (webElement == null) {
+			return false;
+		}
+
+		performActionSendKeys(webElement, argument);
+		return true;
+	}
+
+	private void performActionSendKeys(WebElement webElement, String argument) {
+		webElement.sendKeys(argument);
+	}
+
 	private boolean processPageElement(MethodParameterNode methodParameterNode, String argument) {
 		String elementType = methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_WEB_ELEMENT_TYPE);
 
@@ -219,7 +246,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 
 		String action = 
 				methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_ACTION);
-		
+
 		if (action == null) {
 			ExceptionHelper.reportRuntimeException("Action is undefined.");
 		}

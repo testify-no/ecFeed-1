@@ -225,4 +225,11 @@ public class NodePropertyDefs {
 		return false;
 	}
 
+	public static boolean isActionAvailable(String webElementType) {
+		if (!NodePropertyDefElemType.isActionAvailable(webElementType)) {
+			return false;
+		}
+		return true;
+	}	
+
 }
