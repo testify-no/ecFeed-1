@@ -133,9 +133,6 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 	private void processOneArgument(
 			MethodParameterNode methodParameterNode, String argument, String choiceName) {
 
-		if (processTextElement(methodParameterNode, argument)) {
-			return;
-		}
 		if (processPageElement(methodParameterNode, argument)) {
 			return;
 		}
@@ -189,21 +186,27 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		fBrowserDefined = true;
 	}
 
-	private boolean processTextElement(MethodParameterNode methodParameterNode, String argument) {
+	private boolean processPageElement(MethodParameterNode methodParameterNode, String argument) {
+
 		String elementType = methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_WEB_ELEMENT_TYPE);
 
+		if (processTextElement(elementType, methodParameterNode, argument)) {
+			return true;
+		}
+
+		if (processGenericPageElement(methodParameterNode, argument)) {
+			return true;
+		}
+
+		return false;
+	}
+
+	private boolean processTextElement(String elementType, MethodParameterNode methodParameterNode, String argument) {
 		if (!NodePropertyDefElemType.isText(elementType)) {
 			return false;
 		}
 
-		String findByType = methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_TYPE_OF_ELEMENT);
-
-		String findByValue = methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_VALUE_OF_ELEMENT);
-
-		WebElement webElement = findWebElement(findByType, findByValue);
-		if (webElement == null) {
-			return false;
-		}
+		WebElement webElement = findWebElement(methodParameterNode);
 
 		performActionSendKeys(webElement, argument);
 		return true;
@@ -213,21 +216,14 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		webElement.sendKeys(argument);
 	}
 
-	private boolean processPageElement(MethodParameterNode methodParameterNode, String argument) {
+	private boolean processGenericPageElement(MethodParameterNode methodParameterNode, String argument) {
 		String elementType = methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_WEB_ELEMENT_TYPE);
 
 		if (!NodePropertyDefElemType.isPageElement(elementType)) {
 			return false;
 		}
 
-		String findByType = methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_TYPE_OF_ELEMENT);
-
-		String findByValue = methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_VALUE_OF_ELEMENT);
-
-		WebElement webElement = findWebElement(findByType, findByValue);
-		if (webElement == null) {
-			return false;
-		}
+		WebElement webElement = findWebElement(methodParameterNode);
 
 		if (!performAction(webElement, argument, methodParameterNode)) {
 			return false; 
@@ -236,7 +232,20 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		return true;
 	}
 
-	private WebElement findWebElement(String findByType, String findByValue) {
+	private WebElement findWebElement(MethodParameterNode methodParameterNode) {
+		String findByType = methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_TYPE_OF_ELEMENT);
+		String findByValue = methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_VALUE_OF_ELEMENT);
+
+		WebElement webElement = findWebElementBy(findByType, findByValue);
+
+		if (webElement == null) {
+			ExceptionHelper.reportRuntimeException("Can not find web element.");
+		}
+
+		return webElement;
+	}
+
+	private WebElement findWebElementBy(String findByType, String findByValue) {
 		// TODO add various types of By
 		checkWebDriver();
 		return fDriver.findElement(By.id(findByValue));
