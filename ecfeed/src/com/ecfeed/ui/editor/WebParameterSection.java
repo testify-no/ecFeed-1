@@ -241,7 +241,7 @@ public class WebParameterSection extends BasicSection {
 	}
 
 	private void createActionControls() {
-		fActionLabel = fFormObjectToolkit.createLabel(fGridComposite, "Using ");
+		fActionLabel = fFormObjectToolkit.createLabel(fGridComposite, "Action ");
 		fActionCombo = fFormObjectToolkit.createReadOnlyGridCombo(fGridComposite, new ActionChangedAdapter());
 	}	
 
