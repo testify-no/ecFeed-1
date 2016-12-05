@@ -28,6 +28,7 @@ import com.ecfeed.core.model.NodePropertyDefElemType;
 import com.ecfeed.core.model.NodePropertyDefs;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.runner.ITestMethodInvoker;
+import com.ecfeed.core.utils.BooleanHelper;
 import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.StringHelper;
 
@@ -47,6 +48,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 	}	
 
 	public SeleniumTestMethodInvoker(MethodNode methodNode) {
+
 		fDriver = null;
 		fMethodNode = methodNode;
 		fMethodParameters = fMethodNode.getMethodParameters();
@@ -92,6 +94,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 	}
 
 	private void processWebBrowserProperty() {
+
 		String browserDriver = decodeDriverPath(fMethodNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_BROWSER_DRIVER));
 		if (StringHelper.isNullOrEmpty(browserDriver)) {
 			return;
@@ -122,6 +125,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 	}
 
 	private void processArguments(Object[] arguments, Object[] choiceNames, String argumentsDescription) {
+
 		for (int cnt = 0; cnt < fMethodNode.getParametersCount(); ++cnt) {
 			MethodParameterNode methodParameterNode = fMethodParameters.get(cnt);
 			String argument = arguments[cnt].toString();
@@ -148,6 +152,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 	}
 
 	private void setDriverIntr(String driverName, String driverProperty) {
+
 		if (driverName == null) {
 			reportException("WebDriver name is empty.");
 			return;
@@ -182,6 +187,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 	}
 
 	private void setDriver(String driverName, String driverProperty) {
+
 		setDriverIntr(driverName, driverProperty);
 		fBrowserDefined = true;
 	}
@@ -194,6 +200,10 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 			return true;
 		}
 
+		if (processButton(elementType, methodParameterNode, argument)) {
+			return true;
+		}
+
 		if (processGenericPageElement(methodParameterNode, argument)) {
 			return true;
 		}
@@ -202,6 +212,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 	}
 
 	private boolean processTextElement(String elementType, MethodParameterNode methodParameterNode, String argument) {
+
 		if (!NodePropertyDefElemType.isText(elementType)) {
 			return false;
 		}
@@ -216,7 +227,23 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		webElement.sendKeys(argument);
 	}
 
+	private boolean processButton(String elementType, MethodParameterNode methodParameterNode, String argument) {
+
+		if (!NodePropertyDefElemType.isButton(elementType)) {
+			return false;
+		}
+
+		WebElement webElement = findWebElement(methodParameterNode);
+
+		if (BooleanHelper.parseBoolean(argument)) {
+			webElement.click();
+		}
+
+		return true;
+	}
+
 	private boolean processGenericPageElement(MethodParameterNode methodParameterNode, String argument) {
+
 		String elementType = methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_WEB_ELEMENT_TYPE);
 
 		if (!NodePropertyDefElemType.isPageElement(elementType)) {
@@ -233,6 +260,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 	}
 
 	private WebElement findWebElement(MethodParameterNode methodParameterNode) {
+
 		String findByType = methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_TYPE_OF_ELEMENT);
 		String findByValue = methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_VALUE_OF_ELEMENT);
 
@@ -296,6 +324,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 	}
 
 	private boolean processWebBrowser(MethodParameterNode methodParameterNode, String argument, String choiceName) {
+
 		String elementType = methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_WEB_ELEMENT_TYPE);
 		boolean isElementTypeBrowser = NodePropertyDefElemType.isBrowser(elementType);
 
@@ -320,6 +349,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 	}
 
 	private void goToPage(String url) {
+
 		if (url == null) {
 			return;
 		}
@@ -327,7 +357,8 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		fDriver.get(url);
 	}	
 
-	private boolean processPageAddress(MethodParameterNode methodParameterNode, String argument) {	
+	private boolean processPageAddress(MethodParameterNode methodParameterNode, String argument) {
+
 		String parameterType = methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_WEB_ELEMENT_TYPE);
 		if (!NodePropertyDefElemType.isPageUrl(parameterType)) {
 			return false;
@@ -343,6 +374,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 	}
 
 	private void processExpectedPageAddress(String argument) {
+
 		checkWebDriver();
 		String currentUrl = fDriver.getCurrentUrl();
 
@@ -357,12 +389,14 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 	}
 
 	private void checkWebDriver() {
+
 		if (fDriver == null) {
 			reportException("Web driver not defined.");
 		}
 	}
 
 	private void reportException(String message) {
+
 		String exceptionMessage = TestMethodInvokerHelper.createErrorMessage(
 				fMethodNode.getName(), fArgumentsDescription, message);
 		ExceptionHelper.reportRuntimeException(exceptionMessage);

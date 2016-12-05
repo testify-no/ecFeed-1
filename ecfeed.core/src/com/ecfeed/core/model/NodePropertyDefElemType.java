@@ -77,6 +77,13 @@ public class NodePropertyDefElemType {
 		return false;
 	}
 
+	public static boolean isButton(String value) {
+		if (value.equals(BUTTON)) {
+			return true;
+		}
+		return false;
+	}
+
 	public static boolean isPageElement(String value) {
 		if (value.equals(PAGE_ELEMENT)) {
 			return true;
@@ -106,7 +113,7 @@ public class NodePropertyDefElemType {
 	}
 
 	public static boolean isChildElementAvailable(String value) {
-		if (isPageElement(value) || isText(value)) {
+		if (isPageElement(value) || isText(value) || isButton(value)) {
 			return true;
 		}
 		return false;
