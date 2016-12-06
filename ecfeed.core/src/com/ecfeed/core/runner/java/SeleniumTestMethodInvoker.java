@@ -211,6 +211,10 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 			return true;
 		}		
 
+		if (processSelect(elementType, methodParameterNode, argument)) {
+			return true;
+		}		
+
 		if (processButton(elementType, methodParameterNode, argument)) {
 			return true;
 		}
@@ -269,6 +273,32 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		}
 		return true;
 	}
+
+	private boolean processSelect(String elementType, MethodParameterNode methodParameterNode, String argument) {
+
+		if (!NodePropertyDefElemType.isSelect(elementType)) {
+			return false;
+		}
+
+		WebElement selectWebElement = findWebElement(methodParameterNode);
+		String tagName = selectWebElement.getTagName();
+
+		if (!StringHelper.stringsEqualWithNulls(tagName, "select")) {
+			return false;
+		}
+
+		List<WebElement> allOptions = selectWebElement.findElements(By.tagName("option"));
+		for (WebElement option : allOptions) {
+			String text = option.getText();
+
+			if (StringHelper.stringsEqualWithNulls(text, argument)) {
+				option.click();
+				break;
+			}
+		}
+
+		return true;
+	}	
 
 	private boolean processButton(String elementType, MethodParameterNode methodParameterNode, String argument) {
 

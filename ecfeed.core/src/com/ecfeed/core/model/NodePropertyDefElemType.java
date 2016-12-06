@@ -19,6 +19,7 @@ public class NodePropertyDefElemType {
 	private static final String PAGE_ELEMENT = "Page element";
 	private static final String BUTTON = "Button";
 	private static final String TEXT = "Text";
+	private static final String SELECT = "Select";
 	private static final String PAGE_URL = "Page URL";
 	private static final String DELAY = "Delay";
 	private static final String BROWSER = "Browser";
@@ -33,7 +34,7 @@ public class NodePropertyDefElemType {
 
 
 	private static NodePropertyValueSet VALUE_SET_FOR_STRING = 
-			new NodePropertyValueSet(UNMAPPED, new String[] {UNMAPPED, TEXT, PAGE_ELEMENT, PAGE_URL, BROWSER});
+			new NodePropertyValueSet(UNMAPPED, new String[] {UNMAPPED, TEXT, SELECT, PAGE_ELEMENT, PAGE_URL, BROWSER});
 
 	private static NodePropertyValueSet VALUE_SET_FOR_CHAR = 
 			new NodePropertyValueSet(UNMAPPED, new String[] {UNMAPPED, TEXT, PAGE_ELEMENT});
@@ -85,6 +86,13 @@ public class NodePropertyDefElemType {
 		return false;
 	}	
 
+	public static boolean isSelect(String value) {
+		if (value.equals(SELECT)) {
+			return true;
+		}
+		return false;
+	}	
+
 	public static boolean isButton(String value) {
 		if (value.equals(BUTTON)) {
 			return true;
@@ -121,7 +129,7 @@ public class NodePropertyDefElemType {
 	}
 
 	public static boolean isChildElementAvailable(String value) {
-		if (isPageElement(value) || isText(value) || isButton(value) || isCheckbox(value)) {
+		if (isPageElement(value) || isText(value) || isButton(value) || isCheckbox(value) || isSelect(value)) {
 			return true;
 		}
 		return false;
