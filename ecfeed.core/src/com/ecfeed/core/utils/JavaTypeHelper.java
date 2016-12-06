@@ -109,7 +109,7 @@ public class JavaTypeHelper {
 	}	
 	
 	public static boolean isDoubleTypeName(String typeName) {
-		if (typeName.equals(TYPE_NAME_FLOAT)) {
+		if (typeName.equals(TYPE_NAME_DOUBLE)) {
 			return true;
 		}
 		return false;
