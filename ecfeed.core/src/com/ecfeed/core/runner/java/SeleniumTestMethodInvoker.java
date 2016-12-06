@@ -129,9 +129,15 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 
 		for (int cnt = 0; cnt < fMethodNode.getParametersCount(); ++cnt) {
 			MethodParameterNode methodParameterNode = fMethodParameters.get(cnt);
-			String argument = arguments[cnt].toString();
+			
+			Object argument = arguments[cnt];
+			if (argument == null) {
+				ExceptionHelper.reportRuntimeException("Argument: " + cnt+1 + " of parameter: " + methodParameterNode.getName() + " must not be null.");
+			}
+			
+			String argumentStr = arguments[cnt].toString();
 			String choiceName = choiceNames[cnt].toString();
-			processOneArgument(methodParameterNode, argument, choiceName);
+			processOneArgument(methodParameterNode, argumentStr, choiceName);
 		}		
 	}
 
