@@ -24,11 +24,12 @@ public class NodePropertyDefElemType {
 	private static final String BROWSER = "Browser";
 	private static final String EMPTY_STR = "";
 	private static final String UNMAPPED = "Unmapped";
+	private static final String CHECKBOX = "Checkbox";
 
 	public static NodePropertyDef parameterType = 
 			new NodePropertyDef(
 					PARAMETER_TYPE, JavaTypeHelper.TYPE_NAME_STRING, EMPTY_STR,
-					new String[]{EMPTY_STR, TEXT, PAGE_ELEMENT, PAGE_URL, DELAY, BROWSER });
+					new String[]{EMPTY_STR, TEXT, CHECKBOX, PAGE_ELEMENT, PAGE_URL, DELAY, BROWSER });
 
 
 	private static NodePropertyValueSet VALUE_SET_FOR_STRING = 
@@ -38,7 +39,7 @@ public class NodePropertyDefElemType {
 			new NodePropertyValueSet(UNMAPPED, new String[] {UNMAPPED, TEXT, PAGE_ELEMENT});
 
 	private static NodePropertyValueSet VALUE_SET_FOR_BOOLEAN = 
-			new NodePropertyValueSet(UNMAPPED, new String[] {UNMAPPED, BUTTON, PAGE_ELEMENT});
+			new NodePropertyValueSet(UNMAPPED, new String[] {UNMAPPED, CHECKBOX, BUTTON, PAGE_ELEMENT});
 
 	private static NodePropertyValueSet VALUE_SET_FOR_NUMERIC_TYPES = 
 			new NodePropertyValueSet(UNMAPPED, new String[] {UNMAPPED, TEXT, DELAY, PAGE_ELEMENT});	
@@ -77,6 +78,13 @@ public class NodePropertyDefElemType {
 		return false;
 	}
 
+	public static boolean isCheckbox(String value) {
+		if (value.equals(CHECKBOX)) {
+			return true;
+		}
+		return false;
+	}	
+
 	public static boolean isButton(String value) {
 		if (value.equals(BUTTON)) {
 			return true;
@@ -113,7 +121,7 @@ public class NodePropertyDefElemType {
 	}
 
 	public static boolean isChildElementAvailable(String value) {
-		if (isPageElement(value) || isText(value) || isButton(value)) {
+		if (isPageElement(value) || isText(value) || isButton(value) || isCheckbox(value)) {
 			return true;
 		}
 		return false;

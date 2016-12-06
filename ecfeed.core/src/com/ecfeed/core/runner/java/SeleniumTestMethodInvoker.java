@@ -129,12 +129,12 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 
 		for (int cnt = 0; cnt < fMethodNode.getParametersCount(); ++cnt) {
 			MethodParameterNode methodParameterNode = fMethodParameters.get(cnt);
-			
+
 			Object argument = arguments[cnt];
 			if (argument == null) {
 				ExceptionHelper.reportRuntimeException("Argument: " + cnt+1 + " of parameter: " + methodParameterNode.getName() + " must not be null.");
 			}
-			
+
 			String argumentStr = arguments[cnt].toString();
 			String choiceName = choiceNames[cnt].toString();
 			processOneArgument(methodParameterNode, argumentStr, choiceName);
@@ -207,6 +207,10 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 			return true;
 		}
 
+		if (processCheckBox(elementType, methodParameterNode, argument)) {
+			return true;
+		}		
+
 		if (processButton(elementType, methodParameterNode, argument)) {
 			return true;
 		}
@@ -227,7 +231,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		WebElement webElement = findWebElement(methodParameterNode);
 
 		if (!methodParameterNode.isExpected()) {
-			performActionSendKeys(webElement, argument);
+			performActionClearAndSendKeys(webElement, argument);
 			return true;
 		}
 
@@ -240,8 +244,30 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		return true;
 	}
 
-	private void performActionSendKeys(WebElement webElement, String argument) {
+	private void performActionClearAndSendKeys(WebElement webElement, String argument) {
+		webElement.clear();
 		webElement.sendKeys(argument);
+	}
+
+	private boolean processCheckBox(String elementType, MethodParameterNode methodParameterNode, String argument) {
+
+		if (!NodePropertyDefElemType.isCheckbox(elementType)) {
+			return false;
+		}
+
+		WebElement webElement = findWebElement(methodParameterNode);
+		String type = webElement.getAttribute("type");
+
+		if (!StringHelper.stringsEqualWithNulls(type, "checkbox")) {
+			return false;
+		}
+
+		boolean isAction = BooleanHelper.parseBoolean(argument);
+
+		if (isAction) {
+			webElement.click();
+		}
+		return true;
 	}
 
 	private boolean processButton(String elementType, MethodParameterNode methodParameterNode, String argument) {
