@@ -35,6 +35,15 @@ import com.ecfeed.core.utils.StringHelper;
 
 public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 
+	private final String ATTR_VALUE = "value";
+	private final String ATTR_TYPE = "type";
+
+	private final String TYPE_CHECKBOX = "checkbox";
+	private final String TYPE_RADIO = "radio";
+
+	private final String TAG_SELECT = "select";
+	private final String TAG_OPTION = "option";
+
 	WebDriver fDriver;
 	String fStartupPage = null;
 	boolean fBrowserDefined = false;
@@ -213,6 +222,10 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 
 		if (processSelect(elementType, methodParameterNode, argument)) {
 			return true;
+		}
+
+		if (processRadioButton(elementType, methodParameterNode, argument)) {
+			return true;
 		}		
 
 		if (processButton(elementType, methodParameterNode, argument)) {
@@ -260,9 +273,9 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		}
 
 		WebElement webElement = findWebElement(methodParameterNode);
-		String type = webElement.getAttribute("type");
+		String type = webElement.getAttribute(ATTR_TYPE);
 
-		if (!StringHelper.stringsEqualWithNulls(type, "checkbox")) {
+		if (!StringHelper.stringsEqualWithNulls(type, TYPE_CHECKBOX)) {
 			return false;
 		}
 
@@ -271,6 +284,42 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		if (isAction) {
 			webElement.click();
 		}
+		return true;
+	}
+
+	private boolean processRadioButton(String elementType, MethodParameterNode methodParameterNode, String argument) {
+
+		if (!NodePropertyDefElemType.isRadio(elementType)) {
+			return false;
+		}
+
+		String findByValue 
+		= methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_VALUE_OF_ELEMENT);
+
+		List<WebElement> allOptions = fDriver.findElements(By.name(findByValue));
+
+		for (WebElement option : allOptions) {
+			if (clickRadioButton(option, argument)) {
+				break;
+			}
+		}
+
+		return true;
+	}	
+
+	private boolean clickRadioButton(WebElement option, String argument) {
+
+		String type = option.getAttribute(ATTR_TYPE);
+		if (!StringHelper.stringsEqualWithNulls(type, TYPE_RADIO)) {
+			return false;
+		}
+
+		String value = option.getAttribute(ATTR_VALUE); 
+		if (!StringHelper.stringsEqualWithNulls(value, argument)) {
+			return false;
+		}
+
+		option.click();
 		return true;
 	}
 
@@ -283,11 +332,11 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		WebElement selectWebElement = findWebElement(methodParameterNode);
 		String tagName = selectWebElement.getTagName();
 
-		if (!StringHelper.stringsEqualWithNulls(tagName, "select")) {
+		if (!StringHelper.stringsEqualWithNulls(tagName, TAG_SELECT)) {
 			return false;
 		}
 
-		List<WebElement> allOptions = selectWebElement.findElements(By.tagName("option"));
+		List<WebElement> allOptions = selectWebElement.findElements(By.tagName(TAG_OPTION));
 		for (WebElement option : allOptions) {
 			String text = option.getText();
 
@@ -332,9 +381,15 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		return true;
 	}
 
-	private WebElement findWebElement(MethodParameterNode methodParameterNode) {
+	private WebElement findWebElement(MethodParameterNode methodParameterNode, String defaultFindByType) {
 
-		String findByType = methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_TYPE_OF_ELEMENT);
+		String findByType;
+
+		if (defaultFindByType == null) {
+			findByType = methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_TYPE_OF_ELEMENT);
+		} else {
+			findByType = defaultFindByType;
+		}
 		String findByValue = methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_VALUE_OF_ELEMENT);
 
 		WebElement webElement = findWebElementBy(findByType, findByValue);
@@ -344,6 +399,10 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		}
 
 		return webElement;
+	}
+
+	private WebElement findWebElement(MethodParameterNode methodParameterNode) {
+		return findWebElement(methodParameterNode, null);
 	}
 
 	private WebElement findWebElementBy(String findByType, String findByValue) {

@@ -19,7 +19,7 @@ public class NodePropertyDefFindByType {
 	private static final String ID = "Id";
 	private static final String CLASS_NAME = "Class name";
 	private static final String TAG_NAME = "Tag name";
-	private static final String NAME = "Name";
+	public  static final String NAME = "Name";
 	private static final String LINK_TEXT = "Link text";
 	private static final String PARTIAL_LINK_TEXT = "Partial link text";
 	private static final String CSS_SELECTOR = "CSS selector";
@@ -29,6 +29,25 @@ public class NodePropertyDefFindByType {
 			new NodePropertyDef(
 					"findByTypeOfElement", JavaTypeHelper.TYPE_NAME_STRING, UNMAPPED,
 					new String[]{ UNMAPPED, ID, CLASS_NAME, TAG_NAME, NAME, LINK_TEXT, PARTIAL_LINK_TEXT, CSS_SELECTOR, XPATH });
+
+	private static NodePropertyValueSet VALUE_SET_DEFAULT = 
+			new NodePropertyValueSet(UNMAPPED, new String[] { UNMAPPED, ID, CLASS_NAME, TAG_NAME, NAME, LINK_TEXT, PARTIAL_LINK_TEXT, CSS_SELECTOR, XPATH });
+
+	private static NodePropertyValueSet VALUE_SET_FOR_RADIO = 
+			new NodePropertyValueSet(NAME, new String[] {NAME});
+
+	public static String[] getPossibleValues(String webElementType) {
+		return getValueSet(webElementType).getPossibleValues();
+	}
+
+	private static NodePropertyValueSet getValueSet(String webElementType) {
+
+		if (NodePropertyDefElemType.isRadio(webElementType)) {
+			return VALUE_SET_FOR_RADIO;
+		}
+		return VALUE_SET_DEFAULT;
+	}
+
 
 	public static boolean isUnmapped(String value) {
 		if (value.equals(UNMAPPED)) {

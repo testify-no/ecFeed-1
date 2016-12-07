@@ -135,6 +135,9 @@ public class NodePropertyDefs {
 		if (propertyId == NodePropertyDefs.PropertyId.PROPERTY_WEB_ELEMENT_TYPE) {
 			return NodePropertyDefElemType.getPossibleValues(parentValue);
 		}
+		if (propertyId == NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_TYPE_OF_ELEMENT) {
+			return NodePropertyDefFindByType.getPossibleValues(parentValue);
+		}
 
 		return getDefinition(propertyId).getPossibleValues();
 	}	
