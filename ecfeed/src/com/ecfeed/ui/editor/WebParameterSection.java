@@ -34,6 +34,7 @@ public class WebParameterSection extends BasicSection {
 
 	private Combo fWebElementTypeCombo;
 
+	private Label fFindBySpacer;
 	private Label fFindByLabel;
 	private Combo fFindByElemTypeCombo;
 
@@ -62,7 +63,7 @@ public class WebParameterSection extends BasicSection {
 		setText("Web runner properties");
 		fClientComposite = getClientComposite();
 
-		fGridComposite = fFormObjectToolkit.createGridComposite(fClientComposite, 2);
+		fGridComposite = fFormObjectToolkit.createGridComposite(fClientComposite, 5);
 		fFormObjectToolkit.paintBorders(fGridComposite);
 		createControls(fGridComposite);
 	}
@@ -71,6 +72,10 @@ public class WebParameterSection extends BasicSection {
 
 		fFormObjectToolkit.createLabel(fGridComposite, "Element type");
 		fWebElementTypeCombo = fFormObjectToolkit.createReadOnlyGridCombo(fGridComposite, new ElementTypeChangedAdapter());
+
+		fFormObjectToolkit.createEmptyLabel(fGridComposite);
+		fFormObjectToolkit.createEmptyLabel(fGridComposite);
+		fFormObjectToolkit.createEmptyLabel(fGridComposite);
 	}
 
 	public void refresh() {
@@ -82,8 +87,7 @@ public class WebParameterSection extends BasicSection {
 		String parameterType = fAbstractParameterNode.getType();
 		String webElementType = getWebElementValue(parameterType);
 		refreshWebElementTypeCombo(webElementType);
-		refreshFindByType(webElementType);
-		refreshFindByValue(webElementType);
+		refreshFindByTypeAndValue(webElementType);
 		refreshAction(webElementType);
 	}
 
@@ -109,16 +113,19 @@ public class WebParameterSection extends BasicSection {
 				fAbstractParameterNode.getType(), webElementValue);
 	}
 
-	private void refreshFindByType(String webElementType) {
+	private void refreshFindByTypeAndValue(String webElementType) {
 
 		disposeFindByElemControls();
+		disposeFindBySpacer();
+		disposeFindByValueControls();
 
 		if (!isChildOfWebElementAvailable(webElementType)) {
 			return;
 		}
 
-		createFindByElemControls();
-		refreshfFindElemTypeCombo(webElementType);
+		refreshFindByType(webElementType);
+		fFindBySpacer = fFormObjectToolkit.createEmptyLabel(fGridComposite);
+		refreshFindByValue(webElementType);
 
 		fGridComposite.pack();
 		fGridComposite.layout(true);		
@@ -131,6 +138,30 @@ public class WebParameterSection extends BasicSection {
 		if (fFindByElemTypeCombo != null) {
 			fFindByElemTypeCombo.dispose();
 		}
+	}
+
+	private void disposeFindByValueControls() {
+
+		if (fFindByElemValueLabel != null) {
+			fFindByElemValueLabel.dispose();
+		}
+		if (fFindByElemValueText != null) {
+			fFindByElemValueText.dispose();
+		}
+	}
+
+	private void disposeFindBySpacer() {
+
+		if (fFindBySpacer != null) {
+			fFindBySpacer.dispose();
+		}
+	}	
+
+
+	private void refreshFindByType(String webElementType) {
+
+		createFindByElemControls();
+		refreshfFindElemTypeCombo(webElementType);
 	}
 
 	private void createFindByElemControls() {
@@ -163,17 +194,8 @@ public class WebParameterSection extends BasicSection {
 
 	private void refreshFindByValue(String webElementType) {
 
-		disposeFindByValueControls();
-
-		if (!isChildOfWebElementAvailable(webElementType)) {
-			return;
-		}
-
 		createFindByValueControls();
 		refreshfFindByValueText();
-
-		fGridComposite.pack();
-		fGridComposite.layout(true);		
 	}	
 
 	private boolean isChildOfWebElementAvailable(String webElementType) {
@@ -184,16 +206,6 @@ public class WebParameterSection extends BasicSection {
 			return false;
 		}
 		return true;
-	}
-
-	private void disposeFindByValueControls() {
-
-		if (fFindByElemValueLabel != null) {
-			fFindByElemValueLabel.dispose();
-		}
-		if (fFindByElemValueText != null) {
-			fFindByElemValueText.dispose();
-		}
 	}
 
 	private void createFindByValueControls() {
