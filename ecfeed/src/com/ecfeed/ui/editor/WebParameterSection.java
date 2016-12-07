@@ -11,13 +11,16 @@
 package com.ecfeed.ui.editor;
 
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import com.ecfeed.core.model.AbstractParameterNode;
+import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.NodePropertyDefs;
+import com.ecfeed.core.utils.BooleanHelper;
 import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.modelif.AbstractParameterInterface;
@@ -33,6 +36,7 @@ public class WebParameterSection extends BasicSection {
 	private Composite fGridComposite;
 
 	private Combo fWebElementTypeCombo;
+	private Button fOptionalCheckbox;
 
 	private Label fFindBySpacer;
 	private Label fFindByLabel;
@@ -45,6 +49,7 @@ public class WebParameterSection extends BasicSection {
 	private Combo fActionCombo = null;
 
 	private final NodePropertyDefs.PropertyId fWebElementTypePropertyId = NodePropertyDefs.PropertyId.PROPERTY_WEB_ELEMENT_TYPE;
+	private final NodePropertyDefs.PropertyId fOptionalPropertyId = NodePropertyDefs.PropertyId.PROPERTY_OPTIONAL;
 
 	private final NodePropertyDefs.PropertyId fFindByElemTypePropertyId = NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_TYPE_OF_ELEMENT;
 	private final NodePropertyDefs.PropertyId fFindByElemValuePropertyId = NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_VALUE_OF_ELEMENT;
@@ -64,34 +69,41 @@ public class WebParameterSection extends BasicSection {
 		fClientComposite = getClientComposite();
 
 		fGridComposite = fFormObjectToolkit.createGridComposite(fClientComposite, 5);
-		fFormObjectToolkit.paintBorders(fGridComposite);
 		createControls(fGridComposite);
+		fFormObjectToolkit.paintBorders(fGridComposite);
 	}
 
 	private void createControls(Composite gridComposite) {
+		fAbstractParameterNode = fAbstractParameterInterface.getTarget();
 
 		fFormObjectToolkit.createLabel(fGridComposite, "Element type");
 		fWebElementTypeCombo = fFormObjectToolkit.createReadOnlyGridCombo(fGridComposite, new ElementTypeChangedAdapter());
 
 		fFormObjectToolkit.createEmptyLabel(fGridComposite);
 		fFormObjectToolkit.createEmptyLabel(fGridComposite);
-		fFormObjectToolkit.createEmptyLabel(fGridComposite);
+
+		fOptionalCheckbox = fFormObjectToolkit.createGridCheckBox(fGridComposite, "Optional", new OptionalChangedAdapter() );
+		fOptionalCheckbox.setVisible(false);
 	}
 
 	public void refresh() {
 		fAbstractParameterNode = fAbstractParameterInterface.getTarget();
-		refreshWebElementType();
+		refreshWebElementTypeWithChildren();
 	}
 
-	private void refreshWebElementType() {
+	private void refreshWebElementTypeWithChildren() {
+
 		String parameterType = fAbstractParameterNode.getType();
 		String webElementType = getWebElementValue(parameterType);
+
 		refreshWebElementTypeCombo(webElementType);
+		refreshOptionalCheckBox(webElementType);
 		refreshFindByTypeAndValue(webElementType);
 		refreshAction(webElementType);
 	}
 
 	private String getWebElementValue(String parameterType) {
+
 		NodePropertyDefs.PropertyId propertyId = NodePropertyDefs.PropertyId.PROPERTY_WEB_ELEMENT_TYPE;
 
 		String webElementValue = fAbstractParameterNode.getPropertyValue(propertyId);
@@ -111,6 +123,29 @@ public class WebParameterSection extends BasicSection {
 	private void refreshWebElementTypeCombo(String webElementValue) {
 		refreshCombo(fWebElementTypeCombo, NodePropertyDefs.PropertyId.PROPERTY_WEB_ELEMENT_TYPE, 
 				fAbstractParameterNode.getType(), webElementValue);
+	}
+
+	private void refreshOptionalCheckBox(String webElementType) {
+
+		if (!(fAbstractParameterNode instanceof MethodParameterNode)) {
+			fOptionalCheckbox.setVisible(false);
+			return;
+		}
+
+		MethodParameterNode methodParameterNode = (MethodParameterNode)fAbstractParameterNode;
+
+		if (!methodParameterNode.isExpected()) {
+			fOptionalCheckbox.setVisible(false);
+			return;
+		}
+
+		String currentPropertyValue = 
+				fAbstractParameterNode.getPropertyValue(fOptionalPropertyId);
+
+		boolean isChecked = BooleanHelper.parseBoolean(currentPropertyValue);
+
+		fOptionalCheckbox.setSelection(isChecked);
+		fOptionalCheckbox.setVisible(true);
 	}
 
 	private void refreshFindByTypeAndValue(String webElementType) {
@@ -268,10 +303,11 @@ public class WebParameterSection extends BasicSection {
 	private class ElementTypeChangedAdapter extends AbstractSelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
+
 			String webElementType = fWebElementTypeCombo.getText();
 			fAbstractParameterInterface.setProperty(fWebElementTypePropertyId, webElementType);
-			refreshFindByType(webElementType);
-			refreshFindByValue(webElementType);
+
+			refreshFindByTypeAndValue(webElementType);
 			refreshAction(webElementType);
 		}
 	}
@@ -295,5 +331,14 @@ public class WebParameterSection extends BasicSection {
 		public void widgetSelected(SelectionEvent e) {
 			fAbstractParameterInterface.setProperty(fActionPropertyId, fActionCombo.getText());
 		}
+	}
+
+	private class OptionalChangedAdapter extends AbstractSelectionAdapter {
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			String isOptionalStr = BooleanHelper.toString(fOptionalCheckbox.getSelection());
+			fAbstractParameterInterface.setProperty(fOptionalPropertyId, isOptionalStr);
+		}
 	}	
+
 }

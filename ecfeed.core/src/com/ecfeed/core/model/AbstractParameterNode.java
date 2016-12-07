@@ -27,6 +27,7 @@ public abstract class AbstractParameterNode extends ChoicesParentNode {
 
 	private void createDefaultProperties() {
 		setPropertyDefaultValue(NodePropertyDefs.PropertyId.PROPERTY_WEB_ELEMENT_TYPE);
+		setPropertyDefaultValue(NodePropertyDefs.PropertyId.PROPERTY_OPTIONAL);
 	}
 
 	@Override

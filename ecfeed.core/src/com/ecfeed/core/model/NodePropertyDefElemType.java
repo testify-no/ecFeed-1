@@ -28,7 +28,7 @@ public class NodePropertyDefElemType {
 	private static final String UNMAPPED = "Unmapped";
 	private static final String CHECKBOX = "Checkbox";
 
-	public static NodePropertyDef parameterType = 
+	public static NodePropertyDef elementType = 
 			new NodePropertyDef(
 					PARAMETER_TYPE, JavaTypeHelper.TYPE_NAME_STRING, EMPTY_STR,
 					new String[]{EMPTY_STR, TEXT, CHECKBOX, PAGE_ELEMENT, PAGE_URL, DELAY, BROWSER });

@@ -63,6 +63,7 @@ public class NodePropertyDefs {
 
 	static NodePropertyDef startUrl = new NodePropertyDef("startUrl", JavaTypeHelper.TYPE_NAME_STRING, null, null);
 
+	static NodePropertyDef optional = new NodePropertyDef("isOptional", JavaTypeHelper.TYPE_NAME_BOOLEAN, FALSE_VALUE, falseTrueArray);
 
 	static NodePropertyDef findByValueOfElement = new NodePropertyDef("findByValueOfElement", JavaTypeHelper.TYPE_NAME_STRING, null, null);
 
@@ -84,9 +85,10 @@ public class NodePropertyDefs {
 		PROPERTY_START_URL(7),
 
 		PROPERTY_WEB_ELEMENT_TYPE(8),
-		PROPERTY_FIND_BY_TYPE_OF_ELEMENT(9),
-		PROPERTY_FIND_BY_VALUE_OF_ELEMENT(10),
-		PROPERTY_ACTION(11);
+		PROPERTY_OPTIONAL(9),
+		PROPERTY_FIND_BY_TYPE_OF_ELEMENT(10),
+		PROPERTY_FIND_BY_VALUE_OF_ELEMENT(11),
+		PROPERTY_ACTION(12);
 
 		private final int fIndex; 
 
@@ -109,7 +111,8 @@ public class NodePropertyDefs {
 		browserDriver,
 		mapStartUrlToParam,
 		startUrl,
-		NodePropertyDefElemType.parameterType,
+		NodePropertyDefElemType.elementType,
+		optional,
 		NodePropertyDefFindByType.findByTypeOfElement,
 		findByValueOfElement,
 		action
