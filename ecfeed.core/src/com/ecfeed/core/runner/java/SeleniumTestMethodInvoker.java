@@ -245,37 +245,49 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 			return false;
 		}
 
-		WebElement webElement = null;
+		WebElement webElement = findWebElement(methodParameterNode);
 
-		try {
-			webElement = findWebElement(methodParameterNode);
-		} catch (Exception e) {
-
-		}
-
-		if (webElement == null && isOptional(methodParameterNode)) {
+		if (methodParameterNode.isExpected()) {
+			processExpectedText(methodParameterNode, webElement, argument);
 			return true;
 		}
 
-		if (!methodParameterNode.isExpected()) {
-			performActionClearAndSendKeys(webElement, argument);
-			return true;
+		processNormalText(webElement, argument);
+		return true;
+	}
+
+	private void processExpectedText(MethodParameterNode methodParameterNode, WebElement webElement, String argument) {
+
+		if (webElement == null) {
+			if (isOptional(methodParameterNode)) {
+				return;
+			} else {
+				reportExceptionEmptyWebElement();
+			}
 		}
 
 		String currentText = webElement.getText();
 		if (currentText.equals(argument)) {
-			return true;
+			return;
 		}
 
 		reportException("Text does not match. Expected: " + argument + " Current: " + currentText);
-		return true;
+	}
+
+	private void processNormalText(WebElement webElement, String argument) {
+
+		if (webElement == null) {
+			reportExceptionEmptyWebElement();
+		}
+
+		performActionClearAndSendKeys(webElement, argument);
+	}
+
+	private void reportExceptionEmptyWebElement() {
+		reportException("Web element not found.");
 	}
 
 	private boolean isOptional(MethodParameterNode methodParameterNode) {
-		if (!methodParameterNode.isExpected()) {
-			return false;
-		}
-
 		String optionalStr = methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_OPTIONAL);
 		return BooleanHelper.parseBoolean(optionalStr);
 	}
@@ -292,6 +304,10 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		}
 
 		WebElement webElement = findWebElement(methodParameterNode);
+
+		if (webElement == null) {
+			reportExceptionEmptyWebElement();
+		}
 		String type = webElement.getAttribute(ATTR_TYPE);
 
 		if (!StringHelper.stringsEqualWithNulls(type, TYPE_CHECKBOX)) {
@@ -349,6 +365,10 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		}
 
 		WebElement selectWebElement = findWebElement(methodParameterNode);
+
+		if (selectWebElement == null) {
+			reportExceptionEmptyWebElement();
+		}
 		String tagName = selectWebElement.getTagName();
 
 		if (!StringHelper.stringsEqualWithNulls(tagName, TAG_SELECT)) {
@@ -376,6 +396,10 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 
 		WebElement webElement = findWebElement(methodParameterNode);
 
+		if (webElement == null) {
+			reportExceptionEmptyWebElement();
+		}
+
 		if (BooleanHelper.parseBoolean(argument)) {
 			webElement.click();
 		}
@@ -393,6 +417,10 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 
 		WebElement webElement = findWebElement(methodParameterNode);
 
+		if (webElement == null) {
+			reportExceptionEmptyWebElement();
+		}
+
 		if (!performAction(webElement, argument, methodParameterNode)) {
 			return false; 
 		}
@@ -400,7 +428,23 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		return true;
 	}
 
+	private WebElement findWebElement(MethodParameterNode methodParameterNode) {
+		return findWebElement(methodParameterNode, null);
+	}
+
 	private WebElement findWebElement(MethodParameterNode methodParameterNode, String defaultFindByType) {
+
+		WebElement webElement = null;
+		try {
+			webElement = findWebElementThrow(methodParameterNode, defaultFindByType);
+		} catch (Exception e) {
+
+		}
+
+		return webElement;
+	}
+
+	private WebElement findWebElementThrow(MethodParameterNode methodParameterNode, String defaultFindByType) {
 
 		String findByType;
 
@@ -411,17 +455,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		}
 		String findByValue = methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_VALUE_OF_ELEMENT);
 
-		WebElement webElement = findWebElementBy(findByType, findByValue);
-
-		if (webElement == null) {
-			ExceptionHelper.reportRuntimeException("Can not find web element.");
-		}
-
-		return webElement;
-	}
-
-	private WebElement findWebElement(MethodParameterNode methodParameterNode) {
-		return findWebElement(methodParameterNode, null);
+		return findWebElementBy(findByType, findByValue);
 	}
 
 	private WebElement findWebElementBy(String findByType, String findByValue) {
