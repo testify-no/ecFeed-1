@@ -88,13 +88,13 @@ public class WebParameterSection extends BasicSection {
 
 	public void refresh() {
 		fAbstractParameterNode = fAbstractParameterInterface.getTarget();
-		refreshWebElementTypeWithChildren();
-	}
-
-	private void refreshWebElementTypeWithChildren() {
-
 		String parameterType = fAbstractParameterNode.getType();
 		String webElementType = getWebElementValue(parameterType);
+
+		refreshControls(webElementType);
+	}
+
+	private void refreshControls(String webElementType) {
 
 		refreshWebElementTypeCombo(webElementType);
 		refreshOptionalCheckBox(webElementType);
@@ -121,31 +121,43 @@ public class WebParameterSection extends BasicSection {
 	}
 
 	private void refreshWebElementTypeCombo(String webElementValue) {
+
 		refreshCombo(fWebElementTypeCombo, NodePropertyDefs.PropertyId.PROPERTY_WEB_ELEMENT_TYPE, 
 				fAbstractParameterNode.getType(), webElementValue);
 	}
 
 	private void refreshOptionalCheckBox(String webElementType) {
 
-		if (!(fAbstractParameterNode instanceof MethodParameterNode)) {
+		if (!isOptionalCheckboxVisible(webElementType)) {
 			fOptionalCheckbox.setVisible(false);
 			return;
+		}
+
+		String currentPropertyValue = fAbstractParameterNode.getPropertyValue(fOptionalPropertyId);
+
+		boolean isChecked = BooleanHelper.parseBoolean(currentPropertyValue);
+		fOptionalCheckbox.setSelection(isChecked);
+
+		fOptionalCheckbox.setVisible(true);
+	}
+
+	private boolean isOptionalCheckboxVisible(String webElementType) {
+
+		if (!(fAbstractParameterNode instanceof MethodParameterNode)) {
+			return false;
 		}
 
 		MethodParameterNode methodParameterNode = (MethodParameterNode)fAbstractParameterNode;
 
 		if (!methodParameterNode.isExpected()) {
-			fOptionalCheckbox.setVisible(false);
-			return;
+			return false;
 		}
 
-		String currentPropertyValue = 
-				fAbstractParameterNode.getPropertyValue(fOptionalPropertyId);
+		if (!NodePropertyDefs.isOptionalAvailable(webElementType)) {
+			return false;
+		}		
 
-		boolean isChecked = BooleanHelper.parseBoolean(currentPropertyValue);
-
-		fOptionalCheckbox.setSelection(isChecked);
-		fOptionalCheckbox.setVisible(true);
+		return true;
 	}
 
 	private void refreshFindByTypeAndValue(String webElementType) {

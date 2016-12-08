@@ -143,6 +143,13 @@ public class NodePropertyDefElemType {
 		return false;
 	}
 
+	public static boolean isOptionalAvailable(String value) {
+		if (isText(value)) {
+			return true;
+		}
+		return false;
+	}	
+
 	public static boolean isActionAvailable(String value) {
 		if (isPageElement(value)) {
 			return true;

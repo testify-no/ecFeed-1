@@ -151,6 +151,10 @@ public class NodePropertyDefs {
 		return valueSet.isOneOfPossibleValues(value);
 	}
 
+	public static boolean isOptionalAvailable(String webElementType) {
+		return NodePropertyDefElemType.isOptionalAvailable(webElementType);
+	}
+
 	private static NodePropertyDef getDefinition(PropertyId propertyId) {
 		return fPropertyDefs[propertyId.getIndex()];
 	}

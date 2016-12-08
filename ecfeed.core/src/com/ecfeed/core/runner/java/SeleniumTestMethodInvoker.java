@@ -245,7 +245,17 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 			return false;
 		}
 
-		WebElement webElement = findWebElement(methodParameterNode);
+		WebElement webElement = null;
+
+		try {
+			webElement = findWebElement(methodParameterNode);
+		} catch (Exception e) {
+
+		}
+
+		if (webElement == null && isOptional(methodParameterNode)) {
+			return true;
+		}
 
 		if (!methodParameterNode.isExpected()) {
 			performActionClearAndSendKeys(webElement, argument);
@@ -259,6 +269,15 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 
 		reportException("Text does not match. Expected: " + argument + " Current: " + currentText);
 		return true;
+	}
+
+	private boolean isOptional(MethodParameterNode methodParameterNode) {
+		if (!methodParameterNode.isExpected()) {
+			return false;
+		}
+
+		String optionalStr = methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_OPTIONAL);
+		return BooleanHelper.parseBoolean(optionalStr);
 	}
 
 	private void performActionClearAndSendKeys(WebElement webElement, String argument) {
