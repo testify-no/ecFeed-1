@@ -199,12 +199,12 @@ public class WebParameterSection extends BasicSection {
 
 	private void refreshFindByTypeAndValue(String webElementType) {
 
-		if (!isChildOfWebElementAvailable(webElementType)) {
-			return;
-		}
-
 		refreshfFindElemTypeCombo(webElementType);
 		refreshfFindByValueText();
+		
+		boolean isAvailable = isChildOfWebElementAvailable(webElementType);
+		fFindByElemTypeCombo.setEnabled(isAvailable);
+		fFindByElemValueText.setEnabled(isAvailable);
 	}
 
 	private void refreshfFindElemTypeCombo(String webElementType) {
@@ -238,17 +238,12 @@ public class WebParameterSection extends BasicSection {
 
 	private void refreshAction(String webElementType) {
 
-		if (!isChildOfWebElementAvailable(webElementType)) {
-			return;
-		}
-
-		if (!NodePropertyDefs.isActionAvailable(webElementType)) {
-			return;
-		}		
-
 		refreshActionCombo(webElementType);
+		
+		boolean isAvailable = NodePropertyDefs.isActionAvailable(webElementType);
+		fActionCombo.setEnabled(isAvailable);
 	}
-
+	
 	private void refreshActionCombo(String webElementType) {
 
 		String currentPropertyValue = 
