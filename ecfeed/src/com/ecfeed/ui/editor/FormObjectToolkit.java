@@ -59,10 +59,12 @@ public class FormObjectToolkit {
 
 	public Label createEmptyLabel(Composite parentComposite) {
 		return fFormToolkit.createLabel(parentComposite, " ", SWT.NONE);
-	}	
+	}
 
 	public Label createSpacer(Composite parentComposite, int size) {
-		return createLabel(parentComposite, StringHelper.createString(" ", size));
+		Label label = createLabel(parentComposite, StringHelper.createString("X", size));
+		label.setVisible(false);
+		return label;
 	}
 
 	public Text createGridText(Composite parentGridComposite, SelectionListener selectionListener) {

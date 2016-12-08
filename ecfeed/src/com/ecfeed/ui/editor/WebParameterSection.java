@@ -11,6 +11,7 @@
 package com.ecfeed.ui.editor;
 
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -38,14 +39,10 @@ public class WebParameterSection extends BasicSection {
 	private Combo fWebElementTypeCombo;
 	private Button fOptionalCheckbox;
 
-	private Label fFindBySpacer;
-	private Label fFindByLabel;
 	private Combo fFindByElemTypeCombo;
 
-	private Label fFindByElemValueLabel;
 	private Text fFindByElemValueText;
 
-	private Label fActionLabel = null;
 	private Combo fActionCombo = null;
 
 	private final NodePropertyDefs.PropertyId fWebElementTypePropertyId = NodePropertyDefs.PropertyId.PROPERTY_WEB_ELEMENT_TYPE;
@@ -68,7 +65,7 @@ public class WebParameterSection extends BasicSection {
 		setText("Web runner properties");
 		fClientComposite = getClientComposite();
 
-		fGridComposite = fFormObjectToolkit.createGridComposite(fClientComposite, 5);
+		fGridComposite = fFormObjectToolkit.createGridComposite(fClientComposite, 3);
 		createControls(fGridComposite);
 		fFormObjectToolkit.paintBorders(fGridComposite);
 	}
@@ -76,17 +73,40 @@ public class WebParameterSection extends BasicSection {
 	private void createControls(Composite gridComposite) {
 		fAbstractParameterNode = fAbstractParameterInterface.getTarget();
 
+		//
 		fFormObjectToolkit.createLabel(fGridComposite, "Element type");
 		fWebElementTypeCombo = fFormObjectToolkit.createReadOnlyGridCombo(fGridComposite, new ElementTypeChangedAdapter());
-
-		fFormObjectToolkit.createEmptyLabel(fGridComposite);
-		fFormObjectToolkit.createEmptyLabel(fGridComposite);
-
+		GridData elementTypeGridData = (GridData)fWebElementTypeCombo.getLayoutData();
+		elementTypeGridData.horizontalSpan = 2;
+		
+		//
 		fOptionalCheckbox = fFormObjectToolkit.createGridCheckBox(fGridComposite, "Optional", new OptionalChangedAdapter() );
-		fOptionalCheckbox.setVisible(false);
+		fOptionalCheckbox.setEnabled(false);
+		
+		fFormObjectToolkit.createEmptyLabel(fGridComposite);
+		
+		fFormObjectToolkit.createSpacer(fGridComposite, 60);
+		
+		// 
+		fFormObjectToolkit.createLabel(fGridComposite, "Identified by ");
+		fFormObjectToolkit.createEmptyLabel(fGridComposite);
+		fFormObjectToolkit.createEmptyLabel(fGridComposite);
+
+		//
+		fFindByElemTypeCombo = fFormObjectToolkit.createReadOnlyGridCombo(fGridComposite, new FindByChangedAdapter());
+		fFindByElemValueText = fFormObjectToolkit.createGridText(fGridComposite, new FindByValueChangedAdapter());
+		GridData valueTextGridData = (GridData)fFindByElemValueText.getLayoutData();
+		valueTextGridData.horizontalSpan = 2;
+		
+		//
+		fFormObjectToolkit.createLabel(fGridComposite, "Action ");
+		fActionCombo = fFormObjectToolkit.createReadOnlyGridCombo(fGridComposite, new ActionChangedAdapter());
+		GridData actionGridData = (GridData)fActionCombo.getLayoutData();
+		actionGridData.horizontalSpan = 2;
 	}
 
 	public void refresh() {
+		
 		fAbstractParameterNode = fAbstractParameterInterface.getTarget();
 		String parameterType = fAbstractParameterNode.getType();
 		String webElementType = getWebElementValue(parameterType);
@@ -95,7 +115,6 @@ public class WebParameterSection extends BasicSection {
 	}
 
 	private void refreshControls(String webElementType) {
-
 		refreshWebElementTypeCombo(webElementType);
 		refreshOptionalCheckBox(webElementType);
 		refreshFindByTypeAndValue(webElementType);
@@ -121,15 +140,14 @@ public class WebParameterSection extends BasicSection {
 	}
 
 	private void refreshWebElementTypeCombo(String webElementValue) {
-
 		refreshCombo(fWebElementTypeCombo, NodePropertyDefs.PropertyId.PROPERTY_WEB_ELEMENT_TYPE, 
 				fAbstractParameterNode.getType(), webElementValue);
 	}
 
 	private void refreshOptionalCheckBox(String webElementType) {
 
-		if (!isOptionalCheckboxVisible(webElementType)) {
-			fOptionalCheckbox.setVisible(false);
+		if (!isOptionalCheckboxEnabled(webElementType)) {
+			fOptionalCheckbox.setEnabled(false);
 			return;
 		}
 
@@ -138,10 +156,10 @@ public class WebParameterSection extends BasicSection {
 		boolean isChecked = BooleanHelper.parseBoolean(currentPropertyValue);
 		fOptionalCheckbox.setSelection(isChecked);
 
-		fOptionalCheckbox.setVisible(true);
+		fOptionalCheckbox.setEnabled(true);
 	}
 
-	private boolean isOptionalCheckboxVisible(String webElementType) {
+	private boolean isOptionalCheckboxEnabled(String webElementType) {
 
 		if (!(fAbstractParameterNode instanceof MethodParameterNode)) {
 			return false;
@@ -162,58 +180,12 @@ public class WebParameterSection extends BasicSection {
 
 	private void refreshFindByTypeAndValue(String webElementType) {
 
-		disposeFindByElemControls();
-		disposeFindBySpacer();
-		disposeFindByValueControls();
-
 		if (!isChildOfWebElementAvailable(webElementType)) {
 			return;
 		}
 
-		refreshFindByType(webElementType);
-		fFindBySpacer = fFormObjectToolkit.createEmptyLabel(fGridComposite);
-		refreshFindByValue(webElementType);
-
-		fGridComposite.pack();
-		fGridComposite.layout(true);		
-	}
-
-	private void disposeFindByElemControls() {
-		if (fFindByLabel != null) {
-			fFindByLabel.dispose();
-		}
-		if (fFindByElemTypeCombo != null) {
-			fFindByElemTypeCombo.dispose();
-		}
-	}
-
-	private void disposeFindByValueControls() {
-
-		if (fFindByElemValueLabel != null) {
-			fFindByElemValueLabel.dispose();
-		}
-		if (fFindByElemValueText != null) {
-			fFindByElemValueText.dispose();
-		}
-	}
-
-	private void disposeFindBySpacer() {
-
-		if (fFindBySpacer != null) {
-			fFindBySpacer.dispose();
-		}
-	}	
-
-
-	private void refreshFindByType(String webElementType) {
-
-		createFindByElemControls();
 		refreshfFindElemTypeCombo(webElementType);
-	}
-
-	private void createFindByElemControls() {
-		fFindByLabel = fFormObjectToolkit.createLabel(fGridComposite, "Find element by ");
-		fFindByElemTypeCombo = fFormObjectToolkit.createReadOnlyGridCombo(fGridComposite, new FindByChangedAdapter());
+		refreshfFindByValueText();
 	}
 
 	private void refreshfFindElemTypeCombo(String webElementType) {
@@ -226,7 +198,8 @@ public class WebParameterSection extends BasicSection {
 
 	private static void refreshCombo(Combo combo, NodePropertyDefs.PropertyId propertyId, String parentValue, String value) {
 
-		combo.setItems(NodePropertyDefs.getPossibleValues(propertyId, parentValue));
+		String[] possibleValues = NodePropertyDefs.getPossibleValues(propertyId, parentValue); 
+		combo.setItems(possibleValues);
 
 		if (value != null && NodePropertyDefs.isOneOfPossibleValues(value, propertyId, parentValue)) {
 			combo.setText(value);
@@ -239,12 +212,6 @@ public class WebParameterSection extends BasicSection {
 		}		
 	}
 
-	private void refreshFindByValue(String webElementType) {
-
-		createFindByValueControls();
-		refreshfFindByValueText();
-	}	
-
 	private boolean isChildOfWebElementAvailable(String webElementType) {
 		if (StringHelper.isNullOrEmpty(webElementType)) {
 			return false;
@@ -253,11 +220,6 @@ public class WebParameterSection extends BasicSection {
 			return false;
 		}
 		return true;
-	}
-
-	private void createFindByValueControls() {
-		fFindByElemValueLabel = fFormObjectToolkit.createLabel(fGridComposite, "Using ");
-		fFindByElemValueText = fFormObjectToolkit.createGridText(fGridComposite, new FindByValueChangedAdapter());
 	}
 
 	private void refreshfFindByValueText() {
@@ -272,8 +234,6 @@ public class WebParameterSection extends BasicSection {
 
 	private void refreshAction(String webElementType) {
 
-		disposeActionControls();
-
 		if (!isChildOfWebElementAvailable(webElementType)) {
 			return;
 		}
@@ -282,27 +242,8 @@ public class WebParameterSection extends BasicSection {
 			return;
 		}		
 
-		createActionControls();
 		refreshActionCombo(webElementType);
-
-		fGridComposite.pack();
-		fGridComposite.layout(true);		
 	}
-
-	private void disposeActionControls() {
-
-		if (fActionLabel != null) {
-			fActionLabel.dispose();
-		}
-		if (fActionLabel != null) {
-			fActionCombo.dispose();
-		}
-	}
-
-	private void createActionControls() {
-		fActionLabel = fFormObjectToolkit.createLabel(fGridComposite, "Action ");
-		fActionCombo = fFormObjectToolkit.createReadOnlyGridCombo(fGridComposite, new ActionChangedAdapter());
-	}	
 
 	private void refreshActionCombo(String webElementType) {
 		String currentPropertyValue = 
