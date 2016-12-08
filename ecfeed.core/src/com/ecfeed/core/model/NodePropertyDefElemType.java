@@ -11,6 +11,7 @@
 package com.ecfeed.core.model;
 
 import com.ecfeed.core.utils.JavaTypeHelper;
+import com.ecfeed.core.utils.StringTabHelper;
 
 
 public class NodePropertyDefElemType {
@@ -44,11 +45,25 @@ public class NodePropertyDefElemType {
 			new NodePropertyValueSet(UNMAPPED, new String[] {UNMAPPED, CHECKBOX, BUTTON, PAGE_ELEMENT});
 
 	private static NodePropertyValueSet VALUE_SET_FOR_NUMERIC_TYPES = 
-			new NodePropertyValueSet(UNMAPPED, new String[] {UNMAPPED, TEXT, DELAY, PAGE_ELEMENT});	
+			new NodePropertyValueSet(UNMAPPED, new String[] {UNMAPPED, TEXT, DELAY, PAGE_ELEMENT});
+
+	private static NodePropertyValueSet VALUE_SET_FOR_EXPECTED_PARAMETER = 
+			new NodePropertyValueSet(UNMAPPED, new String[] {UNMAPPED, TEXT, PAGE_ELEMENT});	
+
 
 	public static String[] getPossibleValues(String parameterType) {
 		return getValueSet(parameterType).getPossibleValues();
 	}
+
+	public static String[] getPossibleValues(String parameterType, boolean isExpectedParameter) {
+		String[] possible1 = getValueSet(parameterType).getPossibleValues();
+
+		if (!isExpectedParameter) {
+			return possible1;
+		}
+
+		return StringTabHelper.intersect(possible1, VALUE_SET_FOR_EXPECTED_PARAMETER.getPossibleValues());
+	}	
 
 	public static String getDefaultValue(String parameterType) {
 		if (parameterType == null) {

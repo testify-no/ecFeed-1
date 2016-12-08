@@ -145,6 +145,13 @@ public class NodePropertyDefs {
 		return getDefinition(propertyId).getPossibleValues();
 	}	
 
+	public static String[] getPossibleValues(PropertyId propertyId, String parameterType, boolean isExpectedParameter) {
+		if (propertyId == NodePropertyDefs.PropertyId.PROPERTY_WEB_ELEMENT_TYPE) {
+			return NodePropertyDefElemType.getPossibleValues(parameterType, isExpectedParameter);
+		}
+		return null;
+	}	
+
 	public static boolean isOneOfPossibleValues(String value, PropertyId propertyId, String parentValue) {
 		String[] possibleValues = getPossibleValues(propertyId, parentValue);
 		NodePropertyValueSet valueSet = new NodePropertyValueSet(null, possibleValues);

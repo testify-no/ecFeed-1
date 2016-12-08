@@ -15,14 +15,13 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.NodePropertyDefs;
 import com.ecfeed.core.utils.BooleanHelper;
 import com.ecfeed.core.utils.StringHelper;
+import com.ecfeed.core.utils.StringTabHelper;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
@@ -30,7 +29,7 @@ import com.ecfeed.ui.modelif.IModelUpdateContext;
 public class WebParameterSection extends BasicSection {
 
 	AbstractParameterInterface fAbstractParameterInterface;
-	AbstractParameterNode fAbstractParameterNode;
+	MethodParameterNode fMethodParameterNode;
 
 	private FormObjectToolkit fFormObjectToolkit;
 	private Composite fClientComposite;
@@ -71,22 +70,22 @@ public class WebParameterSection extends BasicSection {
 	}
 
 	private void createControls(Composite gridComposite) {
-		fAbstractParameterNode = fAbstractParameterInterface.getTarget();
+		fMethodParameterNode = (MethodParameterNode)fAbstractParameterInterface.getTarget();
 
 		//
 		fFormObjectToolkit.createLabel(fGridComposite, "Element type");
 		fWebElementTypeCombo = fFormObjectToolkit.createReadOnlyGridCombo(fGridComposite, new ElementTypeChangedAdapter());
 		GridData elementTypeGridData = (GridData)fWebElementTypeCombo.getLayoutData();
 		elementTypeGridData.horizontalSpan = 2;
-		
+
 		//
 		fOptionalCheckbox = fFormObjectToolkit.createGridCheckBox(fGridComposite, "Optional", new OptionalChangedAdapter() );
 		fOptionalCheckbox.setEnabled(false);
-		
+
 		fFormObjectToolkit.createEmptyLabel(fGridComposite);
-		
+
 		fFormObjectToolkit.createSpacer(fGridComposite, 60);
-		
+
 		// 
 		fFormObjectToolkit.createLabel(fGridComposite, "Identified by ");
 		fFormObjectToolkit.createEmptyLabel(fGridComposite);
@@ -97,7 +96,7 @@ public class WebParameterSection extends BasicSection {
 		fFindByElemValueText = fFormObjectToolkit.createGridText(fGridComposite, new FindByValueChangedAdapter());
 		GridData valueTextGridData = (GridData)fFindByElemValueText.getLayoutData();
 		valueTextGridData.horizontalSpan = 2;
-		
+
 		//
 		fFormObjectToolkit.createLabel(fGridComposite, "Action ");
 		fActionCombo = fFormObjectToolkit.createReadOnlyGridCombo(fGridComposite, new ActionChangedAdapter());
@@ -106,26 +105,19 @@ public class WebParameterSection extends BasicSection {
 	}
 
 	public void refresh() {
-		
-		fAbstractParameterNode = fAbstractParameterInterface.getTarget();
-		String parameterType = fAbstractParameterNode.getType();
+
+		fMethodParameterNode = (MethodParameterNode)fAbstractParameterInterface.getTarget();
+		String parameterType = fMethodParameterNode.getType();
 		String webElementType = getWebElementValue(parameterType);
 
 		refreshControls(webElementType);
-	}
-
-	private void refreshControls(String webElementType) {
-		refreshWebElementTypeCombo(webElementType);
-		refreshOptionalCheckBox(webElementType);
-		refreshFindByTypeAndValue(webElementType);
-		refreshAction(webElementType);
 	}
 
 	private String getWebElementValue(String parameterType) {
 
 		NodePropertyDefs.PropertyId propertyId = NodePropertyDefs.PropertyId.PROPERTY_WEB_ELEMENT_TYPE;
 
-		String webElementValue = fAbstractParameterNode.getPropertyValue(propertyId);
+		String webElementValue = fMethodParameterNode.getPropertyValue(propertyId);
 
 		if (!NodePropertyDefs.isOneOfPossibleValues(webElementValue, propertyId, parameterType)) {
 			webElementValue = null;
@@ -133,15 +125,46 @@ public class WebParameterSection extends BasicSection {
 
 		if (webElementValue == null) {
 			webElementValue = NodePropertyDefs.getPropertyDefaultValue(propertyId, parameterType);
-			fAbstractParameterNode.setPropertyValue(fWebElementTypePropertyId, webElementValue);
+			fMethodParameterNode.setPropertyValue(fWebElementTypePropertyId, webElementValue);
 		}
 
 		return webElementValue;
 	}
 
-	private void refreshWebElementTypeCombo(String webElementValue) {
-		refreshCombo(fWebElementTypeCombo, NodePropertyDefs.PropertyId.PROPERTY_WEB_ELEMENT_TYPE, 
-				fAbstractParameterNode.getType(), webElementValue);
+	private void refreshControls(String webElementType) {
+
+		refreshWebElementTypeCombo(webElementType);
+		refreshOptionalCheckBox(webElementType);
+		refreshFindByTypeAndValue(webElementType);
+		refreshAction(webElementType);
+	}
+
+	private void refreshWebElementTypeCombo(String value) {
+
+		String parentValue = fMethodParameterNode.getType();
+
+		String[] possibleValues = 
+				NodePropertyDefs.getPossibleValues(
+						fWebElementTypePropertyId, parentValue, fMethodParameterNode.isExpected());
+
+		refreshCombo(fWebElementTypeCombo, possibleValues, parentValue, value);
+	}
+
+	private static void refreshCombo(Combo combo, String[] possibleValues, String parentValue, String value) {
+
+		combo.setItems(possibleValues);
+
+		boolean isOneOfPossibleValues = StringTabHelper.isOneOfValues(value, possibleValues);
+
+		if (value != null && isOneOfPossibleValues) {
+			combo.setText(value);
+			return;
+		}
+
+		String firstValue = StringTabHelper.getFirstValue(possibleValues);
+		if (firstValue != null) {
+			combo.setText(firstValue);
+		}		
 	}
 
 	private void refreshOptionalCheckBox(String webElementType) {
@@ -151,7 +174,7 @@ public class WebParameterSection extends BasicSection {
 			return;
 		}
 
-		String currentPropertyValue = fAbstractParameterNode.getPropertyValue(fOptionalPropertyId);
+		String currentPropertyValue = fMethodParameterNode.getPropertyValue(fOptionalPropertyId);
 
 		boolean isChecked = BooleanHelper.parseBoolean(currentPropertyValue);
 		fOptionalCheckbox.setSelection(isChecked);
@@ -161,11 +184,7 @@ public class WebParameterSection extends BasicSection {
 
 	private boolean isOptionalCheckboxEnabled(String webElementType) {
 
-		if (!(fAbstractParameterNode instanceof MethodParameterNode)) {
-			return false;
-		}
-
-		MethodParameterNode methodParameterNode = (MethodParameterNode)fAbstractParameterNode;
+		MethodParameterNode methodParameterNode = (MethodParameterNode)fMethodParameterNode;
 
 		if (!methodParameterNode.isExpected()) {
 			return false;
@@ -190,26 +209,11 @@ public class WebParameterSection extends BasicSection {
 
 	private void refreshfFindElemTypeCombo(String webElementType) {
 		String currentPropertyValue = 
-				fAbstractParameterNode.getPropertyValue(fFindByElemTypePropertyId);
+				fMethodParameterNode.getPropertyValue(fFindByElemTypePropertyId);
 
-		refreshCombo(fFindByElemTypeCombo, fFindByElemTypePropertyId, 
-				webElementType, currentPropertyValue);
-	}
+		String[] possibleValues = NodePropertyDefs.getPossibleValues(fFindByElemTypePropertyId, webElementType);
 
-	private static void refreshCombo(Combo combo, NodePropertyDefs.PropertyId propertyId, String parentValue, String value) {
-
-		String[] possibleValues = NodePropertyDefs.getPossibleValues(propertyId, parentValue); 
-		combo.setItems(possibleValues);
-
-		if (value != null && NodePropertyDefs.isOneOfPossibleValues(value, propertyId, parentValue)) {
-			combo.setText(value);
-			return;
-		}
-
-		String defaultValue = NodePropertyDefs.getPropertyDefaultValue(propertyId, parentValue);
-		if (defaultValue != null) {
-			combo.setText(defaultValue);
-		}		
+		refreshCombo(fFindByElemTypeCombo, possibleValues, webElementType, currentPropertyValue);
 	}
 
 	private boolean isChildOfWebElementAvailable(String webElementType) {
@@ -223,7 +227,7 @@ public class WebParameterSection extends BasicSection {
 	}
 
 	private void refreshfFindByValueText() {
-		String value = fAbstractParameterNode.getPropertyValue(fFindByElemValuePropertyId);
+		String value = fMethodParameterNode.getPropertyValue(fFindByElemValuePropertyId);
 
 		if (value == null) {
 			fFindByElemValueText.setText("");
@@ -246,11 +250,13 @@ public class WebParameterSection extends BasicSection {
 	}
 
 	private void refreshActionCombo(String webElementType) {
-		String currentPropertyValue = 
-				fAbstractParameterNode.getPropertyValue(fActionPropertyId);
 
-		refreshCombo(fActionCombo, fActionPropertyId, 
-				webElementType, currentPropertyValue);
+		String currentPropertyValue = 
+				fMethodParameterNode.getPropertyValue(fActionPropertyId);
+
+		String[] possibleValues = NodePropertyDefs.getPossibleValues(fActionPropertyId, webElementType);
+
+		refreshCombo(fActionCombo, possibleValues, webElementType, currentPropertyValue);
 	}	
 
 	private class ElementTypeChangedAdapter extends AbstractSelectionAdapter {
