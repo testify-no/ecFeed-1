@@ -21,6 +21,12 @@ class NodePropertyDef {
 		fValueSet = new NodePropertyValueSet(defaultValue, possibleValues);
 	}
 
+	NodePropertyDef(String name, String type, NodePropertyValueSet valueSet) {
+		fName = name;
+		fType = type;
+		fValueSet = valueSet;
+	}
+
 	String getName() {
 		return fName;
 	}
@@ -35,6 +41,10 @@ class NodePropertyDef {
 
 	String[] getPossibleValues() {
 		return fValueSet.getPossibleValues();
+	}
+
+	NodePropertyValueSet getValueSet() {
+		return fValueSet;
 	}
 
 	boolean matchesPossibleValue(String valueToMatch) {

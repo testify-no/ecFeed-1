@@ -134,29 +134,24 @@ public class NodePropertyDefs {
 		return getDefinition(propertyId).getDefaultValue();
 	}	
 
-	public static String[] getPossibleValues(PropertyId propertyId, String parentValue) {
+	public static NodePropertyValueSet getValueSet(PropertyId propertyId, String parentValue) {
 		if (propertyId == NodePropertyDefs.PropertyId.PROPERTY_WEB_ELEMENT_TYPE) {
-			return NodePropertyDefElemType.getPossibleValues(parentValue);
+			return NodePropertyDefElemType.getValueSet(parentValue);
 		}
 		if (propertyId == NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_TYPE_OF_ELEMENT) {
-			return NodePropertyDefFindByType.getPossibleValues(parentValue);
+			return NodePropertyDefFindByType.getValueSet(parentValue);
 		}
 
-		return getDefinition(propertyId).getPossibleValues();
+		return getDefinition(propertyId).getValueSet();
 	}	
 
-	public static String[] getPossibleValues(PropertyId propertyId, String parameterType, boolean isExpectedParameter) {
+
+	public static NodePropertyValueSet getValueSet(PropertyId propertyId, String parameterType, boolean isExpectedParameter) {
 		if (propertyId == NodePropertyDefs.PropertyId.PROPERTY_WEB_ELEMENT_TYPE) {
-			return NodePropertyDefElemType.getPossibleValues(parameterType, isExpectedParameter);
+			return NodePropertyDefElemType.getValueSet(parameterType, isExpectedParameter);
 		}
 		return null;
 	}	
-
-	public static boolean isOneOfPossibleValues(String value, PropertyId propertyId, String parentValue) {
-		String[] possibleValues = getPossibleValues(propertyId, parentValue);
-		NodePropertyValueSet valueSet = new NodePropertyValueSet(null, possibleValues);
-		return valueSet.isOneOfPossibleValues(value);
-	}
 
 	public static boolean isOptionalAvailable(String webElementType) {
 		return NodePropertyDefElemType.isOptionalAvailable(webElementType);
@@ -233,6 +228,7 @@ public class NodePropertyDefs {
 	}
 
 	public static boolean isFindByAvailable(String webElementType) {
+
 		if (NodePropertyDefElemType.isChildElementAvailable(webElementType)) {
 			return true;
 		}

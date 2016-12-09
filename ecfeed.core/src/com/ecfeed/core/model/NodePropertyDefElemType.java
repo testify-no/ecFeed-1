@@ -11,7 +11,7 @@
 package com.ecfeed.core.model;
 
 import com.ecfeed.core.utils.JavaTypeHelper;
-import com.ecfeed.core.utils.StringTabHelper;
+import com.ecfeed.core.utils.StringHelper;
 
 
 public class NodePropertyDefElemType {
@@ -55,15 +55,17 @@ public class NodePropertyDefElemType {
 		return getValueSet(parameterType).getPossibleValues();
 	}
 
-	public static String[] getPossibleValues(String parameterType, boolean isExpectedParameter) {
-		String[] possible1 = getValueSet(parameterType).getPossibleValues();
+	public static NodePropertyValueSet getValueSet(String parameterType, boolean isExpectedParameter) {
+
+		NodePropertyValueSet valueSet = getValueSet(parameterType);
 
 		if (!isExpectedParameter) {
-			return possible1;
+			return valueSet;
 		}
 
-		return StringTabHelper.intersect(possible1, VALUE_SET_FOR_EXPECTED_PARAMETER.getPossibleValues());
+		return NodePropertyValueSet.intersect(valueSet, VALUE_SET_FOR_EXPECTED_PARAMETER);
 	}	
+
 
 	public static String getDefaultValue(String parameterType) {
 		if (parameterType == null) {
@@ -72,7 +74,7 @@ public class NodePropertyDefElemType {
 		return getValueSet(parameterType).getDefaultValue();
 	}
 
-	private static NodePropertyValueSet getValueSet(String parameterType) {
+	public static NodePropertyValueSet getValueSet(String parameterType) {
 		if (JavaTypeHelper.isStringTypeName(parameterType)) {
 			return VALUE_SET_FOR_STRING;
 		}
@@ -152,9 +154,15 @@ public class NodePropertyDefElemType {
 	}
 
 	public static boolean isChildElementAvailable(String value) {
+
+		if (StringHelper.isNullOrEmpty(value)) {
+			return false;
+		}
+
 		if (isPageElement(value) || isText(value) || isButton(value) || isCheckbox(value) || isSelect(value) || isRadio(value)) {
 			return true;
 		}
+
 		return false;
 	}
 

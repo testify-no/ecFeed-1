@@ -10,31 +10,47 @@
 
 package com.ecfeed.core.model;
 
-class NodePropertyValueSet {
+import com.ecfeed.core.utils.StringTabHelper;
+
+public class NodePropertyValueSet {
 	private String fDefaultValue;
 	private String[] fPossibleValues;
 
-	NodePropertyValueSet(String defaultValue, String[] possibleValues) {
+	public NodePropertyValueSet(String defaultValue, String[] possibleValues) {
+
 		fDefaultValue = defaultValue;
 		fPossibleValues = possibleValues;
 	}
 
-	String getDefaultValue() {
+	public String getDefaultValue() {
+
 		return fDefaultValue;
 	}	
 
-	String[] getPossibleValues() {
+	public String[] getPossibleValues() {
+
 		return fPossibleValues;
 	}
 
-	boolean isOneOfPossibleValues(String valueToMatch) {
-		for (String possibleValue : fPossibleValues) {
-			if (possibleValue.equals(valueToMatch)) {
-				return true;
-			}
-		}
+	public boolean isOneOfPossibleValues(String valueToMatch) {
 
+		if (StringTabHelper.isOneOfValues(valueToMatch, fPossibleValues)) {
+			return true;
+		}
 		return false;
 	}
+
+	public static NodePropertyValueSet intersect(NodePropertyValueSet set1, NodePropertyValueSet set2) {
+
+		String[] possibleValues = StringTabHelper.intersect(set1.getPossibleValues(), set2.getPossibleValues());
+
+		String defaultValue = null;
+		if (set1.getDefaultValue().equals(set2.getDefaultValue())) {
+			defaultValue = set1.getDefaultValue();
+		}
+
+		return new NodePropertyValueSet(defaultValue, possibleValues); 
+	}
+
 }
 

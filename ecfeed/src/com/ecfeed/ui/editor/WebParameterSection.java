@@ -19,9 +19,8 @@ import org.eclipse.swt.widgets.Text;
 
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.NodePropertyDefs;
+import com.ecfeed.core.model.NodePropertyValueSet;
 import com.ecfeed.core.utils.BooleanHelper;
-import com.ecfeed.core.utils.StringHelper;
-import com.ecfeed.core.utils.StringTabHelper;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
@@ -116,10 +115,11 @@ public class WebParameterSection extends BasicSection {
 	private String getWebElementValue(String parameterType) {
 
 		NodePropertyDefs.PropertyId propertyId = NodePropertyDefs.PropertyId.PROPERTY_WEB_ELEMENT_TYPE;
+		NodePropertyValueSet valueSet = NodePropertyDefs.getValueSet(propertyId, parameterType);
 
 		String webElementValue = fMethodParameterNode.getPropertyValue(propertyId);
 
-		if (!NodePropertyDefs.isOneOfPossibleValues(webElementValue, propertyId, parameterType)) {
+		if (!valueSet.isOneOfPossibleValues(webElementValue)) {
 			webElementValue = null;
 		}
 
@@ -143,27 +143,29 @@ public class WebParameterSection extends BasicSection {
 
 		String parentValue = fMethodParameterNode.getType();
 
-		String[] possibleValues = 
-				NodePropertyDefs.getPossibleValues(
+		NodePropertyValueSet valueSet =
+				NodePropertyDefs.getValueSet(
 						fWebElementTypePropertyId, parentValue, fMethodParameterNode.isExpected());
 
-		refreshCombo(fWebElementTypeCombo, possibleValues, parentValue, value);
+		refreshCombo(fWebElementTypeCombo, valueSet, parentValue, value);
 	}
 
-	private static void refreshCombo(Combo combo, String[] possibleValues, String parentValue, String value) {
+	private static void refreshCombo(Combo combo, NodePropertyValueSet valueSet, String parentValue, String value) {
+
+		String[] possibleValues = valueSet.getPossibleValues();
 
 		combo.setItems(possibleValues);
 
-		boolean isOneOfPossibleValues = StringTabHelper.isOneOfValues(value, possibleValues);
+		boolean isOneOfPossibleValues = valueSet.isOneOfPossibleValues(value);
 
 		if (value != null && isOneOfPossibleValues) {
 			combo.setText(value);
 			return;
 		}
 
-		String firstValue = StringTabHelper.getFirstValue(possibleValues);
-		if (firstValue != null) {
-			combo.setText(firstValue);
+		String defaultValue = valueSet.getDefaultValue();
+		if (defaultValue != null) {
+			combo.setText(defaultValue);
 		}		
 	}
 
@@ -201,7 +203,7 @@ public class WebParameterSection extends BasicSection {
 
 		refreshfFindElemTypeCombo(webElementType);
 		refreshfFindByValueText();
-		
+
 		boolean isAvailable = isChildOfWebElementAvailable(webElementType);
 		fFindByElemTypeCombo.setEnabled(isAvailable);
 		fFindByElemValueText.setEnabled(isAvailable);
@@ -211,19 +213,16 @@ public class WebParameterSection extends BasicSection {
 		String currentPropertyValue = 
 				fMethodParameterNode.getPropertyValue(fFindByElemTypePropertyId);
 
-		String[] possibleValues = NodePropertyDefs.getPossibleValues(fFindByElemTypePropertyId, webElementType);
+		NodePropertyValueSet valueSet = NodePropertyDefs.getValueSet(fFindByElemTypePropertyId, webElementType);
 
-		refreshCombo(fFindByElemTypeCombo, possibleValues, webElementType, currentPropertyValue);
+		refreshCombo(fFindByElemTypeCombo, valueSet, webElementType, currentPropertyValue);
 	}
 
 	private boolean isChildOfWebElementAvailable(String webElementType) {
-		if (StringHelper.isNullOrEmpty(webElementType)) {
-			return false;
+		if (NodePropertyDefs.isFindByAvailable(webElementType)) {
+			return true;
 		}
-		if (!NodePropertyDefs.isFindByAvailable(webElementType)) {
-			return false;
-		}
-		return true;
+		return false;
 	}
 
 	private void refreshfFindByValueText() {
@@ -239,19 +238,19 @@ public class WebParameterSection extends BasicSection {
 	private void refreshAction(String webElementType) {
 
 		refreshActionCombo(webElementType);
-		
+
 		boolean isAvailable = NodePropertyDefs.isActionAvailable(webElementType);
 		fActionCombo.setEnabled(isAvailable);
 	}
-	
+
 	private void refreshActionCombo(String webElementType) {
 
 		String currentPropertyValue = 
 				fMethodParameterNode.getPropertyValue(fActionPropertyId);
 
-		String[] possibleValues = NodePropertyDefs.getPossibleValues(fActionPropertyId, webElementType);
+		NodePropertyValueSet valueSet = NodePropertyDefs.getValueSet(fActionPropertyId, webElementType);
 
-		refreshCombo(fActionCombo, possibleValues, webElementType, currentPropertyValue);
+		refreshCombo(fActionCombo, valueSet, webElementType, currentPropertyValue);
 	}	
 
 	private class ElementTypeChangedAdapter extends AbstractSelectionAdapter {

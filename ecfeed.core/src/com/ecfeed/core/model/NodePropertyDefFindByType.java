@@ -25,22 +25,21 @@ public class NodePropertyDefFindByType {
 	private static final String CSS_SELECTOR = "CSS selector";
 	private static final String XPATH = "Xpath";
 
-	public static NodePropertyDef findByTypeOfElement = 
-			new NodePropertyDef(
-					"findByTypeOfElement", JavaTypeHelper.TYPE_NAME_STRING, UNMAPPED,
-					new String[]{ UNMAPPED, ID, CLASS_NAME, TAG_NAME, NAME, LINK_TEXT, PARTIAL_LINK_TEXT, CSS_SELECTOR, XPATH });
-
 	private static NodePropertyValueSet VALUE_SET_DEFAULT = 
-			new NodePropertyValueSet(UNMAPPED, new String[] { UNMAPPED, ID, CLASS_NAME, TAG_NAME, NAME, LINK_TEXT, PARTIAL_LINK_TEXT, CSS_SELECTOR, XPATH });
+			new NodePropertyValueSet(ID, new String[] { UNMAPPED, ID, CLASS_NAME, TAG_NAME, NAME, LINK_TEXT, PARTIAL_LINK_TEXT, CSS_SELECTOR, XPATH });
 
 	private static NodePropertyValueSet VALUE_SET_FOR_RADIO = 
 			new NodePropertyValueSet(NAME, new String[] {NAME});
+
+	public static NodePropertyDef findByTypeOfElement = 
+			new NodePropertyDef(
+					"findByTypeOfElement", JavaTypeHelper.TYPE_NAME_STRING, VALUE_SET_DEFAULT);
 
 	public static String[] getPossibleValues(String webElementType) {
 		return getValueSet(webElementType).getPossibleValues();
 	}
 
-	private static NodePropertyValueSet getValueSet(String webElementType) {
+	public static NodePropertyValueSet getValueSet(String webElementType) {
 
 		if (NodePropertyDefElemType.isRadio(webElementType)) {
 			return VALUE_SET_FOR_RADIO;
