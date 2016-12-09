@@ -48,7 +48,7 @@ public class NodePropertyDefElemType {
 			new NodePropertyValueSet(UNMAPPED, new String[] {UNMAPPED, TEXT, DELAY, PAGE_ELEMENT});
 
 	private static NodePropertyValueSet VALUE_SET_FOR_EXPECTED_PARAMETER = 
-			new NodePropertyValueSet(UNMAPPED, new String[] {UNMAPPED, TEXT, PAGE_ELEMENT});	
+			new NodePropertyValueSet(UNMAPPED, new String[] {UNMAPPED, TEXT, PAGE_URL});	
 
 
 	public static String[] getPossibleValues(String parameterType) {

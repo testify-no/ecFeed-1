@@ -93,6 +93,10 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 
 		if (!mapStartUrlToParam) {
 			fStartupPage = fMethodNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_START_URL);
+
+			if (StringHelper.isNullOrEmpty(fStartupPage)) {
+				reportException("Start URL not defined in properties of the method.");
+			}
 		}
 
 		boolean mapBrowserToParam 
@@ -141,7 +145,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 
 			Object argument = arguments[cnt];
 			if (argument == null) {
-				ExceptionHelper.reportRuntimeException("Argument: " + cnt+1 + " of parameter: " + methodParameterNode.getName() + " must not be null.");
+				reportException("Argument: " + cnt+1 + " of parameter: " + methodParameterNode.getName() + " must not be null.");
 			}
 
 			String argumentStr = arguments[cnt].toString();
@@ -252,7 +256,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 			return true;
 		}
 
-		processNormalText(webElement, argument);
+		processNormalText(webElement, argument, methodParameterNode);
 		return true;
 	}
 
@@ -262,7 +266,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 			if (isOptional(methodParameterNode)) {
 				return;
 			} else {
-				reportExceptionEmptyWebElement();
+				reportExceptionEmptyWebElement(methodParameterNode);
 			}
 		}
 
@@ -274,17 +278,17 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		reportException("Text does not match. Expected: " + argument + " Current: " + currentText);
 	}
 
-	private void processNormalText(WebElement webElement, String argument) {
+	private void processNormalText(WebElement webElement, String argument, MethodParameterNode methodParameterNode) {
 
 		if (webElement == null) {
-			reportExceptionEmptyWebElement();
+			reportExceptionEmptyWebElement(methodParameterNode);
 		}
 
 		performActionClearAndSendKeys(webElement, argument);
 	}
 
-	private void reportExceptionEmptyWebElement() {
-		reportException("Web element not found.");
+	private void reportExceptionEmptyWebElement(MethodParameterNode methodParameterNode) {
+		reportException("Web element not found. Parameter: " + methodParameterNode.getName() + ".");
 	}
 
 	private boolean isOptional(MethodParameterNode methodParameterNode) {
@@ -306,7 +310,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		WebElement webElement = findWebElement(methodParameterNode);
 
 		if (webElement == null) {
-			reportExceptionEmptyWebElement();
+			reportExceptionEmptyWebElement(methodParameterNode);
 		}
 		String type = webElement.getAttribute(ATTR_TYPE);
 
@@ -367,7 +371,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		WebElement selectWebElement = findWebElement(methodParameterNode);
 
 		if (selectWebElement == null) {
-			reportExceptionEmptyWebElement();
+			reportExceptionEmptyWebElement(methodParameterNode);
 		}
 		String tagName = selectWebElement.getTagName();
 
@@ -397,7 +401,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		WebElement webElement = findWebElement(methodParameterNode);
 
 		if (webElement == null) {
-			reportExceptionEmptyWebElement();
+			reportExceptionEmptyWebElement(methodParameterNode);
 		}
 
 		if (BooleanHelper.parseBoolean(argument)) {
@@ -418,7 +422,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		WebElement webElement = findWebElement(methodParameterNode);
 
 		if (webElement == null) {
-			reportExceptionEmptyWebElement();
+			reportExceptionEmptyWebElement(methodParameterNode);
 		}
 
 		if (!performAction(webElement, argument, methodParameterNode)) {
@@ -506,7 +510,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 				methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_ACTION);
 
 		if (action == null) {
-			ExceptionHelper.reportRuntimeException("Action is undefined.");
+			reportException("Action is undefined.");
 		}
 
 		if (NodePropertyDefs.isActionSendKeys(action)) {
@@ -553,11 +557,11 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 			return false;
 		}
 		if (fBrowserDefined) {
-			ExceptionHelper.reportRuntimeException(
-					"Web browser was already defined. Can not redefine it in parameter: " + methodParameterNode.getName());
+			reportException("Web browser was already defined. Can not redefine it in parameter: " + methodParameterNode.getName());
+
 		}
 		if (!NodePropertyDefs.isValidBrowser(choiceName)) {
-			ExceptionHelper.reportRuntimeException("Invalid web browser name: " + choiceName);
+			reportException("Invalid web browser name: " + choiceName);
 		}
 		String driverPath = decodeDriverPath(argument);
 		setDriver(choiceName, driverPath);
