@@ -240,6 +240,15 @@ public class NodePropertyDefs {
 			return false;
 		}
 		return true;
-	}	
+	}
+
+	public static boolean isTypeForSimpleFindByValue(NodePropertyDefs.PropertyId propertyId, String value) {
+
+		if (propertyId == NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_TYPE_OF_ELEMENT) {
+			return NodePropertyDefFindByType.isTypeForSimpleFindByValue(propertyId, value);
+		}
+
+		return false;
+	}
 
 }

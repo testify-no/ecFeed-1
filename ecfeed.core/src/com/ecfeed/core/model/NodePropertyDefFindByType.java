@@ -11,11 +11,12 @@
 package com.ecfeed.core.model;
 
 import com.ecfeed.core.utils.JavaTypeHelper;
+import com.ecfeed.core.utils.StringHelper;
 
 
 public class NodePropertyDefFindByType {
 
-	private static final String UNMAPPED = "Unmapped";
+	public static final String UNMAPPED = "Unmapped";
 	private static final String ID = "Id";
 	private static final String CLASS_NAME = "Class name";
 	private static final String TAG_NAME = "Tag name";
@@ -25,15 +26,20 @@ public class NodePropertyDefFindByType {
 	private static final String CSS_SELECTOR = "CSS selector";
 	private static final String XPATH = "Xpath";
 
-	private static NodePropertyValueSet VALUE_SET_DEFAULT = 
-			new NodePropertyValueSet(ID, new String[] { UNMAPPED, ID, CLASS_NAME, TAG_NAME, NAME, LINK_TEXT, PARTIAL_LINK_TEXT, CSS_SELECTOR, XPATH });
+	private static String[] valuesForStandardSet = new String[] { UNMAPPED, ID, CLASS_NAME, TAG_NAME, NAME, LINK_TEXT, PARTIAL_LINK_TEXT, CSS_SELECTOR, XPATH }; 
+
+	private static NodePropertyValueSet STANDARD_VALUE_SET_WITH_DEFAULT_UNMAPPED = 
+			new NodePropertyValueSet(UNMAPPED, valuesForStandardSet);
+
+	private static NodePropertyValueSet STANDARD_VALUE_SET_WITH_DEFAULT_ID = 
+			new NodePropertyValueSet(ID, valuesForStandardSet);
 
 	private static NodePropertyValueSet VALUE_SET_FOR_RADIO = 
 			new NodePropertyValueSet(NAME, new String[] {NAME});
 
 	public static NodePropertyDef findByTypeOfElement = 
 			new NodePropertyDef(
-					"findByTypeOfElement", JavaTypeHelper.TYPE_NAME_STRING, VALUE_SET_DEFAULT);
+					"findByTypeOfElement", JavaTypeHelper.TYPE_NAME_STRING, STANDARD_VALUE_SET_WITH_DEFAULT_UNMAPPED);
 
 	public static String[] getPossibleValues(String webElementType) {
 		return getValueSet(webElementType).getPossibleValues();
@@ -44,19 +50,23 @@ public class NodePropertyDefFindByType {
 		if (NodePropertyDefElemType.isRadio(webElementType)) {
 			return VALUE_SET_FOR_RADIO;
 		}
-		return VALUE_SET_DEFAULT;
+
+		if (NodePropertyDefElemType.isUnmapped(webElementType)) {
+			return STANDARD_VALUE_SET_WITH_DEFAULT_UNMAPPED;
+		}
+
+		return STANDARD_VALUE_SET_WITH_DEFAULT_ID;
 	}
 
-
 	public static boolean isUnmapped(String value) {
-		if (value.equals(UNMAPPED)) {
+		if (StringHelper.stringsEqualWithNulls(value, UNMAPPED)) {
 			return true;
 		}
 		return false;
 	}	
 
 	public static boolean isId(String value) {
-		if (value.equals(ID)) {
+		if (StringHelper.stringsEqualWithNulls(value, ID)) {
 			return true;
 		}
 		return false;
@@ -70,44 +80,65 @@ public class NodePropertyDefFindByType {
 	}	
 
 	public static boolean isTagName(String value) {
-		if (value.equals(TAG_NAME)) {
+		if (StringHelper.stringsEqualWithNulls(value, TAG_NAME)) {
 			return true;
 		}
 		return false;
 	}	
 
 	public static boolean isName(String value) {
-		if (value.equals(NAME)) {
+		if (StringHelper.stringsEqualWithNulls(value, NAME)) {
 			return true;
 		}
 		return false;
 	}	
 
 	public static boolean isLinkText(String value) {
-		if (value.equals(LINK_TEXT)) {
+		if (StringHelper.stringsEqualWithNulls(value, LINK_TEXT)) {
 			return true;
 		}
 		return false;
 	}	
 
 	public static boolean isPartialLinkText(String value) {
-		if (value.equals(PARTIAL_LINK_TEXT)) {
+		if (StringHelper.stringsEqualWithNulls(value, PARTIAL_LINK_TEXT)) {
 			return true;
 		}
 		return false;
 	}	
 
 	public static boolean isCssSelector(String value) {
-		if (value.equals(CSS_SELECTOR)) {
+		if (StringHelper.stringsEqualWithNulls(value, CSS_SELECTOR)) {
 			return true;
 		}
 		return false;
 	}	
 
 	public static boolean isXPath(String value) {
-		if (value.equals(XPATH)) {
+		if (StringHelper.stringsEqualWithNulls(value, XPATH)) {
 			return true;
 		}
+		return false;
+	}
+
+	public static boolean isTypeForSimpleFindByValue(NodePropertyDefs.PropertyId propertyId, String value) {
+
+		if (isId(value)) {
+			return true;
+		}	
+
+		if (isClassName(value)) {
+			return true;
+		}	
+
+		if (isTagName(value)) {
+			return true;
+		}	
+
+		if (isName(value)) {
+			return true;
+		}	
+
 		return false;
 	}	
 

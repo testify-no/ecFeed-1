@@ -90,36 +90,43 @@ public class NodePropertyDefElemType {
 		return null;
 	}
 
+	public static boolean isUnmapped(String value) {
+		if (StringHelper.stringsEqualWithNulls(value, UNMAPPED)) {
+			return true;
+		}
+		return false;
+	}	
+
 	public static boolean isText(String value) {
-		if (value.equals(TEXT)) {
+		if ( StringHelper.stringsEqualWithNulls(value, TEXT)) {
 			return true;
 		}
 		return false;
 	}
 
 	public static boolean isCheckbox(String value) {
-		if (value.equals(CHECKBOX)) {
+		if (StringHelper.stringsEqualWithNulls(value, CHECKBOX)) {
 			return true;
 		}
 		return false;
 	}	
 
 	public static boolean isSelect(String value) {
-		if (value.equals(SELECT)) {
+		if (StringHelper.stringsEqualWithNulls(value, SELECT)) {
 			return true;
 		}
 		return false;
 	}	
 
 	public static boolean isRadio(String value) {
-		if (value.equals(RADIO)) {
+		if (StringHelper.stringsEqualWithNulls(value, RADIO)) {
 			return true;
 		}
 		return false;
 	}	
 
 	public static boolean isButton(String value) {
-		if (value.equals(BUTTON)) {
+		if (StringHelper.stringsEqualWithNulls(value, BUTTON)) {
 			return true;
 		}
 		return false;
@@ -179,4 +186,5 @@ public class NodePropertyDefElemType {
 		}
 		return false;
 	}	
+
 }

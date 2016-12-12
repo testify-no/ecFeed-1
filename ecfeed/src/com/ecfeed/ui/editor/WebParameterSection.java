@@ -18,6 +18,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
 import com.ecfeed.core.model.MethodParameterNode;
+import com.ecfeed.core.model.NodePropertyDefFindByType;
 import com.ecfeed.core.model.NodePropertyDefs;
 import com.ecfeed.core.model.NodePropertyValueSet;
 import com.ecfeed.core.utils.BooleanHelper;
@@ -91,7 +92,7 @@ public class WebParameterSection extends BasicSection {
 		fFormObjectToolkit.createEmptyLabel(fGridComposite);
 
 		//
-		fFindByElemTypeCombo = fFormObjectToolkit.createReadOnlyGridCombo(fGridComposite, new FindByChangedAdapter());
+		fFindByElemTypeCombo = fFormObjectToolkit.createReadOnlyGridCombo(fGridComposite, new FindByTypeChangedAdapter());
 		fFindByElemValueText = fFormObjectToolkit.createGridText(fGridComposite, new FindByValueChangedAdapter());
 		GridData valueTextGridData = (GridData)fFindByElemValueText.getLayoutData();
 		valueTextGridData.horizontalSpan = 2;
@@ -148,18 +149,20 @@ public class WebParameterSection extends BasicSection {
 						fWebElementTypePropertyId, parentValue, fMethodParameterNode.isExpected());
 
 		refreshCombo(fWebElementTypeCombo, valueSet, parentValue, value);
+
+		fAbstractParameterInterface.setProperty(fWebElementTypePropertyId, fWebElementTypeCombo.getText());
 	}
 
-	private static void refreshCombo(Combo combo, NodePropertyValueSet valueSet, String parentValue, String value) {
+	private static void refreshCombo(Combo combo, NodePropertyValueSet valueSet, String parentValue, String currentPropertyvalue) {
 
 		String[] possibleValues = valueSet.getPossibleValues();
 
 		combo.setItems(possibleValues);
 
-		boolean isOneOfPossibleValues = valueSet.isOneOfPossibleValues(value);
+		boolean isOneOfPossibleValues = valueSet.isOneOfPossibleValues(currentPropertyvalue);
 
-		if (value != null && isOneOfPossibleValues) {
-			combo.setText(value);
+		if (currentPropertyvalue != null && isOneOfPossibleValues) {
+			combo.setText(currentPropertyvalue);
 			return;
 		}
 
@@ -210,15 +213,36 @@ public class WebParameterSection extends BasicSection {
 	}
 
 	private void refreshfFindElemTypeCombo(String webElementType) {
-		String currentPropertyValue = 
-				fMethodParameterNode.getPropertyValue(fFindByElemTypePropertyId);
 
 		NodePropertyValueSet valueSet = NodePropertyDefs.getValueSet(fFindByElemTypePropertyId, webElementType);
+		fFindByElemTypeCombo.setItems(valueSet.getPossibleValues());
 
-		refreshCombo(fFindByElemTypeCombo, valueSet, webElementType, currentPropertyValue);
+		fFindByElemTypeCombo.setText(getDefaultFindByType(valueSet, webElementType));
+		fAbstractParameterInterface.setProperty(fFindByElemTypePropertyId, fFindByElemTypeCombo.getText());
+	}
+
+	private String getDefaultFindByType(NodePropertyValueSet valueSet, String webElementType) {
+
+		String currentPropertyValue = fMethodParameterNode.getPropertyValue(fFindByElemTypePropertyId);
+
+		if (currentPropertyValue == null) {
+			currentPropertyValue = NodePropertyDefFindByType.UNMAPPED;
+		}
+
+		if (currentPropertyValue.equals(NodePropertyDefFindByType.UNMAPPED) &&
+				(!valueSet.getDefaultValue().equals(NodePropertyDefFindByType.UNMAPPED))) {
+			return valueSet.getDefaultValue();
+		}
+
+		if (valueSet.isOneOfPossibleValues(currentPropertyValue)) {
+			return currentPropertyValue;
+		}
+
+		return valueSet.getDefaultValue();
 	}
 
 	private boolean isChildOfWebElementAvailable(String webElementType) {
+
 		if (NodePropertyDefs.isFindByAvailable(webElementType)) {
 			return true;
 		}
@@ -226,13 +250,37 @@ public class WebParameterSection extends BasicSection {
 	}
 
 	private void refreshfFindByValueText() {
-		String value = fMethodParameterNode.getPropertyValue(fFindByElemValuePropertyId);
 
-		if (value == null) {
-			fFindByElemValueText.setText("");
-		} else {
-			fFindByElemValueText.setText(value);
+		String value = fMethodParameterNode.getPropertyValue(fFindByElemValuePropertyId);
+		String newText = getFindByValueText(value);
+		fFindByElemValueText.setText(newText);
+	}
+
+	private String getFindByValueText(String value) {
+
+		if (value != null) {
+			return value;
 		}
+
+		String result = getDefaultFindByTextValue(fMethodParameterNode);
+
+		if (result == null) {
+			result = "";
+		}
+
+		return result;
+	}
+
+	public static String getDefaultFindByTextValue(MethodParameterNode methodParameterNode) {
+
+		String findByType = 
+				methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_TYPE_OF_ELEMENT);
+
+		if (NodePropertyDefs.isTypeForSimpleFindByValue(NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_TYPE_OF_ELEMENT, findByType)) {
+			return methodParameterNode.getName();
+		}
+
+		return null;
 	}
 
 	private void refreshAction(String webElementType) {
@@ -265,7 +313,7 @@ public class WebParameterSection extends BasicSection {
 		}
 	}
 
-	private class FindByChangedAdapter extends AbstractSelectionAdapter {
+	private class FindByTypeChangedAdapter extends AbstractSelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			fAbstractParameterInterface.setProperty(fFindByElemTypePropertyId, fFindByElemTypeCombo.getText());

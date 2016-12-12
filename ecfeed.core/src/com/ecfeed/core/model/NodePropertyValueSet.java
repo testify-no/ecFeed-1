@@ -22,6 +22,10 @@ public class NodePropertyValueSet {
 		fPossibleValues = possibleValues;
 	}
 
+	public void setDefaultValue(String value) {
+		fDefaultValue = value;
+	}
+
 	public String getDefaultValue() {
 
 		return fDefaultValue;
