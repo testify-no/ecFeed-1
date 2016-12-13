@@ -15,6 +15,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 
 import com.ecfeed.core.model.MethodParameterNode;
@@ -65,6 +66,7 @@ public class WebParameterSection extends BasicSection {
 		fClientComposite = getClientComposite();
 
 		fGridComposite = fFormObjectToolkit.createGridComposite(fClientComposite, 3);
+
 		createControls(fGridComposite);
 		fFormObjectToolkit.paintBorders(fGridComposite);
 	}
@@ -81,10 +83,10 @@ public class WebParameterSection extends BasicSection {
 		//
 		fOptionalCheckbox = fFormObjectToolkit.createGridCheckBox(fGridComposite, "Optional", new OptionalChangedAdapter() );
 		fOptionalCheckbox.setEnabled(false);
+		setParamsForTheFirstColumn(fOptionalCheckbox);
 
-		fFormObjectToolkit.createEmptyLabel(fGridComposite);
-
-		fFormObjectToolkit.createSpacer(fGridComposite, 60);
+		fFormObjectToolkit.createSpacer(fGridComposite, 1);
+		fFormObjectToolkit.createSpacer(fGridComposite, 1);
 
 		// 
 		fFormObjectToolkit.createLabel(fGridComposite, "Identified by ");
@@ -93,6 +95,8 @@ public class WebParameterSection extends BasicSection {
 
 		//
 		fFindByElemTypeCombo = fFormObjectToolkit.createReadOnlyGridCombo(fGridComposite, new FindByTypeChangedAdapter());
+		setParamsForTheFirstColumn(fFindByElemTypeCombo);
+
 		fFindByElemValueText = fFormObjectToolkit.createGridText(fGridComposite, new FindByValueChangedAdapter());
 		GridData valueTextGridData = (GridData)fFindByElemValueText.getLayoutData();
 		valueTextGridData.horizontalSpan = 2;
@@ -102,6 +106,12 @@ public class WebParameterSection extends BasicSection {
 		fActionCombo = fFormObjectToolkit.createReadOnlyGridCombo(fGridComposite, new ActionChangedAdapter());
 		GridData actionGridData = (GridData)fActionCombo.getLayoutData();
 		actionGridData.horizontalSpan = 2;
+	}
+
+	private void setParamsForTheFirstColumn(Control control) {
+		GridData gridData = fFormObjectToolkit.getGridData(control);
+		gridData.grabExcessHorizontalSpace = false;
+		gridData.widthHint = 150;
 	}
 
 	public void refresh() {
