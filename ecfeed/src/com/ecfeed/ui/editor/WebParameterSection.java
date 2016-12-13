@@ -65,7 +65,7 @@ public class WebParameterSection extends BasicSection {
 		setText("Web runner properties");
 		fClientComposite = getClientComposite();
 
-		fGridComposite = fFormObjectToolkit.createGridComposite(fClientComposite, 3);
+		fGridComposite = fFormObjectToolkit.createGridComposite(fClientComposite, 2);
 
 		createControls(fGridComposite);
 		fFormObjectToolkit.paintBorders(fGridComposite);
@@ -77,8 +77,6 @@ public class WebParameterSection extends BasicSection {
 		//
 		fFormObjectToolkit.createLabel(fGridComposite, "Element type");
 		fWebElementTypeCombo = fFormObjectToolkit.createReadOnlyGridCombo(fGridComposite, new ElementTypeChangedAdapter());
-		GridData elementTypeGridData = (GridData)fWebElementTypeCombo.getLayoutData();
-		elementTypeGridData.horizontalSpan = 2;
 
 		//
 		fOptionalCheckbox = fFormObjectToolkit.createGridCheckBox(fGridComposite, "Optional", new OptionalChangedAdapter() );
@@ -86,26 +84,20 @@ public class WebParameterSection extends BasicSection {
 		setParamsForTheFirstColumn(fOptionalCheckbox);
 
 		fFormObjectToolkit.createSpacer(fGridComposite, 1);
-		fFormObjectToolkit.createSpacer(fGridComposite, 1);
 
 		// 
 		fFormObjectToolkit.createLabel(fGridComposite, "Identified by ");
-		fFormObjectToolkit.createEmptyLabel(fGridComposite);
-		fFormObjectToolkit.createEmptyLabel(fGridComposite);
+		fFormObjectToolkit.createSpacer(fGridComposite, 1);
 
 		//
 		fFindByElemTypeCombo = fFormObjectToolkit.createReadOnlyGridCombo(fGridComposite, new FindByTypeChangedAdapter());
 		setParamsForTheFirstColumn(fFindByElemTypeCombo);
 
 		fFindByElemValueText = fFormObjectToolkit.createGridText(fGridComposite, new FindByValueChangedAdapter());
-		GridData valueTextGridData = (GridData)fFindByElemValueText.getLayoutData();
-		valueTextGridData.horizontalSpan = 2;
 
 		//
 		fFormObjectToolkit.createLabel(fGridComposite, "Action ");
 		fActionCombo = fFormObjectToolkit.createReadOnlyGridCombo(fGridComposite, new ActionChangedAdapter());
-		GridData actionGridData = (GridData)fActionCombo.getLayoutData();
-		actionGridData.horizontalSpan = 2;
 	}
 
 	private void setParamsForTheFirstColumn(Control control) {
