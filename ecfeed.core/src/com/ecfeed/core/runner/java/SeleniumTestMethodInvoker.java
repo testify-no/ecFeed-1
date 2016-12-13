@@ -95,7 +95,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 			fStartupPage = fMethodNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_START_URL);
 
 			if (StringHelper.isNullOrEmpty(fStartupPage)) {
-				reportException("Start URL not defined in properties of the method.");
+				reportException("Start URL not defined in properties of the method.", null);
 			}
 		}
 
@@ -116,7 +116,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 
 		String webBrowser = fMethodNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_WEB_BROWSER);
 		if (!StringHelper.isNullOrEmpty(webBrowser)) {
-			setDriver(webBrowser, browserDriver);
+			setDriver(webBrowser, browserDriver, null);
 			goToPage(fStartupPage);
 		}
 	}
@@ -145,7 +145,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 
 			Object argument = arguments[cnt];
 			if (argument == null) {
-				reportException("Argument: " + cnt+1 + " of parameter: " + methodParameterNode.getName() + " must not be null.");
+				reportException("Argument: " + cnt+1 + " of parameter: " + methodParameterNode.getName() + " must not be null.", null);
 			}
 
 			String argumentStr = arguments[cnt].toString();
@@ -171,10 +171,10 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		}
 	}
 
-	private void setDriverIntr(String driverName, String driverProperty) {
+	private void setDriverIntr(String driverName, String driverProperty, MethodParameterNode methodParameterNode) {
 
 		if (driverName == null) {
-			reportException("WebDriver name is empty.");
+			reportException("WebDriver name is empty.", methodParameterNode);
 			return;
 		}
 		if (driverName.equals(NodePropertyDefs.browserNameChrome())) {
@@ -203,12 +203,12 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 			return;
 		}		
 
-		reportException("WebDriver is not supported: " + driverName);
+		reportException("WebDriver is not supported: " + driverName, methodParameterNode);
 	}
 
-	private void setDriver(String driverName, String driverProperty) {
+	private void setDriver(String driverName, String driverProperty, MethodParameterNode methodParameterNode) {
 
-		setDriverIntr(driverName, driverProperty);
+		setDriverIntr(driverName, driverProperty, methodParameterNode);
 		fBrowserDefined = true;
 	}
 
@@ -275,7 +275,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 			return;
 		}
 
-		reportException("Text does not match. Expected: " + argument + " Current: " + currentText);
+		reportException("Text does not match. Expected: " + argument + " Current: " + currentText, methodParameterNode);
 	}
 
 	private void processNormalText(WebElement webElement, String argument, MethodParameterNode methodParameterNode) {
@@ -288,7 +288,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 	}
 
 	private void reportExceptionEmptyWebElement(MethodParameterNode methodParameterNode) {
-		reportException("Web element not found. Parameter: " + methodParameterNode.getName() + ".");
+		reportException("Web element not found.", methodParameterNode);
 	}
 
 	private boolean isOptional(MethodParameterNode methodParameterNode) {
@@ -510,7 +510,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 				methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_ACTION);
 
 		if (action == null) {
-			reportException("Action is undefined.");
+			reportException("Action is undefined.", methodParameterNode);
 		}
 
 		if (NodePropertyDefs.isActionSendKeys(action)) {
@@ -557,14 +557,14 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 			return false;
 		}
 		if (fBrowserDefined) {
-			reportException("Web browser was already defined. Can not redefine it in parameter: " + methodParameterNode.getName());
+			reportException("Web browser was already defined. Can not redefine.", methodParameterNode);
 
 		}
 		if (!NodePropertyDefs.isValidBrowser(choiceName)) {
-			reportException("Invalid web browser name: " + choiceName);
+			reportException("Invalid web browser name: " + choiceName, methodParameterNode);
 		}
 		String driverPath = decodeDriverPath(argument);
-		setDriver(choiceName, driverPath);
+		setDriver(choiceName, driverPath, methodParameterNode);
 
 		if (fStartupPage != null) {
 			goToPage(fStartupPage);
@@ -590,7 +590,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		}
 
 		if (methodParameterNode.isExpected()) {
-			processExpectedPageAddress(argument);
+			processExpectedPageAddress(argument, methodParameterNode);
 		} else {
 			goToPage(argument);
 		}
@@ -598,7 +598,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		return true;
 	}
 
-	private void processExpectedPageAddress(String argument) {
+	private void processExpectedPageAddress(String argument, MethodParameterNode methodParameterNode) {
 
 		checkWebDriver();
 		String currentUrl = fDriver.getCurrentUrl();
@@ -610,18 +610,22 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 			return;
 		}
 
-		reportException("Page address does not match. Expected: " + argument + " Current: " + currentUrl);
+		reportException("Page address does not match. Expected: " + argument + " Current: " + currentUrl, methodParameterNode);
 	}
 
 	private void checkWebDriver() {
 
 		if (fDriver == null) {
-			reportException("Web driver not defined.");
+			reportException("Web driver not defined.", null);
 		}
 	}
 
-	private void reportException(String message) {
+	private void reportException(String message, MethodParameterNode methodParameterNode) {
 
+		if (methodParameterNode != null) {
+			message = message + ". Parameter: " + methodParameterNode.getName();
+		}
+		
 		String exceptionMessage = TestMethodInvokerHelper.createErrorMessage(
 				fMethodNode.getName(), fArgumentsDescription, message);
 		ExceptionHelper.reportRuntimeException(exceptionMessage);
