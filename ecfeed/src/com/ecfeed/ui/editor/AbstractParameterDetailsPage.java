@@ -78,11 +78,15 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 			addForm(fCommentsSection = getParameterCommentsSection(this, this));
 		}
 
-		fWebParameterSection = new WebParameterSection(this, this, getParameterIf(), fFileInfoProvider);
+		fWebParameterSection = createWebParameterSection();
 
 		addForm(fChoicesViewer = new ChoicesViewer(this, this, fFileInfoProvider));
 
 		getToolkit().paintBordersFor(getMainComposite());
+	}
+
+	protected WebParameterSection createWebParameterSection() { 
+		return null;
 	}
 
 	@Override
@@ -103,7 +107,9 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 			fTypeCombo.setItems(AbstractParameterInterface.supportedPrimitiveTypes());
 			fTypeCombo.setText(parameter.getType());
 
-			fWebParameterSection.refresh();
+			if (fWebParameterSection != null) {
+				fWebParameterSection.refresh();
+			}
 
 			if (fFileInfoProvider.isProjectAvailable()) {
 				fCommentsSection.setInput(parameter);

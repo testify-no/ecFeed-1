@@ -91,6 +91,11 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 	}
 
 	@Override
+	protected WebParameterSection createWebParameterSection() {
+		return new WebParameterSection(this, this, getParameterIf(), fFileInfoProvider);
+	}
+
+	@Override
 	protected Composite createAttributesComposite(){
 		Composite attributesComposite = super.createAttributesComposite();
 
