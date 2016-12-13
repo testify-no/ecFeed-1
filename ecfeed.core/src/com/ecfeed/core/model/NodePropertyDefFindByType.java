@@ -39,7 +39,7 @@ public class NodePropertyDefFindByType {
 
 	public static NodePropertyDef findByTypeOfElement = 
 			new NodePropertyDef(
-					"findByTypeOfElement", JavaTypeHelper.TYPE_NAME_STRING, STANDARD_VALUE_SET_WITH_DEFAULT_UNMAPPED);
+					"wbFindByType", JavaTypeHelper.TYPE_NAME_STRING, STANDARD_VALUE_SET_WITH_DEFAULT_UNMAPPED);
 
 	public static String[] getPossibleValues(String webElementType) {
 		return getValueSet(webElementType).getPossibleValues();
@@ -121,7 +121,7 @@ public class NodePropertyDefFindByType {
 		return false;
 	}
 
-	public static boolean isTypeForSimpleFindByValue(NodePropertyDefs.PropertyId propertyId, String value) {
+	public static boolean isTypeForSimpleFindByValue(String value) {
 
 		if (isId(value)) {
 			return true;

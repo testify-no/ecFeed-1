@@ -251,36 +251,46 @@ public class WebParameterSection extends BasicSection {
 
 	private void refreshfFindByValueText() {
 
-		String value = fMethodParameterNode.getPropertyValue(fFindByElemValuePropertyId);
-		String newText = getFindByValueText(value);
+		String propertyValue = fMethodParameterNode.getPropertyValue(fFindByElemValuePropertyId);
+		String newText = getFindByValueText(propertyValue);
+
+		if (newText == null) {
+			fFindByElemValueText.setText("");
+			return;
+		}
+
 		fFindByElemValueText.setText(newText);
+
+		String newValue = fFindByElemValueText.getText();
+		fAbstractParameterInterface.setProperty(fFindByElemValuePropertyId, newValue);
 	}
 
 	private String getFindByValueText(String value) {
 
-		if (value != null) {
-			return value;
+		if (value == null) {
+			return getDefaultFindByTextValue(fMethodParameterNode);
 		}
 
-		String result = getDefaultFindByTextValue(fMethodParameterNode);
-
-		if (result == null) {
-			result = "";
-		}
-
-		return result;
+		return value;
 	}
 
 	public static String getDefaultFindByTextValue(MethodParameterNode methodParameterNode) {
 
+		String webElementType = 
+				methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_WEB_ELEMENT_TYPE);
+
+		if (!NodePropertyDefs.isTypeForSimpleFindByValue(NodePropertyDefs.PropertyId.PROPERTY_WEB_ELEMENT_TYPE, webElementType)) {
+			return null;
+		}
+
 		String findByType = 
 				methodParameterNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_TYPE_OF_ELEMENT);
 
-		if (NodePropertyDefs.isTypeForSimpleFindByValue(NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_TYPE_OF_ELEMENT, findByType)) {
-			return methodParameterNode.getName();
+		if (!NodePropertyDefs.isTypeForSimpleFindByValue(NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_TYPE_OF_ELEMENT, findByType)) {
+			return null;
 		}
 
-		return null;
+		return methodParameterNode.getName();
 	}
 
 	private void refreshAction(String webElementType) {

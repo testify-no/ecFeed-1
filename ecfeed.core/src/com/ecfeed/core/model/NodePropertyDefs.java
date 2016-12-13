@@ -48,28 +48,28 @@ public class NodePropertyDefs {
 					"methodRunner", JavaTypeHelper.TYPE_NAME_STRING, JAVA_RUNNER,
 					new String[]{JAVA_RUNNER, WEB_DRIVER});
 
-	static NodePropertyDef mapBrowserToParam =  
-			new NodePropertyDef("mapBrowserToParam", JavaTypeHelper.TYPE_NAME_BOOLEAN, FALSE_VALUE, falseTrueArray);
+	static NodePropertyDef wbMapBrowserToParam =  
+			new NodePropertyDef("wbMapBrowserToParam", JavaTypeHelper.TYPE_NAME_BOOLEAN, FALSE_VALUE, falseTrueArray);
 
 	static NodePropertyDef webBrowser = 
 			new NodePropertyDef(
-					"webBrowser", JavaTypeHelper.TYPE_NAME_STRING, BROWSER_CHROME, 
+					"wbBrowser", JavaTypeHelper.TYPE_NAME_STRING, BROWSER_CHROME, 
 					new String[]{BROWSER_CHROME, BROWSER_FIREFOX, BROWSER_IEXPLORER, BROWSER_OPERA, BROWSER_SAFARI});
 
-	static NodePropertyDef browserDriver = new NodePropertyDef("browserDriver", JavaTypeHelper.TYPE_NAME_STRING, null, null);	
+	static NodePropertyDef browserDriver = new NodePropertyDef("wbBrowserDriver", JavaTypeHelper.TYPE_NAME_STRING, null, null);	
 
 	static NodePropertyDef mapStartUrlToParam = 
-			new NodePropertyDef("mapStartUrlToParam", JavaTypeHelper.TYPE_NAME_BOOLEAN, FALSE_VALUE, falseTrueArray);
+			new NodePropertyDef("wbMapStartUrlToParam", JavaTypeHelper.TYPE_NAME_BOOLEAN, FALSE_VALUE, falseTrueArray);
 
-	static NodePropertyDef startUrl = new NodePropertyDef("startUrl", JavaTypeHelper.TYPE_NAME_STRING, null, null);
+	static NodePropertyDef startUrl = new NodePropertyDef("wbStartUrl", JavaTypeHelper.TYPE_NAME_STRING, null, null);
 
-	static NodePropertyDef optional = new NodePropertyDef("isOptional", JavaTypeHelper.TYPE_NAME_BOOLEAN, FALSE_VALUE, falseTrueArray);
+	static NodePropertyDef optional = new NodePropertyDef("wbIsOptional", JavaTypeHelper.TYPE_NAME_BOOLEAN, FALSE_VALUE, falseTrueArray);
 
-	static NodePropertyDef findByValueOfElement = new NodePropertyDef("findByValueOfElement", JavaTypeHelper.TYPE_NAME_STRING, null, null);
+	static NodePropertyDef findByValueOfElement = new NodePropertyDef("wbFindByValue", JavaTypeHelper.TYPE_NAME_STRING, null, null);
 
 	static NodePropertyDef action = 
 			new NodePropertyDef(
-					"action", JavaTypeHelper.TYPE_NAME_STRING, UNMAPPED,
+					"wbAction", JavaTypeHelper.TYPE_NAME_STRING, UNMAPPED,
 					new String[]{ UNMAPPED, ACTION_SEND_KEYS, ACTION_CLICK, ACTION_SUBMIT });
 
 
@@ -106,7 +106,7 @@ public class NodePropertyDefs {
 		runOnAndroid,
 		androidRunner,
 		methodRunner,
-		mapBrowserToParam,
+		wbMapBrowserToParam,
 		webBrowser,
 		browserDriver,
 		mapStartUrlToParam,
@@ -244,8 +244,12 @@ public class NodePropertyDefs {
 
 	public static boolean isTypeForSimpleFindByValue(NodePropertyDefs.PropertyId propertyId, String value) {
 
+		if (propertyId == NodePropertyDefs.PropertyId.PROPERTY_WEB_ELEMENT_TYPE) {
+			return NodePropertyDefElemType.isTypeForSimpleFindByValue(value);
+		}
+
 		if (propertyId == NodePropertyDefs.PropertyId.PROPERTY_FIND_BY_TYPE_OF_ELEMENT) {
-			return NodePropertyDefFindByType.isTypeForSimpleFindByValue(propertyId, value);
+			return NodePropertyDefFindByType.isTypeForSimpleFindByValue(value);
 		}
 
 		return false;

@@ -16,7 +16,7 @@ import com.ecfeed.core.utils.StringHelper;
 
 public class NodePropertyDefElemType {
 
-	private static final String PARAMETER_TYPE = "parameterType";
+	private static final String WB_ELEMENT_TYPE = "wbElementType";
 	private static final String PAGE_ELEMENT = "Page element";
 	private static final String BUTTON = "Button";
 	private static final String TEXT = "Text";
@@ -31,7 +31,7 @@ public class NodePropertyDefElemType {
 
 	public static NodePropertyDef elementType = 
 			new NodePropertyDef(
-					PARAMETER_TYPE, JavaTypeHelper.TYPE_NAME_STRING, EMPTY_STR,
+					WB_ELEMENT_TYPE, JavaTypeHelper.TYPE_NAME_STRING, EMPTY_STR,
 					new String[]{EMPTY_STR, TEXT, CHECKBOX, PAGE_ELEMENT, PAGE_URL, DELAY, BROWSER });
 
 
@@ -172,6 +172,36 @@ public class NodePropertyDefElemType {
 
 		return false;
 	}
+
+	public static boolean isTypeForSimpleFindByValue(String value) {
+
+		if (isText(value)) {
+			return true;
+		}
+
+		if (isCheckbox(value)) {
+			return true;
+		}	
+
+		if (isSelect(value)) {
+			return true;
+		}	
+
+		if (isRadio(value)) {
+			return true;
+		}	
+
+		if (isButton(value)) {
+			return true;
+		}
+
+		if (isPageElement(value)) {
+			return true;
+		}
+
+		return false;
+	}	
+
 
 	public static boolean isOptionalAvailable(String value) {
 		if (isText(value)) {
