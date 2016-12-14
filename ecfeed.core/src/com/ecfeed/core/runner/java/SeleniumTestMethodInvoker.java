@@ -203,7 +203,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 			return;
 		}		
 
-		reportException("WebDriver is not supported: " + driverName, methodParameterNode);
+		reportException("WebDriver is not supported: " + driverName + ".", methodParameterNode);
 	}
 
 	private void setDriver(String driverName, String driverProperty, MethodParameterNode methodParameterNode) {
@@ -275,7 +275,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 			return;
 		}
 
-		reportException("Text does not match. Expected: " + argument + " Current: " + currentText, methodParameterNode);
+		reportException("Text does not match. Expected: " + argument + " Current: " + currentText + ".", methodParameterNode);
 	}
 
 	private void processNormalText(WebElement webElement, String argument, MethodParameterNode methodParameterNode) {
@@ -385,10 +385,11 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 
 			if (StringHelper.stringsEqualWithNulls(text, argument)) {
 				option.click();
-				break;
+				return true;
 			}
 		}
 
+		reportException("Option with text: '" + argument + "' not found.", methodParameterNode);
 		return true;
 	}	
 
@@ -561,7 +562,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 
 		}
 		if (!NodePropertyDefs.isValidBrowser(choiceName)) {
-			reportException("Invalid web browser name: " + choiceName, methodParameterNode);
+			reportException("Invalid web browser name: " + choiceName + ".", methodParameterNode);
 		}
 		String driverPath = decodeDriverPath(argument);
 		setDriver(choiceName, driverPath, methodParameterNode);
@@ -610,7 +611,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 			return;
 		}
 
-		reportException("Page address does not match. Expected: " + argument + " Current: " + currentUrl, methodParameterNode);
+		reportException("Page address does not match. Expected: " + argument + " Current: " + currentUrl + ".", methodParameterNode);
 	}
 
 	private void checkWebDriver() {
@@ -623,7 +624,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 	private void reportException(String message, MethodParameterNode methodParameterNode) {
 
 		if (methodParameterNode != null) {
-			message = message + ". Parameter: " + methodParameterNode.getName();
+			message = message + " Parameter: " + methodParameterNode.getName();
 		}
 		
 		String exceptionMessage = TestMethodInvokerHelper.createErrorMessage(
