@@ -212,7 +212,8 @@ public abstract class AbstractNode{
 	}	
 
 	public String getPropertyValue(NodePropertyDefs.PropertyId propertyId) {
-		NodeProperty nodeProperty = fProperties.get(NodePropertyDefs.getPropertyName(propertyId));
+		String propertyName = NodePropertyDefs.getPropertyName(propertyId);
+		NodeProperty nodeProperty = fProperties.get(propertyName);
 		if (nodeProperty == null) {
 			return null;
 		}

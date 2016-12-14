@@ -161,7 +161,7 @@ public class NodePropertyDefs {
 		return fPropertyDefs[propertyId.getIndex()];
 	}
 
-	public static boolean isSeleniumRunnerMethod(String value) {
+	public static boolean isWebRunnerMethod(String value) {
 		if (value.equals(WEB_DRIVER)) {
 			return true;
 		}

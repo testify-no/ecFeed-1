@@ -24,7 +24,7 @@ public class SeleniumHelper {
 
 		String value = methodNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_METHOD_RUNNER);
 
-		return NodePropertyDefs.isSeleniumRunnerMethod(value);
+		return NodePropertyDefs.isWebRunnerMethod(value);
 	}	
 
 }
