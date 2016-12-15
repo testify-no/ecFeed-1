@@ -206,6 +206,10 @@ public abstract class BasicSection extends SectionPart implements IModelUpdateCo
 		getSection().setVisible(visible);
 	}
 
+	public void setEnabled(boolean enabled) {
+		getSection().setEnabled(enabled);
+	}	
+
 	@Override
 	public IUndoContext getUndoContext(){
 		return fUpdateContext.getUndoContext();

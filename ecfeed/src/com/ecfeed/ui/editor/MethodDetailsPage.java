@@ -221,10 +221,10 @@ public class MethodDetailsPage extends BasicDetailsPage {
 
 		String runner = methodNode.getPropertyValue(fRunnerPropertyId);
 		if (NodePropertyDefs.isJavaRunnerMethod(runner)) {
-			fRunnerSection.setVisible(false);
+			fRunnerSection.setEnabled(false);
 		} else {
-			fRunnerSection.setVisible(true);
-		}
+			fRunnerSection.setEnabled(true);
+		}		
 	}
 
 	private void refrestTestOnlineButton(IFileInfoProvider fileInfoProvider) {

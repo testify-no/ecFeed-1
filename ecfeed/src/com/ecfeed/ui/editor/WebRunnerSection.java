@@ -186,4 +186,16 @@ public class WebRunnerSection extends BasicSection  {
 		}
 	}
 
+	@Override
+	public void setEnabled(boolean enabled) {
+
+		super.setEnabled(enabled);
+
+		fMapBrowserCheckbox.setEnabled(enabled);
+		fBrowserCombo.setEnabled(enabled);
+		fBrowserDriverText.setEnabled(enabled);
+		fMapStartUrlCheckbox.setEnabled(enabled);
+		fStartUrlText.setEnabled(enabled);
+	}
+
 }
