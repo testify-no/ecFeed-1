@@ -117,7 +117,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		String webBrowser = fMethodNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_WEB_BROWSER);
 		if (!StringHelper.isNullOrEmpty(webBrowser)) {
 			setDriver(webBrowser, browserDriver, null);
-			goToPage(fStartupPage);
+			goToPage(fStartupPage, null);
 		}
 	}
 
@@ -568,15 +568,16 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		setDriver(choiceName, driverPath, methodParameterNode);
 
 		if (fStartupPage != null) {
-			goToPage(fStartupPage);
+			goToPage(fStartupPage, null);
 		}
 
 		return true;
 	}
 
-	private void goToPage(String url) {
+	private void goToPage(String url, MethodParameterNode methodParameterNode) {
 
 		if (url == null) {
+			reportException("Url must not be empty.", methodParameterNode);
 			return;
 		}
 		checkWebDriver();
@@ -593,7 +594,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		if (methodParameterNode.isExpected()) {
 			processExpectedPageAddress(argument, methodParameterNode);
 		} else {
-			goToPage(argument);
+			goToPage(argument, methodParameterNode);
 		}
 
 		return true;
@@ -624,7 +625,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 	private void reportException(String message, MethodParameterNode methodParameterNode) {
 
 		if (methodParameterNode != null) {
-			message = message + " Parameter: " + methodParameterNode.getName();
+			message = message + " Method parameter: " + methodParameterNode.getName();
 		}
 		
 		String exceptionMessage = TestMethodInvokerHelper.createErrorMessage(
