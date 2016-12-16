@@ -23,7 +23,7 @@ public class NodePropertyDefElemType {
 	private static final String SELECT = "Select";
 	private static final String RADIO = "Radio";
 	private static final String PAGE_URL = "Page URL";
-	private static final String DELAY = "Delay";
+	private static final String DELAY = "Delay[s]";
 	private static final String BROWSER = "Browser";
 	private static final String EMPTY_STR = "";
 	private static final String UNMAPPED = "Unmapped";
