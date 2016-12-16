@@ -34,7 +34,7 @@ public class NodeProperty{
 		if (!fType.equals(other.fType)) {
 			return false;
 		}
-		if (!StringHelper.stringsEqualWithNulls(fValue, other.fValue)) {
+		if (!StringHelper.isEqual(fValue, other.fValue)) {
 			return false;
 		}
 		return true;

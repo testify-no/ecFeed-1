@@ -147,7 +147,7 @@ public class AbstractNodeInterface extends OperationExecuter{
 	public boolean setProperty(NodePropertyDefs.PropertyId propertyId, String value) {
 		String oldValue = fTarget.getPropertyValue(propertyId);
 
-		if (StringHelper.stringsEqualWithNulls(oldValue, value)) {
+		if (StringHelper.isEqual(oldValue, value)) {
 			return false;
 		}
 

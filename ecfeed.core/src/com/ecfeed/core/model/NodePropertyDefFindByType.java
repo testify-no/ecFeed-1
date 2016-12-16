@@ -59,14 +59,14 @@ public class NodePropertyDefFindByType {
 	}
 
 	public static boolean isUnmapped(String value) {
-		if (StringHelper.stringsEqualWithNulls(value, UNMAPPED)) {
+		if (StringHelper.isEqual(value, UNMAPPED)) {
 			return true;
 		}
 		return false;
 	}	
 
 	public static boolean isId(String value) {
-		if (StringHelper.stringsEqualWithNulls(value, ID)) {
+		if (StringHelper.isEqual(value, ID)) {
 			return true;
 		}
 		return false;
@@ -80,42 +80,42 @@ public class NodePropertyDefFindByType {
 	}	
 
 	public static boolean isTagName(String value) {
-		if (StringHelper.stringsEqualWithNulls(value, TAG_NAME)) {
+		if (StringHelper.isEqual(value, TAG_NAME)) {
 			return true;
 		}
 		return false;
 	}	
 
 	public static boolean isName(String value) {
-		if (StringHelper.stringsEqualWithNulls(value, NAME)) {
+		if (StringHelper.isEqual(value, NAME)) {
 			return true;
 		}
 		return false;
 	}	
 
 	public static boolean isLinkText(String value) {
-		if (StringHelper.stringsEqualWithNulls(value, LINK_TEXT)) {
+		if (StringHelper.isEqual(value, LINK_TEXT)) {
 			return true;
 		}
 		return false;
 	}	
 
 	public static boolean isPartialLinkText(String value) {
-		if (StringHelper.stringsEqualWithNulls(value, PARTIAL_LINK_TEXT)) {
+		if (StringHelper.isEqual(value, PARTIAL_LINK_TEXT)) {
 			return true;
 		}
 		return false;
 	}	
 
 	public static boolean isCssSelector(String value) {
-		if (StringHelper.stringsEqualWithNulls(value, CSS_SELECTOR)) {
+		if (StringHelper.isEqual(value, CSS_SELECTOR)) {
 			return true;
 		}
 		return false;
 	}	
 
 	public static boolean isXPath(String value) {
-		if (StringHelper.stringsEqualWithNulls(value, XPATH)) {
+		if (StringHelper.isEqual(value, XPATH)) {
 			return true;
 		}
 		return false;

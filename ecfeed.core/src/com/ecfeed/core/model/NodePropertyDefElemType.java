@@ -91,42 +91,42 @@ public class NodePropertyDefElemType {
 	}
 
 	public static boolean isUnmapped(String value) {
-		if (StringHelper.stringsEqualWithNulls(value, UNMAPPED)) {
+		if (StringHelper.isEqual(value, UNMAPPED)) {
 			return true;
 		}
 		return false;
 	}	
 
 	public static boolean isText(String value) {
-		if ( StringHelper.stringsEqualWithNulls(value, TEXT)) {
+		if ( StringHelper.isEqual(value, TEXT)) {
 			return true;
 		}
 		return false;
 	}
 
 	public static boolean isCheckbox(String value) {
-		if (StringHelper.stringsEqualWithNulls(value, CHECKBOX)) {
+		if (StringHelper.isEqual(value, CHECKBOX)) {
 			return true;
 		}
 		return false;
 	}	
 
 	public static boolean isSelect(String value) {
-		if (StringHelper.stringsEqualWithNulls(value, SELECT)) {
+		if (StringHelper.isEqual(value, SELECT)) {
 			return true;
 		}
 		return false;
 	}	
 
 	public static boolean isRadio(String value) {
-		if (StringHelper.stringsEqualWithNulls(value, RADIO)) {
+		if (StringHelper.isEqual(value, RADIO)) {
 			return true;
 		}
 		return false;
 	}	
 
 	public static boolean isButton(String value) {
-		if (StringHelper.stringsEqualWithNulls(value, BUTTON)) {
+		if (StringHelper.isEqual(value, BUTTON)) {
 			return true;
 		}
 		return false;

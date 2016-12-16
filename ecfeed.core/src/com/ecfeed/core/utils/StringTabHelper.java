@@ -29,7 +29,7 @@ public class StringTabHelper {
 	public static boolean isOneOfValues(String valueToTest, String[] array) {
 
 		for (String value : array) {
-			if (StringHelper.stringsEqualWithNulls(value, valueToTest)) {
+			if (StringHelper.isEqual(value, valueToTest)) {
 				return true;
 			}
 		}
@@ -38,7 +38,7 @@ public class StringTabHelper {
 	}
 
 	public static String getFirstValue(String[] array) {
-		
+
 		if (array.length < 1) {
 			return null;
 		}

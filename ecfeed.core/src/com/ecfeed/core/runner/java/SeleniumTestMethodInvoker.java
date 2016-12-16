@@ -177,27 +177,27 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 			reportException("WebDriver name is empty.", methodParameterNode);
 			return;
 		}
-		if (driverName.equals(NodePropertyDefs.browserNameChrome())) {
+		if (StringHelper.isEqualIgnoreCase(driverName, NodePropertyDefs.browserNameChrome())) {
 			System.setProperty("webdriver.chrome.driver", driverProperty);
 			fDriver = new ChromeDriver();
 			return;
 		}
-		if (driverName.equals(NodePropertyDefs.browserNameFirefox())) {
+		if (StringHelper.isEqualIgnoreCase(driverName, NodePropertyDefs.browserNameFirefox())) {
 			System.setProperty("webdriver.gecko.driver", driverProperty);
 			fDriver = new FirefoxDriver();
 			return;
 		}		
-		if (driverName.equals(NodePropertyDefs.browserNameIExplorer())) {
+		if (StringHelper.isEqualIgnoreCase(driverName, NodePropertyDefs.browserNameIExplorer())) {
 			System.setProperty("webdriver.ie.driver", driverProperty);
 			fDriver = new InternetExplorerDriver();
 			return;
 		}		
-		if (driverName.equals(NodePropertyDefs.browserNameOpera())) {
+		if (StringHelper.isEqualIgnoreCase(driverName, NodePropertyDefs.browserNameOpera())) {
 			System.setProperty("webdriver.opera.driver", driverProperty);
 			fDriver = new OperaDriver();
 			return;
 		}
-		if (driverName.equals(NodePropertyDefs.browserNameSafari())) {
+		if (StringHelper.isEqualIgnoreCase(driverName, NodePropertyDefs.browserNameSafari())) {
 			System.setProperty("webdriver.safari.driver", driverProperty);
 			fDriver = new SafariDriver();
 			return;
@@ -314,7 +314,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		}
 		String type = webElement.getAttribute(ATTR_TYPE);
 
-		if (!StringHelper.stringsEqualWithNulls(type, TYPE_CHECKBOX)) {
+		if (!StringHelper.isEqual(type, TYPE_CHECKBOX)) {
 			return false;
 		}
 
@@ -349,12 +349,12 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 	private boolean clickRadioButton(WebElement option, String argument) {
 
 		String type = option.getAttribute(ATTR_TYPE);
-		if (!StringHelper.stringsEqualWithNulls(type, TYPE_RADIO)) {
+		if (!StringHelper.isEqual(type, TYPE_RADIO)) {
 			return false;
 		}
 
 		String value = option.getAttribute(ATTR_VALUE); 
-		if (!StringHelper.stringsEqualWithNulls(value, argument)) {
+		if (!StringHelper.isEqual(value, argument)) {
 			return false;
 		}
 
@@ -375,7 +375,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		}
 		String tagName = selectWebElement.getTagName();
 
-		if (!StringHelper.stringsEqualWithNulls(tagName, TAG_SELECT)) {
+		if (!StringHelper.isEqual(tagName, TAG_SELECT)) {
 			return false;
 		}
 
@@ -383,7 +383,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		for (WebElement option : allOptions) {
 			String text = option.getText();
 
-			if (StringHelper.stringsEqualWithNulls(text, argument)) {
+			if (StringHelper.isEqual(text, argument)) {
 				option.click();
 				return true;
 			}
@@ -627,7 +627,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		if (methodParameterNode != null) {
 			message = message + " Method parameter: " + methodParameterNode.getName();
 		}
-		
+
 		String exceptionMessage = TestMethodInvokerHelper.createErrorMessage(
 				fMethodNode.getName(), fArgumentsDescription, message);
 		ExceptionHelper.reportRuntimeException(exceptionMessage);

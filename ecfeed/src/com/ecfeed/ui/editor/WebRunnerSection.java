@@ -34,6 +34,8 @@ public class WebRunnerSection extends BasicSection  {
 	private Button fMapStartUrlCheckbox;
 	private Text fStartUrlText;
 
+	private boolean fSectionEnabled = false;
+
 	private final NodePropertyDefs.PropertyId fMapBrowserPropertyId = NodePropertyDefs.PropertyId.PROPERTY_MAP_BROWSER_TO_PARAM;
 	private final NodePropertyDefs.PropertyId fBrowserPropertyId = NodePropertyDefs.PropertyId.PROPERTY_WEB_BROWSER;
 	private final NodePropertyDefs.PropertyId fBrowserDriverPropertyId = NodePropertyDefs.PropertyId.PROPERTY_BROWSER_DRIVER;
@@ -57,6 +59,7 @@ public class WebRunnerSection extends BasicSection  {
 	}
 
 	private void createWebDriverPropertiesComposite(Composite parentComposite) {
+
 		Composite composite = fFormObjectToolkit.createGridComposite(parentComposite, 2);
 		fFormObjectToolkit.paintBorders(composite);
 
@@ -69,6 +72,7 @@ public class WebRunnerSection extends BasicSection  {
 	}
 
 	private void createMapBrowserCheckBox(Composite gridComposite) {
+
 		fFormObjectToolkit.createEmptyLabel(gridComposite);
 		fMapBrowserCheckbox = 
 				fFormObjectToolkit.createGridCheckBox(
@@ -76,17 +80,20 @@ public class WebRunnerSection extends BasicSection  {
 	}
 
 	private void createBrowserCombo(Composite gridComposite) {
+
 		fFormObjectToolkit.createLabel(gridComposite, "Browser");
 		fBrowserCombo = fFormObjectToolkit.createReadOnlyGridCombo(gridComposite, new BrowserChangedAdapter());
 		fBrowserCombo.setItems(NodePropertyDefs.getValueSet(fBrowserPropertyId, null).getPossibleValues());
 	}
 
 	private void createBrowserDriverPathText(Composite gridComposite) {
+
 		fFormObjectToolkit.createLabel(gridComposite, "Web driver  ");
 		fBrowserDriverText = fFormObjectToolkit.createGridText(gridComposite, new BrowserDriverChangedAdapter());
 	}
 
 	private void createMapStartUrlCheckBox(Composite gridComposite) {
+
 		fFormObjectToolkit.createEmptyLabel(gridComposite);
 		fMapStartUrlCheckbox = 
 				fFormObjectToolkit.createGridCheckBox(
@@ -94,11 +101,13 @@ public class WebRunnerSection extends BasicSection  {
 	}
 
 	private void createUrlText(Composite gridComposite) {
+
 		fFormObjectToolkit.createLabel(gridComposite, "Start URL");
 		fStartUrlText = fFormObjectToolkit.createGridText(gridComposite, new UrlChangedAdapter());
 	}
 
 	public void refresh() {
+
 		MethodNode methodNode = fMethodInterface.getTarget();
 
 		refreshCheckboxByProperty(fMapBrowserPropertyId, fMapBrowserCheckbox, methodNode, new Control[]{fBrowserCombo, fBrowserDriverText});
@@ -110,34 +119,44 @@ public class WebRunnerSection extends BasicSection  {
 	}
 
 	private void refreshComboByProperty(NodePropertyDefs.PropertyId propertyId, Combo combo, MethodNode methodNode) {
+
 		String value = methodNode.getPropertyValue(propertyId);
 		if (value != null) {
 			combo.setText(value);
 			return;
 		}		
+
 		combo.setText(NodePropertyDefs.getEmptyElement());
 	}
 
 	private void refreshTextByProperty(NodePropertyDefs.PropertyId propertyId, Text text, MethodNode methodNode) {
+
 		String value = methodNode.getPropertyValue(propertyId);
 		if (value != null) {
 			text.setText(value);
 			return;
-		}		
+		}
+
 		text.setText(NodePropertyDefs.getEmptyElement());
 	}	
 
 	private void refreshCheckboxByProperty(
 			NodePropertyDefs.PropertyId propertyId, Button checkBox, MethodNode methodNode, Control[] additionalControls) {
+
 		String mapBrowserToParam = methodNode.getPropertyValue(propertyId);
 		setCheckbox(checkBox, mapBrowserToParam);
 
 		for (Control control : additionalControls) {
-			control.setEnabled(!BooleanHelper.parseBoolean(mapBrowserToParam));
+			if (fSectionEnabled) {
+				control.setEnabled(!BooleanHelper.parseBoolean(mapBrowserToParam));
+			} else {
+				control.setEnabled(false);
+			}
 		}
 	}
 
 	private void setCheckbox(Button checkBox, String value) {
+
 		if (value == null) {
 			checkBox.setSelection(false);
 			return;
@@ -148,24 +167,41 @@ public class WebRunnerSection extends BasicSection  {
 	}
 
 	private class SetMapBrowserListener extends AbstractSelectionAdapter{
+
 		@Override
 		public void widgetSelected(SelectionEvent e) {
+
 			boolean selected = fMapBrowserCheckbox.getSelection();
-			fBrowserCombo.setEnabled(!selected);
+
+			if (fSectionEnabled) {
+				fBrowserCombo.setEnabled(!selected);
+			} else {
+				fBrowserCombo.setEnabled(false);
+			}
+
 			fMethodInterface.setProperty(fMapBrowserPropertyId, BooleanHelper.toString(selected));
 		}
 	}	
 
 	private class SetMapStartUrlListener extends AbstractSelectionAdapter{
+
 		@Override
 		public void widgetSelected(SelectionEvent e) {
+
 			boolean selected = fMapStartUrlCheckbox.getSelection();
-			fStartUrlText.setEnabled(!selected);
+
+			if (fSectionEnabled) {
+				fStartUrlText.setEnabled(!selected);
+			} else {
+				fStartUrlText.setEnabled(false);
+			}
+
 			fMethodInterface.setProperty(fMapStartUrlPropertyId, BooleanHelper.toString(selected));
 		}
 	}	
 
 	private class BrowserChangedAdapter extends AbstractSelectionAdapter {
+
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			fMethodInterface.setProperty(fBrowserPropertyId, fBrowserCombo.getText());
@@ -173,6 +209,7 @@ public class WebRunnerSection extends BasicSection  {
 	}
 
 	private class BrowserDriverChangedAdapter extends AbstractSelectionAdapter {
+
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			fMethodInterface.setProperty(fBrowserDriverPropertyId, fBrowserDriverText.getText());
@@ -180,6 +217,7 @@ public class WebRunnerSection extends BasicSection  {
 	}	
 
 	private class UrlChangedAdapter extends AbstractSelectionAdapter {
+
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			fMethodInterface.setProperty(fStartUrlPropertyId, fStartUrlText.getText());
@@ -190,12 +228,11 @@ public class WebRunnerSection extends BasicSection  {
 	public void setEnabled(boolean enabled) {
 
 		super.setEnabled(enabled);
-
 		fMapBrowserCheckbox.setEnabled(enabled);
-		fBrowserCombo.setEnabled(enabled);
-		fBrowserDriverText.setEnabled(enabled);
 		fMapStartUrlCheckbox.setEnabled(enabled);
-		fStartUrlText.setEnabled(enabled);
+		fSectionEnabled = enabled;
+
+		refresh();
 	}
 
 }
