@@ -44,6 +44,14 @@ public class NodePropertyValueSet {
 		return false;
 	}
 
+	public boolean isOneOfPossibleValuesIgnoreCase(String valueToMatch) {
+
+		if (StringTabHelper.isOneOfValuesIgnoreCase(valueToMatch, fPossibleValues)) {
+			return true;
+		}
+		return false;
+	}	
+
 	public static NodePropertyValueSet intersect(NodePropertyValueSet set1, NodePropertyValueSet set2) {
 
 		String[] possibleValues = StringTabHelper.intersect(set1.getPossibleValues(), set2.getPossibleValues());

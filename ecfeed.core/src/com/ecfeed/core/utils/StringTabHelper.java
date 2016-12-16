@@ -37,6 +37,17 @@ public class StringTabHelper {
 		return false;
 	}
 
+	public static boolean isOneOfValuesIgnoreCase(String valueToTest, String[] array) {
+
+		for (String value : array) {
+			if (StringHelper.isEqualIgnoreCase(value, valueToTest)) {
+				return true;
+			}
+		}
+
+		return false;
+	}	
+
 	public static String getFirstValue(String[] array) {
 
 		if (array.length < 1) {

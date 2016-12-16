@@ -50,4 +50,8 @@ class NodePropertyDef {
 	boolean matchesPossibleValue(String valueToMatch) {
 		return fValueSet.isOneOfPossibleValues(valueToMatch);
 	}
+
+	boolean matchesPossibleValueIgnoreCase(String valueToMatch) {
+		return fValueSet.isOneOfPossibleValuesIgnoreCase(valueToMatch);
+	}	
 }

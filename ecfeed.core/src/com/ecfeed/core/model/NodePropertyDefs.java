@@ -200,7 +200,7 @@ public class NodePropertyDefs {
 	}
 
 	public static boolean isValidBrowser(String browserName) {
-		if (webBrowser.matchesPossibleValue(browserName)) {
+		if (webBrowser.matchesPossibleValueIgnoreCase(browserName)) {
 			return true;
 		}
 		return false;
