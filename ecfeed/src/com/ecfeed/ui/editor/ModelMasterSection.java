@@ -65,6 +65,7 @@ import com.ecfeed.ui.modelif.IModelUpdateListener;
 import com.ecfeed.ui.modelif.MethodInterface;
 import com.ecfeed.ui.modelif.ModelNodesTransfer;
 import com.ecfeed.ui.modelif.NodeInterfaceFactory;
+import com.ecfeed.utils.SeleniumHelper;
 
 public class ModelMasterSection extends TreeViewerSection{
 
@@ -512,6 +513,24 @@ public class ModelMasterSection extends TreeViewerSection{
 		}
 
 		private boolean addTestOnlineAction(MethodInterface methodInterface) {
+
+			if (!isTestOnlineActionVisible(methodInterface)) {
+				return false;
+			}
+
+			TestOnlineAction testOnlineAction = new TestOnlineAction(fFileInfoProvider, ModelMasterSection.this, methodInterface);
+			addMenuItem(testOnlineAction.getName(), testOnlineAction);
+			return true;
+		}
+
+		private boolean isTestOnlineActionVisible(MethodInterface methodInterface) {
+
+			MethodNode methodNode = methodInterface.getTarget();
+
+			if (SeleniumHelper.isSeleniumRunnerMethod(methodNode)) {
+				return true;
+			}
+
 			if (ApplicationContext.isStandaloneApplication()) {
 				return false;
 			}
@@ -522,11 +541,8 @@ public class ModelMasterSection extends TreeViewerSection{
 				return false;
 			}
 
-			TestOnlineAction testOnlineAction = new TestOnlineAction(fFileInfoProvider, ModelMasterSection.this, methodInterface);
-			addMenuItem(testOnlineAction.getName(), testOnlineAction);
 			return true;
 		}
-
 
 		private boolean addExportOnlineAction(MethodNode methodNode, MethodInterface methodInterface) {
 			if (methodNode.getParametersCount() == 0) {
