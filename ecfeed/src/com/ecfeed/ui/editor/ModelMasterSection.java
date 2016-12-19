@@ -56,6 +56,7 @@ import com.ecfeed.ui.common.ImageManager;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.editor.actions.AbstractAddChildAction;
 import com.ecfeed.ui.editor.actions.AddChildActionProvider;
+import com.ecfeed.ui.editor.actions.ExecuteTestCaseAction;
 import com.ecfeed.ui.editor.actions.ExportOnlineAction;
 import com.ecfeed.ui.editor.actions.ModelViewerActionProvider;
 import com.ecfeed.ui.editor.actions.TestOnlineAction;
@@ -65,6 +66,7 @@ import com.ecfeed.ui.modelif.IModelUpdateListener;
 import com.ecfeed.ui.modelif.MethodInterface;
 import com.ecfeed.ui.modelif.ModelNodesTransfer;
 import com.ecfeed.ui.modelif.NodeInterfaceFactory;
+import com.ecfeed.ui.modelif.TestCaseInterface;
 import com.ecfeed.utils.SeleniumHelper;
 
 public class ModelMasterSection extends TreeViewerSection{
@@ -461,6 +463,7 @@ public class ModelMasterSection extends TreeViewerSection{
 
 			addChildAddingActions(firstSelectedNode);
 			addActionsForMethod(firstSelectedNode);
+			addActionsForTestCase(firstSelectedNode);
 			super.populateMenu();
 		}
 
@@ -481,6 +484,7 @@ public class ModelMasterSection extends TreeViewerSection{
 		}
 
 		private void addActionsForMethod(AbstractNode abstractNode) {
+
 			if (!(abstractNode instanceof MethodNode)) {
 				return;
 			}
@@ -501,6 +505,29 @@ public class ModelMasterSection extends TreeViewerSection{
 			}
 		}
 
+		private void addActionsForTestCase(AbstractNode abstractNode) {
+
+			if (!(abstractNode instanceof TestCaseNode)) {
+				return;
+			}
+
+			TestCaseInterface testCaseInterface = getTestCaseInterface();
+
+			AbstractNodeInterface nodeIf = 
+					NodeInterfaceFactory.getNodeInterface(testCaseInterface.getMethod(), null, fFileInfoProvider);
+
+			MethodInterface methodInterface = (MethodInterface)nodeIf; 
+
+			if (!isActionExecutable(methodInterface)) {
+				return;
+			}
+
+			ExecuteTestCaseAction action = new ExecuteTestCaseAction(ModelMasterSection.this, testCaseInterface);
+			addMenuItem(action.getName(), action);
+
+			new MenuItem(getMenu(), SWT.SEPARATOR);
+		}
+
 		private MethodInterface getMethodInterface() {
 			AbstractNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(getSelectedNodes().get(0), null, fFileInfoProvider);
 
@@ -512,9 +539,20 @@ public class ModelMasterSection extends TreeViewerSection{
 			return (MethodInterface)nodeIf; 
 		}
 
+		private TestCaseInterface getTestCaseInterface() {
+			AbstractNodeInterface nodeInterface = NodeInterfaceFactory.getNodeInterface(getSelectedNodes().get(0), null, fFileInfoProvider);
+
+			if (!(nodeInterface instanceof TestCaseInterface)) {
+				final String MSG = "Invalid type of node interface. Test case interface expected"; 
+				ExceptionHelper.reportRuntimeException(MSG);
+			}
+
+			return (TestCaseInterface)nodeInterface; 
+		}
+
 		private boolean addTestOnlineAction(MethodInterface methodInterface) {
 
-			if (!isTestOnlineActionVisible(methodInterface)) {
+			if (!isActionExecutable(methodInterface)) {
 				return false;
 			}
 
@@ -523,8 +561,7 @@ public class ModelMasterSection extends TreeViewerSection{
 			return true;
 		}
 
-		private boolean isTestOnlineActionVisible(MethodInterface methodInterface) {
-
+		private boolean isActionExecutable(MethodInterface methodInterface) {
 			MethodNode methodNode = methodInterface.getTarget();
 
 			if (SeleniumHelper.isSeleniumRunnerMethod(methodNode)) {
