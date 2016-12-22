@@ -109,12 +109,15 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 
 	private void processWebBrowserProperty() {
 
+		String webBrowser = fMethodNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_WEB_BROWSER);
 		String browserDriver = decodeDriverPath(fMethodNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_BROWSER_DRIVER));
+
 		if (StringHelper.isNullOrEmpty(browserDriver)) {
-			return;
+			if (!StringHelper.isEqualIgnoreCase(webBrowser, NodePropertyDefs.browserNameSafari())) {
+				return;
+			}
 		}
 
-		String webBrowser = fMethodNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_WEB_BROWSER);
 		if (!StringHelper.isNullOrEmpty(webBrowser)) {
 			setDriver(webBrowser, browserDriver, null);
 			goToPage(fStartupPage, null);
@@ -198,7 +201,6 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 			return;
 		}
 		if (StringHelper.isEqualIgnoreCase(driverName, NodePropertyDefs.browserNameSafari())) {
-			System.setProperty("webdriver.safari.driver", driverProperty);
 			fDriver = new SafariDriver();
 			return;
 		}		
