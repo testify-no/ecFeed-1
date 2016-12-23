@@ -91,50 +91,52 @@ public class RootNodeTest{
 		RootNode r1 = new RootNode("r1", ModelVersionDistributor.getCurrentVersion());
 		RootNode r2 = new RootNode("r2", ModelVersionDistributor.getCurrentVersion());
 
-		assertFalse(r1.compare(r2));
+		assertFalse(r1.isMatch(r2));
 
 		r2.setName("r1");
-		assertTrue(r1.compare(r2));
+		assertTrue(r1.isMatch(r2));
 
 		ClassNode class1 = new ClassNode("name");
 		ClassNode class2 = new ClassNode("name");
 
 		r1.addClass(class1);
-		assertFalse(r1.compare(r2));
+		assertFalse(r1.isMatch(r2));
 
 		r2.addClass(class2);
-		assertTrue(r1.compare(r2));
+		assertTrue(r1.isMatch(r2));
 
 		class2.setName("new name");
-		assertFalse(r1.compare(r2));
+		assertFalse(r1.isMatch(r2));
 
 		class2.setName("name");
-		assertTrue(r1.compare(r2));
+		assertTrue(r1.isMatch(r2));
 
 		GlobalParameterNode parameter1 = new GlobalParameterNode("parameter1", "int");
 		GlobalParameterNode parameter2 = new GlobalParameterNode("parameter1", "int");
 
 		r1.addParameter(parameter1);
-		assertFalse(r1.compare(r2));
+		assertFalse(r1.isMatch(r2));
 		r2.addParameter(parameter2);
-		assertTrue(r1.compare(r2));
+		assertTrue(r1.isMatch(r2));
 		parameter1.setName("newName");
-		assertFalse(r1.compare(r2));
+		assertFalse(r1.isMatch(r2));
 		parameter2.setName("newName");
-		assertTrue(r1.compare(r2));
+		assertTrue(r1.isMatch(r2));
 
 		parameter1.setType("float");
-		assertFalse(r1.compare(r2));
+		assertFalse(r1.isMatch(r2));
 		parameter2.setType("float");
-		assertTrue(r1.compare(r2));
+		assertTrue(r1.isMatch(r2));
 	}
 
-//	@Test
+	@Test
 	public void getCopyTest(){
 		RandomModelGenerator generator = new RandomModelGenerator();
 		for(int i = 0; i < 1; i++){
 			RootNode root = generator.generateModel(3);
-			System.out.println(root);
+			RootNode copy = root.makeClone();
+
+			assertTrue(copy.isMatch(root));
 		}
 	}
 

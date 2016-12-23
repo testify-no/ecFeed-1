@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.ListIterator;
 
 import com.ecfeed.core.adapter.IModelOperation;
-import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.Constants;
 import com.ecfeed.core.model.ConstraintNode;
@@ -24,6 +23,7 @@ import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.model.TestCaseNode;
+import com.ecfeed.core.utils.JavaTypeHelper;
 
 public class ParameterOperationSetExpected extends AbstractModelOperation {
 	
@@ -80,7 +80,7 @@ public class ParameterOperationSetExpected extends AbstractModelOperation {
 	public void execute() throws ModelOperationException {
 		fTarget.setExpected(fExpected);
 		String type = fTarget.getType();
-		if(fExpected && JavaUtils.hasLimitedValuesSet(type)){
+		if(fExpected && JavaTypeHelper.hasLimitedValuesSet(type)){
 			boolean validDefaultValue = false;
 			String currentDefaultValue = fTarget.getDefaultValue();
 			for(ChoiceNode leaf : fTarget.getLeafChoices()){
@@ -108,9 +108,9 @@ public class ParameterOperationSetExpected extends AbstractModelOperation {
 				if(fExpected){
 					ChoiceNode p = new ChoiceNode(Constants.EXPECTED_VALUE_CHOICE_NAME, fTarget.getDefaultValue());
 					p.setParent(fTarget);
-					TestCaseNode newTestCase = testCase.getCopy();
+					TestCaseNode newTestCase = testCase.makeClone();
 					newTestCase.setParent(method);
-					newTestCase.getTestData().set(index, p.getCopy());
+					newTestCase.getTestData().set(index, p.makeClone());
 					tcIt.set(newTestCase);
 				}
 				else{

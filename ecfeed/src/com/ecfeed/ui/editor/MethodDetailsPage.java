@@ -13,6 +13,7 @@ package com.ecfeed.ui.editor;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
@@ -20,10 +21,12 @@ import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.MethodNode;
+import com.ecfeed.core.model.NodePropertyDefs;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.MethodInterface;
+import com.ecfeed.utils.SeleniumHelper;
 
 public class MethodDetailsPage extends BasicDetailsPage {
 
@@ -31,18 +34,22 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	private Button fTestOnlineButton;
 	private Button fExportOnlineButton;
 	private Button fBrowseButton;
+	private Combo fRunnerCombo;
+	private WebRunnerSection fRunnerSection;
 	private MethodParametersViewer fParemetersSection;
 	private ConstraintsListViewer fConstraintsSection;
 	private TestCasesViewer fTestCasesSection;
 
-	private MethodInterface fMethodIf;
+	private MethodInterface fMethodInterface;
 	private JavaDocCommentsSection fCommentsSection;
+
+	private final NodePropertyDefs.PropertyId fRunnerPropertyId = NodePropertyDefs.PropertyId.PROPERTY_METHOD_RUNNER;
 
 	private class OnlineTestAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent ev) {
 			try {
-				fMethodIf.executeOnlineTests(getFileInfoProvider());
+				fMethodInterface.executeOnlineTests(getFileInfoProvider());
 			} catch (Exception e) {
 				ExceptionCatchDialog.open("Can not execute online tests.",
 						e.getMessage());
@@ -54,7 +61,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		@Override
 		public void widgetSelected(SelectionEvent ev) {
 			try {
-				fMethodIf.executeOnlineExport(getFileInfoProvider());
+				fMethodInterface.executeOnlineExport(getFileInfoProvider());
 			} catch (Exception e) {
 				ExceptionCatchDialog.open("Can not execute online export.",
 						e.getMessage());
@@ -65,15 +72,15 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	private class ReassignAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			fMethodIf.reassignTarget();
+			fMethodInterface.reassignTarget();
 		}
 	}
 
 	private class RenameMethodAdapter extends AbstractSelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			fMethodIf.setName(fMethodNameText.getText());
-			fMethodNameText.setText(fMethodIf.getName());
+			fMethodInterface.setName(fMethodNameText.getText());
+			fMethodNameText.setText(fMethodInterface.getName());
 		}
 	}
 
@@ -81,7 +88,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 			IModelUpdateContext updateContext,
 			IFileInfoProvider fileInfoProvider) {
 		super(masterSection, updateContext, fileInfoProvider);
-		fMethodIf = new MethodInterface(this, fileInfoProvider);
+		fMethodInterface = new MethodInterface(this, fileInfoProvider);
 	}
 
 	@Override
@@ -92,6 +99,8 @@ public class MethodDetailsPage extends BasicDetailsPage {
 
 		createMethodNameWidgets(fileInfoProvider);
 		createTestAndExportButtons(fileInfoProvider);
+		createRunnerCombo();
+		createRunnerSection(fileInfoProvider);
 
 		if (fileInfoProvider.isProjectAvailable()) {
 			addForm(fCommentsSection = new JavaDocCommentsSection(this, this,
@@ -136,17 +145,38 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	}
 
 	private void createTestAndExportButtons(IFileInfoProvider fileInfoProvider) {
+
 		Composite childComposite = getFormObjectToolkit().createRowComposite(
 				getMainComposite());
 
-		if (fileInfoProvider.isProjectAvailable()) {
-			fTestOnlineButton = getFormObjectToolkit().createButton(
-					childComposite, "Test online...", new OnlineTestAdapter());
-		}
+		fTestOnlineButton = getFormObjectToolkit().createButton(
+				childComposite, "Test online...", new OnlineTestAdapter());
 
 		fExportOnlineButton = getFormObjectToolkit().createButton(
 				childComposite, "Export online...", new OnlineExportAdapter());
 		getFormObjectToolkit().paintBorders(childComposite);
+	}
+
+	private void createRunnerCombo() {
+		FormObjectToolkit formObjectToolkit = getFormObjectToolkit();
+		Composite gridComposite = formObjectToolkit.createGridComposite(getMainComposite(), 2);
+
+		formObjectToolkit.createLabel(gridComposite, "Runner");
+
+		fRunnerCombo = formObjectToolkit.createReadOnlyGridCombo(gridComposite, new RunnerChangedAdapter());
+		fRunnerCombo.setItems(NodePropertyDefs.getValueSet(fRunnerPropertyId, null).getPossibleValues()); 
+		fRunnerCombo.setText(NodePropertyDefs.getPropertyDefaultValue(fRunnerPropertyId, null));
+	}	
+
+	private class RunnerChangedAdapter extends AbstractSelectionAdapter {
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			fMethodInterface.setProperty(fRunnerPropertyId, fRunnerCombo.getText());
+		}
+	}	
+
+	private void createRunnerSection(IFileInfoProvider fileInfoProvider) {
+		fRunnerSection = new WebRunnerSection(this, this, fMethodInterface, fileInfoProvider);
 	}
 
 	@Override
@@ -157,45 +187,103 @@ public class MethodDetailsPage extends BasicDetailsPage {
 			return;
 		}
 
-		MethodNode selectedMethod = (MethodNode) getSelectedElement();
-		fMethodIf.setTarget(selectedMethod);
-
 		IFileInfoProvider fileInfoProvider = getFileInfoProvider();
+		MethodNode methodNode = (MethodNode)getSelectedElement();
+		fMethodInterface.setTarget(methodNode);
 
-		EImplementationStatus methodStatus = null;
+		refreshMethodNameAndSignature(methodNode);
+
+		refreshRunnerCombo(methodNode);		
+		refreshRunnerSection(methodNode);
+
+		refrestTestOnlineButton(fileInfoProvider);
+		refreshExportOnlineButton(methodNode);
+
+		setInputForOtherSections(fileInfoProvider, methodNode);
+
+		refreshBrowseButton(fileInfoProvider, methodNode);
+	}
+
+	private void refreshMethodNameAndSignature(MethodNode methodNode) {
+		getMainSection().setText(JavaUtils.simplifiedToString(methodNode));
+		fMethodNameText.setText(fMethodInterface.getName());
+	}
+
+	private void refreshRunnerCombo(MethodNode methodNode) {
+		String methodRunner = methodNode.getPropertyValue(fRunnerPropertyId);
+		if (methodRunner != null) {
+			fRunnerCombo.setText(methodRunner);
+		}		
+	}
+
+	private void refreshRunnerSection(MethodNode methodNode) {
+		fRunnerSection.refresh();
+
+		String runner = methodNode.getPropertyValue(fRunnerPropertyId);
+		if (NodePropertyDefs.isJavaRunnerMethod(runner)) {
+			fRunnerSection.setEnabled(false);
+		} else {
+			fRunnerSection.setEnabled(true);
+		}		
+	}
+
+	private void refrestTestOnlineButton(IFileInfoProvider fileInfoProvider) {
+		EImplementationStatus methodImplementationStatus = null;
 		if (fileInfoProvider.isProjectAvailable()) {
-			methodStatus = fMethodIf.getImplementationStatus();
-		}
-		getMainSection().setText(JavaUtils.simplifiedToString(selectedMethod));
-
-		if (fileInfoProvider.isProjectAvailable()) {
-			fTestOnlineButton
-					.setEnabled(methodStatus != EImplementationStatus.NOT_IMPLEMENTED);
+			methodImplementationStatus = fMethodInterface.getImplementationStatus();
 		}
 
-		if (selectedMethod.getParametersCount() > 0) {
+		fTestOnlineButton.setEnabled(isTestOnlineButtonEnabled(fileInfoProvider, methodImplementationStatus));
+	}
+
+	private void refreshExportOnlineButton(MethodNode methodNode) {
+		if (methodNode.getParametersCount() > 0) {
 			fExportOnlineButton.setEnabled(true);
 		} else {
 			fExportOnlineButton.setEnabled(false);
 		}
+	}
 
-		fParemetersSection.setInput(selectedMethod);
-		fConstraintsSection.setInput(selectedMethod);
-		fTestCasesSection.setInput(selectedMethod);
-
-		if (fileInfoProvider.isProjectAvailable()) {
-			fCommentsSection.setInput(selectedMethod);
-		}
-		fMethodNameText.setText(fMethodIf.getName());
+	private void setInputForOtherSections(IFileInfoProvider fileInfoProvider, MethodNode methodNode) {
+		fParemetersSection.setInput(methodNode);
+		fConstraintsSection.setInput(methodNode);
+		fTestCasesSection.setInput(methodNode);
 
 		if (fileInfoProvider.isProjectAvailable()) {
-			EImplementationStatus parentStatus = fMethodIf
-					.getImplementationStatus(selectedMethod.getClassNode());
-			fBrowseButton
-					.setEnabled((parentStatus == EImplementationStatus.IMPLEMENTED || parentStatus == EImplementationStatus.PARTIALLY_IMPLEMENTED)
-							&& fMethodIf.getCompatibleMethods().isEmpty() == false);
+			fCommentsSection.setInput(methodNode);
 		}
 	}
+
+	private void refreshBrowseButton(IFileInfoProvider fileInfoProvider, MethodNode methodNode) {
+		if (!fileInfoProvider.isProjectAvailable()) {
+			return;
+		}
+
+		EImplementationStatus parentStatus = fMethodInterface.getImplementationStatus(methodNode.getClassNode());
+
+		boolean parentImplemented = 
+				parentStatus == EImplementationStatus.IMPLEMENTED
+				|| parentStatus == EImplementationStatus.PARTIALLY_IMPLEMENTED; 
+
+		boolean isEnabled = parentImplemented && (!fMethodInterface.getCompatibleMethods().isEmpty());
+
+		fBrowseButton.setEnabled(isEnabled);
+	}
+
+	private boolean isTestOnlineButtonEnabled(IFileInfoProvider fileInfoProvider, EImplementationStatus methodStatus) {
+
+		MethodNode methodNode = fMethodInterface.getTarget();
+
+		if (SeleniumHelper.isSeleniumRunnerMethod(methodNode)) {
+			return true;
+		}		
+
+		if (fileInfoProvider.isProjectAvailable()) {
+			return methodStatus != EImplementationStatus.NOT_IMPLEMENTED;
+		}
+
+		return false;
+	}	
 
 	@Override
 	protected Class<? extends AbstractNode> getNodeType() {

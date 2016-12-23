@@ -202,4 +202,19 @@ public class StringHelperTest{
 		assertEquals(4, StringHelper.countOccurencesOfChar(" 12 3 45 ", ' '));
 	}
 
+	@Test
+	public void shouldReturnNullWhenOnlyBoundaryChar() {
+		assertNull(StringHelper.getSubstringWithBoundaries("%", '%'));
+	}
+
+	@Test
+	public void shouldReturnStringWithBoundaries() {
+		assertEquals("%A%", StringHelper.getSubstringWithBoundaries("%A%", '%'));
+	}
+
+	@Test
+	public void shouldReplaceStringWithBoundaries() {
+		assertEquals("XXABCYY", StringHelper.replaceSubstringWithBoundaries("XX%abc%YY", '%', "ABC"));
+	}
+
 }

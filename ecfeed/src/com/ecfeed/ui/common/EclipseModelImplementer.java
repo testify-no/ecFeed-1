@@ -58,6 +58,7 @@ import com.ecfeed.core.model.GlobalParameterNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.utils.EcException;
+import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.PackageClassHelper;
 import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.utils.EclipsePackageFragmentGetter;
@@ -102,7 +103,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 
 	private void validateIfUserType(AbstractParameterNode parameterNode) throws EcException {
 		String type = parameterNode.getType();
-		if (!JavaUtils.isUserType(type)) {
+		if (!JavaTypeHelper.isUserType(type)) {
 			return;
 		}
 
@@ -192,7 +193,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 
 	protected void implementParameterDefinition(AbstractParameterNode node, Set<String> fields) throws CoreException, EcException {
 		String typeName = node.getType();
-		if(JavaUtils.isPrimitive(typeName)){
+		if(JavaTypeHelper.isJavaType(typeName)){
 			return;
 		}
 		if(JavaUtils.isValidTypeName(typeName) == false){
@@ -497,7 +498,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 	private boolean parameterDefinitionImplementable(AbstractParameterNode parameter) {
 		try {
 			String type = parameter.getType();
-			if(JavaUtils.isPrimitive(type)){
+			if(JavaTypeHelper.isJavaType(type)){
 				return false;
 			}
 			else{

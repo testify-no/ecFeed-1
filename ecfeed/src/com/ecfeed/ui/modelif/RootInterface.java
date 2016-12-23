@@ -36,7 +36,7 @@ public class RootInterface extends GlobalParametersParentInterface {
 	}
 
 	@Override
-	protected RootNode getTarget() {
+	public RootNode getTarget() {
 		return (RootNode)super.getTarget();
 	}
 

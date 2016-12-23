@@ -25,7 +25,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Tree;
-import org.eclipse.ui.forms.widgets.Section;
 
 import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.model.MethodNode;
@@ -38,10 +37,10 @@ import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.MethodInterface;
+import com.ecfeed.utils.SeleniumHelper;
 
 public class TestCasesViewer extends CheckboxTreeViewerSection {
 
-	private final static int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 	private final static int VIEWER_STYLE = SWT.BORDER;
 
 	private TestCasesViewerLabelProvider fLabelProvider;
@@ -146,7 +145,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext,
 			IFileInfoProvider fileInfoProvider) {
-		super(sectionContext, updateContext, fileInfoProvider, STYLE);
+		super(sectionContext, updateContext, fileInfoProvider, StyleDistributor.getSectionStyle());
 
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gd.minimumHeight = 250;
@@ -163,11 +162,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 		fRenameSuiteButton = addButton("Rename suite", new RenameSuiteAdapter());
 		fCalculateCoverageButton = addButton("Calculate coverage", new CalculateCoverageAdapter(fileInfoProvider));
 		fRemoveSelectedButton = addButton("Remove selected", new RemoveSelectedAdapter(Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
-
-		if (getFileInfoProvider().isProjectAvailable()) {
-			fExecuteSelectedButton = addButton("Execute selected", new ExecuteStaticTestAdapter());
-		}
-
+		fExecuteSelectedButton = addButton("Execute selected", new ExecuteStaticTestAdapter());
 		fExportTestCasesButton = addButton("Export selected", new ExportTestCasesAdapter());
 
 		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
@@ -181,10 +176,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 		boolean testCasesExist = getSelectedMethod().hasTestCases();
 		fRenameSuiteButton.setEnabled(testCasesExist);
 		fCalculateCoverageButton.setEnabled(testCasesExist && parametersExist);
-
-		if (getFileInfoProvider().isProjectAvailable()) {
-			fExecuteSelectedButton.setEnabled(executionEnabled());
-		}
+		fExecuteSelectedButton.setEnabled(executionEnabled());
 
 		boolean selectedTestCasesExist = anyTestCaseSelected();
 		fExportTestCasesButton.setEnabled(selectedTestCasesExist);
@@ -232,6 +224,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 					fExecuteSelectedButton.setEnabled(executionEnabled());
 				}
 
+				fExecuteSelectedButton.setEnabled(executionEnabled());
 				boolean anySelected = anyTestCaseSelected();
 				fExportTestCasesButton.setEnabled(anySelected);
 				fRemoveSelectedButton.setEnabled(anySelected);
@@ -274,16 +267,21 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 
 	private boolean executionEnabled() {
 
+		Collection<TestCaseNode> checked = getCheckedTestCases();
+		if (checked.size() == 0) {
+			return false;
+		}
+
+		MethodNode methodNode = fMethodIf.getTarget();
+		if (SeleniumHelper.isSeleniumRunnerMethod(methodNode)) {
+			return true;
+		}
+
 		if (!getFileInfoProvider().isProjectAvailable()) {
 			return false;
 		}
 
-		if (fMethodIf.getImplementationStatus() == EImplementationStatus.NOT_IMPLEMENTED) { 
-			return false;
-		}
-
-		Collection<TestCaseNode> checked = getCheckedTestCases();
-		if (checked.size() == 0) {
+		if (fMethodIf.getImplementationStatus() == EImplementationStatus.NOT_IMPLEMENTED) {
 			return false;
 		}
 
@@ -293,7 +291,8 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 			}
 		}
 
-		return true;
+		return true;		
 	}
+
 
 }

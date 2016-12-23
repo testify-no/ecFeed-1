@@ -16,15 +16,11 @@ import java.util.List;
 import java.util.Set;
 
 import com.ecfeed.core.utils.BooleanHelper;
-import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.StringHelper;
 
 public class ClassNode extends GlobalParametersParentNode {
 
 	private List<MethodNode> fMethods;
-
-	private static final String RUN_ON_ANDROID_PROPERTY_KEY = "runOnAndroid";
-	private static final String ANDROID_RUNNER_PROPERTY_KEY = "androidRunner";
 
 	@Override
 	public List<? extends AbstractNode> getChildren(){
@@ -34,14 +30,19 @@ public class ClassNode extends GlobalParametersParentNode {
 	}
 
 	@Override
-	public ClassNode getCopy(){
+	public ClassNode makeClone(){
 		ClassNode copy = new ClassNode(getName());
+
+		copy.setProperties(getProperties());
+
 		for(GlobalParameterNode parameter : getGlobalParameters()){
-			copy.addParameter(parameter.getCopy());
+			copy.addParameter(parameter.makeClone());
 		}
+
 		for(MethodNode method : fMethods){
-			copy.addMethod(method.getCopy());
+			copy.addMethod(method.makeClone());
 		}
+
 		copy.setParent(getParent());
 		return copy;
 	}
@@ -76,15 +77,15 @@ public class ClassNode extends GlobalParametersParentNode {
 	}
 
 	public String getAndroidRunner() {
-		return getPropertyValue(ANDROID_RUNNER_PROPERTY_KEY);
+		return getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_ANDROID_RUNNER);
 	}
 
 	public void setAndroidRunner(String androidRunner) {
-		putProperty(ANDROID_RUNNER_PROPERTY_KEY, JavaTypeHelper.TYPE_NAME_STRING, androidRunner);
+		setPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_ANDROID_RUNNER, androidRunner);
 	}	
 
 	public boolean getRunOnAndroid() {
-		String value = getPropertyValue(RUN_ON_ANDROID_PROPERTY_KEY);
+		String value = getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_RUN_ON_ANDROID);
 
 		if (value == null) {
 			return false;
@@ -94,7 +95,7 @@ public class ClassNode extends GlobalParametersParentNode {
 	}
 
 	public void setRunOnAndroid(boolean runOnAndroid) {
-		putProperty(RUN_ON_ANDROID_PROPERTY_KEY, JavaTypeHelper.TYPE_NAME_BOOLEAN, BooleanHelper.toString(runOnAndroid));
+		setPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_RUN_ON_ANDROID, BooleanHelper.toString(runOnAndroid));
 	}	
 
 	public boolean addMethod(MethodNode method) {
@@ -145,7 +146,7 @@ public class ClassNode extends GlobalParametersParentNode {
 	}
 
 	@Override
-	public boolean compare(AbstractNode node){
+	public boolean isMatch(AbstractNode node){
 		if(node instanceof ClassNode == false){
 			return false;
 		}
@@ -157,12 +158,12 @@ public class ClassNode extends GlobalParametersParentNode {
 		}
 
 		for(int i = 0; i < comparedMethods.size(); i++){
-			if(getMethods().get(i).compare(comparedMethods.get(i)) == false){
+			if(getMethods().get(i).isMatch(comparedMethods.get(i)) == false){
 				return false;
 			}
 		}
 
-		return super.compare(node);
+		return super.isMatch(node);
 	}
 
 	@Override

@@ -37,6 +37,16 @@ public class TestCaseInterface extends AbstractNodeInterface {
 		return (TestCaseNode)super.getTarget();
 	}
 
+	public MethodNode getMethod() {
+
+		TestCaseNode testCaseNode = getTarget();
+		if (testCaseNode == null) {
+			return null;
+		}
+
+		return (MethodNode)testCaseNode.getParent();
+	}
+
 	public boolean isExpected(ChoiceNode testValue) {
 		return getTarget().getMethodParameter(testValue).isExpected();
 	}

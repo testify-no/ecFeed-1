@@ -17,6 +17,7 @@ import com.ecfeed.android.external.IMethodImplementHelper;
 import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.MethodNode;
+import com.ecfeed.core.utils.JavaTypeHelper;
 
 public abstract class AbstractMethodImplementer implements IImplementerExt {
 
@@ -40,7 +41,7 @@ public abstract class AbstractMethodImplementer implements IImplementerExt {
 	private void createImportsForUserParams(MethodNode methodNode) {
 		for(AbstractParameterNode parameter : methodNode.getParameters()){
 			final String type = parameter.getType();
-			if(JavaUtils.isUserType(type)){
+			if(JavaTypeHelper.isUserType(type)){
 				final String packageName = JavaUtils.getPackageName(type);
 				if(packageName.equals(JavaUtils.getPackageName(methodNode.getClassNode())) == false){
 					fMethodImplementHelper.createImport(type);

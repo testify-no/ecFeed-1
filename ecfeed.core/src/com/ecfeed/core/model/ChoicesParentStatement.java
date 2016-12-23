@@ -121,7 +121,7 @@ public class ChoicesParentStatement extends AbstractStatement implements IRelati
 
 		@Override
 		public ChoiceCondition getCopy(){
-			return new ChoiceCondition(fChoice.getCopy());
+			return new ChoiceCondition(fChoice.makeClone());
 		}
 
 		@Override
@@ -178,7 +178,7 @@ public class ChoicesParentStatement extends AbstractStatement implements IRelati
 			}
 			ChoiceCondition compared = (ChoiceCondition)condition;
 
-			return (fChoice.compare((ChoiceNode)compared.getCondition()));
+			return (fChoice.isMatch((ChoiceNode)compared.getCondition()));
 		}
 
 		@Override

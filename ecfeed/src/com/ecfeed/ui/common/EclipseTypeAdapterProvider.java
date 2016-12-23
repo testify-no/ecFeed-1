@@ -339,7 +339,7 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 	}
 
 	public ITypeAdapter getAdapter(String type){
-		if(JavaUtils.isPrimitive(type) == false){
+		if(JavaTypeHelper.isJavaType(type) == false){
 			type = USER_TYPE;
 		}
 		switch(type){

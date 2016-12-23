@@ -21,6 +21,7 @@ import com.ecfeed.core.adapter.java.ModelClassLoader;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.MethodNode;
+import com.ecfeed.core.utils.JavaTypeHelper;
 
 public class JavaTestRunner {
 
@@ -34,20 +35,19 @@ public class JavaTestRunner {
 	public JavaTestRunner(ModelClassLoader loader, boolean isExport, ITestMethodInvoker testMethodInvoker) {
 		fLoader = loader;
 		fIsExport = isExport;
-		fTestMethodInvoker = testMethodInvoker; 
-	}
-
-	public void setTargetForTest(MethodNode target) throws RunnerException {
-		fTarget = target;
-		ClassNode classNode = fTarget.getClassNode();
-		fTestClass = getTestClass(classNode.getName());
-		fTestMethod = getTestMethod(fTestClass, fTarget);
-	}
-
-	public void setTargetForExport(MethodNode target) {
-		fTarget = target;
+		fTestMethodInvoker = testMethodInvoker;
 		fTestClass = null;
 		fTestMethod = null;
+	}
+
+	public void setTarget(MethodNode target) throws RunnerException {
+		fTarget = target;
+	}
+
+	public void createTestClassAndMethod(MethodNode methodNode) throws RunnerException {
+		ClassNode classNode = methodNode.getClassNode();
+		fTestClass = getTestClass(classNode.getName());
+		fTestMethod = getTestMethod(fTestClass, fTarget);
 	}	
 
 	public void runTestCase(List<ChoiceNode> testData) throws RunnerException{
@@ -56,7 +56,7 @@ public class JavaTestRunner {
 
 		Object instance = null;
 
-		if (!fTestMethodInvoker.isRemote())	{
+		if (fTestMethodInvoker.isClassInstanceRequired())	{
 			try {
 				instance = fTestClass.newInstance();
 			} catch (InstantiationException | IllegalAccessException e) {
@@ -68,20 +68,27 @@ public class JavaTestRunner {
 			}
 		}
 
-		String className = fTestClass.getName();
 		Object[] arguments = getArguments(testData);
+		Object[] choiceNames = getChoiceNames(testData);
 
 		try {
-			fTestMethodInvoker.invoke(fTestMethod, className, instance, arguments, testData.toString());
+			fTestMethodInvoker.invoke(fTestMethod, getClassName(fTestClass), instance, arguments, choiceNames, testData.toString());
 		} catch (Exception e) {
 			RunnerException.report(e.getMessage());
 		}
 	}
 
+	private static String getClassName(Class<?> theClass) {
+		if (theClass == null) {
+			return null;
+		}
+		return theClass.getName();
+	}
+
 	public void prepareTestCaseForExport(List<ChoiceNode> testData) throws RunnerException{
 		validateTestData(testData);
 		Object[] arguments = getArguments(testData);
-		fTestMethodInvoker.invoke(null, null, null, arguments, null);
+		fTestMethodInvoker.invoke(null, null, null, arguments, null, null);
 	}
 
 	protected Method getTestMethod(Class<?> testClass, MethodNode methodModel) throws RunnerException {
@@ -112,7 +119,7 @@ public class JavaTestRunner {
 			if(value == null){
 				String type = choice.getParameter().getType();
 				//check if null value acceptable
-				if(JavaUtils.isString(type) || JavaUtils.isUserType(type)){
+				if(JavaUtils.isString(type) || JavaTypeHelper.isUserType(type)){
 					if(choice.getValueString().equals(Constants.VALUE_REPRESENTATION_NULL) == false){
 						RunnerException.report(Messages.CANNOT_PARSE_PARAMETER(type, choice.getValueString()));
 					}
@@ -123,6 +130,15 @@ public class JavaTestRunner {
 		}
 		return args.toArray();
 	}
+
+	protected Object[] getChoiceNames(List<ChoiceNode> testData) throws RunnerException {
+		List<String> args = new ArrayList<String>();
+
+		for(ChoiceNode choice : testData){
+			args.add(choice.getName());
+		}
+		return args.toArray();
+	}	
 
 	private void validateTestData(List<ChoiceNode> testData) throws RunnerException {
 		List<String> dataTypes = new ArrayList<String>();

@@ -44,7 +44,7 @@ public class GlobalParametersParentInterface extends ParametersParentInterface {
 	}
 
 	@Override
-	protected GlobalParametersParentNode getTarget(){
+	public GlobalParametersParentNode getTarget(){
 		return (GlobalParametersParentNode)super.getTarget();
 	}
 

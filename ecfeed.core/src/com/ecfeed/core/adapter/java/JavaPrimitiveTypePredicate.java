@@ -11,11 +11,12 @@
 package com.ecfeed.core.adapter.java;
 
 import com.ecfeed.core.model.IPrimitiveTypePredicate;
+import com.ecfeed.core.utils.JavaTypeHelper;
 
 public class JavaPrimitiveTypePredicate implements IPrimitiveTypePredicate{
 	@Override
 	public boolean isPrimitive(String type){
-		return JavaUtils.isPrimitive(type);
+		return JavaTypeHelper.isJavaType(type);
 	}
 }
 

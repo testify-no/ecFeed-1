@@ -26,7 +26,6 @@ import org.eclipse.text.edits.InsertEdit;
 import org.eclipse.text.edits.ReplaceEdit;
 import org.eclipse.text.edits.TextEdit;
 
-import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ChoiceNode;
@@ -38,6 +37,7 @@ import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.TestCaseNode;
+import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.SystemLogger;
 
 public class JavaDocSupport {
@@ -115,7 +115,7 @@ public class JavaDocSupport {
 		@Override
 		public Object visit(ChoiceNode node) throws Exception {
 			try{
-				if(node.isAbstract() == false && JavaUtils.isUserType(node.getParameter().getType())) {
+				if(node.isAbstract() == false && JavaTypeHelper.isUserType(node.getParameter().getType())) {
 					IType type = JavaModelAnalyser.getIType(node.getParameter().getType());
 					if (type == null) {
 						return EMPTY_STRING;
@@ -284,7 +284,7 @@ public class JavaDocSupport {
 	}
 
 	public static String getTypeJavadoc(AbstractParameterNode node){
-		if(JavaUtils.isUserType(node.getType())){
+		if(JavaTypeHelper.isUserType(node.getType())){
 			return getJavadoc(JavaModelAnalyser.getIType(node.getType()));
 		}
 		return null;
@@ -332,7 +332,7 @@ public class JavaDocSupport {
 	}
 
 	public static void exportTypeJavadoc(AbstractParameterNode node){
-		if(JavaUtils.isUserType(node.getType())){
+		if(JavaTypeHelper.isUserType(node.getType())){
 			IType type = JavaModelAnalyser.getIType(node.getType());
 			try{
 				exportJavadoc(type, node.getTypeComments());

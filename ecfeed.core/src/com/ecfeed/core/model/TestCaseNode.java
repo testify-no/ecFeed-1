@@ -43,12 +43,14 @@ public class TestCaseNode extends AbstractNode {
 	}
 
 	@Override
-	public TestCaseNode getCopy(){
+	public TestCaseNode makeClone(){
 		List<ChoiceNode> testdata = new ArrayList<>();
 		for(ChoiceNode choice : fTestData){
 			testdata.add(choice);
 		}
-		return new TestCaseNode(this.getName(), testdata);
+		TestCaseNode copy = new TestCaseNode(this.getName(), testdata);
+		copy.setProperties(getProperties());
+		return copy;
 	}
 
 	public TestCaseNode(String name, List<ChoiceNode> testData) {
@@ -110,7 +112,7 @@ public class TestCaseNode extends AbstractNode {
 	}
 
 	public TestCaseNode getCopy(MethodNode method){
-		TestCaseNode tcase = getCopy();
+		TestCaseNode tcase = makeClone();
 		if(tcase.updateReferences(method)){
 			tcase.setParent(method);
 			return tcase;
@@ -145,7 +147,7 @@ public class TestCaseNode extends AbstractNode {
 	}
 
 	@Override
-	public boolean compare(AbstractNode node){
+	public boolean isMatch(AbstractNode node){
 		if(node instanceof TestCaseNode == false){
 			return false;
 		}
@@ -157,12 +159,12 @@ public class TestCaseNode extends AbstractNode {
 		}
 
 		for(int i = 0; i < getTestData().size(); i++){
-			if(getTestData().get(i).compare(compared.getTestData().get(i)) == false){
+			if(getTestData().get(i).isMatch(compared.getTestData().get(i)) == false){
 				return false;
 			}
 		}
 
-		return super.compare(node);
+		return super.isMatch(node);
 	}
 
 	@Override

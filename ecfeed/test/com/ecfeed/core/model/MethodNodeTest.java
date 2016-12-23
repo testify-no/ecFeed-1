@@ -160,72 +160,72 @@ public class MethodNodeTest {
 
 	@Test
 	public void moveChildTest(){
-//		MethodNode method = new MethodNode("name");
-//
-//		ParameterNode parameter1 = new ParameterNode("name", "type", "0", false);
-//		ParameterNode parameter2 = new ParameterNode("name", "type", "0", false);
-//		ParameterNode parameter3 = new ParameterNode("name", "type", "0", false);
-//
-//		TestCaseNode testCase1 = new TestCaseNode("test case", new ArrayList<ChoiceNode>());
-//		TestCaseNode testCase2 = new TestCaseNode("test case", new ArrayList<ChoiceNode>());
-//		TestCaseNode testCase3 = new TestCaseNode("test case", new ArrayList<ChoiceNode>());
-//
-//		ConstraintNode constraint1 = new ConstraintNode("constraint",
-//				new Constraint(new StaticStatement(false), new StaticStatement(false)));
-//		ConstraintNode constraint2 = new ConstraintNode("constraint",
-//				new Constraint(new StaticStatement(false), new StaticStatement(false)));
-//		ConstraintNode constraint3 = new ConstraintNode("constraint",
-//				new Constraint(new StaticStatement(false), new StaticStatement(false)));
-//
-//		method.addParameter(parameter1);
-//		method.addParameter(parameter2);
-//		method.addParameter(parameter3);
-//
-//		method.addTestCase(testCase1);
-//		method.addTestCase(testCase2);
-//		method.addTestCase(testCase3);
-//
-//		method.addConstraint(constraint1);
-//		method.addConstraint(constraint2);
-//		method.addConstraint(constraint3);
-//
-//		int parameter2Index = method.getChildren().indexOf(parameter2);
-//		int testCase2Index = method.getChildren().indexOf(testCase2);
-//		int constraint2Index = method.getChildren().indexOf(constraint2);
-//
-//		method.moveChild(parameter2, true);
-//		assertEquals(parameter2Index - 1, method.getChildren().indexOf(parameter2));
-//		method.moveChild(parameter2, true); //parameter should not be moved further
-//		assertEquals(parameter2Index - 1, method.getChildren().indexOf(parameter2));
-//		method.moveChild(parameter2, false);
-//		assertEquals(parameter2Index, method.getChildren().indexOf(parameter2));
-//		method.moveChild(parameter2, false);
-//		assertEquals(parameter2Index + 1, method.getChildren().indexOf(parameter2));
-//		method.moveChild(parameter2, false); //parameter should not be moved further
-//		assertEquals(parameter2Index + 1, method.getChildren().indexOf(parameter2));
-//
-//		method.moveChild(testCase2, true);
-//		assertEquals(testCase2Index - 1, method.getChildren().indexOf(testCase2));
-//		method.moveChild(testCase2, true); //test case should not be moved further
-//		assertEquals(testCase2Index - 1, method.getChildren().indexOf(testCase2));
-//		method.moveChild(testCase2, false);
-//		assertEquals(testCase2Index, method.getChildren().indexOf(testCase2));
-//		method.moveChild(testCase2, false);
-//		assertEquals(testCase2Index + 1, method.getChildren().indexOf(testCase2));
-//		method.moveChild(testCase2, false); //test case should not be moved further
-//		assertEquals(testCase2Index + 1, method.getChildren().indexOf(testCase2));
-//
-//		method.moveChild(constraint2, true);
-//		assertEquals(constraint2Index - 1, method.getChildren().indexOf(constraint2));
-//		method.moveChild(constraint2, true); //test case should not be moved further
-//		assertEquals(constraint2Index - 1, method.getChildren().indexOf(constraint2));
-//		method.moveChild(constraint2, false);
-//		assertEquals(constraint2Index, method.getChildren().indexOf(constraint2));
-//		method.moveChild(constraint2, false);
-//		assertEquals(constraint2Index + 1, method.getChildren().indexOf(constraint2));
-//		method.moveChild(constraint2, false); //test case should not be moved further
-//		assertEquals(constraint2Index + 1, method.getChildren().indexOf(constraint2));
-//
+		//		MethodNode method = new MethodNode("name");
+		//
+		//		ParameterNode parameter1 = new ParameterNode("name", "type", "0", false);
+		//		ParameterNode parameter2 = new ParameterNode("name", "type", "0", false);
+		//		ParameterNode parameter3 = new ParameterNode("name", "type", "0", false);
+		//
+		//		TestCaseNode testCase1 = new TestCaseNode("test case", new ArrayList<ChoiceNode>());
+		//		TestCaseNode testCase2 = new TestCaseNode("test case", new ArrayList<ChoiceNode>());
+		//		TestCaseNode testCase3 = new TestCaseNode("test case", new ArrayList<ChoiceNode>());
+		//
+		//		ConstraintNode constraint1 = new ConstraintNode("constraint",
+		//				new Constraint(new StaticStatement(false), new StaticStatement(false)));
+		//		ConstraintNode constraint2 = new ConstraintNode("constraint",
+		//				new Constraint(new StaticStatement(false), new StaticStatement(false)));
+		//		ConstraintNode constraint3 = new ConstraintNode("constraint",
+		//				new Constraint(new StaticStatement(false), new StaticStatement(false)));
+		//
+		//		method.addParameter(parameter1);
+		//		method.addParameter(parameter2);
+		//		method.addParameter(parameter3);
+		//
+		//		method.addTestCase(testCase1);
+		//		method.addTestCase(testCase2);
+		//		method.addTestCase(testCase3);
+		//
+		//		method.addConstraint(constraint1);
+		//		method.addConstraint(constraint2);
+		//		method.addConstraint(constraint3);
+		//
+		//		int parameter2Index = method.getChildren().indexOf(parameter2);
+		//		int testCase2Index = method.getChildren().indexOf(testCase2);
+		//		int constraint2Index = method.getChildren().indexOf(constraint2);
+		//
+		//		method.moveChild(parameter2, true);
+		//		assertEquals(parameter2Index - 1, method.getChildren().indexOf(parameter2));
+		//		method.moveChild(parameter2, true); //parameter should not be moved further
+		//		assertEquals(parameter2Index - 1, method.getChildren().indexOf(parameter2));
+		//		method.moveChild(parameter2, false);
+		//		assertEquals(parameter2Index, method.getChildren().indexOf(parameter2));
+		//		method.moveChild(parameter2, false);
+		//		assertEquals(parameter2Index + 1, method.getChildren().indexOf(parameter2));
+		//		method.moveChild(parameter2, false); //parameter should not be moved further
+		//		assertEquals(parameter2Index + 1, method.getChildren().indexOf(parameter2));
+		//
+		//		method.moveChild(testCase2, true);
+		//		assertEquals(testCase2Index - 1, method.getChildren().indexOf(testCase2));
+		//		method.moveChild(testCase2, true); //test case should not be moved further
+		//		assertEquals(testCase2Index - 1, method.getChildren().indexOf(testCase2));
+		//		method.moveChild(testCase2, false);
+		//		assertEquals(testCase2Index, method.getChildren().indexOf(testCase2));
+		//		method.moveChild(testCase2, false);
+		//		assertEquals(testCase2Index + 1, method.getChildren().indexOf(testCase2));
+		//		method.moveChild(testCase2, false); //test case should not be moved further
+		//		assertEquals(testCase2Index + 1, method.getChildren().indexOf(testCase2));
+		//
+		//		method.moveChild(constraint2, true);
+		//		assertEquals(constraint2Index - 1, method.getChildren().indexOf(constraint2));
+		//		method.moveChild(constraint2, true); //test case should not be moved further
+		//		assertEquals(constraint2Index - 1, method.getChildren().indexOf(constraint2));
+		//		method.moveChild(constraint2, false);
+		//		assertEquals(constraint2Index, method.getChildren().indexOf(constraint2));
+		//		method.moveChild(constraint2, false);
+		//		assertEquals(constraint2Index + 1, method.getChildren().indexOf(constraint2));
+		//		method.moveChild(constraint2, false); //test case should not be moved further
+		//		assertEquals(constraint2Index + 1, method.getChildren().indexOf(constraint2));
+		//
 	}
 
 	@Test
@@ -257,63 +257,63 @@ public class MethodNodeTest {
 
 	@Test
 	public void removeChoicesParentParameterTest(){
-//		MethodNode method = new MethodNode("method");
-//		ParameterNode parameter = new ParameterNode("parameter", "type", "0", false);
-//		ChoiceNode choice = new ChoiceNode("choice", "0");
-//		Constraint mentioningConstraint = new Constraint(new DecomposedParameterStatement(parameter, Relation.EQUAL, choice), new StaticStatement(false));
-//		Constraint notMentioningConstraint = new Constraint(new StaticStatement(false), new StaticStatement(false));
-//		ConstraintNode mentioningConstraintNode = new ConstraintNode("constraint", mentioningConstraint);
-//		ConstraintNode notMentioningConstraintNode = new ConstraintNode("constraint", notMentioningConstraint);
-//		TestCaseNode testCaseNode = new TestCaseNode("name", new ArrayList<ChoiceNode>());
-//
-//		parameter.addChoice(choice);
-//		method.addParameter(parameter);
-//		method.addConstraint(notMentioningConstraintNode);
-//		method.addConstraint(mentioningConstraintNode);
-//		method.addTestCase(testCaseNode);
-//
-//		assertTrue(method.getParameters().contains(parameter));
-//		assertTrue(method.getParameters(false).contains(parameter));
-//		assertTrue(method.getConstraintNodes().contains(mentioningConstraintNode));
-//		assertTrue(method.getConstraintNodes().contains(notMentioningConstraintNode));
-//		assertTrue(method.getTestCases().contains(testCaseNode));
-//
-//		assertTrue(method.removeParameter(parameter));
-//		assertFalse(method.getParameters().contains(parameter));
-//		assertFalse(method.getParameters(false).contains(parameter));
-//		assertFalse(method.getConstraintNodes().contains(mentioningConstraintNode));
-//		assertTrue(method.getConstraintNodes().contains(notMentioningConstraintNode));
+		//		MethodNode method = new MethodNode("method");
+		//		ParameterNode parameter = new ParameterNode("parameter", "type", "0", false);
+		//		ChoiceNode choice = new ChoiceNode("choice", "0");
+		//		Constraint mentioningConstraint = new Constraint(new DecomposedParameterStatement(parameter, Relation.EQUAL, choice), new StaticStatement(false));
+		//		Constraint notMentioningConstraint = new Constraint(new StaticStatement(false), new StaticStatement(false));
+		//		ConstraintNode mentioningConstraintNode = new ConstraintNode("constraint", mentioningConstraint);
+		//		ConstraintNode notMentioningConstraintNode = new ConstraintNode("constraint", notMentioningConstraint);
+		//		TestCaseNode testCaseNode = new TestCaseNode("name", new ArrayList<ChoiceNode>());
+		//
+		//		parameter.addChoice(choice);
+		//		method.addParameter(parameter);
+		//		method.addConstraint(notMentioningConstraintNode);
+		//		method.addConstraint(mentioningConstraintNode);
+		//		method.addTestCase(testCaseNode);
+		//
+		//		assertTrue(method.getParameters().contains(parameter));
+		//		assertTrue(method.getParameters(false).contains(parameter));
+		//		assertTrue(method.getConstraintNodes().contains(mentioningConstraintNode));
+		//		assertTrue(method.getConstraintNodes().contains(notMentioningConstraintNode));
+		//		assertTrue(method.getTestCases().contains(testCaseNode));
+		//
+		//		assertTrue(method.removeParameter(parameter));
+		//		assertFalse(method.getParameters().contains(parameter));
+		//		assertFalse(method.getParameters(false).contains(parameter));
+		//		assertFalse(method.getConstraintNodes().contains(mentioningConstraintNode));
+		//		assertTrue(method.getConstraintNodes().contains(notMentioningConstraintNode));
 	}
 
 	@Test
 	public void removeExpectedParameterTest(){
-//		MethodNode method = new MethodNode("method");
-//		ParameterNode parameter = new ParameterNode("parameter", "type", "0", true);
-//		parameter.setDefaultValueString("value");
-//		ChoiceNode choice = new ChoiceNode("choice", "value2");
-//		Constraint mentioningConstraint = new Constraint(new ExpectedValueStatement(parameter, choice), new StaticStatement(false));
-//		Constraint notMentioningConstraint = new Constraint(new StaticStatement(false), new StaticStatement(false));
-//		ConstraintNode mentioningConstraintNode = new ConstraintNode("constraint", mentioningConstraint);
-//		ConstraintNode notMentioningConstraintNode = new ConstraintNode("constraint", notMentioningConstraint);
-//		TestCaseNode testCaseNode = new TestCaseNode("name", new ArrayList<ChoiceNode>());
-//
-//		parameter.addChoice(choice);
-//		method.addParameter(parameter);
-//		method.addConstraint(notMentioningConstraintNode);
-//		method.addConstraint(mentioningConstraintNode);
-//		method.addTestCase(testCaseNode);
-//
-//		assertTrue(method.getParameters().contains(parameter));
-//		assertTrue(method.getParameters(true).contains(parameter));
-//		assertTrue(method.getConstraintNodes().contains(mentioningConstraintNode));
-//		assertTrue(method.getConstraintNodes().contains(notMentioningConstraintNode));
-//		assertTrue(method.getTestCases().contains(testCaseNode));
-//
-//		assertTrue(method.removeParameter(parameter));
-//		assertFalse(method.getParameters().contains(parameter));
-//		assertFalse(method.getParameters(true).contains(parameter));
-//		assertFalse(method.getConstraintNodes().contains(mentioningConstraintNode));
-//		assertTrue(method.getConstraintNodes().contains(notMentioningConstraintNode));
+		//		MethodNode method = new MethodNode("method");
+		//		ParameterNode parameter = new ParameterNode("parameter", "type", "0", true);
+		//		parameter.setDefaultValueString("value");
+		//		ChoiceNode choice = new ChoiceNode("choice", "value2");
+		//		Constraint mentioningConstraint = new Constraint(new ExpectedValueStatement(parameter, choice), new StaticStatement(false));
+		//		Constraint notMentioningConstraint = new Constraint(new StaticStatement(false), new StaticStatement(false));
+		//		ConstraintNode mentioningConstraintNode = new ConstraintNode("constraint", mentioningConstraint);
+		//		ConstraintNode notMentioningConstraintNode = new ConstraintNode("constraint", notMentioningConstraint);
+		//		TestCaseNode testCaseNode = new TestCaseNode("name", new ArrayList<ChoiceNode>());
+		//
+		//		parameter.addChoice(choice);
+		//		method.addParameter(parameter);
+		//		method.addConstraint(notMentioningConstraintNode);
+		//		method.addConstraint(mentioningConstraintNode);
+		//		method.addTestCase(testCaseNode);
+		//
+		//		assertTrue(method.getParameters().contains(parameter));
+		//		assertTrue(method.getParameters(true).contains(parameter));
+		//		assertTrue(method.getConstraintNodes().contains(mentioningConstraintNode));
+		//		assertTrue(method.getConstraintNodes().contains(notMentioningConstraintNode));
+		//		assertTrue(method.getTestCases().contains(testCaseNode));
+		//
+		//		assertTrue(method.removeParameter(parameter));
+		//		assertFalse(method.getParameters().contains(parameter));
+		//		assertFalse(method.getParameters(true).contains(parameter));
+		//		assertFalse(method.getConstraintNodes().contains(mentioningConstraintNode));
+		//		assertTrue(method.getConstraintNodes().contains(notMentioningConstraintNode));
 	}
 
 	@Test
@@ -344,123 +344,123 @@ public class MethodNodeTest {
 
 	@Test
 	public void testReplaceParameterWithExpected(){
-//		MethodNode method = new MethodNode("method");
-//		ParameterNode parameter = new ParameterNode("parameter", "type","0",  false);
-//		ChoiceNode choice = new ChoiceNode("choice", "value");
-//		Constraint mentioningConstraint = new Constraint(new DecomposedParameterStatement(parameter, Relation.EQUAL, choice), new StaticStatement(false));
-//		Constraint notMentioningConstraint = new Constraint(new StaticStatement(false), new StaticStatement(false));
-//		ConstraintNode mentioningConstraintNode = new ConstraintNode("constraint", mentioningConstraint);
-//		ConstraintNode notMentioningConstraintNode = new ConstraintNode("constraint", notMentioningConstraint);
-//		List<ChoiceNode> testData = new ArrayList<ChoiceNode>();
-//		testData.add(choice);
-//		TestCaseNode testCaseNode = new TestCaseNode("name", testData);
-//
-//		ParameterNode newExpCat = new ParameterNode("expCat", "type", "0", true);
-//		newExpCat.setDefaultValueString("expected value");
-//		parameter.addChoice(choice);
-//		method.addParameter(parameter);
-//		method.addConstraint(notMentioningConstraintNode);
-//		method.addConstraint(mentioningConstraintNode);
-//		method.addTestCase(testCaseNode);
-//
-//		method.replaceParameter(0, newExpCat);
-//
-//		assertFalse(method.getParameters().contains(parameter));
-//		assertFalse(method.getParameters(false).contains(parameter));
-//		assertTrue(method.getParameters().contains(newExpCat));
-//		assertTrue(method.getParameters(true).contains(newExpCat));
-//		assertTrue(method.getConstraintNodes().contains(notMentioningConstraintNode));
-//		assertFalse(method.getConstraintNodes().contains(mentioningConstraintNode));
-//		assertTrue(method.getTestCases().contains(testCaseNode));
-//		assertEquals("expected value", testCaseNode.getTestData().get(0).getValueString());
+		//		MethodNode method = new MethodNode("method");
+		//		ParameterNode parameter = new ParameterNode("parameter", "type","0",  false);
+		//		ChoiceNode choice = new ChoiceNode("choice", "value");
+		//		Constraint mentioningConstraint = new Constraint(new DecomposedParameterStatement(parameter, Relation.EQUAL, choice), new StaticStatement(false));
+		//		Constraint notMentioningConstraint = new Constraint(new StaticStatement(false), new StaticStatement(false));
+		//		ConstraintNode mentioningConstraintNode = new ConstraintNode("constraint", mentioningConstraint);
+		//		ConstraintNode notMentioningConstraintNode = new ConstraintNode("constraint", notMentioningConstraint);
+		//		List<ChoiceNode> testData = new ArrayList<ChoiceNode>();
+		//		testData.add(choice);
+		//		TestCaseNode testCaseNode = new TestCaseNode("name", testData);
+		//
+		//		ParameterNode newExpCat = new ParameterNode("expCat", "type", "0", true);
+		//		newExpCat.setDefaultValueString("expected value");
+		//		parameter.addChoice(choice);
+		//		method.addParameter(parameter);
+		//		method.addConstraint(notMentioningConstraintNode);
+		//		method.addConstraint(mentioningConstraintNode);
+		//		method.addTestCase(testCaseNode);
+		//
+		//		method.replaceParameter(0, newExpCat);
+		//
+		//		assertFalse(method.getParameters().contains(parameter));
+		//		assertFalse(method.getParameters(false).contains(parameter));
+		//		assertTrue(method.getParameters().contains(newExpCat));
+		//		assertTrue(method.getParameters(true).contains(newExpCat));
+		//		assertTrue(method.getConstraintNodes().contains(notMentioningConstraintNode));
+		//		assertFalse(method.getConstraintNodes().contains(mentioningConstraintNode));
+		//		assertTrue(method.getTestCases().contains(testCaseNode));
+		//		assertEquals("expected value", testCaseNode.getTestData().get(0).getValueString());
 	}
 
 	@Test
 	public void testReplaceParameterWithChoicesParent(){
-//		MethodNode method = new MethodNode("method");
-//		ParameterNode parameter = new ParameterNode("parameter", "type", "0", true);
-//		ChoiceNode choice = new ChoiceNode("choice", "value");
-//		Constraint mentioningConstraint = new Constraint(new ExpectedValueStatement(parameter, choice), new StaticStatement(false));
-//		Constraint notMentioningConstraint = new Constraint(new StaticStatement(false), new StaticStatement(false));
-//		ConstraintNode mentioningConstraintNode = new ConstraintNode("constraint", mentioningConstraint);
-//		ConstraintNode notMentioningConstraintNode = new ConstraintNode("constraint", notMentioningConstraint);
-//		List<ChoiceNode> testData = new ArrayList<ChoiceNode>();
-//		testData.add(choice);
-//		TestCaseNode testCaseNode = new TestCaseNode("name", testData);
-//
-//		ParameterNode newCat = new ParameterNode("newCat", "type", "0", false);
-//		parameter.addChoice(choice);
-//		method.addParameter(parameter);
-//		method.addConstraint(notMentioningConstraintNode);
-//		method.addConstraint(mentioningConstraintNode);
-//		method.addTestCase(testCaseNode);
-//
-//		method.replaceParameter(0, newCat);
-//
-//		assertFalse(method.getParameters().contains(parameter));
-//		assertFalse(method.getParameters(true).contains(parameter));
-//		assertTrue(method.getParameters().contains(newCat));
-//		assertTrue(method.getParameters(false).contains(newCat));
-//		assertTrue(method.getConstraintNodes().contains(notMentioningConstraintNode));
-//		assertFalse(method.getConstraintNodes().contains(mentioningConstraintNode));
-//		assertEquals(0, method.getTestCases().size());
+		//		MethodNode method = new MethodNode("method");
+		//		ParameterNode parameter = new ParameterNode("parameter", "type", "0", true);
+		//		ChoiceNode choice = new ChoiceNode("choice", "value");
+		//		Constraint mentioningConstraint = new Constraint(new ExpectedValueStatement(parameter, choice), new StaticStatement(false));
+		//		Constraint notMentioningConstraint = new Constraint(new StaticStatement(false), new StaticStatement(false));
+		//		ConstraintNode mentioningConstraintNode = new ConstraintNode("constraint", mentioningConstraint);
+		//		ConstraintNode notMentioningConstraintNode = new ConstraintNode("constraint", notMentioningConstraint);
+		//		List<ChoiceNode> testData = new ArrayList<ChoiceNode>();
+		//		testData.add(choice);
+		//		TestCaseNode testCaseNode = new TestCaseNode("name", testData);
+		//
+		//		ParameterNode newCat = new ParameterNode("newCat", "type", "0", false);
+		//		parameter.addChoice(choice);
+		//		method.addParameter(parameter);
+		//		method.addConstraint(notMentioningConstraintNode);
+		//		method.addConstraint(mentioningConstraintNode);
+		//		method.addTestCase(testCaseNode);
+		//
+		//		method.replaceParameter(0, newCat);
+		//
+		//		assertFalse(method.getParameters().contains(parameter));
+		//		assertFalse(method.getParameters(true).contains(parameter));
+		//		assertTrue(method.getParameters().contains(newCat));
+		//		assertTrue(method.getParameters(false).contains(newCat));
+		//		assertTrue(method.getConstraintNodes().contains(notMentioningConstraintNode));
+		//		assertFalse(method.getConstraintNodes().contains(mentioningConstraintNode));
+		//		assertEquals(0, method.getTestCases().size());
 	}
 
 	//TODO move the test to different place
-//	@Test
-//	public void testChangeParameterTypeToExpected(){
-//		MethodNode method = new MethodNode("method");
-//		ParameterNode parameter = new ParameterNode("parameter", "type", false);
-//		ChoiceNode choice = new ChoiceNode("choice", "value");
-//		Constraint mentioningConstraint = new Constraint(new DecomposedParameterStatement(parameter, Relation.EQUAL, choice), new StaticStatement(false));
-//		Constraint notMentioningConstraint = new Constraint(new StaticStatement(false), new StaticStatement(false));
-//		ConstraintNode mentioningConstraintNode = new ConstraintNode("constraint", mentioningConstraint);
-//		ConstraintNode notMentioningConstraintNode = new ConstraintNode("constraint", notMentioningConstraint);
-//		List<ChoiceNode> testData = new ArrayList<ChoiceNode>();
-//		testData.add(choice);
-//		TestCaseNode testCaseNode = new TestCaseNode("name", testData);
-//
-//		parameter.addChoice(choice);
-//		method.addParameter(parameter);
-//		method.addConstraint(notMentioningConstraintNode);
-//		method.addConstraint(mentioningConstraintNode);
-//		method.addTestCase(testCaseNode);
-//
-//		parameter.getMethod().changeParameterExpectedStatus(parameter,true);
-//
-//		assertTrue(method.getParameters().contains(parameter));
-//		assertTrue(method.getConstraintNodes().contains(notMentioningConstraintNode));
-//		assertFalse(method.getConstraintNodes().contains(mentioningConstraintNode));
-//		assertTrue(method.getTestCases().contains(testCaseNode));
-//		assertEquals("value", testCaseNode.getTestData().get(0).getValueString());
-//	}
+	//	@Test
+	//	public void testChangeParameterTypeToExpected(){
+	//		MethodNode method = new MethodNode("method");
+	//		ParameterNode parameter = new ParameterNode("parameter", "type", false);
+	//		ChoiceNode choice = new ChoiceNode("choice", "value");
+	//		Constraint mentioningConstraint = new Constraint(new DecomposedParameterStatement(parameter, Relation.EQUAL, choice), new StaticStatement(false));
+	//		Constraint notMentioningConstraint = new Constraint(new StaticStatement(false), new StaticStatement(false));
+	//		ConstraintNode mentioningConstraintNode = new ConstraintNode("constraint", mentioningConstraint);
+	//		ConstraintNode notMentioningConstraintNode = new ConstraintNode("constraint", notMentioningConstraint);
+	//		List<ChoiceNode> testData = new ArrayList<ChoiceNode>();
+	//		testData.add(choice);
+	//		TestCaseNode testCaseNode = new TestCaseNode("name", testData);
+	//
+	//		parameter.addChoice(choice);
+	//		method.addParameter(parameter);
+	//		method.addConstraint(notMentioningConstraintNode);
+	//		method.addConstraint(mentioningConstraintNode);
+	//		method.addTestCase(testCaseNode);
+	//
+	//		parameter.getMethod().changeParameterExpectedStatus(parameter,true);
+	//
+	//		assertTrue(method.getParameters().contains(parameter));
+	//		assertTrue(method.getConstraintNodes().contains(notMentioningConstraintNode));
+	//		assertFalse(method.getConstraintNodes().contains(mentioningConstraintNode));
+	//		assertTrue(method.getTestCases().contains(testCaseNode));
+	//		assertEquals("value", testCaseNode.getTestData().get(0).getValueString());
+	//	}
 
-//	@Test
-//	public void testChangeParameterTypeToDecomposed(){
-//		MethodNode method = new MethodNode("method");
-//		ParameterNode parameter = new ParameterNode("parameter", "type", true);
-//		ChoiceNode choice = new ChoiceNode("choice", "value");
-//		Constraint mentioningConstraint = new Constraint(new ExpectedValueStatement(parameter, choice), new StaticStatement(false));
-//		Constraint notMentioningConstraint = new Constraint(new StaticStatement(false), new StaticStatement(false));
-//		ConstraintNode mentioningConstraintNode = new ConstraintNode("constraint", mentioningConstraint);
-//		ConstraintNode notMentioningConstraintNode = new ConstraintNode("constraint", notMentioningConstraint);
-//		List<ChoiceNode> testData = new ArrayList<ChoiceNode>();
-//		testData.add(choice);
-//		TestCaseNode testCaseNode = new TestCaseNode("name", testData);
-//
-//		parameter.addChoice(choice);
-//		method.addParameter(parameter);
-//		method.addConstraint(notMentioningConstraintNode);
-//		method.addConstraint(mentioningConstraintNode);
-//		method.addTestCase(testCaseNode);
-//
-//		parameter.getMethod().changeParameterExpectedStatus(parameter,false);
-//
-//		assertTrue(method.getParameters().contains(parameter));
-//		assertTrue(method.getConstraintNodes().contains(notMentioningConstraintNode));
-//		assertFalse(method.getConstraintNodes().contains(mentioningConstraintNode));
-//		assertEquals(0, method.getTestCases().size());
-//	}
+	//	@Test
+	//	public void testChangeParameterTypeToDecomposed(){
+	//		MethodNode method = new MethodNode("method");
+	//		ParameterNode parameter = new ParameterNode("parameter", "type", true);
+	//		ChoiceNode choice = new ChoiceNode("choice", "value");
+	//		Constraint mentioningConstraint = new Constraint(new ExpectedValueStatement(parameter, choice), new StaticStatement(false));
+	//		Constraint notMentioningConstraint = new Constraint(new StaticStatement(false), new StaticStatement(false));
+	//		ConstraintNode mentioningConstraintNode = new ConstraintNode("constraint", mentioningConstraint);
+	//		ConstraintNode notMentioningConstraintNode = new ConstraintNode("constraint", notMentioningConstraint);
+	//		List<ChoiceNode> testData = new ArrayList<ChoiceNode>();
+	//		testData.add(choice);
+	//		TestCaseNode testCaseNode = new TestCaseNode("name", testData);
+	//
+	//		parameter.addChoice(choice);
+	//		method.addParameter(parameter);
+	//		method.addConstraint(notMentioningConstraintNode);
+	//		method.addConstraint(mentioningConstraintNode);
+	//		method.addTestCase(testCaseNode);
+	//
+	//		parameter.getMethod().changeParameterExpectedStatus(parameter,false);
+	//
+	//		assertTrue(method.getParameters().contains(parameter));
+	//		assertTrue(method.getConstraintNodes().contains(notMentioningConstraintNode));
+	//		assertFalse(method.getConstraintNodes().contains(mentioningConstraintNode));
+	//		assertEquals(0, method.getTestCases().size());
+	//	}
 
 	@Test
 	public void testChoiceRemoved(){
@@ -491,10 +491,10 @@ public class MethodNodeTest {
 		assertTrue(method.getTestCases().contains(mentioningTestCaseNode));
 
 		parameter.removeChoice(choice);
-//		assertFalse(method.getConstraintNodes().contains(mentioningConstraintNode));
-//		assertTrue(method.getConstraintNodes().contains(notMentioningConstraintNode));
-//		assertTrue(method.getTestCases().contains(notMentioningTestCaseNode));
-//		assertFalse(method.getTestCases().contains(mentioningTestCaseNode));
+		//		assertFalse(method.getConstraintNodes().contains(mentioningConstraintNode));
+		//		assertTrue(method.getConstraintNodes().contains(notMentioningConstraintNode));
+		//		assertTrue(method.getTestCases().contains(notMentioningTestCaseNode));
+		//		assertFalse(method.getTestCases().contains(mentioningTestCaseNode));
 
 	}
 
@@ -504,11 +504,11 @@ public class MethodNodeTest {
 		MethodNode m1 = new MethodNode("m");
 		MethodNode m2 = new MethodNode("m");
 
-		assertTrue(m1.compare(m2));
+		assertTrue(m1.isMatch(m2));
 		m1.setName("m1");
-		assertFalse(m1.compare(m2));
+		assertFalse(m1.isMatch(m2));
 		m2.setName("m1");
-		assertTrue(m1.compare(m2));
+		assertTrue(m1.isMatch(m2));
 	}
 
 	@Test
@@ -516,24 +516,24 @@ public class MethodNodeTest {
 		MethodNode m1 = new MethodNode("m");
 		MethodNode m2 = new MethodNode("m");
 
-		assertTrue(m1.compare(m2));
+		assertTrue(m1.isMatch(m2));
 		m1.setName("m1");
-		assertFalse(m1.compare(m2));
+		assertFalse(m1.isMatch(m2));
 		m2.setName("m1");
-		assertTrue(m1.compare(m2));
+		assertTrue(m1.isMatch(m2));
 
 		MethodParameterNode c1 = new MethodParameterNode("c", "type", "0", true);
 		MethodParameterNode c2 = new MethodParameterNode("c", "type", "0", true);
 
 		m1.addParameter(c1);
-		assertFalse(m1.compare(m2));
+		assertFalse(m1.isMatch(m2));
 		m2.addParameter(c2);
-		assertTrue(m1.compare(m2));
+		assertTrue(m1.isMatch(m2));
 
 		c1.setName("c1");
-		assertFalse(m1.compare(m2));
+		assertFalse(m1.isMatch(m2));
 		c2.setName("c1");
-		assertTrue(m1.compare(m2));
+		assertTrue(m1.isMatch(m2));
 	}
 
 	@Test
@@ -545,14 +545,14 @@ public class MethodNodeTest {
 		ConstraintNode c2 = new ConstraintNode("c", new Constraint(new StaticStatement(true), new StaticStatement(true)));
 
 		m1.addConstraint(c1);
-		assertFalse(m1.compare(m2));
+		assertFalse(m1.isMatch(m2));
 		m2.addConstraint(c2);
-		assertTrue(m1.compare(m2));
+		assertTrue(m1.isMatch(m2));
 
 		c1.setName("c1");
-		assertFalse(m1.compare(m2));
+		assertFalse(m1.isMatch(m2));
 		c2.setName("c1");
-		assertTrue(m1.compare(m2));
+		assertTrue(m1.isMatch(m2));
 	}
 
 	@Test
@@ -564,22 +564,22 @@ public class MethodNodeTest {
 		TestCaseNode tc2 = new TestCaseNode("tc", new ArrayList<ChoiceNode>());
 
 		m1.addTestCase(tc1);
-		assertFalse(m1.compare(m2));
+		assertFalse(m1.isMatch(m2));
 		m2.addTestCase(tc2);
-		assertTrue(m1.compare(m2));
+		assertTrue(m1.isMatch(m2));
 
 		tc1.setName("tc1");
-		assertFalse(m1.compare(m2));
+		assertFalse(m1.isMatch(m2));
 		tc2.setName("tc1");
-		assertTrue(m1.compare(m2));
-}
+		assertTrue(m1.isMatch(m2));
+	}
 
 	@Test
 	public void compareSmokeTest(){
 		for(int i = 0; i < 5; i++){
 			RandomModelGenerator gen = new RandomModelGenerator();
 			MethodNode m = gen.generateMethod(3, 3, 10);
-			assertTrue(m.compare(m));
+			assertTrue(m.isMatch(m));
 		}
 	}
 

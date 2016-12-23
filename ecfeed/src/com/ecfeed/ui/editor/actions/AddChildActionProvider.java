@@ -16,7 +16,6 @@ import java.util.List;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 
-import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ChoiceNode;
@@ -32,6 +31,7 @@ import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.utils.ExceptionHelper;
+import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.modelif.AbstractNodeInterface;
@@ -291,7 +291,7 @@ public class AddChildActionProvider {
 
 			@Override
 			public Object visit(MethodParameterNode node) throws Exception {
-				return (node.isLinked() == false) && (node.isExpected() == false || JavaUtils.isUserType(node.getType()));
+				return (node.isLinked() == false) && (node.isExpected() == false || JavaTypeHelper.isUserType(node.getType()));
 			}
 
 			@Override

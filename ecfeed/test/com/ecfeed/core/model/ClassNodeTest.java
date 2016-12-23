@@ -119,36 +119,36 @@ public class ClassNodeTest extends ClassNode {
 		ClassNode c1 = new ClassNode("c1");
 		ClassNode c2 = new ClassNode("c2");
 
-		assertFalse(c1.compare(c2));
+		assertFalse(c1.isMatch(c2));
 
 		c2.setName("c1");
-		assertTrue(c1.compare(c2));
+		assertTrue(c1.isMatch(c2));
 
 		MethodNode m1 = new MethodNode("m1");
 		MethodNode m2 = new MethodNode("m2");
 
 		c1.addMethod(m1);
-		assertFalse(c1.compare(c2));
+		assertFalse(c1.isMatch(c2));
 
 		c2.addMethod(m2);
-		assertFalse(c1.compare(c2));
+		assertFalse(c1.isMatch(c2));
 
 		m2.setName("m1");
-		assertTrue(c1.compare(c2));
+		assertTrue(c1.isMatch(c2));
 
 		GlobalParameterNode parameter1 = new GlobalParameterNode("parameter1", "int");
 		c1.addParameter(parameter1);
-		assertFalse(c1.compare(c2));
+		assertFalse(c1.isMatch(c2));
 		GlobalParameterNode parameter2 = new GlobalParameterNode("parameter1", "int");
 		c2.addParameter(parameter2);
-		assertTrue(c1.compare(c2));
+		assertTrue(c1.isMatch(c2));
 		parameter1.setName("newName");
-		assertFalse(c1.compare(c2));
+		assertFalse(c1.isMatch(c2));
 		parameter2.setName("newName");
-		assertTrue(c1.compare(c2));
+		assertTrue(c1.isMatch(c2));
 		parameter1.setType("float");
-		assertFalse(c1.compare(c2));
+		assertFalse(c1.isMatch(c2));
 		parameter2.setType("float");
-		assertTrue(c1.compare(c2));
+		assertTrue(c1.isMatch(c2));
 	}
 }

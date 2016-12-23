@@ -33,7 +33,7 @@ public class ModelTestUtils {
 
 	public static void assertElementsEqual(AbstractNode n, AbstractNode n1) {
 		ModelStringifier stringifier = new ModelStringifier();
-		if(n.compare(n1) == false){
+		if(n.isMatch(n1) == false){
 			fail("Parsed element differs from original\n" + stringifier.stringify(n, 0) + "\n" + stringifier.stringify(n1, 0));
 		}
 	}
@@ -45,7 +45,7 @@ public class ModelTestUtils {
 		List<AbstractNode> l1 = new ArrayList<>(col1);
 		List<AbstractNode> l2 = new ArrayList<>(col2);
 		for(int i = 0; i < col1.size(); ++i){
-			if(l1.get(i).compare(l2.get(i)) == false){
+			if(l1.get(i).isMatch(l2.get(i)) == false){
 				fail("Parsed collection differs from original at element " + i +"\n" + l1.get(i) + "\n" + l2.get(i));
 			}
 		}

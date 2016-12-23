@@ -31,8 +31,10 @@ public class ConstraintNode extends AbstractNode{
 	}
 
 	@Override
-	public ConstraintNode getCopy(){
-		return new ConstraintNode(getName(), fConstraint.getCopy());
+	public ConstraintNode makeClone(){
+		ConstraintNode copy = new ConstraintNode(getName(), fConstraint.getCopy());
+		copy.setProperties(getProperties());
+		return copy;
 	}
 
 	public ConstraintNode(String name, Constraint constraint) {
@@ -103,7 +105,7 @@ public class ConstraintNode extends AbstractNode{
 	}
 
 	public ConstraintNode getCopy(MethodNode method){
-		ConstraintNode copy = getCopy();
+		ConstraintNode copy = makeClone();
 		if(copy.updateReferences(method))
 			return copy;
 		else
@@ -111,7 +113,7 @@ public class ConstraintNode extends AbstractNode{
 	}
 
 	@Override
-	public boolean compare(AbstractNode node){
+	public boolean isMatch(AbstractNode node){
 		if(node instanceof ConstraintNode == false){
 			return false;
 		}
@@ -124,7 +126,7 @@ public class ConstraintNode extends AbstractNode{
 			return false;
 		}
 
-		return super.compare(node);
+		return super.isMatch(node);
 	}
 
 	@Override

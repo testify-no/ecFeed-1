@@ -22,13 +22,12 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.Transfer;
-import org.eclipse.ui.forms.widgets.Section;
 
-import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.GlobalParameterNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
+import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.ui.common.NodeViewerColumnLabelProvider;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.modelif.AbstractParameterInterface;
@@ -41,7 +40,6 @@ import com.ecfeed.ui.modelif.ParametersParentInterface;
 
 public class MethodParametersViewer extends AbstractParametersViewer {
 
-	private final static int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 	private final String EMPTY_STRING = "";
 	private final String NOT_LINKED = "NOT LINKED";
 
@@ -82,7 +80,7 @@ public class MethodParametersViewer extends AbstractParametersViewer {
 		@Override
 		protected boolean canEdit(Object element) {
 			MethodParameterNode parameter = (MethodParameterNode)element;
-			return parameter.isLinked() == false || JavaUtils.isUserType(parameter.getType());
+			return parameter.isLinked() == false || JavaTypeHelper.isUserType(parameter.getType());
 		}
 
 		@Override
@@ -115,7 +113,7 @@ public class MethodParametersViewer extends AbstractParametersViewer {
 			if(expectedValues.contains(parameter.getDefaultValue()) == false){
 				expectedValues.add(parameter.getDefaultValue());
 			}
-			if(JavaUtils.isUserType(parameter.getType())){
+			if(JavaTypeHelper.isUserType(parameter.getType())){
 				for(ChoiceNode leaf : parameter.getLeafChoices()){
 					if(!expectedValues.contains(leaf.getValueString())){
 						expectedValues.add(leaf.getValueString());
@@ -240,7 +238,7 @@ public class MethodParametersViewer extends AbstractParametersViewer {
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext, 
 			IFileInfoProvider fileInfoProvider) {
-		super(sectionContext, updateContext, fileInfoProvider, STYLE);
+		super(sectionContext, updateContext, fileInfoProvider, StyleDistributor.getSectionStyle());
 
 		fParameterIf = (MethodParameterInterface)getParameterInterface();
 		getSection().setText("Parameters");

@@ -40,28 +40,28 @@ public class TestCaseNodeTest {
 		TestCaseNode tc2 = new TestCaseNode("name", td2);
 		TestCaseNode tc3 = new TestCaseNode("name", td3);
 
-		assertTrue(tc1.compare(tc2));
-		assertFalse(tc1.compare(tc3));
+		assertTrue(tc1.isMatch(tc2));
+		assertFalse(tc1.isMatch(tc3));
 
 		tc1.setName("tc1");
-		assertFalse(tc1.compare(tc2));
+		assertFalse(tc1.isMatch(tc2));
 		tc2.setName("tc1");
-		assertTrue(tc1.compare(tc2));
+		assertTrue(tc1.isMatch(tc2));
 
 		p1.setName("p1");
-		assertFalse(tc1.compare(tc2));
+		assertFalse(tc1.isMatch(tc2));
 		p2.setName("p1");
-		assertTrue(tc1.compare(tc2));
+		assertTrue(tc1.isMatch(tc2));
 	}
 
-//	@Test
+	//	@Test
 	public void compareSmokeTest(){
 		for(int i = 0; i < 5; i++){
 			RandomModelGenerator gen = new RandomModelGenerator();
 			MethodNode m = gen.generateMethod(5, 0, 0);
 			TestCaseNode t = gen.generateTestCase(m);
 
-			assertTrue(t.compare(t));
+			assertTrue(t.isMatch(t));
 		}
 	}
 }

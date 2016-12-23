@@ -26,6 +26,7 @@ import com.ecfeed.android.external.ApkInstallerExt;
 import com.ecfeed.android.external.DeviceCheckerExt;
 import com.ecfeed.core.adapter.java.ILoaderProvider;
 import com.ecfeed.core.adapter.java.ModelClassLoader;
+import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.runner.ITestMethodInvoker;
 import com.ecfeed.core.runner.JavaTestRunner;
@@ -41,14 +42,14 @@ public class StaticTestExecutionSupport extends TestExecutionSupport{
 	private JavaTestRunner fRunner;
 	private List<TestCaseNode> fFailedTests;
 	private IFileInfoProvider fFileInfoProvider;
-	private boolean fRunOnAndroid;
+	private TestRunMode fTestRunMode;
 
 	private class ExecuteRunnable implements IRunnableWithProgress{
 
 		@Override
 		public void run(IProgressMonitor progressMonitor)
 				throws InvocationTargetException, InterruptedException {
-			if (fRunOnAndroid) {
+			if (fTestRunMode == TestRunMode.ANDROID) {
 				DeviceCheckerExt.checkIfOneDeviceAttached();
 				EclipseProjectHelper projectHelper = new EclipseProjectHelper(fFileInfoProvider); 
 				new ApkInstallerExt(projectHelper).installApplicationsIfModified();
@@ -62,7 +63,14 @@ public class StaticTestExecutionSupport extends TestExecutionSupport{
 				if(progressMonitor.isCanceled() == false){
 					try {
 						setTestProgressMessage();
-						fRunner.setTargetForTest(testCase.getMethod());
+
+						MethodNode methodNode = testCase.getMethod();
+						fRunner.setTarget(methodNode);
+
+						if (fTestRunMode == TestRunMode.JUNIT) {
+							fRunner.createTestClassAndMethod(methodNode);
+						}
+
 						fRunner.runTestCase(testCase.getTestData());
 					} catch (RunnerException e) {
 						addFailedTest(e);
@@ -78,8 +86,8 @@ public class StaticTestExecutionSupport extends TestExecutionSupport{
 	public StaticTestExecutionSupport(
 			Collection<TestCaseNode> testCases, 
 			ITestMethodInvoker testMethodInvoker, 
-			IFileInfoProvider fileInfoProvider, 
-			boolean runOnAndroid){
+			IFileInfoProvider fileInfoProvider,
+			TestRunMode testRunMode){
 		super();
 		ILoaderProvider loaderProvider = new EclipseLoaderProvider();
 		ModelClassLoader loader = loaderProvider.getLoader(true, null);
@@ -87,7 +95,7 @@ public class StaticTestExecutionSupport extends TestExecutionSupport{
 		fTestCases = testCases;
 		fFailedTests = new ArrayList<>();
 		fFileInfoProvider = fileInfoProvider;
-		fRunOnAndroid = runOnAndroid;
+		fTestRunMode = testRunMode;
 	}
 
 	public void proceed(){

@@ -22,7 +22,6 @@ import org.eclipse.swt.widgets.Display;
 
 import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.adapter.IModelOperation;
-import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.adapter.operations.ChoiceOperationAddLabel;
 import com.ecfeed.core.adapter.operations.ChoiceOperationAddLabels;
 import com.ecfeed.core.adapter.operations.ChoiceOperationRemoveLabels;
@@ -31,6 +30,7 @@ import com.ecfeed.core.adapter.operations.ChoiceOperationSetValue;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ChoiceNode;
+import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.Constants;
 import com.ecfeed.ui.common.EclipseTypeAdapterProvider;
@@ -126,7 +126,7 @@ public class ChoiceInterface extends ChoicesParentInterface{
 
 	@Override
 	public boolean goToImplementationEnabled(){
-		if(JavaUtils.isPrimitive(getTarget().getParameter().getType())){
+		if(JavaTypeHelper.isJavaType(getTarget().getParameter().getType())){
 			return false;
 		}
 		if(getTarget().isAbstract()){
@@ -151,7 +151,7 @@ public class ChoiceInterface extends ChoicesParentInterface{
 	}
 
 	@Override
-	protected ChoiceNode getTarget(){
+	public ChoiceNode getTarget(){
 		return (ChoiceNode)super.getTarget();
 	}
 

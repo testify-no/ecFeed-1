@@ -23,6 +23,7 @@ import com.ecfeed.core.adapter.java.ModelClassLoader;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.runner.Messages;
 import com.ecfeed.core.runner.RunnerException;
+import com.ecfeed.core.utils.JavaTypeHelper;
 
 public class AbstractFrameworkMethod extends FrameworkMethod {
 
@@ -49,7 +50,7 @@ public class AbstractFrameworkMethod extends FrameworkMethod {
 		String type = choice.getParameter().getType();
 		Object value = fValueParser.parseValue(choice);
 
-		if(JavaUtils.isString(type) || JavaUtils.isUserType(type)){
+		if(JavaUtils.isString(type) || JavaTypeHelper.isUserType(type)){
 			//null value acceptable
 			if(choice.getValueString().equals(Constants.VALUE_REPRESENTATION_NULL)){
 				return null;

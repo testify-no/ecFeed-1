@@ -22,9 +22,9 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
-import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ChoiceNode;
+import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.ecfeed.ui.modelif.ChoiceInterface;
@@ -124,7 +124,7 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		fValueCombo = new ComboViewer(fAttributesComposite, style).getCombo();
 		fValueCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		Set<String> items = new LinkedHashSet<String>(AbstractParameterInterface.getSpecialValues(type));
-		if(JavaUtils.isUserType(type)){
+		if(JavaTypeHelper.isUserType(type)){
 			Set<String> usedValues = fChoiceIf.getParameter().getLeafChoiceValues();
 			usedValues.removeAll(items);
 			items.addAll(usedValues);

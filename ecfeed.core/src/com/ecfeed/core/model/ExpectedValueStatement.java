@@ -20,7 +20,7 @@ public class ExpectedValueStatement extends AbstractStatement implements IRelati
 
 	public ExpectedValueStatement(MethodParameterNode parameter, ChoiceNode condition, IPrimitiveTypePredicate predicate) {
 		fParameter = parameter;
-		fCondition = condition.getCopy();
+		fCondition = condition.makeClone();
 		fPredicate = predicate;
 	}
 
@@ -44,7 +44,7 @@ public class ExpectedValueStatement extends AbstractStatement implements IRelati
 		if(values == null) return true;
 		if(fParameter.getMethod() != null){
 			int index = fParameter.getMethod().getParameters().indexOf(fParameter);
-			values.set(index, fCondition.getCopy());
+			values.set(index, fCondition.makeClone());
 		}
 		return true;
 	}
@@ -78,7 +78,7 @@ public class ExpectedValueStatement extends AbstractStatement implements IRelati
 
 	@Override
 	public ExpectedValueStatement getCopy(){
-		return new ExpectedValueStatement(fParameter, fCondition.getCopy(), fPredicate);
+		return new ExpectedValueStatement(fParameter, fCondition.makeClone(), fPredicate);
 	}
 
 	@Override

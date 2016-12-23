@@ -21,6 +21,7 @@ import org.eclipse.swt.widgets.Display;
 import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.ITypeAdapterProvider;
+import com.ecfeed.core.adapter.operations.AbstractNodeOperationSetProperty;
 import com.ecfeed.core.adapter.operations.BulkOperation;
 import com.ecfeed.core.adapter.operations.FactoryRemoveOperation;
 import com.ecfeed.core.adapter.operations.FactoryRenameOperation;
@@ -38,8 +39,10 @@ import com.ecfeed.core.model.GlobalParameterNode;
 import com.ecfeed.core.model.IModelVisitor;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
+import com.ecfeed.core.model.NodePropertyDefs;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.TestCaseNode;
+import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.EclipseImplementationStatusResolver;
 import com.ecfeed.ui.common.EclipseTypeAdapterProvider;
@@ -141,6 +144,17 @@ public class AbstractNodeInterface extends OperationExecuter{
 		return execute(FactoryRenameOperation.getRenameOperation(fTarget, newName), problemTitle);
 	}
 
+	public boolean setProperty(NodePropertyDefs.PropertyId propertyId, String value) {
+		String oldValue = fTarget.getPropertyValue(propertyId);
+
+		if (StringHelper.isEqual(oldValue, value)) {
+			return false;
+		}
+
+		IModelOperation operation = new AbstractNodeOperationSetProperty(propertyId, value, fTarget); 
+		return execute(operation, Messages.DIALOG_SET_PROPERTY_PROBLEM_TITLE);
+	}	
+
 	public boolean editComments() {
 		TextAreaDialog dialog = new TextAreaDialog(Display.getCurrent().getActiveShell(),
 				Messages.DIALOG_EDIT_COMMENTS_TITLE, Messages.DIALOG_EDIT_COMMENTS_MESSAGE, getComments());
@@ -233,7 +247,7 @@ public class AbstractNodeInterface extends OperationExecuter{
 		return fAdapterProvider;
 	}
 
-	protected AbstractNode getTarget(){
+	public AbstractNode getTarget(){
 		return fTarget;
 	}
 

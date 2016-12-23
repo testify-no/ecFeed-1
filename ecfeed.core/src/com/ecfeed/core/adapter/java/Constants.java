@@ -10,7 +10,6 @@
 
 package com.ecfeed.core.adapter.java;
 
-import com.ecfeed.core.utils.JavaTypeHelper;
 
 public class Constants {
 
@@ -18,18 +17,6 @@ public class Constants {
 	public static final int MAX_PARTITION_VALUE_STRING_LENGTH = 512;
 
 	public static final String TYPE_NAME_UNSUPPORTED = "unsupported";
-
-	public static final String[] SUPPORTED_PRIMITIVE_TYPES = new String[]{
-		JavaTypeHelper.TYPE_NAME_INT,
-		JavaTypeHelper.TYPE_NAME_BOOLEAN,
-		JavaTypeHelper.TYPE_NAME_LONG,
-		JavaTypeHelper.TYPE_NAME_SHORT,
-		JavaTypeHelper.TYPE_NAME_BYTE,
-		JavaTypeHelper.TYPE_NAME_DOUBLE,
-		JavaTypeHelper.TYPE_NAME_FLOAT,
-		JavaTypeHelper.TYPE_NAME_CHAR,
-		JavaTypeHelper.TYPE_NAME_STRING
-	};
 
 	public static final String REGEX_JAVA_IDENTIFIER = "[A-Za-z_$][A-Za-z0-9_$]*";
 	public static final String REGEX_ALPHANUMERIC_WITH_SPACES_64 = "[A-Za-z0-9_\\-][A-Za-z0-9_\\- ]{0,63}";	

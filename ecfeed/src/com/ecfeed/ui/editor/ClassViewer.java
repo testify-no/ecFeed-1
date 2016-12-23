@@ -20,7 +20,6 @@ import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.ui.forms.widgets.Section;
 
 import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.adapter.java.JavaUtils;
@@ -39,7 +38,6 @@ import com.ecfeed.ui.modelif.ModelNodesTransfer;
 import com.ecfeed.ui.modelif.RootInterface;
 
 public class ClassViewer extends TableViewerSection {
-	private static final int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 
 	private TableViewerColumn fNameColumn;
 	private RootInterface fRootIf;
@@ -159,7 +157,7 @@ public class ClassViewer extends TableViewerSection {
 			ISectionContext parent, 
 			IModelUpdateContext updateContext, 
 			IFileInfoProvider fileInfoProvider) {
-		super(parent, updateContext, fileInfoProvider, STYLE);
+		super(parent, updateContext, fileInfoProvider, StyleDistributor.getSectionStyle());
 
 		fFileInfoProvider = fileInfoProvider; 
 		fNameColumn.setEditingSupport(new LocalNameEditingSupport());
@@ -169,11 +167,11 @@ public class ClassViewer extends TableViewerSection {
 		fClassIf = new ClassInterface(this, fileInfoProvider);
 
 		setText("Classes");
-		
+
 		if (fFileInfoProvider.isProjectAvailable()) {
 			addButton("Add implemented class", new AddImplementedClassAdapter());
 		}
-		
+
 		addButton("New test class", new AddNewClassAdapter());
 		addButton("Remove selected", 
 				new ActionSelectionAdapter(

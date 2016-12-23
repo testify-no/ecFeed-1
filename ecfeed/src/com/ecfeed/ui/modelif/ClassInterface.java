@@ -236,7 +236,7 @@ public class ClassInterface extends GlobalParametersParentInterface {
 	}
 
 	@Override
-	protected ClassNode getTarget(){
+	public ClassNode getTarget(){
 		return (ClassNode)super.getTarget();
 	}
 

@@ -33,15 +33,17 @@ public class RootNode extends GlobalParametersParentNode {
 	}
 
 	@Override
-	public RootNode getCopy(){
+	public RootNode makeClone(){
 		RootNode copy = new RootNode(this.getName(), this.fModelVersion);
 
+		copy.setProperties(getProperties());
+
 		for(GlobalParameterNode parameter : getGlobalParameters()){
-			copy.addParameter(parameter.getCopy());
+			copy.addParameter(parameter.makeClone());
 		}
 
 		for(ClassNode classnode : fClasses){
-			copy.addClass(classnode.getCopy());
+			copy.addClass(classnode.makeClone());
 		}
 		copy.setParent(this.getParent());
 		return copy;
@@ -92,7 +94,7 @@ public class RootNode extends GlobalParametersParentNode {
 	}
 
 	@Override
-	public boolean compare(AbstractNode node){
+	public boolean isMatch(AbstractNode node){
 		if(node instanceof RootNode == false){
 			return false;
 		}
@@ -103,12 +105,12 @@ public class RootNode extends GlobalParametersParentNode {
 		}
 
 		for(int i = 0; i < getClasses().size(); i++){
-			if(getClasses().get(i).compare(root.getClasses().get(i)) == false){
+			if(getClasses().get(i).isMatch(root.getClasses().get(i)) == false){
 				return false;
 			}
 		}
 
-		return super.compare(root);
+		return super.isMatch(root);
 	}
 
 	@Override

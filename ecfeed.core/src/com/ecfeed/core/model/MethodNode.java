@@ -29,6 +29,15 @@ public class MethodNode extends ParametersParentNode {
 		super(name);
 		fTestCases = new ArrayList<TestCaseNode>();
 		fConstraints = new ArrayList<ConstraintNode>();
+
+		createDefaultProperties();
+	}
+
+	private void createDefaultProperties() {
+		setPropertyDefaultValue(NodePropertyDefs.PropertyId.PROPERTY_METHOD_RUNNER);
+		setPropertyDefaultValue(NodePropertyDefs.PropertyId.PROPERTY_MAP_BROWSER_TO_PARAM);
+		setPropertyDefaultValue(NodePropertyDefs.PropertyId.PROPERTY_WEB_BROWSER);
+		setPropertyDefaultValue(NodePropertyDefs.PropertyId.PROPERTY_MAP_START_URL_TO_PARAM);
 	}
 
 	@Override
@@ -64,11 +73,13 @@ public class MethodNode extends ParametersParentNode {
 	}
 
 	@Override
-	public MethodNode getCopy(){
+	public MethodNode makeClone(){
 		MethodNode copy = new MethodNode(this.getName());
 
+		copy.setProperties(getProperties());
+
 		for(MethodParameterNode parameter : getMethodParameters()){
-			copy.addParameter(parameter.getCopy());
+			copy.addParameter(parameter.makeClone());
 		}
 
 		for(TestCaseNode testcase : fTestCases){
@@ -340,7 +351,7 @@ public class MethodNode extends ParametersParentNode {
 	}
 
 	@Override
-	public boolean compare(AbstractNode node){
+	public boolean isMatch(AbstractNode node){
 		if(node instanceof MethodNode == false){
 			return false;
 		}
@@ -356,18 +367,18 @@ public class MethodNode extends ParametersParentNode {
 		}
 
 		for(int i = 0; i < testCasesCount; i++){
-			if(getTestCases().get(i).compare(comparedMethod.getTestCases().get(i)) == false){
+			if(getTestCases().get(i).isMatch(comparedMethod.getTestCases().get(i)) == false){
 				return false;
 			}
 		}
 
 		for(int i = 0; i < constraintsCount; i++){
-			if(getConstraintNodes().get(i).compare(comparedMethod.getConstraintNodes().get(i)) == false){
+			if(getConstraintNodes().get(i).isMatch(comparedMethod.getConstraintNodes().get(i)) == false){
 				return false;
 			}
 		}
 
-		return super.compare(node);
+		return super.isMatch(node);
 	}
 
 	@Override

@@ -34,13 +34,13 @@ public class ReplaceMethodParametersWithGlobalOperation extends BulkOperation{
 			addOperation(new MethodParameterOperationSetLinked(target, true));
 			for(ConstraintNode constraint : method.getConstraintNodes()){
 				if(constraint.mentions(target)){
-					ConstraintNode copy = constraint.getCopy();
+					ConstraintNode copy = constraint.makeClone();
 //					addOperation(new MethodOperationRemoveConstraint(method, constraint));
 					addOperation(new MethodOperationAddConstraint(method, copy, constraint.getIndex()));
 				}
 			}
 			for(TestCaseNode tc : method.getTestCases()){
-				TestCaseNode copy = tc.getCopy();
+				TestCaseNode copy = tc.makeClone();
 				addOperation(new MethodOperationAddTestCase(method, copy, adapterProvider, tc.getIndex()));
 			}
 		}

@@ -20,7 +20,6 @@ import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.ui.forms.widgets.Section;
 
 import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.model.ClassNode;
@@ -40,7 +39,6 @@ import com.ecfeed.ui.modelif.ModelNodesTransfer;
 
 public class MethodsViewer extends TableViewerSection {
 
-	private static final int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 	private TableViewerColumn fMethodsColumn;
 	private ClassInterface fClassIf;
 	private MethodInterface fMethodIf;
@@ -115,7 +113,7 @@ public class MethodsViewer extends TableViewerSection {
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext, 
 			IFileInfoProvider fileInfoProvider) {
-		super(sectionContext, updateContext, fileInfoProvider, STYLE);
+		super(sectionContext, updateContext, fileInfoProvider, StyleDistributor.getSectionStyle());
 
 		fClassIf = new ClassInterface(this, fileInfoProvider);
 		fMethodIf = new MethodInterface(this, fileInfoProvider);

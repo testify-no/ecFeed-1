@@ -49,8 +49,8 @@ public class CopyNodeTest{
 		root.addParameter(par1);
 		root.addParameter(par2);
 
-		RootNode copy = root.getCopy();
-		assertTrue(root.compare(copy));
+		RootNode copy = root.makeClone();
+		assertTrue(root.isMatch(copy));
 	}
 
 	@Test
@@ -65,8 +65,8 @@ public class CopyNodeTest{
 		classNode.addParameter(par1);
 		classNode.addParameter(par2);
 
-		ClassNode copy = classNode.getCopy();
-		assertTrue(classNode.compare(copy));
+		ClassNode copy = classNode.makeClone();
+		assertTrue(classNode.isMatch(copy));
 	}
 
 	@Test
@@ -92,8 +92,8 @@ public class CopyNodeTest{
 		method.addTestCase(testCase1);
 		method.addTestCase(testCase2);
 
-		MethodNode copy = method.getCopy();
-		assertTrue(method.compare(copy));
+		MethodNode copy = method.makeClone();
+		assertTrue(method.isMatch(copy));
 	}
 
 	@Test
@@ -112,8 +112,8 @@ public class CopyNodeTest{
 		parameter.addChoice(choice1);
 		parameter.addChoice(choice2);
 
-		GlobalParameterNode copy = parameter.getCopy();
-		assertTrue(parameter.compare(copy));
+		GlobalParameterNode copy = parameter.makeClone();
+		assertTrue(parameter.isMatch(copy));
 	}
 
 	@Test
@@ -132,8 +132,8 @@ public class CopyNodeTest{
 		parameter.addChoice(choice1);
 		parameter.addChoice(choice2);
 
-		MethodParameterNode copy = parameter.getCopy();
-		assertTrue(parameter.compare(copy));
+		MethodParameterNode copy = parameter.makeClone();
+		assertTrue(parameter.isMatch(copy));
 	}
 
 	@Test
@@ -160,8 +160,8 @@ public class CopyNodeTest{
 		ConstraintNode constraint = new ConstraintNode("constraint", new Constraint(premise, consequence));
 		method.addConstraint(constraint);
 
-		ConstraintNode copy = constraint.getCopy();
-		assertTrue(constraint.compare(copy));
+		ConstraintNode copy = constraint.makeClone();
+		assertTrue(constraint.isMatch(copy));
 	}
 
 	@Test
@@ -181,8 +181,8 @@ public class CopyNodeTest{
 		method.addParameter(par2);
 		method.addTestCase(testCase);
 
-		TestCaseNode copy = testCase.getCopy();
-		assertTrue(testCase.compare(copy));
+		TestCaseNode copy = testCase.makeClone();
+		assertTrue(testCase.isMatch(copy));
 	}
 
 	@Test
@@ -202,8 +202,8 @@ public class CopyNodeTest{
 		choice2.addChoice(choice21);
 		choice2.addChoice(choice22);
 
-		ChoiceNode copy = choice.getCopy();
-		assertTrue(choice.compare(copy));
+		ChoiceNode copy = choice.makeClone();
+		assertTrue(choice.isMatch(copy));
 	}
 
 	@Test

@@ -18,8 +18,8 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.TabItem;
 
 import com.ecfeed.core.adapter.EImplementationStatus;
-import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.model.MethodParameterNode;
+import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.ui.common.JavaDocSupport;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
@@ -155,7 +155,7 @@ public class MethodParameterCommentsSection extends AbstractParameterCommentsSec
 	private void refreshMenuItems() {
 		EImplementationStatus methodStatus = getTargetIf().getImplementationStatus(getTarget().getMethod());
 		boolean parameterCommentsExportEnabled = methodStatus != EImplementationStatus.NOT_IMPLEMENTED;
-		boolean typeCommentsExportEnabled = JavaUtils.isUserType(getTarget().getType()) && getTargetIf().getImplementationStatus() != EImplementationStatus.NOT_IMPLEMENTED && getTarget().isLinked() == false;
+		boolean typeCommentsExportEnabled = JavaTypeHelper.isUserType(getTarget().getType()) && getTargetIf().getImplementationStatus() != EImplementationStatus.NOT_IMPLEMENTED && getTarget().isLinked() == false;
 		fExportParameterCommentsItem.setEnabled(parameterCommentsExportEnabled);
 		fImportParameterCommentsItem.setEnabled(parameterCommentsExportEnabled);
 		fExportTypeCommentsItem.setEnabled(typeCommentsExportEnabled);

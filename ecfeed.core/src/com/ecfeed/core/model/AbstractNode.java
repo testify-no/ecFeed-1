@@ -16,6 +16,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+import com.ecfeed.core.utils.BooleanHelper;
+
 public abstract class AbstractNode{
 	private String fName;
 	private AbstractNode fParent;
@@ -161,7 +163,7 @@ public abstract class AbstractNode{
 		return false;
 	}
 
-	public boolean compare(AbstractNode node){
+	public boolean isMatch(AbstractNode node){
 		if (!getName().equals(node.getName())) {
 			return false;
 		}
@@ -178,32 +180,49 @@ public abstract class AbstractNode{
 		return -1;
 	}
 
-	public abstract AbstractNode getCopy();
+	public abstract AbstractNode makeClone();
 	public abstract Object accept(IModelVisitor visitor) throws Exception;
+
+	public void setProperties(NodeProperties nodeProperties) {
+		fProperties = nodeProperties.getCopy(); 
+	}
+
+	public NodeProperties getProperties() {
+		return fProperties; 
+	}
+
 
 	public int getMaxChildIndex(AbstractNode potentialChild) {
 		return getChildren().size();
 	}
 
-	public void putProperty(String key, NodeProperty property) {
-		fProperties.put(key, property);
+	public void setPropertyValue(NodePropertyDefs.PropertyId propertyId, String value) {
+		NodeProperty nodeProperty = new NodeProperty(NodePropertyDefs.getPropertyType(propertyId), value);
+		fProperties.put(NodePropertyDefs.getPropertyName(propertyId), nodeProperty);
 	}
 
-	public void putProperty(String key, String type, String value) {
-		NodeProperty nodeProperty = new NodeProperty(type, value);
-		putProperty(key, nodeProperty);
-	}
+	public void setPropertyDefaultValue(NodePropertyDefs.PropertyId propertyId) {
 
-	public NodeProperty getProperty(String key) {
-		return fProperties.get(key);
+		NodeProperty nodeProperty = 
+				new NodeProperty(
+						NodePropertyDefs.getPropertyType(propertyId), 
+						NodePropertyDefs.getPropertyDefaultValue(propertyId, null));
+
+		fProperties.put(NodePropertyDefs.getPropertyName(propertyId), nodeProperty);
 	}	
 
-	public String getPropertyValue(String key) {
-		NodeProperty nodeProperty = fProperties.get(key);
+	public String getPropertyValue(NodePropertyDefs.PropertyId propertyId) {
+		String propertyName = NodePropertyDefs.getPropertyName(propertyId);
+		NodeProperty nodeProperty = fProperties.get(propertyName);
 		if (nodeProperty == null) {
 			return null;
 		}
 		return nodeProperty.getValue();
+	}
+
+	public boolean getPropertyValueBoolean(NodePropertyDefs.PropertyId propertyId) {
+		String str = getPropertyValue(propertyId);
+		return BooleanHelper.parseBoolean(str);
 	}	
 
 	public Set<String> getPropertyKeys() {
@@ -214,7 +233,7 @@ public abstract class AbstractNode{
 		return fProperties.size();
 	}
 
-	public void remove(String key) {
-		fProperties.remove(key);
+	public void removeProperty(NodePropertyDefs.PropertyId propertyId) {
+		fProperties.remove(NodePropertyDefs.getPropertyName(propertyId));
 	}
 }

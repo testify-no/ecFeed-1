@@ -52,7 +52,8 @@ public class AndroidRuntimeMethod extends AbstractFrameworkMethod{
 						getMethod(), 
 						fClassName,
 						target, 
-						choiceListToParamArray(next), 
+						choiceListToParamArray(next),
+						null,
 						next.toString());		
 			}
 		} catch (GeneratorException e) {

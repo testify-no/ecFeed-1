@@ -50,7 +50,8 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport {
 	private IFileInfoProvider fFileInfoProvider;
 	private String fTargetFile;
 	private String fExportTemplate;
-	String fInitialExportTemplate;
+	private String fInitialExportTemplate;
+	private TestRunMode fTestRunMode;
 
 	public AbstractOnlineSupport(
 			MethodNode methodNode, ITestMethodInvoker testMethodInvoker, 
@@ -60,17 +61,23 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport {
 
 	public AbstractOnlineSupport(
 			MethodNode methodNode, ITestMethodInvoker testMethodInvoker,
-			IFileInfoProvider fileInfoProvider, boolean isExport, String initialExportTemplate) {
+			IFileInfoProvider fileInfoProvider,
+			boolean isExport, String initialExportTemplate) {
 		ILoaderProvider loaderProvider = new EclipseLoaderProvider();
 		ModelClassLoader loader = loaderProvider.getLoader(true, null);
 		fRunner = new JavaTestRunner(loader, isExport, testMethodInvoker);
 		fFileInfoProvider = fileInfoProvider;
 		fInitialExportTemplate = initialExportTemplate;
+		fTestRunMode = TestRunModeHelper.getTestRunMode(methodNode);
 
 		setTargetMethod(methodNode);
 	}
 
-	protected abstract void setRunnerTarget(MethodNode target) throws RunnerException;
+	protected TestRunMode getTestRunMode() {
+		return fTestRunMode;
+	}
+
+	protected abstract void prepareRunner(MethodNode target) throws RunnerException;
 
 	protected abstract SetupDialogOnline createSetupDialog(
 			Shell activeShell, MethodNode methodNode,
@@ -90,7 +97,7 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport {
 
 	private void setTargetMethod(MethodNode target) {
 		try {
-			setRunnerTarget(target);
+			prepareRunner(target);
 			fTarget = target;
 		} catch (RunnerException e) {
 			ErrorDialog.open(Messages.DIALOG_TEST_EXECUTION_PROBLEM_TITLE,
@@ -123,8 +130,7 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport {
 			return Result.CANCELED;
 		}
 
-		IGenerator<ChoiceNode> selectedGenerator = dialog
-				.getSelectedGenerator();
+		IGenerator<ChoiceNode> selectedGenerator = dialog.getSelectedGenerator();
 		List<List<ChoiceNode>> algorithmInput = dialog.getAlgorithmInput();
 		Collection<IConstraint<ChoiceNode>> constraintList = new ArrayList<IConstraint<ChoiceNode>>();
 		constraintList.addAll(dialog.getConstraints());

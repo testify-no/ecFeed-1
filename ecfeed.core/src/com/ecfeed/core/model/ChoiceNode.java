@@ -55,11 +55,14 @@ public class ChoiceNode extends ChoicesParentNode{
 	}
 
 	@Override
-	public ChoiceNode getCopy(){
+	public ChoiceNode makeClone(){
 		ChoiceNode copy = new ChoiceNode(getName(), fValueString);
+
+		copy.setProperties(getProperties());
 		copy.setParent(fParent);
+
 		for(ChoiceNode choice : getChoices()){
-			copy.addChoice(choice.getCopy());
+			copy.addChoice(choice.makeClone());
 		}
 		for(String label : fLabels){
 			copy.addLabel(label);
@@ -130,7 +133,7 @@ public class ChoiceNode extends ChoicesParentNode{
 	}
 
 	public boolean is(ChoiceNode choice){
-//		return (this == (choice)) || (parentChoice() != null ? parentChoice().is(choice) : false);
+		//		return (this == (choice)) || (parentChoice() != null ? parentChoice().is(choice) : false);
 		boolean result = (this == choice);
 		if (result == false){
 			result = (getParameter() == choice.getParameter()) && (getQualifiedName() == choice.getQualifiedName());
@@ -149,7 +152,7 @@ public class ChoiceNode extends ChoicesParentNode{
 	}
 
 	@Override
-	public boolean compare(AbstractNode node){
+	public boolean isMatch(AbstractNode node){
 		if(node instanceof ChoiceNode == false){
 			return false;
 		}
@@ -169,12 +172,12 @@ public class ChoiceNode extends ChoicesParentNode{
 		}
 
 		for(int i = 0; i < getChoices().size(); i++){
-			if(getChoices().get(i).compare(compared.getChoices().get(i)) == false){
+			if(getChoices().get(i).isMatch(compared.getChoices().get(i)) == false){
 				return false;
 			}
 		}
 
-		return super.compare(node);
+		return super.isMatch(node);
 	}
 
 	@Override

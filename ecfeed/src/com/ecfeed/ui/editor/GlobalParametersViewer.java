@@ -12,7 +12,6 @@ package com.ecfeed.ui.editor;
 
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.Transfer;
-import org.eclipse.ui.forms.widgets.Section;
 
 import com.ecfeed.core.model.GlobalParametersParentNode;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
@@ -25,7 +24,6 @@ import com.ecfeed.ui.modelif.ParametersParentInterface;
 
 public class GlobalParametersViewer extends AbstractParametersViewer {
 
-	private final static int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 	private GlobalParametersParentInterface fParentIf;
 	private GlobalParameterInterface fParameterIf;
 
@@ -33,7 +31,7 @@ public class GlobalParametersViewer extends AbstractParametersViewer {
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext,
 			IFileInfoProvider fileInfoProvider) {
-		super(sectionContext, updateContext, fileInfoProvider, STYLE);
+		super(sectionContext, updateContext, fileInfoProvider, StyleDistributor.getSectionStyle());
 
 		getSection().setText("Global parameters");
 		getViewer().addDragSupport(DND.DROP_COPY|DND.DROP_MOVE|DND.DROP_LINK, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDragListener(getViewer()));

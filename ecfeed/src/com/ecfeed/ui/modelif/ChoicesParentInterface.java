@@ -100,7 +100,7 @@ public class ChoicesParentInterface extends AbstractNodeInterface {
 	}
 
 	@Override
-	protected ChoicesParentNode getTarget(){
+	public ChoicesParentNode getTarget(){
 		return (ChoicesParentNode)super.getTarget();
 	}
 
@@ -120,12 +120,12 @@ public class ChoicesParentInterface extends AbstractNodeInterface {
 	protected String generateChoiceName(){
 		String name = Constants.DEFAULT_NEW_PARTITION_NAME;
 		int i = 0;
-		
+
 		ArrayList<String> choiceNames = new ArrayList<>();
 		for(ChoiceNode choice: getTarget().getChoices()){
 			choiceNames.add(choice.getName());
 		}
-		
+
 		while(choiceNames.contains(name)){
 			name = Constants.DEFAULT_NEW_PARTITION_NAME + i++;
 		}

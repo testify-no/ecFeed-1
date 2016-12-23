@@ -59,17 +59,22 @@ public class MethodParameterNode extends AbstractParameterNode {
 	}
 
 	@Override
-	public MethodParameterNode getCopy() {
-		MethodParameterNode parameter = new MethodParameterNode(getName(),
+	public MethodParameterNode makeClone() {
+		MethodParameterNode copy = new MethodParameterNode(getName(),
 				getType(), getDefaultValue(), isExpected());
-		parameter.setParent(this.getParent());
+
+		copy.setProperties(getProperties());
+		copy.setParent(this.getParent());
+
 		if (getDefaultValue() != null)
-			parameter.setDefaultValueString(getDefaultValue());
+			copy.setDefaultValueString(getDefaultValue());
+
 		for (ChoiceNode choice : fChoices) {
-			parameter.addChoice(choice.getCopy());
+			copy.addChoice(choice.makeClone());
 		}
-		parameter.setParent(getParent());
-		return parameter;
+
+		copy.setParent(getParent());
+		return copy;
 	}
 
 	@Override
@@ -197,7 +202,7 @@ public class MethodParameterNode extends AbstractParameterNode {
 	}
 
 	@Override
-	public boolean compare(AbstractNode node) {
+	public boolean isMatch(AbstractNode node) {
 		if (node instanceof MethodParameterNode == false) {
 			return false;
 		}
@@ -223,12 +228,12 @@ public class MethodParameterNode extends AbstractParameterNode {
 
 		for (int i = 0; i < choicesCount; i++) {
 			if (getChoices().get(i)
-					.compare(comparedParameter.getChoices().get(i)) == false) {
+					.isMatch(comparedParameter.getChoices().get(i)) == false) {
 				return false;
 			}
 		}
 
-		return super.compare(node);
+		return super.isMatch(node);
 	}
 
 	@Override

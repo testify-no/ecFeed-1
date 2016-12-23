@@ -42,7 +42,7 @@ public class AbstractNodeTest{
 		}
 
 		@Override
-		public AbstractNode getCopy() {
+		public AbstractNode makeClone() {
 			return null;
 		}
 
@@ -84,20 +84,19 @@ public class AbstractNodeTest{
 		AbstractNode node = new AbstractNodeImpl("name");
 		assertEquals(0, node.getPropertyCount());
 
-		NodeProperty inAttribute = new NodeProperty("String", "Name");
-		node.putProperty("NameKey", inAttribute);
+		NodePropertyDefs.PropertyId propertyId = NodePropertyDefs.PropertyId.PROPERTY_METHOD_RUNNER;
+
+		node.setPropertyValue(propertyId, "Value");
 		assertEquals(1, node.getPropertyCount());
 
 		Set<String> keys = node.getPropertyKeys();
 		assertEquals(1, keys.size());
 
-		NodeProperty outAttribute = node.getProperty("NameKey");
-		assertNotEquals(null, outAttribute);
 
-		assertEquals("String", outAttribute.getType());
-		assertEquals("Name", outAttribute.getValue());
+		String outValue = node.getPropertyValue(propertyId);
+		assertEquals("Value", outValue);
 
-		node.remove("NameKey");
+		node.removeProperty(propertyId);
 		assertEquals(0, node.getPropertyCount());
 	}
 
@@ -265,13 +264,13 @@ public class AbstractNodeTest{
 		AbstractNode n1 = new AbstractNodeImpl("n");
 		AbstractNode n2 = new AbstractNodeImpl("n");
 
-		assertTrue(n1.compare(n2));
+		assertTrue(n1.isMatch(n2));
 
 		n2.setName("nn");
-		assertFalse(n1.compare(n2));
+		assertFalse(n1.isMatch(n2));
 
 		n1.setName("nn");
-		assertTrue(n1.compare(n2));
+		assertTrue(n1.isMatch(n2));
 
 	}
 }

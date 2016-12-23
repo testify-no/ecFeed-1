@@ -45,7 +45,8 @@ public class AndroidParameterizedMethod extends AbstractFrameworkMethod {
 						getMethod(), 
 						fClassName,
 						target, 
-						choiceListToParamArray(testCase.getTestData()), 
+						choiceListToParamArray(testCase.getTestData()),
+						null,
 						testCase.getTestData().toString());
 
 			}catch (Throwable e){

@@ -405,7 +405,7 @@ public class XomParserTest {
 	}
 
 	private void assertElementsEqual(AbstractNode n, AbstractNode n1) {
-		if(n.compare(n1) == false){
+		if(n.isMatch(n1) == false){
 			fail("Parsed element differs from original\n" + fStringifier.stringify(n, 0) + "\n" + fStringifier.stringify(n1, 0));
 		}
 	}

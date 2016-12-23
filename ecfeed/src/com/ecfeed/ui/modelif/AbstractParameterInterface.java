@@ -20,13 +20,13 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.widgets.Display;
 
 import com.ecfeed.core.adapter.IModelOperation;
-import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.adapter.operations.AbstractParameterOperationSetType;
 import com.ecfeed.core.adapter.operations.BulkOperation;
 import com.ecfeed.core.adapter.operations.ParameterSetTypeCommentsOperation;
 import com.ecfeed.core.adapter.operations.ReplaceChoicesOperation;
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ChoiceNode;
+import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.EclipseModelBuilder;
 import com.ecfeed.ui.common.JavaDocSupport;
@@ -38,7 +38,7 @@ import com.ecfeed.ui.dialogs.TextAreaDialog;
 import com.ecfeed.ui.dialogs.UserTypeSelectionDialog;
 
 public abstract class AbstractParameterInterface extends ChoicesParentInterface {
-	
+
 	IFileInfoProvider fFileInfoProvider;
 
 	public AbstractParameterInterface(IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider) {
@@ -98,7 +98,7 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 	}
 
 	public static boolean isPrimitive(String type) {
-		return Arrays.asList(JavaUtils.supportedPrimitiveTypes()).contains(type);
+		return Arrays.asList(JavaTypeHelper.getSupportedJavaTypes()).contains(type);
 	}
 
 	public static boolean isUserType(String type) {
@@ -106,7 +106,7 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 	}
 
 	public static boolean isBoolean(String type){
-		return type.equals(JavaUtils.getBooleanTypeName());
+		return type.equals(JavaTypeHelper.getBooleanTypeName());
 	}
 
 	public static List<String> getSpecialValues(String type) {
@@ -114,12 +114,12 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 	}
 
 	public static String[] supportedPrimitiveTypes() {
-		return JavaUtils.supportedPrimitiveTypes();
+		return JavaTypeHelper.getSupportedJavaTypes();
 	}
 
 	@Override
 	public boolean goToImplementationEnabled(){
-		if(JavaUtils.isUserType(getTarget().getType()) == false){
+		if(JavaTypeHelper.isUserType(getTarget().getType()) == false){
 			return false;
 		}
 		return super.goToImplementationEnabled();
@@ -127,7 +127,7 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 
 	@Override
 	public void goToImplementation(){
-		if(JavaUtils.isUserType(getTarget().getType())){
+		if(JavaTypeHelper.isUserType(getTarget().getType())){
 			IType type = JavaModelAnalyser.getIType(getType());
 			if(type != null){
 				try {
@@ -145,7 +145,7 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 	}
 
 	@Override
-	protected AbstractParameterNode getTarget(){
+	public AbstractParameterNode getTarget(){
 		return (AbstractParameterNode)super.getTarget();
 	}
 

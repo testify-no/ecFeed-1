@@ -21,7 +21,8 @@ Export-Package: com.ecfeed.core.adapter,
  com.ecfeed.junit,
  com.ecfeed.junit.annotations
 Bundle-ClassPath: lib/xom-1.2.10.jar,
- .
+ .,
+ lib/selenium-server-standalone-3.0.1.jar
 Import-Package: org.eclipse.core.runtime;version="3.4.0",
  org.eclipse.jface.dialogs,
  org.eclipse.swt.widgets,

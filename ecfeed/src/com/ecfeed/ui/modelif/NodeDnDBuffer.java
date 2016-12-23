@@ -39,7 +39,7 @@ public class NodeDnDBuffer {
 		List<AbstractNode> result = new ArrayList<>();
 		if(fDraggedNodes != null){
 			for(AbstractNode node : fDraggedNodes){
-				result.add(node.getCopy());
+				result.add(node.makeClone());
 			}
 		}
 		return result;

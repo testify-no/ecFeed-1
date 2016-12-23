@@ -20,7 +20,6 @@ import org.eclipse.swt.widgets.Display;
 
 import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.adapter.IModelOperation;
-import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.adapter.operations.MethodParameterOperationSetLink;
 import com.ecfeed.core.adapter.operations.MethodParameterOperationSetLinked;
 import com.ecfeed.core.adapter.operations.MethodParameterOperationSetType;
@@ -32,6 +31,7 @@ import com.ecfeed.core.model.GlobalParametersParentNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.RootNode;
+import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 
@@ -89,7 +89,7 @@ public class MethodParameterInterface extends AbstractParameterInterface {
 
 	public String[] defaultValueSuggestions(){
 		Set<String> items = new HashSet<String>(getSpecialValues());
-		if(JavaUtils.isPrimitive(getType()) == false){
+		if(JavaTypeHelper.isJavaType(getType()) == false){
 			for(ChoiceNode p : getTarget().getLeafChoices()){
 				items.add(p.getValueString());
 			}
@@ -161,7 +161,7 @@ public class MethodParameterInterface extends AbstractParameterInterface {
 	}
 
 	@Override
-	protected MethodParameterNode getTarget(){
+	public MethodParameterNode getTarget(){
 		return (MethodParameterNode)super.getTarget();
 	}
 

@@ -14,8 +14,8 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.TabItem;
 
-import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.model.AbstractParameterNode;
+import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.ui.common.JavaDocSupport;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
@@ -136,7 +136,7 @@ public abstract class AbstractParameterCommentsSection extends JavaDocCommentsSe
 		TabItem activeItem = getActiveItem();
 		boolean enabled = true;
 		if(activeItem == getTypeCommentsTab() || activeItem == getTypeJavadocTab()){
-			if(JavaUtils.isPrimitive(getTarget().getType())){
+			if(JavaTypeHelper.isJavaType(getTarget().getType())){
 				enabled = false;
 			}
 		}

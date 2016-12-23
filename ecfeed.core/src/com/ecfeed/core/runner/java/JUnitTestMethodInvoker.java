@@ -19,8 +19,8 @@ import com.ecfeed.core.utils.ExceptionHelper;
 public class JUnitTestMethodInvoker implements ITestMethodInvoker {
 
 	@Override
-	public boolean isRemote() {
-		return false;
+	public boolean isClassInstanceRequired() {
+		return true;	
 	}
 
 	@Override
@@ -28,12 +28,14 @@ public class JUnitTestMethodInvoker implements ITestMethodInvoker {
 			Method testMethod, 
 			String className, 
 			Object instance,
-			Object[] arguments, 
+			Object[] arguments,
+			Object[] choiceNames,
 			String argumentsDescription) throws RuntimeException {
 		try {
 			testMethod.invoke(instance, arguments);
 		} catch (InvocationTargetException e) {
-			String message = testMethod.getName() + " " + argumentsDescription + ": " + e.getTargetException().toString();
+			String message = TestMethodInvokerHelper.createErrorMessage(
+					testMethod.getName(), argumentsDescription, e.getTargetException().toString());
 			ExceptionHelper.reportRuntimeException(message);
 		} catch (IllegalAccessException | IllegalArgumentException e) {
 			String message = Messages.CANNOT_INVOKE_TEST_METHOD(testMethod.getName(), argumentsDescription, e.getMessage());

@@ -21,6 +21,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
 import com.ecfeed.core.model.AbstractParameterNode;
+import com.ecfeed.core.model.MethodNode;
+import com.ecfeed.core.model.MethodParameterNode;
+import com.ecfeed.core.model.NodePropertyDefs;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
@@ -33,6 +36,7 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 	private Combo fTypeCombo;
 	private ChoicesViewer fChoicesViewer;
 	private Button fBrowseUserTypeButton;
+	private WebParameterSection fWebParameterSection;
 	private AbstractParameterCommentsSection fCommentsSection;
 
 	private class SetNameListener extends AbstractSelectionAdapter{
@@ -76,9 +80,16 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 		if (fFileInfoProvider.isProjectAvailable()) {
 			addForm(fCommentsSection = getParameterCommentsSection(this, this));
 		}
+
+		fWebParameterSection = createWebParameterSection();
+
 		addForm(fChoicesViewer = new ChoicesViewer(this, this, fFileInfoProvider));
 
 		getToolkit().paintBordersFor(getMainComposite());
+	}
+
+	protected WebParameterSection createWebParameterSection() { 
+		return null;
 	}
 
 	@Override
@@ -99,11 +110,30 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 			fTypeCombo.setItems(AbstractParameterInterface.supportedPrimitiveTypes());
 			fTypeCombo.setText(parameter.getType());
 
+			refreshWebParameterSection();
+
 			if (fFileInfoProvider.isProjectAvailable()) {
 				fCommentsSection.setInput(parameter);
 			}
 
 			fChoicesViewer.setInput(parameter);
+		}
+	}
+
+	private void refreshWebParameterSection() {
+		if (fWebParameterSection == null) {
+			return;
+		}
+
+		MethodParameterNode methodParameterNode = (MethodParameterNode)getParameterIf().getTarget();
+		MethodNode methodNode = (MethodNode)methodParameterNode.getParent();
+		String runner = methodNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_METHOD_RUNNER);
+
+		if (NodePropertyDefs.isWebRunnerMethod(runner)) {
+			fWebParameterSection.setVisible(true);
+			fWebParameterSection.refresh();
+		} else {
+			fWebParameterSection.setVisible(false);
 		}
 	}
 

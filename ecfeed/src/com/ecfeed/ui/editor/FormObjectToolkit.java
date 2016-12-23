@@ -15,65 +15,105 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.ecfeed.core.utils.StringHelper;
-	
+
 public class FormObjectToolkit {
-	
+
 	private FormToolkit fFormToolkit = null;
 
 	protected FormObjectToolkit(FormToolkit formToolkit) {
 		fFormToolkit = formToolkit;
 	}
-	
+
 	public void paintBorders(Composite composite) {
 		fFormToolkit.paintBordersFor(composite);
 	}
 
 	public Composite createGridComposite(Composite parentComposite, int countOfColumns) {
 		Composite composite = fFormToolkit.createComposite(parentComposite);
-		
+
 		composite.setLayout(new GridLayout(countOfColumns, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
-		
+
 		return composite;
 	}
-	
+
 	public Composite createRowComposite(Composite parentComposite) {
 		Composite composite = fFormToolkit.createComposite(parentComposite);
-		
+
 		RowLayout rowLayout = new RowLayout();
 		composite.setLayout(rowLayout);
-		
+
 		return composite;
 	}	
 
 	public Label createLabel(Composite parentComposite, String text) {
 		return fFormToolkit.createLabel(parentComposite, text, SWT.NONE);
 	}
-	
-	public Label createSpacer(Composite parentComposite, int size) {
-		return createLabel(parentComposite, StringHelper.createString(" ", size));
+
+	public Label createEmptyLabel(Composite parentComposite) {
+		return fFormToolkit.createLabel(parentComposite, " ", SWT.NONE);
 	}
-	
-	public Text createGridText(Composite parentGridComposite, SelectionListener listener) {
+
+	public Label createSpacer(Composite parentComposite, int size) {
+		Label label = createLabel(parentComposite, StringHelper.createString("X", size));
+		label.setVisible(false);
+		return label;
+	}
+
+	public Text createGridText(Composite parentGridComposite, SelectionListener selectionListener) {
 		Text text = fFormToolkit.createText(parentGridComposite, null, SWT.NONE);
 		text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		text.addSelectionListener(listener);
+
+		if (selectionListener != null) {
+			text.addSelectionListener(selectionListener);
+		}
+
 		return text;
 	}
-	
+
 	public Button createButton(Composite parentComposite, String text, SelectionListener selectionListener) {
 		Button button = fFormToolkit.createButton(parentComposite, text, SWT.NONE);
-		
+
 		if (selectionListener != null) {
 			button.addSelectionListener(selectionListener);
 		}
-		
+
 		return button;
 	}
+
+	public Combo createReadOnlyGridCombo(Composite parentComposite, SelectionListener selectionListener) {
+		Combo combo = new Combo(parentComposite, SWT.DROP_DOWN | SWT.READ_ONLY);
+		combo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+
+		if (selectionListener != null) {
+			combo.addSelectionListener(selectionListener);
+		}
+
+		return combo;
+	}
+
+	public Button createGridCheckBox(Composite parentComposite, String checkboxLabel, SelectionListener selectionListener) {
+		Button checkbox = fFormToolkit.createButton(parentComposite, checkboxLabel, SWT.CHECK);
+		GridData checkboxGridData = new GridData(SWT.FILL,  SWT.CENTER, true, false);
+		checkbox.setLayoutData(checkboxGridData);
+
+		if (selectionListener != null) {
+			checkbox.addSelectionListener(selectionListener);
+		}
+
+		return checkbox;
+	}
+
+	public GridData getGridData(Control control) {
+		return (GridData)control.getLayoutData();
+	}
+
 }

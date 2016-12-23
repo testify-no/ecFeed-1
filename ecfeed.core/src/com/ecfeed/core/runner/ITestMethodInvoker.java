@@ -14,13 +14,14 @@ import java.lang.reflect.Method;
 
 public interface ITestMethodInvoker {
 
-	boolean isRemote();
+	boolean isClassInstanceRequired();
 
 	void invoke(
 			Method testMethod,
 			String className,
 			Object instance,
 			Object[] arguments, 
+			Object[] choiceNames,
 			String argumentsDescription
 			) throws RuntimeException;
 }

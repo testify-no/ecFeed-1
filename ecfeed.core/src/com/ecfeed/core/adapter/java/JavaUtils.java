@@ -26,7 +26,7 @@ public class JavaUtils {
 
 	public static boolean isValidTypeName(String name){
 		if(name == null) return false;
-		if(isPrimitive(name)) return true;
+		if(JavaTypeHelper.isJavaType(name)) return true;
 		if(name.matches(Constants.REGEX_CLASS_NODE_NAME) == false) return false;
 		StringTokenizer tokenizer = new StringTokenizer(name, ".");
 		while(tokenizer.hasMoreTokens()){
@@ -44,14 +44,6 @@ public class JavaUtils {
 
 	public static String[] javaKeywords(){
 		return Constants.JAVA_KEYWORDS;
-	}
-
-	public static boolean isPrimitive(String typeName){
-		return Arrays.asList(Constants.SUPPORTED_PRIMITIVE_TYPES).contains(typeName);
-	}
-
-	public static boolean isUserType(String typeName){
-		return isPrimitive(typeName) == false;
 	}
 
 	public static boolean isString(String typeName){
@@ -116,16 +108,8 @@ public class JavaUtils {
 		return values;
 	}
 
-	public static String[] supportedPrimitiveTypes(){
-		return Constants.SUPPORTED_PRIMITIVE_TYPES;
-	}
-
 	public static boolean isValidJavaIdentifier(String value) {
 		return (value.matches(Constants.REGEX_JAVA_IDENTIFIER) && isJavaKeyword(value) == false);
-	}
-
-	public static String getBooleanTypeName(){
-		return JavaTypeHelper.TYPE_NAME_BOOLEAN;
 	}
 
 	public static String getStringTypeName(){
@@ -138,10 +122,6 @@ public class JavaUtils {
 
 	public static boolean isValidConstraintName(String name) {
 		return name.matches(Constants.REGEX_CONSTRAINT_NODE_NAME);
-	}
-
-	public static boolean hasLimitedValuesSet(String type){
-		return isPrimitive(type) == false || type.equals(getBooleanTypeName());
 	}
 
 	public static boolean validateTestCaseName(String name){

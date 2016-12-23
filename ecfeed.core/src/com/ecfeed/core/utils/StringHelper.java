@@ -161,4 +161,68 @@ public class StringHelper {
 
 		return builder.toString();
 	}
+
+	public static boolean isEqual(String s1, String s2) {
+		if (s1 == null && s2 == null) {
+			return true;
+		}
+		if (s1 == null && s2 != null) {
+			return false;
+		}
+		if (s1 != null && s2 == null) {
+			return false;
+		}
+		if (s1.equals(s2)) {
+			return true;
+		}
+		return false;
+	}
+
+	public static boolean isEqualIgnoreCase(String s1, String s2) {
+		if (s1 == null && s2 == null) {
+			return true;
+		}
+		if (s1 == null && s2 != null) {
+			return false;
+		}
+		if (s1 != null && s2 == null) {
+			return false;
+		}
+		if (s1.equalsIgnoreCase(s2)) {
+			return true;
+		}
+		return false;
+	}
+
+	public static String getSubstringWithBoundaries(String source, int boundaryChar) {
+		if (source == null) {
+			return null;
+		}
+
+		int begIndex = source.indexOf(boundaryChar);
+		if (begIndex == -1) {
+			return null;
+		}
+
+		if (begIndex >= source.length() - 1) {
+			return null;
+		}
+
+		int endIndex = source.indexOf(boundaryChar, begIndex+1);
+		if (endIndex == -1) {
+			return null;
+		}		
+
+		return source.substring(begIndex, endIndex+1);
+	}
+
+	public static String replaceSubstringWithBoundaries(String source, int boundaryChar, String strToReplace) {
+		String substr = getSubstringWithBoundaries(source, boundaryChar);
+		if (substr == null) {
+			return null;
+		}
+
+		return source.replace(substr, strToReplace);
+	}
+
 }
