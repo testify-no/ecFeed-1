@@ -7,6 +7,10 @@
 #                                                                                  
 #-------------------------------------------------------------------------------
 
+Version 1.11.0
+ - Web runner
+ - added node properties (implementation detail)
+
 Version 1.10.3
  - more bugfixes about global parameters
  - fixed label editor for standalone version
