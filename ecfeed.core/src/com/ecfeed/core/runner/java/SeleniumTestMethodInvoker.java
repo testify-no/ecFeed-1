@@ -120,7 +120,10 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 
 		if (!StringHelper.isNullOrEmpty(webBrowser)) {
 			setDriver(webBrowser, browserDriver, null);
-			goToPage(fStartupPage, null);
+
+			if (fStartupPage != null) {
+				goToPage(fStartupPage, null);
+			}
 		}
 	}
 
