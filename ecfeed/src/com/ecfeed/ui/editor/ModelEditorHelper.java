@@ -236,9 +236,6 @@ public class ModelEditorHelper {
 			IEditorInput editorInput = modelEditor.getEditorInput();
 
 			int extractedNumber = extractUntitledDocNumber(editorInput.getToolTipText());
-			if ( extractedNumber == 0) {
-				return IModelEditorWorker.WorkStatus.OK;
-			}
 
 			fMaxNumber = Math.max(fMaxNumber, extractedNumber);
 			return IModelEditorWorker.WorkStatus.OK;
@@ -247,8 +244,23 @@ public class ModelEditorHelper {
 		private int extractUntitledDocNumber(String pathWithFileName) {
 			String fileNameWithExt = DiskFileHelper.extractFileName(pathWithFileName);
 			String fileName = DiskFileHelper.extractFileNameWithoutExtension(fileNameWithExt);
-			String fileNumber = StringHelper.removePrefix(EditorInMemFileHelper.getFilePrefix(), fileName);
-			return Integer.parseInt(fileNumber);
+			
+			String untitledFilePrefix = EditorInMemFileHelper.getUntitledFilePrefix();
+			if (!StringHelper.startsWithPrefix(untitledFilePrefix, fileName)) {
+				return 0;
+			}
+			
+			String fileNumber = StringHelper.removePrefix(untitledFilePrefix, fileName);
+			
+			int extractedNumber = 0;
+			try { 
+				extractedNumber = Integer.parseInt(fileNumber);
+			} catch (NumberFormatException e) {
+				return 0;
+			}
+			
+			return extractedNumber;
+			
 		}
 
 		public int getNextFreeNumber() {

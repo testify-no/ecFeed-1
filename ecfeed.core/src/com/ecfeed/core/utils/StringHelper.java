@@ -136,7 +136,17 @@ public class StringHelper {
 		}
 		return null;
 	}
-
+	
+	public static boolean startsWithPrefix(String prefix, String str) {
+		int index = str.indexOf(prefix);
+		
+		if (index == 0) {
+			return true;
+		}
+		
+		return false;
+	}
+	
 	public static int countOccurencesOfChar(String str, char charToCount) {
 		int len = str.length();
 		int occurences = 0;
@@ -224,5 +234,5 @@ public class StringHelper {
 
 		return source.replace(substr, strToReplace);
 	}
-
+	
 }
