@@ -21,6 +21,7 @@ public class UriHelper {
 		pathWithFileName = StringHelper.removePrefix("file:", pathWithFileName);
 		pathWithFileName = removePrefixForWindows(pathWithFileName);
 		pathWithFileName = convertUriSeparatorsToPathSeparators(pathWithFileName);
+		pathWithFileName = convertSpaces(pathWithFileName);
 
 		return pathWithFileName;
 	}
@@ -43,6 +44,11 @@ public class UriHelper {
 		if (File.separator.equals(windowsSeparator)) {
 			pathWithFileName = pathWithFileName.replace('/', windowsSeparator.charAt(0));
 		}
+		return pathWithFileName;
+	}
+	
+	private static String convertSpaces(String pathWithFileName) {
+		pathWithFileName = pathWithFileName.replace("%20", " ");
 		return pathWithFileName;
 	}
 
