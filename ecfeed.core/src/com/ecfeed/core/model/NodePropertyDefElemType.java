@@ -204,9 +204,25 @@ public class NodePropertyDefElemType {
 
 
 	public static boolean isOptionalAvailable(String value) {
+
 		if (isText(value)) {
 			return true;
 		}
+		if (isSelect(value)) {
+			return true;
+		}
+		if (isRadio(value)) {
+			return true;
+		}		
+		if (isCheckbox(value)) {
+			return true;
+		}		
+		if (isButton(value)) {
+			return true;
+		}		
+		if (isPageElement(value)) {
+			return true;
+		}		
 		return false;
 	}	
 

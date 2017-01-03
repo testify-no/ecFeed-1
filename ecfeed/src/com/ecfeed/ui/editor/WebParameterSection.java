@@ -191,12 +191,6 @@ public class WebParameterSection extends BasicSection {
 
 	private boolean isOptionalCheckboxEnabled(String webElementType) {
 
-		MethodParameterNode methodParameterNode = (MethodParameterNode)fMethodParameterNode;
-
-		if (!methodParameterNode.isExpected()) {
-			return false;
-		}
-
 		if (!NodePropertyDefs.isOptionalAvailable(webElementType)) {
 			return false;
 		}		

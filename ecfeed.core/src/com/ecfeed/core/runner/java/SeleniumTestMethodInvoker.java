@@ -261,19 +261,25 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 			return true;
 		}
 
-		processNormalText(webElement, argument, methodParameterNode);
+		processInputText(webElement, argument, methodParameterNode);
 		return true;
 	}
 
 	private void processExpectedText(MethodParameterNode methodParameterNode, WebElement webElement, String argument) {
 
-		if (webElement == null) {
-			if (isOptional(methodParameterNode)) {
-				return;
-			} else {
-				reportExceptionEmptyWebElement(methodParameterNode);
-			}
+		if (isElementOkForOutput(webElement)) {
+			readAndTestValue(webElement, argument, methodParameterNode);
+			return;
 		}
+
+		if (isOptional(methodParameterNode)) {
+			return;
+		}
+
+		reportExceptionUnavailableElement(methodParameterNode);
+	}
+
+	private void readAndTestValue(WebElement webElement, String argument, MethodParameterNode methodParameterNode) {
 
 		String currentText = webElement.getText();
 		if (currentText.equals(argument)) {
@@ -283,17 +289,53 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		reportException("Text does not match. Expected: " + argument + " Current: " + currentText + ".", methodParameterNode);
 	}
 
-	private void processNormalText(WebElement webElement, String argument, MethodParameterNode methodParameterNode) {
+	private boolean isElementOkForOutput(WebElement webElement) {
 
 		if (webElement == null) {
-			reportExceptionEmptyWebElement(methodParameterNode);
+			return false;
 		}
 
-		performActionClearAndSendKeys(webElement, argument);
+		if (!webElement.isDisplayed()) {
+			return false;
+		}
+
+		return true;
 	}
 
-	private void reportExceptionEmptyWebElement(MethodParameterNode methodParameterNode) {
-		reportException("Web element not found.", methodParameterNode);
+
+	private void processInputText(WebElement webElement, String argument, MethodParameterNode methodParameterNode) {
+
+		if (isElementOkForInput(webElement)) {
+			performActionClearAndSendKeys(webElement, argument);
+			return;
+		}
+
+		if (isOptional(methodParameterNode)) {
+			return;
+		} 
+
+		reportExceptionUnavailableElement(methodParameterNode);
+	}
+
+	private boolean isElementOkForInput(WebElement webElement) {
+
+		if (webElement == null) {
+			return false;
+		}
+
+		if (!webElement.isDisplayed()) {
+			return false;
+		}
+
+		if (!webElement.isEnabled()) {
+			return false;
+		}		
+
+		return true;
+	}
+
+	private void reportExceptionUnavailableElement(MethodParameterNode methodParameterNode) {
+		reportException("Web element not found or is not accessible.", methodParameterNode);
 	}
 
 	private boolean isOptional(MethodParameterNode methodParameterNode) {
@@ -314,8 +356,8 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 
 		WebElement webElement = findWebElement(methodParameterNode);
 
-		if (webElement == null) {
-			reportExceptionEmptyWebElement(methodParameterNode);
+		if (!isElementOkForInput(webElement)) {
+			reportExceptionUnavailableElement(methodParameterNode);
 		}
 		String type = webElement.getAttribute(ATTR_TYPE);
 
@@ -373,18 +415,18 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 			return false;
 		}
 
-		WebElement selectWebElement = findWebElement(methodParameterNode);
+		WebElement webElement = findWebElement(methodParameterNode);
 
-		if (selectWebElement == null) {
-			reportExceptionEmptyWebElement(methodParameterNode);
+		if (!isElementOkForInput(webElement)) {
+			reportExceptionUnavailableElement(methodParameterNode);
 		}
-		String tagName = selectWebElement.getTagName();
+		String tagName = webElement.getTagName();
 
 		if (!StringHelper.isEqual(tagName, TAG_SELECT)) {
 			return false;
 		}
 
-		List<WebElement> allOptions = selectWebElement.findElements(By.tagName(TAG_OPTION));
+		List<WebElement> allOptions = webElement.findElements(By.tagName(TAG_OPTION));
 		for (WebElement option : allOptions) {
 			String text = option.getText();
 
@@ -406,8 +448,8 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 
 		WebElement webElement = findWebElement(methodParameterNode);
 
-		if (webElement == null) {
-			reportExceptionEmptyWebElement(methodParameterNode);
+		if (!isElementOkForInput(webElement)) {
+			reportExceptionUnavailableElement(methodParameterNode);
 		}
 
 		if (BooleanHelper.parseBoolean(argument)) {
@@ -427,8 +469,8 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 
 		WebElement webElement = findWebElement(methodParameterNode);
 
-		if (webElement == null) {
-			reportExceptionEmptyWebElement(methodParameterNode);
+		if (!isElementOkForInput(webElement)) {
+			reportExceptionUnavailableElement(methodParameterNode);
 		}
 
 		if (!performAction(webElement, argument, methodParameterNode)) {
