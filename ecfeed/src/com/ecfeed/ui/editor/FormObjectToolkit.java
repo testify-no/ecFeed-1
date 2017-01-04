@@ -116,4 +116,8 @@ public class FormObjectToolkit {
 		return (GridData)control.getLayoutData();
 	}
 
+	public void setHorizontalSpan(Control control, int span) {
+		GridData gridData = getGridData(control);
+		gridData.horizontalSpan = span;
+	}
 }

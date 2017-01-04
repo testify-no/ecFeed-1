@@ -10,6 +10,7 @@
 
 package com.ecfeed.ui.editor;
 
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
@@ -21,6 +22,7 @@ import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.NodePropertyDefs;
 import com.ecfeed.core.utils.BooleanHelper;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.dialogs.basic.FileOpenDialog;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.MethodInterface;
 
@@ -60,13 +62,13 @@ public class WebRunnerSection extends BasicSection  {
 
 	private void createWebDriverPropertiesComposite(Composite parentComposite) {
 
-		Composite composite = fFormObjectToolkit.createGridComposite(parentComposite, 2);
+		Composite composite = fFormObjectToolkit.createGridComposite(parentComposite, 3);
 		fFormObjectToolkit.paintBorders(composite);
 
 		createMapBrowserCheckBox(composite);
 		createBrowserCombo(composite);
 		createBrowserDriverPathText(composite);
-		createMapStartUrlCheckBox(composite);		
+		createMapStartUrlCheckBox(composite);
 		createUrlText(composite);
 		fFormObjectToolkit.createEmptyLabel(composite);
 	}
@@ -77,6 +79,7 @@ public class WebRunnerSection extends BasicSection  {
 		fMapBrowserCheckbox = 
 				fFormObjectToolkit.createGridCheckBox(
 						gridComposite, "Map browser to method parameter", new SetMapBrowserListener());
+		fFormObjectToolkit.setHorizontalSpan(fMapBrowserCheckbox, 2);
 	}
 
 	private void createBrowserCombo(Composite gridComposite) {
@@ -84,12 +87,14 @@ public class WebRunnerSection extends BasicSection  {
 		fFormObjectToolkit.createLabel(gridComposite, "Browser");
 		fBrowserCombo = fFormObjectToolkit.createReadOnlyGridCombo(gridComposite, new BrowserChangedAdapter());
 		fBrowserCombo.setItems(NodePropertyDefs.getValueSet(fBrowserPropertyId, null).getPossibleValues());
+		fFormObjectToolkit.setHorizontalSpan(fBrowserCombo, 2);
 	}
 
 	private void createBrowserDriverPathText(Composite gridComposite) {
 
 		fFormObjectToolkit.createLabel(gridComposite, "Web driver  ");
 		fBrowserDriverText = fFormObjectToolkit.createGridText(gridComposite, new BrowserDriverChangedAdapter());
+		fFormObjectToolkit.createButton(gridComposite, "Browse...", new BrowseButtonSelectionAdapter());
 	}
 
 	private void createMapStartUrlCheckBox(Composite gridComposite) {
@@ -98,12 +103,14 @@ public class WebRunnerSection extends BasicSection  {
 		fMapStartUrlCheckbox = 
 				fFormObjectToolkit.createGridCheckBox(
 						gridComposite, "Map start URL to method parameter", new SetMapStartUrlListener());
+		fFormObjectToolkit.setHorizontalSpan(fMapStartUrlCheckbox, 2);
 	}
 
 	private void createUrlText(Composite gridComposite) {
 
 		fFormObjectToolkit.createLabel(gridComposite, "Start URL");
 		fStartUrlText = fFormObjectToolkit.createGridText(gridComposite, new UrlChangedAdapter());
+		fFormObjectToolkit.setHorizontalSpan(fStartUrlText, 2);
 	}
 
 	public void refresh() {
@@ -215,6 +222,19 @@ public class WebRunnerSection extends BasicSection  {
 			fMethodInterface.setProperty(fBrowserDriverPropertyId, fBrowserDriverText.getText());
 		}
 	}	
+
+	private class BrowseButtonSelectionAdapter extends SelectionAdapter {
+		@Override
+		public void widgetSelected(SelectionEvent ev) {
+
+			String path = FileOpenDialog.open();
+
+			if (path != null) {
+				fBrowserDriverText.setText(path);
+				fMethodInterface.setProperty(fBrowserDriverPropertyId, fBrowserDriverText.getText());
+			}
+		}
+	}
 
 	private class UrlChangedAdapter extends AbstractSelectionAdapter {
 
