@@ -173,7 +173,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		fRunnerCombo.setText(NodePropertyDefs.getPropertyDefaultValue(fRunnerPropertyId, null));
 	}	
 
-	private class RunnerChangedAdapter extends AbstractSelectionAdapter {
+	private class RunnerChangedAdapter extends ComboSelectionListener {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			fMethodInterface.setProperty(fRunnerPropertyId, fRunnerCombo.getText());

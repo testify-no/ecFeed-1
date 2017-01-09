@@ -45,7 +45,7 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 		}
 	}	
 
-	private class SetTypeListener extends AbstractSelectionAdapter{
+	private class SetTypeListener extends ComboSelectionListener {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			getParameterIf().setType(fTypeCombo.getText());

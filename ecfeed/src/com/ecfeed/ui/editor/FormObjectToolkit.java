@@ -102,19 +102,19 @@ public class FormObjectToolkit {
 		return button;
 	}
 
-	public Combo createReadOnlyGridCombo(Composite parentComposite, SelectionListener selectionListener) {
+	public Combo createReadOnlyGridCombo(Composite parentComposite, ComboSelectionListener selectionListener) {
 		Combo combo = new Combo(parentComposite, SWT.DROP_DOWN | SWT.READ_ONLY);
 		configureCombo(combo, selectionListener);
 		return combo;
 	}
 	
-	public Combo createReadWriteGridCombo(Composite parentComposite, SelectionListener selectionListener) {
+	public Combo createReadWriteGridCombo(Composite parentComposite, ComboSelectionListener selectionListener) {
 		Combo combo = new Combo(parentComposite, SWT.DROP_DOWN);
 		configureCombo(combo, selectionListener);
 		return combo;
 	}	
 
-	private void configureCombo(Combo combo, SelectionListener selectionListener) {
+	private void configureCombo(Combo combo, ComboSelectionListener selectionListener) {
 		
 		combo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 

@@ -308,7 +308,7 @@ public class WebParameterSection extends BasicSection {
 		refreshCombo(fActionCombo, valueSet, webElementType, currentPropertyValue);
 	}	
 
-	private class ElementTypeChangedAdapter extends AbstractSelectionAdapter {
+	private class ElementTypeChangedAdapter extends ComboSelectionListener {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 
@@ -320,7 +320,7 @@ public class WebParameterSection extends BasicSection {
 		}
 	}
 
-	private class FindByTypeChangedAdapter extends AbstractSelectionAdapter {
+	private class FindByTypeChangedAdapter extends ComboSelectionListener {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			fAbstractParameterInterface.setProperty(fFindByElemTypePropertyId, fFindByElemTypeCombo.getText());
@@ -335,7 +335,7 @@ public class WebParameterSection extends BasicSection {
 		}
 	}	
 
-	private class ActionChangedAdapter extends AbstractSelectionAdapter {
+	private class ActionChangedAdapter extends ComboSelectionListener {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			fAbstractParameterInterface.setProperty(fActionPropertyId, fActionCombo.getText());

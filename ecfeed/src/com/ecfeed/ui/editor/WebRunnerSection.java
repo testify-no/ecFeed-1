@@ -209,7 +209,7 @@ public class WebRunnerSection extends BasicSection  {
 		}
 	}	
 
-	private class BrowserChangedAdapter extends AbstractSelectionAdapter {
+	private class BrowserChangedAdapter extends ComboSelectionListener {
 
 		@Override
 		public void widgetSelected(SelectionEvent e) {
