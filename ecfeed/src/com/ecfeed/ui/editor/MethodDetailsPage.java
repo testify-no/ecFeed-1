@@ -10,6 +10,7 @@
 
 package com.ecfeed.ui.editor;
 
+import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
@@ -76,13 +77,14 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		}
 	}
 
-	private class RenameMethodAdapter extends AbstractSelectionAdapter {
+	private class MethodNameFocusLostListener extends FocusLostListener {
+
 		@Override
-		public void widgetSelected(SelectionEvent e) {
+		public void focusLost(FocusEvent e) {
 			fMethodInterface.setName(fMethodNameText.getText());
 			fMethodNameText.setText(fMethodInterface.getName());
 		}
-	}
+	}	
 
 	public MethodDetailsPage(ModelMasterSection masterSection,
 			IModelUpdateContext updateContext,
@@ -134,7 +136,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 
 		getFormObjectToolkit().createLabel(gridComposite, "Method name ");
 		fMethodNameText = getFormObjectToolkit().createGridText(gridComposite,
-				new RenameMethodAdapter());
+				new MethodNameFocusLostListener());
 
 		if (fileInfoProvider.isProjectAvailable()) {
 			fBrowseButton = getFormObjectToolkit().createButton(gridComposite,
@@ -149,12 +151,15 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		Composite childComposite = getFormObjectToolkit().createRowComposite(
 				getMainComposite());
 
-		fTestOnlineButton = getFormObjectToolkit().createButton(
+		FormObjectToolkit formObjectToolkit = getFormObjectToolkit();
+
+		fTestOnlineButton = formObjectToolkit.createButton(
 				childComposite, "Test online...", new OnlineTestAdapter());
 
-		fExportOnlineButton = getFormObjectToolkit().createButton(
+		fExportOnlineButton = formObjectToolkit.createButton(
 				childComposite, "Export online...", new OnlineExportAdapter());
-		getFormObjectToolkit().paintBorders(childComposite);
+
+		formObjectToolkit.paintBorders(childComposite);
 	}
 
 	private void createRunnerCombo() {
