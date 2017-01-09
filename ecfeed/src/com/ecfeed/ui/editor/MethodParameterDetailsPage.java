@@ -40,7 +40,7 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 	private Button fLinkedCheckbox;
 	private Combo fLinkCombo;
 
-	private class SetDefaultValueListener extends AbstractSelectionAdapter{
+	private class SetDefaultValueListener extends ComboSelectionListener {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			fParameterIf.setDefaultValue(fDefaultValueCombo.getText());
@@ -48,7 +48,7 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 		}
 	}
 
-	private class SetExpectedListener extends AbstractSelectionAdapter{
+	private class SetExpectedListener extends CheckBoxClickListener {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			fParameterIf.setExpected(fExpectedCheckbox.getSelection());
@@ -56,7 +56,7 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 		}
 	}
 
-	private class SetLinkedListener extends AbstractSelectionAdapter{
+	private class SetLinkedListener extends CheckBoxClickListener {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			fParameterIf.setLinked(fLinkedCheckbox.getSelection());
@@ -64,7 +64,7 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 		}
 	}
 
-	private class SetLinkListener extends AbstractSelectionAdapter{
+	private class SetLinkListener extends ComboSelectionListener {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			String linkPath = linkPath(fLinkCombo.getText());
