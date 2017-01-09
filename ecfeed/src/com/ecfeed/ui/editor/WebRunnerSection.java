@@ -10,6 +10,7 @@
 
 package com.ecfeed.ui.editor;
 
+import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
@@ -93,7 +94,7 @@ public class WebRunnerSection extends BasicSection  {
 	private void createBrowserDriverPathText(Composite gridComposite) {
 
 		fFormObjectToolkit.createLabel(gridComposite, "Web driver  ");
-		fBrowserDriverText = fFormObjectToolkit.createGridText(gridComposite, new BrowserDriverChangedAdapter());
+		fBrowserDriverText = fFormObjectToolkit.createGridText(gridComposite, new BrowserDriverFocusLostListener());
 		fFormObjectToolkit.createButton(gridComposite, "Browse...", new BrowseButtonSelectionAdapter());
 	}
 
@@ -109,7 +110,8 @@ public class WebRunnerSection extends BasicSection  {
 	private void createUrlText(Composite gridComposite) {
 
 		fFormObjectToolkit.createLabel(gridComposite, "Start URL");
-		fStartUrlText = fFormObjectToolkit.createGridText(gridComposite, new UrlChangedAdapter());
+		fStartUrlText = fFormObjectToolkit.createGridText(gridComposite, new UrlFocusLostListener());
+
 		fFormObjectToolkit.setHorizontalSpan(fStartUrlText, 2);
 	}
 
@@ -215,10 +217,10 @@ public class WebRunnerSection extends BasicSection  {
 		}
 	}
 
-	private class BrowserDriverChangedAdapter extends AbstractSelectionAdapter {
+	private class BrowserDriverFocusLostListener extends FocusLostListener {
 
 		@Override
-		public void widgetSelected(SelectionEvent e) {
+		public void focusLost(FocusEvent e) {
 			fMethodInterface.setProperty(fBrowserDriverPropertyId, fBrowserDriverText.getText());
 		}
 	}	
@@ -236,10 +238,10 @@ public class WebRunnerSection extends BasicSection  {
 		}
 	}
 
-	private class UrlChangedAdapter extends AbstractSelectionAdapter {
+	private class UrlFocusLostListener extends FocusLostListener {
 
 		@Override
-		public void widgetSelected(SelectionEvent e) {
+		public void focusLost(FocusEvent e) {
 			fMethodInterface.setProperty(fStartUrlPropertyId, fStartUrlText.getText());
 		}
 	}

@@ -20,6 +20,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.TypedListener;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.ecfeed.core.utils.StringHelper;
@@ -69,7 +70,7 @@ public class FormObjectToolkit {
 	}
 
 	public Text createGridText(Composite parentGridComposite, SelectionListener selectionListener) {
-		Text text = fFormToolkit.createText(parentGridComposite, null, SWT.NONE);
+		Text text = fFormToolkit.createText(parentGridComposite, null, SWT.NONE);	
 		text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
 		if (selectionListener != null) {
@@ -78,6 +79,18 @@ public class FormObjectToolkit {
 
 		return text;
 	}
+
+	public Text createGridText(Composite parentGridComposite, FocusLostListener focusListener) {
+		Text text = fFormToolkit.createText(parentGridComposite, null, SWT.NONE);
+		text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+
+		if (focusListener != null) {
+			TypedListener typedListener = new TypedListener(focusListener);
+			text.addListener(SWT.FocusOut, typedListener);
+		}
+
+		return text;
+	}	
 
 	public Button createButton(Composite parentComposite, String text, SelectionListener selectionListener) {
 		Button button = fFormToolkit.createButton(parentComposite, text, SWT.NONE);
