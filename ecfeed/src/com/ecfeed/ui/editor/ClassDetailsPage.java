@@ -58,7 +58,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		}
 	}
 
-	private class AndroidBaseRunnerComboSelectionListener extends AbstractSelectionAdapter {
+	private class AndroidBaseRunnerComboSelectionListener extends ComboSelectionListener {
 		@Override
 		public void widgetSelected(SelectionEvent e){
 
@@ -101,7 +101,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		}
 	}	
 
-	private class RunOnAndroidCheckBoxAdapter extends AbstractSelectionAdapter{
+	private class RunOnAndroidCheckBoxAdapter extends CheckBoxClickListener {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			boolean selection = fRunOnAndroidCheckbox.getSelection();

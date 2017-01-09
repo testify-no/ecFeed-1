@@ -205,7 +205,7 @@ public class ChoicesViewer extends TableViewerSection {
 		}
 	}
 
-	private class ReplaceWithDefaultAdapter extends AbstractSelectionAdapter{
+	private class ReplaceWithDefaultAdapter extends ButtonClickListener {
 
 		@Override
 		public void widgetSelected(SelectionEvent ev) {
