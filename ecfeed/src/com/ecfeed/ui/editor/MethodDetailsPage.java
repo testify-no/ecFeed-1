@@ -11,7 +11,6 @@
 package com.ecfeed.ui.editor;
 
 import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
@@ -46,7 +45,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 
 	private final NodePropertyDefs.PropertyId fRunnerPropertyId = NodePropertyDefs.PropertyId.PROPERTY_METHOD_RUNNER;
 
-	private class OnlineTestAdapter extends SelectionAdapter {
+	private class OnlineTestAdapter extends ButtonClickListener {
 		@Override
 		public void widgetSelected(SelectionEvent ev) {
 			try {
@@ -58,7 +57,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		}
 	}
 
-	private class OnlineExportAdapter extends SelectionAdapter {
+	private class OnlineExportAdapter extends ButtonClickListener {
 		@Override
 		public void widgetSelected(SelectionEvent ev) {
 			try {
@@ -70,7 +69,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		}
 	}
 
-	private class ReassignAdapter extends SelectionAdapter {
+	private class ReassignAdapter extends ButtonClickListener {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			fMethodInterface.reassignTarget();

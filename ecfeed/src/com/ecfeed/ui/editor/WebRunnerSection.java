@@ -11,7 +11,6 @@
 package com.ecfeed.ui.editor;
 
 import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
@@ -225,7 +224,7 @@ public class WebRunnerSection extends BasicSection  {
 		}
 	}	
 
-	private class BrowseButtonSelectionAdapter extends SelectionAdapter {
+	private class BrowseButtonSelectionAdapter extends ButtonClickListener {
 		@Override
 		public void widgetSelected(SelectionEvent ev) {
 

@@ -53,7 +53,7 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 		}
 	}
 
-	private class BrowseTypeSelectionListener extends AbstractSelectionAdapter{
+	private class BrowseTypeSelectionListener extends ButtonClickListener {
 
 		@Override
 		public void widgetSelected(SelectionEvent e) {

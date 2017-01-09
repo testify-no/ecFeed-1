@@ -51,14 +51,14 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	private GlobalParametersViewer fGlobalParametersSection;
 	private JavaDocCommentsSection fCommentsSection;
 
-	private class BrowseClassesSelectionListener extends AbstractSelectionAdapter{
+	private class BrowseClassesSelectionListener extends ButtonClickListener {
 		@Override
 		public void widgetSelected(SelectionEvent e){
 			fClassIf.reassignClass();
 		}
 	}
 
-	private class AndroidBaseRunnerComboSelectionListener extends AbstractSelectionAdapter{
+	private class AndroidBaseRunnerComboSelectionListener extends AbstractSelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e){
 
@@ -71,7 +71,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		}
 	}	
 
-	private class AndroidBaseRunnerComboFocusListener implements FocusListener{
+	private class AndroidBaseRunnerComboFocusListener implements FocusListener {
 
 		@Override
 		public void focusGained(FocusEvent e) {

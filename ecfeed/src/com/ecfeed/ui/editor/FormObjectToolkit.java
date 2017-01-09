@@ -92,7 +92,7 @@ public class FormObjectToolkit {
 		return text;
 	}	
 
-	public Button createButton(Composite parentComposite, String text, SelectionListener selectionListener) {
+	public Button createButton(Composite parentComposite, String text, ButtonClickListener selectionListener) {
 		Button button = fFormToolkit.createButton(parentComposite, text, SWT.NONE);
 
 		if (selectionListener != null) {
@@ -107,7 +107,7 @@ public class FormObjectToolkit {
 		configureCombo(combo, selectionListener);
 		return combo;
 	}
-	
+
 	public Combo createReadWriteGridCombo(Composite parentComposite, ComboSelectionListener selectionListener) {
 		Combo combo = new Combo(parentComposite, SWT.DROP_DOWN);
 		configureCombo(combo, selectionListener);
@@ -115,14 +115,14 @@ public class FormObjectToolkit {
 	}	
 
 	private void configureCombo(Combo combo, ComboSelectionListener selectionListener) {
-		
+
 		combo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
 		if (selectionListener != null) {
 			combo.addSelectionListener(selectionListener);
 		}
 	}
-	
+
 	public Button createGridCheckBox(Composite parentComposite, String checkboxLabel, SelectionListener selectionListener) {
 		Button checkbox = fFormToolkit.createButton(parentComposite, checkboxLabel, SWT.CHECK);
 		GridData checkboxGridData = new GridData(SWT.FILL,  SWT.CENTER, true, false);
