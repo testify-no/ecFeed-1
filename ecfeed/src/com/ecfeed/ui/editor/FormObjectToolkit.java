@@ -80,12 +80,12 @@ public class FormObjectToolkit {
 		return text;
 	}
 
-	public Text createGridText(Composite parentGridComposite, FocusLostListener focusListener) {
+	public Text createGridText(Composite parentGridComposite, FocusLostListener focusLostListener) {
 		Text text = fFormToolkit.createText(parentGridComposite, null, SWT.NONE);
 		text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
-		if (focusListener != null) {
-			TypedListener typedListener = new TypedListener(focusListener);
+		if (focusLostListener != null) {
+			TypedListener typedListener = new TypedListener(focusLostListener);
 			text.addListener(SWT.FocusOut, typedListener);
 		}
 

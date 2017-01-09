@@ -83,21 +83,23 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		}
 	}	
 
-	private class ClassNameSelectionListener extends AbstractSelectionAdapter{
+	private class ClassNameFocusLostListener extends FocusLostListener {
+
 		@Override
-		public void widgetSelected(SelectionEvent e) {
+		public void focusLost(FocusEvent e) {
 			fClassIf.setLocalName(fClassNameText.getText());
 			fClassNameText.setText(fClassIf.getLocalName());
 		}
-	}
+	}	
 
-	private class PackageNameSelectionListener extends AbstractSelectionAdapter{
+	private class PackageNameFocusLostListener extends FocusLostListener {
+
 		@Override
-		public void widgetSelected(SelectionEvent e) {
+		public void focusLost(FocusEvent e) {
 			fClassIf.setPackageName(fPackageNameText.getText());
 			fPackageNameText.setText(fClassIf.getPackageName());
 		}
-	}
+	}	
 
 	private class RunOnAndroidCheckBoxAdapter extends AbstractSelectionAdapter{
 		@Override
@@ -146,7 +148,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		}
 		addViewerSection(fMethodsSection = new MethodsViewer(this, this, fFileInfoProvider));
 		addViewerSection(fGlobalParametersSection = new GlobalParametersViewer(this, this, fFileInfoProvider));
-		
+
 		if (fFileInfoProvider.isProjectAvailable()) {
 			addViewerSection(fOtherMethodsSection = new OtherMethodsViewer(this, this, fFileInfoProvider));
 		}
@@ -180,38 +182,21 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		composite.setLayout(new GridLayout(3, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
-		// row 1
-
-		// col 1 label 
-		getToolkit().createLabel(composite, "Package name");
-
-		// col 2 packageName
-		fPackageNameText = getToolkit().createText(composite, null, SWT.NONE);
-		fPackageNameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		fPackageNameText.addSelectionListener(new PackageNameSelectionListener());
-
-		// col 3 empty
-		getToolkit().createLabel(composite, "");
+		FormObjectToolkit formObjectToolkit = getFormObjectToolkit(); 
 
 
-		// row 2
+		formObjectToolkit.createLabel(composite, "Package name");
+		fPackageNameText = formObjectToolkit.createGridText(composite, new PackageNameFocusLostListener());
+		formObjectToolkit.createEmptyLabel(composite);
 
-		// col 1 label
-		getToolkit().createLabel(composite, "Class name");
 
-		// col 2 className
-		fClassNameText = getToolkit().createText(composite, null, SWT.NONE);
-		fClassNameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		fClassNameText.addSelectionListener(new ClassNameSelectionListener());
-
-		// col 3 browse button
+		formObjectToolkit.createLabel(composite, "Class name");
+		fClassNameText = formObjectToolkit.createGridText(composite, new ClassNameFocusLostListener());
 		if (fFileInfoProvider.isProjectAvailable()) {
-			Button browseButton = getToolkit().createButton(composite, "Browse...", SWT.NONE);
-			browseButton.addSelectionListener(new BrowseClassesSelectionListener());
-			browseButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false));
+			formObjectToolkit.createButton(composite, "Browse...", new BrowseClassesSelectionListener());
 		}
 
-		getToolkit().paintBordersFor(composite);
+		formObjectToolkit.paintBorders(composite);
 	}
 
 	private void initAndFillAndroidComposite(Composite composite) {
@@ -291,9 +276,9 @@ public class ClassDetailsPage extends BasicDetailsPage {
 
 			fMethodsSection.setInput(selectedClass);
 			fGlobalParametersSection.setInput(selectedClass);
-			
+
 			refreshOtherMethodsSection(selectedClass);
-			
+
 			if (fFileInfoProvider.isProjectAvailable()) {
 				fCommentsSection.setInput(selectedClass);
 			}
@@ -301,17 +286,17 @@ public class ClassDetailsPage extends BasicDetailsPage {
 			getMainSection().layout();
 		}
 	}
-	
+
 	private void refreshOtherMethodsSection(ClassNode classNode) {
 		if (!fFileInfoProvider.isProjectAvailable()) {
 			return;
 		}
-		
+
 		if (fClassIf.getImplementationStatus() == EImplementationStatus.NOT_IMPLEMENTED) {
 			fOtherMethodsSection.setVisible(false);
 			return;
 		}
-		
+
 		fOtherMethodsSection.setInput(classNode);
 		fOtherMethodsSection.setVisible(fOtherMethodsSection.getItemsCount() > 0);
 	}
