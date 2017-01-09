@@ -123,7 +123,7 @@ public class FormObjectToolkit {
 		}
 	}
 
-	public Button createGridCheckBox(Composite parentComposite, String checkboxLabel, SelectionListener selectionListener) {
+	public Button createGridCheckBox(Composite parentComposite, String checkboxLabel, CheckBoxClickListener selectionListener) {
 		Button checkbox = fFormToolkit.createButton(parentComposite, checkboxLabel, SWT.CHECK);
 		GridData checkboxGridData = new GridData(SWT.FILL,  SWT.CENTER, true, false);
 		checkbox.setLayoutData(checkboxGridData);

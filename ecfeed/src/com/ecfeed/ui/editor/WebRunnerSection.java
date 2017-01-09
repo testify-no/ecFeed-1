@@ -174,7 +174,7 @@ public class WebRunnerSection extends BasicSection  {
 		checkBox.setSelection(isSelected);
 	}
 
-	private class SetMapBrowserListener extends AbstractSelectionAdapter{
+	private class SetMapBrowserListener extends CheckBoxClickListener {
 
 		@Override
 		public void widgetSelected(SelectionEvent e) {
@@ -191,7 +191,7 @@ public class WebRunnerSection extends BasicSection  {
 		}
 	}	
 
-	private class SetMapStartUrlListener extends AbstractSelectionAdapter{
+	private class SetMapStartUrlListener extends CheckBoxClickListener {
 
 		@Override
 		public void widgetSelected(SelectionEvent e) {

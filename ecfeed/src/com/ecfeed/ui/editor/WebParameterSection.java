@@ -342,7 +342,7 @@ public class WebParameterSection extends BasicSection {
 		}
 	}
 
-	private class OptionalChangedAdapter extends AbstractSelectionAdapter {
+	private class OptionalChangedAdapter extends CheckBoxClickListener {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			String isOptionalStr = BooleanHelper.toString(fOptionalCheckbox.getSelection());
