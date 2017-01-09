@@ -104,15 +104,25 @@ public class FormObjectToolkit {
 
 	public Combo createReadOnlyGridCombo(Composite parentComposite, SelectionListener selectionListener) {
 		Combo combo = new Combo(parentComposite, SWT.DROP_DOWN | SWT.READ_ONLY);
+		configureCombo(combo, selectionListener);
+		return combo;
+	}
+	
+	public Combo createReadWriteGridCombo(Composite parentComposite, SelectionListener selectionListener) {
+		Combo combo = new Combo(parentComposite, SWT.DROP_DOWN);
+		configureCombo(combo, selectionListener);
+		return combo;
+	}	
+
+	private void configureCombo(Combo combo, SelectionListener selectionListener) {
+		
 		combo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
 		if (selectionListener != null) {
 			combo.addSelectionListener(selectionListener);
 		}
-
-		return combo;
 	}
-
+	
 	public Button createGridCheckBox(Composite parentComposite, String checkboxLabel, SelectionListener selectionListener) {
 		Button checkbox = fFormToolkit.createButton(parentComposite, checkboxLabel, SWT.CHECK);
 		GridData checkboxGridData = new GridData(SWT.FILL,  SWT.CENTER, true, false);
