@@ -121,6 +121,10 @@ public class WebParameterSection extends BasicSection {
 		NodePropertyDefs.PropertyId propertyId = NodePropertyDefs.PropertyId.PROPERTY_WEB_ELEMENT_TYPE;
 		NodePropertyValueSet valueSet = NodePropertyDefs.getValueSet(propertyId, parameterType);
 
+		if (valueSet == null) {
+			return null;
+		}
+
 		String webElementValue = fMethodParameterNode.getPropertyValue(propertyId);
 
 		if (!valueSet.isOneOfPossibleValues(webElementValue)) {
@@ -137,6 +141,9 @@ public class WebParameterSection extends BasicSection {
 
 	private void refreshControls(String webElementType) {
 
+		if (webElementType == null) {
+			return;
+		}
 		refreshWebElementTypeCombo(webElementType);
 		refreshOptionalCheckBox(webElementType);
 		refreshFindByTypeAndValue(webElementType);

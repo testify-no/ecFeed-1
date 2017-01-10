@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -47,6 +48,15 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 			fDefaultValueCombo.setText(fParameterIf.getDefaultValue());
 		}
 	}
+
+	private class DefaultValueFocusLostListener extends FocusLostListener {
+
+		@Override
+		public void focusLost(FocusEvent e) {
+			fParameterIf.setDefaultValue(fDefaultValueCombo.getText());
+			fDefaultValueCombo.setText(fParameterIf.getDefaultValue());
+		}
+	}	
 
 	private class SetExpectedListener extends CheckBoxClickListener {
 		@Override
@@ -202,6 +212,7 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 		fDefaultValueCombo.setItems(fParameterIf.defaultValueSuggestions());
 		fDefaultValueCombo.setText(parameter.getDefaultValue());
 		fDefaultValueCombo.addSelectionListener(new SetDefaultValueListener());
+		fDefaultValueCombo.addFocusListener(new DefaultValueFocusLostListener());
 
 		fDefaultValueCombo.setEnabled(parameter.isExpected());
 

@@ -104,22 +104,32 @@ public class FormObjectToolkit {
 
 	public Combo createReadOnlyGridCombo(Composite parentComposite, ComboSelectionListener selectionListener) {
 		Combo combo = new Combo(parentComposite, SWT.DROP_DOWN | SWT.READ_ONLY);
-		configureCombo(combo, selectionListener);
+		configureCombo(combo, selectionListener, null);
 		return combo;
 	}
 
-	public Combo createReadWriteGridCombo(Composite parentComposite, ComboSelectionListener selectionListener) {
+	public Combo createReadWriteGridCombo(
+			Composite parentComposite, 
+			ComboSelectionListener selectionListener, 
+			FocusLostListener focusLostListener) {
 		Combo combo = new Combo(parentComposite, SWT.DROP_DOWN);
-		configureCombo(combo, selectionListener);
+		configureCombo(combo, selectionListener, focusLostListener);
 		return combo;
 	}	
 
-	private void configureCombo(Combo combo, ComboSelectionListener selectionListener) {
+	private void configureCombo(
+			Combo combo, 
+			ComboSelectionListener selectionListener, 
+			FocusLostListener focusLostListener) {
 
 		combo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
 		if (selectionListener != null) {
 			combo.addSelectionListener(selectionListener);
+		}
+
+		if (focusLostListener != null) {
+			combo.addFocusListener(focusLostListener);
 		}
 	}
 

@@ -53,6 +53,15 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 		}
 	}
 
+	private class TypeFocusLostListener extends FocusLostListener {
+
+		@Override
+		public void focusLost(FocusEvent e) {
+			getParameterIf().setType(fTypeCombo.getText());
+			fTypeCombo.setText(getParameterIf().getType());
+		}
+	}	
+
 	private class BrowseTypeSelectionListener extends ButtonClickListener {
 
 		@Override
@@ -146,13 +155,28 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 
 
 		formObjectToolkit.createLabel(fAttributesComposite, "Parameter type: ");
-		fTypeCombo = formObjectToolkit.createReadWriteGridCombo(fAttributesComposite, new SetTypeListener());
+		createParameterTypeCombo(formObjectToolkit);
+
 		if (fFileInfoProvider.isProjectAvailable()) {
 			fBrowseUserTypeButton = formObjectToolkit.createButton(fAttributesComposite, "Import...", new BrowseTypeSelectionListener());
 		}
 
 		formObjectToolkit.paintBorders(fAttributesComposite);
 		return fAttributesComposite;
+	}
+
+	private void createParameterTypeCombo(FormObjectToolkit formObjectToolkit) {
+
+		SetTypeListener setTypeListener = new SetTypeListener();
+		TypeFocusLostListener typeFocusLostListener = new TypeFocusLostListener();
+
+		if (fFileInfoProvider.isProjectAvailable()) {
+			fTypeCombo = formObjectToolkit.createReadWriteGridCombo(
+					fAttributesComposite, setTypeListener, typeFocusLostListener);
+		} else {
+			fTypeCombo = formObjectToolkit.createReadOnlyGridCombo(
+					fAttributesComposite, setTypeListener);
+		}
 	}
 
 	protected Composite getAttributesComposite(){
