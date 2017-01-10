@@ -37,14 +37,14 @@ public abstract class AbstractCommentsSection extends TabFolderSection {
 	private final static int STYLE = Section.TITLE_BAR | Section.COMPACT | Section.TWISTIE;
 	private final static String SECTION_TITLE = "Comments";
 
-	private class TabFolderSelectionListsner extends AbstractSelectionAdapter{
+	private class TabFolderSelectionListsner extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			refreshEditButton();
 		}
 	}
 
-	private class EditCommentsAdapter extends SelectionAdapter{
+	private class EditCommentsAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent ev){
 			try {
