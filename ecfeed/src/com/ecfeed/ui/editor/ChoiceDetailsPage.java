@@ -15,6 +15,7 @@ import java.util.Set;
 
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -42,15 +43,16 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 	private ChoiceInterface fChoiceIf;
 	private AbstractCommentsSection fCommentsSection;
 
-	private class NameTextListener extends AbstractSelectionAdapter{
+	private class NameTextListener extends FocusLostListener {
+		
 		@Override
-		public void widgetSelected(SelectionEvent e){
+		public void focusLost(FocusEvent e) {
 			fChoiceIf.setName(fNameText.getText());
 			fNameText.setText(fChoiceIf.getName());
 		}
 	}
 
-	private class ValueComboListener extends AbstractSelectionAdapter{
+	private class ValueComboListener extends ComboSelectionListener {
 		@Override
 		public void widgetSelected(SelectionEvent e){
 			fChoiceIf.setValue(fValueCombo.getText());
@@ -163,13 +165,11 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		fAttributesComposite.setLayout(new GridLayout(2, false));
 		fAttributesComposite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 
-		getToolkit().createLabel(fAttributesComposite, "Name");
-		fNameText = getToolkit().createText(fAttributesComposite, "", SWT.NONE);
-		fNameText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-		fNameText.addSelectionListener(new NameTextListener());
+		getFormObjectToolkit().createLabel(fAttributesComposite, "Name");
+		fNameText = getFormObjectToolkit().createGridText(fAttributesComposite, new NameTextListener());
 
-		getToolkit().createLabel(fAttributesComposite, "Value");
-		getToolkit().paintBordersFor(fAttributesComposite);
+		getFormObjectToolkit().createLabel(fAttributesComposite, "Value");
+		getFormObjectToolkit().paintBorders(fAttributesComposite);
 	}
 
 	@Override

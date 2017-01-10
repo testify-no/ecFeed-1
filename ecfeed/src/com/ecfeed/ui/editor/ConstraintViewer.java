@@ -25,6 +25,7 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeNodeContentProvider;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -280,6 +281,16 @@ public class ConstraintViewer extends TreeViewerSection {
 			}
 
 		}
+		
+		private class ConditionComboFocusLostListener extends FocusLostListener {
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				fStatementIf.setConditionValue(fConditionCombo.getText());
+				fConditionCombo.setText(fStatementIf.getConditionValue());
+			}
+
+		}		
 
 		private class StatementComboListener implements SelectionListener{
 			@Override
@@ -428,6 +439,7 @@ public class ConstraintViewer extends TreeViewerSection {
 				fConditionCombo.setItems(items);
 				fConditionCombo.setText(item);
 				fConditionCombo.addSelectionListener(new ConditionComboListener());
+				fConditionCombo.addFocusListener(new ConditionComboFocusLostListener());
 				StatementEditor.this.layout();
 			}
 

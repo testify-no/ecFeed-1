@@ -10,7 +10,6 @@
 
 package com.ecfeed.ui.editor;
 
-import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.TabItem;
 
@@ -27,7 +26,7 @@ public abstract class AbstractParameterCommentsSection extends JavaDocCommentsSe
 
 	private TabItem fParameterCommentsTab;
 
-	protected class ImportTypeSelectionAdapter extends AbstractSelectionAdapter{
+	protected class ImportTypeSelectionAdapter extends ButtonClickListener {
 		@Override
 		public void widgetSelected(SelectionEvent ev) {
 			try {
@@ -39,7 +38,7 @@ public abstract class AbstractParameterCommentsSection extends JavaDocCommentsSe
 		}
 	}
 
-	protected class ImportFullTypeSelectionAdapter extends AbstractSelectionAdapter{
+	protected class ImportFullTypeSelectionAdapter extends ButtonClickListener {
 		@Override
 		public void widgetSelected(SelectionEvent ev) {
 			try {
@@ -51,19 +50,7 @@ public abstract class AbstractParameterCommentsSection extends JavaDocCommentsSe
 		}
 	}
 
-	protected class ExportTypeSelectionAdapter extends AbstractSelectionAdapter{
-		@Override
-		public void widgetSelected(SelectionEvent ev) {
-			try {
-				getTargetIf().exportTypeJavadocComments();
-				getTabFolder().setSelection(getTabFolder().indexOf(getTypeJavadocTab()));
-			} catch (Exception e) {
-				ExceptionCatchDialog.open(Messages.EXCEPTION_CAN_NOT_EXPORT, e.getMessage());
-			}
-		}
-	}
-
-	protected class ExportFullTypeSelectionAdapter extends AbstractSelectionAdapter{
+	protected class ExportFullTypeSelectionAdapter extends ButtonClickListener {
 		@Override
 		public void widgetSelected(SelectionEvent ev) {
 			try {
@@ -75,7 +62,7 @@ public abstract class AbstractParameterCommentsSection extends JavaDocCommentsSe
 		}
 	}
 
-	protected class EditButtonListener extends AbstractSelectionAdapter{
+	protected class EditButtonListener extends ButtonClickListener {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			if(getActiveItem() == fParameterCommentsTab){
@@ -162,7 +149,7 @@ public abstract class AbstractParameterCommentsSection extends JavaDocCommentsSe
 	}
 
 	@Override
-	protected SelectionAdapter createEditButtonSelectionAdapter(){
+	protected ButtonClickListener createEditButtonSelectionAdapter(){
 		return new EditButtonListener();
 	}
 

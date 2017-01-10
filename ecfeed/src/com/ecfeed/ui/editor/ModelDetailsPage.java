@@ -11,10 +11,7 @@
 package com.ecfeed.ui.editor;
 
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IFormPart;
@@ -33,14 +30,6 @@ public class ModelDetailsPage extends BasicDetailsPage {
 	private RootInterface fRootIf;
 	private SingleTextCommentsSection fComments;
 	private IFileInfoProvider fFileInfoProvider;
-
-	private class SetNameAdapter extends AbstractSelectionAdapter{
-		@Override
-		public void widgetSelected(SelectionEvent e) {
-			fRootIf.setName(fModelNameText.getText());
-			fModelNameText.setText(fRootIf.getName());
-		}
-	}
 
 	public ModelDetailsPage(
 			ModelMasterSection masterSection, 
@@ -76,14 +65,13 @@ public class ModelDetailsPage extends BasicDetailsPage {
 	}
 
 	private void createModelNameEdit(Composite parent) {
-		Composite composite = getToolkit().createComposite(parent);
-		composite.setLayout(new GridLayout(2, false));
-		composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
-		getToolkit().createLabel(composite, "Model name", SWT.NONE);
-		fModelNameText = getToolkit().createText(composite, null, SWT.NONE);
-		fModelNameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		fModelNameText.addSelectionListener(new SetNameAdapter());
-		getToolkit().paintBordersFor(composite);
+
+		FormObjectToolkit formObjectToolkit = getFormObjectToolkit();
+		Composite composite = formObjectToolkit.createGridComposite(parent, 2);		
+
+		formObjectToolkit.createLabel(composite, "Model name");
+		fModelNameText = formObjectToolkit.createGridText(composite, new ModelNameFocusLostListener());
+		formObjectToolkit.paintBorders(composite);
 	}
 
 	@Override
@@ -114,5 +102,14 @@ public class ModelDetailsPage extends BasicDetailsPage {
 	protected Class<? extends AbstractNode> getNodeType() {
 		return RootNode.class;
 	}
+	
+	private class ModelNameFocusLostListener extends FocusLostListener{
+
+		@Override
+		public void focusLost(FocusEvent e) {
+			fRootIf.setName(fModelNameText.getText());
+			fModelNameText.setText(fRootIf.getName());
+		}
+	}	
 
 }

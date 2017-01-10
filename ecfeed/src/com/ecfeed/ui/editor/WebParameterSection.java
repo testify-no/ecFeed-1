@@ -10,6 +10,7 @@
 
 package com.ecfeed.ui.editor;
 
+import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
@@ -93,7 +94,7 @@ public class WebParameterSection extends BasicSection {
 		fFindByElemTypeCombo = fFormObjectToolkit.createReadOnlyGridCombo(fGridComposite, new FindByTypeChangedAdapter());
 		setParamsForTheFirstColumn(fFindByElemTypeCombo);
 
-		fFindByElemValueText = fFormObjectToolkit.createGridText(fGridComposite, new FindByValueChangedAdapter());
+		fFindByElemValueText = fFormObjectToolkit.createGridText(fGridComposite, new FindByValueFocusLostListener());
 
 		//
 		fFormObjectToolkit.createLabel(fGridComposite, "Action ");
@@ -120,6 +121,10 @@ public class WebParameterSection extends BasicSection {
 		NodePropertyDefs.PropertyId propertyId = NodePropertyDefs.PropertyId.PROPERTY_WEB_ELEMENT_TYPE;
 		NodePropertyValueSet valueSet = NodePropertyDefs.getValueSet(propertyId, parameterType);
 
+		if (valueSet == null) {
+			return null;
+		}
+
 		String webElementValue = fMethodParameterNode.getPropertyValue(propertyId);
 
 		if (!valueSet.isOneOfPossibleValues(webElementValue)) {
@@ -136,6 +141,9 @@ public class WebParameterSection extends BasicSection {
 
 	private void refreshControls(String webElementType) {
 
+		if (webElementType == null) {
+			return;
+		}
 		refreshWebElementTypeCombo(webElementType);
 		refreshOptionalCheckBox(webElementType);
 		refreshFindByTypeAndValue(webElementType);
@@ -307,7 +315,7 @@ public class WebParameterSection extends BasicSection {
 		refreshCombo(fActionCombo, valueSet, webElementType, currentPropertyValue);
 	}	
 
-	private class ElementTypeChangedAdapter extends AbstractSelectionAdapter {
+	private class ElementTypeChangedAdapter extends ComboSelectionListener {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 
@@ -319,28 +327,29 @@ public class WebParameterSection extends BasicSection {
 		}
 	}
 
-	private class FindByTypeChangedAdapter extends AbstractSelectionAdapter {
+	private class FindByTypeChangedAdapter extends ComboSelectionListener {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			fAbstractParameterInterface.setProperty(fFindByElemTypePropertyId, fFindByElemTypeCombo.getText());
 		}
 	}
 
-	private class FindByValueChangedAdapter extends AbstractSelectionAdapter {
+	private class FindByValueFocusLostListener extends FocusLostListener {
+
 		@Override
-		public void widgetSelected(SelectionEvent e) {
+		public void focusLost(FocusEvent e) {
 			fAbstractParameterInterface.setProperty(fFindByElemValuePropertyId, fFindByElemValueText.getText());
 		}
 	}	
 
-	private class ActionChangedAdapter extends AbstractSelectionAdapter {
+	private class ActionChangedAdapter extends ComboSelectionListener {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			fAbstractParameterInterface.setProperty(fActionPropertyId, fActionCombo.getText());
 		}
 	}
 
-	private class OptionalChangedAdapter extends AbstractSelectionAdapter {
+	private class OptionalChangedAdapter extends CheckBoxClickListener {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			String isOptionalStr = BooleanHelper.toString(fOptionalCheckbox.getSelection());

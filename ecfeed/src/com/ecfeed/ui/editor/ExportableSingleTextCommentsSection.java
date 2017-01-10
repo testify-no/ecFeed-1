@@ -20,7 +20,7 @@ import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class ExportableSingleTextCommentsSection extends SingleTextCommentsSection {
 
-	private class ExportAllSelectionAdapter extends AbstractSelectionAdapter{
+	private class ExportAllSelectionAdapter extends ButtonClickListener{
 		@Override
 		public void widgetSelected(SelectionEvent ev) {
 			try {
@@ -31,7 +31,7 @@ public class ExportableSingleTextCommentsSection extends SingleTextCommentsSecti
 		}
 	}
 
-	private class ImportAllSelectionAdapter extends AbstractSelectionAdapter{
+	private class ImportAllSelectionAdapter extends ButtonClickListener{
 		@Override
 		public void widgetSelected(SelectionEvent ev) {
 			try {

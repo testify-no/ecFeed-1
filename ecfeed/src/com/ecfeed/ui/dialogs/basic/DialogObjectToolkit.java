@@ -117,14 +117,14 @@ public class DialogObjectToolkit {
 
 	public Button createButton(Composite parent, String buttonText,
 			SelectionListener selectionListener) {
-		Button browseButton = new Button(parent, SWT.NONE);
-		browseButton.setText(buttonText);
+		Button button = new Button(parent, SWT.NONE);
+		button.setText(buttonText);
 
 		if (selectionListener != null) {
-			browseButton.addSelectionListener(selectionListener);
+			button.addSelectionListener(selectionListener);
 		}
 
-		return browseButton;
+		return button;
 	}
 
 	public Button createBrowseButton(Composite parent,

@@ -20,6 +20,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.TypedListener;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.ecfeed.core.utils.StringHelper;
@@ -69,7 +70,7 @@ public class FormObjectToolkit {
 	}
 
 	public Text createGridText(Composite parentGridComposite, SelectionListener selectionListener) {
-		Text text = fFormToolkit.createText(parentGridComposite, null, SWT.NONE);
+		Text text = fFormToolkit.createText(parentGridComposite, null, SWT.NONE);	
 		text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
 		if (selectionListener != null) {
@@ -79,7 +80,19 @@ public class FormObjectToolkit {
 		return text;
 	}
 
-	public Button createButton(Composite parentComposite, String text, SelectionListener selectionListener) {
+	public Text createGridText(Composite parentGridComposite, FocusLostListener focusLostListener) {
+		Text text = fFormToolkit.createText(parentGridComposite, null, SWT.NONE);
+		text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+
+		if (focusLostListener != null) {
+			TypedListener typedListener = new TypedListener(focusLostListener);
+			text.addListener(SWT.FocusOut, typedListener);
+		}
+
+		return text;
+	}	
+
+	public Button createButton(Composite parentComposite, String text, ButtonClickListener selectionListener) {
 		Button button = fFormToolkit.createButton(parentComposite, text, SWT.NONE);
 
 		if (selectionListener != null) {
@@ -89,18 +102,38 @@ public class FormObjectToolkit {
 		return button;
 	}
 
-	public Combo createReadOnlyGridCombo(Composite parentComposite, SelectionListener selectionListener) {
+	public Combo createReadOnlyGridCombo(Composite parentComposite, ComboSelectionListener selectionListener) {
 		Combo combo = new Combo(parentComposite, SWT.DROP_DOWN | SWT.READ_ONLY);
+		configureCombo(combo, selectionListener, null);
+		return combo;
+	}
+
+	public Combo createReadWriteGridCombo(
+			Composite parentComposite, 
+			ComboSelectionListener selectionListener, 
+			FocusLostListener focusLostListener) {
+		Combo combo = new Combo(parentComposite, SWT.DROP_DOWN);
+		configureCombo(combo, selectionListener, focusLostListener);
+		return combo;
+	}	
+
+	private void configureCombo(
+			Combo combo, 
+			ComboSelectionListener selectionListener, 
+			FocusLostListener focusLostListener) {
+
 		combo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
 		if (selectionListener != null) {
 			combo.addSelectionListener(selectionListener);
 		}
 
-		return combo;
+		if (focusLostListener != null) {
+			combo.addFocusListener(focusLostListener);
+		}
 	}
 
-	public Button createGridCheckBox(Composite parentComposite, String checkboxLabel, SelectionListener selectionListener) {
+	public Button createGridCheckBox(Composite parentComposite, String checkboxLabel, CheckBoxClickListener selectionListener) {
 		Button checkbox = fFormToolkit.createButton(parentComposite, checkboxLabel, SWT.CHECK);
 		GridData checkboxGridData = new GridData(SWT.FILL,  SWT.CENTER, true, false);
 		checkbox.setLayoutData(checkboxGridData);
@@ -116,4 +149,8 @@ public class FormObjectToolkit {
 		return (GridData)control.getLayoutData();
 	}
 
+	public void setHorizontalSpan(Control control, int span) {
+		GridData gridData = getGridData(control);
+		gridData.horizontalSpan = span;
+	}
 }

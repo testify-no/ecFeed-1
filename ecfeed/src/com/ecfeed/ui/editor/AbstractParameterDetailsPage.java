@@ -10,11 +10,8 @@
 
 package com.ecfeed.ui.editor;
 
-import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -39,15 +36,16 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 	private WebParameterSection fWebParameterSection;
 	private AbstractParameterCommentsSection fCommentsSection;
 
-	private class SetNameListener extends AbstractSelectionAdapter{
+	private class NameFocusLostListener extends FocusLostListener {
+
 		@Override
-		public void widgetSelected(SelectionEvent e) {
+		public void focusLost(FocusEvent e) {
 			getParameterIf().setName(fNameText.getText());
 			fNameText.setText(getParameterIf().getName());
 		}
-	}
+	}	
 
-	private class SetTypeListener extends AbstractSelectionAdapter{
+	private class SetTypeListener extends ComboSelectionListener {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			getParameterIf().setType(fTypeCombo.getText());
@@ -55,7 +53,16 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 		}
 	}
 
-	private class BrowseTypeSelectionListener extends AbstractSelectionAdapter{
+	private class TypeFocusLostListener extends FocusLostListener {
+
+		@Override
+		public void focusLost(FocusEvent e) {
+			getParameterIf().setType(fTypeCombo.getText());
+			fTypeCombo.setText(getParameterIf().getType());
+		}
+	}	
+
+	private class BrowseTypeSelectionListener extends ButtonClickListener {
 
 		@Override
 		public void widgetSelected(SelectionEvent e) {
@@ -138,28 +145,38 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 	}
 
 	protected Composite createAttributesComposite(){
-		fAttributesComposite = getToolkit().createComposite(getMainComposite());
-		fAttributesComposite.setLayout(new GridLayout(3, false));
-		fAttributesComposite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+		FormObjectToolkit formObjectToolkit = getFormObjectToolkit();
+		fAttributesComposite = formObjectToolkit.createGridComposite(getMainComposite(), 3);
 
-		getToolkit().createLabel(fAttributesComposite, "Parameter name: ", SWT.NONE);
-		fNameText = getToolkit().createText(fAttributesComposite, "",SWT.NONE);
-		fNameText.setLayoutData(new GridData(SWT.FILL,  SWT.CENTER, true, false, 2, 1));
-		SelectionListener nameListener = new SetNameListener();
-		fNameText.addSelectionListener(nameListener);
 
-		getToolkit().createLabel(fAttributesComposite, "Parameter type: ", SWT.NONE);
-		fTypeCombo = new Combo(fAttributesComposite,SWT.DROP_DOWN);
-		fTypeCombo.setLayoutData(new GridData(SWT.FILL,  SWT.CENTER, true, false));
-		fTypeCombo.addSelectionListener(new SetTypeListener());
+		formObjectToolkit.createLabel(fAttributesComposite, "Parameter name: ");
+		fNameText = formObjectToolkit.createGridText(fAttributesComposite, new NameFocusLostListener());
+		formObjectToolkit.setHorizontalSpan(fNameText, 2);
+
+
+		formObjectToolkit.createLabel(fAttributesComposite, "Parameter type: ");
+		createParameterTypeCombo(formObjectToolkit);
 
 		if (fFileInfoProvider.isProjectAvailable()) {
-			fBrowseUserTypeButton = getToolkit().createButton(fAttributesComposite, "Import...", SWT.NONE);
-			fBrowseUserTypeButton.addSelectionListener(new BrowseTypeSelectionListener());
+			fBrowseUserTypeButton = formObjectToolkit.createButton(fAttributesComposite, "Import...", new BrowseTypeSelectionListener());
 		}
 
-		getToolkit().paintBordersFor(fAttributesComposite);
+		formObjectToolkit.paintBorders(fAttributesComposite);
 		return fAttributesComposite;
+	}
+
+	private void createParameterTypeCombo(FormObjectToolkit formObjectToolkit) {
+
+		SetTypeListener setTypeListener = new SetTypeListener();
+		TypeFocusLostListener typeFocusLostListener = new TypeFocusLostListener();
+
+		if (fFileInfoProvider.isProjectAvailable()) {
+			fTypeCombo = formObjectToolkit.createReadWriteGridCombo(
+					fAttributesComposite, setTypeListener, typeFocusLostListener);
+		} else {
+			fTypeCombo = formObjectToolkit.createReadOnlyGridCombo(
+					fAttributesComposite, setTypeListener);
+		}
 	}
 
 	protected Composite getAttributesComposite(){

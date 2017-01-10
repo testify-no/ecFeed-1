@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -40,7 +41,7 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 	private Button fLinkedCheckbox;
 	private Combo fLinkCombo;
 
-	private class SetDefaultValueListener extends AbstractSelectionAdapter{
+	private class SetDefaultValueListener extends ComboSelectionListener {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			fParameterIf.setDefaultValue(fDefaultValueCombo.getText());
@@ -48,7 +49,16 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 		}
 	}
 
-	private class SetExpectedListener extends AbstractSelectionAdapter{
+	private class DefaultValueFocusLostListener extends FocusLostListener {
+
+		@Override
+		public void focusLost(FocusEvent e) {
+			fParameterIf.setDefaultValue(fDefaultValueCombo.getText());
+			fDefaultValueCombo.setText(fParameterIf.getDefaultValue());
+		}
+	}	
+
+	private class SetExpectedListener extends CheckBoxClickListener {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			fParameterIf.setExpected(fExpectedCheckbox.getSelection());
@@ -56,7 +66,7 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 		}
 	}
 
-	private class SetLinkedListener extends AbstractSelectionAdapter{
+	private class SetLinkedListener extends CheckBoxClickListener {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			fParameterIf.setLinked(fLinkedCheckbox.getSelection());
@@ -64,7 +74,7 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 		}
 	}
 
-	private class SetLinkListener extends AbstractSelectionAdapter{
+	private class SetLinkListener extends ComboSelectionListener {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			String linkPath = linkPath(fLinkCombo.getText());
@@ -202,6 +212,7 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 		fDefaultValueCombo.setItems(fParameterIf.defaultValueSuggestions());
 		fDefaultValueCombo.setText(parameter.getDefaultValue());
 		fDefaultValueCombo.addSelectionListener(new SetDefaultValueListener());
+		fDefaultValueCombo.addFocusListener(new DefaultValueFocusLostListener());
 
 		fDefaultValueCombo.setEnabled(parameter.isExpected());
 

@@ -8,13 +8,8 @@
  *  
  *******************************************************************************/
 
-package com.ecfeed.ui.dialogs.basic;
+package com.ecfeed.ui.editor;
 
+public abstract class ComboSelectionListener extends AbstractSelectionAdapter {
 
-public class FileOpenEctDialog {
-
-	public static String open() {
-		String[] filterExt = { "*.ect" };
-		return FileOpenDialog.open(filterExt);
-	}
 }

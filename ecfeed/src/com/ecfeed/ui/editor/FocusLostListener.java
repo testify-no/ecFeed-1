@@ -8,13 +8,15 @@
  *  
  *******************************************************************************/
 
-package com.ecfeed.ui.dialogs.basic;
+package com.ecfeed.ui.editor;
 
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 
-public class FileOpenEctDialog {
+public abstract class FocusLostListener implements FocusListener {
 
-	public static String open() {
-		String[] filterExt = { "*.ect" };
-		return FileOpenDialog.open(filterExt);
+	@Override
+	public final void focusGained(FocusEvent e) {
 	}
+
 }

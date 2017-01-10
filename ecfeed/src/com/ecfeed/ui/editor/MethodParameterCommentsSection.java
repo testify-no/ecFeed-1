@@ -41,7 +41,7 @@ public class MethodParameterCommentsSection extends AbstractParameterCommentsSec
 	private MenuItem fImportParameterCommentsItem;
 	private MenuItem fImportTypeCommentsItem;
 
-	protected class ImportParameterCommentsSelectionAdapter extends AbstractSelectionAdapter{
+	protected class ImportParameterCommentsSelectionAdapter extends MenuItemSelectionListener {
 		@Override
 		public void widgetSelected(SelectionEvent ev) {
 			try {
@@ -53,7 +53,7 @@ public class MethodParameterCommentsSection extends AbstractParameterCommentsSec
 		}
 	}
 
-	protected class ExportParameterCommentsSelectionAdapter extends AbstractSelectionAdapter{
+	protected class ExportParameterCommentsSelectionAdapter extends MenuItemSelectionListener {
 		@Override
 		public void widgetSelected(SelectionEvent ev) {
 			try {
@@ -65,7 +65,7 @@ public class MethodParameterCommentsSection extends AbstractParameterCommentsSec
 		}
 	}
 
-	protected class ExportAllParameterCommentsSelectionAdapter extends AbstractSelectionAdapter{
+	protected class ExportAllParameterCommentsSelectionAdapter extends MenuItemSelectionListener {
 		@Override
 		public void widgetSelected(SelectionEvent ev) {
 			try {
@@ -77,7 +77,7 @@ public class MethodParameterCommentsSection extends AbstractParameterCommentsSec
 		}
 	}
 
-	protected class ImportAllParameterCommentsSelectionAdapter extends AbstractSelectionAdapter{
+	protected class ImportAllParameterCommentsSelectionAdapter extends MenuItemSelectionListener {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			getTargetIf().importAllJavadocComments();

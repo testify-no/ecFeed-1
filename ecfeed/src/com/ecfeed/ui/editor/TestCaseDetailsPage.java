@@ -40,7 +40,7 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 	private TestCaseInterface fTestCaseIf;
 	private SingleTextCommentsSection fCommentsSection;
 
-	private class RenameTestCaseAdapter extends AbstractSelectionAdapter{
+	private class RenameTestCaseAdapter extends ComboSelectionListener {
 		@Override
 		public void widgetSelected(SelectionEvent e){
 			fTestCaseIf.setName(fTestSuiteNameCombo.getText());

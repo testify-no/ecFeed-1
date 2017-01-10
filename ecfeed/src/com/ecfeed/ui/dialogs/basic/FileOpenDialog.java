@@ -10,11 +10,23 @@
 
 package com.ecfeed.ui.dialogs.basic;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.FileDialog;
 
-public class FileOpenEctDialog {
+import com.ecfeed.utils.EclipseHelper;
+
+public class FileOpenDialog {
+
+	public static String open(String[] filterExtensions) {
+		FileDialog fFileDialog = new FileDialog(EclipseHelper.getActiveShell(), SWT.OPEN);
+		fFileDialog.setText("Open");
+		fFileDialog.setFilterPath(null);
+		fFileDialog.setFilterExtensions(filterExtensions);
+		return fFileDialog.open();
+	}
 
 	public static String open() {
-		String[] filterExt = { "*.ect" };
+		String[] filterExt = { "*; *.*" };
 		return FileOpenDialog.open(filterExt);
 	}
 }
