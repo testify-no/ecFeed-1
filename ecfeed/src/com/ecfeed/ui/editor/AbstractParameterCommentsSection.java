@@ -39,7 +39,7 @@ public abstract class AbstractParameterCommentsSection extends JavaDocCommentsSe
 		}
 	}
 
-	protected class ImportFullTypeSelectionAdapter extends AbstractSelectionAdapter{
+	protected class ImportFullTypeSelectionAdapter extends ButtonClickListener {
 		@Override
 		public void widgetSelected(SelectionEvent ev) {
 			try {
@@ -63,7 +63,7 @@ public abstract class AbstractParameterCommentsSection extends JavaDocCommentsSe
 		}
 	}
 
-	protected class ExportFullTypeSelectionAdapter extends AbstractSelectionAdapter{
+	protected class ExportFullTypeSelectionAdapter extends ButtonClickListener {
 		@Override
 		public void widgetSelected(SelectionEvent ev) {
 			try {

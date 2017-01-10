@@ -10,8 +10,6 @@
 
 package com.ecfeed.ui.editor;
 
-import org.eclipse.swt.events.SelectionListener;
-
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.ecfeed.ui.modelif.GlobalParameterInterface;
@@ -41,12 +39,12 @@ public class GlobalParameterCommentsSection extends AbstractParameterCommentsSec
 	}
 
 	@Override
-	protected SelectionListener createExportButtonSelectionListener(){
+	protected ButtonClickListener createExportButtonSelectionListener(){
 		return new ExportFullTypeSelectionAdapter();
 	}
 
 	@Override
-	protected SelectionListener createImportButtonSelectionListener(){
+	protected ButtonClickListener createImportButtonSelectionListener(){
 		return new ImportFullTypeSelectionAdapter();
 	}
 

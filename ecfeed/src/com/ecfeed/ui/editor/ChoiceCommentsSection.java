@@ -11,7 +11,6 @@
 package com.ecfeed.ui.editor;
 
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.ui.common.Messages;
@@ -20,7 +19,7 @@ import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class ChoiceCommentsSection extends JavaDocCommentsSection {
 
-	protected class ChoiceImportSelectionAdapter extends AbstractSelectionAdapter{
+	protected class ChoiceImportSelectionAdapter extends ButtonClickListener {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			if(getTarget().getChoices().size() > 0){
@@ -32,7 +31,7 @@ public class ChoiceCommentsSection extends JavaDocCommentsSection {
 		}
 	}
 
-	protected class ChoiceExportSelectionAdapter extends AbstractSelectionAdapter{
+	protected class ChoiceExportSelectionAdapter extends ButtonClickListener {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			if(getTarget().getChoices().size() > 0){
@@ -57,12 +56,12 @@ public class ChoiceCommentsSection extends JavaDocCommentsSection {
 	}
 
 	@Override
-	protected SelectionListener createExportButtonSelectionListener(){
+	protected ButtonClickListener createExportButtonSelectionListener(){
 		return new ChoiceExportSelectionAdapter();
 	}
 
 	@Override
-	protected SelectionListener createImportButtonSelectionListener(){
+	protected ButtonClickListener createImportButtonSelectionListener(){
 		return new ChoiceImportSelectionAdapter();
 	}
 

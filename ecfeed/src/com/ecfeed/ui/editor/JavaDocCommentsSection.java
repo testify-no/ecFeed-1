@@ -13,7 +13,6 @@ package com.ecfeed.ui.editor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
@@ -29,7 +28,7 @@ import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class JavaDocCommentsSection extends AbstractCommentsSection {
 
-	private class JavadocEditButtonListener extends AbstractSelectionAdapter{
+	private class JavadocEditButtonListener extends ButtonClickListener {
 		@Override
 		public void widgetSelected(SelectionEvent ev) {
 			getTargetIf().editComments();
@@ -37,7 +36,7 @@ public class JavaDocCommentsSection extends AbstractCommentsSection {
 		}
 	}
 
-	protected class JavadocExportSelectionAdapter extends AbstractSelectionAdapter{
+	protected class JavadocExportSelectionAdapter extends MenuItemSelectionListener {
 		@Override
 		public void widgetSelected(SelectionEvent ev) {
 			try {
@@ -49,7 +48,7 @@ public class JavaDocCommentsSection extends AbstractCommentsSection {
 		}
 	}
 
-	protected class JavadocImportSelectionAdapter extends AbstractSelectionAdapter{
+	protected class JavadocImportSelectionAdapter extends MenuItemSelectionListener {
 		@Override
 		public void widgetSelected(SelectionEvent ev) {
 			try {
@@ -61,7 +60,7 @@ public class JavaDocCommentsSection extends AbstractCommentsSection {
 		}
 	}
 
-	protected class JavadocExportAllSelectionAdapter extends AbstractSelectionAdapter{
+	protected class JavadocExportAllSelectionAdapter extends MenuItemSelectionListener {
 		@Override
 		public void widgetSelected(SelectionEvent ev) {
 			try {
@@ -73,7 +72,7 @@ public class JavaDocCommentsSection extends AbstractCommentsSection {
 		}
 	}
 
-	protected class JavadocImportAllSelectionAdapter extends AbstractSelectionAdapter{
+	protected class JavadocImportAllSelectionAdapter extends MenuItemSelectionListener {
 		@Override
 		public void widgetSelected(SelectionEvent ev) {
 			try {
@@ -161,11 +160,11 @@ public class JavaDocCommentsSection extends AbstractCommentsSection {
 		return fImportButton;
 	}
 
-	protected SelectionListener createExportButtonSelectionListener(){
+	protected ButtonClickListener createExportButtonSelectionListener(){
 		fExportButtonMenu = new Menu(fExportButton);
 		createExportMenuItems();
 
-		return new AbstractSelectionAdapter() {
+		return new ButtonClickListener() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				fExportButtonMenu.setVisible(true);
@@ -173,10 +172,11 @@ public class JavaDocCommentsSection extends AbstractCommentsSection {
 		};
 	}
 
-	protected SelectionListener createImportButtonSelectionListener(){
+	protected ButtonClickListener createImportButtonSelectionListener(){
 		fImportButtonMenu = new Menu(fImportButton);
 		createImportMenuItems();
-		return new AbstractSelectionAdapter() {
+
+		return new ButtonClickListener() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				fImportButtonMenu.setVisible(true);
