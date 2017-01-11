@@ -284,7 +284,6 @@ public class ChoicesViewer extends TableViewerSection {
 		fValueEditingSupport.setEnabled(enabled);
 		fAddChoicesButton.setEnabled(enabled);
 		fRemoveSelectedButton.setEnabled(enabled);
-		fReplaceWithDefaultButton.setEnabled(enabled);
 		fDragListener.setEnabled(enabled);
 		fDropListener.setEnabled(enabled);
 		if(enabled){

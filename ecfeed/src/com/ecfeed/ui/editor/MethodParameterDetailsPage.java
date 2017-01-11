@@ -22,6 +22,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
+import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.GlobalParameterNode;
@@ -141,7 +142,7 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 	}
 
 	@Override
-	public void refresh(){
+	public void refresh() {
 		super.refresh();
 		if(getSelectedElement() instanceof MethodParameterNode){
 			MethodParameterNode parameter = (MethodParameterNode)getSelectedElement();
@@ -169,7 +170,7 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 			if (fFileInfoProvider.isProjectAvailable()) {
 				getBrowseUserTypeButton().setEnabled(!fParameterIf.isLinked());
 			}
-			getChoicesViewer().setReplaceButtonEnabled(!fParameterIf.isLinked());
+			getChoicesViewer().setReplaceButtonEnabled(isReplaceButtonEnabled());
 
 
 			if(fParameterIf.isExpected() && fParameterIf.isPrimitive()){
@@ -180,6 +181,19 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 			}
 			getChoicesViewer().setEditEnabled(choicesViewerEnabled());
 		}
+	}
+
+	private boolean isReplaceButtonEnabled() {
+
+		if (fParameterIf.isLinked()) {
+			return false;
+		}
+
+		if (fParameterIf.getImplementationStatus() != EImplementationStatus.IMPLEMENTED) {
+			return false;
+		}
+
+		return true;
 	}
 
 	private boolean choicesViewerEnabled() {
