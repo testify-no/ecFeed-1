@@ -19,7 +19,10 @@ import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.ComboBoxViewerCellEditor;
 import org.eclipse.jface.viewers.EditingSupport;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
@@ -53,6 +56,8 @@ public class ChoicesViewer extends TableViewerSection {
 
 	private ChoicesParentInterface fParentIf;
 	private ChoiceInterface fTableItemIf;
+
+	private boolean fChoiceViewerEnabled;
 
 	private TableViewerColumn fNameColumn;
 	private TableViewerColumn fValueColumn;
@@ -199,6 +204,8 @@ public class ChoicesViewer extends TableViewerSection {
 				if(added != null){
 					getTable().setSelection(added.getIndex());
 				}
+
+				setRemoveSelectedStatus();
 			} catch (Exception e) {
 				ExceptionCatchDialog.open("Can not add choice.", e.getMessage());
 			}
@@ -211,10 +218,12 @@ public class ChoicesViewer extends TableViewerSection {
 		public void widgetSelected(SelectionEvent ev) {
 			try {
 				if(fSelectedParent == fSelectedParent.getParameter()){
-					AbstractParameterInterface parameterIf 
-					= (AbstractParameterInterface)NodeInterfaceFactory.getNodeInterface(
-							fSelectedParent, ChoicesViewer.this, fFileInfoProvider);
+					AbstractParameterInterface parameterIf = 
+							(AbstractParameterInterface)NodeInterfaceFactory.getNodeInterface(
+									fSelectedParent, ChoicesViewer.this, fFileInfoProvider);
 					parameterIf.resetChoicesToDefault();
+
+					setRemoveSelectedStatus();
 				}
 			} catch (Exception e) {
 				ExceptionCatchDialog.open("Can not replace with default.", e.getMessage());
@@ -255,7 +264,18 @@ public class ChoicesViewer extends TableViewerSection {
 		fDropListener = new ModelNodeDropListener(getViewer(), this, fFileInfoProvider);
 		getViewer().addDragSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, fDragListener);
 		getViewer().addDropSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, fDropListener);
+
+		addSelectionChangedListener(new SelectionChangedListener());
 	}
+
+	private class SelectionChangedListener implements ISelectionChangedListener {
+
+		@Override
+		public void selectionChanged(SelectionChangedEvent event) {
+			setRemoveSelectedStatus();
+		}
+	}
+
 
 	public void setInput(ChoicesParentNode parent){
 		super.setInput(parent.getChoices());
@@ -280,10 +300,12 @@ public class ChoicesViewer extends TableViewerSection {
 	}
 
 	public void setEditEnabled(boolean enabled) {
+		fChoiceViewerEnabled = enabled;
+
 		fNameEditingSupport.setEnabled(enabled);
 		fValueEditingSupport.setEnabled(enabled);
 		fAddChoicesButton.setEnabled(enabled);
-		fRemoveSelectedButton.setEnabled(enabled);
+		setRemoveSelectedStatus();
 		fDragListener.setEnabled(enabled);
 		fDropListener.setEnabled(enabled);
 		if(enabled){
@@ -296,4 +318,21 @@ public class ChoicesViewer extends TableViewerSection {
 	public void setReplaceButtonEnabled(boolean isEnabled){
 		fReplaceWithDefaultButton.setEnabled(isEnabled);
 	}
+
+	private void setRemoveSelectedStatus() {
+
+		if (!fChoiceViewerEnabled) {
+			fRemoveSelectedButton.setEnabled(false);
+			return;
+		}
+
+		ISelectionProvider selectionProvider = getViewer();
+
+		if (selectionProvider.getSelection().isEmpty()) {
+			fRemoveSelectedButton.setEnabled(false);
+		} else {
+			fRemoveSelectedButton.setEnabled(true);
+		}
+	}
+
 }
