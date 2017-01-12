@@ -51,6 +51,7 @@ import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.TestCaseNode;
+import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
@@ -155,7 +156,7 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 
 			while(groupIt.hasNext()){
 				for(NamedAction action : provider.getActions(groupIt.next())){
-					String convertedName = convertActionName(action.getName(), firstSelectedNode, fIsNameWithShortcut); 
+					String convertedName = convertActionName(action.getName(), firstSelectedNode, fIsNameWithShortcut);
 					addMenuItem(convertedName, action);
 				}
 				if(groupIt.hasNext()){

@@ -101,11 +101,16 @@ public class NamedAction extends Action {
 		}
 
 		public String getDescription(boolean isNameWithShortcut) {
-			if (isNameWithShortcut) {
-				return fName + "\t" + fShortcut;
+			
+			if (!isNameWithShortcut) {
+				return fName;
+			}
+			
+			if (fShortcut == null) {
+				return fName;
 			}
 
-			return fName;
+			return fName + "\t" + fShortcut;
 		}		
 
 		public String getId(){
