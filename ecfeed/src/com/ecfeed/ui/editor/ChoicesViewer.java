@@ -52,7 +52,8 @@ import com.ecfeed.ui.modelif.NodeInterfaceFactory;
 
 public class ChoicesViewer extends TableViewerSection {
 
-	public IFileInfoProvider fFileInfoProvider;
+	private IFileInfoProvider fFileInfoProvider;
+	private boolean fIsNameWithShortcut;
 
 	private ChoicesParentInterface fParentIf;
 	private ChoiceInterface fTableItemIf;
@@ -238,6 +239,7 @@ public class ChoicesViewer extends TableViewerSection {
 		super(sectionContext, updateContext, fileInfoProvider, StyleDistributor.getSectionStyle());
 
 		fFileInfoProvider = fileInfoProvider;
+		fIsNameWithShortcut = fileInfoProvider.isProjectAvailable();
 
 		fParentIf = new ChoicesParentInterface(this, fileInfoProvider);
 		fTableItemIf = new ChoiceInterface(this, fFileInfoProvider);
@@ -253,7 +255,7 @@ public class ChoicesViewer extends TableViewerSection {
 		fRemoveSelectedButton = 
 				addButton("Remove selected", 
 						new ActionSelectionAdapter(
-								new DeleteAction(getViewer(), this), Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
+								new DeleteAction(getViewer(), this, fIsNameWithShortcut), Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
 
 		fReplaceWithDefaultButton = addButton("Replace with default", new ReplaceWithDefaultAdapter());
 

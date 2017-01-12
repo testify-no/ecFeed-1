@@ -18,15 +18,15 @@ public class SelectAllAction extends NamedAction {
 	private TableViewer fTableViewer;
 	private TreeViewer fTreeViewer;
 	private boolean fSelectRoot;
-	
-	public SelectAllAction(TreeViewer viewer, boolean selectRoot){
-		super(GlobalActions.SELECT_ALL.getId(), GlobalActions.SELECT_ALL.getName());
+
+	public SelectAllAction(TreeViewer viewer, boolean selectRoot, boolean isNameWithShortcut){
+		super(GlobalActions.SELECT_ALL.getId(), GlobalActions.SELECT_ALL.getDescription(isNameWithShortcut));
 		fTreeViewer = viewer;
 		fSelectRoot = selectRoot;
 	}
-	
-	public SelectAllAction(TableViewer viewer){
-		super(GlobalActions.SELECT_ALL.getId(), GlobalActions.SELECT_ALL.getName());
+
+	public SelectAllAction(TableViewer viewer, boolean isNameWithShortcut){
+		super(GlobalActions.SELECT_ALL.getId(), GlobalActions.SELECT_ALL.getDescription(isNameWithShortcut));
 		fTableViewer = viewer;
 	}
 
@@ -34,7 +34,7 @@ public class SelectAllAction extends NamedAction {
 	public boolean isEnabled(){
 		return true;
 	}
-	
+
 	@Override
 	public void run(){
 		if(fTreeViewer != null){

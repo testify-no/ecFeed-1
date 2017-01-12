@@ -19,9 +19,9 @@ import com.ecfeed.core.model.AbstractNode;
 public class ExpandAction extends ModelSelectionAction {
 
 	TreeViewer fViewer;
-	
-	public ExpandAction(TreeViewer viewer) {
-		super(GlobalActions.EXPAND.getId(), GlobalActions.EXPAND.getName(), viewer);
+
+	public ExpandAction(TreeViewer viewer, boolean isNameWithShortcut) {
+		super(GlobalActions.EXPAND.getId(), GlobalActions.EXPAND.getDescription(isNameWithShortcut), viewer);
 		fViewer = viewer;
 	}
 
@@ -36,16 +36,16 @@ public class ExpandAction extends ModelSelectionAction {
 		}
 		return enabled;
 	}
-	
+
 	@Override
 	public void run(){
 		for(AbstractNode node : getSelectedNodes()){
 			fViewer.expandToLevel(node, TreeViewer.ALL_LEVELS);
 		}
 	}
-	
+
 	protected boolean getBranchExpandedState(AbstractNode branchRoot, TreeViewer viewer){
- 		if(branchRoot.getChildren().size() == 0) return true;
+		if(branchRoot.getChildren().size() == 0) return true;
 		if(viewer.getExpandedState(branchRoot) == false) return false;
 		for(AbstractNode child : branchRoot.getChildren()){
 			if(getBranchExpandedState(child, viewer) == false) return false;

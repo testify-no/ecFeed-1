@@ -18,17 +18,17 @@ public class ExpandCollapseAction extends ModelSelectionAction {
 	private ExpandAction fExpandAction;
 	private CollapseAction fCollapseAction;
 
-	public ExpandCollapseAction(TreeViewer treeViewer) {
+	public ExpandCollapseAction(TreeViewer treeViewer, boolean isNameWithShortcut) {
 		super(EXPAND_COLLAPSE_ACTION_ID, EXPAND_COLLAPSE_ACTION_NAME, treeViewer);
-		fExpandAction = new ExpandAction(treeViewer);
-		fCollapseAction = new CollapseAction(treeViewer);
+		fExpandAction = new ExpandAction(treeViewer, isNameWithShortcut);
+		fCollapseAction = new CollapseAction(treeViewer, isNameWithShortcut);
 	}
 
 	@Override
 	public boolean isEnabled(){
 		return fExpandAction.isEnabled() || fCollapseAction.isEnabled();
 	}
-	
+
 	@Override
 	public void run(){
 		if(fExpandAction.isEnabled()){

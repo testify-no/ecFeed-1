@@ -281,7 +281,7 @@ public class ConstraintViewer extends TreeViewerSection {
 			}
 
 		}
-		
+
 		private class ConditionComboFocusLostListener extends FocusLostListener {
 
 			@Override
@@ -553,8 +553,9 @@ public class ConstraintViewer extends TreeViewerSection {
 	}
 
 	public class DeleteStatementAction extends ModelModifyingAction {
-		public DeleteStatementAction(IModelUpdateContext updateContext) {
-			super(GlobalActions.DELETE.getId(), GlobalActions.DELETE.getName(), getTreeViewer(), ConstraintViewer.this);
+		public DeleteStatementAction(IModelUpdateContext updateContext, boolean isNameWithShortcut) {
+			super(GlobalActions.DELETE.getId(), GlobalActions.DELETE.getDescription(isNameWithShortcut), 
+					getTreeViewer(), ConstraintViewer.this);
 		}
 
 		@Override
@@ -597,16 +598,19 @@ public class ConstraintViewer extends TreeViewerSection {
 		super(sectionContext, updateContext, fileInfoProvider, STYLE);
 		getSection().setText("Constraint editor");
 		fAddStatementButton = addButton("Add statement", new AddStatementAdapter());
+
+		boolean isNameWithShortcut = fileInfoProvider.isProjectAvailable();
+
 		fRemoveStatementButton = 
 				addButton("Remove statement", 
 						new ActionSelectionAdapter(
-								new DeleteStatementAction(updateContext), 
+								new DeleteStatementAction(updateContext, isNameWithShortcut), 
 								Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
 
 		getViewer().addSelectionChangedListener(new StatementSelectionListener());
 
 		fStatementEditor = new StatementEditor(getClientComposite(), fileInfoProvider);
-		addKeyListener(SWT.DEL, SWT.NONE, new DeleteStatementAction(updateContext));
+		addKeyListener(SWT.DEL, SWT.NONE, new DeleteStatementAction(updateContext, isNameWithShortcut));
 	}
 
 	@Override

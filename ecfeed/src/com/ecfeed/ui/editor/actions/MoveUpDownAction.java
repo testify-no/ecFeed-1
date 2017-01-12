@@ -18,16 +18,16 @@ public class MoveUpDownAction extends ModelModifyingAction {
 
 	private boolean fUp;
 
-	public MoveUpDownAction(boolean up, ISelectionProvider selectionProvider, IModelUpdateContext updateContext) {
-		super(chooseId(up), chooseName(up), selectionProvider, updateContext);
+	public MoveUpDownAction(boolean up, ISelectionProvider selectionProvider, IModelUpdateContext updateContext, boolean isNameWithShortcut) {
+		super(chooseId(up), chooseName(up, isNameWithShortcut), selectionProvider, updateContext);
 		fUp = up;
 	}
-	
+
 	@Override
 	public boolean isEnabled(){
 		return getSelectionInterface().moveUpDownEnabed(fUp);
 	}
-	
+
 	@Override 
 	public void run(){
 		getSelectionInterface().moveUpDown(fUp);
@@ -37,7 +37,7 @@ public class MoveUpDownAction extends ModelModifyingAction {
 		return up?GlobalActions.MOVE_UP.getId():GlobalActions.MOVE_DOWN.getId();
 	}
 
-	private static String chooseName(boolean up){
-		return up?GlobalActions.MOVE_UP.getName():GlobalActions.MOVE_DOWN.getName();
+	private static String chooseName(boolean up, boolean isNameWithShortcut){
+		return up?GlobalActions.MOVE_UP.getDescription(isNameWithShortcut):GlobalActions.MOVE_DOWN.getDescription(isNameWithShortcut);
 	}
 }

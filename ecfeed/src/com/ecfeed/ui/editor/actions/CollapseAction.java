@@ -18,11 +18,11 @@ import com.ecfeed.core.model.AbstractNode;
 
 
 public class CollapseAction extends ModelSelectionAction {
-	
+
 	private TreeViewer fViewer;
 
-	public CollapseAction(TreeViewer viewer) {
-		super(GlobalActions.COLLAPSE.getId(), GlobalActions.COLLAPSE.getName(), viewer);
+	public CollapseAction(TreeViewer viewer, boolean isNameWithShortcut) {
+		super(GlobalActions.COLLAPSE.getId(), GlobalActions.COLLAPSE.getDescription(isNameWithShortcut), viewer);
 		fViewer = viewer;
 	}
 
@@ -37,7 +37,7 @@ public class CollapseAction extends ModelSelectionAction {
 		}
 		return enabled;
 	}
-	
+
 	@Override
 	public void run(){
 		for(AbstractNode node : getSelectedNodes()){
