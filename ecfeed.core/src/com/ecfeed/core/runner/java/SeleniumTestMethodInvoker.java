@@ -109,17 +109,17 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 
 	private void processWebBrowserProperty() {
 
-		String webBrowser = fMethodNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_WEB_BROWSER);
-		String browserDriver = decodeDriverPath(fMethodNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_BROWSER_DRIVER));
+		String browserName = fMethodNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_WEB_BROWSER);
+		String driverPath = decodeDriverPath(fMethodNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_BROWSER_DRIVER_PATH));
 
-		if (StringHelper.isNullOrEmpty(browserDriver)) {
-			if (!StringHelper.isEqualIgnoreCase(webBrowser, NodePropertyDefs.browserNameSafari())) {
+		if (StringHelper.isNullOrEmpty(driverPath)) {
+			if (!StringHelper.isEqualIgnoreCase(browserName, NodePropertyDefs.browserNameSafari())) {
 				return;
 			}
 		}
 
-		if (!StringHelper.isNullOrEmpty(webBrowser)) {
-			setDriver(webBrowser, browserDriver, null);
+		if (!StringHelper.isNullOrEmpty(browserName)) {
+			setDriver(browserName, driverPath, null);
 
 			if (fStartupPage != null) {
 				goToPage(fStartupPage, null);
@@ -178,44 +178,48 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		}
 	}
 
-	private void setDriverIntr(String driverName, String driverProperty, MethodParameterNode methodParameterNode) {
+	private void setDriver(String browserName, String driverPath, MethodParameterNode methodParameterNode) {
 
-		if (driverName == null) {
-			reportException("WebDriver name is empty.", methodParameterNode);
+		if (StringHelper.isNullOrEmpty(browserName)) {
+			reportException("Browser name is empty.", methodParameterNode);
 			return;
 		}
-		if (StringHelper.isEqualIgnoreCase(driverName, NodePropertyDefs.browserNameChrome())) {
-			System.setProperty("webdriver.chrome.driver", driverProperty);
+		if (StringHelper.isNullOrEmpty(driverPath)) {
+			reportException("Invalid web browser path.", methodParameterNode);
+		}
+
+		setDriverIntr(browserName, driverPath, methodParameterNode);
+		fBrowserDefined = true;
+	}
+
+	private void setDriverIntr(String browserName, String driverPath, MethodParameterNode methodParameterNode) {
+
+		if (StringHelper.isEqualIgnoreCase(browserName, NodePropertyDefs.browserNameChrome())) {
+			System.setProperty("webdriver.chrome.driver", driverPath);
 			fDriver = new ChromeDriver();
 			return;
 		}
-		if (StringHelper.isEqualIgnoreCase(driverName, NodePropertyDefs.browserNameFirefox())) {
-			System.setProperty("webdriver.gecko.driver", driverProperty);
+		if (StringHelper.isEqualIgnoreCase(browserName, NodePropertyDefs.browserNameFirefox())) {
+			System.setProperty("webdriver.gecko.driver", driverPath);
 			fDriver = new FirefoxDriver();
 			return;
 		}		
-		if (StringHelper.isEqualIgnoreCase(driverName, NodePropertyDefs.browserNameIExplorer())) {
-			System.setProperty("webdriver.ie.driver", driverProperty);
+		if (StringHelper.isEqualIgnoreCase(browserName, NodePropertyDefs.browserNameIExplorer())) {
+			System.setProperty("webdriver.ie.driver", driverPath);
 			fDriver = new InternetExplorerDriver();
 			return;
 		}		
-		if (StringHelper.isEqualIgnoreCase(driverName, NodePropertyDefs.browserNameOpera())) {
-			System.setProperty("webdriver.opera.driver", driverProperty);
+		if (StringHelper.isEqualIgnoreCase(browserName, NodePropertyDefs.browserNameOpera())) {
+			System.setProperty("webdriver.opera.driver", driverPath);
 			fDriver = new OperaDriver();
 			return;
 		}
-		if (StringHelper.isEqualIgnoreCase(driverName, NodePropertyDefs.browserNameSafari())) {
+		if (StringHelper.isEqualIgnoreCase(browserName, NodePropertyDefs.browserNameSafari())) {
 			fDriver = new SafariDriver();
 			return;
 		}		
 
-		reportException("WebDriver is not supported: " + driverName + ".", methodParameterNode);
-	}
-
-	private void setDriver(String driverName, String driverProperty, MethodParameterNode methodParameterNode) {
-
-		setDriverIntr(driverName, driverProperty, methodParameterNode);
-		fBrowserDefined = true;
+		reportException("WebDriver is not supported: " + browserName + ".", methodParameterNode);
 	}
 
 	private boolean processPageElement(MethodParameterNode methodParameterNode, String argument) {
@@ -612,6 +616,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 		if (!NodePropertyDefs.isValidBrowser(choiceName)) {
 			reportException("Invalid web browser name: " + choiceName + ".", methodParameterNode);
 		}
+
 		String driverPath = decodeDriverPath(argument);
 		setDriver(choiceName, driverPath, methodParameterNode);
 

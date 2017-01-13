@@ -40,7 +40,7 @@ public class WebRunnerSection extends BasicSection  {
 
 	private final NodePropertyDefs.PropertyId fMapBrowserPropertyId = NodePropertyDefs.PropertyId.PROPERTY_MAP_BROWSER_TO_PARAM;
 	private final NodePropertyDefs.PropertyId fBrowserPropertyId = NodePropertyDefs.PropertyId.PROPERTY_WEB_BROWSER;
-	private final NodePropertyDefs.PropertyId fBrowserDriverPropertyId = NodePropertyDefs.PropertyId.PROPERTY_BROWSER_DRIVER;
+	private final NodePropertyDefs.PropertyId fBrowserDriverPropertyId = NodePropertyDefs.PropertyId.PROPERTY_BROWSER_DRIVER_PATH;
 	private final NodePropertyDefs.PropertyId fMapStartUrlPropertyId = NodePropertyDefs.PropertyId.PROPERTY_MAP_START_URL_TO_PARAM;
 	private final NodePropertyDefs.PropertyId fStartUrlPropertyId = NodePropertyDefs.PropertyId.PROPERTY_START_URL;
 
