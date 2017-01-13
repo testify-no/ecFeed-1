@@ -13,6 +13,6 @@ package com.ecfeed.core.runner.java;
 public class TestMethodInvokerHelper {
 
 	public static String createErrorMessage(String testMethodName, String argumentsDescription, String exceptionMessage) {
-		return testMethodName + " " + argumentsDescription + ": " + exceptionMessage;
+		return "Test case: " + testMethodName + " " + argumentsDescription + "   Problem: " + exceptionMessage;
 	}
 }

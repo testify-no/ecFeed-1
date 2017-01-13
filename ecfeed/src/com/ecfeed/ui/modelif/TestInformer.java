@@ -54,8 +54,8 @@ public class TestInformer {
 		fTotalTestCases++;
 	}
 
-	protected void incrementFailedTestcases(RunnerException e){
-		fUnsuccesfullExecutionStatuses.add(new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage()));
+	protected void incrementFailedTestcases(String message){
+		fUnsuccesfullExecutionStatuses.add(new Status(IStatus.ERROR, Activator.PLUGIN_ID, message));
 	}
 
 	public boolean anyTestFailed() {
@@ -72,7 +72,14 @@ public class TestInformer {
 	protected void displayTestStatusDialog() {
 		if(fUnsuccesfullExecutionStatuses.size() > 0){
 			String msg = Messages.DIALOG_UNSUCCESSFUL_TEST_EXECUTION(fTotalTestCases, fUnsuccesfullExecutionStatuses.size());
-			MultiStatus ms = new MultiStatus(Activator.PLUGIN_ID, IStatus.ERROR, fUnsuccesfullExecutionStatuses.toArray(new Status[]{}), "Open details to see more", new RunnerException("Problematic test cases"));
+			MultiStatus ms = 
+					new MultiStatus(
+							Activator.PLUGIN_ID, 
+							IStatus.ERROR, 
+							fUnsuccesfullExecutionStatuses.toArray(new Status[]{}), 
+							"Open details to see more", 
+							new RunnerException("Problematic test cases"));
+
 			ErrorDialog.openError(null, Messages.DIALOG_TEST_EXECUTION_REPORT_TITLE, msg, ms);
 			return;
 		}

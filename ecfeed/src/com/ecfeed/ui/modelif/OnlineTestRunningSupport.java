@@ -175,7 +175,7 @@ public class OnlineTestRunningSupport extends AbstractOnlineSupport {
 				executeSingleTest();
 			} catch (RunnerException e) {
 				fTestInformer.incrementTotalTestcases();
-				fTestInformer.incrementFailedTestcases(e);
+				fTestInformer.incrementFailedTestcases(e.getMessage());
 			}
 
 			progressMonitor.worked(1);

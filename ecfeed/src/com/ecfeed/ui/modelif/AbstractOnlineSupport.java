@@ -210,7 +210,7 @@ public abstract class AbstractOnlineSupport {
 						fTestInformer.setTestProgressMessage();
 						processTestCase(next);
 					} catch (RunnerException e) {
-						fTestInformer.incrementFailedTestcases(e);
+						fTestInformer.incrementFailedTestcases(e.getMessage());
 					}
 					progressMonitor.worked(fGenerator.workProgress());
 					fTestInformer.incrementTotalTestcases();

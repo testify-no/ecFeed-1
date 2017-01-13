@@ -678,7 +678,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 	private void reportException(String message, MethodParameterNode methodParameterNode) {
 
 		if (methodParameterNode != null) {
-			message = message + " Method parameter: " + methodParameterNode.getName();
+			message = message + " Method parameter: " + methodParameterNode.getName() + ".";
 		}
 
 		String exceptionMessage = TestMethodInvokerHelper.createErrorMessage(
