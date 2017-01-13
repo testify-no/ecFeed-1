@@ -98,18 +98,16 @@ public class OnlineTestRunningSupport extends AbstractOnlineSupport {
 
 	private void runNonParametrizedTest() {
 		try {
-			IRunnableWithProgress operation = new NonParametrizedTestRunnable();
-			new ProgressMonitorDialog(Display.getCurrent().getActiveShell())
-			.run(true, true, operation);
+			IRunnableWithProgress runable = new NonParametrizedTestRunnable();
+
+			ProgressMonitorDialog progressMonitorDialog = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
+			progressMonitorDialog.run(true, true, runable);
 
 			MessageDialog.openInformation(null, "Test case executed correctly",
 					"The execution of " + getTargetMethod().toString()
 					+ " has been succesful");
-		} catch (InvocationTargetException | InterruptedException
-				| RuntimeException e) {
-			MessageDialog.openError(Display.getCurrent().getActiveShell(),
-					Messages.DIALOG_TEST_EXECUTION_PROBLEM_TITLE,
-					e.getMessage());
+		} catch (InvocationTargetException | InterruptedException | RuntimeException e) {
+			MessageDialog.openError(Display.getCurrent().getActiveShell(), Messages.DIALOG_TEST_EXECUTION_PROBLEM_TITLE, e.getMessage());
 		}
 	}
 
@@ -173,7 +171,7 @@ public class OnlineTestRunningSupport extends AbstractOnlineSupport {
 				executeSingleTest();
 			} catch (RunnerException e) {
 				SystemLogger.logCatch(e.getMessage());
-				ExceptionHelper.reportRuntimeException(e.getMessage());
+				throw new InvocationTargetException(e, e.getMessage());
 			}
 
 			monitor.worked(1);

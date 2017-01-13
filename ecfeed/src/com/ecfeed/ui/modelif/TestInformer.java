@@ -24,15 +24,15 @@ import com.ecfeed.core.runner.RunnerException;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.plugin.Activator;
 
-public abstract class TestExecutionSupport {
+public class TestInformer {
 
 	IProgressMonitor fProgressMonitor;
-
 	int fTotalWork;
 	private int fExecutedTestCases = 0;
 	private List<Status> fUnsuccesfullExecutionStatuses;
 
-	public TestExecutionSupport(){
+
+	public TestInformer(){
 		fUnsuccesfullExecutionStatuses = new ArrayList<>();
 	}
 
@@ -70,7 +70,7 @@ public abstract class TestExecutionSupport {
 		fUnsuccesfullExecutionStatuses.clear();
 	}
 
-	protected void displayTestStatusDialog(){
+	protected void displayTestStatusDialog() {
 		if(fUnsuccesfullExecutionStatuses.size() > 0){
 			String msg = Messages.DIALOG_UNSUCCESFUL_TEST_EXECUTION(fExecutedTestCases, fUnsuccesfullExecutionStatuses.size());
 			MultiStatus ms = new MultiStatus(Activator.PLUGIN_ID, IStatus.ERROR, fUnsuccesfullExecutionStatuses.toArray(new Status[]{}), "Open details to see more", new RunnerException("Problematic test cases"));
