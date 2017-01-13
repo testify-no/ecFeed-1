@@ -450,8 +450,8 @@ public class ModelMasterSection extends TreeViewerSection{
 	}
 
 	protected class MasterViewerMenuListener extends ViewerMenuListener{
-		public MasterViewerMenuListener(Menu menu) {
-			super(menu);
+		public MasterViewerMenuListener(Menu menu, boolean isNameWithShortcut) {
+			super(menu, isNameWithShortcut);
 		}
 
 		@Override
@@ -640,8 +640,8 @@ public class ModelMasterSection extends TreeViewerSection{
 	}
 
 	@Override
-	protected ViewerMenuListener getMenuListener(){
-		return new MasterViewerMenuListener(getMenu());
+	protected ViewerMenuListener getMenuListener(boolean isNameWithShortcut){
+		return new MasterViewerMenuListener(getMenu(), isNameWithShortcut);
 	}
 
 	@Override

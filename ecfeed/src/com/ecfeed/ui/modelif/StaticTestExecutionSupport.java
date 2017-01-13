@@ -36,13 +36,14 @@ import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.utils.EclipseProjectHelper;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 
-public class StaticTestExecutionSupport extends TestExecutionSupport{
+public class StaticTestExecutionSupport {
 
 	private Collection<TestCaseNode> fTestCases;
 	private JavaTestRunner fRunner;
 	private List<TestCaseNode> fFailedTests;
 	private IFileInfoProvider fFileInfoProvider;
 	private TestRunMode fTestRunMode;
+	private TestInformer fTestInformer;
 
 	private class ExecuteRunnable implements IRunnableWithProgress{
 
@@ -55,14 +56,14 @@ public class StaticTestExecutionSupport extends TestExecutionSupport{
 				new ApkInstallerExt(projectHelper).installApplicationsIfModified();
 			}			
 
-			setProgressMonitor(progressMonitor);
+			fTestInformer.setProgressMonitor(progressMonitor);
 			fFailedTests.clear();
-			beginTestExecution(fTestCases.size());
+			fTestInformer.beginTestExecution(fTestCases.size());
 
 			for(TestCaseNode testCase : fTestCases){
 				if(progressMonitor.isCanceled() == false){
 					try {
-						setTestProgressMessage();
+						fTestInformer.setTestProgressMessage();
 
 						MethodNode methodNode = testCase.getMethod();
 						fRunner.setTarget(methodNode);
@@ -73,9 +74,10 @@ public class StaticTestExecutionSupport extends TestExecutionSupport{
 
 						fRunner.runTestCase(testCase.getTestData());
 					} catch (RunnerException e) {
-						addFailedTest(e);
+						fTestInformer.incrementFailedTestcases(e.getMessage());
 					}
-					addExecutedTest(1);
+					progressMonitor.worked(1);
+					fTestInformer.incrementTotalTestcases();
 				}
 			}
 
@@ -96,6 +98,7 @@ public class StaticTestExecutionSupport extends TestExecutionSupport{
 		fFailedTests = new ArrayList<>();
 		fFileInfoProvider = fileInfoProvider;
 		fTestRunMode = testRunMode;
+		fTestInformer = new TestInformer();
 	}
 
 	public void proceed(){
@@ -120,7 +123,7 @@ public class StaticTestExecutionSupport extends TestExecutionSupport{
 			}
 			MessageDialog.openError(Display.getCurrent().getActiveShell(), Messages.DIALOG_TEST_EXECUTION_REPORT_TITLE, message);
 		}
-		displayTestStatusDialog();
+		fTestInformer.displayTestStatusDialog();
 
 		System.setOut(currentOut);
 	}

@@ -97,20 +97,20 @@ public class OnlineTestRunningSupport extends AbstractOnlineSupport {
 	}	
 
 	private void runNonParametrizedTest() {
-		try {
-			IRunnableWithProgress operation = new NonParametrizedTestRunnable();
-			new ProgressMonitorDialog(Display.getCurrent().getActiveShell())
-			.run(true, true, operation);
 
-			MessageDialog.openInformation(null, "Test case executed correctly",
-					"The execution of " + getTargetMethod().toString()
-					+ " has been succesful");
-		} catch (InvocationTargetException | InterruptedException
-				| RuntimeException e) {
-			MessageDialog.openError(Display.getCurrent().getActiveShell(),
-					Messages.DIALOG_TEST_EXECUTION_PROBLEM_TITLE,
-					e.getMessage());
+		try {
+			IRunnableWithProgress runable = new NonParametrizedTestRunnable();
+
+			ProgressMonitorDialog progressMonitorDialog = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
+			progressMonitorDialog.run(true, true, runable);
+
+			displayTestStatusDialog();
+
+		} catch (InvocationTargetException | InterruptedException | RuntimeException e) {
+			MessageDialog.openError(Display.getCurrent().getActiveShell(), Messages.DIALOG_TEST_EXECUTION_PROBLEM_TITLE, e.getMessage());
 		}
+
+
 	}
 
 	@Override
@@ -165,19 +165,21 @@ public class OnlineTestRunningSupport extends AbstractOnlineSupport {
 			monitor.done();
 		}
 
-		private void runNonParametrizedStandardTest(IProgressMonitor monitor)
+		private void runNonParametrizedStandardTest(IProgressMonitor progressMonitor)
 				throws InvocationTargetException, InterruptedException {
-			monitor.beginTask("Running test...", 1);
+			progressMonitor.beginTask("Running test...", 1);
+			fTestInformer.setProgressMonitor(progressMonitor);
+			fTestInformer.beginTestExecution(1);
 
 			try {
 				executeSingleTest();
 			} catch (RunnerException e) {
-				SystemLogger.logCatch(e.getMessage());
-				ExceptionHelper.reportRuntimeException(e.getMessage());
+				fTestInformer.incrementTotalTestcases();
+				fTestInformer.incrementFailedTestcases(e.getMessage());
 			}
 
-			monitor.worked(1);
-			monitor.done();
+			progressMonitor.worked(1);
+			progressMonitor.done();
 		}
 
 		private void executeSingleTest() throws RunnerException {

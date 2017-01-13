@@ -16,10 +16,10 @@ import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class DeleteAction extends ModelModifyingAction {
 
-	public DeleteAction(ISelectionProvider selectionProvider, IModelUpdateContext updateContext) {
-		super(GlobalActions.DELETE.getId(), GlobalActions.DELETE.getName(), selectionProvider, updateContext);
+	public DeleteAction(ISelectionProvider selectionProvider, IModelUpdateContext updateContext, boolean isNameWithShortcut) {
+		super(GlobalActions.DELETE.getId(), GlobalActions.DELETE.getDescription(isNameWithShortcut), selectionProvider, updateContext);
 	}
-	
+
 	@Override
 	public boolean isEnabled(){
 		return getSelectionInterface().deleteEnabled();
@@ -29,5 +29,5 @@ public class DeleteAction extends ModelModifyingAction {
 	public void run(){
 		getSelectionInterface().delete();
 	}
-	
+
 }

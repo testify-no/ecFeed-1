@@ -83,19 +83,25 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 
 	private class LabelsViewerActionProvider extends ActionGroups{
 
-		public LabelsViewerActionProvider(){
+		public LabelsViewerActionProvider(boolean isNameWithShortcut){
 			super();
-			addAction("edit", new LabelCopyAction());
-			addAction("edit", new CutAction(new LabelCopyAction(), new LabelDeleteAction(ChoiceLabelsViewer.this)));
-			addAction("edit", new LabelPasteAction(ChoiceLabelsViewer.this));
-			addAction("edit", new LabelDeleteAction(ChoiceLabelsViewer.this));
-			addAction("selection", new SelectAllAction(getTableViewer()));
+			addAction("edit", new LabelCopyAction(isNameWithShortcut));
+			addAction("edit", 
+					new CutAction(
+							new LabelCopyAction(isNameWithShortcut), 
+							new LabelDeleteAction(ChoiceLabelsViewer.this, isNameWithShortcut),
+							isNameWithShortcut));
+
+
+			addAction("edit", new LabelPasteAction(ChoiceLabelsViewer.this, isNameWithShortcut));
+			addAction("edit", new LabelDeleteAction(ChoiceLabelsViewer.this, isNameWithShortcut));
+			addAction("selection", new SelectAllAction(getTableViewer(), isNameWithShortcut));
 		}
 	}
 
 	private class LabelCopyAction extends NamedAction{
-		public LabelCopyAction() {
-			super(GlobalActions.COPY.getId(), GlobalActions.COPY.getName());
+		public LabelCopyAction(boolean isNameWithShortcut) {
+			super(GlobalActions.COPY.getId(), GlobalActions.COPY.getDescription(isNameWithShortcut));
 		}
 
 		@Override
@@ -110,8 +116,8 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 	}
 
 	private class LabelPasteAction extends ModelModifyingAction{
-		public LabelPasteAction(IModelUpdateContext updateContext) {
-			super(GlobalActions.PASTE.getId(), GlobalActions.PASTE.getName(), getViewer(), updateContext);
+		public LabelPasteAction(IModelUpdateContext updateContext, boolean isNameWithShortcut) {
+			super(GlobalActions.PASTE.getId(), GlobalActions.PASTE.getDescription(isNameWithShortcut), getViewer(), updateContext);
 		}
 
 		@Override
@@ -126,8 +132,9 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 	}
 
 	private class LabelDeleteAction extends ModelModifyingAction{
-		public LabelDeleteAction(IModelUpdateContext updateContext) {
-			super(GlobalActions.DELETE.getId(), GlobalActions.DELETE.getName(), getTableViewer(), updateContext);
+		public LabelDeleteAction(IModelUpdateContext updateContext, boolean isNameWithShortcut) {
+			super(GlobalActions.DELETE.getId(), GlobalActions.DELETE.getDescription(isNameWithShortcut), 
+					getTableViewer(), updateContext);
 		}
 
 		@Override
@@ -288,7 +295,7 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 		addButton("Add label", new AddLabelAdapter());
 		addButton("Remove selected", 
 				new ActionSelectionAdapter(
-						new LabelDeleteAction(updateContext), 
+						new LabelDeleteAction(updateContext, fileInfoProvider.isProjectAvailable()), 
 						Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
 
 		if (isLabelEditionInTextField(fileInfoProvider)) {
@@ -299,7 +306,7 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 		}
 
 		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
-		setActionProvider(new LabelsViewerActionProvider());
+		setActionProvider(new LabelsViewerActionProvider(fileInfoProvider.isProjectAvailable()));
 	}
 
 	private boolean isLabelEditionInTextField(IFileInfoProvider fileInfoProvider) {

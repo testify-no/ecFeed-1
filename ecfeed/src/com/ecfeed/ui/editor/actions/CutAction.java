@@ -17,8 +17,8 @@ public class CutAction extends NamedAction {
 	private Action fCopyAction;
 	private Action fDeleteAction;
 
-	public CutAction(Action copyAction, Action deleteAction) {
-		super(GlobalActions.CUT.getId(), GlobalActions.CUT.getName());
+	public CutAction(Action copyAction, Action deleteAction, boolean isNameWithShortcut) {
+		super(GlobalActions.CUT.getId(), GlobalActions.CUT.getDescription(isNameWithShortcut));
 		fCopyAction = copyAction;
 		fDeleteAction = deleteAction;
 	}
@@ -27,7 +27,7 @@ public class CutAction extends NamedAction {
 	public boolean isEnabled(){
 		return fCopyAction.isEnabled() && fDeleteAction.isEnabled();
 	}
-	
+
 	@Override
 	public void run(){
 		fCopyAction.run();

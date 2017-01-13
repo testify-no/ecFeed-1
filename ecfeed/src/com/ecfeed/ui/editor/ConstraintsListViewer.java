@@ -42,6 +42,7 @@ public class ConstraintsListViewer extends TableViewerSection {
 	private TableViewerColumn fNameColumn;
 	private MethodInterface fMethodInterface;
 	private ConstraintInterface fConstraintIf;
+	private boolean fIsNameWithShortcut;
 
 	public class ConstraintNameEditingSupport extends EditingSupport{
 
@@ -100,11 +101,12 @@ public class ConstraintsListViewer extends TableViewerSection {
 
 		fMethodInterface = new MethodInterface(this, fileInfoProvider);
 		fConstraintIf = new ConstraintInterface(this, fileInfoProvider);
+		fIsNameWithShortcut = fileInfoProvider.isProjectAvailable();
 
 		fNameColumn.setEditingSupport(new ConstraintNameEditingSupport());
 
 		addButton("Add constraint", new AddConstraintAdapter());
-		addButton("Remove selected", new ActionSelectionAdapter(new DeleteAction(getViewer(), this), Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
+		addButton("Remove selected", new ActionSelectionAdapter(new DeleteAction(getViewer(), this, fIsNameWithShortcut), Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
 
 		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
 		setActionProvider(new ModelViewerActionProvider(getTableViewer(), updateContext, fileInfoProvider));

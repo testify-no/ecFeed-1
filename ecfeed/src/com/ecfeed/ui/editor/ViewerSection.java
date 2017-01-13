@@ -51,6 +51,7 @@ import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.TestCaseNode;
+import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
@@ -71,6 +72,7 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 	private Composite fViewerComposite;
 	private Menu fMenu;
 	private Set<KeyListener> fKeyListeners;
+	private boolean fIsNameWithShortcut;
 
 	protected class ViewerKeyAdapter extends KeyAdapter{
 		private int fKeyCode;
@@ -115,27 +117,11 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 	protected class ViewerMenuListener implements MenuListener{
 
 		private Menu fMenu;
+		private boolean fIsNameWithShortcut;
 
-		private class MenuItemSelectionAdapter extends SelectionAdapter{
-
-			private Action fAction;
-
-			public MenuItemSelectionAdapter(Action action){
-				fAction = action;
-			}
-
-			@Override
-			public void widgetSelected(SelectionEvent ev){
-				try {
-					fAction.run();
-				} catch (Exception e) {
-					ExceptionCatchDialog.open(null, e.getMessage());
-				}
-			}
-		}
-
-		public ViewerMenuListener(Menu menu) {
+		public ViewerMenuListener(Menu menu, boolean isNameWithShortcut) {
 			fMenu = menu;
+			fIsNameWithShortcut = isNameWithShortcut;
 		}
 
 		protected Menu getMenu(){
@@ -170,7 +156,7 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 
 			while(groupIt.hasNext()){
 				for(NamedAction action : provider.getActions(groupIt.next())){
-					String convertedName = convertActionName(action.getName(), firstSelectedNode); 
+					String convertedName = convertActionName(action.getName(), firstSelectedNode, fIsNameWithShortcut);
 					addMenuItem(convertedName, action);
 				}
 				if(groupIt.hasNext()){
@@ -179,7 +165,7 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 			}
 		}
 
-		private String convertActionName(String oldName, AbstractNode selectedNode) {
+		private String convertActionName(String oldName, AbstractNode selectedNode, boolean isNameWithShortcut) {
 			if (!oldName.equals(NamedAction.INSERT_ACTION_NAME)) {
 				return oldName;
 			}
@@ -192,8 +178,30 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 				SystemLogger.logCatch(e.getMessage());
 			}
 
-			final String insertKey = "INS";
-			return newName + "\t" + insertKey;
+			if (isNameWithShortcut) {
+				final String insertKey = "INS";
+				return newName + "\t" + insertKey;
+			}
+
+			return newName;
+		}
+
+		private class MenuItemSelectionAdapter extends SelectionAdapter{
+
+			private Action fAction;
+
+			public MenuItemSelectionAdapter(Action action){
+				fAction = action;
+			}
+
+			@Override
+			public void widgetSelected(SelectionEvent ev){
+				try {
+					fAction.run();
+				} catch (Exception e) {
+					ExceptionCatchDialog.open(null, e.getMessage());
+				}
+			}
 		}
 
 		private class ConvertInsertNameVisitor implements IModelVisitor{
@@ -262,6 +270,7 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 		super(sectionContext, updateContext, fileInfoProvider, style);
 		fSelectedElements = new ArrayList<>();
 		fKeyListeners = new HashSet<KeyListener>();
+		fIsNameWithShortcut = fileInfoProvider.isProjectAvailable();
 	}
 
 	@Override
@@ -392,7 +401,7 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 		super.setActionProvider(provider);
 		fMenu = new Menu(fViewer.getControl());
 		fViewer.getControl().setMenu(fMenu);
-		fMenu.addMenuListener(getMenuListener());
+		fMenu.addMenuListener(getMenuListener(fIsNameWithShortcut));
 
 		if(provider != null) {
 			addKeyListenersForActions(provider, addDeleteAction);
@@ -432,8 +441,8 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 		}
 	}
 
-	protected MenuListener getMenuListener() {
-		return new ViewerMenuListener(fMenu);
+	protected MenuListener getMenuListener(boolean isNameWithShortcut) {
+		return new ViewerMenuListener(fMenu, isNameWithShortcut);
 	}
 
 	protected Menu getMenu(){

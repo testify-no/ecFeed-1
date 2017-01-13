@@ -39,7 +39,7 @@ import com.ecfeed.ui.dialogs.GeneratorProgressMonitorDialog;
 import com.ecfeed.ui.dialogs.SetupDialogOnline;
 import com.ecfeed.ui.dialogs.basic.ErrorDialog;
 
-public abstract class AbstractOnlineSupport extends TestExecutionSupport {
+public abstract class AbstractOnlineSupport {
 
 	public enum Result {
 		OK, CANCELED
@@ -52,6 +52,7 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport {
 	private String fExportTemplate;
 	private String fInitialExportTemplate;
 	private TestRunMode fTestRunMode;
+	protected TestInformer fTestInformer;
 
 	public AbstractOnlineSupport(
 			MethodNode methodNode, ITestMethodInvoker testMethodInvoker, 
@@ -69,6 +70,7 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport {
 		fFileInfoProvider = fileInfoProvider;
 		fInitialExportTemplate = initialExportTemplate;
 		fTestRunMode = TestRunModeHelper.getTestRunMode(methodNode);
+		fTestInformer = new TestInformer();
 
 		setTargetMethod(methodNode);
 	}
@@ -165,6 +167,14 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport {
 		}
 	}
 
+	protected void displayTestStatusDialog() {
+		fTestInformer.displayTestStatusDialog();
+	}
+
+	protected boolean anyTestFailed() {
+		return fTestInformer.anyTestFailed();
+	}
+
 	private class ParametrizedTestRunnable implements IRunnableWithProgress {
 
 		private IGenerator<ChoiceNode> fGenerator;
@@ -188,21 +198,22 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport {
 
 			try {
 				prepareRun();
-				setProgressMonitor(progressMonitor);
+				fTestInformer.setProgressMonitor(progressMonitor);
 
 				List<ChoiceNode> next;
 				fGenerator.initialize(fInput, fConstraints, fParameters);
-				beginTestExecution(fGenerator.totalWork());
+				fTestInformer.beginTestExecution(fGenerator.totalWork());
 
 				while ((next = fGenerator.next()) != null
 						&& progressMonitor.isCanceled() == false) {
 					try {
-						setTestProgressMessage();
+						fTestInformer.setTestProgressMessage();
 						processTestCase(next);
 					} catch (RunnerException e) {
-						addFailedTest(e);
+						fTestInformer.incrementFailedTestcases(e.getMessage());
 					}
-					addExecutedTest(fGenerator.workProgress());
+					progressMonitor.worked(fGenerator.workProgress());
+					fTestInformer.incrementTotalTestcases();
 				}
 				progressMonitor.done();
 			} catch (Throwable e) {

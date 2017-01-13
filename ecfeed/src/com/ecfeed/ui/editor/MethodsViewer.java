@@ -124,7 +124,8 @@ public class MethodsViewer extends TableViewerSection {
 		addButton("Add new method", new AddNewMethodAdapter());
 		addButton("Remove selected", 
 				new ActionSelectionAdapter(
-						new DeleteAction(getViewer(), this), Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
+						new DeleteAction(getViewer(), this, fileInfoProvider.isProjectAvailable()), 
+						Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
 
 		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
 		setActionProvider(new ModelViewerActionProvider(getTableViewer(), this, fileInfoProvider));
