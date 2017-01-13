@@ -28,7 +28,7 @@ public class TestInformer {
 
 	IProgressMonitor fProgressMonitor;
 	int fTotalWork;
-	private int fExecutedTestCases = 0;
+	private int fTotalTestCases = 0;
 	private List<Status> fUnsuccesfullExecutionStatuses;
 
 
@@ -46,16 +46,15 @@ public class TestInformer {
 	}
 
 	protected void setTestProgressMessage() {
-		String message = "Total: " + fTotalWork + "  Executed: " + fExecutedTestCases + "  Failed: " + fUnsuccesfullExecutionStatuses.size();
+		String message = "Total: " + fTotalWork + "  Executed: " + fTotalTestCases + "  Failed: " + fUnsuccesfullExecutionStatuses.size();
 		fProgressMonitor.subTask(message);
 	}
 
-	protected void addExecutedTest(int worked){
-		fProgressMonitor.worked(worked);
-		fExecutedTestCases++;
+	protected void incrementTotalTestcases(){
+		fTotalTestCases++;
 	}
 
-	protected void addFailedTest(RunnerException e){
+	protected void incrementFailedTestcases(RunnerException e){
 		fUnsuccesfullExecutionStatuses.add(new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage()));
 	}
 
@@ -72,13 +71,13 @@ public class TestInformer {
 
 	protected void displayTestStatusDialog() {
 		if(fUnsuccesfullExecutionStatuses.size() > 0){
-			String msg = Messages.DIALOG_UNSUCCESFUL_TEST_EXECUTION(fExecutedTestCases, fUnsuccesfullExecutionStatuses.size());
+			String msg = Messages.DIALOG_UNSUCCESSFUL_TEST_EXECUTION(fTotalTestCases, fUnsuccesfullExecutionStatuses.size());
 			MultiStatus ms = new MultiStatus(Activator.PLUGIN_ID, IStatus.ERROR, fUnsuccesfullExecutionStatuses.toArray(new Status[]{}), "Open details to see more", new RunnerException("Problematic test cases"));
 			ErrorDialog.openError(null, Messages.DIALOG_TEST_EXECUTION_REPORT_TITLE, msg, ms);
 			return;
 		}
-		if (fExecutedTestCases > 0) {
-			String msg = Messages.DIALOG_SUCCESFUL_TEST_EXECUTION(fExecutedTestCases);
+		if (fTotalTestCases > 0) {
+			String msg = Messages.DIALOG_SUCCESFUL_TEST_EXECUTION(fTotalTestCases);
 			MessageDialog.openInformation(null, Messages.DIALOG_TEST_EXECUTION_REPORT_TITLE, msg);
 		}
 	}

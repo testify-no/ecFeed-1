@@ -74,9 +74,10 @@ public class StaticTestExecutionSupport {
 
 						fRunner.runTestCase(testCase.getTestData());
 					} catch (RunnerException e) {
-						fTestInformer.addFailedTest(e);
+						fTestInformer.incrementFailedTestcases(e);
 					}
-					fTestInformer.addExecutedTest(1);
+					progressMonitor.worked(1);
+					fTestInformer.incrementTotalTestcases();
 				}
 			}
 

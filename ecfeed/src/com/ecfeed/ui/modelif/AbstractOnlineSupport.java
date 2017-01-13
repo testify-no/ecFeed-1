@@ -52,7 +52,7 @@ public abstract class AbstractOnlineSupport {
 	private String fExportTemplate;
 	private String fInitialExportTemplate;
 	private TestRunMode fTestRunMode;
-	private TestInformer fTestInformer;
+	protected TestInformer fTestInformer;
 
 	public AbstractOnlineSupport(
 			MethodNode methodNode, ITestMethodInvoker testMethodInvoker, 
@@ -210,9 +210,10 @@ public abstract class AbstractOnlineSupport {
 						fTestInformer.setTestProgressMessage();
 						processTestCase(next);
 					} catch (RunnerException e) {
-						fTestInformer.addFailedTest(e);
+						fTestInformer.incrementFailedTestcases(e);
 					}
-					fTestInformer.addExecutedTest(fGenerator.workProgress());
+					progressMonitor.worked(fGenerator.workProgress());
+					fTestInformer.incrementTotalTestcases();
 				}
 				progressMonitor.done();
 			} catch (Throwable e) {

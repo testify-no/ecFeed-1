@@ -97,18 +97,20 @@ public class OnlineTestRunningSupport extends AbstractOnlineSupport {
 	}	
 
 	private void runNonParametrizedTest() {
+
 		try {
 			IRunnableWithProgress runable = new NonParametrizedTestRunnable();
 
 			ProgressMonitorDialog progressMonitorDialog = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
 			progressMonitorDialog.run(true, true, runable);
 
-			MessageDialog.openInformation(null, "Test case executed correctly",
-					"The execution of " + getTargetMethod().toString()
-					+ " has been succesful");
+			displayTestStatusDialog();
+
 		} catch (InvocationTargetException | InterruptedException | RuntimeException e) {
 			MessageDialog.openError(Display.getCurrent().getActiveShell(), Messages.DIALOG_TEST_EXECUTION_PROBLEM_TITLE, e.getMessage());
 		}
+
+
 	}
 
 	@Override
@@ -163,19 +165,21 @@ public class OnlineTestRunningSupport extends AbstractOnlineSupport {
 			monitor.done();
 		}
 
-		private void runNonParametrizedStandardTest(IProgressMonitor monitor)
+		private void runNonParametrizedStandardTest(IProgressMonitor progressMonitor)
 				throws InvocationTargetException, InterruptedException {
-			monitor.beginTask("Running test...", 1);
+			progressMonitor.beginTask("Running test...", 1);
+			fTestInformer.setProgressMonitor(progressMonitor);
+			fTestInformer.beginTestExecution(1);
 
 			try {
 				executeSingleTest();
 			} catch (RunnerException e) {
-				SystemLogger.logCatch(e.getMessage());
-				throw new InvocationTargetException(e, e.getMessage());
+				fTestInformer.incrementTotalTestcases();
+				fTestInformer.incrementFailedTestcases(e);
 			}
 
-			monitor.worked(1);
-			monitor.done();
+			progressMonitor.worked(1);
+			progressMonitor.done();
 		}
 
 		private void executeSingleTest() throws RunnerException {
