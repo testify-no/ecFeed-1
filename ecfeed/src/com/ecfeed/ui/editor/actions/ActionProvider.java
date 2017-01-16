@@ -15,7 +15,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 
-public abstract class ActionGroups implements IActionProvider {
+public abstract class ActionProvider implements IActionProvider {
 
 	private boolean fEnabled;
 
@@ -31,7 +31,7 @@ public abstract class ActionGroups implements IActionProvider {
 
 	private Set<GrouppedAction> fActions;
 
-	public ActionGroups(){
+	public ActionProvider(){
 		fActions = new LinkedHashSet<>();
 		fEnabled = true;
 	}

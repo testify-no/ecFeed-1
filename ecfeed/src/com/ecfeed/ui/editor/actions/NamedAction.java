@@ -32,6 +32,7 @@ public class NamedAction extends Action {
 	public static final String JAVADOC_IMPORT_ACTION_ID = "javadoc.import";
 	public static final String JAVADOC_EXPORT_TYPE_ACTION_ID = "javadoc.exportType";
 	public static final String JAVADOC_IMPORT_TYPE_ACTION_ID = "javadoc.importType";
+	public static final String SAVE_ACTION_ID = "save";
 
 	public static final String COPY_ACTION_NAME = "Copy";
 	public static final String COPY_ACTION_SHORTCUT = "Ctrl+C";
@@ -75,6 +76,9 @@ public class NamedAction extends Action {
 	public static final String JAVADOC_IMPORT_ACTION_NAME = "Import javadoc";
 	public static final String JAVADOC_EXPORT_TYPE_ACTION_NAME = "javadoc.exportType";
 	public static final String JAVADOC_IMPORT_TYPE_ACTION_NAME = "javadoc.importType";
+	
+	public static final String SAVE_ACTION_NAME = "Save";
+	public static final String SAVE_ACTION_SHORTCUT = "Ctrl+S";
 
 	protected enum GlobalActions{
 		COPY(COPY_ACTION_ID, COPY_ACTION_NAME, COPY_ACTION_SHORTCUT),
@@ -88,7 +92,9 @@ public class NamedAction extends Action {
 		MOVE_UP(MOVE_UP_ACTION_ID, MOVE_UP_ACTION_NAME, MOVE_UP_ACTION_SHORTCUT),
 		MOVE_DOWN(MOVE_DOWN_ACTION_ID, MOVE_DOWN_ACTION_NAME, MOVE_DOWN_ACTION_SHORTCUT),
 		EXPAND(EXPAND_ACTION_ID, EXPAND_ACTION_NAME, EXPAND_ACTION_SHORTCUT),
-		COLLAPSE(COLLAPSE_ACTION_ID, COLLAPSE_ACTION_NAME, COLLAPSE_ACTION_SHORTCUT);
+		COLLAPSE(COLLAPSE_ACTION_ID, COLLAPSE_ACTION_NAME, COLLAPSE_ACTION_SHORTCUT),
+		
+		SAVE(SAVE_ACTION_ID, SAVE_ACTION_NAME, SAVE_ACTION_SHORTCUT);
 
 		private String fId;
 		private String fName;

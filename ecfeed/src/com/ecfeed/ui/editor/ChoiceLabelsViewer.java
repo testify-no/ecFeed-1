@@ -42,7 +42,7 @@ import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.dialogs.basic.ErrorDialog;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
-import com.ecfeed.ui.editor.actions.ActionGroups;
+import com.ecfeed.ui.editor.actions.ActionProvider;
 import com.ecfeed.ui.editor.actions.CutAction;
 import com.ecfeed.ui.editor.actions.ModelModifyingAction;
 import com.ecfeed.ui.editor.actions.NamedAction;
@@ -81,7 +81,7 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 		}
 	}
 
-	private class LabelsViewerActionProvider extends ActionGroups{
+	private class LabelsViewerActionProvider extends ActionProvider{
 
 		public LabelsViewerActionProvider(){
 			super();

@@ -440,6 +440,12 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 			fKeyListeners.add(createKeyListener('v', SWT.CTRL, pasteAction));
 			fKeyListeners.add(createKeyListener('V', SWT.CTRL, pasteAction));
 		}		
+		
+		NamedAction saveAction = provider.getAction(NamedAction.SAVE_ACTION_ID);
+		if (saveAction != null) {
+			fKeyListeners.add(createKeyListener('s', SWT.CTRL, saveAction));
+			fKeyListeners.add(createKeyListener('S', SWT.CTRL, saveAction));
+		}		
 	}
 
 	private void removeKeyListeners() {
