@@ -51,7 +51,6 @@ import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.TestCaseNode;
-import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
@@ -72,7 +71,6 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 	private Composite fViewerComposite;
 	private Menu fMenu;
 	private Set<KeyListener> fKeyListeners;
-	private boolean fIsNameWithShortcut;
 
 	protected class ViewerKeyAdapter extends KeyAdapter{
 		private int fKeyCode;
@@ -117,11 +115,9 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 	protected class ViewerMenuListener implements MenuListener{
 
 		private Menu fMenu;
-		private boolean fIsNameWithShortcut;
 
-		public ViewerMenuListener(Menu menu, boolean isNameWithShortcut) {
+		public ViewerMenuListener(Menu menu) {
 			fMenu = menu;
-			fIsNameWithShortcut = isNameWithShortcut;
 		}
 
 		protected Menu getMenu(){
@@ -156,7 +152,7 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 
 			while(groupIt.hasNext()){
 				for(NamedAction action : provider.getActions(groupIt.next())){
-					String convertedName = convertActionName(action.getName(), firstSelectedNode, fIsNameWithShortcut);
+					String convertedName = convertActionName(action.getName(), firstSelectedNode);
 					addMenuItem(convertedName, action);
 				}
 				if(groupIt.hasNext()){
@@ -165,7 +161,7 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 			}
 		}
 
-		private String convertActionName(String oldName, AbstractNode selectedNode, boolean isNameWithShortcut) {
+		private String convertActionName(String oldName, AbstractNode selectedNode) {
 			if (!oldName.equals(NamedAction.INSERT_ACTION_NAME)) {
 				return oldName;
 			}
@@ -178,12 +174,8 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 				SystemLogger.logCatch(e.getMessage());
 			}
 
-			if (isNameWithShortcut) {
-				final String insertKey = "INS";
-				return newName + "\t" + insertKey;
-			}
-
-			return newName;
+			final String insertKey = "INS";
+			return newName + "\t" + insertKey;
 		}
 
 		private class MenuItemSelectionAdapter extends SelectionAdapter{
@@ -270,7 +262,6 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 		super(sectionContext, updateContext, fileInfoProvider, style);
 		fSelectedElements = new ArrayList<>();
 		fKeyListeners = new HashSet<KeyListener>();
-		fIsNameWithShortcut = fileInfoProvider.isProjectAvailable();
 	}
 
 	@Override
@@ -386,7 +377,7 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 		return fViewerComposite;
 	}
 
-	protected KeyListener addKeyListener(int keyCode, int modifier, Action action){
+	protected KeyListener createKeyListener(int keyCode, int modifier, Action action){
 		ViewerKeyAdapter adapter = new ViewerKeyAdapter(keyCode, modifier, action);
 		fViewer.getControl().addKeyListener(adapter);
 		return adapter;
@@ -401,7 +392,7 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 		super.setActionProvider(provider);
 		fMenu = new Menu(fViewer.getControl());
 		fViewer.getControl().setMenu(fMenu);
-		fMenu.addMenuListener(getMenuListener(fIsNameWithShortcut));
+		fMenu.addMenuListener(getMenuListener());
 
 		if(provider != null) {
 			addKeyListenersForActions(provider, addDeleteAction);
@@ -413,24 +404,42 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 	private void addKeyListenersForActions(IActionProvider provider, boolean addDeleteAction) {
 
 		NamedAction insertAction = provider.getAction(NamedAction.INSERT_ACTION_ID);
-		if(insertAction != null){
-			fKeyListeners.add(addKeyListener(SWT.INSERT, SWT.NONE, insertAction));
+		if (insertAction != null) {
+			fKeyListeners.add(createKeyListener(SWT.INSERT, SWT.NONE, insertAction));
 		}
 
 		NamedAction deleteAction = provider.getAction(ActionFactory.DELETE.getId());
-		if(addDeleteAction && deleteAction != null){
-			fKeyListeners.add(addKeyListener(SWT.DEL, SWT.NONE, deleteAction));
+		if (addDeleteAction && deleteAction != null) {
+			fKeyListeners.add(createKeyListener(SWT.DEL, SWT.NONE, deleteAction));
 		}
 
 		NamedAction arrowUpAction = provider.getAction(NamedAction.MOVE_UP_ACTION_ID); 
-		if(arrowUpAction != null) {
-			fKeyListeners.add(addKeyListener(SWT.ARROW_UP, SWT.ALT, arrowUpAction));
+		if (arrowUpAction != null) {
+			fKeyListeners.add(createKeyListener(SWT.ARROW_UP, SWT.ALT, arrowUpAction));
 		}
 
 		NamedAction arrowDownAction = provider.getAction(NamedAction.MOVE_DOWN_ACTION_ID); 
-		if(arrowDownAction != null){
-			fKeyListeners.add(addKeyListener(SWT.ARROW_DOWN, SWT.ALT, arrowDownAction));
+		if (arrowDownAction != null) {
+			fKeyListeners.add(createKeyListener(SWT.ARROW_DOWN, SWT.ALT, arrowDownAction));
 		}
+
+		NamedAction copyAction = provider.getAction(NamedAction.COPY_ACTION_ID);
+		if (copyAction != null) {
+			fKeyListeners.add(createKeyListener('c', SWT.CTRL, copyAction));
+			fKeyListeners.add(createKeyListener('C', SWT.CTRL, copyAction));
+		}
+
+		NamedAction cutAction = provider.getAction(NamedAction.CUT_ACTION_ID);
+		if (copyAction != null) {
+			fKeyListeners.add(createKeyListener('x', SWT.CTRL, cutAction));
+			fKeyListeners.add(createKeyListener('X', SWT.CTRL, cutAction));
+		}		
+
+		NamedAction pasteAction = provider.getAction(NamedAction.PASTE_ACTION_ID);
+		if (copyAction != null) {
+			fKeyListeners.add(createKeyListener('v', SWT.CTRL, pasteAction));
+			fKeyListeners.add(createKeyListener('V', SWT.CTRL, pasteAction));
+		}		
 	}
 
 	private void removeKeyListeners() {
@@ -441,8 +450,8 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 		}
 	}
 
-	protected MenuListener getMenuListener(boolean isNameWithShortcut) {
-		return new ViewerMenuListener(fMenu, isNameWithShortcut);
+	protected MenuListener getMenuListener() {
+		return new ViewerMenuListener(fMenu);
 	}
 
 	protected Menu getMenu(){

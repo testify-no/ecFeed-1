@@ -48,7 +48,7 @@ public class NamedAction extends Action {
 	public static final String DELETE_ACTION_SHORTCUT = "DEL";
 
 	public static final String SELECT_ALL_ACTION_NAME = "Select All";
-	public static final String SELECT_ALL_ACTION_SHORTCUT = "Select All\tCtrl+A";
+	public static final String SELECT_ALL_ACTION_SHORTCUT = "Ctrl+A";
 
 	public static final String UNDO_ACTION_NAME = "Undo";
 	public static final String UNDO_ACTION_SHORTCUT = "Ctrl+Z";
@@ -100,12 +100,8 @@ public class NamedAction extends Action {
 			fShortcut = shortcut;
 		}
 
-		public String getDescription(boolean isNameWithShortcut) {
-			
-			if (!isNameWithShortcut) {
-				return fName;
-			}
-			
+		public String getDescription() {
+
 			if (fShortcut == null) {
 				return fName;
 			}

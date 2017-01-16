@@ -59,7 +59,7 @@ public abstract class TreeViewerSection extends ViewerSection {
 	protected void setActionProvider(IActionProvider provider){
 		super.setActionProvider(provider);
 		if(provider.getAction(NamedAction.EXPAND_COLLAPSE_ACTION_ID) != null){
-			addKeyListener(SWT.SPACE, SWT.NONE, provider.getAction(NamedAction.EXPAND_COLLAPSE_ACTION_ID));
+			createKeyListener(SWT.SPACE, SWT.NONE, provider.getAction(NamedAction.EXPAND_COLLAPSE_ACTION_ID));
 		}
 	}
 }

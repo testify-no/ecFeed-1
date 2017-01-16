@@ -16,8 +16,8 @@ import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class DeleteAction extends ModelModifyingAction {
 
-	public DeleteAction(ISelectionProvider selectionProvider, IModelUpdateContext updateContext, boolean isNameWithShortcut) {
-		super(GlobalActions.DELETE.getId(), GlobalActions.DELETE.getDescription(isNameWithShortcut), selectionProvider, updateContext);
+	public DeleteAction(ISelectionProvider selectionProvider, IModelUpdateContext updateContext) {
+		super(GlobalActions.DELETE.getId(), GlobalActions.DELETE.getDescription(), selectionProvider, updateContext);
 	}
 
 	@Override

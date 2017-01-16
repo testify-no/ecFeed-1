@@ -21,8 +21,8 @@ public class CollapseAction extends ModelSelectionAction {
 
 	private TreeViewer fViewer;
 
-	public CollapseAction(TreeViewer viewer, boolean isNameWithShortcut) {
-		super(GlobalActions.COLLAPSE.getId(), GlobalActions.COLLAPSE.getDescription(isNameWithShortcut), viewer);
+	public CollapseAction(TreeViewer viewer) {
+		super(GlobalActions.COLLAPSE.getId(), GlobalActions.COLLAPSE.getDescription(), viewer);
 		fViewer = viewer;
 	}
 

@@ -29,9 +29,8 @@ public class InsertAction extends ModelModifyingAction {
 			ISelectionProvider selectionProvider,
 			StructuredViewer structuredViewer,
 			IModelUpdateContext updateContext,
-			IFileInfoProvider fileInfoProvider,
-			boolean isNameWithShortcut) {
-		super(GlobalActions.INSERT.getId(), GlobalActions.INSERT.getDescription(isNameWithShortcut), 
+			IFileInfoProvider fileInfoProvider) {
+		super(GlobalActions.INSERT.getId(), GlobalActions.INSERT.getDescription(), 
 				selectionProvider, updateContext);
 		fFileInfoProvider = fileInfoProvider;
 		fStructuredViewer = structuredViewer;

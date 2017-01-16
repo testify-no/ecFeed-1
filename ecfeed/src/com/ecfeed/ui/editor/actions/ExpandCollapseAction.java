@@ -18,10 +18,10 @@ public class ExpandCollapseAction extends ModelSelectionAction {
 	private ExpandAction fExpandAction;
 	private CollapseAction fCollapseAction;
 
-	public ExpandCollapseAction(TreeViewer treeViewer, boolean isNameWithShortcut) {
+	public ExpandCollapseAction(TreeViewer treeViewer) {
 		super(EXPAND_COLLAPSE_ACTION_ID, EXPAND_COLLAPSE_ACTION_NAME, treeViewer);
-		fExpandAction = new ExpandAction(treeViewer, isNameWithShortcut);
-		fCollapseAction = new CollapseAction(treeViewer, isNameWithShortcut);
+		fExpandAction = new ExpandAction(treeViewer);
+		fCollapseAction = new CollapseAction(treeViewer);
 	}
 
 	@Override
