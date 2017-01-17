@@ -423,6 +423,12 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 			fKeyListeners.add(createKeyListener(SWT.ARROW_DOWN, SWT.ALT, arrowDownAction));
 		}
 
+		if (!getFileInfoProvider().isProjectAvailable()) {
+			addActionsForStandaloneApp(provider);
+		}
+	}
+	
+	private void addActionsForStandaloneApp(IActionProvider provider) {
 		NamedAction copyAction = provider.getAction(NamedAction.COPY_ACTION_ID);
 		if (copyAction != null) {
 			fKeyListeners.add(createKeyListener('c', SWT.CTRL, copyAction));
@@ -440,12 +446,12 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 			fKeyListeners.add(createKeyListener('v', SWT.CTRL, pasteAction));
 			fKeyListeners.add(createKeyListener('V', SWT.CTRL, pasteAction));
 		}		
-		
+
 		NamedAction saveAction = provider.getAction(NamedAction.SAVE_ACTION_ID);
 		if (saveAction != null) {
 			fKeyListeners.add(createKeyListener('s', SWT.CTRL, saveAction));
 			fKeyListeners.add(createKeyListener('S', SWT.CTRL, saveAction));
-		}		
+		}
 	}
 
 	private void removeKeyListeners() {
