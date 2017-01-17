@@ -44,6 +44,7 @@ import com.ecfeed.ui.dialogs.basic.ErrorDialog;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.editor.actions.ActionProvider;
 import com.ecfeed.ui.editor.actions.CutAction;
+import com.ecfeed.ui.editor.actions.GlobalActions;
 import com.ecfeed.ui.editor.actions.ModelModifyingAction;
 import com.ecfeed.ui.editor.actions.NamedAction;
 import com.ecfeed.ui.editor.actions.SelectAllAction;

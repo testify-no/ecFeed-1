@@ -18,7 +18,6 @@ import org.eclipse.jface.viewers.TreeViewer;
 import com.ecfeed.core.adapter.IModelImplementer;
 import com.ecfeed.ui.common.EclipseModelImplementer;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
-import com.ecfeed.ui.editor.actions.NamedAction.GlobalActions;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 
@@ -70,7 +69,7 @@ public class ModelViewerActionProvider extends ActionProvider {
 		addAction("edit", new PasteAction(selectionProvider, context, fileInfoProvider));
 		addAction("edit", new InsertAction(selectionProvider, structuredViewer, context, fileInfoProvider));
 		addAction("edit", deleteAction);
-		
+
 		addAction("edit", new SaveAction(GlobalActions.SAVE.getId(), GlobalActions.SAVE.getDescription()));
 	}
 

@@ -17,8 +17,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
 
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.editor.actions.GlobalActions;
 import com.ecfeed.ui.editor.actions.IActionProvider;
-import com.ecfeed.ui.editor.actions.NamedAction;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 public abstract class TreeViewerSection extends ViewerSection {
@@ -58,8 +58,8 @@ public abstract class TreeViewerSection extends ViewerSection {
 	@Override
 	protected void setActionProvider(IActionProvider provider){
 		super.setActionProvider(provider);
-		if(provider.getAction(NamedAction.EXPAND_COLLAPSE_ACTION_ID) != null){
-			createKeyListener(SWT.SPACE, SWT.NONE, provider.getAction(NamedAction.EXPAND_COLLAPSE_ACTION_ID));
+		if(provider.getAction(GlobalActions.EXPAND_COLLAPSE.getId()) != null){
+			createKeyListener(SWT.SPACE, SWT.NONE, provider.getAction(GlobalActions.EXPAND_COLLAPSE.getId()));
 		}
 	}
 }

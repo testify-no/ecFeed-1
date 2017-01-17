@@ -39,7 +39,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
-import org.eclipse.ui.actions.ActionFactory;
 
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ChoiceNode;
@@ -54,6 +53,7 @@ import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
+import com.ecfeed.ui.editor.actions.GlobalActions;
 import com.ecfeed.ui.editor.actions.IActionProvider;
 import com.ecfeed.ui.editor.actions.NamedAction;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
@@ -162,7 +162,7 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 		}
 
 		private String convertActionName(String oldName, AbstractNode selectedNode) {
-			if (!oldName.equals(NamedAction.INSERT_ACTION_NAME)) {
+			if (!oldName.equals(GlobalActions.INSERT.getDescription())) {
 				return oldName;
 			}
 
@@ -403,22 +403,22 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 
 	private void addKeyListenersForActions(IActionProvider provider, boolean addDeleteAction) {
 
-		NamedAction insertAction = provider.getAction(NamedAction.INSERT_ACTION_ID);
+		NamedAction insertAction = provider.getAction(GlobalActions.INSERT.getId());
 		if (insertAction != null) {
 			fKeyListeners.add(createKeyListener(SWT.INSERT, SWT.NONE, insertAction));
 		}
 
-		NamedAction deleteAction = provider.getAction(ActionFactory.DELETE.getId());
+		NamedAction deleteAction = provider.getAction(GlobalActions.DELETE.getId());
 		if (addDeleteAction && deleteAction != null) {
 			fKeyListeners.add(createKeyListener(SWT.DEL, SWT.NONE, deleteAction));
 		}
 
-		NamedAction arrowUpAction = provider.getAction(NamedAction.MOVE_UP_ACTION_ID); 
+		NamedAction arrowUpAction = provider.getAction(GlobalActions.MOVE_UP.getId()); 
 		if (arrowUpAction != null) {
 			fKeyListeners.add(createKeyListener(SWT.ARROW_UP, SWT.ALT, arrowUpAction));
 		}
 
-		NamedAction arrowDownAction = provider.getAction(NamedAction.MOVE_DOWN_ACTION_ID); 
+		NamedAction arrowDownAction = provider.getAction(GlobalActions.MOVE_DOWN.getId()); 
 		if (arrowDownAction != null) {
 			fKeyListeners.add(createKeyListener(SWT.ARROW_DOWN, SWT.ALT, arrowDownAction));
 		}
@@ -427,27 +427,27 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 			addActionsForStandaloneApp(provider);
 		}
 	}
-	
+
 	private void addActionsForStandaloneApp(IActionProvider provider) {
-		NamedAction copyAction = provider.getAction(NamedAction.COPY_ACTION_ID);
+		NamedAction copyAction = provider.getAction(GlobalActions.COPY.getId());
 		if (copyAction != null) {
 			fKeyListeners.add(createKeyListener('c', SWT.CTRL, copyAction));
 			fKeyListeners.add(createKeyListener('C', SWT.CTRL, copyAction));
 		}
 
-		NamedAction cutAction = provider.getAction(NamedAction.CUT_ACTION_ID);
+		NamedAction cutAction = provider.getAction(GlobalActions.CUT.getId());
 		if (copyAction != null) {
 			fKeyListeners.add(createKeyListener('x', SWT.CTRL, cutAction));
 			fKeyListeners.add(createKeyListener('X', SWT.CTRL, cutAction));
 		}		
 
-		NamedAction pasteAction = provider.getAction(NamedAction.PASTE_ACTION_ID);
+		NamedAction pasteAction = provider.getAction(GlobalActions.PASTE.getId());
 		if (copyAction != null) {
 			fKeyListeners.add(createKeyListener('v', SWT.CTRL, pasteAction));
 			fKeyListeners.add(createKeyListener('V', SWT.CTRL, pasteAction));
 		}		
 
-		NamedAction saveAction = provider.getAction(NamedAction.SAVE_ACTION_ID);
+		NamedAction saveAction = provider.getAction(GlobalActions.SAVE.getId());
 		if (saveAction != null) {
 			fKeyListeners.add(createKeyListener('s', SWT.CTRL, saveAction));
 			fKeyListeners.add(createKeyListener('S', SWT.CTRL, saveAction));
