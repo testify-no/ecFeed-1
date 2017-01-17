@@ -45,6 +45,14 @@ import com.ecfeed.utils.EclipseHelper;
 
 public class ModelEditorHelper {
 
+	public static void saveActiveEditor() {
+		ModelEditor modelEditor = ModelEditorHelper.getActiveModelEditor(); 
+		if (modelEditor == null) {
+			return;
+		}
+		modelEditor.doSave(null);
+	}
+
 	public static ModelEditor getActiveModelEditor() {
 		IEditorPart editorPart = EclipseHelper.getActiveEditor();		
 		if (editorPart == null) {
@@ -147,23 +155,23 @@ public class ModelEditorHelper {
 	}
 
 	public static RootNode parseModel(InputStream iStream) {
-			IModelParser parser = new EctParser();
-			
-			RootNode parsedModel = null;
-			try {
-				parsedModel = parser.parseModel(iStream);
-			} catch (ParserException e) {
-				ExceptionCatchDialog.open("Can not parse model. ", e.getMessage());
-			}
-			
-			RootNode convertedModel = null;
-			try {
-				convertedModel = ModelConverter.convertToCurrentVersion(parsedModel);
-			} catch (ModelOperationException e) {
-				ExceptionCatchDialog.open("Can not convert model to current version. ", e.getMessage());
-			}
+		IModelParser parser = new EctParser();
 
-			return convertedModel;
+		RootNode parsedModel = null;
+		try {
+			parsedModel = parser.parseModel(iStream);
+		} catch (ParserException e) {
+			ExceptionCatchDialog.open("Can not parse model. ", e.getMessage());
+		}
+
+		RootNode convertedModel = null;
+		try {
+			convertedModel = ModelConverter.convertToCurrentVersion(parsedModel);
+		} catch (ModelOperationException e) {
+			ExceptionCatchDialog.open("Can not convert model to current version. ", e.getMessage());
+		}
+
+		return convertedModel;
 	}	
 
 	public static String selectFileForSaveAs(IEditorInput editorInput, Shell shell) {
@@ -244,23 +252,23 @@ public class ModelEditorHelper {
 		private int extractUntitledDocNumber(String pathWithFileName) {
 			String fileNameWithExt = DiskFileHelper.extractFileName(pathWithFileName);
 			String fileName = DiskFileHelper.extractFileNameWithoutExtension(fileNameWithExt);
-			
+
 			String untitledFilePrefix = EditorInMemFileHelper.getUntitledFilePrefix();
 			if (!StringHelper.startsWithPrefix(untitledFilePrefix, fileName)) {
 				return 0;
 			}
-			
+
 			String fileNumber = StringHelper.removePrefix(untitledFilePrefix, fileName);
-			
+
 			int extractedNumber = 0;
 			try { 
 				extractedNumber = Integer.parseInt(fileNumber);
 			} catch (NumberFormatException e) {
 				return 0;
 			}
-			
+
 			return extractedNumber;
-			
+
 		}
 
 		public int getNextFreeNumber() {

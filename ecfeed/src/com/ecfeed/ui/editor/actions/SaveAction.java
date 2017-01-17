@@ -10,7 +10,6 @@
 
 package com.ecfeed.ui.editor.actions;
 
-import com.ecfeed.ui.editor.ModelEditor;
 import com.ecfeed.ui.editor.ModelEditorHelper;
 
 public class SaveAction extends NamedAction {
@@ -21,11 +20,7 @@ public class SaveAction extends NamedAction {
 
 	@Override
 	public void run() {
-		ModelEditor modelEditor = ModelEditorHelper.getActiveModelEditor(); 
-		if (modelEditor == null) {
-			return;
-		}
-		modelEditor.doSave(null);
+		ModelEditorHelper.saveActiveEditor(); 
 	}
 
 	@Override
