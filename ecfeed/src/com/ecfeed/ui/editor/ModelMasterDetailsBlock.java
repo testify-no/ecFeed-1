@@ -30,6 +30,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.operations.RedoActionHandler;
 import org.eclipse.ui.operations.UndoActionHandler;
 
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.adapter.ModelOperationManager;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ChoiceNode;
@@ -234,9 +235,11 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 		IUndoContext undoContext = fUpdateContext.getUndoContext();
 
 		fUndoActionHandler = new UndoActionHandler(editorSite, undoContext);
+		ApplicationContext.setUndoHandler(fUndoActionHandler);
 		actionBars.setGlobalActionHandler(ActionFactory.UNDO.getId(), fUndoActionHandler);
 
 		fRedoActionHandler = new RedoActionHandler(editorSite, undoContext);
+		ApplicationContext.setRedoHandler(fRedoActionHandler);
 		actionBars.setGlobalActionHandler(ActionFactory.REDO.getId(), fRedoActionHandler);
 
 		actionBars.setGlobalActionHandler(ActionFactory.COPY.getId(), new GenericToolbarAction(ActionFactory.COPY.getId()));

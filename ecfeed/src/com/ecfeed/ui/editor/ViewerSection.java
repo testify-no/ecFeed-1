@@ -56,6 +56,8 @@ import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.editor.actions.GlobalActions;
 import com.ecfeed.ui.editor.actions.IActionProvider;
 import com.ecfeed.ui.editor.actions.NamedAction;
+import com.ecfeed.ui.editor.actions.RedoAction;
+import com.ecfeed.ui.editor.actions.UndoAction;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 /**
@@ -452,6 +454,17 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 			fKeyListeners.add(createKeyListener('s', SWT.CTRL, saveAction));
 			fKeyListeners.add(createKeyListener('S', SWT.CTRL, saveAction));
 		}
+		
+		UndoAction undoAction = new UndoAction(GlobalActions.UNDO.getId(), GlobalActions.UNDO.getDescription());
+		if (undoAction != null) {
+			fKeyListeners.add(createKeyListener('z', SWT.CTRL, undoAction));
+			fKeyListeners.add(createKeyListener('Z', SWT.CTRL, undoAction));
+		}				
+		RedoAction redoAction = new RedoAction(GlobalActions.REDO.getId(), GlobalActions.REDO.getDescription());
+		if (redoAction != null) {
+			fKeyListeners.add(createKeyListener('z', SWT.CTRL | SWT.SHIFT, redoAction));
+			fKeyListeners.add(createKeyListener('Z', SWT.CTRL | SWT.SHIFT, redoAction));
+		}		
 	}
 
 	private void removeKeyListeners() {
