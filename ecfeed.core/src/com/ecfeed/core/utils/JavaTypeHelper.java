@@ -25,15 +25,15 @@ public class JavaTypeHelper {
 	public static final String TYPE_NAME_STRING = "String";
 
 	private static final String[] SUPPORTED_PRIMITIVE_TYPES = new String[]{
-		TYPE_NAME_STRING,
-		TYPE_NAME_CHAR,
-		TYPE_NAME_BOOLEAN,
-		TYPE_NAME_BYTE,
 		TYPE_NAME_INT,
+		TYPE_NAME_BYTE,
 		TYPE_NAME_SHORT,
 		TYPE_NAME_LONG,
 		TYPE_NAME_FLOAT,
-		TYPE_NAME_DOUBLE
+		TYPE_NAME_DOUBLE,
+		TYPE_NAME_STRING,
+		TYPE_NAME_CHAR,
+		TYPE_NAME_BOOLEAN
 	};
 
 	public static boolean isJavaType(String typeName) {
@@ -65,56 +65,56 @@ public class JavaTypeHelper {
 		}
 		return false;
 	}
-	
+
 	public static boolean isCharTypeName(String typeName) {
 		if (typeName.equals(TYPE_NAME_CHAR)) {
 			return true;
 		}
 		return false;
 	}	
-	
+
 	public static boolean isBooleanTypeName(String typeName) {
 		if (typeName.equals(TYPE_NAME_BOOLEAN)) {
 			return true;
 		}
 		return false;
 	}	
-	
+
 	public static boolean isByteTypeName(String typeName) {
 		if (typeName.equals(TYPE_NAME_BYTE)) {
 			return true;
 		}
 		return false;
 	}	
-	
+
 	public static boolean isIntTypeName(String typeName) {
 		if (typeName.equals(TYPE_NAME_INT)) {
 			return true;
 		}
 		return false;
 	}	
-	
+
 	public static boolean isShortTypeName(String typeName) {
 		if (typeName.equals(TYPE_NAME_SHORT)) {
 			return true;
 		}
 		return false;
 	}	
-	
+
 	public static boolean isFloatTypeName(String typeName) {
 		if (typeName.equals(TYPE_NAME_FLOAT)) {
 			return true;
 		}
 		return false;
 	}	
-	
+
 	public static boolean isDoubleTypeName(String typeName) {
 		if (typeName.equals(TYPE_NAME_DOUBLE)) {
 			return true;
 		}
 		return false;
 	}	
-	
+
 	public static boolean isNumericTypeName(String typeName) {
 
 		if (isByteTypeName(typeName)) {
