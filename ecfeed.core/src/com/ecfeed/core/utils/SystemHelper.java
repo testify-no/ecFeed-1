@@ -29,5 +29,14 @@ public class SystemHelper {
 		}
 		return false;
 	}	
+	
+	public static boolean isOperatingSystemMacOs() { 
+		String os = System.getProperty("os.name");
+
+		if (os.equals("MacOS")) {
+			return true;
+		}
+		return false;
+	}	
 
 }

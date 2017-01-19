@@ -50,6 +50,7 @@ import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.TestCaseNode;
+import com.ecfeed.core.utils.SystemHelper;
 import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
@@ -429,28 +430,40 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 	}
 
 	private void addActionsForStandaloneApp(IActionProvider provider) {
+		
+		int modifier = getKeyModifier();
+		
 		NamedAction copyAction = provider.getAction(GlobalActions.COPY.getId());
 		if (copyAction != null) {
-			fKeyListeners.add(createKeyListener('c', SWT.CTRL, copyAction));
-			fKeyListeners.add(createKeyListener('C', SWT.CTRL, copyAction));
+			fKeyListeners.add(createKeyListener('c', modifier, copyAction));
+			fKeyListeners.add(createKeyListener('C', modifier, copyAction));
 		}
 
 		NamedAction cutAction = provider.getAction(GlobalActions.CUT.getId());
 		if (copyAction != null) {
-			fKeyListeners.add(createKeyListener('x', SWT.CTRL, cutAction));
-			fKeyListeners.add(createKeyListener('X', SWT.CTRL, cutAction));
+			fKeyListeners.add(createKeyListener('x', modifier, cutAction));
+			fKeyListeners.add(createKeyListener('X', modifier, cutAction));
 		}		
 
 		NamedAction pasteAction = provider.getAction(GlobalActions.PASTE.getId());
 		if (copyAction != null) {
-			fKeyListeners.add(createKeyListener('v', SWT.CTRL, pasteAction));
-			fKeyListeners.add(createKeyListener('V', SWT.CTRL, pasteAction));
+			fKeyListeners.add(createKeyListener('v', modifier, pasteAction));
+			fKeyListeners.add(createKeyListener('V', modifier, pasteAction));
 		}		
 
 		NamedAction saveAction = provider.getAction(GlobalActions.SAVE.getId());
 		if (saveAction != null) {
-			fKeyListeners.add(createKeyListener('s', SWT.CTRL, saveAction));
-			fKeyListeners.add(createKeyListener('S', SWT.CTRL, saveAction));
+			fKeyListeners.add(createKeyListener('s', modifier, saveAction));
+			fKeyListeners.add(createKeyListener('S', modifier, saveAction));
+		}
+	}
+	
+	int getKeyModifier() {
+		
+		if (SystemHelper.isOperatingSystemMacOs()) {
+			return SWT.COMMAND;
+		} else {
+			return SWT.CTRL;
 		}
 	}
 
