@@ -94,7 +94,7 @@ public class XmlParserSerializerTest {
 				RootNode model = createRootNode(rand.nextInt(MAX_CLASSES) + 1);
 				ByteArrayOutputStream ostream = new ByteArrayOutputStream();
 				IModelSerializer serializer = 
-						new EctSerializer(ostream, ModelVersionDistributor.getCurrentVersion());
+						new EctSerializer(ostream, ModelVersionDistributor.getCurrentSoftwareVersion());
 				IModelParser parser = new EctParser();
 				serializer.serialize(model);
 				ByteArrayInputStream istream = new ByteArrayInputStream(ostream.toByteArray());
@@ -159,7 +159,7 @@ public class XmlParserSerializerTest {
 	@Test
 	public void parseConditionStatementTest(){
 		try{
-			int version = ModelVersionDistributor.getCurrentVersion();
+			int version = ModelVersionDistributor.getCurrentSoftwareVersion();
 			RootNode root = new RootNode("root", version);
 			ClassNode classNode = new ClassNode("classNode");
 			MethodNode method = new MethodNode("method");
@@ -216,7 +216,7 @@ public class XmlParserSerializerTest {
 	}
 
 	protected RootNode createRootNode(int classes) {
-		RootNode root = new RootNode(randomName(), ModelVersionDistributor.getCurrentVersion());
+		RootNode root = new RootNode(randomName(), ModelVersionDistributor.getCurrentSoftwareVersion());
 		for(int i = 0; i < classes; ++i){
 			root.addClass(createClassNode(rand.nextInt(MAX_METHODS) + 1));
 		}

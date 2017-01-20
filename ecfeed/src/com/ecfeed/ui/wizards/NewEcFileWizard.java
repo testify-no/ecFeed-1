@@ -100,10 +100,10 @@ public class NewEcFileWizard extends Wizard implements INewWizard {
 			String modelName = newFileFullPath.removeFileExtension().lastSegment();
 			RootNode model = new RootNode(
 					modelName != null ? modelName : Constants.DEFAULT_NEW_ECT_MODEL_NAME, 
-							ModelVersionDistributor.getCurrentVersion());
+							ModelVersionDistributor.getCurrentSoftwareVersion());
 
 			ByteArrayOutputStream ostream = new ByteArrayOutputStream();
-			new EctSerializer(ostream, ModelVersionDistributor.getCurrentVersion()).serialize(model);
+			new EctSerializer(ostream, ModelVersionDistributor.getCurrentSoftwareVersion()).serialize(model);
 			ByteArrayInputStream istream = new ByteArrayInputStream(ostream.toByteArray());
 			file.setContents(istream, true, true, null);
 

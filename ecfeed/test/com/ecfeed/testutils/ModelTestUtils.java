@@ -60,7 +60,7 @@ public class ModelTestUtils {
 		case PARAMETER: return new MethodParameterNode(name, "int", "0", false);
 		case METHOD_PARAMETER: return new MethodParameterNode(name, "int", "0", false);
 		case GLOBAL_PARAMETER: return new GlobalParameterNode(name, "int");
-		case PROJECT: return new RootNode(name, ModelVersionDistributor.getCurrentVersion());
+		case PROJECT: return new RootNode(name, ModelVersionDistributor.getCurrentSoftwareVersion());
 		case TEST_CASE: return new TestCaseNode(name, new ArrayList<ChoiceNode>());
 		}
 		return null;

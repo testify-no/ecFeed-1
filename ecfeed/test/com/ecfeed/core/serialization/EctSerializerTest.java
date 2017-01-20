@@ -44,7 +44,7 @@ public class EctSerializerTest {
 
 	@Test
 	public void modelSerializerTest() {
-		for (int version = 0; version <= ModelVersionDistributor.getCurrentVersion(); version++) {
+		for (int version = 0; version <= ModelVersionDistributor.getCurrentSoftwareVersion(); version++) {
 			modelSerializerTest(version);
 		}
 	}
@@ -85,7 +85,7 @@ public class EctSerializerTest {
 
 	@Test
 	public void classSerializerTest() {
-		for (int version = 0; version <= ModelVersionDistributor.getCurrentVersion(); version++) {
+		for (int version = 0; version <= ModelVersionDistributor.getCurrentSoftwareVersion(); version++) {
 			classSerializerTest(false, null, version);
 		}
 	}
@@ -117,7 +117,7 @@ public class EctSerializerTest {
 
 	@Test
 	public void wrongTypeStreamTest(){
-		int version = ModelVersionDistributor.getCurrentVersion();
+		int version = ModelVersionDistributor.getCurrentSoftwareVersion();
 		RootNode r = new RootNode("model", version);
 
 		OutputStream ostream = new ByteArrayOutputStream();
@@ -200,7 +200,7 @@ public class EctSerializerTest {
 	private String getSerializedString(RootNode model) {
 		OutputStream modelStream = new ByteArrayOutputStream();
 		IModelSerializer serializer = 
-				new EctSerializer(modelStream, ModelVersionDistributor.getCurrentVersion());
+				new EctSerializer(modelStream, ModelVersionDistributor.getCurrentSoftwareVersion());
 
 		try {
 			serializer.serialize(model);
@@ -221,11 +221,11 @@ public class EctSerializerTest {
 		}
 		String convertedString = getSerializedString(convertedModel);
 
-		RootNode currentModel = createModel(ModelVersionDistributor.getCurrentVersion());
+		RootNode currentModel = createModel(ModelVersionDistributor.getCurrentSoftwareVersion());
 		String currentString = getSerializedString(currentModel);
 
-		assertEquals(ModelVersionDistributor.getCurrentVersion(), convertedModel.getModelVersion());
-		assertEquals(ModelVersionDistributor.getCurrentVersion(), currentModel.getModelVersion());
+		assertEquals(ModelVersionDistributor.getCurrentSoftwareVersion(), convertedModel.getModelVersion());
+		assertEquals(ModelVersionDistributor.getCurrentSoftwareVersion(), currentModel.getModelVersion());
 
 		assertEquals(currentString, convertedString);
 	}

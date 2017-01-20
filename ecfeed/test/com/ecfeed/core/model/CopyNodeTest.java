@@ -39,7 +39,7 @@ public class CopyNodeTest{
 
 	@Test
 	public void copyRootTest(){
-		RootNode root = new RootNode("name", ModelVersionDistributor.getCurrentVersion());
+		RootNode root = new RootNode("name", ModelVersionDistributor.getCurrentSoftwareVersion());
 		ClassNode class1 = new ClassNode("class1");
 		ClassNode class2 = new ClassNode("class2");
 		GlobalParameterNode par1 = new GlobalParameterNode("par1", "int");

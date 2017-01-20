@@ -108,7 +108,7 @@ public class AbstractNodeTest{
 
 	@Test
 	public void testGetRoot(){
-		RootNode root = new RootNode("root", ModelVersionDistributor.getCurrentVersion());
+		RootNode root = new RootNode("root", ModelVersionDistributor.getCurrentSoftwareVersion());
 		ClassNode classNode = new ClassNode("class");
 		MethodNode method = new MethodNode("method");
 		MethodParameterNode parameter = new MethodParameterNode("name", "type", "0", false);
@@ -165,7 +165,7 @@ public class AbstractNodeTest{
 
 	@Test
 	public void testSubtreeSize(){
-		RootNode root = new RootNode("root", ModelVersionDistributor.getCurrentVersion());
+		RootNode root = new RootNode("root", ModelVersionDistributor.getCurrentSoftwareVersion());
 		ClassNode classNode = new ClassNode("class");
 		MethodNode method = new MethodNode("method");
 		MethodParameterNode parameter = new MethodParameterNode("name", "type", "0", false);
@@ -195,7 +195,7 @@ public class AbstractNodeTest{
 
 	@Test
 	public void getChildTest(){
-		RootNode root = new RootNode("root", ModelVersionDistributor.getCurrentVersion());
+		RootNode root = new RootNode("root", ModelVersionDistributor.getCurrentSoftwareVersion());
 		ClassNode classNode = new ClassNode("class");
 		MethodNode method = new MethodNode("method");
 		MethodParameterNode parameter = new MethodParameterNode("parameter", "type", "0", false);

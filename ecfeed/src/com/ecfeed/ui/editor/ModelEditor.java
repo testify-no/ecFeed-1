@@ -242,7 +242,7 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 	{
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		IModelSerializer serializer = 
-				new EctSerializer(outputStream, ModelVersionDistributor.getCurrentVersion());
+				new EctSerializer(outputStream, ModelVersionDistributor.getCurrentSoftwareVersion());
 		try{
 			serializer.serialize(fModel);
 		}
@@ -343,7 +343,7 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 	private void saveModelToStream(FileOutputStream outputStream){
 		try{
 			IModelSerializer serializer = 
-					new EctSerializer(outputStream, ModelVersionDistributor.getCurrentVersion());
+					new EctSerializer(outputStream, ModelVersionDistributor.getCurrentSoftwareVersion());
 			serializer.serialize(fModel);
 			refreshWorkspace(null);
 			commitPages(true);

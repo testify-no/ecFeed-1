@@ -16,10 +16,10 @@ public class ModelConverter {
 	private static final String INVALID_MODEL_VERSION = "Invalid model version.";
 
 	public static RootNode convertToCurrentVersion(RootNode model) throws ModelOperationException {
-		int currentVersion = ModelVersionDistributor.getCurrentVersion();
+		int softwareVersion = ModelVersionDistributor.getCurrentSoftwareVersion();
 		int modelVersion = model.getModelVersion();
 
-		for (int version = modelVersion; version < currentVersion; version++) {
+		for (int version = modelVersion; version < softwareVersion; version++) {
 			model = convertToNextVersion(model, version);
 		}
 		return model;

@@ -11,7 +11,7 @@
 package com.ecfeed.core.model;
 
 public class ModelVersionDistributor {
-	public static int getCurrentVersion() {
+	public static int getCurrentSoftwareVersion() {
 		return 2;
 	}
 

@@ -38,8 +38,6 @@ import com.ecfeed.core.utils.ExceptionHelper;
 
 public class EctParser implements IModelParser {
 
-	private final static String UNKNOWN_VERSION = "Ect file has unknown version: ";
-	
 	Builder fBuilder = new Builder();
 	XomAnalyser fXomAnalyser = null;
 
@@ -49,13 +47,18 @@ public class EctParser implements IModelParser {
 		try {
 			Document document = fBuilder.build(istream);
 			Element element = document.getRootElement();
-			int version = XomModelVersionDetector.getVersion(element);
-
-			if (version > ModelVersionDistributor.getCurrentVersion()) {
-				ExceptionHelper.reportRuntimeException(UNKNOWN_VERSION + version);
+			
+			int modelVersion = XomModelVersionDetector.getVersion(element);
+			int softwareVersion = ModelVersionDistributor.getCurrentSoftwareVersion(); 
+			
+			if (modelVersion > softwareVersion) {
+				ExceptionHelper.reportRuntimeException(
+						"Can not read ect file. It has newer version: " + modelVersion +
+						" than this software: " + softwareVersion + 
+						". Please install newer version of the software.");
 			}
 
-			createXomAnalyser(version);
+			createXomAnalyser(modelVersion);
 			return getXomAnalyser().parseRoot(element);
 		} catch (ParsingException e) {
 			ParserException.report(Messages.PARSING_EXCEPTION(e));

@@ -56,7 +56,7 @@ public class XomParserTest {
 
 	@Test
 	public void parseRootTest() {
-		for (int version = 0; version <= ModelVersionDistributor.getCurrentVersion(); version++) {
+		for (int version = 0; version <= ModelVersionDistributor.getCurrentSoftwareVersion(); version++) {
 			parseRootTest(version);
 		}
 	}
@@ -79,7 +79,7 @@ public class XomParserTest {
 
 	@Test
 	public void parseClassTest() {
-		for (int version = 0; version <= ModelVersionDistributor.getCurrentVersion(); version++) {
+		for (int version = 0; version <= ModelVersionDistributor.getCurrentSoftwareVersion(); version++) {
 			parseClassTest(version);
 		}
 	}
@@ -102,7 +102,7 @@ public class XomParserTest {
 
 	@Test
 	public void parseMethodTest() {
-		for (int version = 0; version <= ModelVersionDistributor.getCurrentVersion(); version++) {
+		for (int version = 0; version <= ModelVersionDistributor.getCurrentSoftwareVersion(); version++) {
 			parseMethodTest(version);
 		}
 	}
@@ -128,7 +128,7 @@ public class XomParserTest {
 
 	@Test
 	public void parseParameterTest() {
-		for (int version = 0; version <= ModelVersionDistributor.getCurrentVersion(); version++) {
+		for (int version = 0; version <= ModelVersionDistributor.getCurrentSoftwareVersion(); version++) {
 			parseParameterTest(version);
 		}
 	}
@@ -158,7 +158,7 @@ public class XomParserTest {
 
 	@Test
 	public void parseTestCaseTest() {
-		for (int version = 0; version <= ModelVersionDistributor.getCurrentVersion(); version++) {
+		for (int version = 0; version <= ModelVersionDistributor.getCurrentSoftwareVersion(); version++) {
 			parseTestCaseTest(version);
 		}
 	}
@@ -185,7 +185,7 @@ public class XomParserTest {
 
 	@Test
 	public void parseConstraintTest() {
-		for (int version = 0; version <= ModelVersionDistributor.getCurrentVersion(); version++) {
+		for (int version = 0; version <= ModelVersionDistributor.getCurrentSoftwareVersion(); version++) {
 			parseConstraintTest(version);
 		}
 	}
@@ -214,7 +214,7 @@ public class XomParserTest {
 
 	@Test
 	public void parseChoiceTest() {
-		for (int version = 0; version <= ModelVersionDistributor.getCurrentVersion(); version++) {
+		for (int version = 0; version <= ModelVersionDistributor.getCurrentSoftwareVersion(); version++) {
 			parseChoiceTest(version);
 		}
 	}
@@ -240,7 +240,7 @@ public class XomParserTest {
 
 	@Test
 	public void parseStaticStatementTest() {
-		for (int version = 0; version <= ModelVersionDistributor.getCurrentVersion(); version++) {
+		for (int version = 0; version <= ModelVersionDistributor.getCurrentSoftwareVersion(); version++) {
 			parseStaticStatementTest(version);
 		}
 	}
@@ -271,7 +271,7 @@ public class XomParserTest {
 
 	@Test
 	public void parseChoiceStatementTest() {
-		for (int version = 0; version <= ModelVersionDistributor.getCurrentVersion(); version++) {
+		for (int version = 0; version <= ModelVersionDistributor.getCurrentSoftwareVersion(); version++) {
 			parseChoiceStatementTest(version);
 		}
 	}
@@ -306,7 +306,7 @@ public class XomParserTest {
 
 	@Test
 	public void parseExpectedValueStatementTest() {
-		for (int version = 0; version <= ModelVersionDistributor.getCurrentVersion(); version++) {
+		for (int version = 0; version <= ModelVersionDistributor.getCurrentSoftwareVersion(); version++) {
 			parseExpectedValueStatementTest(version);
 		}
 	}	
@@ -332,7 +332,7 @@ public class XomParserTest {
 
 	@Test
 	public void parseStatementArrayTest() {
-		for (int version = 0; version <= ModelVersionDistributor.getCurrentVersion(); version++) {
+		for (int version = 0; version <= ModelVersionDistributor.getCurrentSoftwareVersion(); version++) {
 			parseStatementArrayTest(version);
 		}
 	}	
@@ -357,7 +357,7 @@ public class XomParserTest {
 
 	@Test
 	public void assertTypeTest() {
-		for (int version = 0; version <= ModelVersionDistributor.getCurrentVersion(); version++) {
+		for (int version = 0; version <= ModelVersionDistributor.getCurrentSoftwareVersion(); version++) {
 			assertTypeTest(version);
 		}
 	}
