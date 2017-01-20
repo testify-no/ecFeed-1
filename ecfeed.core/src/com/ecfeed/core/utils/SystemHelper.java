@@ -13,27 +13,37 @@ package com.ecfeed.core.utils;
 
 public class SystemHelper {
 
-	public static String getSystemTemporaryDir() { 
+	static String fOs = null;
+
+	public static String getSystemTemporaryDir() {
+
 		return System.getProperty("java.io.tmpdir");
 	}
 
-	public static String getOperatingSystem() { 
-		return System.getProperty("os.name");
+	public static String getOperatingSystem() {
+
+		if (fOs == null) {
+			fOs = System.getProperty("os.name");
+		}
+
+		return fOs;
 	}	
 
-	public static boolean isOperatingSystemLinux() { 
-		String os = System.getProperty("os.name");
+	public static boolean isOperatingSystemLinux() {
+
+		String os = getOperatingSystem();
 
 		if (os.equals("Linux")) {
 			return true;
 		}
 		return false;
 	}	
-	
-	public static boolean isOperatingSystemMacOs() { 
-		String os = System.getProperty("os.name");
 
-		if (os.equals("MacOS")) {
+	public static boolean isOperatingSystemMacOs() {
+
+		String os = getOperatingSystem();
+
+		if (os.equals("Mac OS X")) {
 			return true;
 		}
 		return false;
