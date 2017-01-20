@@ -163,6 +163,7 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 		}
 
 		private String convertActionName(String oldName, AbstractNode selectedNode) {
+
 			if (!oldName.equals(GlobalActions.INSERT.getDescription())) {
 				return oldName;
 			}
@@ -176,6 +177,10 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 			}
 
 			final String insertKey = "INS";
+
+			if (SystemHelper.isOperatingSystemMacOs()) {
+				return newName + "   (" + insertKey + ")";
+			}
 			return newName + "\t" + insertKey;
 		}
 
@@ -430,9 +435,9 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 	}
 
 	private void addActionsForStandaloneApp(IActionProvider provider) {
-		
+
 		int modifier = getKeyModifier();
-		
+
 		NamedAction copyAction = provider.getAction(GlobalActions.COPY.getId());
 		if (copyAction != null) {
 			fKeyListeners.add(createKeyListener('c', modifier, copyAction));
@@ -457,9 +462,9 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 			fKeyListeners.add(createKeyListener('S', modifier, saveAction));
 		}
 	}
-	
+
 	int getKeyModifier() {
-		
+
 		if (SystemHelper.isOperatingSystemMacOs()) {
 			return SWT.COMMAND;
 		} else {
