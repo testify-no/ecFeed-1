@@ -87,11 +87,14 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 
 		@Override
 		public void keyReleased(KeyEvent e) {
-			if((e.stateMask & fModifier) != 0 || fModifier == SWT.NONE){
-				if(e.keyCode == fKeyCode){
-					fAction.run();
-				}
+
+			if(e.keyCode != fKeyCode) {
+				return;
 			}
+			if (e.stateMask != fModifier) {
+				return;
+			}
+			fAction.run();
 		}
 	}
 
@@ -434,36 +437,31 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 		NamedAction copyAction = provider.getAction(GlobalActions.COPY.getId());
 		if (copyAction != null) {
 			fKeyListeners.add(createKeyListener('c', SWT.CTRL, copyAction));
-			fKeyListeners.add(createKeyListener('C', SWT.CTRL, copyAction));
 		}
 
 		NamedAction cutAction = provider.getAction(GlobalActions.CUT.getId());
 		if (copyAction != null) {
 			fKeyListeners.add(createKeyListener('x', SWT.CTRL, cutAction));
-			fKeyListeners.add(createKeyListener('X', SWT.CTRL, cutAction));
 		}		
 
 		NamedAction pasteAction = provider.getAction(GlobalActions.PASTE.getId());
 		if (copyAction != null) {
 			fKeyListeners.add(createKeyListener('v', SWT.CTRL, pasteAction));
-			fKeyListeners.add(createKeyListener('V', SWT.CTRL, pasteAction));
 		}		
 
 		NamedAction saveAction = provider.getAction(GlobalActions.SAVE.getId());
 		if (saveAction != null) {
 			fKeyListeners.add(createKeyListener('s', SWT.CTRL, saveAction));
-			fKeyListeners.add(createKeyListener('S', SWT.CTRL, saveAction));
 		}
-		
+
 		UndoAction undoAction = new UndoAction(GlobalActions.UNDO.getId(), GlobalActions.UNDO.getDescription());
 		if (undoAction != null) {
 			fKeyListeners.add(createKeyListener('z', SWT.CTRL, undoAction));
-			fKeyListeners.add(createKeyListener('Z', SWT.CTRL, undoAction));
 		}				
+
 		RedoAction redoAction = new RedoAction(GlobalActions.REDO.getId(), GlobalActions.REDO.getDescription());
 		if (redoAction != null) {
 			fKeyListeners.add(createKeyListener('z', SWT.CTRL | SWT.SHIFT, redoAction));
-			fKeyListeners.add(createKeyListener('Z', SWT.CTRL | SWT.SHIFT, redoAction));
 		}		
 	}
 

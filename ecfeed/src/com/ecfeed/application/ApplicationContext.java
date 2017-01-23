@@ -10,18 +10,12 @@
 
 package com.ecfeed.application;
 
-import org.eclipse.ui.operations.RedoActionHandler;
-import org.eclipse.ui.operations.UndoActionHandler;
 
 public class ApplicationContext {
 
 	static boolean fIsStandaloneApplication = false;
 	static String fExportFileName;
 
-	private static UndoActionHandler fUndoActionHandler;
-	private static RedoActionHandler fRedoActionHandler;
-	
-	
 	public static boolean isStandaloneApplication() {
 		return fIsStandaloneApplication;
 	}
@@ -36,22 +30,6 @@ public class ApplicationContext {
 
 	public static String getExportTargetFile() {
 		return fExportFileName;
-	}	
-	
-	public static void setUndoHandler(UndoActionHandler undoActionHandler) {
-		fUndoActionHandler = undoActionHandler;
-	}
-	
-	public static UndoActionHandler getUndoHandler() {
-		return fUndoActionHandler;
-	}	
-	
-	public static void setRedoHandler(RedoActionHandler undoActionHandler) {
-		fRedoActionHandler = undoActionHandler;
-	}
-	
-	public static RedoActionHandler getRedoHandler() {
-		return fRedoActionHandler;
 	}	
 
 }

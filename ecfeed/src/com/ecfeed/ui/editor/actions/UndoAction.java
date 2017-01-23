@@ -10,9 +10,13 @@
 
 package com.ecfeed.ui.editor.actions;
 
-import org.eclipse.ui.operations.UndoActionHandler;
+import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.commands.operations.IOperationHistory;
+import org.eclipse.core.commands.operations.IUndoContext;
+import org.eclipse.core.commands.operations.OperationHistoryFactory;
 
-import com.ecfeed.application.ApplicationContext;
+import com.ecfeed.core.utils.SystemLogger;
+import com.ecfeed.ui.editor.ModelEditorHelper;
 
 
 public class UndoAction extends NamedAction {
@@ -23,10 +27,14 @@ public class UndoAction extends NamedAction {
 
 	@Override
 	public void run() {
-		UndoActionHandler undoActionHandler = ApplicationContext.getUndoHandler();
 
-		if (undoActionHandler != null) {
-			undoActionHandler.run();
+		IOperationHistory operationHistory = OperationHistoryFactory.getOperationHistory();
+		IUndoContext undoContext = ModelEditorHelper.getActiveModelEditor().getUndoContext();
+
+		try {
+			operationHistory.undo(undoContext, null, null);
+		} catch (ExecutionException e) {
+			SystemLogger.logCatch("Can not undo operation.");
 		}
 	}
 
