@@ -71,6 +71,8 @@ public class ModelViewerActionProvider extends ActionProvider {
 		addAction("edit", deleteAction);
 
 		addAction("edit", new SaveAction(GlobalActions.SAVE.getId(), GlobalActions.SAVE.getDescription()));
+		addAction("edit", new UndoAction(GlobalActions.UNDO.getId(), GlobalActions.UNDO.getDescription()));
+		addAction("edit", new RedoAction(GlobalActions.REDO.getId(), GlobalActions.REDO.getDescription()));
 	}
 
 	private void addImplementationActions(StructuredViewer viewer, IModelUpdateContext context, IFileInfoProvider fileInfoProvider) {

@@ -57,8 +57,6 @@ import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.editor.actions.GlobalActions;
 import com.ecfeed.ui.editor.actions.IActionProvider;
 import com.ecfeed.ui.editor.actions.NamedAction;
-import com.ecfeed.ui.editor.actions.RedoAction;
-import com.ecfeed.ui.editor.actions.UndoAction;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 /**
@@ -463,17 +461,17 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 			fKeyListeners.add(createKeyListener('s', ctrlModifier, saveAction));
 		}
 		
-		UndoAction undoAction = new UndoAction(GlobalActions.UNDO.getId(), GlobalActions.UNDO.getDescription());
+		NamedAction undoAction = provider.getAction(GlobalActions.UNDO.getId());
 		if (undoAction != null) {
 			fKeyListeners.add(createKeyListener('z', ctrlModifier, undoAction));
 		}				
 
-		RedoAction redoAction = new RedoAction(GlobalActions.REDO.getId(), GlobalActions.REDO.getDescription());
+		NamedAction redoAction = provider.getAction(GlobalActions.REDO.getId());
 		if (redoAction != null) {
 			fKeyListeners.add(createKeyListener('z', ctrlModifier | SWT.SHIFT, redoAction));
 		}		
 	}
-
+	
 	int getCtrlModifier() {
 
 		if (SystemHelper.isOperatingSystemMacOs()) {
