@@ -412,25 +412,11 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 
 	private void addKeyListenersForActions(IActionProvider provider, boolean addDeleteAction) {
 
-		NamedAction insertAction = provider.getAction(GlobalActions.INSERT.getId());
-		if (insertAction != null) {
-			fKeyListeners.add(createKeyListener(SWT.INSERT, SWT.NONE, insertAction));
-		}
+		addKeyListener(GlobalActions.INSERT.getId(), SWT.INSERT, SWT.NONE, provider);
+		addKeyListener(GlobalActions.DELETE.getId(), SWT.DEL, SWT.NONE, provider);
 
-		NamedAction deleteAction = provider.getAction(GlobalActions.DELETE.getId());
-		if (addDeleteAction && deleteAction != null) {
-			fKeyListeners.add(createKeyListener(SWT.DEL, SWT.NONE, deleteAction));
-		}
-
-		NamedAction arrowUpAction = provider.getAction(GlobalActions.MOVE_UP.getId()); 
-		if (arrowUpAction != null) {
-			fKeyListeners.add(createKeyListener(SWT.ARROW_UP, SWT.ALT, arrowUpAction));
-		}
-
-		NamedAction arrowDownAction = provider.getAction(GlobalActions.MOVE_DOWN.getId()); 
-		if (arrowDownAction != null) {
-			fKeyListeners.add(createKeyListener(SWT.ARROW_DOWN, SWT.ALT, arrowDownAction));
-		}
+		addKeyListener(GlobalActions.MOVE_UP.getId(), SWT.ARROW_UP, SWT.ALT, provider);
+		addKeyListener(GlobalActions.MOVE_DOWN.getId(), SWT.ARROW_DOWN, SWT.ALT, provider);
 
 		if (!getFileInfoProvider().isProjectAvailable()) {
 			addActionsForStandaloneApp(provider);
@@ -441,37 +427,24 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 
 		int ctrlModifier = getCtrlModifier();
 
-		NamedAction copyAction = provider.getAction(GlobalActions.COPY.getId());
-		if (copyAction != null) {
-			fKeyListeners.add(createKeyListener('c', ctrlModifier, copyAction));
-		}
+		addKeyListener(GlobalActions.COPY.getId(), 'c', ctrlModifier, provider);
+		addKeyListener(GlobalActions.CUT.getId(), 'x', ctrlModifier, provider);
+		addKeyListener(GlobalActions.PASTE.getId(), 'v', ctrlModifier, provider);
 
-		NamedAction cutAction = provider.getAction(GlobalActions.CUT.getId());
-		if (copyAction != null) {
-			fKeyListeners.add(createKeyListener('x', ctrlModifier, cutAction));
-		}		
-
-		NamedAction pasteAction = provider.getAction(GlobalActions.PASTE.getId());
-		if (copyAction != null) {
-			fKeyListeners.add(createKeyListener('v', ctrlModifier, pasteAction));
-		}		
-
-		NamedAction saveAction = provider.getAction(GlobalActions.SAVE.getId());
-		if (saveAction != null) {
-			fKeyListeners.add(createKeyListener('s', ctrlModifier, saveAction));
-		}
-		
-		NamedAction undoAction = provider.getAction(GlobalActions.UNDO.getId());
-		if (undoAction != null) {
-			fKeyListeners.add(createKeyListener('z', ctrlModifier, undoAction));
-		}				
-
-		NamedAction redoAction = provider.getAction(GlobalActions.REDO.getId());
-		if (redoAction != null) {
-			fKeyListeners.add(createKeyListener('z', ctrlModifier | SWT.SHIFT, redoAction));
-		}		
+		addKeyListener(GlobalActions.SAVE.getId(), 's', ctrlModifier, provider);
+		addKeyListener(GlobalActions.UNDO.getId(), 'z', ctrlModifier, provider);
+		addKeyListener(GlobalActions.REDO.getId(), 'z', ctrlModifier | SWT.SHIFT, provider);
 	}
-	
+
+	private void addKeyListener(String actionId, int keyCode, int modifier, IActionProvider provider) {
+		NamedAction action = provider.getAction(actionId);
+		if (action == null) {
+			return;
+		}
+		fKeyListeners.add(createKeyListener(keyCode, modifier, action));
+	}
+
+
 	int getCtrlModifier() {
 
 		if (SystemHelper.isOperatingSystemMacOs()) {
