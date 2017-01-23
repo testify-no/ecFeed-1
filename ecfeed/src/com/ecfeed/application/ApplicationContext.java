@@ -10,6 +10,7 @@
 
 package com.ecfeed.application;
 
+
 public class ApplicationContext {
 
 	static boolean fIsStandaloneApplication = false;

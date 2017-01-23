@@ -129,7 +129,9 @@ public class ClassNode extends GlobalParametersParentNode {
 	}
 
 	public boolean removeMethod(MethodNode method) {
-		return fMethods.remove(method);
+		boolean result = fMethods.remove(method);
+		ModelLogger.printModel("After remove method", this);
+		return result;
 	}
 
 	public Set<String> getTestSuites(){

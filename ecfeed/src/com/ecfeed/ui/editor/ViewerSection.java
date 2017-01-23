@@ -57,6 +57,8 @@ import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.editor.actions.GlobalActions;
 import com.ecfeed.ui.editor.actions.IActionProvider;
 import com.ecfeed.ui.editor.actions.NamedAction;
+import com.ecfeed.ui.editor.actions.RedoAction;
+import com.ecfeed.ui.editor.actions.UndoAction;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 /**
@@ -86,11 +88,14 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 
 		@Override
 		public void keyReleased(KeyEvent e) {
-			if((e.stateMask & fModifier) != 0 || fModifier == SWT.NONE){
-				if(e.keyCode == fKeyCode){
-					fAction.run();
-				}
+
+			if(e.keyCode != fKeyCode) {
+				return;
 			}
+			if (e.stateMask != fModifier) {
+				return;
+			}
+			fAction.run();
 		}
 	}
 
@@ -436,34 +441,40 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 
 	private void addActionsForStandaloneApp(IActionProvider provider) {
 
-		int modifier = getKeyModifier();
+		int ctrlModifier = getCtrlModifier();
 
 		NamedAction copyAction = provider.getAction(GlobalActions.COPY.getId());
 		if (copyAction != null) {
-			fKeyListeners.add(createKeyListener('c', modifier, copyAction));
-			fKeyListeners.add(createKeyListener('C', modifier, copyAction));
+			fKeyListeners.add(createKeyListener('c', ctrlModifier, copyAction));
 		}
 
 		NamedAction cutAction = provider.getAction(GlobalActions.CUT.getId());
 		if (copyAction != null) {
-			fKeyListeners.add(createKeyListener('x', modifier, cutAction));
-			fKeyListeners.add(createKeyListener('X', modifier, cutAction));
+			fKeyListeners.add(createKeyListener('x', ctrlModifier, cutAction));
 		}		
 
 		NamedAction pasteAction = provider.getAction(GlobalActions.PASTE.getId());
 		if (copyAction != null) {
-			fKeyListeners.add(createKeyListener('v', modifier, pasteAction));
-			fKeyListeners.add(createKeyListener('V', modifier, pasteAction));
+			fKeyListeners.add(createKeyListener('v', ctrlModifier, pasteAction));
 		}		
 
 		NamedAction saveAction = provider.getAction(GlobalActions.SAVE.getId());
 		if (saveAction != null) {
-			fKeyListeners.add(createKeyListener('s', modifier, saveAction));
-			fKeyListeners.add(createKeyListener('S', modifier, saveAction));
+			fKeyListeners.add(createKeyListener('s', ctrlModifier, saveAction));
 		}
+		
+		UndoAction undoAction = new UndoAction(GlobalActions.UNDO.getId(), GlobalActions.UNDO.getDescription());
+		if (undoAction != null) {
+			fKeyListeners.add(createKeyListener('z', ctrlModifier, undoAction));
+		}				
+
+		RedoAction redoAction = new RedoAction(GlobalActions.REDO.getId(), GlobalActions.REDO.getDescription());
+		if (redoAction != null) {
+			fKeyListeners.add(createKeyListener('z', ctrlModifier | SWT.SHIFT, redoAction));
+		}		
 	}
 
-	int getKeyModifier() {
+	int getCtrlModifier() {
 
 		if (SystemHelper.isOperatingSystemMacOs()) {
 			return SWT.COMMAND;
