@@ -11,10 +11,10 @@
 package com.ecfeed.ui.editor.actions;
 
 
-public class UndoAction extends NamedAction {
+public class NamedActionWithRunner extends NamedAction {
 
 	IActionRunner fRunner;
-	public UndoAction(String id, String name, IActionRunner runner) {
+	public NamedActionWithRunner(String id, String name, IActionRunner runner) {
 		super(id, name);
 		fRunner = runner;
 	}

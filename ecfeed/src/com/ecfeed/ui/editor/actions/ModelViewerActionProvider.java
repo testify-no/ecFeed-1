@@ -23,23 +23,15 @@ import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class ModelViewerActionProvider extends ActionProvider {
 
-	IActionRunner fSaveActionRunner;
-	IActionRunner fUndoActionRunner;
-	IActionRunner fRedoActionRunner;
+	BasicActionRunnerProvider fBasicActionRunnerProvider;
 
 	public ModelViewerActionProvider(
 			TreeViewer viewer, 
 			IModelUpdateContext 
 			context, 
 			IFileInfoProvider fileInfoProvider,
-			IActionRunner saveActionRunner,
-			IActionRunner undoActionRunner,
-			IActionRunner redoActionRunner,
+			BasicActionRunnerProvider basicActionRunnerProvider,
 			boolean selectRoot) {
-
-		fSaveActionRunner = saveActionRunner;
-		fUndoActionRunner = undoActionRunner;
-		fRedoActionRunner = redoActionRunner;
 
 		addEditActions(viewer, viewer, context, fileInfoProvider);
 		if(fileInfoProvider != null && fileInfoProvider.isProjectAvailable()){
@@ -78,9 +70,30 @@ public class ModelViewerActionProvider extends ActionProvider {
 		addAction("edit", new InsertAction(selectionProvider, structuredViewer, context, fileInfoProvider));
 		addAction("edit", deleteAction);
 
-		addAction("edit", new SaveAction(GlobalActions.SAVE.getId(), GlobalActions.SAVE.getDescription(), fSaveActionRunner));
-		addAction("edit", new UndoAction(GlobalActions.UNDO.getId(), GlobalActions.UNDO.getDescription(), fUndoActionRunner));
-		addAction("edit", new RedoAction(GlobalActions.REDO.getId(), GlobalActions.REDO.getDescription(), fRedoActionRunner));
+		if (fBasicActionRunnerProvider != null) {
+			addBasicEditActions();
+		}
+	}
+	
+	private void addBasicEditActions() {
+		
+		addAction(
+				"edit", 
+				new NamedActionWithRunner(
+						GlobalActions.SAVE.getId(), GlobalActions.SAVE.getDescription(), 
+						fBasicActionRunnerProvider.getSaveRunner()));
+
+		addAction(
+				"edit", 
+				new NamedActionWithRunner(
+						GlobalActions.UNDO.getId(), GlobalActions.UNDO.getDescription(), 
+						fBasicActionRunnerProvider.getUndoRunner()));
+
+		addAction(
+				"edit", 
+				new NamedActionWithRunner(
+						GlobalActions.REDO.getId(), GlobalActions.REDO.getDescription(), 
+						fBasicActionRunnerProvider.getRedoRunner()));
 	}
 
 	private void addImplementationActions(StructuredViewer viewer, IModelUpdateContext context, IFileInfoProvider fileInfoProvider) {

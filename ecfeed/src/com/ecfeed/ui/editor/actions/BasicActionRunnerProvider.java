@@ -11,24 +11,28 @@
 package com.ecfeed.ui.editor.actions;
 
 
-public class RedoAction extends NamedAction {
-
-	IActionRunner fRunner;
-	public RedoAction(String id, String name, IActionRunner runner) {
-		super(id, name);
-		fRunner = runner;
+public class BasicActionRunnerProvider {
+	
+	IActionRunner fSaveRunner;
+	IActionRunner fUndoRunner;
+	IActionRunner fRedoRunner;
+	
+	public BasicActionRunnerProvider(IActionRunner saveRunner, IActionRunner undoRunner, IActionRunner redoRunner) {
+		fSaveRunner = saveRunner;
+		fUndoRunner = undoRunner;
+		fRedoRunner = redoRunner;
 	}
 
-	@Override
-	public void run() {
-		if (fRunner != null) {
-			fRunner.run();
-		}
+	public IActionRunner getSaveRunner() {
+		return fSaveRunner;
 	}
-
-	@Override
-	public boolean isEnabled(){
-		return true;
+	
+	public IActionRunner getUndoRunner() {
+		return fUndoRunner;
 	}
-}	
+	
+	public IActionRunner getRedoRunner() {
+		return fRedoRunner;
+	}	
 
+}

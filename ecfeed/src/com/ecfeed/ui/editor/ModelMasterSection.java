@@ -60,10 +60,12 @@ import com.ecfeed.ui.common.ImageManager;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.editor.actions.AbstractAddChildAction;
 import com.ecfeed.ui.editor.actions.AddChildActionProvider;
+import com.ecfeed.ui.editor.actions.BasicActionRunnerProvider;
 import com.ecfeed.ui.editor.actions.ExecuteTestCaseAction;
 import com.ecfeed.ui.editor.actions.ExportOnlineAction;
 import com.ecfeed.ui.editor.actions.IActionRunner;
 import com.ecfeed.ui.editor.actions.ModelViewerActionProvider;
+import com.ecfeed.ui.editor.actions.NamedAction;
 import com.ecfeed.ui.editor.actions.TestOnlineAction;
 import com.ecfeed.ui.modelif.AbstractNodeInterface;
 import com.ecfeed.ui.modelif.AbstractParameterInterface;
@@ -608,16 +610,18 @@ public class ModelMasterSection extends TreeViewerSection{
 			includeDeleteAction = true;
 		}
 
-		setActionProvider(
-				new ModelViewerActionProvider(
-						getTreeViewer(), 
-						this, 
-						parentBlock.getPage().getEditor(),
+		BasicActionRunnerProvider basicActionRunnerProvider = 
+				new BasicActionRunnerProvider(
 						new SaveActionRunner(),
 						new UndoActionRunner(),
-						new RedoActionRunner(),
-						false), includeDeleteAction);		
-
+						new RedoActionRunner()); 
+		
+		ModelViewerActionProvider modelViewerActionProvider = 
+				new ModelViewerActionProvider(
+						getTreeViewer(), this, parentBlock.getPage().getEditor(), basicActionRunnerProvider, false);
+		
+		setActionProvider(modelViewerActionProvider, includeDeleteAction);		
+		
 		getTreeViewer().addDragSupport(DND.DROP_COPY|DND.DROP_MOVE|DND.DROP_LINK, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDragListener(getTreeViewer()));
 		getTreeViewer().addDropSupport(DND.DROP_COPY|DND.DROP_MOVE|DND.DROP_LINK, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDropListener(getTreeViewer(), this, fFileInfoProvider));
 	}
@@ -630,7 +634,7 @@ public class ModelMasterSection extends TreeViewerSection{
 		}
 
 	}
-
+	
 	private class UndoActionRunner implements IActionRunner {
 
 		@Override
