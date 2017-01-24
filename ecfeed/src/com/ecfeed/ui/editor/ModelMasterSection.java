@@ -615,13 +615,13 @@ public class ModelMasterSection extends TreeViewerSection{
 						new SaveActionRunner(),
 						new UndoActionRunner(),
 						new RedoActionRunner()); 
-		
+
 		ModelViewerActionProvider modelViewerActionProvider = 
 				new ModelViewerActionProvider(
 						getTreeViewer(), this, parentBlock.getPage().getEditor(), basicActionRunnerProvider, false);
-		
+
 		setActionProvider(modelViewerActionProvider, includeDeleteAction);		
-		
+
 		getTreeViewer().addDragSupport(DND.DROP_COPY|DND.DROP_MOVE|DND.DROP_LINK, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDragListener(getTreeViewer()));
 		getTreeViewer().addDropSupport(DND.DROP_COPY|DND.DROP_MOVE|DND.DROP_LINK, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDropListener(getTreeViewer(), this, fFileInfoProvider));
 	}
@@ -634,7 +634,7 @@ public class ModelMasterSection extends TreeViewerSection{
 		}
 
 	}
-	
+
 	private class UndoActionRunner implements IActionRunner {
 
 		@Override

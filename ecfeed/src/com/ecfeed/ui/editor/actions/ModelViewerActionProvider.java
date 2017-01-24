@@ -33,7 +33,10 @@ public class ModelViewerActionProvider extends ActionProvider {
 			BasicActionRunnerProvider basicActionRunnerProvider,
 			boolean selectRoot) {
 
+		fBasicActionRunnerProvider = basicActionRunnerProvider;
+
 		addEditActions(viewer, viewer, context, fileInfoProvider);
+
 		if(fileInfoProvider != null && fileInfoProvider.isProjectAvailable()){
 			addImplementationActions(viewer, context, fileInfoProvider);
 		}
@@ -74,9 +77,9 @@ public class ModelViewerActionProvider extends ActionProvider {
 			addBasicEditActions();
 		}
 	}
-	
+
 	private void addBasicEditActions() {
-		
+
 		addAction(
 				"edit", 
 				new NamedActionWithRunner(

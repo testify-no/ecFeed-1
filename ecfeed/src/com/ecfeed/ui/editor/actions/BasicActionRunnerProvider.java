@@ -12,11 +12,11 @@ package com.ecfeed.ui.editor.actions;
 
 
 public class BasicActionRunnerProvider {
-	
+
 	IActionRunner fSaveRunner;
 	IActionRunner fUndoRunner;
 	IActionRunner fRedoRunner;
-	
+
 	public BasicActionRunnerProvider(IActionRunner saveRunner, IActionRunner undoRunner, IActionRunner redoRunner) {
 		fSaveRunner = saveRunner;
 		fUndoRunner = undoRunner;
@@ -26,11 +26,11 @@ public class BasicActionRunnerProvider {
 	public IActionRunner getSaveRunner() {
 		return fSaveRunner;
 	}
-	
+
 	public IActionRunner getUndoRunner() {
 		return fUndoRunner;
 	}
-	
+
 	public IActionRunner getRedoRunner() {
 		return fRedoRunner;
 	}	
