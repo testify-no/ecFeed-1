@@ -20,8 +20,8 @@ public class ExpandAction extends ModelSelectionAction {
 
 	TreeViewer fViewer;
 
-	public ExpandAction(TreeViewer viewer, boolean isNameWithShortcut) {
-		super(GlobalActions.EXPAND.getId(), GlobalActions.EXPAND.getDescription(isNameWithShortcut), viewer);
+	public ExpandAction(TreeViewer viewer) {
+		super(GlobalActions.EXPAND.getId(), GlobalActions.EXPAND.getDescription(), viewer);
 		fViewer = viewer;
 	}
 

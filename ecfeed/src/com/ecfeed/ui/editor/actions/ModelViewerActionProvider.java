@@ -21,27 +21,28 @@ import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 
-public class ModelViewerActionProvider extends ActionGroups {
+public class ModelViewerActionProvider extends ActionProvider {
 
-	public ModelViewerActionProvider(TreeViewer viewer, IModelUpdateContext context, boolean selectRoot) {
-		this(viewer, context, null, selectRoot);
-	}
+	BasicActionRunnerProvider fBasicActionRunnerProvider;
 
 	public ModelViewerActionProvider(
 			TreeViewer viewer, 
 			IModelUpdateContext 
 			context, 
-			IFileInfoProvider fileInfoProvider, 
+			IFileInfoProvider fileInfoProvider,
+			BasicActionRunnerProvider basicActionRunnerProvider,
 			boolean selectRoot) {
+
+		fBasicActionRunnerProvider = basicActionRunnerProvider;
+
 		addEditActions(viewer, viewer, context, fileInfoProvider);
+
 		if(fileInfoProvider != null && fileInfoProvider.isProjectAvailable()){
 			addImplementationActions(viewer, context, fileInfoProvider);
 		}
 
-		boolean isNameWithShortcut = fileInfoProvider.isProjectAvailable();
-
-		addViewerActions(viewer, context, selectRoot, isNameWithShortcut);
-		addMoveActions(viewer, context, isNameWithShortcut);
+		addViewerActions(viewer, context, selectRoot);
+		addMoveActions(viewer, context);
 	}
 
 	public ModelViewerActionProvider(
@@ -55,10 +56,8 @@ public class ModelViewerActionProvider extends ActionGroups {
 			addImplementationActions(viewer, context, fileInfoProvider);
 		}
 
-		boolean isNameWithShortcut = fileInfoProvider.isProjectAvailable();
-
-		addViewerActions(viewer, isNameWithShortcut);
-		addMoveActions(viewer, context, isNameWithShortcut);
+		addViewerActions(viewer);
+		addMoveActions(viewer, context);
 	}
 
 	private void addEditActions(
@@ -67,14 +66,37 @@ public class ModelViewerActionProvider extends ActionGroups {
 			IModelUpdateContext context,
 			IFileInfoProvider fileInfoProvider) {
 
-		boolean isNameWithShortcut = fileInfoProvider.isProjectAvailable();
-
-		DeleteAction deleteAction = new DeleteAction(selectionProvider, context, isNameWithShortcut);
-		addAction("edit", new CopyAction(selectionProvider, isNameWithShortcut));
-		addAction("edit", new CutAction(new CopyAction(selectionProvider, isNameWithShortcut), deleteAction, isNameWithShortcut));
+		DeleteAction deleteAction = new DeleteAction(selectionProvider, context);
+		addAction("edit", new CopyAction(selectionProvider));
+		addAction("edit", new CutAction(new CopyAction(selectionProvider), deleteAction));
 		addAction("edit", new PasteAction(selectionProvider, context, fileInfoProvider));
-		addAction("edit", new InsertAction(selectionProvider, structuredViewer, context, fileInfoProvider, isNameWithShortcut));
+		addAction("edit", new InsertAction(selectionProvider, structuredViewer, context, fileInfoProvider));
 		addAction("edit", deleteAction);
+
+		if (fBasicActionRunnerProvider != null) {
+			addBasicEditActions();
+		}
+	}
+
+	private void addBasicEditActions() {
+
+		addAction(
+				"edit", 
+				new NamedActionWithRunner(
+						GlobalActions.SAVE.getId(), GlobalActions.SAVE.getDescription(), 
+						fBasicActionRunnerProvider.getSaveRunner()));
+
+		addAction(
+				"edit", 
+				new NamedActionWithRunner(
+						GlobalActions.UNDO.getId(), GlobalActions.UNDO.getDescription(), 
+						fBasicActionRunnerProvider.getUndoRunner()));
+
+		addAction(
+				"edit", 
+				new NamedActionWithRunner(
+						GlobalActions.REDO.getId(), GlobalActions.REDO.getDescription(), 
+						fBasicActionRunnerProvider.getRedoRunner()));
 	}
 
 	private void addImplementationActions(StructuredViewer viewer, IModelUpdateContext context, IFileInfoProvider fileInfoProvider) {
@@ -83,18 +105,18 @@ public class ModelViewerActionProvider extends ActionGroups {
 		addAction("implement", new GoToImplementationAction(viewer, fileInfoProvider));
 	}
 
-	private void addMoveActions(ISelectionProvider selectionProvider, IModelUpdateContext context, boolean isNameWithShortcut){
-		addAction("move", new MoveUpDownAction(true, selectionProvider, context, isNameWithShortcut));
-		addAction("move", new MoveUpDownAction(false, selectionProvider, context, isNameWithShortcut));
+	private void addMoveActions(ISelectionProvider selectionProvider, IModelUpdateContext context){
+		addAction("move", new MoveUpDownAction(true, selectionProvider, context));
+		addAction("move", new MoveUpDownAction(false, selectionProvider, context));
 	}
 
-	private void addViewerActions(TreeViewer viewer, IModelUpdateContext context, boolean selectRoot, boolean isNameWithShortcut){
-		addAction("viewer", new SelectAllAction(viewer, selectRoot, isNameWithShortcut));
-		addAction("viewer", new ExpandCollapseAction(viewer, isNameWithShortcut));
+	private void addViewerActions(TreeViewer viewer, IModelUpdateContext context, boolean selectRoot){
+		addAction("viewer", new SelectAllAction(viewer, selectRoot));
+		addAction("viewer", new ExpandCollapseAction(viewer));
 	}
 
-	private void addViewerActions(TableViewer viewer, boolean isNameWithShortcut){
-		addAction("viewer", new SelectAllAction(viewer, isNameWithShortcut));
+	private void addViewerActions(TableViewer viewer){
+		addAction("viewer", new SelectAllAction(viewer));
 	}
 
 }

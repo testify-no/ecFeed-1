@@ -10,7 +10,8 @@
 package com.ecfeed.ui.editor;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
@@ -69,17 +70,6 @@ public class FormObjectToolkit {
 		return label;
 	}
 
-	public Text createGridText(Composite parentGridComposite, SelectionListener selectionListener) {
-		Text text = fFormToolkit.createText(parentGridComposite, null, SWT.NONE);	
-		text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-
-		if (selectionListener != null) {
-			text.addSelectionListener(selectionListener);
-		}
-
-		return text;
-	}
-
 	public Text createGridText(Composite parentGridComposite, FocusLostListener focusLostListener) {
 		Text text = fFormToolkit.createText(parentGridComposite, null, SWT.NONE);
 		text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
@@ -89,6 +79,7 @@ public class FormObjectToolkit {
 			text.addListener(SWT.FocusOut, typedListener);
 		}
 
+		text.addKeyListener(new SaveKeyListener(focusLostListener));
 		return text;
 	}	
 
@@ -153,4 +144,34 @@ public class FormObjectToolkit {
 		GridData gridData = getGridData(control);
 		gridData.horizontalSpan = span;
 	}
+
+	private class SaveKeyListener implements KeyListener {
+
+		FocusLostListener fFocusLostListener;
+
+		public SaveKeyListener(FocusLostListener focusLostListener) {
+			fFocusLostListener = focusLostListener;
+		}
+
+		@Override
+		public void keyPressed(KeyEvent e) {
+		}
+
+		@Override
+		public void keyReleased(KeyEvent e) {
+
+			if ((e.stateMask & SWT.CTRL) != SWT.CTRL) {
+				return;
+			}
+
+			if ((e.keyCode != 's') && (e.keyCode != 'S')) {
+				return;
+			}
+
+			fFocusLostListener.focusLost(null);
+			ModelEditorHelper.saveActiveEditor();
+		}
+
+	}
+
 }

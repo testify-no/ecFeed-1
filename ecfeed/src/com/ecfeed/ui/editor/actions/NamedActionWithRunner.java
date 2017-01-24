@@ -10,27 +10,25 @@
 
 package com.ecfeed.ui.editor.actions;
 
-import org.eclipse.jface.action.Action;
 
-public class CutAction extends NamedAction {
+public class NamedActionWithRunner extends NamedAction {
 
-	private Action fCopyAction;
-	private Action fDeleteAction;
+	IActionRunner fRunner;
+	public NamedActionWithRunner(String id, String name, IActionRunner runner) {
+		super(id, name);
+		fRunner = runner;
+	}
 
-	public CutAction(Action copyAction, Action deleteAction) {
-		super(GlobalActions.CUT.getId(), GlobalActions.CUT.getDescription());
-		fCopyAction = copyAction;
-		fDeleteAction = deleteAction;
+	@Override
+	public void run() {
+		if (fRunner != null) {
+			fRunner.run();
+		}
 	}
 
 	@Override
 	public boolean isEnabled(){
-		return fCopyAction.isEnabled() && fDeleteAction.isEnabled();
-	}
-
-	@Override
-	public void run(){
-		fCopyAction.run();
-		fDeleteAction.run();
+		return true;
 	}
 }
+

@@ -45,7 +45,6 @@ import com.ecfeed.ui.modelif.RootInterface;
 public class AddChildActionProvider {
 
 	private StructuredViewer fViewer;
-	private boolean fIsNameWithShortcut;
 	private IModelUpdateContext fContext;
 	private IFileInfoProvider fFileInfoProvider;
 	private static final boolean CHILD_SELECT_ON = true;
@@ -79,7 +78,7 @@ public class AddChildActionProvider {
 		}
 
 		TreeViewer treeViewer = (TreeViewer)fViewer;
-		ExpandAction expandAction = new ExpandAction(treeViewer, fIsNameWithShortcut);
+		ExpandAction expandAction = new ExpandAction(treeViewer);
 		expandAction.run();
 	}
 
@@ -415,7 +414,6 @@ public class AddChildActionProvider {
 		fFileInfoProvider = fileInfoProvider;
 		fContext = context;
 		fViewer = viewer;
-		fIsNameWithShortcut = fileInfoProvider.isProjectAvailable();
 	}
 
 

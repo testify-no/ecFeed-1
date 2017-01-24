@@ -44,9 +44,7 @@ public class ClassViewer extends TableViewerSection {
 	private ClassInterface fClassIf;
 
 	private TableViewerColumn fPackageNameColumn;
-
 	private IFileInfoProvider fFileInfoProvider;
-	private boolean fIsNameWithShortcut;
 
 
 	private abstract class ClassNameEditingSupport extends EditingSupport{
@@ -163,7 +161,6 @@ public class ClassViewer extends TableViewerSection {
 		fFileInfoProvider = fileInfoProvider; 
 		fNameColumn.setEditingSupport(new LocalNameEditingSupport());
 		fPackageNameColumn.setEditingSupport(new PackageNameEditingSupport());
-		fIsNameWithShortcut = fileInfoProvider.isProjectAvailable();
 
 		fRootIf = new RootInterface(this, fileInfoProvider);
 		fClassIf = new ClassInterface(this, fileInfoProvider);
@@ -177,7 +174,7 @@ public class ClassViewer extends TableViewerSection {
 		addButton("New test class", new AddNewClassAdapter());
 		addButton("Remove selected", 
 				new ActionSelectionAdapter(
-						new DeleteAction(getViewer(), this, fIsNameWithShortcut), Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
+						new DeleteAction(getViewer(), this), Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
 
 		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
 		setActionProvider(new ModelViewerActionProvider(getTableViewer(), this, fileInfoProvider));

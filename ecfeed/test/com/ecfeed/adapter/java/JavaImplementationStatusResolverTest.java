@@ -198,7 +198,7 @@ public class JavaImplementationStatusResolverTest {
 	}
 
 	private RootNode prepareProject(EChildrenStatus classes) {
-		RootNode project = new RootNode("project", ModelVersionDistributor.getCurrentVersion());
+		RootNode project = new RootNode("project", ModelVersionDistributor.getCurrentSoftwareVersion());
 		if(classes == EChildrenStatus.NO_CHILDREN){
 			return project;
 		}

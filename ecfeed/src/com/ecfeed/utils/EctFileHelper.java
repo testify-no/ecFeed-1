@@ -33,10 +33,10 @@ public class EctFileHelper {
 	}
 
 	public static void serializeEmptyModel(String modelName, OutputStream outputStream) {
-		RootNode model = new RootNode(modelName, ModelVersionDistributor.getCurrentVersion());
+		RootNode model = new RootNode(modelName, ModelVersionDistributor.getCurrentSoftwareVersion());
 
 		IModelSerializer serializer = 
-				new EctSerializer(outputStream, ModelVersionDistributor.getCurrentVersion());
+				new EctSerializer(outputStream, ModelVersionDistributor.getCurrentSoftwareVersion());
 		try {
 			serializer.serialize(model);
 		} catch (Exception e) {

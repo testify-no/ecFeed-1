@@ -44,7 +44,7 @@ public class PasteAction extends ModelModifyingAction {
 			IModelUpdateContext updateContext,
 			IFileInfoProvider fileInfoProvider) {
 		super(GlobalActions.PASTE.getId(), 
-				GlobalActions.PASTE.getDescription(fileInfoProvider.isProjectAvailable()), selectionProvider, updateContext);
+				GlobalActions.PASTE.getDescription(), selectionProvider, updateContext);
 		fIndex = index;
 		fFileInfoProvider = fileInfoProvider;
 	}

@@ -16,8 +16,8 @@ import com.ecfeed.ui.modelif.NodeClipboard;
 
 public class CopyAction extends ModelSelectionAction {
 
-	public CopyAction(ISelectionProvider selectionProvider, boolean isNameWithShortcut){
-		super(GlobalActions.COPY.getId(), GlobalActions.COPY.getDescription(isNameWithShortcut), selectionProvider);
+	public CopyAction(ISelectionProvider selectionProvider){
+		super(GlobalActions.COPY.getId(), GlobalActions.COPY.getDescription(), selectionProvider);
 	}
 
 	@Override

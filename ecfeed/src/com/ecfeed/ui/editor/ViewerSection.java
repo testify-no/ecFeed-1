@@ -39,7 +39,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
-import org.eclipse.ui.actions.ActionFactory;
 
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ChoiceNode;
@@ -51,10 +50,11 @@ import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.TestCaseNode;
-import com.ecfeed.core.utils.StringHelper;
+import com.ecfeed.core.utils.SystemHelper;
 import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
+import com.ecfeed.ui.editor.actions.GlobalActions;
 import com.ecfeed.ui.editor.actions.IActionProvider;
 import com.ecfeed.ui.editor.actions.NamedAction;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
@@ -72,7 +72,6 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 	private Composite fViewerComposite;
 	private Menu fMenu;
 	private Set<KeyListener> fKeyListeners;
-	private boolean fIsNameWithShortcut;
 
 	protected class ViewerKeyAdapter extends KeyAdapter{
 		private int fKeyCode;
@@ -87,11 +86,14 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 
 		@Override
 		public void keyReleased(KeyEvent e) {
-			if((e.stateMask & fModifier) != 0 || fModifier == SWT.NONE){
-				if(e.keyCode == fKeyCode){
-					fAction.run();
-				}
+
+			if(e.keyCode != fKeyCode) {
+				return;
 			}
+			if (e.stateMask != fModifier) {
+				return;
+			}
+			fAction.run();
 		}
 	}
 
@@ -117,11 +119,9 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 	protected class ViewerMenuListener implements MenuListener{
 
 		private Menu fMenu;
-		private boolean fIsNameWithShortcut;
 
-		public ViewerMenuListener(Menu menu, boolean isNameWithShortcut) {
+		public ViewerMenuListener(Menu menu) {
 			fMenu = menu;
-			fIsNameWithShortcut = isNameWithShortcut;
 		}
 
 		protected Menu getMenu(){
@@ -156,7 +156,7 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 
 			while(groupIt.hasNext()){
 				for(NamedAction action : provider.getActions(groupIt.next())){
-					String convertedName = convertActionName(action.getName(), firstSelectedNode, fIsNameWithShortcut);
+					String convertedName = convertActionName(action.getName(), firstSelectedNode);
 					addMenuItem(convertedName, action);
 				}
 				if(groupIt.hasNext()){
@@ -165,8 +165,9 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 			}
 		}
 
-		private String convertActionName(String oldName, AbstractNode selectedNode, boolean isNameWithShortcut) {
-			if (!oldName.equals(NamedAction.INSERT_ACTION_NAME)) {
+		private String convertActionName(String oldName, AbstractNode selectedNode) {
+
+			if (!oldName.equals(GlobalActions.INSERT.getDescription())) {
 				return oldName;
 			}
 
@@ -178,12 +179,12 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 				SystemLogger.logCatch(e.getMessage());
 			}
 
-			if (isNameWithShortcut) {
-				final String insertKey = "INS";
-				return newName + "\t" + insertKey;
-			}
+			final String insertKey = "INS";
 
-			return newName;
+			if (SystemHelper.isOperatingSystemMacOs()) {
+				return newName + "   (" + insertKey + ")";
+			}
+			return newName + "\t" + insertKey;
 		}
 
 		private class MenuItemSelectionAdapter extends SelectionAdapter{
@@ -270,7 +271,6 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 		super(sectionContext, updateContext, fileInfoProvider, style);
 		fSelectedElements = new ArrayList<>();
 		fKeyListeners = new HashSet<KeyListener>();
-		fIsNameWithShortcut = fileInfoProvider.isProjectAvailable();
 	}
 
 	@Override
@@ -386,7 +386,7 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 		return fViewerComposite;
 	}
 
-	protected KeyListener addKeyListener(int keyCode, int modifier, Action action){
+	protected KeyListener createKeyListener(int keyCode, int modifier, Action action){
 		ViewerKeyAdapter adapter = new ViewerKeyAdapter(keyCode, modifier, action);
 		fViewer.getControl().addKeyListener(adapter);
 		return adapter;
@@ -401,7 +401,7 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 		super.setActionProvider(provider);
 		fMenu = new Menu(fViewer.getControl());
 		fViewer.getControl().setMenu(fMenu);
-		fMenu.addMenuListener(getMenuListener(fIsNameWithShortcut));
+		fMenu.addMenuListener(getMenuListener());
 
 		if(provider != null) {
 			addKeyListenersForActions(provider, addDeleteAction);
@@ -412,24 +412,45 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 
 	private void addKeyListenersForActions(IActionProvider provider, boolean addDeleteAction) {
 
-		NamedAction insertAction = provider.getAction(NamedAction.INSERT_ACTION_ID);
-		if(insertAction != null){
-			fKeyListeners.add(addKeyListener(SWT.INSERT, SWT.NONE, insertAction));
-		}
+		addKeyListener(GlobalActions.INSERT.getId(), SWT.INSERT, SWT.NONE, provider);
+		addKeyListener(GlobalActions.DELETE.getId(), SWT.DEL, SWT.NONE, provider);
 
-		NamedAction deleteAction = provider.getAction(ActionFactory.DELETE.getId());
-		if(addDeleteAction && deleteAction != null){
-			fKeyListeners.add(addKeyListener(SWT.DEL, SWT.NONE, deleteAction));
-		}
+		addKeyListener(GlobalActions.MOVE_UP.getId(), SWT.ARROW_UP, SWT.ALT, provider);
+		addKeyListener(GlobalActions.MOVE_DOWN.getId(), SWT.ARROW_DOWN, SWT.ALT, provider);
 
-		NamedAction arrowUpAction = provider.getAction(NamedAction.MOVE_UP_ACTION_ID); 
-		if(arrowUpAction != null) {
-			fKeyListeners.add(addKeyListener(SWT.ARROW_UP, SWT.ALT, arrowUpAction));
+		if (!getFileInfoProvider().isProjectAvailable()) {
+			addActionsForStandaloneApp(provider);
 		}
+	}
 
-		NamedAction arrowDownAction = provider.getAction(NamedAction.MOVE_DOWN_ACTION_ID); 
-		if(arrowDownAction != null){
-			fKeyListeners.add(addKeyListener(SWT.ARROW_DOWN, SWT.ALT, arrowDownAction));
+	private void addActionsForStandaloneApp(IActionProvider provider) {
+
+		int ctrlModifier = getCtrlModifier();
+
+		addKeyListener(GlobalActions.COPY.getId(), 'c', ctrlModifier, provider);
+		addKeyListener(GlobalActions.CUT.getId(), 'x', ctrlModifier, provider);
+		addKeyListener(GlobalActions.PASTE.getId(), 'v', ctrlModifier, provider);
+
+		addKeyListener(GlobalActions.SAVE.getId(), 's', ctrlModifier, provider);
+		addKeyListener(GlobalActions.UNDO.getId(), 'z', ctrlModifier, provider);
+		addKeyListener(GlobalActions.REDO.getId(), 'z', ctrlModifier | SWT.SHIFT, provider);
+	}
+
+	private void addKeyListener(String actionId, int keyCode, int modifier, IActionProvider provider) {
+		NamedAction action = provider.getAction(actionId);
+		if (action == null) {
+			return;
+		}
+		fKeyListeners.add(createKeyListener(keyCode, modifier, action));
+	}
+
+
+	int getCtrlModifier() {
+
+		if (SystemHelper.isOperatingSystemMacOs()) {
+			return SWT.COMMAND;
+		} else {
+			return SWT.CTRL;
 		}
 	}
 
@@ -441,8 +462,8 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 		}
 	}
 
-	protected MenuListener getMenuListener(boolean isNameWithShortcut) {
-		return new ViewerMenuListener(fMenu, isNameWithShortcut);
+	protected MenuListener getMenuListener() {
+		return new ViewerMenuListener(fMenu);
 	}
 
 	protected Menu getMenu(){

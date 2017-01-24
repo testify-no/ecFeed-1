@@ -162,9 +162,9 @@ public class GenericOperationAddParameterTest{
 
 	private ParametersParentNode getParent(ENodeType parentType) {
 		switch(parentType){
-		case PROJECT: return new RootNode("Project", ModelVersionDistributor.getCurrentVersion());
-		case CLASS: return new RootNode("Class", ModelVersionDistributor.getCurrentVersion());
-		case METHOD: return new RootNode("method", ModelVersionDistributor.getCurrentVersion());
+		case PROJECT: return new RootNode("Project", ModelVersionDistributor.getCurrentSoftwareVersion());
+		case CLASS: return new RootNode("Class", ModelVersionDistributor.getCurrentSoftwareVersion());
+		case METHOD: return new RootNode("method", ModelVersionDistributor.getCurrentSoftwareVersion());
 		default: return null;
 		}
 	}

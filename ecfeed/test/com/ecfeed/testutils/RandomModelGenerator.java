@@ -96,7 +96,7 @@ public class RandomModelGenerator {
 	public RootNode generateModel(int classes){
 		String name = generateString(REGEX_ROOT_NODE_NAME);
 
-		RootNode root = new RootNode(name, ModelVersionDistributor.getCurrentVersion());
+		RootNode root = new RootNode(name, ModelVersionDistributor.getCurrentSoftwareVersion());
 
 		for(int i = 0; i < classes; i++){
 			root.addClass(generateClass(rand.nextInt(MAX_METHODS)));

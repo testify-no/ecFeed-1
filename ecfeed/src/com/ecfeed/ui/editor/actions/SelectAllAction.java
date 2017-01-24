@@ -19,14 +19,14 @@ public class SelectAllAction extends NamedAction {
 	private TreeViewer fTreeViewer;
 	private boolean fSelectRoot;
 
-	public SelectAllAction(TreeViewer viewer, boolean selectRoot, boolean isNameWithShortcut){
-		super(GlobalActions.SELECT_ALL.getId(), GlobalActions.SELECT_ALL.getDescription(isNameWithShortcut));
+	public SelectAllAction(TreeViewer viewer, boolean selectRoot){
+		super(GlobalActions.SELECT_ALL.getId(), GlobalActions.SELECT_ALL.getDescription());
 		fTreeViewer = viewer;
 		fSelectRoot = selectRoot;
 	}
 
-	public SelectAllAction(TableViewer viewer, boolean isNameWithShortcut){
-		super(GlobalActions.SELECT_ALL.getId(), GlobalActions.SELECT_ALL.getDescription(isNameWithShortcut));
+	public SelectAllAction(TableViewer viewer){
+		super(GlobalActions.SELECT_ALL.getId(), GlobalActions.SELECT_ALL.getDescription());
 		fTableViewer = viewer;
 	}
 

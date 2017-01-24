@@ -10,27 +10,29 @@
 
 package com.ecfeed.ui.editor.actions;
 
-import org.eclipse.jface.action.Action;
 
-public class CutAction extends NamedAction {
+public class BasicActionRunnerProvider {
 
-	private Action fCopyAction;
-	private Action fDeleteAction;
+	IActionRunner fSaveRunner;
+	IActionRunner fUndoRunner;
+	IActionRunner fRedoRunner;
 
-	public CutAction(Action copyAction, Action deleteAction) {
-		super(GlobalActions.CUT.getId(), GlobalActions.CUT.getDescription());
-		fCopyAction = copyAction;
-		fDeleteAction = deleteAction;
+	public BasicActionRunnerProvider(IActionRunner saveRunner, IActionRunner undoRunner, IActionRunner redoRunner) {
+		fSaveRunner = saveRunner;
+		fUndoRunner = undoRunner;
+		fRedoRunner = redoRunner;
 	}
 
-	@Override
-	public boolean isEnabled(){
-		return fCopyAction.isEnabled() && fDeleteAction.isEnabled();
+	public IActionRunner getSaveRunner() {
+		return fSaveRunner;
 	}
 
-	@Override
-	public void run(){
-		fCopyAction.run();
-		fDeleteAction.run();
+	public IActionRunner getUndoRunner() {
+		return fUndoRunner;
 	}
+
+	public IActionRunner getRedoRunner() {
+		return fRedoRunner;
+	}	
+
 }

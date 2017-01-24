@@ -465,8 +465,7 @@ public class MethodInterface extends ParametersParentInterface {
 		for (String type : JavaTypeHelper.getSupportedJavaTypes()) {
 			List<String> newTypes = getTarget().getParametersTypes();
 			newTypes.add(type);
-			if (getTarget().getClassNode().getMethod(getTarget().getName(),
-					newTypes) == null) {
+			if (getTarget().getClassNode().getMethod(getTarget().getName(), newTypes) == null) {
 				return type;
 			}
 		}

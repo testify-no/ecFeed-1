@@ -26,7 +26,7 @@ public class RootNodeTest{
 
 	@Test
 	public void addClassTest(){
-		RootNode root = new RootNode("name", ModelVersionDistributor.getCurrentVersion());
+		RootNode root = new RootNode("name", ModelVersionDistributor.getCurrentSoftwareVersion());
 		ClassNode c1 = new ClassNode("c1");
 		ClassNode c2 = new ClassNode("c2");
 		ClassNode c3 = new ClassNode("c3");
@@ -48,7 +48,7 @@ public class RootNodeTest{
 
 	@Test
 	public void testGetClass(){
-		RootNode root = new RootNode("name", ModelVersionDistributor.getCurrentVersion());
+		RootNode root = new RootNode("name", ModelVersionDistributor.getCurrentSoftwareVersion());
 		ClassNode classNode1 = new ClassNode("name");
 		ClassNode classNode2 = new ClassNode("name");
 		assertEquals(0,  root.getClasses().size());
@@ -74,7 +74,7 @@ public class RootNodeTest{
 
 	@Test
 	public void testGetClassModel(){
-		RootNode root = new RootNode("name", ModelVersionDistributor.getCurrentVersion());
+		RootNode root = new RootNode("name", ModelVersionDistributor.getCurrentSoftwareVersion());
 		ClassNode class1 = new ClassNode("com.example.class1");
 		ClassNode class2 = new ClassNode("com.example.class2");
 		ClassNode class3 = new ClassNode("class1");
@@ -88,8 +88,8 @@ public class RootNodeTest{
 
 	@Test
 	public void compareTest(){
-		RootNode r1 = new RootNode("r1", ModelVersionDistributor.getCurrentVersion());
-		RootNode r2 = new RootNode("r2", ModelVersionDistributor.getCurrentVersion());
+		RootNode r1 = new RootNode("r1", ModelVersionDistributor.getCurrentSoftwareVersion());
+		RootNode r2 = new RootNode("r2", ModelVersionDistributor.getCurrentSoftwareVersion());
 
 		assertFalse(r1.isMatch(r2));
 
