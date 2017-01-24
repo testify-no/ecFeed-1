@@ -23,16 +23,24 @@ import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class ModelViewerActionProvider extends ActionProvider {
 
-	public ModelViewerActionProvider(TreeViewer viewer, IModelUpdateContext context, boolean selectRoot) {
-		this(viewer, context, null, selectRoot);
-	}
+	IActionRunner fSaveActionRunner;
+	IActionRunner fUndoActionRunner;
+	IActionRunner fRedoActionRunner;
 
 	public ModelViewerActionProvider(
 			TreeViewer viewer, 
 			IModelUpdateContext 
 			context, 
-			IFileInfoProvider fileInfoProvider, 
+			IFileInfoProvider fileInfoProvider,
+			IActionRunner saveActionRunner,
+			IActionRunner undoActionRunner,
+			IActionRunner redoActionRunner,
 			boolean selectRoot) {
+
+		fSaveActionRunner = saveActionRunner;
+		fUndoActionRunner = undoActionRunner;
+		fRedoActionRunner = redoActionRunner;
+
 		addEditActions(viewer, viewer, context, fileInfoProvider);
 		if(fileInfoProvider != null && fileInfoProvider.isProjectAvailable()){
 			addImplementationActions(viewer, context, fileInfoProvider);
@@ -70,9 +78,9 @@ public class ModelViewerActionProvider extends ActionProvider {
 		addAction("edit", new InsertAction(selectionProvider, structuredViewer, context, fileInfoProvider));
 		addAction("edit", deleteAction);
 
-		addAction("edit", new SaveAction(GlobalActions.SAVE.getId(), GlobalActions.SAVE.getDescription()));
-		addAction("edit", new UndoAction(GlobalActions.UNDO.getId(), GlobalActions.UNDO.getDescription()));
-		addAction("edit", new RedoAction(GlobalActions.REDO.getId(), GlobalActions.REDO.getDescription()));
+		addAction("edit", new SaveAction(GlobalActions.SAVE.getId(), GlobalActions.SAVE.getDescription(), fSaveActionRunner));
+		addAction("edit", new UndoAction(GlobalActions.UNDO.getId(), GlobalActions.UNDO.getDescription(), fUndoActionRunner));
+		addAction("edit", new RedoAction(GlobalActions.REDO.getId(), GlobalActions.REDO.getDescription(), fRedoActionRunner));
 	}
 
 	private void addImplementationActions(StructuredViewer viewer, IModelUpdateContext context, IFileInfoProvider fileInfoProvider) {

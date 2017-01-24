@@ -10,30 +10,19 @@
 
 package com.ecfeed.ui.editor.actions;
 
-import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.commands.operations.IOperationHistory;
-import org.eclipse.core.commands.operations.IUndoContext;
-import org.eclipse.core.commands.operations.OperationHistoryFactory;
-
-import com.ecfeed.core.utils.SystemLogger;
-import com.ecfeed.ui.editor.ModelEditorHelper;
-
 
 public class RedoAction extends NamedAction {
 
-	public RedoAction(String id, String name) {
+	IActionRunner fRunner;
+	public RedoAction(String id, String name, IActionRunner runner) {
 		super(id, name);
+		fRunner = runner;
 	}
 
 	@Override
 	public void run() {
-		IOperationHistory operationHistory = OperationHistoryFactory.getOperationHistory();
-		IUndoContext undoContext = ModelEditorHelper.getActiveModelEditor().getUndoContext();
-
-		try {
-			operationHistory.redo(undoContext, null, null);
-		} catch (ExecutionException e) {
-			SystemLogger.logCatch("Can not redo operation.");
+		if (fRunner != null) {
+			fRunner.run();
 		}
 	}
 
@@ -41,4 +30,5 @@ public class RedoAction extends NamedAction {
 	public boolean isEnabled(){
 		return true;
 	}
-}
+}	
+

@@ -17,6 +17,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.commands.operations.IOperationHistory;
+import org.eclipse.core.commands.operations.IUndoContext;
+import org.eclipse.core.commands.operations.OperationHistoryFactory;
 import org.eclipse.jface.viewers.DecoratingLabelProvider;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.IContentProvider;
@@ -58,6 +62,7 @@ import com.ecfeed.ui.editor.actions.AbstractAddChildAction;
 import com.ecfeed.ui.editor.actions.AddChildActionProvider;
 import com.ecfeed.ui.editor.actions.ExecuteTestCaseAction;
 import com.ecfeed.ui.editor.actions.ExportOnlineAction;
+import com.ecfeed.ui.editor.actions.IActionRunner;
 import com.ecfeed.ui.editor.actions.ModelViewerActionProvider;
 import com.ecfeed.ui.editor.actions.TestOnlineAction;
 import com.ecfeed.ui.modelif.AbstractNodeInterface;
@@ -602,10 +607,60 @@ public class ModelMasterSection extends TreeViewerSection{
 		if (ApplicationContext.isStandaloneApplication()) {
 			includeDeleteAction = true;
 		}
-		setActionProvider(new ModelViewerActionProvider(getTreeViewer(), this, parentBlock.getPage().getEditor(), false), includeDeleteAction);		
+
+		setActionProvider(
+				new ModelViewerActionProvider(
+						getTreeViewer(), 
+						this, 
+						parentBlock.getPage().getEditor(),
+						new SaveActionRunner(),
+						new UndoActionRunner(),
+						new RedoActionRunner(),
+						false), includeDeleteAction);		
 
 		getTreeViewer().addDragSupport(DND.DROP_COPY|DND.DROP_MOVE|DND.DROP_LINK, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDragListener(getTreeViewer()));
 		getTreeViewer().addDropSupport(DND.DROP_COPY|DND.DROP_MOVE|DND.DROP_LINK, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDropListener(getTreeViewer(), this, fFileInfoProvider));
+	}
+
+	private class SaveActionRunner implements IActionRunner {
+
+		@Override
+		public void run() {
+			ModelEditorHelper.saveActiveEditor();
+		}
+
+	}
+
+	private class UndoActionRunner implements IActionRunner {
+
+		@Override
+		public void run() {
+			IOperationHistory operationHistory = OperationHistoryFactory.getOperationHistory();
+			IUndoContext undoContext = ModelEditorHelper.getActiveModelEditor().getUndoContext();
+
+			try {
+				operationHistory.undo(undoContext, null, null);
+			} catch (ExecutionException e) {
+				SystemLogger.logCatch("Can not undo operation.");
+			}
+		}
+
+	}
+
+	private class RedoActionRunner implements IActionRunner {
+
+		@Override
+		public void run() {
+			IOperationHistory operationHistory = OperationHistoryFactory.getOperationHistory();
+			IUndoContext undoContext = ModelEditorHelper.getActiveModelEditor().getUndoContext();
+
+			try {
+				operationHistory.redo(undoContext, null, null);
+			} catch (ExecutionException e) {
+				SystemLogger.logCatch("Can not undo operation.");
+			}
+		}
+
 	}
 
 	public void setInput(RootNode model){

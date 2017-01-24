@@ -10,17 +10,20 @@
 
 package com.ecfeed.ui.editor.actions;
 
-import com.ecfeed.ui.editor.ModelEditorHelper;
 
 public class SaveAction extends NamedAction {
 
-	public SaveAction(String id, String name) {
+	IActionRunner fRunner;
+	public SaveAction(String id, String name, IActionRunner runner) {
 		super(id, name);
+		fRunner = runner;
 	}
 
 	@Override
 	public void run() {
-		ModelEditorHelper.saveActiveEditor(); 
+		if (fRunner != null) {
+			fRunner.run();
+		}
 	}
 
 	@Override

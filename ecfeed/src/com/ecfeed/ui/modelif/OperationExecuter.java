@@ -115,7 +115,7 @@ public class OperationExecuter {
 	protected boolean execute(IModelOperation operation, String errorMessageTitle){
 		try{
 			UndoableOperation action = new UndoableOperation(operation, getUpdateContext().getUndoContext(), errorMessageTitle);
-			fOperationHistory.execute(action, null, null); // XYX
+			fOperationHistory.execute(action, null, null);
 			return true;
 		} catch (ExecutionException e) {SystemLogger.logCatch(e.getMessage());}
 		return false;

@@ -11,24 +11,7 @@
 package com.ecfeed.ui.editor.actions;
 
 
-public class UndoAction extends NamedAction {
+public interface IActionRunner {
 
-	IActionRunner fRunner;
-	public UndoAction(String id, String name, IActionRunner runner) {
-		super(id, name);
-		fRunner = runner;
-	}
-
-	@Override
-	public void run() {
-		if (fRunner != null) {
-			fRunner.run();
-		}
-	}
-
-	@Override
-	public boolean isEnabled(){
-		return true;
-	}
+	public void run();
 }
-
