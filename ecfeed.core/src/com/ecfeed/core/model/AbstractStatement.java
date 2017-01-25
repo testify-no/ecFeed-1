@@ -13,20 +13,21 @@ package com.ecfeed.core.model;
 import java.util.List;
 
 public abstract class AbstractStatement implements IStatement {
+
 	AbstractStatement fParent = null;
 	private static int fLastId = 0;
 	private final int fId;
-	
-	public AbstractStatement(){
+
+	public AbstractStatement() {
 		fId = fLastId++;
 	}
-	
-	public int getId(){
+
+	public int getId() {
 		return fId;
 	}
 
 	public abstract String getLeftOperandName();
-	
+
 	public AbstractStatement getParent() {
 		return fParent;
 	}
@@ -35,33 +36,26 @@ public abstract class AbstractStatement implements IStatement {
 		fParent = parent;
 	}
 
-	public List<AbstractStatement> getChildren(){
+	public List<AbstractStatement> getChildren() {
 		return null;
 	}
 
-	public void replaceChild(AbstractStatement oldStatement, 
-			AbstractStatement newStatement) {
-		List<AbstractStatement> children = getChildren();
-		if(children != null){
-			int index = children.indexOf(oldStatement);
-			if(index != -1){
-				newStatement.setParent(this);
-				children.set(index, newStatement);
-			}
-		}
-	}
+	public void replaceChild(AbstractStatement oldStatement, AbstractStatement newStatement) {
 
-//	public void removeChild(BasicStatement child) {
-//		List<BasicStatement> children = getChildren();
-//		if(children != null){
-//			children.remove(child);
-//		}
-//	}
-	
-	public void addStatement(AbstractStatement statement){
-//		if(getParent() != null){
-//			getParent().addStatement(statement);
-//		}
+		List<AbstractStatement> children = getChildren();
+
+		if(children == null) {
+			return;
+		}
+
+		int index = children.indexOf(oldStatement);
+
+		if(index == -1) {
+			return;
+		}
+
+		newStatement.setParent(this);
+		children.set(index, newStatement);
 	}
 
 	public boolean mentions(ChoiceNode choice) {
@@ -83,18 +77,20 @@ public abstract class AbstractStatement implements IStatement {
 
 	@Override
 	public boolean equals(Object obj){
-		if(obj instanceof AbstractStatement == false){
+
+		if (!(obj instanceof AbstractStatement)) {
 			return false;
 		}
+
 		return fId == ((AbstractStatement)obj).getId();
 	}
-	
+
 	@Override
 	public boolean adapt(List<ChoiceNode> values){
 		return false;
 	}
-	
+
 	public abstract AbstractStatement getCopy();
-	
+
 	public abstract boolean updateReferences(MethodNode method);
 }
