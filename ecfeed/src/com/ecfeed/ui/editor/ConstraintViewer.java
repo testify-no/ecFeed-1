@@ -52,6 +52,59 @@ public class ConstraintViewer extends TreeViewerSection {
 
 	private StatementEditor fStatementEditor;
 
+
+	public ConstraintViewer(
+			ISectionContext sectionContext, IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider) {
+		super(sectionContext, updateContext, fileInfoProvider, STYLE);
+		getSection().setText("Constraint editor");
+		fAddStatementButton = addButton("Add statement", new AddStatementAdapter());
+
+		fRemoveStatementButton = 
+				addButton("Remove statement", 
+						new ActionSelectionAdapter(
+								new DeleteStatementAction(updateContext), 
+								Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
+
+		getViewer().addSelectionChangedListener(new StatementSelectionListener());
+
+		fStatementEditor = new StatementEditor(getClientComposite(), fileInfoProvider, getViewer(), updateContext);
+		createKeyListener(SWT.DEL, SWT.NONE, new DeleteStatementAction(updateContext));
+	}
+
+	@Override
+	protected IContentProvider viewerContentProvider() {
+		return new StatementViewerContentProvider();
+	}
+
+	@Override
+	protected IBaseLabelProvider viewerLabelProvider() {
+		return new StatementViewerLabelProvider();
+	}
+
+	@Override
+	protected int buttonsPosition(){
+		return BUTTONS_ASIDE;
+	}
+
+	@Override
+	protected int viewerStyle(){
+		return VIEWER_STYLE;
+	}
+
+	public void setInput(ConstraintNode constraintNode){
+		//Update the statement provider before setting input to get the correct images
+		fCurrentConstraint = constraintNode.getConstraint();
+		super.setInput(constraintNode.getConstraint());
+		fStatementEditor.refreshConditionCombo();
+		fStatementEditor.setConstraint(constraintNode);
+		fStatementEditor.setInput(fSelectedStatement);
+
+		getTreeViewer().expandAll();
+		if(getSelectedElement() == null){
+			getViewer().setSelection(new StructuredSelection(constraintNode.getConstraint().getPremise()));
+		}
+	}
+
 	private class StatementViewerContentProvider extends TreeNodeContentProvider implements ITreeContentProvider {
 		public final Object[] EMPTY_ARRAY = {};
 
@@ -179,55 +232,4 @@ public class ConstraintViewer extends TreeViewerSection {
 
 	}
 
-	public ConstraintViewer(
-			ISectionContext sectionContext, IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider) {
-		super(sectionContext, updateContext, fileInfoProvider, STYLE);
-		getSection().setText("Constraint editor");
-		fAddStatementButton = addButton("Add statement", new AddStatementAdapter());
-
-		fRemoveStatementButton = 
-				addButton("Remove statement", 
-						new ActionSelectionAdapter(
-								new DeleteStatementAction(updateContext), 
-								Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
-
-		getViewer().addSelectionChangedListener(new StatementSelectionListener());
-
-		fStatementEditor = new StatementEditor(getClientComposite(), fileInfoProvider, getViewer(), updateContext);
-		createKeyListener(SWT.DEL, SWT.NONE, new DeleteStatementAction(updateContext));
-	}
-
-	@Override
-	protected IContentProvider viewerContentProvider() {
-		return new StatementViewerContentProvider();
-	}
-
-	@Override
-	protected IBaseLabelProvider viewerLabelProvider() {
-		return new StatementViewerLabelProvider();
-	}
-
-	@Override
-	protected int buttonsPosition(){
-		return BUTTONS_ASIDE;
-	}
-
-	@Override
-	protected int viewerStyle(){
-		return VIEWER_STYLE;
-	}
-
-	public void setInput(ConstraintNode constraintNode){
-		//Update the statement provider before setting input to get the correct images
-		fCurrentConstraint = constraintNode.getConstraint();
-		super.setInput(constraintNode.getConstraint());
-		fStatementEditor.refreshConditionCombo();
-		fStatementEditor.setConstraint(constraintNode);
-		fStatementEditor.setInput(fSelectedStatement);
-
-		getTreeViewer().expandAll();
-		if(getSelectedElement() == null){
-			getViewer().setSelection(new StructuredSelection(constraintNode.getConstraint().getPremise()));
-		}
-	}
 }
