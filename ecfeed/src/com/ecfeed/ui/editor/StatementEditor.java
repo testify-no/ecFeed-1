@@ -95,10 +95,6 @@ public class StatementEditor extends Composite {
 		createRelationCombo(this);
 	}
 
-	public AbstractStatementInterface getStatementIf() {
-		return fStatementIf;
-	}
-
 	public void setInput(AbstractStatement statement) {
 
 		if (statement == null) {
@@ -127,7 +123,7 @@ public class StatementEditor extends Composite {
 
 		try {
 			if (fConditionCombo != null) {
-				String[] items = availableConditions(fSelectedStatement);
+				String[] items = getAvailableConditions(fSelectedStatement);
 				String currentConditionText = (String)fSelectedStatement.accept(new CurrentConditionProvider());
 				fConditionCombo.setItems(items);
 				fConditionCombo.setText(currentConditionText);
@@ -137,14 +133,8 @@ public class StatementEditor extends Composite {
 		}
 	}
 
-	private String[] availableConditions(AbstractStatement statement) {
-
-		try {
-			return (String[]) statement.accept(new AvailableConditionsProvider());
-		} catch (Exception e) {
-			SystemLogger.logCatch(e.getMessage());
-		}
-		return new String[]{};
+	public AbstractStatementInterface getStatementIf() {
+		return fStatementIf;
 	}
 
 	private void createStatementCombo(Composite parent) {
@@ -159,6 +149,16 @@ public class StatementEditor extends Composite {
 		fRelationCombo = new ComboViewer(parent).getCombo();
 		fRelationCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, RELATION_COMBO_WIDTH, 1));
 		fRelationCombo.addSelectionListener(new RelationComboListener());
+	}
+
+	private String[] getAvailableConditions(AbstractStatement statement) {
+
+		try {
+			return (String[]) statement.accept(new AvailableConditionsProvider());
+		} catch (Exception e) {
+			SystemLogger.logCatch(e.getMessage());
+		}
+		return new String[]{};
 	}
 
 	private String[] getStatementComboItems(AbstractStatement statement) {
@@ -221,7 +221,7 @@ public class StatementEditor extends Composite {
 			for (ChoiceNode choice : allChoices) {
 				ICondition condition = 
 						new ChoicesParentStatement(parameter, EStatementRelation.EQUAL, choice).getCondition();
-				
+
 				result.add(condition.toString());
 			}
 
@@ -311,7 +311,7 @@ public class StatementEditor extends Composite {
 	}
 
 	private class StatementComboListener implements SelectionListener {
-		
+
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 
@@ -436,8 +436,8 @@ public class StatementEditor extends Composite {
 			}
 
 			prepareRelationalStatementEditor(
-					statement, availableConditions(statement), statement.getCondition().getValueString());
-			
+					statement, getAvailableConditions(statement), statement.getCondition().getValueString());
+
 			StatementEditor.this.layout();
 
 			return null;
@@ -449,7 +449,7 @@ public class StatementEditor extends Composite {
 			disposeRightOperandComposite();
 			fRightOperandComposite = fConditionCombo = new ComboViewer(StatementEditor.this).getCombo();
 			prepareRelationalStatementEditor(
-					statement, availableConditions(statement), statement.getCondition().toString());
+					statement, getAvailableConditions(statement), statement.getCondition().toString());
 
 			StatementEditor.this.layout();
 			return null;
