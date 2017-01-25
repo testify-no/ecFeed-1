@@ -11,26 +11,28 @@
 package com.ecfeed.core.model;
 
 public enum EStatementRelation{
-	
+
 	EQUAL("="), 
 	NOT("\u2260");
-	
+
 	String fValue;
 
 	public static final String RELATION_EQUAL = "=";
 	public static final String RELATION_NOT = "\u2260";
 
 
-	private EStatementRelation(String value){
+	private EStatementRelation(String value) {
 		fValue = value;
 	}
-	
-	public String toString(){
+
+	public String toString() {
 		return fValue; 
 	}
-	
-	public static EStatementRelation getRelation(String text){
-		switch(text){
+
+	public static EStatementRelation getRelation(String text) {
+
+		switch(text)
+		{
 		case RELATION_EQUAL:
 			return EQUAL;
 		case RELATION_NOT:
