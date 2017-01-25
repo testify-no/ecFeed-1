@@ -51,7 +51,7 @@ import com.ecfeed.ui.modelif.ConstraintInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.StatementInterfaceFactory;
 
-public class StatementEditor extends Composite{
+public class StatementEditor extends Composite {
 
 	private final String STATEMENT_FALSE = new StaticStatement(false).getLeftOperandName();
 	private final String STATEMENT_TRUE = new StaticStatement(true).getLeftOperandName();
@@ -78,289 +78,6 @@ public class StatementEditor extends Composite{
 	private ConstraintInterface fConstraintIf;
 	private IFileInfoProvider fFileInfoProvider;
 
-	public AbstractStatementInterface getStatementIf() {
-		return fStatementIf;
-	}
-	private class AvailableConditionsProvider implements IStatementVisitor{
-
-		@Override
-		public Object visit(StaticStatement statement) throws Exception {
-			return new String[]{};
-		}
-
-		@Override
-		public Object visit(StatementArray statement) throws Exception {
-			return new String[]{};
-		}
-
-		@Override
-		public Object visit(ExpectedValueStatement statement)
-				throws Exception {
-			MethodParameterNode parameter  = statement.getParameter();
-			List<String> values = AbstractParameterInterface.getSpecialValues(parameter.getType());
-			if(values.isEmpty()){
-				for(ChoiceNode p : parameter.getLeafChoices()){
-					values.add(p.getValueString());
-				}
-			}
-			return values.toArray(new String[]{});
-		}
-
-		@Override
-		public Object visit(ChoicesParentStatement statement)
-				throws Exception {
-			List<String> result = new ArrayList<String>();
-			MethodParameterNode parameter = statement.getParameter();
-
-			Set<ChoiceNode> allChoices = parameter.getAllChoices();
-			Set<String> allLabels = parameter.getLeafLabels();
-			for(ChoiceNode choice : allChoices){
-				ICondition condition = new ChoicesParentStatement(parameter, EStatementRelation.EQUAL, choice).getCondition();
-				result.add(condition.toString());
-			}
-			for(String label : allLabels){
-				ICondition condition = new ChoicesParentStatement(parameter, EStatementRelation.EQUAL, label).getCondition();
-				result.add(condition.toString());
-			}
-			return result.toArray(new String[]{});
-		}
-
-		@Override
-		public Object visit(LabelCondition condition) throws Exception {
-			return new String[]{};
-		}
-
-		@Override
-		public Object visit(ChoiceCondition condition) throws Exception {
-			return new String[]{};
-		}
-	}
-
-	private class CurrentConditionProvider implements IStatementVisitor{
-
-		@Override
-		public Object visit(StaticStatement statement) throws Exception {
-			return "";
-		}
-
-		@Override
-		public Object visit(StatementArray statement) throws Exception {
-			return "";
-		}
-
-		@Override
-		public Object visit(ExpectedValueStatement statement)
-				throws Exception {
-			return statement.getCondition().getValueString();
-		}
-
-		@Override
-		public Object visit(ChoicesParentStatement statement)
-				throws Exception {
-			return statement.getCondition().toString();
-		}
-
-		@Override
-		public Object visit(LabelCondition condition) throws Exception {
-			return "";
-		}
-
-		@Override
-		public Object visit(ChoiceCondition condition) throws Exception {
-			return "";
-		}
-
-	}
-
-	private class ConditionComboListener implements SelectionListener{
-
-		@Override
-		public void widgetSelected(SelectionEvent e){
-			applyNewValue();
-		}
-
-		@Override
-		public void widgetDefaultSelected(SelectionEvent e) {
-			applyNewValue();
-		}
-
-		protected void applyNewValue(){
-			fStatementIf.setConditionValue(fConditionCombo.getText());
-			fConditionCombo.setText(fStatementIf.getConditionValue());
-		}
-
-	}
-
-	private class ConditionComboFocusLostListener extends FocusLostListener {
-
-		@Override
-		public void focusLost(FocusEvent e) {
-			fStatementIf.setConditionValue(fConditionCombo.getText());
-			fConditionCombo.setText(fStatementIf.getConditionValue());
-		}
-
-	}		
-
-	private class StatementComboListener implements SelectionListener{
-		@Override
-		public void widgetSelected(SelectionEvent e) {
-			EStatementOperator operator = EStatementOperator.getOperator(fStatementCombo.getText());
-			if(fStatementIf.getOperator() != null && operator != null){
-				if(operator != fStatementIf.getOperator()){
-					fStatementIf.setOperator(operator);
-				}
-			}
-			else{
-				AbstractStatement statement = buildStatement();
-				if(statement != null){
-					AbstractStatementInterface parentIf = fStatementIf.getParentInterface();
-					boolean result = false;
-					if(parentIf != null){
-						result = parentIf.replaceChild(fSelectedStatement, statement);
-					}
-					else{
-						result = fConstraintIf.replaceStatement(fSelectedStatement, statement);
-					}
-					if(result){
-						fStructuredViewer.setSelection(new StructuredSelection(statement));
-
-					}
-				}
-			}
-		}
-
-		@Override
-		public void widgetDefaultSelected(SelectionEvent e) {
-			widgetSelected(e);
-		}
-
-		private AbstractStatement buildStatement() {
-			String statementText = fStatementCombo.getText();
-			if(statementText.equals(STATEMENT_TRUE) || statementText.equals(STATEMENT_FALSE)){
-				return new StaticStatement(Boolean.parseBoolean(statementText));
-			}
-			if(statementText.equals(STATEMENT_AND) || statementText.equals(STATEMENT_OR)){
-				return new StatementArray(EStatementOperator.getOperator(statementText));
-			}
-			MethodParameterNode parameter = fConstraint.getMethod().getMethodParameter(statementText);
-			EStatementRelation relation = EStatementRelation.EQUAL;
-			if(parameter != null && parameter.isExpected()){
-				ChoiceNode condition = new ChoiceNode("expected", parameter.getDefaultValue());
-				condition.setParent(parameter);
-				return new ExpectedValueStatement(parameter, condition, new JavaPrimitiveTypePredicate());
-			}
-			else if(parameter != null && parameter.getChoices().size() > 0){
-				ChoiceNode condition = parameter.getChoices().get(0);
-				return new ChoicesParentStatement(parameter, relation, condition);
-			}
-
-			return null;
-		}
-	}
-
-	private class RelationComboListener implements SelectionListener{
-
-		@Override
-		public void widgetSelected(SelectionEvent e) {
-			EStatementRelation relation = EStatementRelation.getRelation(fRelationCombo.getText());
-			fStatementIf.setRelation(relation);
-		}
-
-		@Override
-		public void widgetDefaultSelected(SelectionEvent e) {
-			widgetSelected(e);
-		}
-	}
-
-	private class EditorBuilder implements IStatementVisitor{
-
-		public EditorBuilder(IFileInfoProvider fileInfoProvider) {
-			fFileInfoProvider = fileInfoProvider;
-		}
-		@Override
-		public Object visit(StaticStatement statement) throws Exception {
-			fRelationCombo.setVisible(false);
-			if (fRightOperandComposite != null) {
-				fRightOperandComposite.setVisible(false);
-			}
-			StatementEditor.this.redraw();
-			return null;
-		}
-
-		@Override
-		public Object visit(StatementArray statement) throws Exception {
-			fRelationCombo.setVisible(false);
-			if (fRightOperandComposite != null) {
-				fRightOperandComposite.setVisible(false);
-			}
-			StatementEditor.this.redraw();
-			return null;
-		}
-
-		@Override
-		public Object visit(ExpectedValueStatement statement) throws Exception {
-			disposeRightOperandComposite();
-			if(AbstractParameterInterface.hasLimitedValuesSet(statement.getParameter())){
-				fRightOperandComposite = fConditionCombo = new ComboViewer(StatementEditor.this).getCombo();
-			}
-			else{
-				fRightOperandComposite = fConditionCombo = new ComboViewer(StatementEditor.this, SWT.BORDER).getCombo();
-			}
-			prepareRelationalStatementEditor(statement, availableConditions(statement), statement.getCondition().getValueString());
-
-			StatementEditor.this.layout();
-			return null;
-		}
-
-		@Override
-		public Object visit(ChoicesParentStatement statement) throws Exception {
-			disposeRightOperandComposite();
-			fRightOperandComposite = fConditionCombo = new ComboViewer(StatementEditor.this).getCombo();
-			prepareRelationalStatementEditor(statement, availableConditions(statement), statement.getCondition().toString());
-
-			StatementEditor.this.layout();
-			return null;
-		}
-
-		@Override
-		public Object visit(LabelCondition condition) throws Exception {
-			return null;
-		}
-
-		@Override
-		public Object visit(ChoiceCondition condition) throws Exception {
-			return null;
-		}
-
-		private void disposeRightOperandComposite() {
-			if(fRightOperandComposite != null && fRightOperandComposite.isDisposed() == false){
-				fRightOperandComposite.dispose();
-			}
-
-		}
-
-		private void prepareRelationalStatementEditor(IRelationalStatement statement, String[] items, String item) {
-			fRelationCombo.setVisible(true);
-			fRelationCombo.setItems(availableRelations(statement));
-			fRelationCombo.setText(statement.getRelation().toString());
-
-			fConditionCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, CONDITION_COMBO_WIDTH, 1));
-			fConditionCombo.setItems(items);
-			fConditionCombo.setText(item);
-			fConditionCombo.addSelectionListener(new ConditionComboListener());
-			fConditionCombo.addFocusListener(new ConditionComboFocusLostListener());
-			StatementEditor.this.layout();
-		}
-
-		private String[] availableRelations(IRelationalStatement statement){
-			List<String> relations = new ArrayList<String>();
-			for(EStatementRelation r : statement.getAvailableRelations()){
-				relations.add(r.toString());
-			}
-			return relations.toArray(new String[]{});
-		}
-	}
-
 	public StatementEditor(
 			Composite parent, IFileInfoProvider fileInfoProvider, 
 			StructuredViewer structuredViewer, IModelUpdateContext updateContext) {
@@ -378,29 +95,38 @@ public class StatementEditor extends Composite{
 		createRelationCombo(this);
 	}
 
-	public void setInput(AbstractStatement statement){
+	public AbstractStatementInterface getStatementIf() {
+		return fStatementIf;
+	}
+
+	public void setInput(AbstractStatement statement) {
+
 		if (statement == null) {
 			return;
 		}
+
 		fSelectedStatement = statement;
 		fStatementIf = StatementInterfaceFactory.getInterface(statement, fModelUpdateContext);
-		fStatementCombo.setItems(statementComboItems(statement));
+		fStatementCombo.setItems(getStatementComboItems(statement));
 		fStatementCombo.setText(statement.getLeftOperandName());
-		try{
+
+		try {
 			statement.accept(new EditorBuilder(fFileInfoProvider));
-		}catch(Exception e){
+		}catch(Exception e) {
 			SystemLogger.logCatch(e.getMessage());
 		}
 	}
 
 	public void setConstraint(ConstraintNode constraintNode) {
+
 		fConstraint = constraintNode;
 		fConstraintIf.setTarget(constraintNode);
 	}
 
-	public void refreshConditionCombo(){
+	public void refreshConditionCombo() {
+
 		try {
-			if(fConditionCombo != null){
+			if (fConditionCombo != null) {
 				String[] items = availableConditions(fSelectedStatement);
 				String currentConditionText = (String)fSelectedStatement.accept(new CurrentConditionProvider());
 				fConditionCombo.setItems(items);
@@ -412,6 +138,7 @@ public class StatementEditor extends Composite{
 	}
 
 	private String[] availableConditions(AbstractStatement statement) {
+
 		try {
 			return (String[]) statement.accept(new AvailableConditionsProvider());
 		} catch (Exception e) {
@@ -421,33 +148,354 @@ public class StatementEditor extends Composite{
 	}
 
 	private void createStatementCombo(Composite parent) {
+
 		fStatementCombo = new ComboViewer(parent).getCombo();
 		fStatementCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, STATEMENT_COMBO_WIDTH, 1));
 		fStatementCombo.addSelectionListener(new StatementComboListener());
 	}
 
 	private void createRelationCombo(Composite parent) {
+
 		fRelationCombo = new ComboViewer(parent).getCombo();
 		fRelationCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, RELATION_COMBO_WIDTH, 1));
 		fRelationCombo.addSelectionListener(new RelationComboListener());
 	}
 
-	private String[] statementComboItems(AbstractStatement statement){
+	private String[] getStatementComboItems(AbstractStatement statement) {
+
 		List<String> items = new ArrayList<String>();
 		items.addAll(Arrays.asList(FIXED_STATEMENTS));
 		boolean consequence = fConstraint.getConstraint().getConsequence() == statement;
-		for(MethodParameterNode c : fConstraint.getMethod().getMethodParameters()){
-			if(c.isExpected()){
-				if(consequence){
+
+		for (MethodParameterNode c : fConstraint.getMethod().getMethodParameters()) {
+			if (c.isExpected()) {
+				if (consequence) {
 					items.add(c.getName());
 				}
 			}
-			else{
-				if(c.getChoices().size() > 0){
+			else {
+				if (c.getChoices().size() > 0) {
 					items.add(c.getName());
 				}
 			}
 		}
 		return items.toArray(new String[]{});
 	}
+
+	private class AvailableConditionsProvider implements IStatementVisitor {
+
+		@Override
+		public Object visit(StaticStatement statement) throws Exception {
+			return new String[]{};
+		}
+
+		@Override
+		public Object visit(StatementArray statement) throws Exception {
+			return new String[]{};
+		}
+
+		@Override
+		public Object visit(ExpectedValueStatement statement) throws Exception {
+
+			MethodParameterNode parameter  = statement.getParameter();
+			List<String> values = AbstractParameterInterface.getSpecialValues(parameter.getType());
+
+			if (values.isEmpty()) {
+				for (ChoiceNode p : parameter.getLeafChoices()) {
+					values.add(p.getValueString());
+				}
+			}
+
+			return values.toArray(new String[]{});
+		}
+
+		@Override
+		public Object visit(ChoicesParentStatement statement) throws Exception {
+
+			List<String> result = new ArrayList<String>();
+			MethodParameterNode parameter = statement.getParameter();
+
+			Set<ChoiceNode> allChoices = parameter.getAllChoices();
+			Set<String> allLabels = parameter.getLeafLabels();
+
+			for (ChoiceNode choice : allChoices) {
+				ICondition condition = 
+						new ChoicesParentStatement(parameter, EStatementRelation.EQUAL, choice).getCondition();
+				
+				result.add(condition.toString());
+			}
+
+			for (String label : allLabels) {
+				ICondition condition = 
+						new ChoicesParentStatement(parameter, EStatementRelation.EQUAL, label).getCondition();
+				result.add(condition.toString());
+			}
+
+			return result.toArray(new String[]{});
+		}
+
+		@Override
+		public Object visit(LabelCondition condition) throws Exception {
+			return new String[]{};
+		}
+
+		@Override
+		public Object visit(ChoiceCondition condition) throws Exception {
+			return new String[]{};
+		}
+	}
+
+	private class CurrentConditionProvider implements IStatementVisitor {
+
+		@Override
+		public Object visit(StaticStatement statement) throws Exception {
+			return "";
+		}
+
+		@Override
+		public Object visit(StatementArray statement) throws Exception {
+			return "";
+		}
+
+		@Override
+		public Object visit(ExpectedValueStatement statement) throws Exception {
+			return statement.getCondition().getValueString();
+		}
+
+		@Override
+		public Object visit(ChoicesParentStatement statement) throws Exception {
+			return statement.getCondition().toString();
+		}
+
+		@Override
+		public Object visit(LabelCondition condition) throws Exception {
+			return "";
+		}
+
+		@Override
+		public Object visit(ChoiceCondition condition) throws Exception {
+			return "";
+		}
+
+	}
+
+	private class ConditionComboListener implements SelectionListener {
+
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			applyNewValue();
+		}
+
+		@Override
+		public void widgetDefaultSelected(SelectionEvent e) {
+			applyNewValue();
+		}
+
+		protected void applyNewValue() {
+
+			fStatementIf.setConditionValue(fConditionCombo.getText());
+			fConditionCombo.setText(fStatementIf.getConditionValue());
+		}
+
+	}
+
+	private class ConditionComboFocusLostListener extends FocusLostListener {
+
+		@Override
+		public void focusLost(FocusEvent e) {
+
+			fStatementIf.setConditionValue(fConditionCombo.getText());
+			fConditionCombo.setText(fStatementIf.getConditionValue());
+		}
+
+	}
+
+	private class StatementComboListener implements SelectionListener {
+		
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+
+			EStatementOperator operator = EStatementOperator.getOperator(fStatementCombo.getText());
+
+			if (fStatementIf.getOperator() != null && operator != null) {
+				if (operator != fStatementIf.getOperator()) {
+					fStatementIf.setOperator(operator);
+				}
+			}
+			else {
+				AbstractStatement statement = buildStatement();
+				if (statement != null) {
+					AbstractStatementInterface parentIf = fStatementIf.getParentInterface();
+					boolean result = false;
+					if (parentIf != null) {
+						result = parentIf.replaceChild(fSelectedStatement, statement);
+					}
+					else {
+						result = fConstraintIf.replaceStatement(fSelectedStatement, statement);
+					}
+					if (result) {
+						fStructuredViewer.setSelection(new StructuredSelection(statement));
+
+					}
+				}
+			}
+		}
+
+		@Override
+		public void widgetDefaultSelected(SelectionEvent e) {
+			widgetSelected(e);
+		}
+
+		private AbstractStatement buildStatement() {
+
+			String statementText = fStatementCombo.getText();
+
+			if (statementText.equals(STATEMENT_TRUE) || statementText.equals(STATEMENT_FALSE)) {
+				return new StaticStatement(Boolean.parseBoolean(statementText));
+			}
+
+			if (statementText.equals(STATEMENT_AND) || statementText.equals(STATEMENT_OR)) {
+				return new StatementArray(EStatementOperator.getOperator(statementText));
+			}
+
+			MethodParameterNode parameter = fConstraint.getMethod().getMethodParameter(statementText);
+			EStatementRelation relation = EStatementRelation.EQUAL;
+
+			if (parameter != null && parameter.isExpected()) {
+
+				ChoiceNode condition = new ChoiceNode("expected", parameter.getDefaultValue());
+				condition.setParent(parameter);
+
+				return new ExpectedValueStatement(parameter, condition, new JavaPrimitiveTypePredicate());
+			}
+			else if (parameter != null && parameter.getChoices().size() > 0) {
+
+				ChoiceNode condition = parameter.getChoices().get(0);
+				return new ChoicesParentStatement(parameter, relation, condition);
+			}
+
+			return null;
+		}
+	}
+
+	private class RelationComboListener implements SelectionListener{
+
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+
+			EStatementRelation relation = EStatementRelation.getRelation(fRelationCombo.getText());
+			fStatementIf.setRelation(relation);
+		}
+
+		@Override
+		public void widgetDefaultSelected(SelectionEvent e) {
+			widgetSelected(e);
+		}
+	}
+
+	private class EditorBuilder implements IStatementVisitor {
+
+		public EditorBuilder(IFileInfoProvider fileInfoProvider) {
+			fFileInfoProvider = fileInfoProvider;
+		}
+
+		@Override
+		public Object visit(StaticStatement statement) throws Exception {
+
+			fRelationCombo.setVisible(false);
+			if (fRightOperandComposite != null) {
+				fRightOperandComposite.setVisible(false);
+			}
+
+			StatementEditor.this.redraw();
+			return null;
+		}
+
+		@Override
+		public Object visit(StatementArray statement) throws Exception {
+
+			fRelationCombo.setVisible(false);
+
+			if (fRightOperandComposite != null) {
+				fRightOperandComposite.setVisible(false);
+			}
+
+			StatementEditor.this.redraw();
+			return null;
+		}
+
+		@Override
+		public Object visit(ExpectedValueStatement statement) throws Exception {
+
+			disposeRightOperandComposite();
+
+			if (AbstractParameterInterface.hasLimitedValuesSet(statement.getParameter())) {
+				fRightOperandComposite = fConditionCombo = new ComboViewer(StatementEditor.this).getCombo();
+			} else {
+				fRightOperandComposite = fConditionCombo = new ComboViewer(StatementEditor.this, SWT.BORDER).getCombo();
+			}
+
+			prepareRelationalStatementEditor(
+					statement, availableConditions(statement), statement.getCondition().getValueString());
+			
+			StatementEditor.this.layout();
+
+			return null;
+		}
+
+		@Override
+		public Object visit(ChoicesParentStatement statement) throws Exception {
+
+			disposeRightOperandComposite();
+			fRightOperandComposite = fConditionCombo = new ComboViewer(StatementEditor.this).getCombo();
+			prepareRelationalStatementEditor(
+					statement, availableConditions(statement), statement.getCondition().toString());
+
+			StatementEditor.this.layout();
+			return null;
+		}
+
+		@Override
+		public Object visit(LabelCondition condition) throws Exception {
+			return null;
+		}
+
+		@Override
+		public Object visit(ChoiceCondition condition) throws Exception {
+			return null;
+		}
+
+		private void disposeRightOperandComposite() {
+
+			if (fRightOperandComposite != null && fRightOperandComposite.isDisposed() == false) {
+				fRightOperandComposite.dispose();
+			}
+		}
+
+		private void prepareRelationalStatementEditor(IRelationalStatement statement, String[] items, String item) {
+
+			fRelationCombo.setVisible(true);
+			fRelationCombo.setItems(availableRelations(statement));
+			fRelationCombo.setText(statement.getRelation().toString());
+
+			fConditionCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, CONDITION_COMBO_WIDTH, 1));
+			fConditionCombo.setItems(items);
+			fConditionCombo.setText(item);
+			fConditionCombo.addSelectionListener(new ConditionComboListener());
+			fConditionCombo.addFocusListener(new ConditionComboFocusLostListener());
+
+			StatementEditor.this.layout();
+		}
+
+		private String[] availableRelations(IRelationalStatement statement) {
+
+			List<String> relations = new ArrayList<String>();
+			for (EStatementRelation r : statement.getAvailableRelations()) {
+				relations.add(r.toString());
+			}
+
+			return relations.toArray(new String[]{});
+		}
+	}
+
 }
