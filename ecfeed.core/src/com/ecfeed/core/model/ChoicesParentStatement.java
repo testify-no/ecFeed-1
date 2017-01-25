@@ -175,6 +175,27 @@ public class ChoicesParentStatement extends AbstractStatement implements IRelati
 		return fCondition.toString();
 	}
 
+	private ChoiceNode getChoiceForMethodParameter(List<ChoiceNode> choices, MethodParameterNode methodParameterNode) {
+
+		if (choices == null) {
+			return null;
+		}
+
+		MethodNode methodNode = methodParameterNode.getMethod();
+
+		if (methodNode == null) {
+			return null;
+		}
+
+		int index = methodNode.getParameters().indexOf(methodParameterNode);
+
+		if(choices.size() < index + 1) {
+			return null;
+		}
+
+		return choices.get(index);
+	}
+
 	public class LabelCondition implements ICondition {
 
 		private String fLabel;
@@ -183,23 +204,32 @@ public class ChoicesParentStatement extends AbstractStatement implements IRelati
 			fLabel = label;
 		}
 
-		public String getLabel() {
-			return fLabel;
+		@Override
+		public boolean evaluate(List<ChoiceNode> choices) {
+
+			ChoiceNode choice = getChoiceForMethodParameter(choices, getParameter());
+
+			if (choice == null) {
+				return false;
+			}
+
+			return evaluateChoiceContainsLabel(choice);
 		}
 
-		@Override
-		public String toString() {
-			return fLabel + (fParameter.getAllChoiceNames().contains(fLabel)?"[label]":"");
-		}
+		private boolean evaluateChoiceContainsLabel(ChoiceNode choice) {
 
-		@Override
-		public boolean adapt(List<ChoiceNode> values) {
-			return false;
-		}
+			boolean containsLabel = choice.getAllLabels().contains(fLabel);
 
-		@Override
-		public LabelCondition getCopy() {
-			return new LabelCondition(fLabel);
+			switch (getRelation()) {
+
+			case EQUAL:
+				return containsLabel;
+			case NOT:
+				return !containsLabel;
+			default:
+				return false;
+			}
+
 		}
 
 		@Override
@@ -213,24 +243,8 @@ public class ChoicesParentStatement extends AbstractStatement implements IRelati
 		}
 
 		@Override
-		public boolean evaluate(List<ChoiceNode> values) {
-
-			if (getParameter().getMethod() == null) {
-				return false;
-			}
-
-			int index = getParameter().getMethod().getParameters().indexOf(getParameter());
-			boolean containsLabel = values.get(index).getAllLabels().contains(fLabel);
-
-			switch (getRelation()) {
-
-			case EQUAL:
-				return containsLabel;
-			case NOT:
-				return !containsLabel;
-			default:
-				return false;
-			}
+		public boolean adapt(List<ChoiceNode> values) {
+			return false;
 		}
 
 		@Override
@@ -249,22 +263,41 @@ public class ChoicesParentStatement extends AbstractStatement implements IRelati
 		public Object accept(IStatementVisitor visitor) throws Exception {
 			return visitor.visit(this);
 		}
+
+		@Override
+		public String toString() {
+			return fLabel + (fParameter.getAllChoiceNames().contains(fLabel)?"[label]":"");
+		}
+
+		@Override
+		public LabelCondition getCopy() {
+			return new LabelCondition(fLabel);
+		}
+
+		public String getLabel() {
+			return fLabel;
+		}
+
 	}
 
 	public class ChoiceCondition implements ICondition {
+
 		private ChoiceNode fChoice;
 
 		public ChoiceCondition(ChoiceNode choice) {
 			fChoice = choice;
 		}
 
-		public ChoiceNode getChoice() {
-			return fChoice;
-		}
-
 		@Override
-		public String toString() {
-			return fChoice.getQualifiedName();
+		public boolean evaluate(List<ChoiceNode> choices) {
+
+			ChoiceNode choice = getChoiceForMethodParameter(choices, getParameter());
+
+			if (choice == null) {
+				return false;
+			}
+
+			return evaluateChoice(choice);
 		}
 
 		@Override
@@ -279,51 +312,20 @@ public class ChoicesParentStatement extends AbstractStatement implements IRelati
 
 		@Override
 		public boolean updateReferences(MethodParameterNode parameter) {
+
 			ChoiceNode condition = parameter.getChoice(fChoice.getQualifiedName());
-			if(condition != null){
-				fChoice = condition;
-			}
-			else {
+
+			if (condition == null) {
 				return false;
 			}
+
+			fChoice = condition;
 			return true;
 		}
 
 		@Override
 		public Object getCondition(){
 			return fChoice;
-		}
-
-		@Override
-		public boolean evaluate(List<ChoiceNode> values) {
-
-			if(getParameter().getMethod() == null){
-				return false;
-			}
-
-			if(values == null) {
-				return true;
-			}
-
-			int index = getParameter().getMethod().getParameters().indexOf(getParameter());
-
-			if(values.size() < index + 1) {
-				return false;
-			}
-
-			ChoiceNode choice = values.get(index);
-
-			boolean isCondition = choice.is(fChoice);
-
-			switch (getRelation()) {
-
-			case EQUAL:
-				return isCondition;
-			case NOT:
-				return !isCondition;
-			default:
-				return false;
-			}
 		}
 
 		@Override
@@ -341,6 +343,31 @@ public class ChoicesParentStatement extends AbstractStatement implements IRelati
 		@Override
 		public Object accept(IStatementVisitor visitor) throws Exception {
 			return visitor.visit(this);
+		}
+
+		@Override
+		public String toString() {
+			return fChoice.getQualifiedName();
+		}
+
+		public ChoiceNode getChoice() {
+			return fChoice;
+		}
+
+		private boolean evaluateChoice(ChoiceNode choice) {
+
+			boolean isCondition = choice.is(fChoice);
+			EStatementRelation relation = getRelation(); 
+
+			switch (relation) {
+
+			case EQUAL:
+				return isCondition;
+			case NOT:
+				return !isCondition;
+			default:
+				return false;
+			}
 		}
 
 	}
