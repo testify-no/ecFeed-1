@@ -124,8 +124,9 @@ public class StatementEditor extends Composite {
 		try {
 			if (fConditionCombo != null) {
 				String[] items = getAvailableConditions(fSelectedStatement);
-				String currentConditionText = (String)fSelectedStatement.accept(new CurrentConditionProvider());
 				fConditionCombo.setItems(items);
+
+				String currentConditionText = (String)fSelectedStatement.accept(new CurrentConditionProvider());
 				fConditionCombo.setText(currentConditionText);
 			}
 		} catch (Exception e) {
@@ -475,7 +476,7 @@ public class StatementEditor extends Composite {
 		private void prepareRelationalStatementEditor(IRelationalStatement statement, String[] items, String item) {
 
 			fRelationCombo.setVisible(true);
-			fRelationCombo.setItems(availableRelations(statement));
+			fRelationCombo.setItems(getAvailableRelations(statement));
 			fRelationCombo.setText(statement.getRelation().toString());
 
 			fConditionCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, CONDITION_COMBO_WIDTH, 1));
@@ -487,9 +488,10 @@ public class StatementEditor extends Composite {
 			StatementEditor.this.layout();
 		}
 
-		private String[] availableRelations(IRelationalStatement statement) {
+		private String[] getAvailableRelations(IRelationalStatement statement) {
 
 			List<String> relations = new ArrayList<String>();
+
 			for (EStatementRelation r : statement.getAvailableRelations()) {
 				relations.add(r.toString());
 			}

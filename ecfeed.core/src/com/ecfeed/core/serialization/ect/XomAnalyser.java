@@ -610,19 +610,14 @@ public abstract class XomAnalyser {
 		return fWhiteCharConverter.decode(value);
 	}
 
-	protected EStatementRelation getRelation(String relationName) throws ParserException{
-		EStatementRelation relation = null;
-		switch(relationName){
-		case Constants.RELATION_EQUAL:
-			relation = EStatementRelation.EQUAL;
-			break;
-		case Constants.RELATION_NOT:
-		case Constants.RELATION_NOT_ASCII:
-			relation = EStatementRelation.NOT;
-			break;
-		default:
+	protected EStatementRelation getRelation(String relationName) throws ParserException {
+
+		EStatementRelation relation = EStatementRelation.getRelation(relationName);
+
+		if (relation == null) {
 			ParserException.report(Messages.WRONG_OR_MISSING_RELATION_FORMAT(relationName));
 		}
+
 		return relation;
 	}
 

@@ -80,14 +80,14 @@ public class ChoiceStatementTest {
 		fParameter.addChoice(fP1);
 		fParameter.addChoice(fP2);
 		fParameter.addChoice(fP3);
-		
+
 		fMethod.addParameter(fParameter);
 	}
 
 	@Test
 	public void equalsTest(){
 		ChoicesParentStatement statement = new ChoicesParentStatement(fParameter, EStatementRelation.EQUAL, fP22);
-		
+
 		assertTrue(statement.evaluate(Arrays.asList(new ChoiceNode[]{fP221})));
 		assertTrue(statement.evaluate(Arrays.asList(new ChoiceNode[]{fP222})));
 		assertTrue(statement.evaluate(Arrays.asList(new ChoiceNode[]{fP22})));
@@ -101,8 +101,8 @@ public class ChoiceStatementTest {
 
 	@Test 
 	public void notEqualsTest(){
-		ChoicesParentStatement statement = new ChoicesParentStatement(fParameter, EStatementRelation.NOT, fP22);
-		
+		ChoicesParentStatement statement = new ChoicesParentStatement(fParameter, EStatementRelation.NOT_EQUAL, fP22);
+
 		assertFalse(statement.evaluate(Arrays.asList(new ChoiceNode[]{fP221})));
 		assertFalse(statement.evaluate(Arrays.asList(new ChoiceNode[]{fP222})));
 		assertFalse(statement.evaluate(Arrays.asList(new ChoiceNode[]{fP22})));
@@ -125,7 +125,7 @@ public class ChoiceStatementTest {
 		fParameter.addChoice(fChoice2);
 		fParameter.addChoice(fChoice3);
 		fMethod.addParameter(fParameter);
-		
+
 		fList1 = new ArrayList<ChoiceNode>();
 		fList1.add(fChoice1);
 		fList2 = new ArrayList<ChoiceNode>();
@@ -133,8 +133,8 @@ public class ChoiceStatementTest {
 		fList3 = new ArrayList<ChoiceNode>();
 		fList3.add(fChoice3);
 	}
-	
-	
+
+
 	@Test
 	public void testEvaluate() {
 
@@ -143,11 +143,11 @@ public class ChoiceStatementTest {
 		assertTrue(statement1.evaluate(fList2));
 		assertFalse(statement1.evaluate(fList3));
 
-		ChoicesParentStatement statement4 = new ChoicesParentStatement(fParameter, EStatementRelation.NOT, fChoice2);
+		ChoicesParentStatement statement4 = new ChoicesParentStatement(fParameter, EStatementRelation.NOT_EQUAL, fChoice2);
 		assertTrue(statement4.evaluate(fList1));
 		assertFalse(statement4.evaluate(fList2));
 		assertTrue(statement4.evaluate(fList3));
-}
+	}
 
 	@Test
 	public void testMentionsChoiceNode() {
@@ -180,31 +180,31 @@ public class ChoiceStatementTest {
 	public void compareTest(){
 		MethodParameterNode c1 = new MethodParameterNode("name", "type", "0", true);
 		MethodParameterNode c2 = new MethodParameterNode("name", "type", "0", true);
-		
+
 		ChoiceNode p1 = new ChoiceNode("name", "value");
 		ChoiceNode p2 = new ChoiceNode("name", "value");
-		
-		ChoicesParentStatement s1 = new ChoicesParentStatement(c1, EStatementRelation.NOT, p1);
-		ChoicesParentStatement s2 = new ChoicesParentStatement(c2, EStatementRelation.NOT, p2);
-		
+
+		ChoicesParentStatement s1 = new ChoicesParentStatement(c1, EStatementRelation.NOT_EQUAL, p1);
+		ChoicesParentStatement s2 = new ChoicesParentStatement(c2, EStatementRelation.NOT_EQUAL, p2);
+
 		assertTrue(s1.compare(s2));
 		c1.setName("c1");
 		assertFalse(s1.compare(s2));
 		c2.setName("c1");
 		assertTrue(s1.compare(s2));
-		
+
 		p1.setName("p1");
 		assertFalse(s1.compare(s2));
 		p2.setName("p1");
 		assertTrue(s1.compare(s2));
-		
+
 		s1.setCondition("label");
 		assertFalse(s1.compare(s2));
 		s2.setCondition("label1");
 		assertFalse(s1.compare(s2));
 		s2.setCondition("label");
 		assertTrue(s1.compare(s2));
-		
+
 		s1.setRelation(EStatementRelation.EQUAL);
 		assertFalse(s1.compare(s2));
 		s2.setRelation(EStatementRelation.EQUAL);

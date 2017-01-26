@@ -10,34 +10,71 @@
 
 package com.ecfeed.core.model;
 
-public enum EStatementRelation{
+import java.util.ArrayList;
+import java.util.List;
 
-	EQUAL("="), 
-	NOT("\u2260");
+class StatementRelationNames {
+	static final String RELATION_EQUAL = "=";
+	static final String RELATION_NOT_EQUAL = "\u2260";
+	static final String RELATION_LESS_THAN = "<";
+	static final String RELATION_LESS_EQUAL = "<=";
+	static final String RELATION_GREATER_THAN = ">";
+	static final String RELATION_GREATER_EQUAL = ">=";
+}
 
-	String fValue;
+public enum EStatementRelation {
 
-	public static final String RELATION_EQUAL = "=";
-	public static final String RELATION_NOT = "\u2260";
+	EQUAL(StatementRelationNames.RELATION_EQUAL), 
+	NOT_EQUAL(StatementRelationNames.RELATION_NOT_EQUAL),
+	LESS_THAN(StatementRelationNames.RELATION_LESS_THAN), 
+	LESS_EQUAL(StatementRelationNames.RELATION_LESS_EQUAL),
+	GREATER_THAN(StatementRelationNames.RELATION_GREATER_THAN),
+	GREATER_EQUAL(StatementRelationNames.RELATION_GREATER_EQUAL);
 
+	private String fName;
 
-	private EStatementRelation(String value) {
-		fValue = value;
+	private EStatementRelation(String name) {
+		fName = name;
+	}
+
+	public String getName() {
+		return fName; 
 	}
 
 	public String toString() {
-		return fValue; 
+		return fName; 
 	}
 
-	public static EStatementRelation getRelation(String text) {
+	public static EStatementRelation getRelation(String name) {
 
-		switch(text)
-		{
-		case RELATION_EQUAL:
-			return EQUAL;
-		case RELATION_NOT:
-			return NOT;
+		for (EStatementRelation relation : EStatementRelation.values()) {
+			if (name.equals(relation.getName())) {
+				return relation;
+			}
 		}
-		return NOT;
+
+		return null;
 	}
+
+	public static EStatementRelation[] getAvailableRelations() {
+
+		List<EStatementRelation> relations = new ArrayList<EStatementRelation>();
+
+		for (EStatementRelation relation : EStatementRelation.values()) {
+			relations.add(relation);
+		}
+
+		return relations.toArray(new EStatementRelation[relations.size()]);
+	}
+
+	public static String[] getAvailableRelationNames() {
+
+		List<String> relations = new ArrayList<String>();
+
+		for (EStatementRelation relation : EStatementRelation.values()) {
+			relations.add(relation.getName());
+		}
+
+		return relations.toArray(new String[relations.size()]);
+	}	
 }

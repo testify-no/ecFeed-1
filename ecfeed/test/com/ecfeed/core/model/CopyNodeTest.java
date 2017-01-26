@@ -154,7 +154,7 @@ public class CopyNodeTest{
 		StatementArray premise = new StatementArray(EStatementOperator.OR);
 		premise.addStatement(new StaticStatement(true));
 		premise.addStatement(new ChoicesParentStatement(par1, EStatementRelation.EQUAL, choice1));
-		premise.addStatement(new ChoicesParentStatement(par1, EStatementRelation.NOT, "label"));
+		premise.addStatement(new ChoicesParentStatement(par1, EStatementRelation.NOT_EQUAL, "label"));
 		ExpectedValueStatement consequence = new ExpectedValueStatement(par2, expectedChoice, new JavaPrimitiveTypePredicate());
 
 		ConstraintNode constraint = new ConstraintNode("constraint", new Constraint(premise, consequence));

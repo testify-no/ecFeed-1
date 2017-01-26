@@ -254,7 +254,7 @@ public class RandomModelGenerator {
 		}
 
 		MethodParameterNode parameter = parameters.get(rand.nextInt(parameters.size()));
-		EStatementRelation relation = rand.nextBoolean() ? EStatementRelation.EQUAL : EStatementRelation.NOT;
+		EStatementRelation relation = rand.nextBoolean() ? EStatementRelation.EQUAL : EStatementRelation.NOT_EQUAL;
 		if(parameter.getChoices().size() == 0){
 			ChoiceNode choice = generateChoice(0, 0, 1, parameter.getType());
 			parameter.addChoice(choice);

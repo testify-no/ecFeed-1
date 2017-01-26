@@ -79,7 +79,7 @@ public class ChoicesParentStatement extends AbstractStatement implements IRelati
 
 	@Override
 	public EStatementRelation[] getAvailableRelations() {
-		return new EStatementRelation[]{EStatementRelation.EQUAL, EStatementRelation.NOT};
+		return EStatementRelation.getAvailableRelations();
 	}
 
 	@Override
@@ -224,7 +224,7 @@ public class ChoicesParentStatement extends AbstractStatement implements IRelati
 
 			case EQUAL:
 				return containsLabel;
-			case NOT:
+			case NOT_EQUAL:
 				return !containsLabel;
 			default:
 				return false;
@@ -363,7 +363,7 @@ public class ChoicesParentStatement extends AbstractStatement implements IRelati
 
 			case EQUAL:
 				return isCondition;
-			case NOT:
+			case NOT_EQUAL:
 				return !isCondition;
 			default:
 				return false;

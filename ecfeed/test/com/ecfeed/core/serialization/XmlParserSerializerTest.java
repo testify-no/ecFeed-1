@@ -430,7 +430,7 @@ public class XmlParserSerializerTest {
 		EStatementRelation relation;
 		switch(rand.nextInt(2)){
 		case 0: relation = EStatementRelation.EQUAL;
-		case 1: relation = EStatementRelation.NOT;
+		case 1: relation = EStatementRelation.NOT_EQUAL;
 		default: relation = EStatementRelation.EQUAL;
 		}
 		return relation;
