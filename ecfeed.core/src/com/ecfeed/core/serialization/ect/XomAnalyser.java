@@ -77,7 +77,7 @@ public abstract class XomAnalyser {
 	protected abstract String getParameterNodeName();
 	protected abstract String getStatementParameterAttributeName();
 
-	public RootNode parseRoot(Element element) throws ParserException{
+	public RootNode parseRoot(Element element) throws ParserException {
 		assertNodeTag(element.getQualifiedName(), ROOT_NODE_NAME);
 		String name = getElementName(element);
 
@@ -86,17 +86,17 @@ public abstract class XomAnalyser {
 		targetRootNode.setDescription(parseComments(element));
 
 		//parameters must be parsed before classes
-		for(Element child : getIterableChildren(element, getParameterNodeName())){
+		for (Element child : getIterableChildren(element, getParameterNodeName())) {
 			try{
 				targetRootNode.addParameter(parseGlobalParameter(child));
-			}catch(ParserException e){
+			}catch(ParserException e) {
 				System.err.println("Exception: " + e.getMessage());
 			}
 		}
-		for(Element child : getIterableChildren(element, Constants.CLASS_NODE_NAME)){
+		for (Element child : getIterableChildren(element, Constants.CLASS_NODE_NAME)) {
 			try{
 				targetRootNode.addClass(parseClass(child, targetRootNode));
-			}catch(ParserException e){
+			}catch(ParserException e) {
 				System.err.println("Exception: " + e.getMessage());
 			}
 		}
@@ -104,7 +104,7 @@ public abstract class XomAnalyser {
 		return targetRootNode;
 	}
 
-	public ClassNode parseClass(Element classElement, RootNode parent) throws ParserException{
+	public ClassNode parseClass(Element classElement, RootNode parent) throws ParserException {
 		assertNodeTag(classElement.getQualifiedName(), CLASS_NODE_NAME);
 
 		String name = getElementName(classElement);
@@ -119,18 +119,18 @@ public abstract class XomAnalyser {
 		targetClassNode.setParent(parent);
 
 		//parameters must be parsed before classes
-		for(Element child : getIterableChildren(classElement, getParameterNodeName())){
+		for (Element child : getIterableChildren(classElement, getParameterNodeName())) {
 			try{
 				targetClassNode.addParameter(parseGlobalParameter(child));
-			}catch(ParserException e){
+			}catch(ParserException e) {
 				System.err.println("Exception: " + e.getMessage());
 			}
 		}
 
-		for(Element child : getIterableChildren(classElement, Constants.METHOD_NODE_NAME)){
+		for (Element child : getIterableChildren(classElement, Constants.METHOD_NODE_NAME)) {
 			try{
 				targetClassNode.addMethod(parseMethod(child, targetClassNode));
-			}catch(ParserException e){
+			}catch(ParserException e) {
 				System.err.println("Exception: " + e.getMessage());
 			}
 		}
@@ -186,26 +186,26 @@ public abstract class XomAnalyser {
 
 		parseMethodProperties(methodElement, targetMethodNode);
 
-		for(Element child : getIterableChildren(methodElement, getParameterNodeName())){
+		for (Element child : getIterableChildren(methodElement, getParameterNodeName())) {
 			try{
 				targetMethodNode.addParameter(parseMethodParameter(child, targetMethodNode));
-			}catch(ParserException e){
+			}catch(ParserException e) {
 				System.err.println("Exception: " + e.getMessage());
 			}
 		}
 
-		for(Element child : getIterableChildren(methodElement, Constants.TEST_CASE_NODE_NAME)){
+		for (Element child : getIterableChildren(methodElement, Constants.TEST_CASE_NODE_NAME)) {
 			try{
 				targetMethodNode.addTestCase(parseTestCase(child, targetMethodNode));
-			}catch(ParserException e){
+			}catch(ParserException e) {
 				System.err.println("Exception: " + e.getMessage());
 			}
 		}
 
-		for(Element child : getIterableChildren(methodElement, Constants.CONSTRAINT_NODE_NAME)){
+		for (Element child : getIterableChildren(methodElement, Constants.CONSTRAINT_NODE_NAME)) {
 			try{
 				targetMethodNode.addConstraint(parseConstraint(child, targetMethodNode));
-			}catch(ParserException e){
+			}catch(ParserException e) {
 				System.err.println("Exception: " + e.getMessage());
 			}
 		}
@@ -242,7 +242,7 @@ public abstract class XomAnalyser {
 		String defaultValue = null;
 		String expected = String.valueOf(false);
 
-		if(parameterElement.getAttribute(PARAMETER_IS_EXPECTED_ATTRIBUTE_NAME) != null){
+		if (parameterElement.getAttribute(PARAMETER_IS_EXPECTED_ATTRIBUTE_NAME) != null) {
 			expected = getAttributeValue(parameterElement, PARAMETER_IS_EXPECTED_ATTRIBUTE_NAME);
 			defaultValue = getAttributeValue(parameterElement, DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME);
 		}
@@ -251,15 +251,15 @@ public abstract class XomAnalyser {
 
 		parseParameterProperties(parameterElement, targetMethodParameterNode);
 
-		if(parameterElement.getAttribute(PARAMETER_IS_LINKED_ATTRIBUTE_NAME) != null){
+		if (parameterElement.getAttribute(PARAMETER_IS_LINKED_ATTRIBUTE_NAME) != null) {
 			boolean linked = Boolean.parseBoolean(getAttributeValue(parameterElement, PARAMETER_IS_LINKED_ATTRIBUTE_NAME));
 			targetMethodParameterNode.setLinked(linked);
 		}
 
-		if(parameterElement.getAttribute(PARAMETER_LINK_ATTRIBUTE_NAME) != null && method != null && method.getClassNode() != null){
+		if (parameterElement.getAttribute(PARAMETER_LINK_ATTRIBUTE_NAME) != null && method != null && method.getClassNode() != null) {
 			String linkPath = getAttributeValue(parameterElement, PARAMETER_LINK_ATTRIBUTE_NAME);
 			GlobalParameterNode link = method.getClassNode().findGlobalParameter(linkPath);
-			if(link != null){
+			if (link != null) {
 				targetMethodParameterNode.setLink(link);
 			}
 			else{
@@ -269,16 +269,16 @@ public abstract class XomAnalyser {
 			targetMethodParameterNode.setLinked(false);
 		}
 
-		for(Element child : getIterableChildren(parameterElement, getChoiceNodeName())){
+		for (Element child : getIterableChildren(parameterElement, getChoiceNodeName())) {
 			try{
 				targetMethodParameterNode.addChoice(parseChoice(child));
-			}catch(ParserException e){
+			}catch(ParserException e) {
 				System.err.println("Exception: " + e.getMessage());
 			}
 		}
 
 		targetMethodParameterNode.setDescription(parseComments(parameterElement));
-		if(targetMethodParameterNode.isLinked() == false){
+		if (targetMethodParameterNode.isLinked() == false) {
 			targetMethodParameterNode.setTypeComments(parseTypeComments(parameterElement));
 		}
 
@@ -332,10 +332,10 @@ public abstract class XomAnalyser {
 
 		parseParameterProperties(element, targetGlobalParameterNode);
 
-		for(Element child : getIterableChildren(element, getChoiceNodeName())){
+		for (Element child : getIterableChildren(element, getChoiceNodeName())) {
 			try{
 				targetGlobalParameterNode.addChoice(parseChoice(child));
-			}catch(ParserException e){
+			}catch(ParserException e) {
 				System.err.println("Exception: " + e.getMessage());
 			}
 		}
@@ -355,25 +355,25 @@ public abstract class XomAnalyser {
 
 		List<ChoiceNode> testData = new ArrayList<ChoiceNode>();
 
-		if(parameters.size() != parameterElements.size()){
+		if (parameters.size() != parameterElements.size()) {
 			ParserException.report(Messages.WRONG_NUMBER_OF_TEST_PAREMETERS(name));
 		}
 
-		for(int i = 0; i < parameterElements.size(); i++){
+		for (int i = 0; i < parameterElements.size(); i++) {
 			Element testParameterElement = parameterElements.get(i);
 			MethodParameterNode parameter = parameters.get(i);
 			ChoiceNode testValue = null;
 
-			if(testParameterElement.getLocalName().equals(Constants.TEST_PARAMETER_NODE_NAME)){
+			if (testParameterElement.getLocalName().equals(Constants.TEST_PARAMETER_NODE_NAME)) {
 				String choiceName = getAttributeValue(testParameterElement, getChoiceAttributeName());
 				testValue = parameter.getChoice(choiceName);
-				if(testValue == null){
+				if (testValue == null) {
 					ParserException.report(Messages.PARTITION_DOES_NOT_EXIST(parameter.getName(), choiceName));
 				}
 			}
-			else if(testParameterElement.getLocalName().equals(Constants.EXPECTED_PARAMETER_NODE_NAME)){
+			else if (testParameterElement.getLocalName().equals(Constants.EXPECTED_PARAMETER_NODE_NAME)) {
 				String valueString = getAttributeValue(testParameterElement, Constants.VALUE_ATTRIBUTE_NAME);
-				if(valueString == null){
+				if (valueString == null) {
 					ParserException.report(Messages.MISSING_VALUE_ATTRIBUTE_IN_TEST_CASE_ELEMENT);
 				}
 				testValue = new ChoiceNode(EXPECTED_VALUE_CHOICE_NAME, valueString);
@@ -394,13 +394,13 @@ public abstract class XomAnalyser {
 		AbstractStatement premise = null;
 		AbstractStatement consequence = null;
 
-		if((getIterableChildren(element, Constants.CONSTRAINT_PREMISE_NODE_NAME).size() != 1) ||
-				(getIterableChildren(element, Constants.CONSTRAINT_CONSEQUENCE_NODE_NAME).size() != 1)){
+		if ((getIterableChildren(element, Constants.CONSTRAINT_PREMISE_NODE_NAME).size() != 1) ||
+				(getIterableChildren(element, Constants.CONSTRAINT_CONSEQUENCE_NODE_NAME).size() != 1)) {
 			ParserException.report(Messages.MALFORMED_CONSTRAINT_NODE_DEFINITION(method.getName(), name));
 		}
-		for(Element child : getIterableChildren(element, Constants.CONSTRAINT_PREMISE_NODE_NAME)){
-			if(child.getLocalName().equals(Constants.CONSTRAINT_PREMISE_NODE_NAME)){
-				if(getIterableChildren(child).size() == 1){
+		for (Element child : getIterableChildren(element, Constants.CONSTRAINT_PREMISE_NODE_NAME)) {
+			if (child.getLocalName().equals(Constants.CONSTRAINT_PREMISE_NODE_NAME)) {
+				if (getIterableChildren(child).size() == 1) {
 					//there is only one statement per premise or consequence that is either
 					//a single statement or statement array
 					premise = parseStatement(child.getChildElements().get(0), method);
@@ -410,9 +410,9 @@ public abstract class XomAnalyser {
 				}
 			}
 		}
-		for(Element child : getIterableChildren(element, Constants.CONSTRAINT_CONSEQUENCE_NODE_NAME)){
-			if(child.getLocalName().equals(Constants.CONSTRAINT_CONSEQUENCE_NODE_NAME)){
-				if(getIterableChildren(child).size() == 1){
+		for (Element child : getIterableChildren(element, Constants.CONSTRAINT_CONSEQUENCE_NODE_NAME)) {
+			if (child.getLocalName().equals(Constants.CONSTRAINT_CONSEQUENCE_NODE_NAME)) {
+				if (getIterableChildren(child).size() == 1) {
 					consequence = parseStatement(child.getChildElements().get(0), method);
 				}
 				else{
@@ -423,7 +423,7 @@ public abstract class XomAnalyser {
 				ParserException.report(Messages.MALFORMED_CONSTRAINT_NODE_DEFINITION(method.getName(), name));
 			}
 		}
-		if(premise == null || consequence == null){
+		if (premise == null || consequence == null) {
 			ParserException.report(Messages.MALFORMED_CONSTRAINT_NODE_DEFINITION(method.getName(), name));
 		}
 
@@ -435,7 +435,7 @@ public abstract class XomAnalyser {
 	}
 
 	public AbstractStatement parseStatement(Element element, MethodNode method) throws ParserException {
-		switch(element.getLocalName()){
+		switch(element.getLocalName()) {
 		case Constants.CONSTRAINT_CHOICE_STATEMENT_NODE_NAME:
 			return parseChoiceStatement(element, method);
 		case Constants.CONSTRAINT_LABEL_STATEMENT_NODE_NAME:
@@ -455,7 +455,7 @@ public abstract class XomAnalyser {
 
 		StatementArray statementArray = null;
 		String operatorValue = getAttributeValue(element, Constants.STATEMENT_OPERATOR_ATTRIBUTE_NAME);
-		switch(operatorValue){
+		switch(operatorValue) {
 		case Constants.STATEMENT_OPERATOR_OR_ATTRIBUTE_VALUE:
 			statementArray = new StatementArray(EStatementOperator.OR);
 			break;
@@ -465,9 +465,9 @@ public abstract class XomAnalyser {
 		default:
 			ParserException.report(Messages.WRONG_STATEMENT_ARRAY_OPERATOR(method.getName(), operatorValue));
 		}
-		for(Element child : getIterableChildren(element)){
+		for (Element child : getIterableChildren(element)) {
 			AbstractStatement childStatement = parseStatement(child, method);
-			if(childStatement != null){
+			if (childStatement != null) {
 				statementArray.addStatement(childStatement);
 			}
 		}
@@ -478,7 +478,7 @@ public abstract class XomAnalyser {
 		assertNodeTag(element.getQualifiedName(), CONSTRAINT_STATIC_STATEMENT_NODE_NAME);
 
 		String valueString = getAttributeValue(element, Constants.STATIC_VALUE_ATTRIBUTE_NAME);
-		switch(valueString){
+		switch(valueString) {
 		case Constants.STATIC_STATEMENT_TRUE_VALUE:
 			return new StaticStatement(true);
 		case Constants.STATIC_STATEMENT_FALSE_VALUE:
@@ -494,12 +494,12 @@ public abstract class XomAnalyser {
 
 		String parameterName = getAttributeValue(element, getStatementParameterAttributeName());
 		MethodParameterNode parameter = (MethodParameterNode)method.getParameter(parameterName);
-		if(parameter == null || parameter.isExpected()){
+		if (parameter == null || parameter.isExpected()) {
 			ParserException.report(Messages.WRONG_CATEGORY_NAME(parameterName, method.getName()));
 		}
 		String choiceName = getAttributeValue(element, getStatementChoiceAttributeName());
 		ChoiceNode choice = parameter.getChoice(choiceName);
-		if(choice == null){
+		if (choice == null) {
 			ParserException.report(Messages.WRONG_PARTITION_NAME(choiceName, parameterName, method.getName()));
 		}
 
@@ -517,7 +517,7 @@ public abstract class XomAnalyser {
 		String relationName = getAttributeValue(element, Constants.STATEMENT_RELATION_ATTRIBUTE_NAME);
 
 		MethodParameterNode parameter = method.getMethodParameter(parameterName);
-		if(parameter == null || parameter.isExpected()){
+		if (parameter == null || parameter.isExpected()) {
 			ParserException.report(Messages.WRONG_CATEGORY_NAME(parameterName, method.getName()));
 		}
 		EStatementRelation relation = getRelation(relationName);
@@ -531,7 +531,7 @@ public abstract class XomAnalyser {
 		String parameterName = getAttributeValue(element, getStatementParameterAttributeName());
 		String valueString = getAttributeValue(element, Constants.STATEMENT_EXPECTED_VALUE_ATTRIBUTE_NAME);
 		MethodParameterNode parameter = method.getMethodParameter(parameterName);
-		if(parameter == null || !parameter.isExpected()){
+		if (parameter == null || !parameter.isExpected()) {
 			ParserException.report(Messages.WRONG_CATEGORY_NAME(parameterName, method.getName()));
 		}
 		ChoiceNode condition = new ChoiceNode("expected", valueString);
@@ -548,16 +548,16 @@ public abstract class XomAnalyser {
 		ChoiceNode choice = new ChoiceNode(name, value);
 		choice.setDescription(parseComments(element));
 
-		for(Element child : getIterableChildren(element)){
-			if(child.getLocalName() == getChoiceNodeName()){
+		for (Element child : getIterableChildren(element)) {
+			if (child.getLocalName() == getChoiceNodeName()) {
 				try{
 					choice.addChoice(parseChoice(child));
-				}catch(ParserException e){
+				}catch(ParserException e) {
 					System.err.println("Exception: " + e.getMessage());
 				}
 
 			}
-			if(child.getLocalName() == Constants.LABEL_NODE_NAME){
+			if (child.getLocalName() == Constants.LABEL_NODE_NAME) {
 				choice.addLabel(fWhiteCharConverter.decode(child.getAttributeValue(Constants.LABEL_ATTRIBUTE_NAME)));
 			}
 		}
@@ -566,28 +566,28 @@ public abstract class XomAnalyser {
 	}
 
 	private static void assertNodeTag(String qualifiedName, String expectedName) throws ParserException {
-		if(qualifiedName.equals(expectedName) == false){
+		if (qualifiedName.equals(expectedName) == false) {
 			ParserException.report("Unexpected node name: " + qualifiedName + " instead of " + expectedName);
 		}
 	}
 
-	protected static List<Element> getIterableChildren(Element element){
+	protected static List<Element> getIterableChildren(Element element) {
 		ArrayList<Element> list = new ArrayList<Element>();
 		Elements children = element.getChildElements();
-		for(int i = 0; i < children.size(); i++){
+		for (int i = 0; i < children.size(); i++) {
 			Node node = children.get(i);
-			if(node instanceof Element){
+			if (node instanceof Element) {
 				list.add((Element)node);
 			}
 		}
 		return list;
 	}
 
-	protected static List<Element> getIterableChildren(Element element, String name){
+	protected static List<Element> getIterableChildren(Element element, String name) {
 		List<Element> elements = getIterableChildren(element);
 		Iterator<Element> it = elements.iterator();
-		while(it.hasNext()){
-			if(it.next().getLocalName().equals(name) == false){
+		while (it.hasNext()) {
+			if (it.next().getLocalName().equals(name) == false) {
 				it.remove();
 			}
 		}
@@ -596,7 +596,7 @@ public abstract class XomAnalyser {
 
 	protected String getElementName(Element element) throws ParserException {
 		String name = element.getAttributeValue(Constants.NODE_NAME_ATTRIBUTE);
-		if(name == null){
+		if (name == null) {
 			ParserException.report(Messages.MISSING_ATTRIBUTE(element, Constants.NODE_NAME_ATTRIBUTE));
 		}
 		return fWhiteCharConverter.decode(name);
@@ -604,7 +604,7 @@ public abstract class XomAnalyser {
 
 	protected String getAttributeValue(Element element, String attributeName) throws ParserException{
 		String value = element.getAttributeValue(attributeName);
-		if(value == null){
+		if (value == null) {
 			ParserException.report(Messages.MISSING_ATTRIBUTE(element, attributeName));
 		}
 		return fWhiteCharConverter.decode(value);
@@ -622,9 +622,9 @@ public abstract class XomAnalyser {
 	}
 
 	protected String parseComments(Element element) {
-		if(element.getChildElements(Constants.COMMENTS_BLOCK_TAG_NAME).size() > 0){
+		if (element.getChildElements(Constants.COMMENTS_BLOCK_TAG_NAME).size() > 0) {
 			Element comments = element.getChildElements(Constants.COMMENTS_BLOCK_TAG_NAME).get(0);
-			if(comments.getChildElements(Constants.BASIC_COMMENTS_BLOCK_TAG_NAME).size() > 0){
+			if (comments.getChildElements(Constants.BASIC_COMMENTS_BLOCK_TAG_NAME).size() > 0) {
 				Element basicComments = comments.getChildElements(Constants.BASIC_COMMENTS_BLOCK_TAG_NAME).get(0);
 				return fWhiteCharConverter.decode(basicComments.getValue());
 			}
@@ -632,10 +632,10 @@ public abstract class XomAnalyser {
 		return null;
 	}
 
-	protected String parseTypeComments(Element element){
-		if(element.getChildElements(Constants.COMMENTS_BLOCK_TAG_NAME).size() > 0){
+	protected String parseTypeComments(Element element) {
+		if (element.getChildElements(Constants.COMMENTS_BLOCK_TAG_NAME).size() > 0) {
 			Element comments = element.getChildElements(Constants.COMMENTS_BLOCK_TAG_NAME).get(0);
-			if(comments.getChildElements(Constants.TYPE_COMMENTS_BLOCK_TAG_NAME).size() > 0){
+			if (comments.getChildElements(Constants.TYPE_COMMENTS_BLOCK_TAG_NAME).size() > 0) {
 				Element typeComments = comments.getChildElements(Constants.TYPE_COMMENTS_BLOCK_TAG_NAME).get(0);
 				return fWhiteCharConverter.decode(typeComments.getValue());
 			}

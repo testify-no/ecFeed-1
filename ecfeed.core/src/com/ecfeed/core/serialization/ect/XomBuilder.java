@@ -104,11 +104,11 @@ public abstract class XomBuilder implements IModelVisitor, IStatementVisitor {
 		Attribute versionAttr = new Attribute(VERSION_ATTRIBUTE, versionStr);
 		targetRootElement.addAttribute(versionAttr);
 
-		for(ClassNode classNode : rootNode.getClasses()){
+		for (ClassNode classNode : rootNode.getClasses()) {
 			targetRootElement.appendChild((Element)visit(classNode));
 		}
 
-		for(GlobalParameterNode parameterNode : rootNode.getGlobalParameters()){
+		for (GlobalParameterNode parameterNode : rootNode.getGlobalParameters()) {
 			targetRootElement.appendChild((Element)visit(parameterNode));
 		}
 
@@ -121,11 +121,11 @@ public abstract class XomBuilder implements IModelVisitor, IStatementVisitor {
 
 		addAndroidValues(classNode, targetClassElement);
 
-		for(MethodNode methodNode : classNode.getMethods()){
+		for (MethodNode methodNode : classNode.getMethods()) {
 			targetClassElement.appendChild((Element)visit(methodNode));
 		}
 
-		for(GlobalParameterNode parameterNode : classNode.getGlobalParameters()){
+		for (GlobalParameterNode parameterNode : classNode.getGlobalParameters()) {
 			targetClassElement.appendChild((Element)visit(parameterNode));
 		}
 
@@ -187,15 +187,15 @@ public abstract class XomBuilder implements IModelVisitor, IStatementVisitor {
 
 		addMethodProperties(methodNode, targetMethodElement);
 
-		for(MethodParameterNode parameter : methodNode.getMethodParameters()){
+		for (MethodParameterNode parameter : methodNode.getMethodParameters()) {
 			targetMethodElement.appendChild((Element)parameter.accept(this));
 		}
 
-		for(ConstraintNode constraint : methodNode.getConstraintNodes()){
+		for (ConstraintNode constraint : methodNode.getConstraintNodes()) {
 			targetMethodElement.appendChild((Element)constraint.accept(this));
 		}
 
-		for(TestCaseNode testCase : methodNode.getTestCases()){
+		for (TestCaseNode testCase : methodNode.getTestCases()) {
 			targetMethodElement.appendChild((Element)testCase.accept(this));
 		}
 
@@ -233,11 +233,11 @@ public abstract class XomBuilder implements IModelVisitor, IStatementVisitor {
 		encodeAndAddAttribute(targetParameterElement, new Attribute(DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME, node.getDefaultValueForSerialization()));
 		encodeAndAddAttribute(targetParameterElement, new Attribute(PARAMETER_IS_LINKED_ATTRIBUTE_NAME, Boolean.toString(node.isLinked())));
 
-		if(node.getLink() != null){
+		if (node.getLink() != null) {
 			encodeAndAddAttribute(targetParameterElement, new Attribute(PARAMETER_LINK_ATTRIBUTE_NAME, node.getLink().getQualifiedName()));
 		}
 
-		for(ChoiceNode child : node.getRealChoices()){
+		for (ChoiceNode child : node.getRealChoices()) {
 			targetParameterElement.appendChild((Element)child.accept(this));
 		}
 
@@ -253,7 +253,7 @@ public abstract class XomBuilder implements IModelVisitor, IStatementVisitor {
 
 		encodeAndAddAttribute(targetGlobalParamElement, new Attribute(TYPE_NAME_ATTRIBUTE, node.getType()));
 
-		for(ChoiceNode child : node.getChoices()){
+		for (ChoiceNode child : node.getChoices()) {
 			targetGlobalParamElement.appendChild((Element)child.accept(this));
 		}
 		return targetGlobalParamElement;
@@ -282,8 +282,8 @@ public abstract class XomBuilder implements IModelVisitor, IStatementVisitor {
 		encodeAndAddAttribute(targetTestCaseElement, new Attribute(TEST_SUITE_NAME_ATTRIBUTE, node.getName()));
 		appendComments(targetTestCaseElement, node);
 
-		for(ChoiceNode testParameter : node.getTestData()){
-			if(testParameter.getParameter() != null && node.getMethodParameter(testParameter).isExpected()){
+		for (ChoiceNode testParameter : node.getTestData()) {
+			if (testParameter.getParameter() != null && node.getMethodParameter(testParameter).isExpected()) {
 				Element expectedParameterElement = new Element(EXPECTED_PARAMETER_NODE_NAME);
 				Attribute expectedValueAttribute = new Attribute(VALUE_ATTRIBUTE_NAME, testParameter.getValueString());
 				encodeAndAddAttribute(expectedParameterElement, expectedValueAttribute);
@@ -335,13 +335,13 @@ public abstract class XomBuilder implements IModelVisitor, IStatementVisitor {
 
 		encodeAndAddAttribute(targetChoiceElement, new Attribute(VALUE_ATTRIBUTE, legalValue));
 
-		for(String label : node.getLabels()){
+		for (String label : node.getLabels()) {
 			Element labelElement = new Element(LABEL_NODE_NAME);
 			encodeAndAddAttribute(labelElement, new Attribute(LABEL_ATTRIBUTE_NAME, label));
 			targetChoiceElement.appendChild(labelElement);
 		}
 
-		for(ChoiceNode child : node.getChoices()){
+		for (ChoiceNode child : node.getChoices()) {
 			targetChoiceElement.appendChild((Element)child.accept(this));
 		}
 
@@ -364,7 +364,7 @@ public abstract class XomBuilder implements IModelVisitor, IStatementVisitor {
 	public Object visit(StatementArray statement) throws Exception {
 		Element targetStatementElement = new Element(CONSTRAINT_STATEMENT_ARRAY_NODE_NAME);
 		Attribute operatorAttribute = null;
-		switch(statement.getOperator()){
+		switch(statement.getOperator()) {
 		case AND:
 			operatorAttribute = new Attribute(STATEMENT_OPERATOR_ATTRIBUTE_NAME,
 					STATEMENT_OPERATOR_AND_ATTRIBUTE_VALUE);
@@ -376,7 +376,7 @@ public abstract class XomBuilder implements IModelVisitor, IStatementVisitor {
 		}
 		encodeAndAddAttribute(targetStatementElement, operatorAttribute);
 
-		for(AbstractStatement child : statement.getChildren()){
+		for (AbstractStatement child : statement.getChildren()) {
 			targetStatementElement.appendChild((Element)child.accept(this));
 		}
 		return targetStatementElement;
@@ -431,7 +431,7 @@ public abstract class XomBuilder implements IModelVisitor, IStatementVisitor {
 		return targetChoiceElement;
 	}
 
-	private Element createAbstractElement(String nodeTag, AbstractNode node){
+	private Element createAbstractElement(String nodeTag, AbstractNode node) {
 		Element targetAbstractElement = new Element(nodeTag);
 		Attribute nameAttr = new Attribute(NODE_NAME_ATTRIBUTE, node.getName());
 		encodeAndAddAttribute(targetAbstractElement, nameAttr);
@@ -441,7 +441,7 @@ public abstract class XomBuilder implements IModelVisitor, IStatementVisitor {
 	}
 
 	private Element appendComments(Element element, AbstractNode node) {
-		if(node.getDescription() != null){
+		if (node.getDescription() != null) {
 			Element commentsBlock = new Element(COMMENTS_BLOCK_TAG_NAME);
 			Element basicComments = new Element(BASIC_COMMENTS_BLOCK_TAG_NAME);
 
@@ -454,7 +454,7 @@ public abstract class XomBuilder implements IModelVisitor, IStatementVisitor {
 	}
 
 	private void appendTypeComments(Element element, MethodParameterNode node) {
-		if(node.isLinked() == false){
+		if (node.isLinked() == false) {
 			appendTypeComments(element, (AbstractParameterNode)node);
 		}
 	}
@@ -462,7 +462,7 @@ public abstract class XomBuilder implements IModelVisitor, IStatementVisitor {
 	private void appendTypeComments(Element element, AbstractParameterNode node) {
 		Elements commentsElement = element.getChildElements(COMMENTS_BLOCK_TAG_NAME);
 		Element commentElement;
-		if(commentsElement.size() > 0){
+		if (commentsElement.size() > 0) {
 			commentElement = commentsElement.get(0);
 		}else{
 			commentElement = new Element(COMMENTS_BLOCK_TAG_NAME);
