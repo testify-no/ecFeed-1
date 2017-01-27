@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ecfeed.core.utils.ExceptionHelper;
+import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.StringHelper;
 
 class StatementRelationNames {
@@ -75,26 +76,44 @@ public enum EStatementRelation {
 		return null;
 	}
 
-	public static EStatementRelation[] getAvailableRelations() {
+	public static EStatementRelation[] getAvailableRelations(String parameterType) {
 
 		List<EStatementRelation> relations = new ArrayList<EStatementRelation>();
 
 		for (EStatementRelation relation : EStatementRelation.values()) {
-			relations.add(relation);
+			if (isRelationForParameterType(relation, parameterType)) {
+				relations.add(relation);
+			}
 		}
 
 		return relations.toArray(new EStatementRelation[relations.size()]);
 	}
 
-	public static String[] getAvailableRelationNames() {
+	public static String[] getAvailableRelationNames(String parameterTypeName) {
 
-		List<String> relations = new ArrayList<String>();
+		return relationCodesToNames(getAvailableRelations(parameterTypeName)); 
+	}
 
-		for (EStatementRelation relation : EStatementRelation.values()) {
-			relations.add(relation.getName());
+	public static String[] relationCodesToNames(EStatementRelation[] relationCodes) {
+
+		List<String> relationNames = new ArrayList<String>();
+
+		for (EStatementRelation relation : relationCodes) {
+			relationNames.add(relation.getName());
 		}
 
-		return relations.toArray(new String[relations.size()]);
+		return relationNames.toArray(new String[relationNames.size()]);
+	}
+
+	public static boolean isRelationForParameterType(EStatementRelation relation, String parameterTypeName) {
+
+		if (JavaTypeHelper.isTypeComparableForLessGreater(parameterTypeName)) {
+			return true;
+		}
+		if (relation == EQUAL || relation == NOT_EQUAL) {
+			return true;
+		}
+		return false;
 	}
 
 	public static boolean isMatch(EStatementRelation relation, double actualValue, double valueToMatch) {
@@ -108,9 +127,9 @@ public enum EStatementRelation {
 		int compareResult = actualValue.compareTo(valueToMatch);
 		return isMatch(relation, compareResult);
 	}
-	
+
 	private static boolean isMatch(EStatementRelation relation, int compareResult) {
-		
+
 		switch(relation) {
 
 		case EQUAL:
@@ -135,9 +154,9 @@ public enum EStatementRelation {
 			ExceptionHelper.reportRuntimeException("Invalid relation.");
 			return false;
 		}
-		
+
 	}
-	
+
 	public static boolean isEqualityMatch(EStatementRelation relation, String actualValue, String valueToMatch) {
 
 		switch(relation) {

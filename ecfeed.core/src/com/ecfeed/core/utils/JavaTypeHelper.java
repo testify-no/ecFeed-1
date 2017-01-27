@@ -134,16 +134,27 @@ public class JavaTypeHelper {
 		}
 		return false;
 	}
-	
+
 	public static boolean isTypeWithChars(String typeName) {
-		
+
 		if (isCharTypeName(typeName)) {
 			return true;
 		}
 		if (isStringTypeName(typeName)) {
 			return true;
 		}
-		
+
+		return false;
+	}
+
+	public static boolean isTypeComparableForLessGreater(String typeName) {
+
+		if (isNumericTypeName(typeName)) {
+			return true;
+		}
+		if (isTypeWithChars(typeName)) {
+			return true;
+		}
 		return false;
 	}
 

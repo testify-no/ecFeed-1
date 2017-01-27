@@ -58,7 +58,7 @@ public class ChoicesParentStatement extends AbstractStatement implements IRelati
 
 	@Override
 	public boolean evaluate(List<ChoiceNode> values) {
-		
+
 		boolean result;
 		try {
 			result = fCondition.evaluate(values);
@@ -66,7 +66,7 @@ public class ChoicesParentStatement extends AbstractStatement implements IRelati
 			SystemLogger.logCatch(e.getMessage());
 			return false;
 		}
-		
+
 		return result;
 	}
 
@@ -82,17 +82,20 @@ public class ChoicesParentStatement extends AbstractStatement implements IRelati
 
 	@Override
 	public String getLeftOperandName() {
+
 		return getParameter().getName();
 	}
 
 	@Override
 	public String toString() {
+
 		return getLeftOperandName() + getRelation() + fCondition.toString();
 	}
 
 	@Override
 	public EStatementRelation[] getAvailableRelations() {
-		return EStatementRelation.getAvailableRelations();
+
+		return EStatementRelation.getAvailableRelations(getParameter().getType());
 	}
 
 	@Override
@@ -404,7 +407,7 @@ public class ChoicesParentStatement extends AbstractStatement implements IRelati
 			if (JavaTypeHelper.isNumericTypeName(typeName)) {
 				return isMatchForNumericTypes(typeName, relation, actualValue, valueToMatch);
 			}
-			
+
 			if (JavaTypeHelper.isTypeWithChars(typeName)) {
 				return EStatementRelation.isMatch(relation, actualValue, valueToMatch);
 			}
@@ -420,7 +423,7 @@ public class ChoicesParentStatement extends AbstractStatement implements IRelati
 
 			return EStatementRelation.isMatch(relation, actual, toMatch);
 		}
-		
+
 	}
 
 }
