@@ -43,10 +43,6 @@ public class Constants {
 		"native", "super", "while", "null", "true", "false" };
 
 	public static final String VALUE_REPRESENTATION_NULL = "/null";
-	public static final String VALUE_REPRESENTATION_MAX = "MAX_VALUE";
-	public static final String VALUE_REPRESENTATION_MIN = "MIN_VALUE";
-	public static final String VALUE_REPRESENTATION_TRUE = "true";
-	public static final String VALUE_REPRESENTATION_FALSE = "false";
 	public static final String VALUE_REPRESENTATION_POSITIVE_INF = "POSITIVE_INFINITY";
 	public static final String VALUE_REPRESENTATION_NEGATIVE_INF = "NEGATIVE_INFINITY";
 

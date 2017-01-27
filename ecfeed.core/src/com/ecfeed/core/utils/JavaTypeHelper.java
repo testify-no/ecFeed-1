@@ -12,6 +12,8 @@ package com.ecfeed.core.utils;
 
 import java.util.Arrays;
 
+import com.ecfeed.core.adapter.java.Constants;
+
 public class JavaTypeHelper {
 
 	public static final String TYPE_NAME_BOOLEAN = "boolean";
@@ -23,6 +25,11 @@ public class JavaTypeHelper {
 	public static final String TYPE_NAME_LONG = "long";
 	public static final String TYPE_NAME_SHORT = "short";
 	public static final String TYPE_NAME_STRING = "String";
+
+	private static final String VALUE_REPRESENTATION_TRUE = "true";
+	private static final String VALUE_REPRESENTATION_FALSE = "false";
+	private static final String VALUE_REPRESENTATION_MAX = "MAX_VALUE";
+	private static final String VALUE_REPRESENTATION_MIN = "MIN_VALUE";
 
 	private static final String[] SUPPORTED_PRIMITIVE_TYPES = new String[]{
 		TYPE_NAME_INT,
@@ -178,6 +185,171 @@ public class JavaTypeHelper {
 
 		ExceptionHelper.reportRuntimeException("Invalid type in numeric conversion");
 		return 0;
+	}
+
+	public static Object parseJavaType(String valueString, String typeName) {
+
+		if(typeName == null || valueString == null){
+			return null;
+		}
+
+		switch(typeName){
+		case TYPE_NAME_BOOLEAN:
+			return parseBooleanValue(valueString);
+		case TYPE_NAME_BYTE:
+			return parseByteValue(valueString);
+		case TYPE_NAME_CHAR:
+			return parseCharValue(valueString);
+		case TYPE_NAME_DOUBLE:
+			return parseDoubleValue(valueString);
+		case TYPE_NAME_FLOAT:
+			return parseFloatValue(valueString);
+		case TYPE_NAME_INT:
+			return parseIntValue(valueString);
+		case TYPE_NAME_LONG:
+			return parseLongValue(valueString);
+		case TYPE_NAME_SHORT:
+			return parseShortValue(valueString);
+		case TYPE_NAME_STRING:
+			return parseStringValue(valueString);
+		default:
+			return null;
+		}
+	}
+
+	private static Object parseBooleanValue(String valueString) {
+		if(valueString.toLowerCase().equals(VALUE_REPRESENTATION_TRUE.toLowerCase())){
+			return true;
+		}
+		if(valueString.toLowerCase().equals(VALUE_REPRESENTATION_FALSE.toLowerCase())){
+			return false;
+		}
+		return null;
+	}	
+
+	private static Object parseByteValue(String valueString) {
+		if(valueString.equals(VALUE_REPRESENTATION_MAX)){
+			return Byte.MAX_VALUE;
+		}
+		if(valueString.equals(VALUE_REPRESENTATION_MIN)){
+			return Byte.MIN_VALUE;
+		}
+		try{
+			return Byte.parseByte(valueString);
+		}
+		catch(NumberFormatException e){
+			return null;
+		}
+	}
+
+	private static Object parseCharValue(String valueString) {
+		if(valueString.equals(VALUE_REPRESENTATION_MAX)){
+			return Character.MAX_VALUE;
+		}
+		if(valueString.equals(VALUE_REPRESENTATION_MIN)){
+			return Character.MIN_VALUE;
+		}
+		if (valueString.charAt(0) == '\\') {
+			return new Character((char)Integer.parseInt(valueString.substring(1)));
+		} else if (valueString.length() == 1) {
+			return valueString.charAt(0);
+		}
+		return null;
+
+	}
+
+	private static Object parseDoubleValue(String valueString) {
+		if(valueString.equals(VALUE_REPRESENTATION_MAX)){
+			return Double.MAX_VALUE;
+		}
+		if(valueString.equals(VALUE_REPRESENTATION_MIN)){
+			return Double.MIN_VALUE;
+		}
+		if(valueString.equals(Constants.VALUE_REPRESENTATION_POSITIVE_INF)){
+			return Double.POSITIVE_INFINITY;
+		}
+		if(valueString.equals(Constants.VALUE_REPRESENTATION_NEGATIVE_INF)){
+			return Double.NEGATIVE_INFINITY;
+		}
+		try{
+			return Double.parseDouble(valueString);
+		}
+		catch(NumberFormatException e){
+			return null;
+		}
+	}
+
+	private static Object parseFloatValue(String valueString) {
+		if(valueString.equals(VALUE_REPRESENTATION_MAX)){
+			return Float.MAX_VALUE;
+		}
+		if(valueString.equals(VALUE_REPRESENTATION_MIN)){
+			return Float.MIN_VALUE;
+		}
+		if(valueString.equals(Constants.VALUE_REPRESENTATION_POSITIVE_INF)){
+			return Float.POSITIVE_INFINITY;
+		}
+		if(valueString.equals(Constants.VALUE_REPRESENTATION_NEGATIVE_INF)){
+			return Float.NEGATIVE_INFINITY;
+		}
+		try{
+			return Float.parseFloat(valueString);
+		}
+		catch(NumberFormatException e){
+			return null;
+		}
+	}
+
+	private static Object parseIntValue(String valueString) {
+		if(valueString.equals(VALUE_REPRESENTATION_MAX)){
+			return Integer.MAX_VALUE;
+		}
+		if(valueString.equals(VALUE_REPRESENTATION_MIN)){
+			return Integer.MIN_VALUE;
+		}
+		try{
+			return Integer.parseInt(valueString);
+		}
+		catch(NumberFormatException e){
+			return null;
+		}
+	}
+
+	private static Object parseLongValue(String valueString) {
+		if(valueString.equals(VALUE_REPRESENTATION_MAX)){
+			return Long.MAX_VALUE;
+		}
+		if(valueString.equals(VALUE_REPRESENTATION_MIN)){
+			return Long.MIN_VALUE;
+		}
+		try{
+			return Long.parseLong(valueString);
+		}
+		catch(NumberFormatException e){
+			return null;
+		}
+	}
+
+	private static Object parseShortValue(String valueString) {
+		if(valueString.equals(VALUE_REPRESENTATION_MAX)){
+			return Short.MAX_VALUE;
+		}
+		if(valueString.equals(VALUE_REPRESENTATION_MIN)){
+			return Short.MIN_VALUE;
+		}
+		try{
+			return Short.parseShort(valueString);
+		}
+		catch(NumberFormatException e){
+			return null;
+		}
+	}
+
+	private static Object parseStringValue(String valueString) {
+		if(valueString.equals(Constants.VALUE_REPRESENTATION_NULL)){
+			return null;
+		}
+		return valueString;
 	}
 
 
