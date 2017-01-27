@@ -14,6 +14,7 @@ import java.util.List;
 
 import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.JavaTypeHelper;
+import com.ecfeed.core.utils.SystemLogger;
 
 public class ChoicesParentStatement extends AbstractStatement implements IRelationalStatement{
 
@@ -57,7 +58,16 @@ public class ChoicesParentStatement extends AbstractStatement implements IRelati
 
 	@Override
 	public boolean evaluate(List<ChoiceNode> values) {
-		return fCondition.evaluate(values);
+		
+		boolean result;
+		try {
+			result = fCondition.evaluate(values);
+		} catch (Exception e) {
+			SystemLogger.logCatch(e.getMessage());
+			return false;
+		}
+		
+		return result;
 	}
 
 	@Override

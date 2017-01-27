@@ -149,7 +149,7 @@ public enum EStatementRelation {
 			return !(StringHelper.isEqual(actualValue, valueToMatch));
 
 		default:
-			ExceptionHelper.reportRuntimeException("Invalid relation in match for equality.");
+			ExceptionHelper.reportRuntimeException("Invalid relation: " + relation.toString() + " in match for equality.");
 			return false;
 		}
 	}	
