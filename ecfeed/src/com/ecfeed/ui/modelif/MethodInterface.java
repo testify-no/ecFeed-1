@@ -214,15 +214,15 @@ public class MethodInterface extends ParametersParentInterface {
 	}
 
 	public boolean generateTestSuite() {
-		TestSuiteGenerationSupport testGenerationSupport = new TestSuiteGenerationSupport(
-				getTarget(), fFileInfoProvider);
+		TestSuiteGenerationSupport testGenerationSupport = 
+				new TestSuiteGenerationSupport(getTarget(), fFileInfoProvider);
+
 		testGenerationSupport.proceed();
 		if (testGenerationSupport.hasData() == false)
 			return false;
 
 		String testSuiteName = testGenerationSupport.getTestSuiteName();
-		List<List<ChoiceNode>> testData = testGenerationSupport
-				.getGeneratedData();
+		List<List<ChoiceNode>> testData = testGenerationSupport.getGeneratedData();
 
 		int dataLength = testData.size();
 		if (dataLength < 0 && (testGenerationSupport.wasCancelled() == false)) {

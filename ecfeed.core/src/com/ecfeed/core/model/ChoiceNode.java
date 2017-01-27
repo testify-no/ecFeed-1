@@ -132,16 +132,21 @@ public class ChoiceNode extends ChoicesParentNode{
 		return getChoices().size() != 0;
 	}
 
-	public boolean is(ChoiceNode choice){
-		//		return (this == (choice)) || (parentChoice() != null ? parentChoice().is(choice) : false);
-		boolean result = (this == choice);
-		if (result == false){
-			result = (getParameter() == choice.getParameter()) && (getQualifiedName() == choice.getQualifiedName());
+	public boolean isMatchIncludingParents(ChoiceNode choice){
+
+		if (this == choice) {
+			return true;
 		}
-		if(result == false){
-			result = parentChoice() != null ? parentChoice().is(choice) : false;
+
+		if ((getParameter() == choice.getParameter()) && (getQualifiedName() == choice.getQualifiedName())) {
+			return true;
 		}
-		return result;
+
+		if (parentChoice() != null) {
+			return parentChoice().isMatchIncludingParents(choice); 
+		}
+
+		return false;
 	}
 
 	public int level(){

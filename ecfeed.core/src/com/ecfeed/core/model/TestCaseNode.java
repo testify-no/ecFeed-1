@@ -80,7 +80,7 @@ public class TestCaseNode extends AbstractNode {
 
 	public boolean mentions(ChoiceNode choice) {
 		for(ChoiceNode p : fTestData){
-			if(p.is(choice)){
+			if(p.isMatchIncludingParents(choice)){
 				return true;
 			}
 		}

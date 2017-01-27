@@ -12,6 +12,9 @@ package com.ecfeed.core.model;
 
 import java.util.List;
 
+import com.ecfeed.core.utils.ExceptionHelper;
+import com.ecfeed.core.utils.JavaTypeHelper;
+
 public class ChoicesParentStatement extends AbstractStatement implements IRelationalStatement{
 
 	private MethodParameterNode fParameter;
@@ -354,22 +357,60 @@ public class ChoicesParentStatement extends AbstractStatement implements IRelati
 			return fChoice;
 		}
 
-		private boolean evaluateChoice(ChoiceNode choice) {
+		private boolean evaluateChoice(ChoiceNode actualChoice) {
 
-			boolean isCondition = choice.is(fChoice);
-			EStatementRelation relation = getRelation(); 
+			EStatementRelation relation = getRelation();
+
+			if (relation == EStatementRelation.EQUAL || relation == EStatementRelation.NOT_EQUAL) {
+				return evaluateEqualityIncludingParents(relation, actualChoice);
+			}
+
+			return isDirectMatch(
+					actualChoice.getParameter().getType(),
+					relation, 
+					actualChoice.getValueString(), 
+					fChoice.getValueString());
+		}
+
+		private boolean evaluateEqualityIncludingParents(EStatementRelation relation, ChoiceNode choice) {
+
+			boolean isMatch = choice.isMatchIncludingParents(fChoice);
 
 			switch (relation) {
 
 			case EQUAL:
-				return isCondition;
+				return isMatch;
 			case NOT_EQUAL:
-				return !isCondition;
+				return !isMatch;
 			default:
+				ExceptionHelper.reportRuntimeException("Invalid relation.");
 				return false;
 			}
 		}
 
+		private boolean isDirectMatch(
+				String typeName, EStatementRelation relation, String actualValue, String valueToMatch) {
+
+			if (JavaTypeHelper.isNumericTypeName(typeName)) {
+				return isMatchForNumericTypes(typeName, relation, actualValue, valueToMatch);
+			}
+			
+			if (JavaTypeHelper.isTypeWithChars(typeName)) {
+				return EStatementRelation.isMatch(relation, actualValue, valueToMatch);
+			}
+
+			return EStatementRelation.isEqualityMatch(relation, actualValue, valueToMatch);
+		}
+
+		private boolean isMatchForNumericTypes(
+				String typeName, EStatementRelation relation, String actualValue, String valueToMatch) {
+
+			double actual = JavaTypeHelper.convertNumericToDouble(typeName, actualValue);
+			double toMatch = JavaTypeHelper.convertNumericToDouble(typeName, valueToMatch);
+
+			return EStatementRelation.isMatch(relation, actual, toMatch);
+		}
+		
 	}
 
 }

@@ -13,6 +13,9 @@ package com.ecfeed.core.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ecfeed.core.utils.ExceptionHelper;
+import com.ecfeed.core.utils.StringHelper;
+
 class StatementRelationNames {
 	static final String RELATION_EQUAL = "=";
 	static final String RELATION_NOT_EQUAL = "\u2260";
@@ -45,6 +48,22 @@ public enum EStatementRelation {
 		return fName; 
 	}
 
+	public static boolean isRelationEqual(String name) {
+
+		if (name.equals(StatementRelationNames.RELATION_EQUAL)) {
+			return true;
+		}
+		return false;
+	}
+
+	public static boolean isRelationNotEqual(String name) {
+
+		if (name.equals(StatementRelationNames.RELATION_NOT_EQUAL)) {
+			return true;
+		}
+		return false;
+	}	
+
 	public static EStatementRelation getRelation(String name) {
 
 		for (EStatementRelation relation : EStatementRelation.values()) {
@@ -76,5 +95,62 @@ public enum EStatementRelation {
 		}
 
 		return relations.toArray(new String[relations.size()]);
+	}
+
+	public static boolean isMatch(EStatementRelation relation, double actualValue, double valueToMatch) {
+
+		int compareResult = Double.compare(actualValue, valueToMatch);
+		return isMatch(relation, compareResult);
+	}
+
+	public static boolean isMatch(EStatementRelation relation, String actualValue, String valueToMatch) {
+
+		int compareResult = actualValue.compareTo(valueToMatch);
+		return isMatch(relation, compareResult);
+	}
+	
+	private static boolean isMatch(EStatementRelation relation, int compareResult) {
+		
+		switch(relation) {
+
+		case EQUAL:
+			return (compareResult == 0);
+
+		case NOT_EQUAL:
+			return (compareResult != 0);
+
+		case LESS_THAN:
+			return (compareResult < 0);
+
+		case LESS_EQUAL:
+			return (compareResult < 0 || compareResult == 0);
+
+		case GREATER_THAN:
+			return (compareResult > 0);
+
+		case GREATER_EQUAL:
+			return (compareResult > 0 || compareResult == 0);
+
+		default:
+			ExceptionHelper.reportRuntimeException("Invalid relation.");
+			return false;
+		}
+		
+	}
+	
+	public static boolean isEqualityMatch(EStatementRelation relation, String actualValue, String valueToMatch) {
+
+		switch(relation) {
+
+		case EQUAL:
+			return StringHelper.isEqual(actualValue, valueToMatch);
+
+		case NOT_EQUAL:
+			return !(StringHelper.isEqual(actualValue, valueToMatch));
+
+		default:
+			ExceptionHelper.reportRuntimeException("Invalid relation in match for equality.");
+			return false;
+		}
 	}	
 }

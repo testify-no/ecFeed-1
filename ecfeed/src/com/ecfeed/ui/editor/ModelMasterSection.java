@@ -65,7 +65,6 @@ import com.ecfeed.ui.editor.actions.ExecuteTestCaseAction;
 import com.ecfeed.ui.editor.actions.ExportOnlineAction;
 import com.ecfeed.ui.editor.actions.IActionRunner;
 import com.ecfeed.ui.editor.actions.ModelViewerActionProvider;
-import com.ecfeed.ui.editor.actions.NamedAction;
 import com.ecfeed.ui.editor.actions.TestOnlineAction;
 import com.ecfeed.ui.modelif.AbstractNodeInterface;
 import com.ecfeed.ui.modelif.AbstractParameterInterface;

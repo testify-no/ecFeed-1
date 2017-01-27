@@ -134,6 +134,40 @@ public class JavaTypeHelper {
 		}
 		return false;
 	}
+	
+	public static boolean isTypeWithChars(String typeName) {
+		
+		if (isCharTypeName(typeName)) {
+			return true;
+		}
+		if (isStringTypeName(typeName)) {
+			return true;
+		}
+		
+		return false;
+	}
+
+	public static double convertNumericToDouble(String typeName, String value) {
+
+		if (isByteTypeName(typeName)) {
+			return Byte.parseByte(value);
+		}
+		if (isIntTypeName(typeName)) {
+			return Integer.parseInt(value);
+		}
+		if (isShortTypeName(typeName)) {
+			return Short.parseShort(value);
+		}
+		if (isFloatTypeName(typeName)) {
+			return Float.parseFloat(value);
+		}
+		if (isDoubleTypeName(typeName)) {
+			return Double.parseDouble(value);
+		}
+
+		ExceptionHelper.reportRuntimeException("Invalid type in numeric conversion");
+		return 0;
+	}
 
 
 }

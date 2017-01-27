@@ -41,14 +41,15 @@ public class Constraint implements IConstraint<ChoiceNode> {
 			return true;
 		}
 
-		if (fPremise.evaluate(values) == true) {
-			if(fConsequence == null) {
-				return false;
-			}
-			return fConsequence.evaluate(values);
+		if (!fPremise.evaluate(values)) {
+			return true;
 		}
 
-		return true;
+		if(fConsequence == null) {
+			return false;
+		}
+
+		return fConsequence.evaluate(values);
 	}
 
 	@Override
