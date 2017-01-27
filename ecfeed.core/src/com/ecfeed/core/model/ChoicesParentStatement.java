@@ -378,11 +378,12 @@ public class ChoicesParentStatement extends AbstractStatement implements IRelati
 				return evaluateEqualityIncludingParents(relation, actualChoice);
 			}
 
-			return isDirectMatch(
-					actualChoice.getParameter().getType(),
-					relation, 
-					actualChoice.getValueString(), 
-					fChoice.getValueString());
+			String typeName = actualChoice.getParameter().getType();
+
+			String actualValue = JavaTypeHelper.convertValueString(actualChoice.getValueString(), typeName);
+			String valueToMatch = JavaTypeHelper.convertValueString(fChoice.getValueString(), typeName);
+
+			return isDirectMatch(typeName, relation, actualValue, valueToMatch);
 		}
 
 		private boolean evaluateEqualityIncludingParents(EStatementRelation relation, ChoiceNode choice) {

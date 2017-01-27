@@ -30,6 +30,9 @@ public class JavaTypeHelper {
 	private static final String VALUE_REPRESENTATION_FALSE = "false";
 	private static final String VALUE_REPRESENTATION_MAX = "MAX_VALUE";
 	private static final String VALUE_REPRESENTATION_MIN = "MIN_VALUE";
+	public static final String VALUE_REPRESENTATION_POSITIVE_INF = "POSITIVE_INFINITY";
+	public static final String VALUE_REPRESENTATION_NEGATIVE_INF = "NEGATIVE_INFINITY";
+
 
 	private static final String[] SUPPORTED_PRIMITIVE_TYPES = new String[]{
 		TYPE_NAME_INT,
@@ -44,10 +47,12 @@ public class JavaTypeHelper {
 	};
 
 	public static boolean isJavaType(String typeName) {
+
 		return Arrays.asList(SUPPORTED_PRIMITIVE_TYPES).contains(typeName);
 	}
 
 	public static boolean isUserType(String typeName) {
+
 		if (isJavaType(typeName)) {
 			return false;
 		}
@@ -55,18 +60,22 @@ public class JavaTypeHelper {
 	}
 
 	public static String[] getSupportedJavaTypes() {
+
 		return SUPPORTED_PRIMITIVE_TYPES;
 	}
 
 	public static boolean hasLimitedValuesSet(String type){
+
 		return isJavaType(type) == false || type.equals(getBooleanTypeName());
 	}
 
 	public static String getBooleanTypeName(){
+
 		return JavaTypeHelper.TYPE_NAME_BOOLEAN;
 	}
 
 	public static boolean isStringTypeName(String typeName) {
+
 		if (typeName.equals(TYPE_NAME_STRING)) {
 			return true;
 		}
@@ -74,6 +83,7 @@ public class JavaTypeHelper {
 	}
 
 	public static boolean isCharTypeName(String typeName) {
+
 		if (typeName.equals(TYPE_NAME_CHAR)) {
 			return true;
 		}
@@ -81,6 +91,7 @@ public class JavaTypeHelper {
 	}	
 
 	public static boolean isBooleanTypeName(String typeName) {
+
 		if (typeName.equals(TYPE_NAME_BOOLEAN)) {
 			return true;
 		}
@@ -88,6 +99,7 @@ public class JavaTypeHelper {
 	}	
 
 	public static boolean isByteTypeName(String typeName) {
+
 		if (typeName.equals(TYPE_NAME_BYTE)) {
 			return true;
 		}
@@ -95,6 +107,7 @@ public class JavaTypeHelper {
 	}	
 
 	public static boolean isIntTypeName(String typeName) {
+
 		if (typeName.equals(TYPE_NAME_INT)) {
 			return true;
 		}
@@ -102,6 +115,7 @@ public class JavaTypeHelper {
 	}	
 
 	public static boolean isShortTypeName(String typeName) {
+
 		if (typeName.equals(TYPE_NAME_SHORT)) {
 			return true;
 		}
@@ -109,6 +123,7 @@ public class JavaTypeHelper {
 	}	
 
 	public static boolean isFloatTypeName(String typeName) {
+
 		if (typeName.equals(TYPE_NAME_FLOAT)) {
 			return true;
 		}
@@ -116,6 +131,7 @@ public class JavaTypeHelper {
 	}	
 
 	public static boolean isDoubleTypeName(String typeName) {
+
 		if (typeName.equals(TYPE_NAME_DOUBLE)) {
 			return true;
 		}
@@ -218,6 +234,7 @@ public class JavaTypeHelper {
 	}
 
 	private static Object parseBooleanValue(String valueString) {
+
 		if(valueString.toLowerCase().equals(VALUE_REPRESENTATION_TRUE.toLowerCase())){
 			return true;
 		}
@@ -228,6 +245,7 @@ public class JavaTypeHelper {
 	}	
 
 	private static Object parseByteValue(String valueString) {
+
 		if(valueString.equals(VALUE_REPRESENTATION_MAX)){
 			return Byte.MAX_VALUE;
 		}
@@ -243,6 +261,7 @@ public class JavaTypeHelper {
 	}
 
 	private static Object parseCharValue(String valueString) {
+
 		if(valueString.equals(VALUE_REPRESENTATION_MAX)){
 			return Character.MAX_VALUE;
 		}
@@ -259,16 +278,17 @@ public class JavaTypeHelper {
 	}
 
 	private static Object parseDoubleValue(String valueString) {
+
 		if(valueString.equals(VALUE_REPRESENTATION_MAX)){
 			return Double.MAX_VALUE;
 		}
 		if(valueString.equals(VALUE_REPRESENTATION_MIN)){
 			return Double.MIN_VALUE;
 		}
-		if(valueString.equals(Constants.VALUE_REPRESENTATION_POSITIVE_INF)){
+		if(valueString.equals(VALUE_REPRESENTATION_POSITIVE_INF)){
 			return Double.POSITIVE_INFINITY;
 		}
-		if(valueString.equals(Constants.VALUE_REPRESENTATION_NEGATIVE_INF)){
+		if(valueString.equals(VALUE_REPRESENTATION_NEGATIVE_INF)){
 			return Double.NEGATIVE_INFINITY;
 		}
 		try{
@@ -280,16 +300,17 @@ public class JavaTypeHelper {
 	}
 
 	private static Object parseFloatValue(String valueString) {
+
 		if(valueString.equals(VALUE_REPRESENTATION_MAX)){
 			return Float.MAX_VALUE;
 		}
 		if(valueString.equals(VALUE_REPRESENTATION_MIN)){
 			return Float.MIN_VALUE;
 		}
-		if(valueString.equals(Constants.VALUE_REPRESENTATION_POSITIVE_INF)){
+		if(valueString.equals(VALUE_REPRESENTATION_POSITIVE_INF)){
 			return Float.POSITIVE_INFINITY;
 		}
-		if(valueString.equals(Constants.VALUE_REPRESENTATION_NEGATIVE_INF)){
+		if(valueString.equals(VALUE_REPRESENTATION_NEGATIVE_INF)){
 			return Float.NEGATIVE_INFINITY;
 		}
 		try{
@@ -301,6 +322,7 @@ public class JavaTypeHelper {
 	}
 
 	private static Object parseIntValue(String valueString) {
+
 		if(valueString.equals(VALUE_REPRESENTATION_MAX)){
 			return Integer.MAX_VALUE;
 		}
@@ -316,6 +338,7 @@ public class JavaTypeHelper {
 	}
 
 	private static Object parseLongValue(String valueString) {
+
 		if(valueString.equals(VALUE_REPRESENTATION_MAX)){
 			return Long.MAX_VALUE;
 		}
@@ -331,6 +354,7 @@ public class JavaTypeHelper {
 	}
 
 	private static Object parseShortValue(String valueString) {
+
 		if(valueString.equals(VALUE_REPRESENTATION_MAX)){
 			return Short.MAX_VALUE;
 		}
@@ -346,11 +370,15 @@ public class JavaTypeHelper {
 	}
 
 	private static Object parseStringValue(String valueString) {
+
 		if(valueString.equals(Constants.VALUE_REPRESENTATION_NULL)){
 			return null;
 		}
 		return valueString;
 	}
 
+	public static String convertValueString(String valueString, String typeName) {
+		return parseJavaType(valueString, typeName).toString();
+	}	
 
 }

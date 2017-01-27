@@ -43,7 +43,5 @@ public class Constants {
 		"native", "super", "while", "null", "true", "false" };
 
 	public static final String VALUE_REPRESENTATION_NULL = "/null";
-	public static final String VALUE_REPRESENTATION_POSITIVE_INF = "POSITIVE_INFINITY";
-	public static final String VALUE_REPRESENTATION_NEGATIVE_INF = "NEGATIVE_INFINITY";
 
 }
