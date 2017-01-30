@@ -13,20 +13,22 @@ package com.ecfeed.core.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StatementArray extends AbstractStatement{
+public class StatementArray extends AbstractStatement {
+
 	private EStatementOperator fOperator;
 	private List<AbstractStatement> fStatements;
-	
-	public StatementArray(EStatementOperator operator){
+
+	public StatementArray(EStatementOperator operator) {
+
 		fStatements = new ArrayList<AbstractStatement>();
 		fOperator = operator;
 	}
 
-	public String getLeftOperandName(){
+	public String getLeftOperandName() {
 		return fOperator.toString();
 	}
 
-	public EStatementOperator getOperator(){
+	public EStatementOperator getOperator() {
 		return fOperator;
 	}
 
@@ -34,28 +36,30 @@ public class StatementArray extends AbstractStatement{
 		fOperator = operator;
 	}
 
-	public void addStatement(AbstractStatement statement, int index){
+	public void addStatement(AbstractStatement statement, int index) {
+
 		fStatements.add(index, statement);
 		statement.setParent(this);
 	}
-	
-	public void addStatement(AbstractStatement statement){
+
+	public void addStatement(AbstractStatement statement) {
 		addStatement(statement, fStatements.size());
 	}
-	
+
 	@Override
-	public List<AbstractStatement> getChildren(){
+	public List<AbstractStatement> getChildren() {
 		return fStatements;
 	}
-	
-	public boolean removeChild(AbstractStatement child){
+
+	public boolean removeChild(AbstractStatement child) {
 		return getChildren().remove(child);
 	}
-	
+
 	@Override
-	public boolean mentions(ChoiceNode choice){
-		for(AbstractStatement child : fStatements){
-			if(child.mentions(choice)){
+	public boolean mentions(ChoiceNode choice) {
+
+		for (AbstractStatement child : fStatements) {
+			if (child.mentions(choice)) {
 				return true;
 			}
 		}
@@ -63,9 +67,21 @@ public class StatementArray extends AbstractStatement{
 	}
 
 	@Override
-	public boolean mentions(MethodParameterNode parameter){
-		for(AbstractStatement child : fStatements){
-			if(child.mentions(parameter)){
+	public boolean mentions(MethodParameterNode parameter) {
+
+		for (AbstractStatement child : fStatements) {
+			if (child.mentions(parameter)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public boolean mentionsOrderRelation() {
+
+		for (AbstractStatement child : fStatements) {
+			if (child.mentionsOrderRelation()) {
 				return true;
 			}
 		}
@@ -74,35 +90,38 @@ public class StatementArray extends AbstractStatement{
 
 	@Override
 	public boolean evaluate(List<ChoiceNode> values) {
-		if(fStatements.size() == 0){
+
+		if (fStatements.size() == 0) {
 			return false;
 		}
-		switch (fOperator){
-			case AND:
-				for(IStatement statement : fStatements){
-					if(statement.evaluate(values) == false){
-						return false;
-					}
+
+		switch (fOperator) {
+		case AND:
+			for (IStatement statement : fStatements) {
+				if (statement.evaluate(values) == false) {
+					return false;
 				}
-				return true;
-			case OR:
-				for(IStatement statement : fStatements){
-					if(statement.evaluate(values) == true){
-						return true;
-					}
+			}
+			return true;
+		case OR:
+			for (IStatement statement : fStatements) {
+				if (statement.evaluate(values) == true) {
+					return true;
 				}
-				return false;
+			}
+			return false;
 		}
 		return false;
 	}
-	
+
 	@Override
-	public String toString(){
+	public String toString() {
+
 		String result = new String("(");
-		for(int i = 0; i < fStatements.size(); i++){
+		for (int i = 0; i < fStatements.size(); i++) {
 			result += fStatements.get(i).toString();
-			if(i < fStatements.size() - 1){
-				switch(fOperator){
+			if (i < fStatements.size() - 1) {
+				switch(fOperator) {
 				case AND:
 					result += " \u2227 ";
 					break;
@@ -114,52 +133,55 @@ public class StatementArray extends AbstractStatement{
 		}
 		return result + ")";
 	}
-	
+
 	@Override
-	public StatementArray getCopy(){
+	public StatementArray getCopy() {
+
 		StatementArray copy = new StatementArray(fOperator);
-		for(AbstractStatement statement: fStatements){
+		for (AbstractStatement statement: fStatements) {
 			copy.addStatement(statement.getCopy());
 		}
 		return copy;
 	}
-	
+
 	@Override
-	public boolean updateReferences(MethodNode method){
-		for(AbstractStatement statement: fStatements){
-			if(!statement.updateReferences(method)) return false;
+	public boolean updateReferences(MethodNode method) {
+
+		for (AbstractStatement statement: fStatements) {
+			if (!statement.updateReferences(method)) return false;
 		}
 		return true;
 	}
-	
-	List<AbstractStatement> getStatements(){
+
+	List<AbstractStatement> getStatements() {
 		return fStatements;
 	}
-	
+
 	@Override 
-	public boolean compare(IStatement statement){
-		if(statement instanceof StatementArray == false){
+	public boolean compare(IStatement statement) {
+
+		if (statement instanceof StatementArray == false) {
 			return false;
 		}
 		StatementArray compared = (StatementArray)statement;
 
-		if(getOperator() != compared.getOperator()){
+		if (getOperator() != compared.getOperator()) {
 			return false;
 		}
-		
-		if(getStatements().size() != compared.getStatements().size()){
+
+		if (getStatements().size() != compared.getStatements().size()) {
 			return false;
 		}
-		
-		for(int i = 0; i < getStatements().size(); i++){
-			if(getStatements().get(i).compare(compared.getStatements().get(i)) == false){
+
+		for (int i = 0; i < getStatements().size(); i++) {
+			if (getStatements().get(i).compare(compared.getStatements().get(i)) == false) {
 				return false;
 			}
 		}
-		
+
 		return true;
 	}
-	
+
 	@Override
 	public Object accept(IStatementVisitor visitor) throws Exception {
 		return visitor.visit(this);
