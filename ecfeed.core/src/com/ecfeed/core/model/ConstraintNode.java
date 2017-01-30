@@ -13,25 +13,27 @@ package com.ecfeed.core.model;
 import java.util.List;
 import java.util.Set;
 
+import com.ecfeed.core.utils.JavaTypeHelper;
+
 public class ConstraintNode extends AbstractNode{
 
 	private Constraint fConstraint;
 
 	@Override
-	public int getIndex(){
-		if(getMethod() == null){
+	public int getIndex() {
+		if (getMethod() == null) {
 			return -1;
 		}
 		return getMethod().getConstraintNodes().indexOf(this);
 	}
 
 	@Override
-	public String toString(){
+	public String toString() {
 		return getName() + ": " + getConstraint().toString();
 	}
 
 	@Override
-	public ConstraintNode makeClone(){
+	public ConstraintNode makeClone() {
 		ConstraintNode copy = new ConstraintNode(getName(), fConstraint.getCopy());
 		copy.setProperties(getProperties());
 		return copy;
@@ -42,34 +44,34 @@ public class ConstraintNode extends AbstractNode{
 		fConstraint = constraint;
 	}
 
-	public Constraint getConstraint(){
+	public Constraint getConstraint() {
 		return fConstraint;
 	}
 
 	public MethodNode getMethod() {
 		AbstractNode parent = getParent();
-		if(parent == null) {
+		if (parent == null) {
 			return null;
 		}
-		if (parent instanceof MethodNode){
+		if (parent instanceof MethodNode) {
 			return (MethodNode)parent;
 		}
 		return null;
 	}
 
-	public void setMethod(MethodNode method){
+	public void setMethod(MethodNode method) {
 		setParent(method);
 	}
 
 	public boolean evaluate(List<ChoiceNode> values) {
-		if(fConstraint != null){
+		if (fConstraint != null) {
 			return fConstraint.evaluate(values);
 		}
 		return false;
 	}
 
 	public boolean mentions(ChoiceNode choice) {
-		if(fConstraint.mentions(choice)){
+		if (fConstraint.mentions(choice)) {
 			return true;
 		}
 		return false;
@@ -80,12 +82,12 @@ public class ConstraintNode extends AbstractNode{
 	}
 
 	public boolean mentions(AbstractParameterNode parameter) {
-		if(parameter instanceof MethodParameterNode){
+		if (parameter instanceof MethodParameterNode) {
 			MethodParameterNode param = (MethodParameterNode)parameter;
 			return fConstraint.mentions(param);
-		} else if(parameter instanceof GlobalParameterNode){
+		} else if (parameter instanceof GlobalParameterNode) {
 			GlobalParameterNode global = (GlobalParameterNode)parameter;
-			for(MethodParameterNode methodParam: global.getLinkers()){
+			for (MethodParameterNode methodParam: global.getLinkers()) {
 				return fConstraint.mentions(methodParam);
 			}
 		}
@@ -96,33 +98,33 @@ public class ConstraintNode extends AbstractNode{
 		return fConstraint.mentions(parameter, label);
 	}
 
-	public boolean updateReferences(MethodNode method){
-		if(fConstraint.updateRefrences(method)){
+	public boolean updateReferences(MethodNode method) {
+		if (fConstraint.updateRefrences(method)) {
 			setParent(method);
 			return true;
 		}
 		return false;
 	}
 
-	public ConstraintNode getCopy(MethodNode method){
+	public ConstraintNode getCopy(MethodNode method) {
 		ConstraintNode copy = makeClone();
-		if(copy.updateReferences(method))
+		if (copy.updateReferences(method))
 			return copy;
 		else
 			return null;
 	}
 
 	@Override
-	public boolean isMatch(AbstractNode node){
-		if(node instanceof ConstraintNode == false){
+	public boolean isMatch(AbstractNode node) {
+		if (node instanceof ConstraintNode == false) {
 			return false;
 		}
 		ConstraintNode compared = (ConstraintNode)node;
-		if(getConstraint().getPremise().compare(compared.getConstraint().getPremise()) == false){
+		if (getConstraint().getPremise().compare(compared.getConstraint().getPremise()) == false) {
 			return false;
 		}
 
-		if(getConstraint().getConsequence().compare(compared.getConstraint().getConsequence()) == false){
+		if (getConstraint().getConsequence().compare(compared.getConstraint().getConsequence()) == false) {
 			return false;
 		}
 
@@ -135,6 +137,7 @@ public class ConstraintNode extends AbstractNode{
 	}
 
 	public boolean isConsistent() {
+
 		if (!parametersConsistent()) {
 			return false;
 		}
@@ -152,19 +155,19 @@ public class ConstraintNode extends AbstractNode{
 
 	private boolean parametersConsistent() {
 		Set<AbstractParameterNode> referencedParameters = getConstraint().getReferencedParameters(); 
-		for(AbstractParameterNode parameter : referencedParameters){ // wow it really does point to global instead of pointing to method param WHICH would then point to global, if linked...
+		for (AbstractParameterNode parameter : referencedParameters) { // wow it really does point to global instead of pointing to method param WHICH would then point to global, if linked...
 			boolean isLinked = false;
 
 			List<AbstractParameterNode> methodParameters = getMethod().getParameters(); 
-			for(AbstractParameterNode param : methodParameters){
+			for (AbstractParameterNode param : methodParameters) {
 				MethodParameterNode methodParam = (MethodParameterNode) param;
-				if(methodParam.isLinked() && methodParam.getLink().equals(parameter)){
+				if (methodParam.isLinked() && methodParam.getLink().equals(parameter)) {
 					isLinked = true;
 					break;
 				}
 			}
 
-			if(!isLinked && !methodParameters.contains(parameter)){
+			if (!isLinked && !methodParameters.contains(parameter)) {
 				return false;
 			}
 		}
@@ -172,15 +175,15 @@ public class ConstraintNode extends AbstractNode{
 	}
 
 	private boolean choicesConsistent() {
-		for(ChoiceNode choice : getConstraint().getReferencedChoices()){
+		for (ChoiceNode choice : getConstraint().getReferencedChoices()) {
 			AbstractParameterNode parameter = choice.getParameter();
-			if(parameter == null || parameter.getChoice(choice.getQualifiedName()) == null){
-				if(false == (parameter instanceof MethodParameterNode && ((MethodParameterNode)parameter).isExpected())){
+			if (parameter == null || parameter.getChoice(choice.getQualifiedName()) == null) {
+				if (false == (parameter instanceof MethodParameterNode && ((MethodParameterNode)parameter).isExpected())) {
 					return false;
 				}
 			}
 			//check if the choices parent parameter is still part of the method
-			if(parameter.getMethods().contains(getMethod()) == false){
+			if (parameter.getMethods().contains(getMethod()) == false) {
 				return false;
 			}
 			// of course 2nd parameter is linked, so... Also, above 2nd parameter passed equals 
@@ -191,19 +194,44 @@ public class ConstraintNode extends AbstractNode{
 	}
 
 	private boolean constraintsConsistent() {
-		for(MethodParameterNode parameter : getMethod().getMethodParameters()){
-			for(String label : getConstraint().getReferencedLabels(parameter)){
-				if(parameter.getLeafLabels().contains(label) == false){
-					return false;
-				}
+
+		for (MethodParameterNode parameter : getMethod().getMethodParameters()) {
+			if (!isConsistentForParameter(parameter)) {
+				return false;
 			}
 		}
 		return true;
 	}
 
+	private boolean isConsistentForParameter(MethodParameterNode parameter) {
+
+		if (JavaTypeHelper.isUserType(parameter.getType())) {
+			if (fConstraint.mentionsOrderRelation()) {
+				return false;
+			}
+		}
+
+		if (!checkLabels(parameter)) {
+			return false;
+		}
+
+		return true;
+	}
+
+	private boolean checkLabels(MethodParameterNode parameter) {
+
+		for (String label : getConstraint().getReferencedLabels(parameter)) {
+			if (!parameter.getLeafLabels().contains(label)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+
 	@Override
-	public int getMaxIndex(){
-		if(getMethod() != null){
+	public int getMaxIndex() {
+		if (getMethod() != null) {
 			return getMethod().getConstraintNodes().size();
 		}
 		return -1;

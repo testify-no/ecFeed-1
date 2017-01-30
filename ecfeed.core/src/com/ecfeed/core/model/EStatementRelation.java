@@ -65,6 +65,26 @@ public enum EStatementRelation {
 		return false;
 	}	
 
+	public static boolean isOrderRelation(EStatementRelation relation) {
+
+		if (isEquivalenceRelation(relation)) {
+			return false;
+		}
+		return true;
+	}
+
+	private static boolean isEquivalenceRelation(EStatementRelation relation) {
+
+		if (relation == EStatementRelation.EQUAL) {
+			return true;
+		}
+		if (relation == EStatementRelation.NOT_EQUAL) {
+			return true;
+		}		
+
+		return false;
+	}	
+
 	public static EStatementRelation getRelation(String name) {
 
 		for (EStatementRelation relation : EStatementRelation.values()) {

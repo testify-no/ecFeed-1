@@ -70,6 +70,10 @@ public abstract class AbstractStatement implements IStatement {
 		return false;
 	}
 
+	public boolean mentionsOrderRelation() {
+		return false;
+	}
+
 	@Override
 	public boolean evaluate(List<ChoiceNode> values) {
 		return false;

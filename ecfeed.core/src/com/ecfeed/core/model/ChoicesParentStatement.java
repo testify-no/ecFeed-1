@@ -100,6 +100,7 @@ public class ChoicesParentStatement extends AbstractStatement implements IRelati
 
 	@Override
 	public ChoicesParentStatement getCopy() {
+
 		return new ChoicesParentStatement(fParameter, fRelation, fCondition.getCopy());
 	}
 
@@ -145,16 +146,25 @@ public class ChoicesParentStatement extends AbstractStatement implements IRelati
 
 	@Override
 	public boolean mentions(MethodParameterNode parameter) {
+
 		return getParameter() == parameter;
 	}
 
 	@Override
 	public boolean mentions(MethodParameterNode parameter, String label) {
+
 		return getParameter() == parameter && getConditionValue().equals(label);
 	}
 
 	@Override
+	public boolean mentionsOrderRelation() {
+
+		return EStatementRelation.isOrderRelation(fRelation);
+	}
+
+	@Override
 	public boolean mentions(ChoiceNode choice) {
+
 		return getConditionValue() == choice;
 	}
 

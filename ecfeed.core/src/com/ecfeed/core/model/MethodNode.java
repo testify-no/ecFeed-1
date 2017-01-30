@@ -231,6 +231,7 @@ public class MethodNode extends ParametersParentNode {
 	}
 
 	public boolean removeConstraint(ConstraintNode constraint) {
+
 		constraint.setParent(null);
 		return fConstraints.remove(constraint);
 	}
@@ -432,6 +433,7 @@ public class MethodNode extends ParametersParentNode {
 	}
 
 	public void removeConstraintsWithParameter(MethodParameterNode methodParameter) {
+
 		ArrayList<ConstraintNode> constraintsToDelete = new ArrayList<ConstraintNode>();  
 
 		for(ConstraintNode constraint : fConstraints){

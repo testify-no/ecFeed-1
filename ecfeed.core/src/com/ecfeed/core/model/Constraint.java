@@ -129,6 +129,18 @@ public class Constraint implements IConstraint<ChoiceNode> {
 		return fPremise.mentions(choice) || fConsequence.mentions(choice);
 	}
 
+	public boolean mentionsOrderRelation() {
+
+		if (fPremise.mentionsOrderRelation()) {
+			return true;
+		}
+		if (fConsequence.mentionsOrderRelation()) {
+			return true;
+		}
+
+		return false;
+	}
+
 	public Constraint getCopy(){
 
 		AbstractStatement premise = fPremise.getCopy();
