@@ -22,7 +22,7 @@ import com.ecfeed.core.model.TestCaseNode;
 
 public class MethodOperationMakeConsistent extends AbstractModelOperation {
 
-	private MethodNode fTarget;
+	private MethodNode fMethodNode;
 	private List<ConstraintNode> fOriginalConstraints;
 	private List<TestCaseNode> fOriginalTestCases;
 
@@ -34,43 +34,47 @@ public class MethodOperationMakeConsistent extends AbstractModelOperation {
 
 		@Override
 		public void execute() throws ModelOperationException {
-			fTarget.replaceTestCases(fOriginalTestCases);
-			fTarget.replaceConstraints(fOriginalConstraints);
+			fMethodNode.replaceTestCases(fOriginalTestCases);
+			fMethodNode.replaceConstraints(fOriginalConstraints);
 			markModelUpdated();
 		}
 
 		@Override
 		public IModelOperation reverseOperation() {
-			return new MethodOperationMakeConsistent(fTarget);
+			return new MethodOperationMakeConsistent(fMethodNode);
 		}
 
 	}
 
-	public MethodOperationMakeConsistent(MethodNode target){
+	public MethodOperationMakeConsistent(MethodNode target) {
 		super(OperationNames.MAKE_CONSISTENT);
-		fTarget = target;
+		fMethodNode = target;
 		fOriginalConstraints = new ArrayList<ConstraintNode>(target.getConstraintNodes());
 		fOriginalTestCases = new ArrayList<TestCaseNode>(target.getTestCases());
 	}
 
 	@Override
 	public void execute() throws ModelOperationException {
+
 		boolean modelUpdated = false;
-		Iterator<TestCaseNode> tcIt = fTarget.getTestCases().iterator();
-		while(tcIt.hasNext()){
-			if(tcIt.next().isConsistent() == false){
+
+		Iterator<TestCaseNode> tcIt = fMethodNode.getTestCases().iterator();
+		while (tcIt.hasNext()) {
+			if (tcIt.next().isConsistent() == false) {
 				tcIt.remove();
 				modelUpdated = true;
 			}
 		}
-		Iterator<ConstraintNode> cIt = fTarget.getConstraintNodes().iterator();
-		while(cIt.hasNext()){
-			if(!cIt.next().isConsistent()){
-				cIt.remove();
+
+		MethodNode.ConstraintsItr constraintItr = fMethodNode.getIterator();
+		while (fMethodNode.hasNextConstraint(constraintItr)) {
+			if (!fMethodNode.nextConstraint(constraintItr).isConsistent()) {
+				fMethodNode.removeConstraint(constraintItr);
 				modelUpdated = true;
 			}
-		}
-		if(modelUpdated){
+		}		
+
+		if (modelUpdated) {
 			markModelUpdated();
 		}
 	}

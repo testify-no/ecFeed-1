@@ -11,7 +11,6 @@
 package com.ecfeed.core.adapter.operations;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -26,14 +25,14 @@ import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.utils.JavaTypeHelper;
 
 public class ParameterOperationSetExpected extends AbstractModelOperation {
-	
+
 	private MethodParameterNode fTarget;
 	private boolean fExpected;
 	private List<TestCaseNode> fOriginalTestCases;
 	private List<ConstraintNode> fOriginalConstraints;
 	private List<ChoiceNode> fOriginalChoices;
 	private String fOriginalDefaultValue;
-	
+
 	private class ReverseOperation extends AbstractModelOperation{
 
 		public ReverseOperation() {
@@ -56,14 +55,14 @@ public class ParameterOperationSetExpected extends AbstractModelOperation {
 		public IModelOperation reverseOperation() {
 			return new ParameterOperationSetExpected(fTarget, fExpected);
 		}
-		
+
 	}
-	
+
 	public ParameterOperationSetExpected(MethodParameterNode target, boolean expected){
 		super(OperationNames.SET_EXPECTED_STATUS);
 		fTarget = target;
 		fExpected = expected;
-		
+
 		MethodNode method = target.getMethod(); 
 		if(method != null){
 			fOriginalTestCases = new ArrayList<TestCaseNode>();
@@ -98,18 +97,18 @@ public class ParameterOperationSetExpected extends AbstractModelOperation {
 				}
 			}
 		}
-		
-		MethodNode method = fTarget.getMethod(); 
-		if(method != null){
+
+		MethodNode methodNode = fTarget.getMethod(); 
+		if(methodNode != null){
 			int index = fTarget.getIndex();
-			ListIterator<TestCaseNode> tcIt = method.getTestCases().listIterator();
+			ListIterator<TestCaseNode> tcIt = methodNode.getTestCases().listIterator();
 			while(tcIt.hasNext()){
 				TestCaseNode testCase = tcIt.next();
 				if(fExpected){
 					ChoiceNode p = new ChoiceNode(Constants.EXPECTED_VALUE_CHOICE_NAME, fTarget.getDefaultValue());
 					p.setParent(fTarget);
 					TestCaseNode newTestCase = testCase.makeClone();
-					newTestCase.setParent(method);
+					newTestCase.setParent(methodNode);
 					newTestCase.getTestData().set(index, p.makeClone());
 					tcIt.set(newTestCase);
 				}
@@ -117,10 +116,11 @@ public class ParameterOperationSetExpected extends AbstractModelOperation {
 					tcIt.remove();
 				}
 			}
-			Iterator<ConstraintNode> cIt = method.getConstraintNodes().iterator();
-			while(cIt.hasNext()){
-				if(cIt.next().mentions(fTarget)){
-					cIt.remove();
+
+			MethodNode.ConstraintsItr constraintItr = methodNode.getIterator();
+			while(methodNode.hasNextConstraint(constraintItr)){
+				if(methodNode.nextConstraint(constraintItr).mentions(fTarget)){
+					methodNode.removeConstraint(constraintItr);
 				}
 			}
 		}
@@ -131,13 +131,13 @@ public class ParameterOperationSetExpected extends AbstractModelOperation {
 	public IModelOperation reverseOperation() {
 		return new ReverseOperation();
 	}
-	
+
 	protected MethodParameterNode getTarget(){
 		return fTarget;
 	}
-	
+
 	protected boolean getExpected(){
 		return fExpected;
 	}
-	
+
 }

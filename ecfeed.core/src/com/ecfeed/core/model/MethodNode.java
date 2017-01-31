@@ -40,6 +40,39 @@ public class MethodNode extends ParametersParentNode {
 		setPropertyDefaultValue(NodePropertyDefs.PropertyId.PROPERTY_MAP_START_URL_TO_PARAM);
 	}
 
+	public static interface ConstraintsItr {
+
+	}
+
+	private static class ConstraintsItrImpl implements ConstraintsItr {
+
+		Iterator<ConstraintNode> fIterator;
+
+		ConstraintsItrImpl(Iterator<ConstraintNode> iterator) {
+			fIterator = iterator;
+		}
+
+	}
+
+	public ConstraintsItr getIterator() {
+		return new ConstraintsItrImpl(fConstraints.iterator());
+	}
+
+	public boolean hasNextConstraint(ConstraintsItr contIterator) {
+
+		return ((ConstraintsItrImpl)contIterator).fIterator.hasNext();
+	}
+
+	public ConstraintNode nextConstraint(ConstraintsItr contIterator) {
+
+		return ((ConstraintsItrImpl)contIterator).fIterator.next();
+	}
+
+	public void removeConstraint(ConstraintsItr contIterator) {
+
+		((ConstraintsItrImpl)contIterator).fIterator.remove();
+	}	
+
 	@Override
 	public String toString(){
 		String result = new String(getName()) + "(";
