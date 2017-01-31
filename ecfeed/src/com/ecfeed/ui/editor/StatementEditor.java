@@ -106,6 +106,10 @@ public class StatementEditor extends Composite {
 		fStatementCombo.setItems(getStatementComboItems(statement));
 		fStatementCombo.setText(statement.getLeftOperandName());
 
+		buildEditor(statement);
+	}
+	
+	private void buildEditor(AbstractStatement statement) {
 		try {
 			statement.accept(new EditorBuilder(fFileInfoProvider));
 		}catch(Exception e) {
@@ -113,7 +117,7 @@ public class StatementEditor extends Composite {
 		}
 	}
 
-	public void setConstraint(ConstraintNode constraintNode) {
+	public void setConstraintNode(ConstraintNode constraintNode) {
 
 		fConstraint = constraintNode;
 		fConstraintIf.setTarget(constraintNode);

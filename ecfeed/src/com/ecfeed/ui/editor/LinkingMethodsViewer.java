@@ -118,12 +118,12 @@ public class LinkingMethodsViewer extends TreeViewerSection {
 	}
 
 	@Override
-	protected IContentProvider viewerContentProvider() {
+	protected IContentProvider createViewerContentProvider() {
 		return new LinkingMethodsContentProvider();
 	}
 
 	@Override
-	protected IBaseLabelProvider viewerLabelProvider() {
+	protected IBaseLabelProvider createViewerLabelProvider() {
 		return new LinkingMethodsLabelProvider();
 	}
 

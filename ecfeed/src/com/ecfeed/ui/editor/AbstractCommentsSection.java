@@ -96,7 +96,7 @@ public abstract class AbstractCommentsSection extends TabFolderSection {
 	}
 
 	@Override
-	protected int buttonsPosition() {
+	protected int getButtonsPosition() {
 		return BUTTONS_BELOW;
 	}
 

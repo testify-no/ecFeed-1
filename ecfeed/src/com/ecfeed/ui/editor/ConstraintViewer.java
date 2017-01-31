@@ -15,7 +15,6 @@ import java.util.List;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -55,8 +54,10 @@ public class ConstraintViewer extends TreeViewerSection {
 
 	public ConstraintViewer(
 			ISectionContext sectionContext, IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider) {
+
 		super(sectionContext, updateContext, fileInfoProvider, STYLE);
 		getSection().setText("Constraint editor");
+
 		fAddStatementButton = addButton("Add statement", new AddStatementAdapter());
 
 		fRemoveStatementButton = 
@@ -72,45 +73,49 @@ public class ConstraintViewer extends TreeViewerSection {
 	}
 
 	@Override
-	protected IContentProvider viewerContentProvider() {
+	protected IContentProvider createViewerContentProvider() {
 		return new StatementViewerContentProvider();
 	}
 
 	@Override
-	protected IBaseLabelProvider viewerLabelProvider() {
+	protected IBaseLabelProvider createViewerLabelProvider() {
 		return new StatementViewerLabelProvider();
 	}
 
 	@Override
-	protected int buttonsPosition(){
+	protected int getButtonsPosition() {
 		return BUTTONS_ASIDE;
 	}
 
 	@Override
-	protected int viewerStyle(){
+	protected int getViewerStyle() {
 		return VIEWER_STYLE;
 	}
 
-	public void setInput(ConstraintNode constraintNode){
+	public void setInput(ConstraintNode constraintNode) {
+
 		//Update the statement provider before setting input to get the correct images
 		fCurrentConstraint = constraintNode.getConstraint();
 		super.setInput(constraintNode.getConstraint());
+
 		fStatementEditor.refreshConditionCombo();
-		fStatementEditor.setConstraint(constraintNode);
+		fStatementEditor.setConstraintNode(constraintNode);
 		fStatementEditor.setInput(fSelectedStatement);
 
 		getTreeViewer().expandAll();
-		if(getSelectedElement() == null){
+		if (getSelectedElement() == null) {
 			getViewer().setSelection(new StructuredSelection(constraintNode.getConstraint().getPremise()));
 		}
 	}
 
-	private class StatementViewerContentProvider extends TreeNodeContentProvider implements ITreeContentProvider {
+	private class StatementViewerContentProvider extends TreeNodeContentProvider {
+
 		public final Object[] EMPTY_ARRAY = {};
 
 		@Override
 		public Object[] getElements(Object inputElement) {
-			if(inputElement instanceof Constraint){
+
+			if (inputElement instanceof Constraint) {
 				Constraint constraint = (Constraint)inputElement;
 				return new Object[]{constraint.getPremise(), constraint.getConsequence()};
 			}
@@ -119,7 +124,8 @@ public class ConstraintViewer extends TreeViewerSection {
 
 		@Override
 		public Object[] getChildren(Object parentElement) {
-			if(parentElement instanceof AbstractStatement){
+
+			if (parentElement instanceof AbstractStatement) {
 				return ((AbstractStatement)parentElement).getChildren().toArray();
 			}
 			return EMPTY_ARRAY;
@@ -127,7 +133,8 @@ public class ConstraintViewer extends TreeViewerSection {
 
 		@Override
 		public Object getParent(Object element) {
-			if(element instanceof AbstractStatement){
+
+			if (element instanceof AbstractStatement) {
 				return ((AbstractStatement)element).getParent();
 			}
 			return null;
@@ -135,7 +142,8 @@ public class ConstraintViewer extends TreeViewerSection {
 
 		@Override
 		public boolean hasChildren(Object element) {
-			if(element instanceof StatementArray){
+
+			if (element instanceof StatementArray) {
 				StatementArray statementArray = (StatementArray)element;
 				List<AbstractStatement> children = statementArray.getChildren();
 				return (children.size() > 0);
@@ -147,23 +155,24 @@ public class ConstraintViewer extends TreeViewerSection {
 	private class StatementViewerLabelProvider extends LabelProvider {
 
 		@Override
-		public String getText(Object element){
-			if(element instanceof StatementArray){
+		public String getText(Object element) {
+			if (element instanceof StatementArray) {
 				return ((StatementArray)element).getOperator().toString();
 			}
-			else if(element instanceof AbstractStatement){
+			else if (element instanceof AbstractStatement) {
 				return ((AbstractStatement)element).toString();
 			}
 			return null;
 		}
 
 		@Override
-		public Image getImage(Object element){
-			if(fCurrentConstraint != null){
-				if(element == fCurrentConstraint.getPremise()){
+		public Image getImage(Object element) {
+
+			if (fCurrentConstraint != null) {
+				if (element == fCurrentConstraint.getPremise()) {
 					return getImage("premise_statement.gif");
 				}
-				else if(element == fCurrentConstraint.getConsequence()){
+				else if (element == fCurrentConstraint.getConsequence()) {
 					return getImage("consequence_statement.gif");
 				}
 			}
@@ -177,10 +186,11 @@ public class ConstraintViewer extends TreeViewerSection {
 
 	private class AddStatementAdapter extends SelectionAdapter{
 		@Override
-		public void widgetSelected(SelectionEvent ev){
+		public void widgetSelected(SelectionEvent ev) {
+
 			try {
 				AbstractStatement statement = fStatementEditor.getStatementIf().addNewStatement();
-				if(statement != null){
+				if (statement != null) {
 					//modelUpdated must be called before to refresh viewer before selecting the newly added statement
 					getTreeViewer().expandToLevel(statement, 1);
 					getTreeViewer().setSelection(new StructuredSelection(statement));
@@ -192,20 +202,22 @@ public class ConstraintViewer extends TreeViewerSection {
 	}
 
 	public class DeleteStatementAction extends ModelModifyingAction {
+
 		public DeleteStatementAction(IModelUpdateContext updateContext) {
 			super(GlobalActions.DELETE.getId(), GlobalActions.DELETE.getDescription(), 
 					getTreeViewer(), ConstraintViewer.this);
 		}
 
 		@Override
-		public boolean isEnabled(){
+		public boolean isEnabled() {
 			return fSelectedStatement.getParent() != null;
 		}
 
 		@Override
-		public void run(){
+		public void run() {
+
 			AbstractStatement parent = fSelectedStatement.getParent();
-			if(parent != null && fStatementEditor.getStatementIf().getParentInterface().removeChild(fSelectedStatement)){
+			if (parent != null && fStatementEditor.getStatementIf().getParentInterface().removeChild(fSelectedStatement)) {
 				getViewer().setSelection(new StructuredSelection(parent));
 			}
 		}
@@ -215,8 +227,10 @@ public class ConstraintViewer extends TreeViewerSection {
 
 		@Override
 		public void selectionChanged(SelectionChangedEvent event) {
+
 			AbstractStatement statement = (AbstractStatement)((StructuredSelection)event.getSelection()).getFirstElement();
-			if(statement != null){
+
+			if (statement != null) {
 				fSelectedStatement = statement;
 				fStatementEditor.setInput(statement);
 				updateSideButtons(statement);
@@ -224,8 +238,10 @@ public class ConstraintViewer extends TreeViewerSection {
 		}
 
 		private void updateSideButtons(AbstractStatement selectedStatement) {
+
 			boolean enableAddStatementButton = (selectedStatement instanceof StatementArray || selectedStatement.getParent() != null);
 			boolean enableRemoveStatementButton = (selectedStatement.getParent() != null);
+
 			fAddStatementButton.setEnabled(enableAddStatementButton);
 			fRemoveStatementButton.setEnabled(enableRemoveStatementButton);
 		}

@@ -37,12 +37,12 @@ public abstract class TableViewerSection extends ViewerSection {
 	}
 
 	@Override
-	protected IContentProvider viewerContentProvider(){
+	protected IContentProvider createViewerContentProvider(){
 		return new ArrayContentProvider();
 	}
 
 	@Override
-	protected IBaseLabelProvider viewerLabelProvider(){
+	protected IBaseLabelProvider createViewerLabelProvider(){
 		return new LabelProvider();
 	}
 

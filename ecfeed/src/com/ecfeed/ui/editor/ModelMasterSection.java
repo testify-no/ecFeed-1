@@ -688,12 +688,12 @@ public class ModelMasterSection extends TreeViewerSection{
 	}
 
 	@Override
-	protected IContentProvider viewerContentProvider() {
+	protected IContentProvider createViewerContentProvider() {
 		return new ModelContentProvider();
 	}
 
 	@Override
-	protected IBaseLabelProvider viewerLabelProvider() {
+	protected IBaseLabelProvider createViewerLabelProvider() {
 		return new DecoratingLabelProvider(new ModelLabelProvider(), new ModelLabelDecorator());
 	}
 

@@ -80,7 +80,7 @@ public class OtherMethodsViewer extends CheckboxTableViewerSection {
 	}
 
 	@Override
-	protected int viewerStyle(){
+	protected int getViewerStyle(){
 		return VIEWER_STYLE;
 	}
 

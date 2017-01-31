@@ -159,7 +159,7 @@ public class TestDataViewer extends TableViewerSection implements ITestDataEdito
 	}
 
 	@Override
-	protected int viewerStyle(){
+	protected int getViewerStyle(){
 		return VIEWER_STYLE;
 	}
 

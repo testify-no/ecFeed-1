@@ -235,12 +235,12 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 
 	@Override
 	//Put buttons next to the viewer instead below
-	protected int buttonsPosition(){
+	protected int getButtonsPosition(){
 		return BUTTONS_ASIDE;
 	}
 
 	@Override
-	protected IContentProvider viewerContentProvider() {
+	protected IContentProvider createViewerContentProvider() {
 		if(fContentProvider == null){
 			fContentProvider = new TestCasesViewerContentProvider();
 		}
@@ -248,7 +248,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	}
 
 	@Override
-	protected IBaseLabelProvider viewerLabelProvider() {
+	protected IBaseLabelProvider createViewerLabelProvider() {
 		if(fLabelProvider == null){
 			IFileInfoProvider fileInfoProvider = getFileInfoProvider();
 			fLabelProvider = new TestCasesViewerLabelProvider(fileInfoProvider);
@@ -257,7 +257,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	}
 
 	@Override
-	protected int viewerStyle(){
+	protected int getViewerStyle(){
 		return VIEWER_STYLE;
 	}
 

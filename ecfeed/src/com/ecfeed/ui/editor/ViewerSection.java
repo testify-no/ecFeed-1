@@ -353,9 +353,9 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 	}
 
 	protected void createViewer() {
-		fViewer = createViewer(getMainControlComposite(), viewerStyle());
-		fViewer.setContentProvider(viewerContentProvider());
-		fViewer.setLabelProvider(viewerLabelProvider());
+		fViewer = createViewer(getMainControlComposite(), getViewerStyle());
+		fViewer.setContentProvider(createViewerContentProvider());
+		fViewer.setLabelProvider(createViewerLabelProvider());
 		createViewerColumns();
 
 		fViewer.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -367,7 +367,7 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 		});
 	}
 
-	protected int viewerStyle(){
+	protected int getViewerStyle(){
 		return VIEWER_STYLE;
 	}
 
@@ -472,6 +472,6 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 
 	protected abstract void createViewerColumns();
 	protected abstract StructuredViewer createViewer(Composite viewerComposite, int style);
-	protected abstract IContentProvider viewerContentProvider();
-	protected abstract IBaseLabelProvider viewerLabelProvider();
+	protected abstract IContentProvider createViewerContentProvider();
+	protected abstract IBaseLabelProvider createViewerLabelProvider();
 }
