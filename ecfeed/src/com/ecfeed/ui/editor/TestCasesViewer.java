@@ -272,7 +272,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 			return false;
 		}
 
-		MethodNode methodNode = fMethodIf.getTarget();
+		MethodNode methodNode = fMethodIf.getOwnRootNode();
 		if (SeleniumHelper.isSeleniumRunnerMethod(methodNode)) {
 			return true;
 		}

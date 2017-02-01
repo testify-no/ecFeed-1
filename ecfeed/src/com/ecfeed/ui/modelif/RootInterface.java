@@ -36,8 +36,8 @@ public class RootInterface extends GlobalParametersParentInterface {
 	}
 
 	@Override
-	public RootNode getTarget() {
-		return (RootNode)super.getTarget();
+	public RootNode getOwnRootNode() {
+		return (RootNode)super.getOwnRootNode();
 	}
 
 	public ClassNode addNewClass(){
@@ -46,7 +46,7 @@ public class RootInterface extends GlobalParametersParentInterface {
 
 	public ClassNode addNewClass(String className){
 		ClassNode addedClass = new ClassNode(className);
-		if(execute(new RootOperationAddNewClass(getTarget(), addedClass, getTarget().getClasses().size()), Messages.DIALOG_ADD_NEW_CLASS_PROBLEM_TITLE)){
+		if(execute(new RootOperationAddNewClass(getOwnRootNode(), addedClass, getOwnRootNode().getClasses().size()), Messages.DIALOG_ADD_NEW_CLASS_PROBLEM_TITLE)){
 			return addedClass;
 		}
 		return null;
@@ -63,7 +63,7 @@ public class RootInterface extends GlobalParametersParentInterface {
 				ClassNode classModel;
 				try {
 					classModel = new EclipseModelBuilder().buildClassModel(selectedClass, testOnly);
-					if(execute(new RootOperationAddNewClass(getTarget(), classModel, getTarget().getClasses().size()), Messages.DIALOG_ADD_NEW_CLASS_PROBLEM_TITLE)){
+					if(execute(new RootOperationAddNewClass(getOwnRootNode(), classModel, getOwnRootNode().getClasses().size()), Messages.DIALOG_ADD_NEW_CLASS_PROBLEM_TITLE)){
 						return classModel;
 					}
 				} catch (ModelOperationException e) {
@@ -86,15 +86,15 @@ public class RootInterface extends GlobalParametersParentInterface {
 	}
 
 	public boolean addClasses(Collection<ClassNode> classes) {
-		IModelOperation operation = new RootOperationAddClasses(getTarget(), classes, getTarget().getClasses().size());
+		IModelOperation operation = new RootOperationAddClasses(getOwnRootNode(), classes, getOwnRootNode().getClasses().size());
 		return execute(operation, Messages.DIALOG_ADD_METHODS_PROBLEM_TITLE);
 	}
 
 	private String generateClassName() {
 		String className = Constants.DEFAULT_NEW_PACKAGE_NAME + "." + Constants.DEFAULT_NEW_CLASS_NAME;
-		if(getTarget().getClassModel(className) != null){
+		if(getOwnRootNode().getClassModel(className) != null){
 			int i = 0;
-			while(getTarget().getClassModel(className + String.valueOf(i)) != null){
+			while(getOwnRootNode().getClassModel(className + String.valueOf(i)) != null){
 				i++;
 			}
 			className = className + String.valueOf(i);

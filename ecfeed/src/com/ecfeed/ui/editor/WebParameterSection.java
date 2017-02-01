@@ -73,7 +73,7 @@ public class WebParameterSection extends BasicSection {
 	}
 
 	private void createControls(Composite gridComposite) {
-		fMethodParameterNode = (MethodParameterNode)fAbstractParameterInterface.getTarget();
+		fMethodParameterNode = (MethodParameterNode)fAbstractParameterInterface.getOwnRootNode();
 
 		//
 		fFormObjectToolkit.createLabel(fGridComposite, "Element type");
@@ -109,7 +109,7 @@ public class WebParameterSection extends BasicSection {
 
 	public void refresh() {
 
-		fMethodParameterNode = (MethodParameterNode)fAbstractParameterInterface.getTarget();
+		fMethodParameterNode = (MethodParameterNode)fAbstractParameterInterface.getOwnRootNode();
 		String parameterType = fMethodParameterNode.getType();
 		String webElementType = getWebElementValue(parameterType);
 

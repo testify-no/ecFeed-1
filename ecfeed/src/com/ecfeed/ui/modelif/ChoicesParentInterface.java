@@ -37,7 +37,7 @@ public class ChoicesParentInterface extends AbstractNodeInterface {
 	}
 
 	public AbstractParameterNode getParameter() {
-		return getTarget().getParameter();
+		return getOwnRootNode().getParameter();
 	}
 
 	public ChoiceNode addNewChoice() {
@@ -51,18 +51,18 @@ public class ChoicesParentInterface extends AbstractNodeInterface {
 	}
 
 	public boolean addChoice(ChoiceNode newChoice) {
-		IModelOperation operation = new GenericOperationAddChoice(getTarget(), newChoice, new EclipseTypeAdapterProvider(), getTarget().getChoices().size(), true);
+		IModelOperation operation = new GenericOperationAddChoice(getOwnRootNode(), newChoice, new EclipseTypeAdapterProvider(), getOwnRootNode().getChoices().size(), true);
 		return execute(operation, Messages.DIALOG_ADD_CHOICE_PROBLEM_TITLE);
 	}
 
 	public boolean removeChoice(ChoiceNode choice) {
-		IModelOperation operation = new GenericOperationRemoveChoice(getTarget(), choice, getAdapterProvider(), true);
+		IModelOperation operation = new GenericOperationRemoveChoice(getOwnRootNode(), choice, getAdapterProvider(), true);
 		return execute(operation, Messages.DIALOG_REMOVE_CHOICE_TITLE);
 	}
 
 	public boolean removeChoices(Collection<ChoiceNode> choices) {
 		boolean displayWarning = false;
-		for(MethodNode method : getTarget().getParameter().getMethods()){
+		for(MethodNode method : getOwnRootNode().getParameter().getMethods()){
 			for(ChoiceNode p : choices){
 				if(method.mentioningConstraints(p).size() > 0 || method.mentioningTestCases(p).size() > 0){
 					displayWarning = true;
@@ -80,7 +80,7 @@ public class ChoicesParentInterface extends AbstractNodeInterface {
 	}
 
 	public boolean isPrimitive() {
-		return AbstractParameterInterface.isPrimitive(getTarget().getParameter().getType());
+		return AbstractParameterInterface.isPrimitive(getOwnRootNode().getParameter().getType());
 	}
 
 	public boolean isUserType() {
@@ -88,7 +88,7 @@ public class ChoicesParentInterface extends AbstractNodeInterface {
 	}
 
 	public List<String> getSpecialValues() {
-		return new EclipseModelBuilder().getSpecialValues(getTarget().getParameter().getType());
+		return new EclipseModelBuilder().getSpecialValues(getOwnRootNode().getParameter().getType());
 	}
 
 	public boolean hasLimitedValuesSet() {
@@ -96,21 +96,21 @@ public class ChoicesParentInterface extends AbstractNodeInterface {
 	}
 
 	public  boolean isBoolean() {
-		return AbstractParameterInterface.isBoolean(getTarget().getParameter().getType());
+		return AbstractParameterInterface.isBoolean(getOwnRootNode().getParameter().getType());
 	}
 
 	@Override
-	public ChoicesParentNode getTarget(){
-		return (ChoicesParentNode)super.getTarget();
+	public ChoicesParentNode getOwnRootNode(){
+		return (ChoicesParentNode)super.getOwnRootNode();
 	}
 
 	protected String generateNewChoiceValue() {
 		EclipseModelBuilder builder = new EclipseModelBuilder();
-		String type = getTarget().getParameter().getType();
+		String type = getOwnRootNode().getParameter().getType();
 		String value = builder.getDefaultExpectedValue(type);
 		if(isPrimitive() == false && builder.getSpecialValues(type).size() == 0){
 			int i = 0;
-			while(getTarget().getLeafChoiceValues().contains(value)){
+			while(getOwnRootNode().getLeafChoiceValues().contains(value)){
 				value = builder.getDefaultExpectedValue(type) + i++;
 			}
 		}
@@ -122,7 +122,7 @@ public class ChoicesParentInterface extends AbstractNodeInterface {
 		int i = 0;
 
 		ArrayList<String> choiceNames = new ArrayList<>();
-		for(ChoiceNode choice: getTarget().getChoices()){
+		for(ChoiceNode choice: getOwnRootNode().getChoices()){
 			choiceNames.add(choice.getName());
 		}
 

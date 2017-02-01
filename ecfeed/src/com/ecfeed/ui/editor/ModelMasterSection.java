@@ -568,7 +568,7 @@ public class ModelMasterSection extends TreeViewerSection{
 		}
 
 		private boolean isActionExecutable(MethodInterface methodInterface) {
-			MethodNode methodNode = methodInterface.getTarget();
+			MethodNode methodNode = methodInterface.getOwnRootNode();
 
 			if (SeleniumHelper.isSeleniumRunnerMethod(methodNode)) {
 				return true;

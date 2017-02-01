@@ -59,11 +59,11 @@ public class ClassInterface extends GlobalParametersParentInterface {
 	}
 
 	public String getQualifiedName(){
-		return getQualifiedName(getTarget());
+		return getQualifiedName(getOwnRootNode());
 	}
 
 	public String getLocalName(){
-		return getLocalName(getTarget());
+		return getLocalName(getOwnRootNode());
 	}
 
 	public static String getLocalName(ClassNode classNode){
@@ -75,15 +75,15 @@ public class ClassInterface extends GlobalParametersParentInterface {
 	}
 
 	public String getPackageName(){
-		return getPackageName(getTarget());
+		return getPackageName(getOwnRootNode());
 	}
 
 	public boolean getRunOnAndroid(){
-		return getTarget().getRunOnAndroid();
+		return getOwnRootNode().getRunOnAndroid();
 	}
 
 	public String getAndroidBaseRunner(){
-		return getTarget().getAndroidRunner();
+		return getOwnRootNode().getAndroidRunner();
 	}
 
 	@Override
@@ -104,14 +104,14 @@ public class ClassInterface extends GlobalParametersParentInterface {
 		}
 
 		if(getFileInfoProvider().isProjectAvailable() && 
-				getImplementationStatus(getTarget()) != EImplementationStatus.NOT_IMPLEMENTED){
+				getImplementationStatus(getOwnRootNode()) != EImplementationStatus.NOT_IMPLEMENTED){
 			if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(),
 					Messages.DIALOG_RENAME_IMPLEMENTED_CLASS_TITLE,
 					Messages.DIALOG_RENAME_IMPLEMENTED_CLASS_MESSAGE) == false){
 				return false;
 			}
 		}
-		return execute(FactoryRenameOperation.getRenameOperation(getTarget(), newName), Messages.DIALOG_RENAME_CLASS_PROBLEM_TITLE);
+		return execute(FactoryRenameOperation.getRenameOperation(getOwnRootNode(), newName), Messages.DIALOG_RENAME_CLASS_PROBLEM_TITLE);
 	}
 
 	public boolean setLocalName(String newLocalName){
@@ -125,19 +125,19 @@ public class ClassInterface extends GlobalParametersParentInterface {
 	}
 
 	public boolean setRunOnAndroid(boolean runOnAndroid) {
-		if(getImplementationStatus(getTarget()) != EImplementationStatus.NOT_IMPLEMENTED){
+		if(getImplementationStatus(getOwnRootNode()) != EImplementationStatus.NOT_IMPLEMENTED){
 			if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(),
 					Messages.DIALOG_RENAME_RUN_ON_ANDROID_TITLE,
 					Messages.DIALOG_RENAME_RUN_ON_ANDROID_MESSAGE) == false){
 				return false;
 			}
 		}
-		IModelOperation operation = new ClassOperationSetRunOnAndroid(getTarget(), runOnAndroid);
+		IModelOperation operation = new ClassOperationSetRunOnAndroid(getOwnRootNode(), runOnAndroid);
 		return execute(operation, Messages.DIALOG_ANDROID_RUNNER_SET_PROBLEM_TITLE);
 	}
 
 	public boolean setAndroidBaseRunner(String androidBaseRunner) {
-		IModelOperation operation = new ClassOperationSetAndroidBaseRunner(getTarget(), androidBaseRunner);
+		IModelOperation operation = new ClassOperationSetAndroidBaseRunner(getOwnRootNode(), androidBaseRunner);
 		return execute(operation, Messages.DIALOG_ANDROID_RUNNER_SET_PROBLEM_TITLE);
 	}
 
@@ -154,12 +154,12 @@ public class ClassInterface extends GlobalParametersParentInterface {
 	}
 
 	public boolean addMethods(Collection<MethodNode> methods){
-		IModelOperation operation = new ClassOperationAddMethods(getTarget(), methods, getTarget().getMethods().size());
+		IModelOperation operation = new ClassOperationAddMethods(getOwnRootNode(), methods, getOwnRootNode().getMethods().size());
 		return execute(operation, Messages.DIALOG_ADD_METHODS_PROBLEM_TITLE);
 	}
 
 	public boolean addMethod(MethodNode method){
-		IModelOperation operation = new ClassOperationAddMethod(getTarget(), method, getTarget().getMethods().size());
+		IModelOperation operation = new ClassOperationAddMethod(getOwnRootNode(), method, getOwnRootNode().getMethods().size());
 		return execute(operation, Messages.DIALOG_ADD_METHOD_PROBLEM_TITLE);
 	}
 
@@ -167,7 +167,7 @@ public class ClassInterface extends GlobalParametersParentInterface {
 		if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(),
 				Messages.DIALOG_REMOVE_METHOD_TITLE,
 				Messages.DIALOG_REMOVE_METHOD_MESSAGE)){
-			IModelOperation operation = new ClassOperationRemoveMethod(getTarget(), method);
+			IModelOperation operation = new ClassOperationRemoveMethod(getOwnRootNode(), method);
 			return execute(operation, Messages.DIALOG_REMOVE_METHOD_PROBLEM_TITLE);
 		}
 		return false;
@@ -204,7 +204,7 @@ public class ClassInterface extends GlobalParametersParentInterface {
 
 
 	public List<MethodNode> getOtherMethods(){
-		return getOtherMethods(getTarget());
+		return getOtherMethods(getOwnRootNode());
 	}
 
 	public void reassignClass() {
@@ -236,14 +236,14 @@ public class ClassInterface extends GlobalParametersParentInterface {
 	}
 
 	@Override
-	public ClassNode getTarget(){
-		return (ClassNode)super.getTarget();
+	public ClassNode getOwnRootNode(){
+		return (ClassNode)super.getOwnRootNode();
 	}
 
 	private String generateNewMethodName() {
 		String name = Constants.DEFAULT_NEW_METHOD_NAME;
 		int i = 0;
-		while(getTarget().getMethod(name, new ArrayList<String>()) != null){
+		while(getOwnRootNode().getMethod(name, new ArrayList<String>()) != null){
 			name = Constants.DEFAULT_NEW_METHOD_NAME + i++;
 		}
 		return name;

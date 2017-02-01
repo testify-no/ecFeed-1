@@ -47,25 +47,25 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 	}
 
 	public String getType() {
-		return getTarget().getType();
+		return getOwnRootNode().getType();
 	}
 
 	public String getTypeComments() {
-		return getTarget().getTypeComments() != null ? getTarget().getTypeComments() : "";
+		return getOwnRootNode().getTypeComments() != null ? getOwnRootNode().getTypeComments() : "";
 	}
 
 	public boolean editTypeComments() {
 		TextAreaDialog dialog = new TextAreaDialog(Display.getCurrent().getActiveShell(),
 				Messages.DIALOG_EDIT_COMMENTS_TITLE, Messages.DIALOG_EDIT_COMMENTS_MESSAGE, getTypeComments());
 		if(dialog.open() == IDialogConstants.OK_ID){
-			return execute(new ParameterSetTypeCommentsOperation(getTarget(), dialog.getText()), Messages.DIALOG_SET_COMMENTS_PROBLEM_TITLE);
+			return execute(new ParameterSetTypeCommentsOperation(getOwnRootNode(), dialog.getText()), Messages.DIALOG_SET_COMMENTS_PROBLEM_TITLE);
 		}
 		return false;
 	}
 
 	public boolean setTypeComments(String comments){
-		if(comments != null && comments.equals(getTarget().getTypeComments()) == false){
-			return execute(new ParameterSetTypeCommentsOperation(getTarget(), comments), Messages.DIALOG_EDIT_COMMENTS_TITLE);
+		if(comments != null && comments.equals(getOwnRootNode().getTypeComments()) == false){
+			return execute(new ParameterSetTypeCommentsOperation(getOwnRootNode(), comments), Messages.DIALOG_EDIT_COMMENTS_TITLE);
 		}
 		return false;
 	}
@@ -83,9 +83,9 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 	}
 
 	public boolean resetChoicesToDefault(){
-		String type = getTarget().getType();
+		String type = getOwnRootNode().getType();
 		List<ChoiceNode> defaultChoices = new EclipseModelBuilder().defaultChoices(type);
-		IModelOperation operation = new ReplaceChoicesOperation(getTarget(), defaultChoices, getAdapterProvider());
+		IModelOperation operation = new ReplaceChoicesOperation(getOwnRootNode(), defaultChoices, getAdapterProvider());
 		return execute(operation, Messages.DIALOG_RESET_CHOICES_PROBLEM_TITLE);
 	}
 
@@ -119,7 +119,7 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 
 	@Override
 	public boolean goToImplementationEnabled(){
-		if(JavaTypeHelper.isUserType(getTarget().getType()) == false){
+		if(JavaTypeHelper.isUserType(getOwnRootNode().getType()) == false){
 			return false;
 		}
 		return super.goToImplementationEnabled();
@@ -127,7 +127,7 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 
 	@Override
 	public void goToImplementation(){
-		if(JavaTypeHelper.isUserType(getTarget().getType())){
+		if(JavaTypeHelper.isUserType(getOwnRootNode().getType())){
 			IType type = JavaModelAnalyser.getIType(getType());
 			if(type != null){
 				try {
@@ -138,23 +138,23 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 	}
 
 	public boolean setType(String newType) {
-		if(newType.equals(getTarget().getType())){
+		if(newType.equals(getOwnRootNode().getType())){
 			return false;
 		}
 		return execute(setTypeOperation(newType), Messages.DIALOG_SET_PARAMETER_TYPE_PROBLEM_TITLE);
 	}
 
 	@Override
-	public AbstractParameterNode getTarget(){
-		return (AbstractParameterNode)super.getTarget();
+	public AbstractParameterNode getOwnRootNode(){
+		return (AbstractParameterNode)super.getOwnRootNode();
 	}
 
 	protected IModelOperation setTypeOperation(String type) {
-		return new AbstractParameterOperationSetType(getTarget(), type, getAdapterProvider());
+		return new AbstractParameterOperationSetType(getOwnRootNode(), type, getAdapterProvider());
 	}
 
 	public boolean importTypeJavadocComments() {
-		return setTypeComments(JavaDocSupport.importTypeJavadoc(getTarget()));
+		return setTypeComments(JavaDocSupport.importTypeJavadoc(getOwnRootNode()));
 	}
 
 	public void importFullTypeJavadocComments() {
@@ -164,9 +164,9 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 
 	protected List<IModelOperation> getFullTypeImportOperations(){
 		List<IModelOperation> result = new ArrayList<IModelOperation>();
-		String typeJavadoc = JavaDocSupport.importTypeJavadoc(getTarget());
-		result.add(new ParameterSetTypeCommentsOperation(getTarget(), typeJavadoc));
-		for(ChoiceNode choice : getTarget().getChoices()){
+		String typeJavadoc = JavaDocSupport.importTypeJavadoc(getOwnRootNode());
+		result.add(new ParameterSetTypeCommentsOperation(getOwnRootNode(), typeJavadoc));
+		for(ChoiceNode choice : getOwnRootNode().getChoices()){
 			AbstractNodeInterface nodeIf = 
 					NodeInterfaceFactory.getNodeInterface(choice, getUpdateContext(), fFileInfoProvider);
 			result.addAll(nodeIf.getImportAllJavadocCommentsOperations());
@@ -175,12 +175,12 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 	}
 
 	public void exportTypeJavadocComments() {
-		JavaDocSupport.exportTypeJavadoc(getTarget());
+		JavaDocSupport.exportTypeJavadoc(getOwnRootNode());
 	}
 
 	public void exportFullTypeJavadocComments() {
 		exportTypeJavadocComments();
-		for(ChoiceNode choice : getTarget().getChoices()){
+		for(ChoiceNode choice : getOwnRootNode().getChoices()){
 			ChoiceInterface choiceIf = 
 					(ChoiceInterface)NodeInterfaceFactory.getNodeInterface(
 							choice, getUpdateContext(), fFileInfoProvider);
@@ -191,9 +191,9 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 	@Override
 	protected List<IModelOperation> getImportAllJavadocCommentsOperations(){
 		List<IModelOperation> result = super.getImportAllJavadocCommentsOperations();
-		String typeJavadoc = JavaDocSupport.importTypeJavadoc(getTarget());
+		String typeJavadoc = JavaDocSupport.importTypeJavadoc(getOwnRootNode());
 		if(typeJavadoc != null && typeJavadoc.equals(getTypeComments()) == false && importTypeCommentsEnabled()){
-			result.add(new ParameterSetTypeCommentsOperation(getTarget(), typeJavadoc));
+			result.add(new ParameterSetTypeCommentsOperation(getOwnRootNode(), typeJavadoc));
 		}
 		return result;
 	}

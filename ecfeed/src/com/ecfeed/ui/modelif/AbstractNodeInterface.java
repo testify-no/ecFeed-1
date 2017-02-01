@@ -247,7 +247,7 @@ public class AbstractNodeInterface extends OperationExecuter{
 		return fAdapterProvider;
 	}
 
-	public AbstractNode getTarget(){
+	public AbstractNode getOwnRootNode(){
 		return fTarget;
 	}
 
@@ -260,7 +260,7 @@ public class AbstractNodeInterface extends OperationExecuter{
 	}
 
 	public boolean importJavadocComments() {
-		String comments = JavaDocSupport.importJavadoc(getTarget());
+		String comments = JavaDocSupport.importJavadoc(getOwnRootNode());
 		if(comments != null){
 			return setComments(comments);
 		}
@@ -268,7 +268,7 @@ public class AbstractNodeInterface extends OperationExecuter{
 	}
 
 	public void exportCommentsToJavadoc(String comments) {
-		JavaDocSupport.exportJavadoc(getTarget());
+		JavaDocSupport.exportJavadoc(getOwnRootNode());
 	}
 
 	public boolean importAllJavadocComments() {
@@ -282,7 +282,7 @@ public class AbstractNodeInterface extends OperationExecuter{
 
 	public boolean exportAllComments() {
 		exportCommentsToJavadoc(getComments());
-		for(AbstractNode child : getTarget().getChildren()){
+		for(AbstractNode child : getOwnRootNode().getChildren()){
 			AbstractNodeInterface nodeIf = 
 					NodeInterfaceFactory.getNodeInterface(child, getUpdateContext(), fFileInfoProvider);
 			nodeIf.exportAllComments();
@@ -292,11 +292,11 @@ public class AbstractNodeInterface extends OperationExecuter{
 
 	protected List<IModelOperation> getImportAllJavadocCommentsOperations(){
 		List<IModelOperation> result = new ArrayList<IModelOperation>();
-		String javadoc = JavaDocSupport.importJavadoc(getTarget());
+		String javadoc = JavaDocSupport.importJavadoc(getOwnRootNode());
 		if(javadoc != null && getComments() != javadoc){
 			result.add(new GenericSetCommentsOperation(fTarget, javadoc));
 		}
-		for(AbstractNode child : getTarget().getChildren()){
+		for(AbstractNode child : getOwnRootNode().getChildren()){
 			AbstractNodeInterface childIf = 
 					NodeInterfaceFactory.getNodeInterface(child, getUpdateContext(), fFileInfoProvider);
 			result.addAll(childIf.getImportAllJavadocCommentsOperations());

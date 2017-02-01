@@ -151,7 +151,7 @@ public class TestDataViewer extends TableViewerSection implements ITestDataEdito
 	}
 
 	private List<ChoiceNode> getOriginalChoices(int index) {
-		TestCaseNode testCase = fTestCaseIf.getTarget();
+		TestCaseNode testCase = fTestCaseIf.getOwnRootNode();
 		MethodNode method = testCase.getMethod();
 		List<AbstractParameterNode> parameters = method.getParameters();
 		AbstractParameterNode parameter = parameters.get(index);
