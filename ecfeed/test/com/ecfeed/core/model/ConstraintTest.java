@@ -20,7 +20,7 @@ import org.junit.Test;
 
 import com.ecfeed.core.model.AbstractStatement;
 import com.ecfeed.core.model.ChoiceNode;
-import com.ecfeed.core.model.ChoicesParentStatement;
+import com.ecfeed.core.model.RelationStatement;
 import com.ecfeed.core.model.Constraint;
 import com.ecfeed.core.model.EStatementRelation;
 import com.ecfeed.core.model.MethodParameterNode;
@@ -69,7 +69,7 @@ public class ConstraintTest {
 		MethodParameterNode parameter = new MethodParameterNode("parameter", "type", "0", false);
 		parameter.addChoice(choice);
 
-		AbstractStatement mentioningStatement = new ChoicesParentStatement(parameter, EStatementRelation.EQUAL, choice);
+		AbstractStatement mentioningStatement = new RelationStatement(parameter, EStatementRelation.EQUAL, choice);
 		AbstractStatement notMentioningStatement = new StaticStatement(false);
 		
 		assertTrue(new Constraint(mentioningStatement, notMentioningStatement).mentions(parameter));

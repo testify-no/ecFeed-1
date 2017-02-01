@@ -23,7 +23,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.ecfeed.core.model.ChoiceNode;
-import com.ecfeed.core.model.ChoicesParentStatement;
+import com.ecfeed.core.model.RelationStatement;
 import com.ecfeed.core.model.EStatementRelation;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
@@ -86,7 +86,7 @@ public class ChoiceStatementTest {
 
 	@Test
 	public void equalsTest(){
-		ChoicesParentStatement statement = new ChoicesParentStatement(fParameter, EStatementRelation.EQUAL, fP22);
+		RelationStatement statement = new RelationStatement(fParameter, EStatementRelation.EQUAL, fP22);
 
 		assertTrue(statement.evaluate(Arrays.asList(new ChoiceNode[]{fP221})));
 		assertTrue(statement.evaluate(Arrays.asList(new ChoiceNode[]{fP222})));
@@ -101,7 +101,7 @@ public class ChoiceStatementTest {
 
 	@Test 
 	public void notEqualsTest(){
-		ChoicesParentStatement statement = new ChoicesParentStatement(fParameter, EStatementRelation.NOT_EQUAL, fP22);
+		RelationStatement statement = new RelationStatement(fParameter, EStatementRelation.NOT_EQUAL, fP22);
 
 		assertFalse(statement.evaluate(Arrays.asList(new ChoiceNode[]{fP221})));
 		assertFalse(statement.evaluate(Arrays.asList(new ChoiceNode[]{fP222})));
@@ -138,12 +138,12 @@ public class ChoiceStatementTest {
 	@Test
 	public void testEvaluate() {
 
-		ChoicesParentStatement statement1 = new ChoicesParentStatement(fParameter, EStatementRelation.EQUAL, fChoice2);
+		RelationStatement statement1 = new RelationStatement(fParameter, EStatementRelation.EQUAL, fChoice2);
 		assertFalse(statement1.evaluate(fList1));
 		assertTrue(statement1.evaluate(fList2));
 		assertFalse(statement1.evaluate(fList3));
 
-		ChoicesParentStatement statement4 = new ChoicesParentStatement(fParameter, EStatementRelation.NOT_EQUAL, fChoice2);
+		RelationStatement statement4 = new RelationStatement(fParameter, EStatementRelation.NOT_EQUAL, fChoice2);
 		assertTrue(statement4.evaluate(fList1));
 		assertFalse(statement4.evaluate(fList2));
 		assertTrue(statement4.evaluate(fList3));
@@ -151,14 +151,14 @@ public class ChoiceStatementTest {
 
 	@Test
 	public void testMentionsChoiceNode() {
-		ChoicesParentStatement statement = new ChoicesParentStatement(fParameter, EStatementRelation.EQUAL, fChoice2);
+		RelationStatement statement = new RelationStatement(fParameter, EStatementRelation.EQUAL, fChoice2);
 		assertTrue(statement.mentions(fChoice2));
 		assertFalse(statement.mentions(fChoice1));
 	}
 
 	@Test
 	public void testMentionsParameterNode() {
-		ChoicesParentStatement statement = new ChoicesParentStatement(fParameter, EStatementRelation.EQUAL, fChoice2);
+		RelationStatement statement = new RelationStatement(fParameter, EStatementRelation.EQUAL, fChoice2);
 		MethodParameterNode parameter = new MethodParameterNode("name", "type", "0", false);
 		assertTrue(statement.mentions(fParameter));
 		assertFalse(statement.mentions(parameter));
@@ -166,13 +166,13 @@ public class ChoiceStatementTest {
 
 	@Test
 	public void testGetCondition() {
-		ChoicesParentStatement statement = new ChoicesParentStatement(fParameter, EStatementRelation.EQUAL, fChoice2);
+		RelationStatement statement = new RelationStatement(fParameter, EStatementRelation.EQUAL, fChoice2);
 		assertEquals(fChoice2, statement.getConditionValue());
 	}
 
 	@Test
 	public void testGetRelation() {
-		ChoicesParentStatement statement = new ChoicesParentStatement(fParameter, EStatementRelation.EQUAL, fChoice2);
+		RelationStatement statement = new RelationStatement(fParameter, EStatementRelation.EQUAL, fChoice2);
 		assertEquals(EStatementRelation.EQUAL, statement.getRelation());
 	}
 
@@ -184,8 +184,8 @@ public class ChoiceStatementTest {
 		ChoiceNode p1 = new ChoiceNode("name", "value");
 		ChoiceNode p2 = new ChoiceNode("name", "value");
 
-		ChoicesParentStatement s1 = new ChoicesParentStatement(c1, EStatementRelation.NOT_EQUAL, p1);
-		ChoicesParentStatement s2 = new ChoicesParentStatement(c2, EStatementRelation.NOT_EQUAL, p2);
+		RelationStatement s1 = new RelationStatement(c1, EStatementRelation.NOT_EQUAL, p1);
+		RelationStatement s2 = new RelationStatement(c2, EStatementRelation.NOT_EQUAL, p2);
 
 		assertTrue(s1.compare(s2));
 		c1.setName("c1");

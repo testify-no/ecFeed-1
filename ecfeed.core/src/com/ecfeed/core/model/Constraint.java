@@ -15,9 +15,9 @@ import java.util.List;
 import java.util.Set;
 
 import com.ecfeed.core.generators.api.IConstraint;
-import com.ecfeed.core.model.ChoicesParentStatement.ChoiceCondition;
-import com.ecfeed.core.model.ChoicesParentStatement.LabelCondition;
-import com.ecfeed.core.model.ChoicesParentStatement.ParameterCondition;
+import com.ecfeed.core.model.RelationStatement.ChoiceCondition;
+import com.ecfeed.core.model.RelationStatement.LabelCondition;
+import com.ecfeed.core.model.RelationStatement.ParameterCondition;
 
 public class Constraint implements IConstraint<ChoiceNode> {
 
@@ -247,7 +247,7 @@ public class Constraint implements IConstraint<ChoiceNode> {
 		}
 
 		@Override
-		public Object visit(ChoicesParentStatement statement) throws Exception {
+		public Object visit(RelationStatement statement) throws Exception {
 
 			return statement.getCondition().accept(this);
 		}
@@ -305,7 +305,7 @@ public class Constraint implements IConstraint<ChoiceNode> {
 		}
 
 		@Override
-		public Object visit(ChoicesParentStatement statement) throws Exception {
+		public Object visit(RelationStatement statement) throws Exception {
 
 			return statement.getCondition().accept(this);
 		}
@@ -372,7 +372,7 @@ public class Constraint implements IConstraint<ChoiceNode> {
 		}
 
 		@Override
-		public Object visit(ChoicesParentStatement statement) throws Exception {
+		public Object visit(RelationStatement statement) throws Exception {
 
 			if (fParameter == statement.getParameter()) {
 				return statement.getCondition().accept(this);

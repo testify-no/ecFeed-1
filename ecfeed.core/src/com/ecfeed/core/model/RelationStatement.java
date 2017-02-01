@@ -16,7 +16,7 @@ import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.SystemLogger;
 
-public class ChoicesParentStatement extends AbstractStatement implements IRelationalStatement{
+public class RelationStatement extends AbstractStatement implements IRelationalStatement{
 
 	private MethodParameterNode fParameter;
 	private EStatementRelation fRelation;
@@ -32,7 +32,7 @@ public class ChoicesParentStatement extends AbstractStatement implements IRelati
 		public Object accept(IStatementVisitor visitor) throws Exception;
 	}
 
-	public ChoicesParentStatement(
+	public RelationStatement(
 			MethodParameterNode parameter, EStatementRelation relation, String labelCondition) {
 
 		fParameter = parameter;
@@ -40,7 +40,7 @@ public class ChoicesParentStatement extends AbstractStatement implements IRelati
 		fCondition = new LabelCondition(labelCondition);
 	}
 
-	public ChoicesParentStatement(
+	public RelationStatement(
 			MethodParameterNode parameter, EStatementRelation relation, ChoiceNode choiceCondition) {
 
 		fParameter = parameter;
@@ -48,7 +48,7 @@ public class ChoicesParentStatement extends AbstractStatement implements IRelati
 		fCondition = new ChoiceCondition(choiceCondition);
 	}
 
-	private ChoicesParentStatement(
+	private RelationStatement(
 			MethodParameterNode parameter, EStatementRelation relation, ICondition condition) {
 
 		fParameter = parameter;
@@ -99,9 +99,9 @@ public class ChoicesParentStatement extends AbstractStatement implements IRelati
 	}
 
 	@Override
-	public ChoicesParentStatement getCopy() {
+	public RelationStatement getCopy() {
 
-		return new ChoicesParentStatement(fParameter, fRelation, fCondition.getCopy());
+		return new RelationStatement(fParameter, fRelation, fCondition.getCopy());
 	}
 
 	@Override
@@ -122,11 +122,11 @@ public class ChoicesParentStatement extends AbstractStatement implements IRelati
 	@Override
 	public boolean compare(IStatement statement) {
 
-		if(statement instanceof ChoicesParentStatement == false){
+		if(statement instanceof RelationStatement == false){
 			return false;
 		}
 
-		ChoicesParentStatement compared = (ChoicesParentStatement)statement;
+		RelationStatement compared = (RelationStatement)statement;
 
 		if(getParameter().getName().equals(compared.getParameter().getName()) == false) {
 			return false;

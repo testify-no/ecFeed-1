@@ -43,7 +43,7 @@ import com.ecfeed.core.adapter.java.JavaPrimitiveTypePredicate;
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.AbstractStatement;
 import com.ecfeed.core.model.ChoiceNode;
-import com.ecfeed.core.model.ChoicesParentStatement;
+import com.ecfeed.core.model.RelationStatement;
 import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.Constraint;
 import com.ecfeed.core.model.ConstraintNode;
@@ -489,7 +489,7 @@ public abstract class XomAnalyser {
 		}
 	}
 
-	public ChoicesParentStatement parseChoiceStatement(Element element, MethodNode method) throws ParserException {
+	public RelationStatement parseChoiceStatement(Element element, MethodNode method) throws ParserException {
 		assertNodeTag(element.getQualifiedName(), CONSTRAINT_CHOICE_STATEMENT_NODE_NAME);
 
 		String parameterName = getAttributeValue(element, getStatementParameterAttributeName());
@@ -506,10 +506,10 @@ public abstract class XomAnalyser {
 		String relationName = getAttributeValue(element, Constants.STATEMENT_RELATION_ATTRIBUTE_NAME);
 		EStatementRelation relation = getRelation(relationName);
 
-		return new ChoicesParentStatement(parameter, relation, choice);
+		return new RelationStatement(parameter, relation, choice);
 	}
 
-	public ChoicesParentStatement parseLabelStatement(Element element, MethodNode method) throws ParserException {
+	public RelationStatement parseLabelStatement(Element element, MethodNode method) throws ParserException {
 		assertNodeTag(element.getQualifiedName(), CONSTRAINT_LABEL_STATEMENT_NODE_NAME);
 
 		String parameterName = getAttributeValue(element, getStatementParameterAttributeName());
@@ -522,7 +522,7 @@ public abstract class XomAnalyser {
 		}
 		EStatementRelation relation = getRelation(relationName);
 
-		return new ChoicesParentStatement(parameter, relation, label);
+		return new RelationStatement(parameter, relation, label);
 	}
 
 	public ExpectedValueStatement parseExpectedValueStatement(Element element, MethodNode method) throws ParserException {

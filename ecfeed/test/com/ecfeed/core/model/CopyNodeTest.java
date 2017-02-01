@@ -18,7 +18,7 @@ import org.junit.Test;
 
 import com.ecfeed.core.adapter.java.JavaPrimitiveTypePredicate;
 import com.ecfeed.core.model.ChoiceNode;
-import com.ecfeed.core.model.ChoicesParentStatement;
+import com.ecfeed.core.model.RelationStatement;
 import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.Constraint;
 import com.ecfeed.core.model.ConstraintNode;
@@ -153,8 +153,8 @@ public class CopyNodeTest{
 
 		StatementArray premise = new StatementArray(EStatementOperator.OR);
 		premise.addStatement(new StaticStatement(true));
-		premise.addStatement(new ChoicesParentStatement(par1, EStatementRelation.EQUAL, choice1));
-		premise.addStatement(new ChoicesParentStatement(par1, EStatementRelation.NOT_EQUAL, "label"));
+		premise.addStatement(new RelationStatement(par1, EStatementRelation.EQUAL, choice1));
+		premise.addStatement(new RelationStatement(par1, EStatementRelation.NOT_EQUAL, "label"));
 		ExpectedValueStatement consequence = new ExpectedValueStatement(par2, expectedChoice, new JavaPrimitiveTypePredicate());
 
 		ConstraintNode constraint = new ConstraintNode("constraint", new Constraint(premise, consequence));
@@ -239,11 +239,11 @@ public class CopyNodeTest{
 		parameter.addChoice(choice);
 		choice.addLabel("label");
 
-		ChoicesParentStatement statement1 = new ChoicesParentStatement(parameter, EStatementRelation.EQUAL, choice);
-		ChoicesParentStatement statement2 = new ChoicesParentStatement(parameter, EStatementRelation.EQUAL, "label");
+		RelationStatement statement1 = new RelationStatement(parameter, EStatementRelation.EQUAL, choice);
+		RelationStatement statement2 = new RelationStatement(parameter, EStatementRelation.EQUAL, "label");
 
-		ChoicesParentStatement copy1 = statement1.getCopy();
-		ChoicesParentStatement copy2 = statement2.getCopy();
+		RelationStatement copy1 = statement1.getCopy();
+		RelationStatement copy2 = statement2.getCopy();
 
 		assertTrue(statement1.compare(copy1));
 		assertTrue(statement2.compare(copy2));

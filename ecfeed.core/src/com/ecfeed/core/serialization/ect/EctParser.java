@@ -20,7 +20,7 @@ import nu.xom.ParsingException;
 
 import com.ecfeed.core.model.AbstractStatement;
 import com.ecfeed.core.model.ChoiceNode;
-import com.ecfeed.core.model.ChoicesParentStatement;
+import com.ecfeed.core.model.RelationStatement;
 import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.ConstraintNode;
 import com.ecfeed.core.model.ExpectedValueStatement;
@@ -209,7 +209,7 @@ public class EctParser implements IModelParser {
 	}
 
 	@Override
-	public ChoicesParentStatement parseChoicesParentStatement(InputStream istream, MethodNode method) throws ParserException {
+	public RelationStatement parseChoicesParentStatement(InputStream istream, MethodNode method) throws ParserException {
 		try {
 			Document document = fBuilder.build(istream);
 			return getXomAnalyser().parseChoiceStatement(document.getRootElement(), method);

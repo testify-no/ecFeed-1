@@ -10,16 +10,16 @@
 
 package com.ecfeed.core.model;
 
-import com.ecfeed.core.model.ChoicesParentStatement.ChoiceCondition;
-import com.ecfeed.core.model.ChoicesParentStatement.LabelCondition;
-import com.ecfeed.core.model.ChoicesParentStatement.ParameterCondition;
+import com.ecfeed.core.model.RelationStatement.ChoiceCondition;
+import com.ecfeed.core.model.RelationStatement.LabelCondition;
+import com.ecfeed.core.model.RelationStatement.ParameterCondition;
 
 public interface IStatementVisitor {
 	
 	public Object visit(StaticStatement statement) throws Exception;
 	public Object visit(StatementArray statement) throws Exception;
 	public Object visit(ExpectedValueStatement statement) throws Exception;
-	public Object visit(ChoicesParentStatement statement) throws Exception;
+	public Object visit(RelationStatement statement) throws Exception;
 	public Object visit(LabelCondition condition) throws Exception;
 	public Object visit(ChoiceCondition condition) throws Exception;
 	public Object visit(ParameterCondition condition) throws Exception;

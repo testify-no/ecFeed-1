@@ -13,7 +13,7 @@ package com.ecfeed.testutils;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.AbstractStatement;
 import com.ecfeed.core.model.ChoiceNode;
-import com.ecfeed.core.model.ChoicesParentStatement;
+import com.ecfeed.core.model.RelationStatement;
 import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.ConstraintNode;
 import com.ecfeed.core.model.ExpectedValueStatement;
@@ -23,8 +23,8 @@ import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.StatementArray;
 import com.ecfeed.core.model.StaticStatement;
 import com.ecfeed.core.model.TestCaseNode;
-import com.ecfeed.core.model.ChoicesParentStatement.ChoiceCondition;
-import com.ecfeed.core.model.ChoicesParentStatement.LabelCondition;
+import com.ecfeed.core.model.RelationStatement.ChoiceCondition;
+import com.ecfeed.core.model.RelationStatement.LabelCondition;
 
 public class ModelStringifier {
 	public String stringify(AbstractNode node, int indent){
@@ -56,8 +56,8 @@ public class ModelStringifier {
 		if(statement instanceof StaticStatement){
 			return stringify((StaticStatement)statement, indent);
 		}
-		if(statement instanceof ChoicesParentStatement){
-			return stringify((ChoicesParentStatement)statement, indent);
+		if(statement instanceof RelationStatement){
+			return stringify((RelationStatement)statement, indent);
 		}
 		if(statement instanceof ExpectedValueStatement){
 			return stringify((ExpectedValueStatement)statement, indent);
@@ -176,7 +176,7 @@ public class ModelStringifier {
 		return result;
 	}
 
-	public String stringify(ChoicesParentStatement s, int indent){
+	public String stringify(RelationStatement s, int indent){
 		String result = intendentString(indent);
 		result += "Choices parent statement ";
 		if(s.getCondition() instanceof LabelCondition){

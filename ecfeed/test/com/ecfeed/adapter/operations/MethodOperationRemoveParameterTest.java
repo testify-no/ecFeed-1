@@ -26,7 +26,7 @@ import com.ecfeed.core.adapter.operations.MethodOperationRemoveParameter;
 import com.ecfeed.core.generators.CartesianProductGenerator;
 import com.ecfeed.core.model.AbstractStatement;
 import com.ecfeed.core.model.ChoiceNode;
-import com.ecfeed.core.model.ChoicesParentStatement;
+import com.ecfeed.core.model.RelationStatement;
 import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.Constraint;
 import com.ecfeed.core.model.ConstraintNode;
@@ -129,7 +129,7 @@ public class MethodOperationRemoveParameterTest{
 			consequence = new ExpectedValueStatement(removedParameter, condition, new JavaPrimitiveTypePredicate());
 		}
 		else{
-			consequence = new ChoicesParentStatement(removedParameter, EStatementRelation.EQUAL, removedChoice);
+			consequence = new RelationStatement(removedParameter, EStatementRelation.EQUAL, removedChoice);
 		}
 		ConstraintNode removedConstraint = new ConstraintNode("removed constraint", new Constraint(new StaticStatement(true), consequence));
 		target.addConstraint(dummyConstraint);

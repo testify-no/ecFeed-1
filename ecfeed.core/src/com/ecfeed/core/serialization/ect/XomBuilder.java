@@ -63,11 +63,11 @@ import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.AbstractStatement;
 import com.ecfeed.core.model.ChoiceNode;
-import com.ecfeed.core.model.ChoicesParentStatement;
-import com.ecfeed.core.model.ChoicesParentStatement.ChoiceCondition;
-import com.ecfeed.core.model.ChoicesParentStatement.ICondition;
-import com.ecfeed.core.model.ChoicesParentStatement.LabelCondition;
-import com.ecfeed.core.model.ChoicesParentStatement.ParameterCondition;
+import com.ecfeed.core.model.RelationStatement;
+import com.ecfeed.core.model.RelationStatement.ChoiceCondition;
+import com.ecfeed.core.model.RelationStatement.ICondition;
+import com.ecfeed.core.model.RelationStatement.LabelCondition;
+import com.ecfeed.core.model.RelationStatement.ParameterCondition;
 import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.ConstraintNode;
 import com.ecfeed.core.model.ExpectedValueStatement;
@@ -400,7 +400,7 @@ public abstract class XomBuilder implements IModelVisitor, IStatementVisitor {
 	}
 
 	@Override
-	public Object visit(ChoicesParentStatement statement) throws Exception {
+	public Object visit(RelationStatement statement) throws Exception {
 
 		String parameterName = statement.getParameter().getName();
 		Attribute parameterAttribute =

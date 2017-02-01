@@ -19,7 +19,7 @@ import java.util.List;
 import org.junit.Test;
 
 import com.ecfeed.core.model.ChoiceNode;
-import com.ecfeed.core.model.ChoicesParentStatement;
+import com.ecfeed.core.model.RelationStatement;
 import com.ecfeed.core.model.EStatementRelation;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
@@ -77,14 +77,14 @@ public class LabelStatementTest {
 		List<ChoiceNode> p21q = new ArrayList<ChoiceNode>();
 		p21q.add(p21); p21q.add(q);
 
-		ChoicesParentStatement pEqual = new ChoicesParentStatement(c1, EStatementRelation.EQUAL, "p");
-		ChoicesParentStatement pNotEqual = new ChoicesParentStatement(c1, EStatementRelation.NOT_EQUAL, "p");
+		RelationStatement pEqual = new RelationStatement(c1, EStatementRelation.EQUAL, "p");
+		RelationStatement pNotEqual = new RelationStatement(c1, EStatementRelation.NOT_EQUAL, "p");
 
-		ChoicesParentStatement p1Equal = new ChoicesParentStatement(c1, EStatementRelation.EQUAL, "p1");
-		ChoicesParentStatement p1NotEqual = new ChoicesParentStatement(c1, EStatementRelation.NOT_EQUAL, "p1");
+		RelationStatement p1Equal = new RelationStatement(c1, EStatementRelation.EQUAL, "p1");
+		RelationStatement p1NotEqual = new RelationStatement(c1, EStatementRelation.NOT_EQUAL, "p1");
 
-		ChoicesParentStatement p11Equal = new ChoicesParentStatement(c1, EStatementRelation.EQUAL, "p11");
-		ChoicesParentStatement p11NotEqual = new ChoicesParentStatement(c1, EStatementRelation.NOT_EQUAL, "p11");
+		RelationStatement p11Equal = new RelationStatement(c1, EStatementRelation.EQUAL, "p11");
+		RelationStatement p11NotEqual = new RelationStatement(c1, EStatementRelation.NOT_EQUAL, "p11");
 
 		//Check that all pEqual statements evaluates to true for all vectors
 		assertTrue(pEqual.evaluate(pq));

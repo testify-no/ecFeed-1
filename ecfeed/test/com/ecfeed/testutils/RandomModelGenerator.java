@@ -35,7 +35,7 @@ import com.ecfeed.core.adapter.java.JavaPrimitiveTypePredicate;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.AbstractStatement;
 import com.ecfeed.core.model.ChoiceNode;
-import com.ecfeed.core.model.ChoicesParentStatement;
+import com.ecfeed.core.model.RelationStatement;
 import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.Constraint;
 import com.ecfeed.core.model.ConstraintNode;
@@ -238,7 +238,7 @@ public class RandomModelGenerator {
 		return new StaticStatement(rand.nextBoolean());
 	}
 
-	public ChoicesParentStatement generateChoicesParentStatement(MethodNode method) {
+	public RelationStatement generateChoicesParentStatement(MethodNode method) {
 		List<MethodParameterNode> parameters = new ArrayList<MethodParameterNode>();
 
 		for(MethodParameterNode parameter : method.getMethodParameters()){
@@ -264,7 +264,7 @@ public class RandomModelGenerator {
 			List<String> choiceNames = new ArrayList<String>(parameter.getAllChoiceNames());
 			String luckyChoiceName = choiceNames.get(rand.nextInt(choiceNames.size()));
 			ChoiceNode condition = parameter.getChoice(luckyChoiceName);
-			return new ChoicesParentStatement(parameter, relation, condition);
+			return new RelationStatement(parameter, relation, condition);
 		}
 		else{
 			if(parameter.getLeafLabels().size() == 0){
@@ -274,7 +274,7 @@ public class RandomModelGenerator {
 			Set<String>labels = parameter.getLeafLabels();
 
 			String label = labels.toArray(new String[]{})[rand.nextInt(labels.size())];
-			return new ChoicesParentStatement(parameter, relation, label);
+			return new RelationStatement(parameter, relation, label);
 		}
 	}
 
@@ -532,7 +532,7 @@ public class RandomModelGenerator {
 	public void testGenerateChoicesParentStatement(){
 		for(int i = 0; i < 10; i++){
 			MethodNode m = generateMethod(10, 0, 0);
-			ChoicesParentStatement statement = generateChoicesParentStatement(m);
+			RelationStatement statement = generateChoicesParentStatement(m);
 			System.out.println(fStringifier.stringify(statement, 0));
 		}
 	}

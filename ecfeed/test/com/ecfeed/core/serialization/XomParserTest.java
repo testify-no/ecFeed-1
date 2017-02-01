@@ -27,7 +27,7 @@ import org.junit.Test;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.AbstractStatement;
 import com.ecfeed.core.model.ChoiceNode;
-import com.ecfeed.core.model.ChoicesParentStatement;
+import com.ecfeed.core.model.RelationStatement;
 import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.ConstraintNode;
 import com.ecfeed.core.model.ExpectedValueStatement;
@@ -280,14 +280,14 @@ public class XomParserTest {
 		for(int i = 0; i < 10; i++){
 			try{
 				MethodNode m = fModelGenerator.generateMethod(5, 0, 0);
-				ChoicesParentStatement s = fModelGenerator.generateChoicesParentStatement(m);
+				RelationStatement s = fModelGenerator.generateChoicesParentStatement(m);
 
 				XomBuilder builder = XomBuilderFactory.createXomBuilder(version);
 				Element element = (Element)s.accept(builder);
 				TRACE(element);
 				XomAnalyser analyser = XomAnalyserFactory.createXomAnalyser(version);
 
-				ChoicesParentStatement parsedS = null;
+				RelationStatement parsedS = null;
 				switch(element.getLocalName()){
 				case Constants.CONSTRAINT_LABEL_STATEMENT_NODE_NAME:
 					parsedS = analyser.parseLabelStatement(element, m);

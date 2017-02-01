@@ -22,7 +22,7 @@ import java.io.OutputStream;
 import org.junit.Test;
 
 import com.ecfeed.core.model.ChoiceNode;
-import com.ecfeed.core.model.ChoicesParentStatement;
+import com.ecfeed.core.model.RelationStatement;
 import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.Constraint;
 import com.ecfeed.core.model.ConstraintNode;
@@ -181,8 +181,8 @@ public class EctSerializerTest {
 		methodNode.addParameter(parameter);
 
 		Constraint constraint = new Constraint(
-				new ChoicesParentStatement(parameter, EStatementRelation.EQUAL, choice),
-				new ChoicesParentStatement(parameter, EStatementRelation.EQUAL, choice));
+				new RelationStatement(parameter, EStatementRelation.EQUAL, choice),
+				new RelationStatement(parameter, EStatementRelation.EQUAL, choice));
 
 		ConstraintNode constraintNode = new ConstraintNode("name1", constraint);
 		methodNode.addConstraint(constraintNode);

@@ -14,7 +14,7 @@ import java.io.InputStream;
 
 import com.ecfeed.core.model.AbstractStatement;
 import com.ecfeed.core.model.ChoiceNode;
-import com.ecfeed.core.model.ChoicesParentStatement;
+import com.ecfeed.core.model.RelationStatement;
 import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.ConstraintNode;
 import com.ecfeed.core.model.ExpectedValueStatement;
@@ -37,7 +37,7 @@ public interface IModelParser {
 	public ConstraintNode parseConstraint(InputStream istream, MethodNode method) throws ParserException;
 	public AbstractStatement parseStatement(InputStream istream, MethodNode method) throws ParserException;
 	public StaticStatement parseStaticStatement(InputStream istream) throws ParserException;
-	public ChoicesParentStatement parseChoicesParentStatement(InputStream istream, MethodNode method) throws ParserException;
+	public RelationStatement parseChoicesParentStatement(InputStream istream, MethodNode method) throws ParserException;
 	public ExpectedValueStatement parseExpectedValueStatement(InputStream istream, MethodNode method) throws ParserException;
 	public StatementArray parseStatementArray(InputStream istream, MethodNode method) throws ParserException;
 }

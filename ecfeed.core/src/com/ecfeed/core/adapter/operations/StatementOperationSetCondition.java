@@ -11,17 +11,17 @@
 package com.ecfeed.core.adapter.operations;
 
 import com.ecfeed.core.adapter.IModelOperation;
-import com.ecfeed.core.model.ChoicesParentStatement;
+import com.ecfeed.core.model.RelationStatement;
 import com.ecfeed.core.model.ModelOperationException;
-import com.ecfeed.core.model.ChoicesParentStatement.ICondition;
+import com.ecfeed.core.model.RelationStatement.ICondition;
 
 public class StatementOperationSetCondition extends AbstractModelOperation {
 
-	private ChoicesParentStatement fTarget;
+	private RelationStatement fTarget;
 	private ICondition fCurrentCondition;
 	private ICondition fNewCondition;
 
-	public StatementOperationSetCondition(ChoicesParentStatement target, ICondition condition) {
+	public StatementOperationSetCondition(RelationStatement target, ICondition condition) {
 		super(OperationNames.SET_STATEMENT_CONDITION);
 		fTarget = target;
 		fNewCondition = condition;

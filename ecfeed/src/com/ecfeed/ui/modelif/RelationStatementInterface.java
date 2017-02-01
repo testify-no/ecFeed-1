@@ -13,17 +13,17 @@ package com.ecfeed.ui.modelif;
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.operations.StatementOperationSetCondition;
 import com.ecfeed.core.adapter.operations.StatementOperationSetRelation;
-import com.ecfeed.core.model.ChoicesParentStatement;
+import com.ecfeed.core.model.RelationStatement;
 import com.ecfeed.core.model.EStatementRelation;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
-import com.ecfeed.core.model.ChoicesParentStatement.ICondition;
+import com.ecfeed.core.model.RelationStatement.ICondition;
 import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.ui.common.Messages;
 
-public class ChoicesParentStatementInterface extends AbstractStatementInterface{
+public class RelationStatementInterface extends AbstractStatementInterface{
 
-	public ChoicesParentStatementInterface(IModelUpdateContext updateContext) {
+	public RelationStatementInterface(IModelUpdateContext updateContext) {
 		super(updateContext);
 	}
 
@@ -106,7 +106,7 @@ public class ChoicesParentStatementInterface extends AbstractStatementInterface{
 	}
 
 	@Override
-	protected ChoicesParentStatement getStatement() {
-		return (ChoicesParentStatement)super.getStatement();
+	protected RelationStatement getStatement() {
+		return (RelationStatement)super.getStatement();
 	}
 }

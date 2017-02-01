@@ -33,7 +33,7 @@ import com.ecfeed.core.generators.api.GeneratorException;
 import com.ecfeed.core.generators.api.IConstraint;
 import com.ecfeed.core.model.AbstractStatement;
 import com.ecfeed.core.model.ChoiceNode;
-import com.ecfeed.core.model.ChoicesParentStatement;
+import com.ecfeed.core.model.RelationStatement;
 import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.Constraint;
 import com.ecfeed.core.model.ConstraintNode;
@@ -178,9 +178,9 @@ public class XmlParserSerializerTest {
 			testData.add(choice2);
 			TestCaseNode testCase = new TestCaseNode("test", testData);
 			Constraint choiceConstraint = new Constraint(new StaticStatement(true),
-					new ChoicesParentStatement(choicesParentParameter, EStatementRelation.EQUAL, choice1));
+					new RelationStatement(choicesParentParameter, EStatementRelation.EQUAL, choice1));
 			Constraint labelConstraint = new Constraint(new StaticStatement(true),
-					new ChoicesParentStatement(choicesParentParameter, EStatementRelation.EQUAL, "label"));
+					new RelationStatement(choicesParentParameter, EStatementRelation.EQUAL, "label"));
 			Constraint expectedConstraint = new Constraint(new StaticStatement(true),
 					new ExpectedValueStatement(expectedParameter, new ChoiceNode("expected", "n"), new JavaPrimitiveTypePredicate()));
 			ConstraintNode choiceConstraintNode = new ConstraintNode("choice constraint", choiceConstraint);
@@ -416,14 +416,14 @@ public class XmlParserSerializerTest {
 			parameter.getChoices().get(0).addLabel(label);
 		}
 		EStatementRelation relation = pickRelation();
-		return new ChoicesParentStatement(parameter, relation, label);
+		return new RelationStatement(parameter, relation, label);
 	}
 
 	private AbstractStatement createChoiceStatement(List<MethodParameterNode> parameters) {
 		MethodParameterNode parameter = parameters.get(rand.nextInt(parameters.size()));
 		ChoiceNode choice = new ArrayList<ChoiceNode>(parameter.getLeafChoices()).get(rand.nextInt(parameter.getChoices().size()));
 		EStatementRelation relation = pickRelation();
-		return new ChoicesParentStatement(parameter, relation, choice);
+		return new RelationStatement(parameter, relation, choice);
 	}
 
 	private EStatementRelation pickRelation() {
@@ -598,8 +598,8 @@ public class XmlParserSerializerTest {
 		if(statement1 instanceof StaticStatement && statement2 instanceof StaticStatement){
 			compareStaticStatements((StaticStatement)statement1, (StaticStatement)statement2);
 		}
-		else if(statement1 instanceof ChoicesParentStatement && statement2 instanceof ChoicesParentStatement){
-			compareRelationStatements((ChoicesParentStatement)statement1, (ChoicesParentStatement)statement2);
+		else if(statement1 instanceof RelationStatement && statement2 instanceof RelationStatement){
+			compareRelationStatements((RelationStatement)statement1, (RelationStatement)statement2);
 		}
 		else if(statement1 instanceof StatementArray && statement2 instanceof StatementArray){
 			compareStatementArrays((StatementArray)statement1, (StatementArray)statement2);
@@ -618,7 +618,7 @@ public class XmlParserSerializerTest {
 		assertEquals(statement1.getCondition().getValueString(), statement2.getCondition().getValueString());
 	}
 
-	private void compareRelationStatements(ChoicesParentStatement statement1, ChoicesParentStatement statement2) {
+	private void compareRelationStatements(RelationStatement statement1, RelationStatement statement2) {
 		compareParameters(statement1.getParameter(), statement2.getParameter());
 		if((statement1.getRelation() != statement2.getRelation())){
 			fail("Compared statements have different relations: " +

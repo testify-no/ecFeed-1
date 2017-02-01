@@ -11,14 +11,14 @@
 package com.ecfeed.ui.modelif;
 
 import com.ecfeed.core.model.AbstractStatement;
-import com.ecfeed.core.model.ChoicesParentStatement;
-import com.ecfeed.core.model.ChoicesParentStatement.ParameterCondition;
+import com.ecfeed.core.model.RelationStatement;
+import com.ecfeed.core.model.RelationStatement.ParameterCondition;
 import com.ecfeed.core.model.ExpectedValueStatement;
 import com.ecfeed.core.model.IStatementVisitor;
 import com.ecfeed.core.model.StatementArray;
 import com.ecfeed.core.model.StaticStatement;
-import com.ecfeed.core.model.ChoicesParentStatement.ChoiceCondition;
-import com.ecfeed.core.model.ChoicesParentStatement.LabelCondition;
+import com.ecfeed.core.model.RelationStatement.ChoiceCondition;
+import com.ecfeed.core.model.RelationStatement.LabelCondition;
 
 public class StatementInterfaceFactory{
 
@@ -52,9 +52,9 @@ public class StatementInterfaceFactory{
 		}
 
 		@Override
-		public Object visit(ChoicesParentStatement statement)
+		public Object visit(RelationStatement statement)
 				throws Exception {
-			ChoicesParentStatementInterface statementIf = new ChoicesParentStatementInterface(fUpdateContext);
+			RelationStatementInterface statementIf = new RelationStatementInterface(fUpdateContext);
 			statementIf.setTarget(statement);
 			return statementIf;
 		}

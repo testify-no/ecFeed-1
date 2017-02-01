@@ -20,7 +20,7 @@ import java.util.List;
 import org.junit.Test;
 
 import com.ecfeed.core.model.ChoiceNode;
-import com.ecfeed.core.model.ChoicesParentStatement;
+import com.ecfeed.core.model.RelationStatement;
 import com.ecfeed.core.model.Constraint;
 import com.ecfeed.core.model.ConstraintNode;
 import com.ecfeed.core.model.EStatementRelation;
@@ -467,7 +467,7 @@ public class MethodNodeTest {
 		MethodNode method = new MethodNode("method");
 		MethodParameterNode parameter = new MethodParameterNode("parameter", "type", "0", false);
 		ChoiceNode choice = new ChoiceNode("choice", "value");
-		Constraint mentioningConstraint = new Constraint(new ChoicesParentStatement(parameter, EStatementRelation.EQUAL, choice), new StaticStatement(false));
+		Constraint mentioningConstraint = new Constraint(new RelationStatement(parameter, EStatementRelation.EQUAL, choice), new StaticStatement(false));
 		Constraint notMentioningConstraint = new Constraint(new StaticStatement(false), new StaticStatement(false));
 		ConstraintNode mentioningConstraintNode = new ConstraintNode("constraint", mentioningConstraint);
 		ConstraintNode notMentioningConstraintNode = new ConstraintNode("constraint", notMentioningConstraint);
