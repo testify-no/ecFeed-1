@@ -33,7 +33,7 @@ import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.ParameterCondition;
 import com.ecfeed.core.model.RelationStatement;
 import com.ecfeed.core.model.RelationStatement.ChoiceCondition;
-import com.ecfeed.core.model.RelationStatement.ICondition;
+import com.ecfeed.core.model.IStatementCondition;
 import com.ecfeed.core.model.RelationStatement.LabelCondition;
 import com.ecfeed.core.model.ConstraintNode;
 import com.ecfeed.core.model.EStatementOperator;
@@ -234,7 +234,7 @@ public class StatementEditor extends Composite {
 
 			for (ChoiceNode choice : allChoices) {
 
-				ICondition condition = 
+				IStatementCondition condition = 
 						new RelationStatement(
 								methodParameterNode, EStatementRelation.EQUAL, choice).getCondition();
 
@@ -248,7 +248,7 @@ public class StatementEditor extends Composite {
 
 			for (String label : allLabels) {
 
-				ICondition condition = 
+				IStatementCondition condition = 
 						new RelationStatement(
 								methodParameterNode, EStatementRelation.EQUAL, label).getCondition();
 

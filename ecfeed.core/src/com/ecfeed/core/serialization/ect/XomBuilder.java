@@ -65,7 +65,7 @@ import com.ecfeed.core.model.AbstractStatement;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.RelationStatement;
 import com.ecfeed.core.model.RelationStatement.ChoiceCondition;
-import com.ecfeed.core.model.RelationStatement.ICondition;
+import com.ecfeed.core.model.IStatementCondition;
 import com.ecfeed.core.model.RelationStatement.LabelCondition;
 import com.ecfeed.core.model.ParameterCondition;
 import com.ecfeed.core.model.ClassNode;
@@ -407,7 +407,7 @@ public abstract class XomBuilder implements IModelVisitor, IStatementVisitor {
 				new Attribute(getStatementParameterAttributeName(), parameterName);
 		Attribute relationAttribute =
 				new Attribute(STATEMENT_RELATION_ATTRIBUTE_NAME, statement.getRelation().toString());
-		ICondition condition = statement.getCondition();
+		IStatementCondition condition = statement.getCondition();
 		Element targetStatementElement = (Element)condition.accept(this);
 
 		encodeAndAddAttribute(targetStatementElement, parameterAttribute);

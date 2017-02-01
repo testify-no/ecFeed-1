@@ -20,17 +20,7 @@ public class RelationStatement extends AbstractStatement implements IRelationalS
 
 	private MethodParameterNode fParameter;
 	private EStatementRelation fRelation;
-	private ICondition fCondition;
-
-	public interface ICondition {
-		public Object getCondition();
-		public boolean evaluate(List<ChoiceNode> values);
-		public boolean adapt(List<ChoiceNode> values);
-		public ICondition getCopy();
-		public boolean updateReferences(MethodParameterNode parameter);
-		public boolean compare(ICondition condition);
-		public Object accept(IStatementVisitor visitor) throws Exception;
-	}
+	private IStatementCondition fCondition;
 
 	public RelationStatement(
 			MethodParameterNode parameter, EStatementRelation relation, String labelCondition) {
@@ -49,7 +39,7 @@ public class RelationStatement extends AbstractStatement implements IRelationalS
 	}
 
 	private RelationStatement(
-			MethodParameterNode parameter, EStatementRelation relation, ICondition condition) {
+			MethodParameterNode parameter, EStatementRelation relation, IStatementCondition condition) {
 
 		fParameter = parameter;
 		fRelation = relation;
@@ -173,7 +163,7 @@ public class RelationStatement extends AbstractStatement implements IRelationalS
 		return fParameter;
 	}
 
-	public void setCondition(ICondition condition) {
+	public void setCondition(IStatementCondition condition) {
 		fCondition = condition;
 	}
 
@@ -189,7 +179,7 @@ public class RelationStatement extends AbstractStatement implements IRelationalS
 		fCondition = new ChoiceCondition(choice);
 	}
 
-	public ICondition getCondition() {
+	public IStatementCondition getCondition() {
 		return fCondition;
 	}
 
@@ -222,7 +212,7 @@ public class RelationStatement extends AbstractStatement implements IRelationalS
 		return choices.get(index);
 	}
 
-	public class LabelCondition implements ICondition {
+	public class LabelCondition implements IStatementCondition {
 
 		private String fLabel;
 
@@ -274,7 +264,7 @@ public class RelationStatement extends AbstractStatement implements IRelationalS
 		}
 
 		@Override
-		public boolean compare(ICondition condition) {
+		public boolean compare(IStatementCondition condition) {
 
 			if(condition instanceof LabelCondition == false) {
 				return false;
@@ -306,7 +296,7 @@ public class RelationStatement extends AbstractStatement implements IRelationalS
 
 	}
 
-	public class ChoiceCondition implements ICondition {
+	public class ChoiceCondition implements IStatementCondition {
 
 		private ChoiceNode fChoice;
 
@@ -355,7 +345,7 @@ public class RelationStatement extends AbstractStatement implements IRelationalS
 		}
 
 		@Override
-		public boolean compare(ICondition condition) {
+		public boolean compare(IStatementCondition condition) {
 
 			if (condition instanceof ChoiceCondition == false) {
 				return false;

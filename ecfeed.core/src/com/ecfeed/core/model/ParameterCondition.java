@@ -12,10 +12,10 @@ package com.ecfeed.core.model;
 
 import java.util.List;
 
-import com.ecfeed.core.model.RelationStatement.ICondition;
+import com.ecfeed.core.model.IStatementCondition;
 
 
-public class ParameterCondition implements ICondition {
+public class ParameterCondition implements IStatementCondition {
 
 	private MethodParameterNode fMethodParameterNode;
 
@@ -51,7 +51,7 @@ public class ParameterCondition implements ICondition {
 	}
 
 	@Override
-	public boolean compare(ICondition otherCondition) {
+	public boolean compare(IStatementCondition otherCondition) {
 
 		if (!(otherCondition instanceof ParameterCondition)) {
 			return false;

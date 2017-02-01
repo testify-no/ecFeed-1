@@ -13,15 +13,15 @@ package com.ecfeed.core.adapter.operations;
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.model.RelationStatement;
 import com.ecfeed.core.model.ModelOperationException;
-import com.ecfeed.core.model.RelationStatement.ICondition;
+import com.ecfeed.core.model.IStatementCondition;
 
 public class StatementOperationSetCondition extends AbstractModelOperation {
 
 	private RelationStatement fTarget;
-	private ICondition fCurrentCondition;
-	private ICondition fNewCondition;
+	private IStatementCondition fCurrentCondition;
+	private IStatementCondition fNewCondition;
 
-	public StatementOperationSetCondition(RelationStatement target, ICondition condition) {
+	public StatementOperationSetCondition(RelationStatement target, IStatementCondition condition) {
 		super(OperationNames.SET_STATEMENT_CONDITION);
 		fTarget = target;
 		fNewCondition = condition;
