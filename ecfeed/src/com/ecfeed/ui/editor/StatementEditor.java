@@ -43,6 +43,7 @@ import com.ecfeed.core.model.IRelationalStatement;
 import com.ecfeed.core.model.IStatementVisitor;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.StatementArray;
+import com.ecfeed.core.model.StatementConditionHelper;
 import com.ecfeed.core.model.StaticStatement;
 import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
@@ -221,14 +222,14 @@ public class StatementEditor extends Composite {
 			List<String> conditions = new ArrayList<String>();
 			MethodParameterNode methodParameterNode = statement.getParameter();
 
-			addChoices(methodParameterNode, conditions);
-			addLabels(methodParameterNode, conditions);
-			addParameters(methodParameterNode, conditions);
+			addChoiceConditions(methodParameterNode, conditions);
+			addLabelConditions(methodParameterNode, conditions);
+			addParameterConditions(methodParameterNode, conditions);
 
 			return conditions.toArray(new String[]{});
 		}
 
-		private void addChoices(MethodParameterNode methodParameterNode, List<String> inOutConditions) {
+		private void addChoiceConditions(MethodParameterNode methodParameterNode, List<String> inOutConditions) {
 
 			Set<ChoiceNode> allChoices = methodParameterNode.getAllChoices();
 
@@ -242,7 +243,7 @@ public class StatementEditor extends Composite {
 			}
 		}
 
-		private void addLabels(MethodParameterNode methodParameterNode, List<String> inOutConditions) {
+		private void addLabelConditions(MethodParameterNode methodParameterNode, List<String> inOutConditions) {
 
 			Set<String> allLabels = methodParameterNode.getLeafLabels();
 
@@ -256,14 +257,15 @@ public class StatementEditor extends Composite {
 			}
 		}
 
-		private void addParameters(MethodParameterNode methodParameterNode, List<String> inOutConditions) {
+		private void addParameterConditions(MethodParameterNode methodParameterNode, List<String> inOutConditions) {
 
 			List<String> parameterNames = methodParameterNode.getMethod().getParametersNames();
 			parameterNames.remove(methodParameterNode.getName());
 
 			for (String parameterName : parameterNames) {
 
-				inOutConditions.add(parameterName + "[parameter]");
+				String description = StatementConditionHelper.createParameterDescription(parameterName);
+				inOutConditions.add(description);
 			}
 		}
 

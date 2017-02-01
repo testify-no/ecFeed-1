@@ -67,9 +67,8 @@ public class ParameterCondition implements IStatementCondition {
 		return visitor.visit(this);
 	}
 
-	@Override
 	public String toString() {
-		return fMethodParameterNode.getName() + "[parameter]"; 
+		return StatementConditionHelper.createParameterDescription(fMethodParameterNode.getName()); 
 	}
 
 	public MethodParameterNode getMethodParameterNode() {

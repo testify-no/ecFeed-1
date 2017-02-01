@@ -14,14 +14,14 @@ import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.operations.StatementOperationSetCondition;
 import com.ecfeed.core.adapter.operations.StatementOperationSetRelation;
 import com.ecfeed.core.model.ChoiceCondition;
-import com.ecfeed.core.model.LabelCondition;
-import com.ecfeed.core.model.ParameterCondition;
-import com.ecfeed.core.model.RelationStatement;
 import com.ecfeed.core.model.EStatementRelation;
+import com.ecfeed.core.model.IStatementCondition;
+import com.ecfeed.core.model.LabelCondition;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
-import com.ecfeed.core.model.IStatementCondition;
-import com.ecfeed.core.utils.StringHelper;
+import com.ecfeed.core.model.ParameterCondition;
+import com.ecfeed.core.model.RelationStatement;
+import com.ecfeed.core.model.StatementConditionHelper;
 import com.ecfeed.ui.common.Messages;
 
 public class RelationStatementInterface extends AbstractStatementInterface{
@@ -63,16 +63,16 @@ public class RelationStatementInterface extends AbstractStatementInterface{
 
 	private IStatementCondition createNewCondition(String string, MethodParameterNode parameter) {
 
-		if (!containsTypeInfo(string, null)) {
+		if (!StatementConditionHelper.containsTypeInfo(string, null)) {
 			return new ChoiceCondition(parameter.getChoice(string), parameter, fRelation);
 		}
 
-		if (containsTypeInfo(string, "label")) {
-			return new LabelCondition(removeTypeInfo(string, "label"), fRelation, parameter);
+		if (StatementConditionHelper.containsTypeInfo(string, "label")) {
+			return new LabelCondition(StatementConditionHelper.removeTypeInfo(string, "label"), fRelation, parameter);
 		}
 
-		if (containsTypeInfo(string, "parameter")) {
-			String parameterName = removeTypeInfo(string, "parameter"); 
+		if (StatementConditionHelper.containsTypeInfo(string, "parameter")) {
+			String parameterName = StatementConditionHelper.removeTypeInfo(string, "parameter"); 
 			MethodNode methodNode = parameter.getMethod();
 			MethodParameterNode rightParameter = (MethodParameterNode)methodNode.getParameter(parameterName);
 
@@ -83,30 +83,6 @@ public class RelationStatementInterface extends AbstractStatementInterface{
 
 
 	}
-
-	private static boolean containsTypeInfo(String string, String typeDescription) {
-
-		if (!(string.contains("["))) {
-			return false;
-		}
-
-		if (!(string.contains("]"))) {
-			return false;
-		}		
-
-		if (typeDescription != null) {
-			if (!string.contains("[" + typeDescription + "]")) {
-				return false;
-			}
-		}
-
-		return true;
-	}
-
-	private String removeTypeInfo(String string, String typeDescription) {
-		return StringHelper.removeFromPostfix("[" + typeDescription + "]", string);
-	}
-
 
 	@Override
 	public String getConditionValue() {
