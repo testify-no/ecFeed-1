@@ -86,7 +86,7 @@ public class LabelCondition implements IStatementCondition {
 
 	@Override
 	public String toString() {
-		return fLabel + "[label]";
+		return StatementConditionHelper.createLabelDescription(fLabel);
 	}
 
 	@Override

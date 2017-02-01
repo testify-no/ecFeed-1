@@ -41,6 +41,10 @@ public class StatementConditionHelper {
 		return parameterName + "[parameter]";
 	}
 	
+	public static String createLabelDescription(String parameterName) {
+		return parameterName + "[label]";
+	}	
+	
 	public static boolean containsTypeInfo(String string, String typeDescription) {
 
 		if (!(string.contains("["))) {
