@@ -18,7 +18,7 @@ import com.ecfeed.core.model.IStatementVisitor;
 import com.ecfeed.core.model.StatementArray;
 import com.ecfeed.core.model.StaticStatement;
 import com.ecfeed.core.model.RelationStatement.ChoiceCondition;
-import com.ecfeed.core.model.RelationStatement.LabelCondition;
+import com.ecfeed.core.model.LabelCondition;
 
 public class StatementInterfaceFactory{
 

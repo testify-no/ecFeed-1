@@ -27,7 +27,7 @@ public class AbstractStatementInterface extends OperationExecuter {
 		fAbstractStatement = target;
 	}
 
-	protected AbstractStatement getStatement(){
+	protected AbstractStatement getOwnStatement(){
 		return fAbstractStatement;
 	}
 

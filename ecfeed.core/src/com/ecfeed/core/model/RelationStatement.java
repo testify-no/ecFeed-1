@@ -27,7 +27,7 @@ public class RelationStatement extends AbstractStatement implements IRelationalS
 
 		fParameter = parameter;
 		fRelation = relation;
-		fCondition = new LabelCondition(labelCondition);
+		fCondition = new LabelCondition(labelCondition, relation, parameter);
 	}
 
 	public RelationStatement(
@@ -168,7 +168,7 @@ public class RelationStatement extends AbstractStatement implements IRelationalS
 	}
 
 	public void setCondition(String label) {
-		fCondition = new LabelCondition(label);
+		fCondition = new LabelCondition(label, fRelation, fParameter);
 	}
 
 	public void setCondition(ChoiceNode choice) {
@@ -191,111 +191,6 @@ public class RelationStatement extends AbstractStatement implements IRelationalS
 		return fCondition.toString();
 	}
 
-	private ChoiceNode getChoiceForMethodParameter(List<ChoiceNode> choices, MethodParameterNode methodParameterNode) {
-
-		if (choices == null) {
-			return null;
-		}
-
-		MethodNode methodNode = methodParameterNode.getMethod();
-
-		if (methodNode == null) {
-			return null;
-		}
-
-		int index = methodNode.getParameters().indexOf(methodParameterNode);
-
-		if(choices.size() < index + 1) {
-			return null;
-		}
-
-		return choices.get(index);
-	}
-
-	public class LabelCondition implements IStatementCondition {
-
-		private String fLabel;
-
-		public LabelCondition(String label) {
-			fLabel = label;
-		}
-
-		@Override
-		public boolean evaluate(List<ChoiceNode> choices) {
-
-			ChoiceNode choice = getChoiceForMethodParameter(choices, getParameter());
-
-			if (choice == null) {
-				return false;
-			}
-
-			return evaluateContainsLabel(choice);
-		}
-
-		private boolean evaluateContainsLabel(ChoiceNode choice) {
-
-			boolean containsLabel = choice.getAllLabels().contains(fLabel);
-
-			switch (getRelation()) {
-
-			case EQUAL:
-				return containsLabel;
-			case NOT_EQUAL:
-				return !containsLabel;
-			default:
-				return false;
-			}
-
-		}
-
-		@Override
-		public boolean updateReferences(MethodParameterNode parameter) {
-			return true;
-		}
-
-		@Override
-		public Object getCondition(){
-			return fLabel;
-		}
-
-		@Override
-		public boolean adapt(List<ChoiceNode> values) {
-			return false;
-		}
-
-		@Override
-		public boolean compare(IStatementCondition condition) {
-
-			if(condition instanceof LabelCondition == false) {
-				return false;
-			}
-
-			LabelCondition compared = (LabelCondition)condition;
-
-			return (getCondition().equals(compared.getCondition()));
-		}
-
-		@Override
-		public Object accept(IStatementVisitor visitor) throws Exception {
-			return visitor.visit(this);
-		}
-
-		@Override
-		public String toString() {
-			return fLabel + "[label]";
-		}
-
-		@Override
-		public LabelCondition getCopy() {
-			return new LabelCondition(fLabel);
-		}
-
-		public String getLabel() {
-			return fLabel;
-		}
-
-	}
-
 	public class ChoiceCondition implements IStatementCondition {
 
 		private ChoiceNode fChoice;
@@ -307,7 +202,7 @@ public class RelationStatement extends AbstractStatement implements IRelationalS
 		@Override
 		public boolean evaluate(List<ChoiceNode> choices) {
 
-			ChoiceNode choice = getChoiceForMethodParameter(choices, getParameter());
+			ChoiceNode choice = StatementConditionHelper.getChoiceForMethodParameter(choices, getParameter());
 
 			if (choice == null) {
 				return false;

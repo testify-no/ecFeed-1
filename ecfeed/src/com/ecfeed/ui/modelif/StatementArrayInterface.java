@@ -28,20 +28,20 @@ public class StatementArrayInterface extends AbstractStatementInterface{
 
 	@Override
 	public boolean addStatement(AbstractStatement statement){
-		IModelOperation operation = new StatementOperationAddStatement(getStatement(), statement, getStatement().getChildren().size());
+		IModelOperation operation = new StatementOperationAddStatement(getOwnStatement(), statement, getOwnStatement().getChildren().size());
 		return execute(operation, Messages.DIALOG_ADD_STATEMENT_PROBLEM_TITLE);
 	}
 
 	@Override
 	public boolean removeChild(AbstractStatement child){
-		IModelOperation operation = new StatementOperationRemoveStatement(getStatement(), child);
+		IModelOperation operation = new StatementOperationRemoveStatement(getOwnStatement(), child);
 		return execute(operation, Messages.DIALOG_REMOVE_STATEMENT_PROBLEM_TITLE);
 	}
 
 	@Override
 	public boolean setOperator(EStatementOperator operator) {
-		if(operator != getStatement().getOperator()){
-			IModelOperation operation = new StatementOperationChangeOperator(getStatement(), operator);
+		if(operator != getOwnStatement().getOperator()){
+			IModelOperation operation = new StatementOperationChangeOperator(getOwnStatement(), operator);
 			return execute(operation, Messages.DIALOG_EDIT_STATEMENT_PROBLEM_TITLE);
 		}
 		return false;
@@ -49,20 +49,20 @@ public class StatementArrayInterface extends AbstractStatementInterface{
 
 	@Override
 	public EStatementOperator getOperator() {
-		return getStatement().getOperator();
+		return getOwnStatement().getOperator();
 	}
 
 	@Override
 	public boolean replaceChild(AbstractStatement child, AbstractStatement newStatement) {
 		if(child != newStatement){
-			IModelOperation operation = new StatementOperationReplaceChild(getStatement(), child, newStatement);
+			IModelOperation operation = new StatementOperationReplaceChild(getOwnStatement(), child, newStatement);
 			return execute(operation, Messages.DIALOG_ADD_STATEMENT_PROBLEM_TITLE);
 		}
 		return false;
 	}
 
 	@Override
-	protected StatementArray getStatement(){
-		return (StatementArray)super.getStatement();
+	protected StatementArray getOwnStatement(){
+		return (StatementArray)super.getOwnStatement();
 	}
 }

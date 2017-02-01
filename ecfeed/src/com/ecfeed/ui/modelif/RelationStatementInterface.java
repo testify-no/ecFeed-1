@@ -13,6 +13,7 @@ package com.ecfeed.ui.modelif;
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.operations.StatementOperationSetCondition;
 import com.ecfeed.core.adapter.operations.StatementOperationSetRelation;
+import com.ecfeed.core.model.LabelCondition;
 import com.ecfeed.core.model.ParameterCondition;
 import com.ecfeed.core.model.RelationStatement;
 import com.ecfeed.core.model.EStatementRelation;
@@ -24,14 +25,19 @@ import com.ecfeed.ui.common.Messages;
 
 public class RelationStatementInterface extends AbstractStatementInterface{
 
+	EStatementRelation fRelation;
+
 	public RelationStatementInterface(IModelUpdateContext updateContext) {
 		super(updateContext);
 	}
 
 	@Override
 	public boolean setRelation(EStatementRelation relation) {
-		if (relation != getStatement().getRelation()) {
-			IModelOperation operation = new StatementOperationSetRelation(getStatement(), relation);
+
+		fRelation = relation;
+
+		if (relation != getOwnStatement().getRelation()) {
+			IModelOperation operation = new StatementOperationSetRelation(getOwnStatement(), relation);
 			return execute(operation, Messages.DIALOG_EDIT_STATEMENT_PROBLEM_TITLE);
 		}
 		return false;
@@ -40,16 +46,16 @@ public class RelationStatementInterface extends AbstractStatementInterface{
 	@Override
 	public boolean setConditionValue(String text) {
 
-		String conditionName = getStatement().getConditionName();
+		String conditionName = getOwnStatement().getConditionName();
 
 		if (conditionName.equals(text)) {
 			return false;
 		}
 
-		MethodParameterNode leftParameter = getStatement().getParameter();
+		MethodParameterNode leftParameter = getOwnStatement().getParameter();
 
 		IStatementCondition newCondition = createNewCondition(text, leftParameter);
-		IModelOperation operation = new StatementOperationSetCondition(getStatement(), newCondition);
+		IModelOperation operation = new StatementOperationSetCondition(getOwnStatement(), newCondition);
 
 		return execute(operation, Messages.DIALOG_EDIT_STATEMENT_PROBLEM_TITLE);
 	}
@@ -57,11 +63,11 @@ public class RelationStatementInterface extends AbstractStatementInterface{
 	private IStatementCondition createNewCondition(String string, MethodParameterNode parameter) {
 
 		if (!containsTypeInfo(string, null)) {
-			return getStatement().new ChoiceCondition(parameter.getChoice(string));
+			return getOwnStatement().new ChoiceCondition(parameter.getChoice(string));
 		}
 
 		if (containsTypeInfo(string, "label")) {
-			return getStatement().new LabelCondition(removeTypeInfo(string, "label"));
+			return new LabelCondition(removeTypeInfo(string, "label"), fRelation, parameter);
 		}
 
 		if (containsTypeInfo(string, "parameter")) {
@@ -103,11 +109,11 @@ public class RelationStatementInterface extends AbstractStatementInterface{
 
 	@Override
 	public String getConditionValue() {
-		return getStatement().getConditionName();
+		return getOwnStatement().getConditionName();
 	}
 
 	@Override
-	protected RelationStatement getStatement() {
-		return (RelationStatement)super.getStatement();
+	protected RelationStatement getOwnStatement() {
+		return (RelationStatement)super.getOwnStatement();
 	}
 }

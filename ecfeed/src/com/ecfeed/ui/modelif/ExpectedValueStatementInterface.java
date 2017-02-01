@@ -26,8 +26,8 @@ public class ExpectedValueStatementInterface extends AbstractStatementInterface{
 
 	@Override
 	public boolean setRelation(EStatementRelation relation) {
-		if(relation != getStatement().getRelation()){
-			IModelOperation operation = new StatementOperationSetRelation(getStatement(), relation);
+		if(relation != getOwnStatement().getRelation()){
+			IModelOperation operation = new StatementOperationSetRelation(getOwnStatement(), relation);
 			return execute(operation, Messages.DIALOG_EDIT_STATEMENT_PROBLEM_TITLE);
 		}
 		return false;
@@ -35,18 +35,18 @@ public class ExpectedValueStatementInterface extends AbstractStatementInterface{
 
 	@Override
 	public boolean setConditionValue(String newValue) {
-		IModelOperation operation = new ChoiceOperationSetValue(getStatement().getCondition(), newValue, new EclipseTypeAdapterProvider());
+		IModelOperation operation = new ChoiceOperationSetValue(getOwnStatement().getCondition(), newValue, new EclipseTypeAdapterProvider());
 		return 	execute(operation, Messages.DIALOG_EDIT_STATEMENT_PROBLEM_TITLE);
 	}
 
 	@Override
 	public String getConditionValue() {
-		return getStatement().getCondition().getValueString();
+		return getOwnStatement().getCondition().getValueString();
 	}
 
 	@Override
-	protected ExpectedValueStatement getStatement(){
-		return (ExpectedValueStatement)super.getStatement();
+	protected ExpectedValueStatement getOwnStatement(){
+		return (ExpectedValueStatement)super.getOwnStatement();
 	}
 
 }
