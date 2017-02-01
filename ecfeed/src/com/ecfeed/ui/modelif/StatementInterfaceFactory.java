@@ -11,8 +11,8 @@
 package com.ecfeed.ui.modelif;
 
 import com.ecfeed.core.model.AbstractStatement;
+import com.ecfeed.core.model.ParameterCondition;
 import com.ecfeed.core.model.RelationStatement;
-import com.ecfeed.core.model.RelationStatement.ParameterCondition;
 import com.ecfeed.core.model.ExpectedValueStatement;
 import com.ecfeed.core.model.IStatementVisitor;
 import com.ecfeed.core.model.StatementArray;

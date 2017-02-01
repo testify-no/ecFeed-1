@@ -13,6 +13,7 @@ package com.ecfeed.ui.modelif;
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.operations.StatementOperationSetCondition;
 import com.ecfeed.core.adapter.operations.StatementOperationSetRelation;
+import com.ecfeed.core.model.ParameterCondition;
 import com.ecfeed.core.model.RelationStatement;
 import com.ecfeed.core.model.EStatementRelation;
 import com.ecfeed.core.model.MethodNode;
@@ -68,7 +69,7 @@ public class RelationStatementInterface extends AbstractStatementInterface{
 			MethodNode methodNode = parameter.getMethod();
 			MethodParameterNode rightParameter = (MethodParameterNode)methodNode.getParameter(parameterName);
 
-			return getStatement().new ParameterCondition(rightParameter);
+			return new ParameterCondition(rightParameter);
 		}
 
 		return null;

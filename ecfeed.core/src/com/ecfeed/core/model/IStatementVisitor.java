@@ -12,7 +12,7 @@ package com.ecfeed.core.model;
 
 import com.ecfeed.core.model.RelationStatement.ChoiceCondition;
 import com.ecfeed.core.model.RelationStatement.LabelCondition;
-import com.ecfeed.core.model.RelationStatement.ParameterCondition;
+import com.ecfeed.core.model.ParameterCondition;
 
 public interface IStatementVisitor {
 

@@ -67,7 +67,7 @@ import com.ecfeed.core.model.RelationStatement;
 import com.ecfeed.core.model.RelationStatement.ChoiceCondition;
 import com.ecfeed.core.model.RelationStatement.ICondition;
 import com.ecfeed.core.model.RelationStatement.LabelCondition;
-import com.ecfeed.core.model.RelationStatement.ParameterCondition;
+import com.ecfeed.core.model.ParameterCondition;
 import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.ConstraintNode;
 import com.ecfeed.core.model.ExpectedValueStatement;
