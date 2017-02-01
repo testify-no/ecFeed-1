@@ -239,10 +239,10 @@ public class ChoicesParentStatement extends AbstractStatement implements IRelati
 				return false;
 			}
 
-			return evaluateChoiceContainsLabel(choice);
+			return evaluateContainsLabel(choice);
 		}
 
-		private boolean evaluateChoiceContainsLabel(ChoiceNode choice) {
+		private boolean evaluateContainsLabel(ChoiceNode choice) {
 
 			boolean containsLabel = choice.getAllLabels().contains(fLabel);
 
@@ -292,7 +292,7 @@ public class ChoicesParentStatement extends AbstractStatement implements IRelati
 
 		@Override
 		public String toString() {
-			return fLabel + (fParameter.getAllChoiceNames().contains(fLabel)?"[label]":"");
+			return fLabel + "[label]";
 		}
 
 		@Override
@@ -436,6 +436,70 @@ public class ChoicesParentStatement extends AbstractStatement implements IRelati
 		}
 
 	}
+	
+	
+	public class ParameterCondition implements ICondition {
+
+		private MethodParameterNode fMethodParameterNode;
+
+		public ParameterCondition(MethodParameterNode methodParameterNode) {
+			fMethodParameterNode = methodParameterNode;
+		}
+
+		@Override
+		public boolean evaluate(List<ChoiceNode> choices) {
+			
+			// TODO
+			return false;
+		}
+
+		@Override
+		public boolean adapt(List<ChoiceNode> values) {
+			return false;
+		}
+
+		@Override
+		public ParameterCondition getCopy() {
+			return new ParameterCondition(fMethodParameterNode.makeClone());
+		}
+
+		@Override
+		public boolean updateReferences(MethodParameterNode parameter) {
+			return true;
+		}
+
+		@Override
+		public Object getCondition(){
+			return fMethodParameterNode;
+		}
+
+		@Override
+		public boolean compare(ICondition otherCondition) {
+
+			if (!(otherCondition instanceof ParameterCondition)) {
+				return false;
+			}
+
+			ParameterCondition otherParamCondition = (ParameterCondition)otherCondition;
+
+			return (fMethodParameterNode == otherParamCondition.fMethodParameterNode);
+		}
+
+		@Override
+		public Object accept(IStatementVisitor visitor) throws Exception {
+			return visitor.visit(this);
+		}
+
+		@Override
+		public String toString() {
+			return fMethodParameterNode.getName() + "[parameter]"; 
+		}
+
+		public MethodParameterNode getMethodParameterNode() {
+			return fMethodParameterNode;
+		}
+
+	}	
 
 }
 

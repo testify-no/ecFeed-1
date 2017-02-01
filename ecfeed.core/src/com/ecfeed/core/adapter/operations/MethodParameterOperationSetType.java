@@ -26,6 +26,7 @@ import com.ecfeed.core.model.ChoicesParentNode;
 import com.ecfeed.core.model.ChoicesParentStatement;
 import com.ecfeed.core.model.ChoicesParentStatement.ChoiceCondition;
 import com.ecfeed.core.model.ChoicesParentStatement.LabelCondition;
+import com.ecfeed.core.model.ChoicesParentStatement.ParameterCondition;
 import com.ecfeed.core.model.Constraint;
 import com.ecfeed.core.model.ConstraintNode;
 import com.ecfeed.core.model.ExpectedValueStatement;
@@ -121,6 +122,11 @@ public class MethodParameterOperationSetType extends BulkOperation {
 			public Object visit(ChoiceCondition condition) throws Exception {
 				return true;
 			}
+
+			@Override
+			public Object visit(ParameterCondition condition) throws Exception {
+				return true;
+			}
 		}
 
 		private class ReverseSetTypeOperation extends AbstractParameterOperationSetType.ReverseOperation{
@@ -165,6 +171,12 @@ public class MethodParameterOperationSetType extends BulkOperation {
 
 				@Override
 				public Object visit(ChoiceCondition condition)
+						throws Exception {
+					return null;
+				}
+
+				@Override
+				public Object visit(ParameterCondition condition)
 						throws Exception {
 					return null;
 				}

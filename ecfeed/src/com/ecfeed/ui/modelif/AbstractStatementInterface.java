@@ -17,23 +17,23 @@ import com.ecfeed.core.model.StaticStatement;
 
 public class AbstractStatementInterface extends OperationExecuter {
 
-	AbstractStatement fTarget;
+	AbstractStatement fAbstractStatement;
 
 	public AbstractStatementInterface(IModelUpdateContext updateContext) {
 		super(updateContext);
 	}
 
 	public void setTarget(AbstractStatement target){
-		fTarget = target;
+		fAbstractStatement = target;
 	}
 
-	protected AbstractStatement getTarget(){
-		return fTarget;
+	protected AbstractStatement getStatement(){
+		return fAbstractStatement;
 	}
 
 	public boolean remove(){
-		if(fTarget.getParent() != null){
-			return getParentInterface().removeChild(fTarget);
+		if(fAbstractStatement.getParent() != null){
+			return getParentInterface().removeChild(fAbstractStatement);
 		}
 		return false;
 	}
@@ -52,14 +52,14 @@ public class AbstractStatementInterface extends OperationExecuter {
 	}
 
 	public boolean addStatement(AbstractStatement statement){
-		if(fTarget.getParent() != null){
+		if(fAbstractStatement.getParent() != null){
 			return getParentInterface().addStatement(statement);
 		}
 		return false;
 	}
 
 	public AbstractStatementInterface getParentInterface(){
-		AbstractStatement parent = fTarget.getParent();
+		AbstractStatement parent = fAbstractStatement.getParent();
 		if(parent != null){
 			return StatementInterfaceFactory.getInterface(parent, getUpdateContext());
 		}

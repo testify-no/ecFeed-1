@@ -17,6 +17,7 @@ import java.util.Set;
 import com.ecfeed.core.generators.api.IConstraint;
 import com.ecfeed.core.model.ChoicesParentStatement.ChoiceCondition;
 import com.ecfeed.core.model.ChoicesParentStatement.LabelCondition;
+import com.ecfeed.core.model.ChoicesParentStatement.ParameterCondition;
 
 public class Constraint implements IConstraint<ChoiceNode> {
 
@@ -213,7 +214,6 @@ public class Constraint implements IConstraint<ChoiceNode> {
 		return false;
 	}
 
-	//TODO resign from the visitor pattern for better readability of the code
 	private class ReferencedChoicesProvider implements IStatementVisitor {
 
 		@Override
@@ -266,6 +266,12 @@ public class Constraint implements IConstraint<ChoiceNode> {
 
 			return set;
 		}
+		
+		@Override
+		public Object visit(ParameterCondition condition) throws Exception {
+
+			return new HashSet<ChoiceNode>();
+		}		
 
 	}
 
@@ -321,6 +327,11 @@ public class Constraint implements IConstraint<ChoiceNode> {
 			}
 
 			return set;
+		}
+
+		@Override
+		public Object visit(ParameterCondition condition) throws Exception {
+			return new HashSet<MethodParameterNode>();
 		}
 	}
 
@@ -382,6 +393,11 @@ public class Constraint implements IConstraint<ChoiceNode> {
 		@Override
 		public Object visit(ChoiceCondition condition) throws Exception {
 
+			return EMPTY_SET;
+		}
+
+		@Override
+		public Object visit(ParameterCondition condition) throws Exception {
 			return EMPTY_SET;
 		}
 

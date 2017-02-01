@@ -15,8 +15,10 @@ import com.ecfeed.core.adapter.operations.StatementOperationSetCondition;
 import com.ecfeed.core.adapter.operations.StatementOperationSetRelation;
 import com.ecfeed.core.model.ChoicesParentStatement;
 import com.ecfeed.core.model.EStatementRelation;
+import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ChoicesParentStatement.ICondition;
+import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.ui.common.Messages;
 
 public class ChoicesParentStatementInterface extends AbstractStatementInterface{
@@ -27,8 +29,8 @@ public class ChoicesParentStatementInterface extends AbstractStatementInterface{
 
 	@Override
 	public boolean setRelation(EStatementRelation relation) {
-		if(relation != getTarget().getRelation()){
-			IModelOperation operation = new StatementOperationSetRelation(getTarget(), relation);
+		if (relation != getStatement().getRelation()) {
+			IModelOperation operation = new StatementOperationSetRelation(getStatement(), relation);
 			return execute(operation, Messages.DIALOG_EDIT_STATEMENT_PROBLEM_TITLE);
 		}
 		return false;
@@ -36,31 +38,75 @@ public class ChoicesParentStatementInterface extends AbstractStatementInterface{
 
 	@Override
 	public boolean setConditionValue(String text) {
-		if(getTarget().getConditionName().equals(text) == false){
-			ICondition newCondition;
-			MethodParameterNode parameter = getTarget().getParameter();
-			if(parameter.getChoice(text) != null){
-				newCondition = getTarget().new ChoiceCondition(parameter.getChoice(text));
-			}
-			else{
-				if(text.contains("[label]")){
-					text = text.substring(0, text.indexOf("[label]"));
-				}
-				newCondition = getTarget().new LabelCondition(text);
-			}
-			IModelOperation operation = new StatementOperationSetCondition(getTarget(), newCondition);
-			return execute(operation, Messages.DIALOG_EDIT_STATEMENT_PROBLEM_TITLE);
+
+		String conditionName = getStatement().getConditionName();
+		
+		if (conditionName.equals(text)) {
+			return false;
 		}
-		return false;
+		
+		MethodParameterNode leftParameter = getStatement().getParameter();
+		
+		ICondition newCondition = createNewCondition(text, leftParameter);
+		IModelOperation operation = new StatementOperationSetCondition(getStatement(), newCondition);
+		
+		return execute(operation, Messages.DIALOG_EDIT_STATEMENT_PROBLEM_TITLE);
 	}
+	
+	private ICondition createNewCondition(String string, MethodParameterNode parameter) {
+		
+		if (!containsTypeInfo(string, null)) {
+			return getStatement().new ChoiceCondition(parameter.getChoice(string));
+		}
+		
+		if (containsTypeInfo(string, "label")) {
+			return getStatement().new LabelCondition(removeTypeInfo(string, "label"));
+		}
+		
+		if (containsTypeInfo(string, "parameter")) {
+			String parameterName = removeTypeInfo(string, "parameter"); 
+			MethodNode methodNode = parameter.getMethod();
+			MethodParameterNode rightParameter = (MethodParameterNode)methodNode.getParameter(parameterName);
+					
+			return getStatement().new ParameterCondition(rightParameter);
+		}
+		
+		return null;
+		
+		
+	}
+	
+	private static boolean containsTypeInfo(String string, String typeDescription) {
+		
+		if (!(string.contains("["))) {
+			return false;
+		}
+		
+		if (!(string.contains("]"))) {
+			return false;
+		}		
+		
+		if (typeDescription != null) {
+			if (!string.contains("[" + typeDescription + "]")) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
+	private String removeTypeInfo(String string, String typeDescription) {
+		return StringHelper.removeFromPostfix("[" + typeDescription + "]", string);
+	}
+	
 
 	@Override
 	public String getConditionValue() {
-		return getTarget().getConditionName();
+		return getStatement().getConditionName();
 	}
 
 	@Override
-	protected ChoicesParentStatement getTarget(){
-		return (ChoicesParentStatement)super.getTarget();
+	protected ChoicesParentStatement getStatement() {
+		return (ChoicesParentStatement)super.getStatement();
 	}
 }

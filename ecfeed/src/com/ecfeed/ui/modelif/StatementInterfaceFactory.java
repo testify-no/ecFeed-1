@@ -12,6 +12,7 @@ package com.ecfeed.ui.modelif;
 
 import com.ecfeed.core.model.AbstractStatement;
 import com.ecfeed.core.model.ChoicesParentStatement;
+import com.ecfeed.core.model.ChoicesParentStatement.ParameterCondition;
 import com.ecfeed.core.model.ExpectedValueStatement;
 import com.ecfeed.core.model.IStatementVisitor;
 import com.ecfeed.core.model.StatementArray;
@@ -65,6 +66,11 @@ public class StatementInterfaceFactory{
 
 		@Override
 		public Object visit(ChoiceCondition condition) throws Exception {
+			return null;
+		}
+
+		@Override
+		public Object visit(ParameterCondition condition) throws Exception {
 			return null;
 		}
 	}

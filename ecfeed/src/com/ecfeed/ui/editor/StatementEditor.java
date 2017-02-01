@@ -34,6 +34,7 @@ import com.ecfeed.core.model.ChoicesParentStatement;
 import com.ecfeed.core.model.ChoicesParentStatement.ChoiceCondition;
 import com.ecfeed.core.model.ChoicesParentStatement.ICondition;
 import com.ecfeed.core.model.ChoicesParentStatement.LabelCondition;
+import com.ecfeed.core.model.ChoicesParentStatement.ParameterCondition;
 import com.ecfeed.core.model.ConstraintNode;
 import com.ecfeed.core.model.EStatementOperator;
 import com.ecfeed.core.model.EStatementRelation;
@@ -217,26 +218,53 @@ public class StatementEditor extends Composite {
 		@Override
 		public Object visit(ChoicesParentStatement statement) throws Exception {
 
-			List<String> result = new ArrayList<String>();
-			MethodParameterNode parameter = statement.getParameter();
+			List<String> conditions = new ArrayList<String>();
+			MethodParameterNode methodParameterNode = statement.getParameter();
 
-			Set<ChoiceNode> allChoices = parameter.getAllChoices();
-			Set<String> allLabels = parameter.getLeafLabels();
+			addChoices(methodParameterNode, conditions);
+			addLabels(methodParameterNode, conditions);
+			addParameters(methodParameterNode, conditions);
 
+			return conditions.toArray(new String[]{});
+		}
+		
+		private void addChoices(MethodParameterNode methodParameterNode, List<String> inOutConditions) {
+			
+			Set<ChoiceNode> allChoices = methodParameterNode.getAllChoices();
+			
 			for (ChoiceNode choice : allChoices) {
+				
 				ICondition condition = 
-						new ChoicesParentStatement(parameter, EStatementRelation.EQUAL, choice).getCondition();
+						new ChoicesParentStatement(
+								methodParameterNode, EStatementRelation.EQUAL, choice).getCondition();
 
-				result.add(condition.toString());
+				inOutConditions.add(condition.toString());
 			}
-
+		}
+		
+		private void addLabels(MethodParameterNode methodParameterNode, List<String> inOutConditions) {
+			
+			Set<String> allLabels = methodParameterNode.getLeafLabels();
+			
 			for (String label : allLabels) {
+				
 				ICondition condition = 
-						new ChoicesParentStatement(parameter, EStatementRelation.EQUAL, label).getCondition();
-				result.add(condition.toString());
+						new ChoicesParentStatement(
+								methodParameterNode, EStatementRelation.EQUAL, label).getCondition();
+				
+				inOutConditions.add(condition.toString());
 			}
-
-			return result.toArray(new String[]{});
+		}
+		
+		private void addParameters(MethodParameterNode methodParameterNode, List<String> inOutConditions) {
+			
+			List<String> parameterNames = methodParameterNode.getMethod().getParametersNames();
+			parameterNames.remove(methodParameterNode.getName());
+			
+			for (String parameterName : parameterNames) {
+				
+				inOutConditions.add(parameterName + "[parameter]");
+			}
 		}
 
 		@Override
@@ -246,6 +274,11 @@ public class StatementEditor extends Composite {
 
 		@Override
 		public Object visit(ChoiceCondition condition) throws Exception {
+			return new String[]{};
+		}
+
+		@Override
+		public Object visit(ParameterCondition condition) throws Exception {
 			return new String[]{};
 		}
 	}
@@ -282,6 +315,11 @@ public class StatementEditor extends Composite {
 			return "";
 		}
 
+		@Override
+		public Object visit(ParameterCondition condition) throws Exception {
+			return "";
+		}
+
 	}
 
 	private class ConditionComboListener implements SelectionListener {
@@ -299,7 +337,8 @@ public class StatementEditor extends Composite {
 		protected void applyNewValue() {
 
 			fStatementIf.setConditionValue(fConditionCombo.getText());
-			fConditionCombo.setText(fStatementIf.getConditionValue());
+			String newText = fStatementIf.getConditionValue();
+			fConditionCombo.setText(newText);
 		}
 
 	}
@@ -310,7 +349,8 @@ public class StatementEditor extends Composite {
 		public void focusLost(FocusEvent e) {
 
 			fStatementIf.setConditionValue(fConditionCombo.getText());
-			fConditionCombo.setText(fStatementIf.getConditionValue());
+			String newText = fStatementIf.getConditionValue();
+			fConditionCombo.setText(newText);
 		}
 
 	}
@@ -469,6 +509,11 @@ public class StatementEditor extends Composite {
 		public Object visit(ChoiceCondition condition) throws Exception {
 			return null;
 		}
+		
+		@Override
+		public Object visit(ParameterCondition condition) throws Exception {
+			return null;
+		}		
 
 		private void disposeRightOperandComposite() {
 
@@ -502,6 +547,7 @@ public class StatementEditor extends Composite {
 
 			return relations.toArray(new String[]{});
 		}
+
 	}
 
 }
