@@ -23,7 +23,7 @@ import com.ecfeed.core.model.RelationStatement.LabelCondition;
 public class StatementInterfaceFactory{
 
 	private static class InterfaceProvider implements IStatementVisitor{
-		
+
 		private IModelUpdateContext fUpdateContext;
 
 		public InterfaceProvider(IModelUpdateContext updateContext) {

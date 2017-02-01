@@ -431,12 +431,12 @@ public abstract class XomBuilder implements IModelVisitor, IStatementVisitor {
 
 		return targetChoiceElement;
 	}
-	
+
 	@Override
 	public Object visit(ParameterCondition condition) throws Exception {
 		MethodParameterNode methodParameterNode = condition.getMethodParameterNode();
 		Element targetChoiceElement = new Element(CONSTRAINT_CHOICE_STATEMENT_NODE_NAME);
-		
+
 		encodeAndAddAttribute(
 				targetChoiceElement, 
 				new Attribute(getStatementChoiceAttributeName(), methodParameterNode.getName()));

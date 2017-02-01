@@ -109,7 +109,7 @@ public class StatementEditor extends Composite {
 
 		buildEditor(statement);
 	}
-	
+
 	private void buildEditor(AbstractStatement statement) {
 		try {
 			statement.accept(new EditorBuilder(fFileInfoProvider));
@@ -227,13 +227,13 @@ public class StatementEditor extends Composite {
 
 			return conditions.toArray(new String[]{});
 		}
-		
+
 		private void addChoices(MethodParameterNode methodParameterNode, List<String> inOutConditions) {
-			
+
 			Set<ChoiceNode> allChoices = methodParameterNode.getAllChoices();
-			
+
 			for (ChoiceNode choice : allChoices) {
-				
+
 				ICondition condition = 
 						new RelationStatement(
 								methodParameterNode, EStatementRelation.EQUAL, choice).getCondition();
@@ -241,28 +241,28 @@ public class StatementEditor extends Composite {
 				inOutConditions.add(condition.toString());
 			}
 		}
-		
+
 		private void addLabels(MethodParameterNode methodParameterNode, List<String> inOutConditions) {
-			
+
 			Set<String> allLabels = methodParameterNode.getLeafLabels();
-			
+
 			for (String label : allLabels) {
-				
+
 				ICondition condition = 
 						new RelationStatement(
 								methodParameterNode, EStatementRelation.EQUAL, label).getCondition();
-				
+
 				inOutConditions.add(condition.toString());
 			}
 		}
-		
+
 		private void addParameters(MethodParameterNode methodParameterNode, List<String> inOutConditions) {
-			
+
 			List<String> parameterNames = methodParameterNode.getMethod().getParametersNames();
 			parameterNames.remove(methodParameterNode.getName());
-			
+
 			for (String parameterName : parameterNames) {
-				
+
 				inOutConditions.add(parameterName + "[parameter]");
 			}
 		}
@@ -509,7 +509,7 @@ public class StatementEditor extends Composite {
 		public Object visit(ChoiceCondition condition) throws Exception {
 			return null;
 		}
-		
+
 		@Override
 		public Object visit(ParameterCondition condition) throws Exception {
 			return null;

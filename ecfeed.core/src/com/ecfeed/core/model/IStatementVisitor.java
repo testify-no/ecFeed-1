@@ -15,7 +15,7 @@ import com.ecfeed.core.model.RelationStatement.LabelCondition;
 import com.ecfeed.core.model.RelationStatement.ParameterCondition;
 
 public interface IStatementVisitor {
-	
+
 	public Object visit(StaticStatement statement) throws Exception;
 	public Object visit(StatementArray statement) throws Exception;
 	public Object visit(ExpectedValueStatement statement) throws Exception;

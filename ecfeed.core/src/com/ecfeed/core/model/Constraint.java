@@ -266,7 +266,7 @@ public class Constraint implements IConstraint<ChoiceNode> {
 
 			return set;
 		}
-		
+
 		@Override
 		public Object visit(ParameterCondition condition) throws Exception {
 

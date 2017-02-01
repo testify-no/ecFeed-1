@@ -436,8 +436,8 @@ public class RelationStatement extends AbstractStatement implements IRelationalS
 		}
 
 	}
-	
-	
+
+
 	public class ParameterCondition implements ICondition {
 
 		private MethodParameterNode fMethodParameterNode;
@@ -448,7 +448,7 @@ public class RelationStatement extends AbstractStatement implements IRelationalS
 
 		@Override
 		public boolean evaluate(List<ChoiceNode> choices) {
-			
+
 			// TODO
 			return false;
 		}
