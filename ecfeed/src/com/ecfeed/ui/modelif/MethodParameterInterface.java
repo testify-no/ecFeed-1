@@ -42,19 +42,19 @@ public class MethodParameterInterface extends AbstractParameterInterface {
 	}
 
 	public boolean isExpected() {
-		return getOwnRootNode().isExpected();
+		return getOwnNode().isExpected();
 	}
 
 	public String getDefaultValue() {
-		return getOwnRootNode().getDefaultValue();
+		return getOwnNode().getDefaultValue();
 	}
 
 	public boolean setExpected(boolean expected){
-		if(expected != getOwnRootNode().isExpected()){
-			MethodNode method = getOwnRootNode().getMethod();
+		if(expected != getOwnNode().isExpected()){
+			MethodNode method = getOwnNode().getMethod();
 			if(method != null){
 				boolean testCases = method.getTestCases().size() > 0;
-				boolean constraints = method.mentioningConstraints(getOwnRootNode()).size() > 0;
+				boolean constraints = method.mentioningConstraints(getOwnNode()).size() > 0;
 				if(testCases || constraints){
 					String message = "";
 					if(testCases){
@@ -74,14 +74,14 @@ public class MethodParameterInterface extends AbstractParameterInterface {
 					}
 				}
 			}
-			return execute(new ParameterOperationSetExpected(getOwnRootNode(), expected), Messages.DIALOG_SET_CATEGORY_EXPECTED_PROBLEM_TITLE);
+			return execute(new ParameterOperationSetExpected(getOwnNode(), expected), Messages.DIALOG_SET_CATEGORY_EXPECTED_PROBLEM_TITLE);
 		}
 		return false;
 	}
 
 	public boolean setDefaultValue(String valueString) {
-		if(getOwnRootNode().getDefaultValue().equals(valueString) == false){
-			IModelOperation operation = new ParameterOperationSetDefaultValue(getOwnRootNode(), valueString, getAdapterProvider().getAdapter(getOwnRootNode().getType()));
+		if(getOwnNode().getDefaultValue().equals(valueString) == false){
+			IModelOperation operation = new ParameterOperationSetDefaultValue(getOwnNode(), valueString, getAdapterProvider().getAdapter(getOwnNode().getType()));
 			return execute(operation, Messages.DIALOG_SET_DEFAULT_VALUE_PROBLEM_TITLE);
 		}
 		return false;
@@ -90,32 +90,32 @@ public class MethodParameterInterface extends AbstractParameterInterface {
 	public String[] defaultValueSuggestions(){
 		Set<String> items = new HashSet<String>(getSpecialValues());
 		if(JavaTypeHelper.isJavaType(getType()) == false){
-			for(ChoiceNode p : getOwnRootNode().getLeafChoices()){
+			for(ChoiceNode p : getOwnNode().getLeafChoices()){
 				items.add(p.getValueString());
 			}
-			if(items.contains(getOwnRootNode().getDefaultValue())== false){
-				items.add(getOwnRootNode().getDefaultValue());
+			if(items.contains(getOwnNode().getDefaultValue())== false){
+				items.add(getOwnNode().getDefaultValue());
 			}
 		}
 		return items.toArray(new String[]{});
 	}
 
 	public boolean setLinked(boolean linked) {
-		MethodParameterOperationSetLinked operation = new MethodParameterOperationSetLinked(getOwnRootNode(), linked);
-		MethodNode method = getOwnRootNode().getMethod();
+		MethodParameterOperationSetLinked operation = new MethodParameterOperationSetLinked(getOwnNode(), linked);
+		MethodNode method = getOwnNode().getMethod();
 		if(linked){
-			GlobalParameterNode link = getOwnRootNode().getLink();
-			if(link == null || method.getAvailableGlobalParameters().contains(link) == false || method.checkDuplicate(getOwnRootNode().getIndex(), link.getType())){
+			GlobalParameterNode link = getOwnNode().getLink();
+			if(link == null || method.getAvailableGlobalParameters().contains(link) == false || method.checkDuplicate(getOwnNode().getIndex(), link.getType())){
 				GlobalParameterNode newLink = findNewLink();
 				if(newLink == null){
 					MessageDialog.openError(Display.getCurrent().getActiveShell(), Messages.DIALOG_SET_PARAMETER_LINKED_PROBLEM_TITLE, Messages.DIALOG_NO_VALID_LINK_AVAILABLE_PROBLEM_MESSAGE);
 				}
-				operation.addOperation(0, new MethodParameterOperationSetLink(getOwnRootNode(), newLink));
+				operation.addOperation(0, new MethodParameterOperationSetLink(getOwnNode(), newLink));
 			}
 		}else{
 			//check the type of the unlinked parameter. If it causes collision, set new type
-			if(method.checkDuplicate(getOwnRootNode().getIndex(), getOwnRootNode().getRealType())){
-				operation.addOperation(0, new MethodParameterOperationSetType(getOwnRootNode(), getOwnRootNode().getType(), getAdapterProvider()));
+			if(method.checkDuplicate(getOwnNode().getIndex(), getOwnNode().getRealType())){
+				operation.addOperation(0, new MethodParameterOperationSetType(getOwnNode(), getOwnNode().getType(), getAdapterProvider()));
 			}
 		}
 
@@ -123,11 +123,11 @@ public class MethodParameterInterface extends AbstractParameterInterface {
 	}
 
 	public boolean isLinked() {
-		return getOwnRootNode().isLinked();
+		return getOwnNode().isLinked();
 	}
 
 	public boolean setLink(GlobalParameterNode link) {
-		IModelOperation operation = new MethodParameterOperationSetLink(getOwnRootNode(), link);
+		IModelOperation operation = new MethodParameterOperationSetLink(getOwnNode(), link);
 		return execute(operation, Messages.DIALOG_SET_PARAMETER_LINK_PROBLEM_TITLE);
 	}
 
@@ -138,41 +138,41 @@ public class MethodParameterInterface extends AbstractParameterInterface {
 		if(path.indexOf(":") != -1){
 			String parentName = path.substring(0, path.indexOf(":"));
 			parameterName = path.substring(path.indexOf(":") + 1);
-			parametersParent = getOwnRootNode().getMethod().getClassNode();
+			parametersParent = getOwnNode().getMethod().getClassNode();
 			if(parametersParent.getName().equals(parentName) == false){
 				return null;
 			}
 		}
 		else{
-			parametersParent = (RootNode)getOwnRootNode().getRoot();
+			parametersParent = (RootNode)getOwnNode().getRoot();
 		}
 		return parametersParent.getGlobalParameter(parameterName);
 	}
 
 	public GlobalParameterNode getLink() {
-		return getOwnRootNode().getLink();
+		return getOwnNode().getLink();
 	}
 
 	public List<GlobalParameterNode> getAvailableLinks() {
 		List<GlobalParameterNode> result = new ArrayList<GlobalParameterNode>();
-		result.addAll(((RootNode)getOwnRootNode().getRoot()).getGlobalParameters());
-		result.addAll(getOwnRootNode().getMethod().getClassNode().getGlobalParameters());
+		result.addAll(((RootNode)getOwnNode().getRoot()).getGlobalParameters());
+		result.addAll(getOwnNode().getMethod().getClassNode().getGlobalParameters());
 		return result;
 	}
 
 	@Override
-	public MethodParameterNode getOwnRootNode(){
-		return (MethodParameterNode)super.getOwnRootNode();
+	public MethodParameterNode getOwnNode(){
+		return (MethodParameterNode)super.getOwnNode();
 	}
 
 	@Override
 	protected IModelOperation setTypeOperation(String type) {
-		return new MethodParameterOperationSetType(getOwnRootNode(), type, getAdapterProvider());
+		return new MethodParameterOperationSetType(getOwnNode(), type, getAdapterProvider());
 	}
 
 	@Override
 	public boolean commentsImportExportEnabled(){
-		if(getImplementationStatus(getOwnRootNode().getMethod()) != EImplementationStatus.NOT_IMPLEMENTED){
+		if(getImplementationStatus(getOwnNode().getMethod()) != EImplementationStatus.NOT_IMPLEMENTED){
 			return true;
 		}
 		if(getImplementationStatus() != EImplementationStatus.NOT_IMPLEMENTED){
@@ -190,12 +190,12 @@ public class MethodParameterInterface extends AbstractParameterInterface {
 
 	@Override
 	public boolean importTypeCommentsEnabled(){
-		return getOwnRootNode().isLinked() == false;
+		return getOwnNode().isLinked() == false;
 	}
 
 	private GlobalParameterNode findNewLink() {
-		MethodNode method = getOwnRootNode().getMethod();
-		int index = getOwnRootNode().getIndex();
+		MethodNode method = getOwnNode().getMethod();
+		int index = getOwnNode().getIndex();
 		for(GlobalParameterNode parameter : method.getAvailableGlobalParameters()){
 			if(method.checkDuplicate(index, parameter.getType()) == false){
 				return parameter;

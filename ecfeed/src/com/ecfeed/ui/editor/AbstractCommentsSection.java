@@ -120,7 +120,7 @@ public abstract class AbstractCommentsSection extends TabFolderSection {
 		}
 	}
 
-	protected AbstractNode getTarget(){
+	protected AbstractNode getOwnNode(){
 		return fTarget;
 	}
 

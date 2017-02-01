@@ -115,7 +115,7 @@ public class JavaDocCommentsSection extends AbstractCommentsSection {
 
 		String comments = getTargetIf().getComments();
 		getCommentsText().setText(comments != null ? comments : "");
-		String javadoc = JavaDocSupport.getJavadoc(getTarget());
+		String javadoc = JavaDocSupport.getJavadoc(getOwnNode());
 		getJavaDocText().setText(javadoc != null ? javadoc : "");
 	}
 

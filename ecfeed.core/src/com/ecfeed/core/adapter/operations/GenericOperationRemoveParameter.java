@@ -39,7 +39,7 @@ public class GenericOperationRemoveParameter extends AbstractModelOperation{
 		return new GenericOperationAddParameter(fTarget, fParameter, fOriginalIndex);
 	}
 
-	protected ParametersParentNode getTarget(){
+	protected ParametersParentNode getOwnNode(){
 		return fTarget;
 	}
 

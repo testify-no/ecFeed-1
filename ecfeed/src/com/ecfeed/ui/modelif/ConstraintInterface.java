@@ -24,13 +24,13 @@ public class ConstraintInterface extends AbstractNodeInterface {
 	}
 
 	@Override
-	public ConstraintNode getOwnRootNode(){
-		return (ConstraintNode)super.getOwnRootNode();
+	public ConstraintNode getOwnNode(){
+		return (ConstraintNode)super.getOwnNode();
 	}
 
 	public boolean replaceStatement(AbstractStatement current, AbstractStatement newStatement) {
 		if(current != newStatement){
-			IModelOperation operation = new ConstraintOperationReplaceStatement(getOwnRootNode(), current, newStatement);
+			IModelOperation operation = new ConstraintOperationReplaceStatement(getOwnNode(), current, newStatement);
 			return execute(operation, Messages.DIALOG_REMOVE_TEST_CASES_PROBLEM_TITLE);
 		}
 		return false;

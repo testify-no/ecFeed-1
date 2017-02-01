@@ -89,7 +89,7 @@ public abstract class AbstractParameterCommentsSection extends JavaDocCommentsSe
 	public void refresh(){
 		super.refresh();
 
-		String javadoc = JavaDocSupport.getTypeJavadoc(getTarget());
+		String javadoc = JavaDocSupport.getTypeJavadoc(getOwnNode());
 		getTextFromTabItem(getTypeJavadocTab()).setText(javadoc != null ? javadoc : "");
 
 		if(getTargetIf().getComments() != null){
@@ -109,8 +109,8 @@ public abstract class AbstractParameterCommentsSection extends JavaDocCommentsSe
 	}
 
 	@Override
-	public AbstractParameterNode getTarget(){
-		return (AbstractParameterNode)super.getTarget();
+	public AbstractParameterNode getOwnNode(){
+		return (AbstractParameterNode)super.getOwnNode();
 	}
 
 	public void setInput(AbstractParameterNode input){
@@ -123,7 +123,7 @@ public abstract class AbstractParameterCommentsSection extends JavaDocCommentsSe
 		TabItem activeItem = getActiveItem();
 		boolean enabled = true;
 		if(activeItem == getTypeCommentsTab() || activeItem == getTypeJavadocTab()){
-			if(JavaTypeHelper.isJavaType(getTarget().getType())){
+			if(JavaTypeHelper.isJavaType(getOwnNode().getType())){
 				enabled = false;
 			}
 		}

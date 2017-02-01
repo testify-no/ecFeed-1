@@ -93,7 +93,7 @@ public class MethodInterface extends ParametersParentInterface {
 	}
 
 	public boolean convertTo(MethodNode method) {
-		return execute(new MethodOperationConvertTo(getOwnRootNode(), method),
+		return execute(new MethodOperationConvertTo(getOwnNode(), method),
 				Messages.DIALOG_CONVERT_METHOD_PROBLEM_TITLE);
 	}
 
@@ -107,22 +107,22 @@ public class MethodInterface extends ParametersParentInterface {
 				defaultValue, false);
 		List<ChoiceNode> defaultChoices = modelBuilder.defaultChoices(type);
 		parameter.addChoices(defaultChoices);
-		if (addParameter(parameter, getOwnRootNode().getParameters().size())) {
+		if (addParameter(parameter, getOwnNode().getParameters().size())) {
 			return parameter;
 		}
 		return null;
 	}
 
 	public boolean addParameter(MethodParameterNode parameter, int index) {
-		return execute(new MethodOperationAddParameter(getOwnRootNode(), parameter,
+		return execute(new MethodOperationAddParameter(getOwnNode(), parameter,
 				index), Messages.DIALOG_CONVERT_METHOD_PROBLEM_TITLE);
 	}
 
 	public boolean removeMethodParameters(
 			Collection<MethodParameterNode> parameters) {
-		Set<ConstraintNode> constraints = getOwnRootNode().mentioningConstraints(
+		Set<ConstraintNode> constraints = getOwnNode().mentioningConstraints(
 				parameters);
-		if (constraints.size() > 0 || getOwnRootNode().getTestCases().size() > 0) {
+		if (constraints.size() > 0 || getOwnNode().getTestCases().size() > 0) {
 			if (MessageDialog.openConfirm(
 					Display.getCurrent().getActiveShell(),
 					Messages.DIALOG_REMOVE_PARAMETERS_WARNING_TITLE,
@@ -146,7 +146,7 @@ public class MethodInterface extends ParametersParentInterface {
 
 	public boolean addNewConstraint(ConstraintNode constraint) {
 		IModelOperation operation = new MethodOperationAddConstraint(
-				getOwnRootNode(), constraint, getOwnRootNode().getConstraintNodes()
+				getOwnNode(), constraint, getOwnNode().getConstraintNodes()
 				.size());
 		return execute(operation, Messages.DIALOG_ADD_CONSTRAINT_PROBLEM_TITLE);
 	}
@@ -157,7 +157,7 @@ public class MethodInterface extends ParametersParentInterface {
 	}
 
 	public TestCaseNode addTestCase() {
-		for (MethodParameterNode parameter : getOwnRootNode().getMethodParameters()) {
+		for (MethodParameterNode parameter : getOwnNode().getMethodParameters()) {
 			if (!parameter.isExpected() && parameter.getChoices().isEmpty()) {
 				MessageDialog.openError(Display.getDefault().getActiveShell(),
 						Messages.DIALOG_ADD_TEST_CASE_PROBLEM_TITLE,
@@ -167,7 +167,7 @@ public class MethodInterface extends ParametersParentInterface {
 		}
 
 		AddTestCaseDialog dialog = new AddTestCaseDialog(Display.getCurrent()
-				.getActiveShell(), getOwnRootNode());
+				.getActiveShell(), getOwnNode());
 		dialog.create();
 		if (dialog.open() == IDialogConstants.OK_ID) {
 			String testSuite = dialog.getTestSuite();
@@ -181,8 +181,8 @@ public class MethodInterface extends ParametersParentInterface {
 	}
 
 	public boolean addTestCase(TestCaseNode testCase) {
-		return execute(new MethodOperationAddTestCase(getOwnRootNode(), testCase,
-				fAdapterProvider, getOwnRootNode().getTestCases().size()),
+		return execute(new MethodOperationAddTestCase(getOwnNode(), testCase,
+				fAdapterProvider, getOwnNode().getTestCases().size()),
 				Messages.DIALOG_ADD_TEST_CASE_PROBLEM_TITLE);
 	}
 
@@ -193,7 +193,7 @@ public class MethodInterface extends ParametersParentInterface {
 
 	public void renameSuite() {
 		RenameTestSuiteDialog dialog = new RenameTestSuiteDialog(Display
-				.getDefault().getActiveShell(), getOwnRootNode().getTestSuites());
+				.getDefault().getActiveShell(), getOwnNode().getTestSuites());
 		dialog.create();
 		if (dialog.open() == Window.OK) {
 			String oldName = dialog.getRenamedTestSuite();
@@ -204,7 +204,7 @@ public class MethodInterface extends ParametersParentInterface {
 
 	public void renameSuite(String oldName, String newName) {
 		try {
-			execute(new MethodOperationRenameTestCases(getOwnRootNode()
+			execute(new MethodOperationRenameTestCases(getOwnNode()
 					.getTestCases(oldName), newName),
 					Messages.DIALOG_RENAME_TEST_SUITE_PROBLEM);
 		} catch (ModelOperationException e) {
@@ -215,7 +215,7 @@ public class MethodInterface extends ParametersParentInterface {
 
 	public boolean generateTestSuite() {
 		TestSuiteGenerationSupport testGenerationSupport = 
-				new TestSuiteGenerationSupport(getOwnRootNode(), fFileInfoProvider);
+				new TestSuiteGenerationSupport(getOwnNode(), fFileInfoProvider);
 
 		testGenerationSupport.proceed();
 		if (testGenerationSupport.hasData() == false)
@@ -242,20 +242,20 @@ public class MethodInterface extends ParametersParentInterface {
 			}
 		}
 		IModelOperation operation = new MethodOperationAddTestSuite(
-				getOwnRootNode(), testSuiteName, testData, fAdapterProvider);
+				getOwnNode(), testSuiteName, testData, fAdapterProvider);
 		return execute(operation, Messages.DIALOG_ADD_TEST_SUITE_PROBLEM_TITLE);
 	}
 
 	public void executeOnlineTests(IFileInfoProvider fileInfoProvider)
 			throws EcException {
-		ClassNode classNode = getOwnRootNode().getClassNode();
+		ClassNode classNode = getOwnNode().getClassNode();
 
 		if (!isValidClassConfiguration(classNode))
 			return;
 
 		OnlineTestRunningSupport testSupport = 
 				new OnlineTestRunningSupport(
-						getOwnRootNode(), createTestMethodInvoker(fileInfoProvider), fileInfoProvider);
+						getOwnNode(), createTestMethodInvoker(fileInfoProvider), fileInfoProvider);
 
 		testSupport.proceed();
 	}
@@ -263,24 +263,24 @@ public class MethodInterface extends ParametersParentInterface {
 	public void executeOnlineExport(IFileInfoProvider fileInfoProvider)
 			throws EcException {
 
-		if (getOwnRootNode().getParametersCount() == 0) {
+		if (getOwnNode().getParametersCount() == 0) {
 			return;
 		}
 
-		ClassNode classNode = getOwnRootNode().getClassNode();
+		ClassNode classNode = getOwnNode().getClassNode();
 
 		if (!isValidClassConfiguration(classNode))
 			return;
 
 		ExportTestMethodInvoker methodInvoker = new ExportTestMethodInvoker(
-				getOwnRootNode());
+				getOwnNode());
 
 		ExportTemplateParser exportParser = new ExportTemplateParser(
-				getOwnRootNode().getParametersCount());
+				getOwnNode().getParametersCount());
 
 		OnlineExportSupport exportSupport = 
 				new OnlineExportSupport(
-						getOwnRootNode(), methodInvoker, 
+						getOwnNode(), methodInvoker, 
 						fileInfoProvider, exportParser.createInitialTemplate(), 
 						ApplicationContext.getExportTargetFile());
 
@@ -307,7 +307,7 @@ public class MethodInterface extends ParametersParentInterface {
 
 	public void executeStaticTests(Collection<TestCaseNode> testCases,
 			IFileInfoProvider fileInfoProvider) throws EcException {
-		MethodNode methodNode = getOwnRootNode();
+		MethodNode methodNode = getOwnNode();
 		ClassNode classNode = methodNode.getClassNode();
 
 		if (!isValidClassConfiguration(classNode))
@@ -325,7 +325,7 @@ public class MethodInterface extends ParametersParentInterface {
 	public void exportTestCases(Collection<TestCaseNode> checkedTestCases) {
 
 		ExportTemplateParser exportParser = new ExportTemplateParser(
-				getOwnRootNode().getParametersCount());
+				getOwnNode().getParametersCount());
 		String initialTemplate = exportParser.createInitialTemplate();
 
 		TestCasesExportDialog dialog = new TestCasesExportDialog(
@@ -351,7 +351,7 @@ public class MethodInterface extends ParametersParentInterface {
 			TestCasesExporter exporter = new TestCasesExporter(headerTemplate,
 					testCaseTemplate, footerTemplate);
 
-			exporter.runExport(getOwnRootNode(), testCases, targetFile);
+			exporter.runExport(getOwnNode(), testCases, targetFile);
 		} catch (Exception e) {
 			ErrorDialog.open(e.getMessage());
 			return;
@@ -375,7 +375,7 @@ public class MethodInterface extends ParametersParentInterface {
 
 	private ITestMethodInvoker createTestMethodInvoker(
 			IFileInfoProvider fileInfoProvider) throws EcException {
-		MethodNode methodNode = getOwnRootNode();
+		MethodNode methodNode = getOwnNode();
 		ClassNode classNode = methodNode.getClassNode();
 
 		if (classNode.getRunOnAndroid()) {
@@ -401,15 +401,15 @@ public class MethodInterface extends ParametersParentInterface {
 	}
 
 	public Collection<TestCaseNode> getTestCases(String testSuite) {
-		return getOwnRootNode().getTestCases(testSuite);
+		return getOwnNode().getTestCases(testSuite);
 	}
 
 	public Collection<String> getTestSuites() {
-		return getOwnRootNode().getTestSuites();
+		return getOwnNode().getTestSuites();
 	}
 
 	public Collection<TestCaseNode> getTestCases() {
-		return getOwnRootNode().getTestCases();
+		return getOwnNode().getTestCases();
 	}
 
 	public void reassignTarget() {
@@ -423,9 +423,9 @@ public class MethodInterface extends ParametersParentInterface {
 
 	public List<MethodNode> getCompatibleMethods() {
 		List<MethodNode> compatibleMethods = new ArrayList<MethodNode>();
-		for (MethodNode m : ClassInterface.getOtherMethods(getOwnRootNode()
+		for (MethodNode m : ClassInterface.getOtherMethods(getOwnNode()
 				.getClassNode())) {
-			if (m.getParametersTypes().equals(getOwnRootNode().getParametersTypes())) {
+			if (m.getParametersTypes().equals(getOwnNode().getParametersTypes())) {
 				compatibleMethods.add(m);
 			}
 		}
@@ -435,17 +435,17 @@ public class MethodInterface extends ParametersParentInterface {
 	public void openCoverageDialog(Object[] checkedElements,
 			Object[] grayedElements, IFileInfoProvider fileInfoProvider) {
 		Shell activeShell = Display.getDefault().getActiveShell();
-		new CalculateCoverageDialog(activeShell, getOwnRootNode(), checkedElements,
+		new CalculateCoverageDialog(activeShell, getOwnNode(), checkedElements,
 				grayedElements, fileInfoProvider).open();
 	}
 
 	public List<GlobalParameterNode> getAvailableGlobalParameters() {
-		return getOwnRootNode().getAvailableGlobalParameters();
+		return getOwnNode().getAvailableGlobalParameters();
 	}
 
 	@Override
 	public void goToImplementation() {
-		IMethod method = JavaModelAnalyser.getIMethod(getOwnRootNode());
+		IMethod method = JavaModelAnalyser.getIMethod(getOwnNode());
 		if (method != null) {
 			try {
 				JavaUI.openInEditor(method);
@@ -456,25 +456,25 @@ public class MethodInterface extends ParametersParentInterface {
 	}
 
 	@Override
-	public MethodNode getOwnRootNode() {
-		return (MethodNode) super.getOwnRootNode();
+	public MethodNode getOwnNode() {
+		return (MethodNode) super.getOwnNode();
 	}
 
 	@Override
 	protected String generateNewParameterType() {
 		for (String type : JavaTypeHelper.getSupportedJavaTypes()) {
-			List<String> newTypes = getOwnRootNode().getParametersTypes();
+			List<String> newTypes = getOwnNode().getParametersTypes();
 			newTypes.add(type);
-			if (getOwnRootNode().getClassNode().getMethod(getOwnRootNode().getName(), newTypes) == null) {
+			if (getOwnNode().getClassNode().getMethod(getOwnNode().getName(), newTypes) == null) {
 				return type;
 			}
 		}
 		String type = Constants.DEFAULT_USER_TYPE_NAME;
 		int i = 0;
 		while (true) {
-			List<String> newTypes = getOwnRootNode().getParametersTypes();
+			List<String> newTypes = getOwnNode().getParametersTypes();
 			newTypes.add(type);
-			if (getOwnRootNode().getClassNode().getMethod(getOwnRootNode().getName(),
+			if (getOwnNode().getClassNode().getMethod(getOwnNode().getName(),
 					newTypes) == null) {
 				break;
 			} else {

@@ -47,25 +47,25 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 	}
 
 	public String getType() {
-		return getOwnRootNode().getType();
+		return getOwnNode().getType();
 	}
 
 	public String getTypeComments() {
-		return getOwnRootNode().getTypeComments() != null ? getOwnRootNode().getTypeComments() : "";
+		return getOwnNode().getTypeComments() != null ? getOwnNode().getTypeComments() : "";
 	}
 
 	public boolean editTypeComments() {
 		TextAreaDialog dialog = new TextAreaDialog(Display.getCurrent().getActiveShell(),
 				Messages.DIALOG_EDIT_COMMENTS_TITLE, Messages.DIALOG_EDIT_COMMENTS_MESSAGE, getTypeComments());
 		if(dialog.open() == IDialogConstants.OK_ID){
-			return execute(new ParameterSetTypeCommentsOperation(getOwnRootNode(), dialog.getText()), Messages.DIALOG_SET_COMMENTS_PROBLEM_TITLE);
+			return execute(new ParameterSetTypeCommentsOperation(getOwnNode(), dialog.getText()), Messages.DIALOG_SET_COMMENTS_PROBLEM_TITLE);
 		}
 		return false;
 	}
 
 	public boolean setTypeComments(String comments){
-		if(comments != null && comments.equals(getOwnRootNode().getTypeComments()) == false){
-			return execute(new ParameterSetTypeCommentsOperation(getOwnRootNode(), comments), Messages.DIALOG_EDIT_COMMENTS_TITLE);
+		if(comments != null && comments.equals(getOwnNode().getTypeComments()) == false){
+			return execute(new ParameterSetTypeCommentsOperation(getOwnNode(), comments), Messages.DIALOG_EDIT_COMMENTS_TITLE);
 		}
 		return false;
 	}
@@ -83,9 +83,9 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 	}
 
 	public boolean resetChoicesToDefault(){
-		String type = getOwnRootNode().getType();
+		String type = getOwnNode().getType();
 		List<ChoiceNode> defaultChoices = new EclipseModelBuilder().defaultChoices(type);
-		IModelOperation operation = new ReplaceChoicesOperation(getOwnRootNode(), defaultChoices, getAdapterProvider());
+		IModelOperation operation = new ReplaceChoicesOperation(getOwnNode(), defaultChoices, getAdapterProvider());
 		return execute(operation, Messages.DIALOG_RESET_CHOICES_PROBLEM_TITLE);
 	}
 
@@ -119,7 +119,7 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 
 	@Override
 	public boolean goToImplementationEnabled(){
-		if(JavaTypeHelper.isUserType(getOwnRootNode().getType()) == false){
+		if(JavaTypeHelper.isUserType(getOwnNode().getType()) == false){
 			return false;
 		}
 		return super.goToImplementationEnabled();
@@ -127,7 +127,7 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 
 	@Override
 	public void goToImplementation(){
-		if(JavaTypeHelper.isUserType(getOwnRootNode().getType())){
+		if(JavaTypeHelper.isUserType(getOwnNode().getType())){
 			IType type = JavaModelAnalyser.getIType(getType());
 			if(type != null){
 				try {
@@ -138,23 +138,23 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 	}
 
 	public boolean setType(String newType) {
-		if(newType.equals(getOwnRootNode().getType())){
+		if(newType.equals(getOwnNode().getType())){
 			return false;
 		}
 		return execute(setTypeOperation(newType), Messages.DIALOG_SET_PARAMETER_TYPE_PROBLEM_TITLE);
 	}
 
 	@Override
-	public AbstractParameterNode getOwnRootNode(){
-		return (AbstractParameterNode)super.getOwnRootNode();
+	public AbstractParameterNode getOwnNode(){
+		return (AbstractParameterNode)super.getOwnNode();
 	}
 
 	protected IModelOperation setTypeOperation(String type) {
-		return new AbstractParameterOperationSetType(getOwnRootNode(), type, getAdapterProvider());
+		return new AbstractParameterOperationSetType(getOwnNode(), type, getAdapterProvider());
 	}
 
 	public boolean importTypeJavadocComments() {
-		return setTypeComments(JavaDocSupport.importTypeJavadoc(getOwnRootNode()));
+		return setTypeComments(JavaDocSupport.importTypeJavadoc(getOwnNode()));
 	}
 
 	public void importFullTypeJavadocComments() {
@@ -164,9 +164,9 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 
 	protected List<IModelOperation> getFullTypeImportOperations(){
 		List<IModelOperation> result = new ArrayList<IModelOperation>();
-		String typeJavadoc = JavaDocSupport.importTypeJavadoc(getOwnRootNode());
-		result.add(new ParameterSetTypeCommentsOperation(getOwnRootNode(), typeJavadoc));
-		for(ChoiceNode choice : getOwnRootNode().getChoices()){
+		String typeJavadoc = JavaDocSupport.importTypeJavadoc(getOwnNode());
+		result.add(new ParameterSetTypeCommentsOperation(getOwnNode(), typeJavadoc));
+		for(ChoiceNode choice : getOwnNode().getChoices()){
 			AbstractNodeInterface nodeIf = 
 					NodeInterfaceFactory.getNodeInterface(choice, getUpdateContext(), fFileInfoProvider);
 			result.addAll(nodeIf.getImportAllJavadocCommentsOperations());
@@ -175,12 +175,12 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 	}
 
 	public void exportTypeJavadocComments() {
-		JavaDocSupport.exportTypeJavadoc(getOwnRootNode());
+		JavaDocSupport.exportTypeJavadoc(getOwnNode());
 	}
 
 	public void exportFullTypeJavadocComments() {
 		exportTypeJavadocComments();
-		for(ChoiceNode choice : getOwnRootNode().getChoices()){
+		for(ChoiceNode choice : getOwnNode().getChoices()){
 			ChoiceInterface choiceIf = 
 					(ChoiceInterface)NodeInterfaceFactory.getNodeInterface(
 							choice, getUpdateContext(), fFileInfoProvider);
@@ -191,9 +191,9 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 	@Override
 	protected List<IModelOperation> getImportAllJavadocCommentsOperations(){
 		List<IModelOperation> result = super.getImportAllJavadocCommentsOperations();
-		String typeJavadoc = JavaDocSupport.importTypeJavadoc(getOwnRootNode());
+		String typeJavadoc = JavaDocSupport.importTypeJavadoc(getOwnNode());
 		if(typeJavadoc != null && typeJavadoc.equals(getTypeComments()) == false && importTypeCommentsEnabled()){
-			result.add(new ParameterSetTypeCommentsOperation(getOwnRootNode(), typeJavadoc));
+			result.add(new ParameterSetTypeCommentsOperation(getOwnNode(), typeJavadoc));
 		}
 		return result;
 	}

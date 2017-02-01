@@ -39,7 +39,7 @@ public class FactoryRenameOperation {
 
 		@Override
 		public IModelOperation reverseOperation() {
-			return new ClassOperationRename(getTarget(), getOriginalName());
+			return new ClassOperationRename(getOwnNode(), getOriginalName());
 		}
 
 		@Override
@@ -49,7 +49,7 @@ public class FactoryRenameOperation {
 					ModelOperationException.report(Messages.CLASS_NAME_CONTAINS_KEYWORD_PROBLEM);
 				}
 			}
-			if(getTarget().getSibling(getNewName()) != null){
+			if(getOwnNode().getSibling(getNewName()) != null){
 				ModelOperationException.report(Messages.CLASS_NAME_DUPLICATE_PROBLEM);
 			}
 		}
@@ -63,13 +63,13 @@ public class FactoryRenameOperation {
 
 		@Override
 		public IModelOperation reverseOperation() {
-			return new MethodOperationRename((MethodNode)getTarget(), getOriginalName());
+			return new MethodOperationRename((MethodNode)getOwnNode(), getOriginalName());
 		}
 
 		@Override
 		protected void verifyNewName(String newName) throws ModelOperationException {
 			List<String> problems = new ArrayList<String>();
-			MethodNode target = (MethodNode)getTarget();
+			MethodNode target = (MethodNode)getOwnNode();
 			if(JavaUtils.validateNewMethodSignature(target.getClassNode(), getNewName(), target.getParametersTypes(), problems) == false){
 				ModelOperationException.report(JavaUtils.consolidate(problems));
 			}
@@ -84,12 +84,12 @@ public class FactoryRenameOperation {
 
 		@Override
 		public IModelOperation reverseOperation() {
-			return new GlobalParameterOperationRename(getTarget(), getOriginalName());
+			return new GlobalParameterOperationRename(getOwnNode(), getOriginalName());
 		}
 
 		@Override
 		protected void verifyNewName(String newName) throws ModelOperationException {
-			GlobalParameterNode target = (GlobalParameterNode) getTarget();
+			GlobalParameterNode target = (GlobalParameterNode) getOwnNode();
 			if(JavaUtils.isJavaKeyword(newName)){
 				ModelOperationException.report(Messages.CATEGORY_NAME_REGEX_PROBLEM);
 			}
@@ -107,12 +107,12 @@ public class FactoryRenameOperation {
 
 		@Override
 		public IModelOperation reverseOperation() {
-			return new MethodParameterOperationRename(getTarget(), getOriginalName());
+			return new MethodParameterOperationRename(getOwnNode(), getOriginalName());
 		}
 
 		@Override
 		protected void verifyNewName(String newName) throws ModelOperationException {
-			MethodParameterNode target = (MethodParameterNode)getTarget();
+			MethodParameterNode target = (MethodParameterNode)getOwnNode();
 			if(JavaUtils.isJavaKeyword(newName)){
 				ModelOperationException.report(Messages.CATEGORY_NAME_REGEX_PROBLEM);
 			}
@@ -130,12 +130,12 @@ public class FactoryRenameOperation {
 
 		@Override
 		public IModelOperation reverseOperation() {
-			return new ChoiceOperationRename((ChoiceNode)getTarget(), getOriginalName());
+			return new ChoiceOperationRename((ChoiceNode)getOwnNode(), getOriginalName());
 		}
 
 		@Override
 		protected void verifyNewName(String newName)throws ModelOperationException{
-			if(getTarget().getSibling(getNewName()) != null){
+			if(getOwnNode().getSibling(getNewName()) != null){
 				ModelOperationException.report(Messages.PARTITION_NAME_NOT_UNIQUE_PROBLEM);
 			}
 		}

@@ -45,23 +45,23 @@ public class ChoiceInterface extends ChoicesParentInterface{
 	}
 
 	public void setValue(String newValue){
-		IModelOperation operation = new ChoiceOperationSetValue(getOwnRootNode(), newValue, new EclipseTypeAdapterProvider());
+		IModelOperation operation = new ChoiceOperationSetValue(getOwnNode(), newValue, new EclipseTypeAdapterProvider());
 		execute(operation, Messages.DIALOG_SET_CHOICE_VALUE_PROBLEM_TITLE);
 	}
 
 	public String getValue() {
-		return getOwnRootNode().getValueString();
+		return getOwnNode().getValueString();
 	}
 
 	@Override
 	public AbstractParameterNode getParameter() {
-		return getOwnRootNode().getParameter();
+		return getOwnNode().getParameter();
 	}
 
 	public boolean removeLabels(Collection<String> labels) {
 		boolean removeMentioningConstraints = false;
 		for(String label : labels){
-			if(getOwnRootNode().getParameter().mentioningConstraints(label).size() > 0 && getOwnRootNode().getParameter().getLabeledChoices(label).size() == 1){
+			if(getOwnNode().getParameter().mentioningConstraints(label).size() > 0 && getOwnNode().getParameter().getLabeledChoices(label).size() == 1){
 				removeMentioningConstraints = true;
 			}
 		}
@@ -72,13 +72,13 @@ public class ChoiceInterface extends ChoicesParentInterface{
 				return false;
 			}
 		}
-		return execute(new ChoiceOperationRemoveLabels(getOwnRootNode(), labels), Messages.DIALOG_REMOVE_LABEL_PROBLEM_TITLE);
+		return execute(new ChoiceOperationRemoveLabels(getOwnNode(), labels), Messages.DIALOG_REMOVE_LABEL_PROBLEM_TITLE);
 	}
 
 	public String addNewLabel() {
 		String newLabel = Constants.DEFAULT_NEW_PARTITION_LABEL;
 		int i = 1;
-		while(getOwnRootNode().getLeafLabels().contains(newLabel)){
+		while(getOwnNode().getLeafLabels().contains(newLabel)){
 			newLabel = Constants.DEFAULT_NEW_PARTITION_LABEL + "(" + i + ")";
 			i++;
 		}
@@ -89,30 +89,30 @@ public class ChoiceInterface extends ChoicesParentInterface{
 	}
 
 	public boolean addLabels(List<String> labels) {
-		IModelOperation operation = new ChoiceOperationAddLabels(getOwnRootNode(), labels);
+		IModelOperation operation = new ChoiceOperationAddLabels(getOwnNode(), labels);
 		return execute(operation, Messages.DIALOG_ADD_LABEL_PROBLEM_TITLE);
 	}
 
 	public boolean addLabel(String newLabel) {
-		IModelOperation operation = new ChoiceOperationAddLabel(getOwnRootNode(), newLabel);
+		IModelOperation operation = new ChoiceOperationAddLabel(getOwnNode(), newLabel);
 		return execute(operation, Messages.DIALOG_ADD_LABEL_PROBLEM_TITLE);
 	}
 
 	public boolean isLabelInherited(String label) {
-		return getOwnRootNode().getInheritedLabels().contains(label);
+		return getOwnNode().getInheritedLabels().contains(label);
 	}
 
 	public boolean renameLabel(String label, String newValue) {
 		if(label.equals(newValue)){
 			return false;
 		}
-		if(getOwnRootNode().getInheritedLabels().contains(newValue)){
+		if(getOwnNode().getInheritedLabels().contains(newValue)){
 			MessageDialog.openError(Display.getCurrent().getActiveShell(),
 					Messages.DIALOG_RENAME_LABELS_ERROR_TITLE,
 					Messages.DIALOG_LABEL_IS_ALREADY_INHERITED);
 			return false;
 		}
-		if(getOwnRootNode().getLeafLabels().contains(newValue)){
+		if(getOwnNode().getLeafLabels().contains(newValue)){
 			if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(),
 					Messages.DIALOG_RENAME_LABELS_WARNING_TITLE,
 					Messages.DIALOG_DESCENDING_LABELS_WILL_BE_REMOVED_WARNING_TITLE) == false){
@@ -120,16 +120,16 @@ public class ChoiceInterface extends ChoicesParentInterface{
 			}
 		}
 
-		IModelOperation operation = new ChoiceOperationRenameLabel(getOwnRootNode(), label, newValue);
+		IModelOperation operation = new ChoiceOperationRenameLabel(getOwnNode(), label, newValue);
 		return execute(operation, Messages.DIALOG_CHANGE_LABEL_PROBLEM_TITLE);
 	}
 
 	@Override
 	public boolean goToImplementationEnabled(){
-		if(JavaTypeHelper.isJavaType(getOwnRootNode().getParameter().getType())){
+		if(JavaTypeHelper.isJavaType(getOwnNode().getParameter().getType())){
 			return false;
 		}
-		if(getOwnRootNode().isAbstract()){
+		if(getOwnNode().isAbstract()){
 			return false;
 		}
 		return super.goToImplementationEnabled();
@@ -139,9 +139,9 @@ public class ChoiceInterface extends ChoicesParentInterface{
 	public void goToImplementation(){
 		try{
 			IType type = JavaModelAnalyser.getIType(getParameter().getType());
-			if(type != null && getOwnRootNode().isAbstract() == false){
+			if(type != null && getOwnNode().isAbstract() == false){
 				for(IField field : type.getFields()){
-					if(field.getElementName().equals(getOwnRootNode().getValueString())){
+					if(field.getElementName().equals(getOwnNode().getValueString())){
 						JavaUI.openInEditor(field);
 						break;
 					}
@@ -151,8 +151,8 @@ public class ChoiceInterface extends ChoicesParentInterface{
 	}
 
 	@Override
-	public ChoiceNode getOwnRootNode(){
-		return (ChoiceNode)super.getOwnRootNode();
+	public ChoiceNode getOwnNode(){
+		return (ChoiceNode)super.getOwnNode();
 	}
 
 	@Override
@@ -183,7 +183,7 @@ public class ChoiceInterface extends ChoicesParentInterface{
 	}
 
 	List<String> getListOfChildrenChoiceNames() {
-		ChoiceNode choiceNode = getOwnRootNode();
+		ChoiceNode choiceNode = getOwnNode();
 		List<ChoiceNode> existingChoices = choiceNode.getChoices();
 
 		List<String> names = new ArrayList<String>();

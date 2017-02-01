@@ -22,7 +22,7 @@ public class ChoiceCommentsSection extends JavaDocCommentsSection {
 	protected class ChoiceImportSelectionAdapter extends ButtonClickListener {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			if(getTarget().getChoices().size() > 0){
+			if(getOwnNode().getChoices().size() > 0){
 				getTargetIf().importAllJavadocComments();
 			}else{
 				getTargetIf().importJavadocComments();
@@ -34,10 +34,10 @@ public class ChoiceCommentsSection extends JavaDocCommentsSection {
 	protected class ChoiceExportSelectionAdapter extends ButtonClickListener {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			if(getTarget().getChoices().size() > 0){
+			if(getOwnNode().getChoices().size() > 0){
 				getTargetIf().exportAllComments();
 			}else{
-				getTargetIf().exportCommentsToJavadoc(getTarget().getDescription());
+				getTargetIf().exportCommentsToJavadoc(getOwnNode().getDescription());
 				getTabFolder().setSelection(getTabFolder().indexOf(getJavaDocItem()));
 			}
 		}
@@ -72,8 +72,8 @@ public class ChoiceCommentsSection extends JavaDocCommentsSection {
 	}
 
 	@Override
-	protected ChoiceNode getTarget(){
-		return (ChoiceNode)super.getTarget();
+	protected ChoiceNode getOwnNode(){
+		return (ChoiceNode)super.getOwnNode();
 	}
 
 	private void updateExportImportButtons() {
@@ -81,7 +81,7 @@ public class ChoiceCommentsSection extends JavaDocCommentsSection {
 		getExportButton().setEnabled(importExportEnabled);
 		getImportButton().setEnabled(importExportEnabled);
 		getJavaDocText().setEnabled(importExportEnabled);
-		if(getTarget().isAbstract()){
+		if(getOwnNode().isAbstract()){
 			getExportButton().setText("Export all");
 			getExportButton().setToolTipText(Messages.TOOLTIP_EXPORT_CHOICE_SUBTREE_COMMENTS_TO_JAVADOC);
 			getImportButton().setText("Import all");

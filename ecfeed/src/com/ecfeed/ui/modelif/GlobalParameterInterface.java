@@ -26,17 +26,17 @@ public class GlobalParameterInterface extends AbstractParameterInterface {
 	}
 
 	public List<MethodParameterNode> getLinkers(){
-		return getOwnRootNode().getLinkers();
+		return getOwnNode().getLinkers();
 	}
 
 	@Override
-	public GlobalParameterNode getOwnRootNode(){
-		return (GlobalParameterNode)super.getOwnRootNode();
+	public GlobalParameterNode getOwnNode(){
+		return (GlobalParameterNode)super.getOwnNode();
 	}
 
 	@Override
 	protected IModelOperation setTypeOperation(String type) {
-		return new GlobalParameterOperationSetType(getOwnRootNode(), type, getAdapterProvider());
+		return new GlobalParameterOperationSetType(getOwnNode(), type, getAdapterProvider());
 	}
 
 	@Override

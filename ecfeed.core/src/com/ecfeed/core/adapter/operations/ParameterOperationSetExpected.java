@@ -132,7 +132,7 @@ public class ParameterOperationSetExpected extends AbstractModelOperation {
 		return new ReverseOperation();
 	}
 
-	protected MethodParameterNode getTarget(){
+	protected MethodParameterNode getOwnNode(){
 		return fTarget;
 	}
 

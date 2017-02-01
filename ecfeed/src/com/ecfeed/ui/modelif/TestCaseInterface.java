@@ -33,13 +33,13 @@ public class TestCaseInterface extends AbstractNodeInterface {
 	}
 
 	@Override
-	public TestCaseNode getOwnRootNode() {
-		return (TestCaseNode)super.getOwnRootNode();
+	public TestCaseNode getOwnNode() {
+		return (TestCaseNode)super.getOwnNode();
 	}
 
 	public MethodNode getMethod() {
 
-		TestCaseNode testCaseNode = getOwnRootNode();
+		TestCaseNode testCaseNode = getOwnNode();
 		if (testCaseNode == null) {
 			return null;
 		}
@@ -48,7 +48,7 @@ public class TestCaseInterface extends AbstractNodeInterface {
 	}
 
 	public boolean isExpected(ChoiceNode testValue) {
-		return getOwnRootNode().getMethodParameter(testValue).isExpected();
+		return getOwnNode().getMethodParameter(testValue).isExpected();
 	}
 
 	public boolean isExecutable(TestCaseNode tc){
@@ -61,22 +61,22 @@ public class TestCaseInterface extends AbstractNodeInterface {
 	}
 
 	public boolean isExecutable(){
-		return isExecutable(getOwnRootNode());
+		return isExecutable(getOwnNode());
 	}
 
 	public void executeStaticTest() throws EcException {
 		MethodInterface methodIf = new MethodInterface(getUpdateContext(), fFileInfoProvider);
 
-		TestCaseNode testCaseNode = getOwnRootNode();
+		TestCaseNode testCaseNode = getOwnNode();
 		MethodNode methodNode = (MethodNode)testCaseNode.getParent();
 		methodIf.setTarget(methodNode);
 
 		methodIf.executeStaticTests(
-				new ArrayList<TestCaseNode>(Arrays.asList(new TestCaseNode[]{getOwnRootNode()})), fFileInfoProvider);
+				new ArrayList<TestCaseNode>(Arrays.asList(new TestCaseNode[]{getOwnNode()})), fFileInfoProvider);
 	}
 
 	public boolean updateTestData(int index, ChoiceNode value) {
-		IModelOperation operation = new TestCaseOperationUpdateTestData(getOwnRootNode(), index, value);
+		IModelOperation operation = new TestCaseOperationUpdateTestData(getOwnNode(), index, value);
 		return execute(operation, Messages.DIALOG_UPDATE_TEST_DATA_PROBLEM_TITLE);
 	}
 

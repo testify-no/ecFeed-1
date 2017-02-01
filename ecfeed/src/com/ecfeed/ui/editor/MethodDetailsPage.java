@@ -276,7 +276,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 
 	private boolean isTestOnlineButtonEnabled(IFileInfoProvider fileInfoProvider, EImplementationStatus methodStatus) {
 
-		MethodNode methodNode = fMethodInterface.getOwnRootNode();
+		MethodNode methodNode = fMethodInterface.getOwnNode();
 
 		if (SeleniumHelper.isSeleniumRunnerMethod(methodNode)) {
 			return true;

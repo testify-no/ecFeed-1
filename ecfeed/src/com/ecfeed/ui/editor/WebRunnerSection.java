@@ -116,7 +116,7 @@ public class WebRunnerSection extends BasicSection  {
 
 	public void refresh() {
 
-		MethodNode methodNode = fMethodInterface.getOwnRootNode();
+		MethodNode methodNode = fMethodInterface.getOwnNode();
 
 		refreshCheckboxByProperty(fMapBrowserPropertyId, fMapBrowserCheckbox, methodNode, new Control[]{fBrowserCombo, fBrowserDriverText});
 		refreshComboByProperty(fBrowserPropertyId, fBrowserCombo, methodNode);

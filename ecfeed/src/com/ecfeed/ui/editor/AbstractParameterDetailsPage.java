@@ -132,7 +132,7 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 			return;
 		}
 
-		MethodParameterNode methodParameterNode = (MethodParameterNode)getParameterIf().getOwnRootNode();
+		MethodParameterNode methodParameterNode = (MethodParameterNode)getParameterIf().getOwnNode();
 		MethodNode methodNode = (MethodNode)methodParameterNode.getParent();
 		String runner = methodNode.getPropertyValue(NodePropertyDefs.PropertyId.PROPERTY_METHOD_RUNNER);
 

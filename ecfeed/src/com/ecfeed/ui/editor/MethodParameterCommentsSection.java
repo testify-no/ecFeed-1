@@ -57,7 +57,7 @@ public class MethodParameterCommentsSection extends AbstractParameterCommentsSec
 		@Override
 		public void widgetSelected(SelectionEvent ev) {
 			try {
-				getTargetIf().exportCommentsToJavadoc(getTarget().getDescription());
+				getTargetIf().exportCommentsToJavadoc(getOwnNode().getDescription());
 				getTabFolder().setSelection(getTabFolder().indexOf(fParameterJavadocTab));
 			} catch (Exception e) {
 				ExceptionCatchDialog.open(Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS, e.getMessage());
@@ -98,20 +98,20 @@ public class MethodParameterCommentsSection extends AbstractParameterCommentsSec
 	}
 
 	@Override
-	public MethodParameterNode getTarget(){
-		return (MethodParameterNode)super.getTarget();
+	public MethodParameterNode getOwnNode(){
+		return (MethodParameterNode)super.getOwnNode();
 	}
 
 	@Override
 	public void refresh(){
 		super.refresh();
-		if(JavaDocSupport.getJavadoc(getTarget())!= null){
-			getTextFromTabItem(fParameterJavadocTab).setText(JavaDocSupport.getJavadoc(getTarget()));
+		if(JavaDocSupport.getJavadoc(getOwnNode())!= null){
+			getTextFromTabItem(fParameterJavadocTab).setText(JavaDocSupport.getJavadoc(getOwnNode()));
 		}else{
 			getTextFromTabItem(fParameterJavadocTab).setText("");
 		}
-		if(JavaDocSupport.getTypeJavadoc(getTarget()) != null){
-			getTextFromTabItem(getTypeJavadocTab()).setText(JavaDocSupport.getTypeJavadoc(getTarget()));
+		if(JavaDocSupport.getTypeJavadoc(getOwnNode()) != null){
+			getTextFromTabItem(getTypeJavadocTab()).setText(JavaDocSupport.getTypeJavadoc(getOwnNode()));
 		}else{
 			getTextFromTabItem(getTypeJavadocTab()).setText("");
 		}
@@ -153,9 +153,9 @@ public class MethodParameterCommentsSection extends AbstractParameterCommentsSec
 	}
 
 	private void refreshMenuItems() {
-		EImplementationStatus methodStatus = getTargetIf().getImplementationStatus(getTarget().getMethod());
+		EImplementationStatus methodStatus = getTargetIf().getImplementationStatus(getOwnNode().getMethod());
 		boolean parameterCommentsExportEnabled = methodStatus != EImplementationStatus.NOT_IMPLEMENTED;
-		boolean typeCommentsExportEnabled = JavaTypeHelper.isUserType(getTarget().getType()) && getTargetIf().getImplementationStatus() != EImplementationStatus.NOT_IMPLEMENTED && getTarget().isLinked() == false;
+		boolean typeCommentsExportEnabled = JavaTypeHelper.isUserType(getOwnNode().getType()) && getTargetIf().getImplementationStatus() != EImplementationStatus.NOT_IMPLEMENTED && getOwnNode().isLinked() == false;
 		fExportParameterCommentsItem.setEnabled(parameterCommentsExportEnabled);
 		fImportParameterCommentsItem.setEnabled(parameterCommentsExportEnabled);
 		fExportTypeCommentsItem.setEnabled(typeCommentsExportEnabled);
@@ -169,7 +169,7 @@ public class MethodParameterCommentsSection extends AbstractParameterCommentsSec
 		super.refreshEditButton();
 		TabItem item = getActiveItem();
 		if(item == getTypeCommentsTab() || item == getTypeJavadocTab()){
-			if(getTarget().isLinked()){
+			if(getOwnNode().isLinked()){
 				getEditButton().setEnabled(false);
 			}
 		}

@@ -33,7 +33,7 @@ public class GlobalParametersParentInterface extends ParametersParentInterface {
 		EclipseModelBuilder modelBuilder = new EclipseModelBuilder();
 		GlobalParameterNode parameter = new GlobalParameterNode(generateNewParameterName(), generateNewParameterType());
 		parameter.addChoices(modelBuilder.defaultChoices(parameter.getType()));
-		if(addParameter(parameter, getOwnRootNode().getParameters().size())){
+		if(addParameter(parameter, getOwnNode().getParameters().size())){
 			return parameter;
 		}
 		return null;
@@ -44,11 +44,11 @@ public class GlobalParametersParentInterface extends ParametersParentInterface {
 	}
 
 	@Override
-	public GlobalParametersParentNode getOwnRootNode(){
-		return (GlobalParametersParentNode)super.getOwnRootNode();
+	public GlobalParametersParentNode getOwnNode(){
+		return (GlobalParametersParentNode)super.getOwnNode();
 	}
 
 	public boolean replaceMethodParametersWithGlobal(List<MethodParameterNode> originalParameters) {
-		return execute(new ReplaceMethodParametersWithGlobalOperation(getOwnRootNode(), originalParameters, getAdapterProvider()), Messages.DIALOG_REPLACE_PARAMETERS_WITH_LINKS_TITLE);
+		return execute(new ReplaceMethodParametersWithGlobalOperation(getOwnNode(), originalParameters, getAdapterProvider()), Messages.DIALOG_REPLACE_PARAMETERS_WITH_LINKS_TITLE);
 	}
 }

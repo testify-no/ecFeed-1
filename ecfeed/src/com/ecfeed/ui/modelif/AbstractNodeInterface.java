@@ -247,7 +247,7 @@ public class AbstractNodeInterface extends OperationExecuter{
 		return fAdapterProvider;
 	}
 
-	public AbstractNode getOwnRootNode(){
+	public AbstractNode getOwnNode(){
 		return fTarget;
 	}
 
@@ -260,7 +260,7 @@ public class AbstractNodeInterface extends OperationExecuter{
 	}
 
 	public boolean importJavadocComments() {
-		String comments = JavaDocSupport.importJavadoc(getOwnRootNode());
+		String comments = JavaDocSupport.importJavadoc(getOwnNode());
 		if(comments != null){
 			return setComments(comments);
 		}
@@ -268,7 +268,7 @@ public class AbstractNodeInterface extends OperationExecuter{
 	}
 
 	public void exportCommentsToJavadoc(String comments) {
-		JavaDocSupport.exportJavadoc(getOwnRootNode());
+		JavaDocSupport.exportJavadoc(getOwnNode());
 	}
 
 	public boolean importAllJavadocComments() {
@@ -282,7 +282,7 @@ public class AbstractNodeInterface extends OperationExecuter{
 
 	public boolean exportAllComments() {
 		exportCommentsToJavadoc(getComments());
-		for(AbstractNode child : getOwnRootNode().getChildren()){
+		for(AbstractNode child : getOwnNode().getChildren()){
 			AbstractNodeInterface nodeIf = 
 					NodeInterfaceFactory.getNodeInterface(child, getUpdateContext(), fFileInfoProvider);
 			nodeIf.exportAllComments();
@@ -292,11 +292,11 @@ public class AbstractNodeInterface extends OperationExecuter{
 
 	protected List<IModelOperation> getImportAllJavadocCommentsOperations(){
 		List<IModelOperation> result = new ArrayList<IModelOperation>();
-		String javadoc = JavaDocSupport.importJavadoc(getOwnRootNode());
+		String javadoc = JavaDocSupport.importJavadoc(getOwnNode());
 		if(javadoc != null && getComments() != javadoc){
 			result.add(new GenericSetCommentsOperation(fTarget, javadoc));
 		}
-		for(AbstractNode child : getOwnRootNode().getChildren()){
+		for(AbstractNode child : getOwnNode().getChildren()){
 			AbstractNodeInterface childIf = 
 					NodeInterfaceFactory.getNodeInterface(child, getUpdateContext(), fFileInfoProvider);
 			result.addAll(childIf.getImportAllJavadocCommentsOperations());
