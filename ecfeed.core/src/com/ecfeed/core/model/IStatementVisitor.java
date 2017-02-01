@@ -10,7 +10,7 @@
 
 package com.ecfeed.core.model;
 
-import com.ecfeed.core.model.RelationStatement.ChoiceCondition;
+import com.ecfeed.core.model.ChoiceCondition;
 import com.ecfeed.core.model.LabelCondition;
 import com.ecfeed.core.model.ParameterCondition;
 

@@ -23,7 +23,7 @@ import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.StatementArray;
 import com.ecfeed.core.model.StaticStatement;
 import com.ecfeed.core.model.TestCaseNode;
-import com.ecfeed.core.model.RelationStatement.ChoiceCondition;
+import com.ecfeed.core.model.ChoiceCondition;
 import com.ecfeed.core.model.LabelCondition;
 
 public class ModelStringifier {

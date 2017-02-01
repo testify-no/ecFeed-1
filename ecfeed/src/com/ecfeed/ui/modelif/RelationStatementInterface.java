@@ -13,6 +13,7 @@ package com.ecfeed.ui.modelif;
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.operations.StatementOperationSetCondition;
 import com.ecfeed.core.adapter.operations.StatementOperationSetRelation;
+import com.ecfeed.core.model.ChoiceCondition;
 import com.ecfeed.core.model.LabelCondition;
 import com.ecfeed.core.model.ParameterCondition;
 import com.ecfeed.core.model.RelationStatement;
@@ -63,7 +64,7 @@ public class RelationStatementInterface extends AbstractStatementInterface{
 	private IStatementCondition createNewCondition(String string, MethodParameterNode parameter) {
 
 		if (!containsTypeInfo(string, null)) {
-			return getOwnStatement().new ChoiceCondition(parameter.getChoice(string));
+			return new ChoiceCondition(parameter.getChoice(string), parameter, fRelation);
 		}
 
 		if (containsTypeInfo(string, "label")) {

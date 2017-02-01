@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.ecfeed.core.generators.api.IConstraint;
-import com.ecfeed.core.model.RelationStatement.ChoiceCondition;
+import com.ecfeed.core.model.ChoiceCondition;
 import com.ecfeed.core.model.LabelCondition;
 
 public class Constraint implements IConstraint<ChoiceNode> {

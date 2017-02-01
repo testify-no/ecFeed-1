@@ -12,8 +12,6 @@ package com.ecfeed.core.model;
 
 import java.util.List;
 
-import com.ecfeed.core.utils.ExceptionHelper;
-import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.SystemLogger;
 
 public class RelationStatement extends AbstractStatement implements IRelationalStatement{
@@ -35,7 +33,7 @@ public class RelationStatement extends AbstractStatement implements IRelationalS
 
 		fParameter = parameter;
 		fRelation = relation;
-		fCondition = new ChoiceCondition(choiceCondition);
+		fCondition = new ChoiceCondition(choiceCondition, fParameter, relation);
 	}
 
 	private RelationStatement(
@@ -172,11 +170,11 @@ public class RelationStatement extends AbstractStatement implements IRelationalS
 	}
 
 	public void setCondition(ChoiceNode choice) {
-		fCondition = new ChoiceCondition(choice);
+		fCondition = new ChoiceCondition(choice, fParameter, fRelation);
 	}
 
 	public void setCondition(MethodParameterNode parameter, ChoiceNode choice) {
-		fCondition = new ChoiceCondition(choice);
+		fCondition = new ChoiceCondition(choice, fParameter, fRelation);
 	}
 
 	public IStatementCondition getCondition() {
@@ -189,137 +187,6 @@ public class RelationStatement extends AbstractStatement implements IRelationalS
 
 	public String getConditionName() {
 		return fCondition.toString();
-	}
-
-	public class ChoiceCondition implements IStatementCondition {
-
-		private ChoiceNode fChoice;
-
-		public ChoiceCondition(ChoiceNode choice) {
-			fChoice = choice;
-		}
-
-		@Override
-		public boolean evaluate(List<ChoiceNode> choices) {
-
-			ChoiceNode choice = StatementConditionHelper.getChoiceForMethodParameter(choices, getParameter());
-
-			if (choice == null) {
-				return false;
-			}
-
-			return evaluateChoice(choice);
-		}
-
-		@Override
-		public boolean adapt(List<ChoiceNode> values) {
-			return false;
-		}
-
-		@Override
-		public ChoiceCondition getCopy() {
-			return new ChoiceCondition(fChoice.makeClone());
-		}
-
-		@Override
-		public boolean updateReferences(MethodParameterNode parameter) {
-
-			ChoiceNode condition = parameter.getChoice(fChoice.getQualifiedName());
-
-			if (condition == null) {
-				return false;
-			}
-
-			fChoice = condition;
-			return true;
-		}
-
-		@Override
-		public Object getCondition(){
-			return fChoice;
-		}
-
-		@Override
-		public boolean compare(IStatementCondition condition) {
-
-			if (condition instanceof ChoiceCondition == false) {
-				return false;
-			}
-
-			ChoiceCondition compared = (ChoiceCondition)condition;
-
-			return (fChoice.isMatch((ChoiceNode)compared.getCondition()));
-		}
-
-		@Override
-		public Object accept(IStatementVisitor visitor) throws Exception {
-			return visitor.visit(this);
-		}
-
-		@Override
-		public String toString() {
-			return fChoice.getQualifiedName();
-		}
-
-		public ChoiceNode getChoice() {
-			return fChoice;
-		}
-
-		private boolean evaluateChoice(ChoiceNode actualChoice) {
-
-			EStatementRelation relation = getRelation();
-
-			if (relation == EStatementRelation.EQUAL || relation == EStatementRelation.NOT_EQUAL) {
-				return evaluateEqualityIncludingParents(relation, actualChoice);
-			}
-
-			String typeName = actualChoice.getParameter().getType();
-
-			String actualValue = JavaTypeHelper.convertValueString(actualChoice.getValueString(), typeName);
-			String valueToMatch = JavaTypeHelper.convertValueString(fChoice.getValueString(), typeName);
-
-			return isDirectMatch(typeName, relation, actualValue, valueToMatch);
-		}
-
-		private boolean evaluateEqualityIncludingParents(EStatementRelation relation, ChoiceNode choice) {
-
-			boolean isMatch = choice.isMatchIncludingParents(fChoice);
-
-			switch (relation) {
-
-			case EQUAL:
-				return isMatch;
-			case NOT_EQUAL:
-				return !isMatch;
-			default:
-				ExceptionHelper.reportRuntimeException("Invalid relation.");
-				return false;
-			}
-		}
-
-		private boolean isDirectMatch(
-				String typeName, EStatementRelation relation, String actualValue, String valueToMatch) {
-
-			if (JavaTypeHelper.isNumericTypeName(typeName)) {
-				return isMatchForNumericTypes(typeName, relation, actualValue, valueToMatch);
-			}
-
-			if (JavaTypeHelper.isTypeWithChars(typeName)) {
-				return EStatementRelation.isMatch(relation, actualValue, valueToMatch);
-			}
-
-			return EStatementRelation.isEqualityMatch(relation, actualValue, valueToMatch);
-		}
-
-		private boolean isMatchForNumericTypes(
-				String typeName, EStatementRelation relation, String actualValue, String valueToMatch) {
-
-			double actual = JavaTypeHelper.convertNumericToDouble(typeName, actualValue);
-			double toMatch = JavaTypeHelper.convertNumericToDouble(typeName, valueToMatch);
-
-			return EStatementRelation.isMatch(relation, actual, toMatch);
-		}
-
 	}
 
 }
