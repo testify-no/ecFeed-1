@@ -39,10 +39,13 @@ import com.ecfeed.core.model.StatementArray;
 import com.ecfeed.core.model.StaticStatement;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.serialization.ect.Constants;
+import com.ecfeed.core.serialization.ect.SerializationHelperVersion0;
+import com.ecfeed.core.serialization.ect.SerializationHelperVersion1;
 import com.ecfeed.core.serialization.ect.XomAnalyser;
 import com.ecfeed.core.serialization.ect.XomAnalyserFactory;
 import com.ecfeed.core.serialization.ect.XomBuilder;
 import com.ecfeed.core.serialization.ect.XomBuilderFactory;
+import com.ecfeed.core.serialization.ect.XomStatementBuilder;
 import com.ecfeed.testutils.ModelStringifier;
 import com.ecfeed.testutils.RandomModelGenerator;
 
@@ -249,8 +252,10 @@ public class XomParserTest {
 		StaticStatement trueStatement = new StaticStatement(true);
 		StaticStatement falseStatement = new StaticStatement(false);
 		try{
-
-			XomBuilder builder = XomBuilderFactory.createXomBuilder(version);
+			XomStatementBuilder builder = 
+					new XomStatementBuilder(
+							getStatementParameterAttributeName(version), 
+							getStatementChoiceAttributeName(version));
 
 			Element trueElement = (Element)trueStatement.accept(builder);
 			Element falseElement = (Element)falseStatement.accept(builder);
@@ -282,7 +287,11 @@ public class XomParserTest {
 				MethodNode m = fModelGenerator.generateMethod(5, 0, 0);
 				RelationStatement s = fModelGenerator.generateChoicesParentStatement(m);
 
-				XomBuilder builder = XomBuilderFactory.createXomBuilder(version);
+				XomStatementBuilder builder = 
+						new XomStatementBuilder(
+								getStatementParameterAttributeName(version), 
+								getStatementChoiceAttributeName(version));
+				
 				Element element = (Element)s.accept(builder);
 				TRACE(element);
 				XomAnalyser analyser = XomAnalyserFactory.createXomAnalyser(version);
@@ -306,18 +315,42 @@ public class XomParserTest {
 
 	@Test
 	public void parseExpectedValueStatementTest() {
+		
 		for (int version = 0; version <= ModelVersionDistributor.getCurrentSoftwareVersion(); version++) {
 			parseExpectedValueStatementTest(version);
 		}
 	}	
-
+	
+	private String getStatementParameterAttributeName(int version) {
+		
+		if (version == 0) {
+			return SerializationHelperVersion0.getStatementParameterAttributeName();
+		}
+		
+		return SerializationHelperVersion1.getStatementParameterAttributeName();
+	}
+	
+	private String getStatementChoiceAttributeName(int version) {
+		
+		if (version == 0) {
+			return SerializationHelperVersion0.getStatementChoiceAttributeName();
+		}
+		
+		return SerializationHelperVersion1.getStatementChoiceAttributeName();
+	}
+	
 	private void parseExpectedValueStatementTest(int version){
+		
 		for(int i = 0; i < 10; i++){
 			try{
 				MethodNode m = fModelGenerator.generateMethod(10, 0, 0);
 				ExpectedValueStatement s = fModelGenerator.generateExpectedValueStatement(m);
 
-				XomBuilder builder = XomBuilderFactory.createXomBuilder(version);
+				XomStatementBuilder builder = 
+						new XomStatementBuilder(
+								getStatementParameterAttributeName(version), 
+								getStatementChoiceAttributeName(version));
+				
 				Element element = (Element)s.accept(builder);
 				TRACE(element);
 
@@ -341,7 +374,12 @@ public class XomParserTest {
 		try{
 			MethodNode m = fModelGenerator.generateMethod(10, 0, 0);
 			StatementArray s = fModelGenerator.generateStatementArray(m, 4);
-			XomBuilder builder = XomBuilderFactory.createXomBuilder(version);
+			
+			XomStatementBuilder builder = 
+					new XomStatementBuilder(
+							getStatementParameterAttributeName(version), 
+							getStatementChoiceAttributeName(version));
+			
 			Element element = (Element)s.accept(builder);
 			TRACE(element);
 
