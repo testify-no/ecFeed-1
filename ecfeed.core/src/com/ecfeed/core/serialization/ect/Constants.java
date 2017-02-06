@@ -24,6 +24,7 @@ public class Constants {
 	public static final String CONSTRAINT_PREMISE_NODE_NAME = "Premise";
 	public static final String CONSTRAINT_CONSEQUENCE_NODE_NAME = "Consequence";
 	public static final String CONSTRAINT_CHOICE_STATEMENT_NODE_NAME = "Statement";
+	public static final String CONSTRAINT_PARAMETER_STATEMENT_NODE_NAME = "ParameterStatement";
 	public static final String CONSTRAINT_LABEL_STATEMENT_NODE_NAME = "LabelStatement";
 	public static final String CONSTRAINT_STATIC_STATEMENT_NODE_NAME = "StaticStatement";
 	public static final String CONSTRAINT_STATEMENT_ARRAY_NODE_NAME = "StatementArray";
@@ -45,12 +46,15 @@ public class Constants {
 	public static final String PARAMETER_IS_LINKED_ATTRIBUTE_NAME = "linked";
 	public static final String PARAMETER_LINK_ATTRIBUTE_NAME = "link";
 	public static final String VALUE_ATTRIBUTE = "value";
+
+
 	public static final String NULL_VALUE_STRING_REPRESENTATION = "/null";
 	public static final String TEST_SUITE_NAME_ATTRIBUTE = "testSuite";
 	public static final String LABEL_ATTRIBUTE_NAME = "label";
 	public static final String VALUE_ATTRIBUTE_NAME = "value";
 	public static final String STATIC_VALUE_ATTRIBUTE_NAME = "value";
 	public static final String STATEMENT_LABEL_ATTRIBUTE_NAME = "label";
+	public static final String STATEMENT_RIGHT_PARAMETER_ATTRIBUTE_NAME = "rightParameter";
 	public static final String STATEMENT_RELATION_ATTRIBUTE_NAME = "relation";
 	public static final String STATEMENT_OPERATOR_ATTRIBUTE_NAME = "operator";
 	public static final String STATEMENT_STATIC_VALUE_ATTRIBUTE_NAME = "value";

@@ -15,6 +15,7 @@ import static com.ecfeed.core.serialization.ect.Constants.BASIC_COMMENTS_BLOCK_T
 import static com.ecfeed.core.serialization.ect.Constants.CLASS_NODE_NAME;
 import static com.ecfeed.core.serialization.ect.Constants.COMMENTS_BLOCK_TAG_NAME;
 import static com.ecfeed.core.serialization.ect.Constants.CONSTRAINT_CHOICE_STATEMENT_NODE_NAME;
+import static com.ecfeed.core.serialization.ect.Constants.CONSTRAINT_PARAMETER_STATEMENT_NODE_NAME;
 import static com.ecfeed.core.serialization.ect.Constants.CONSTRAINT_CONSEQUENCE_NODE_NAME;
 import static com.ecfeed.core.serialization.ect.Constants.CONSTRAINT_EXPECTED_STATEMENT_NODE_NAME;
 import static com.ecfeed.core.serialization.ect.Constants.CONSTRAINT_LABEL_STATEMENT_NODE_NAME;
@@ -38,6 +39,7 @@ import static com.ecfeed.core.serialization.ect.Constants.PROPERTY_ATTRIBUTE_VAL
 import static com.ecfeed.core.serialization.ect.Constants.PROPERTY_TAG_NAME;
 import static com.ecfeed.core.serialization.ect.Constants.ROOT_NODE_NAME;
 import static com.ecfeed.core.serialization.ect.Constants.RUN_ON_ANDROID_ATTRIBUTE_NAME;
+import static com.ecfeed.core.serialization.ect.Constants.STATEMENT_RIGHT_PARAMETER_ATTRIBUTE_NAME;
 import static com.ecfeed.core.serialization.ect.Constants.STATEMENT_EXPECTED_VALUE_ATTRIBUTE_NAME;
 import static com.ecfeed.core.serialization.ect.Constants.STATEMENT_LABEL_ATTRIBUTE_NAME;
 import static com.ecfeed.core.serialization.ect.Constants.STATEMENT_OPERATOR_AND_ATTRIBUTE_VALUE;
@@ -403,10 +405,13 @@ public abstract class XomBuilder implements IModelVisitor, IStatementVisitor {
 	public Object visit(RelationStatement statement) throws Exception {
 
 		String parameterName = statement.getParameter().getName();
+
 		Attribute parameterAttribute =
 				new Attribute(getStatementParameterAttributeName(), parameterName);
+
 		Attribute relationAttribute =
 				new Attribute(STATEMENT_RELATION_ATTRIBUTE_NAME, statement.getRelation().toString());
+
 		IStatementCondition condition = statement.getCondition();
 		Element targetStatementElement = (Element)condition.accept(this);
 
@@ -435,13 +440,13 @@ public abstract class XomBuilder implements IModelVisitor, IStatementVisitor {
 	@Override
 	public Object visit(ParameterCondition condition) throws Exception {
 		MethodParameterNode methodParameterNode = condition.getMethodParameterNode();
-		Element targetChoiceElement = new Element(CONSTRAINT_CHOICE_STATEMENT_NODE_NAME);
+		Element targetParameterElement = new Element(CONSTRAINT_PARAMETER_STATEMENT_NODE_NAME);
 
 		encodeAndAddAttribute(
-				targetChoiceElement, 
-				new Attribute(getStatementChoiceAttributeName(), methodParameterNode.getName()));
+				targetParameterElement, 
+				new Attribute(STATEMENT_RIGHT_PARAMETER_ATTRIBUTE_NAME, methodParameterNode.getName()));
 
-		return targetChoiceElement;
+		return targetParameterElement;
 	}	
 
 	private Element createAbstractElement(String nodeTag, AbstractNode node) {

@@ -54,13 +54,13 @@ public class Messages {
 		return "Forbidden relation value in statement: " + relation;
 	}
 
-	public static String WRONG_CATEGORY_NAME(String parameterName, String methodName) {
-		return "Parameter " + parameterName + " does not exist in method " + methodName;
-	}
-
 	public static String WRONG_PARTITION_NAME(String choiceName, String parameterName, String methodName) {
 		return "Choice " + choiceName + " does not exist for parameter " + parameterName + " in method " + methodName;
 	}
+
+	public static String WRONG_PARAMETER_NAME(String parameterName, String methodName) {
+		return "Parameter " + parameterName + " does not exist in method " + methodName;
+	}	
 
 	public static String WRONG_NUMBER_OF_TEST_PAREMETERS(String testSuiteName){
 		return "Number of test parameters in test case of " + testSuiteName 

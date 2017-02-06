@@ -435,17 +435,29 @@ public abstract class XomAnalyser {
 	}
 
 	public AbstractStatement parseStatement(Element element, MethodNode method) throws ParserException {
-		switch(element.getLocalName()) {
+
+		String localName = element.getLocalName();
+
+		switch(localName) {
+
 		case Constants.CONSTRAINT_CHOICE_STATEMENT_NODE_NAME:
 			return parseChoiceStatement(element, method);
+
+		case Constants.CONSTRAINT_PARAMETER_STATEMENT_NODE_NAME:
+			return parseParameterStatement(element, method);
+
 		case Constants.CONSTRAINT_LABEL_STATEMENT_NODE_NAME:
 			return parseLabelStatement(element, method);
+
 		case Constants.CONSTRAINT_STATEMENT_ARRAY_NODE_NAME:
 			return parseStatementArray(element, method);
+
 		case Constants.CONSTRAINT_STATIC_STATEMENT_NODE_NAME:
 			return parseStaticStatement(element);
+
 		case Constants.CONSTRAINT_EXPECTED_STATEMENT_NODE_NAME:
 			return parseExpectedValueStatement(element, method);
+
 		default: return null;
 		}
 	}
@@ -493,10 +505,12 @@ public abstract class XomAnalyser {
 		assertNodeTag(element.getQualifiedName(), CONSTRAINT_CHOICE_STATEMENT_NODE_NAME);
 
 		String parameterName = getAttributeValue(element, getStatementParameterAttributeName());
+
 		MethodParameterNode parameter = (MethodParameterNode)method.getParameter(parameterName);
 		if (parameter == null || parameter.isExpected()) {
-			ParserException.report(Messages.WRONG_CATEGORY_NAME(parameterName, method.getName()));
+			ParserException.report(Messages.WRONG_PARAMETER_NAME(parameterName, method.getName()));
 		}
+
 		String choiceName = getAttributeValue(element, getStatementChoiceAttributeName());
 		ChoiceNode choice = parameter.getChoice(choiceName);
 		if (choice == null) {
@@ -509,6 +523,29 @@ public abstract class XomAnalyser {
 		return new RelationStatement(parameter, relation, choice);
 	}
 
+	public RelationStatement parseParameterStatement(Element element, MethodNode method) throws ParserException { 
+		assertNodeTag(element.getQualifiedName(), Constants.CONSTRAINT_PARAMETER_STATEMENT_NODE_NAME);
+
+		String parameterName = getAttributeValue(element, getStatementParameterAttributeName());
+
+		MethodParameterNode leftParameterNode = (MethodParameterNode)method.getParameter(parameterName);
+		if (leftParameterNode == null || leftParameterNode.isExpected()) {
+			ParserException.report(Messages.WRONG_PARAMETER_NAME(parameterName, method.getName()));
+		}
+
+		String rightParameterName = getAttributeValue(element, Constants.STATEMENT_RIGHT_PARAMETER_ATTRIBUTE_NAME);
+
+		MethodParameterNode rightParameterNode = (MethodParameterNode)method.getParameter(rightParameterName);
+		if (rightParameterNode == null) {
+			ParserException.report(Messages.WRONG_PARAMETER_NAME(rightParameterName, method.getName()));
+		}
+
+		String relationName = getAttributeValue(element, Constants.STATEMENT_RELATION_ATTRIBUTE_NAME);
+		EStatementRelation relation = getRelation(relationName);
+
+		return new RelationStatement(leftParameterNode, relation, rightParameterNode);
+	}	
+
 	public RelationStatement parseLabelStatement(Element element, MethodNode method) throws ParserException {
 		assertNodeTag(element.getQualifiedName(), CONSTRAINT_LABEL_STATEMENT_NODE_NAME);
 
@@ -518,7 +555,7 @@ public abstract class XomAnalyser {
 
 		MethodParameterNode parameter = method.getMethodParameter(parameterName);
 		if (parameter == null || parameter.isExpected()) {
-			ParserException.report(Messages.WRONG_CATEGORY_NAME(parameterName, method.getName()));
+			ParserException.report(Messages.WRONG_PARAMETER_NAME(parameterName, method.getName()));
 		}
 		EStatementRelation relation = getRelation(relationName);
 
@@ -532,7 +569,7 @@ public abstract class XomAnalyser {
 		String valueString = getAttributeValue(element, Constants.STATEMENT_EXPECTED_VALUE_ATTRIBUTE_NAME);
 		MethodParameterNode parameter = method.getMethodParameter(parameterName);
 		if (parameter == null || !parameter.isExpected()) {
-			ParserException.report(Messages.WRONG_CATEGORY_NAME(parameterName, method.getName()));
+			ParserException.report(Messages.WRONG_PARAMETER_NAME(parameterName, method.getName()));
 		}
 		ChoiceNode condition = new ChoiceNode("expected", valueString);
 		condition.setParent(parameter);
