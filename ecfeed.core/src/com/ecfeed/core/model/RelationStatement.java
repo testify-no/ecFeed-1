@@ -41,7 +41,7 @@ public class RelationStatement extends AbstractStatement implements IRelationalS
 
 		fParameter = parameter;
 		fRelation = relation;
-		fCondition = new ParameterCondition(rightParameter);
+		fCondition = new ParameterCondition(parameter, relation, rightParameter);
 	}	
 
 	private RelationStatement(

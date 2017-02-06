@@ -104,7 +104,7 @@ public class ChoiceCondition implements IStatementCondition {
 		String actualValue = JavaTypeHelper.convertValueString(actualChoice.getValueString(), typeName);
 		String valueToMatch = JavaTypeHelper.convertValueString(fChoice.getValueString(), typeName);
 
-		return isDirectMatch(typeName, fRelation, actualValue, valueToMatch);
+		return StatementConditionHelper.isRelationMatch(fRelation, typeName, actualValue, valueToMatch);
 	}
 
 	private boolean evaluateEqualityIncludingParents(EStatementRelation relation, ChoiceNode choice) {
@@ -121,29 +121,6 @@ public class ChoiceCondition implements IStatementCondition {
 			ExceptionHelper.reportRuntimeException("Invalid relation.");
 			return false;
 		}
-	}
-
-	private boolean isDirectMatch(
-			String typeName, EStatementRelation relation, String actualValue, String valueToMatch) {
-
-		if (JavaTypeHelper.isNumericTypeName(typeName)) {
-			return isMatchForNumericTypes(typeName, relation, actualValue, valueToMatch);
-		}
-
-		if (JavaTypeHelper.isTypeWithChars(typeName)) {
-			return EStatementRelation.isMatch(relation, actualValue, valueToMatch);
-		}
-
-		return EStatementRelation.isEqualityMatch(relation, actualValue, valueToMatch);
-	}
-
-	private boolean isMatchForNumericTypes(
-			String typeName, EStatementRelation relation, String actualValue, String valueToMatch) {
-
-		double actual = JavaTypeHelper.convertNumericToDouble(typeName, actualValue);
-		double toMatch = JavaTypeHelper.convertNumericToDouble(typeName, valueToMatch);
-
-		return EStatementRelation.isMatch(relation, actual, toMatch);
 	}
 
 }

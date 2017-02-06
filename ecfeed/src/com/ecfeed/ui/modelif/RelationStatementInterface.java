@@ -76,7 +76,7 @@ public class RelationStatementInterface extends AbstractStatementInterface{
 			MethodNode methodNode = parameter.getMethod();
 			MethodParameterNode rightParameter = (MethodParameterNode)methodNode.getParameter(parameterName);
 
-			return new ParameterCondition(rightParameter);
+			return new ParameterCondition(parameter, fRelation, rightParameter);
 		}
 
 		return null;

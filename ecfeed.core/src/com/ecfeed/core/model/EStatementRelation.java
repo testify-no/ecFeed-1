@@ -139,13 +139,21 @@ public enum EStatementRelation {
 	public static boolean isMatch(EStatementRelation relation, double actualValue, double valueToMatch) {
 
 		int compareResult = Double.compare(actualValue, valueToMatch);
-		return isMatch(relation, compareResult);
+
+		if (isMatch(relation, compareResult)) {
+			return true;
+		}
+		return false;
 	}
 
 	public static boolean isMatch(EStatementRelation relation, String actualValue, String valueToMatch) {
 
 		int compareResult = actualValue.compareTo(valueToMatch);
-		return isMatch(relation, compareResult);
+
+		if (isMatch(relation, compareResult)) {
+			return true;
+		}
+		return false;
 	}
 
 	private static boolean isMatch(EStatementRelation relation, int compareResult) {

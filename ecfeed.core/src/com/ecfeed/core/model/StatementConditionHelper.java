@@ -12,6 +12,7 @@ package com.ecfeed.core.model;
 
 import java.util.List;
 
+import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.StringHelper;
 
 public class StatementConditionHelper {
@@ -36,15 +37,15 @@ public class StatementConditionHelper {
 
 		return choices.get(index);
 	}
-	
+
 	public static String createParameterDescription(String parameterName) {
 		return parameterName + "[parameter]";
 	}
-	
+
 	public static String createLabelDescription(String parameterName) {
 		return parameterName + "[label]";
 	}	
-	
+
 	public static boolean containsTypeInfo(String string, String typeDescription) {
 
 		if (!(string.contains("["))) {
@@ -67,7 +68,41 @@ public class StatementConditionHelper {
 	public static String removeTypeInfo(String string, String typeDescription) {
 		return StringHelper.removeFromPostfix("[" + typeDescription + "]", string);
 	}
-	
 
+
+	public static boolean isRelationMatch(
+			EStatementRelation relation, String typeName, String actualValue, String valueToMatch) {
+
+		if (JavaTypeHelper.isNumericTypeName(typeName)) {
+			if (isMatchForNumericTypes(typeName, relation, actualValue, valueToMatch)) {
+				return true;
+			}
+			return false;
+		}
+
+		if (JavaTypeHelper.isTypeWithChars(typeName)) {
+			if (EStatementRelation.isMatch(relation, actualValue, valueToMatch)) {
+				return true;
+			}
+			return false;
+		}
+
+		if (EStatementRelation.isEqualityMatch(relation, actualValue, valueToMatch)) {
+			return true;
+		}
+		return false;
+	}
+
+	private static boolean isMatchForNumericTypes(
+			String typeName, EStatementRelation relation, String actualValue, String valueToMatch) {
+
+		double actual = JavaTypeHelper.convertNumericToDouble(typeName, actualValue);
+		double toMatch = JavaTypeHelper.convertNumericToDouble(typeName, valueToMatch);
+
+		if (EStatementRelation.isMatch(relation, actual, toMatch)) {
+			return true;
+		}
+		return false;
+	}	
 }
 
