@@ -122,6 +122,14 @@ public class JavaTypeHelper {
 		return false;
 	}	
 
+	public static boolean isLongTypeName(String typeName) {
+
+		if (typeName.equals(TYPE_NAME_LONG)) {
+			return true;
+		}
+		return false;
+	}	
+
 	public static boolean isFloatTypeName(String typeName) {
 
 		if (typeName.equals(TYPE_NAME_FLOAT)) {
@@ -138,6 +146,18 @@ public class JavaTypeHelper {
 		return false;
 	}	
 
+	public static boolean isFloatingPointTypeName(String typeName) {
+
+		if (isFloatTypeName(typeName)) {
+			return true;
+		}
+
+		if (isDoubleTypeName(typeName)) {
+			return true;
+		}
+
+		return false;
+	}
 	public static boolean isNumericTypeName(String typeName) {
 
 		if (isByteTypeName(typeName)) {
@@ -146,6 +166,9 @@ public class JavaTypeHelper {
 		if (isIntTypeName(typeName)) {
 			return true;
 		}
+		if (isLongTypeName(typeName)) {
+			return true;
+		}		
 		if (isShortTypeName(typeName)) {
 			return true;
 		}
@@ -192,6 +215,9 @@ public class JavaTypeHelper {
 		if (isShortTypeName(typeName)) {
 			return Short.parseShort(value);
 		}
+		if (isLongTypeName(typeName)) {
+			return Long.parseLong(value);
+		}		
 		if (isFloatTypeName(typeName)) {
 			return Float.parseFloat(value);
 		}
@@ -379,6 +405,45 @@ public class JavaTypeHelper {
 
 	public static String convertValueString(String valueString, String typeName) {
 		return parseJavaType(valueString, typeName).toString();
-	}	
+	}
+
+	public static String getSubstituteType(String typeName1, String typeName2) {
+
+		if (typeName1 == null || typeName2 == null) {
+			return null;
+		}
+
+		if (JavaTypeHelper.isBooleanTypeName(typeName1) || JavaTypeHelper.isBooleanTypeName(typeName2)) {
+			return getSubstituteTypeForBooleans(typeName1, typeName2);
+		}
+
+		if (JavaTypeHelper.isCharTypeName(typeName1) && JavaTypeHelper.isCharTypeName(typeName2)) {
+			return TYPE_NAME_STRING;
+		}		
+
+		if (JavaTypeHelper.isFloatingPointTypeName(typeName1) || JavaTypeHelper.isFloatingPointTypeName(typeName2)) {
+			return TYPE_NAME_DOUBLE;
+		}
+
+		return TYPE_NAME_LONG;
+	}
+
+	private static String getSubstituteTypeForBooleans(String typeName1, String typeName2) {
+
+		if (JavaTypeHelper.isBooleanTypeName(typeName1) && !JavaTypeHelper.isBooleanTypeName(typeName2)) {
+			return null;
+		}		
+
+		if (!JavaTypeHelper.isBooleanTypeName(typeName1) && JavaTypeHelper.isBooleanTypeName(typeName2)) {
+			return null;
+		}
+
+		if (JavaTypeHelper.isBooleanTypeName(typeName1) && JavaTypeHelper.isBooleanTypeName(typeName2)) {
+			return TYPE_NAME_BOOLEAN;
+		}
+
+		return null;
+	}
+
 
 }

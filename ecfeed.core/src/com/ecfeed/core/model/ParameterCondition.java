@@ -13,6 +13,8 @@ package com.ecfeed.core.model;
 import java.util.List;
 
 import com.ecfeed.core.model.IStatementCondition;
+import com.ecfeed.core.utils.JavaTypeHelper;
+import com.ecfeed.core.utils.StringHolder;
 
 
 public class ParameterCondition implements IStatementCondition {
@@ -32,12 +34,20 @@ public class ParameterCondition implements IStatementCondition {
 	@Override
 	public boolean evaluate(List<ChoiceNode> choices) {
 
-		String leftChoice = StatementConditionHelper.getChoiceForMethodParameter(choices, fLeftParameterNode).getValueString();
-		String rightChoice = StatementConditionHelper.getChoiceForMethodParameter(choices, fRightParameterNode).getValueString();
+		String substituteType = 
+				JavaTypeHelper.getSubstituteType(fLeftParameterNode.getType(), fRightParameterNode.getType());
 
-		String typeName = fLeftParameterNode.getType(); // TODO WHEN 2 PARAMETERS HAVE DIFFERENT TYPES
+		if (substituteType == null) {
+			return false;
+		}
 
-		if (StatementConditionHelper.isRelationMatch(fRelation, typeName, leftChoice, rightChoice)) {
+		String leftChoice = 
+				StatementConditionHelper.getChoiceForMethodParameter(choices, fLeftParameterNode).getValueString();
+
+		String rightChoice = 
+				StatementConditionHelper.getChoiceForMethodParameter(choices, fRightParameterNode).getValueString();
+
+		if (StatementConditionHelper.isRelationMatch(fRelation, substituteType, leftChoice, rightChoice)) {
 			return true;
 		}
 
