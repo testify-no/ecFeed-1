@@ -104,7 +104,7 @@ public class ChoiceCondition implements IStatementCondition {
 		String actualValue = JavaTypeHelper.convertValueString(actualChoice.getValueString(), typeName);
 		String valueToMatch = JavaTypeHelper.convertValueString(fChoice.getValueString(), typeName);
 
-		return StatementConditionHelper.isRelationMatch(fRelation, typeName, actualValue, valueToMatch);
+		return StatementConditionHelper.isRelationMatchQuiet(fRelation, typeName, actualValue, valueToMatch);
 	}
 
 	private boolean evaluateEqualityIncludingParents(EStatementRelation relation, ChoiceNode choice) {

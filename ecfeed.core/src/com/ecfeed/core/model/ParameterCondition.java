@@ -47,7 +47,7 @@ public class ParameterCondition implements IStatementCondition {
 		String rightChoice = 
 				StatementConditionHelper.getChoiceForMethodParameter(choices, fRightParameterNode).getValueString();
 
-		if (StatementConditionHelper.isRelationMatch(fRelation, substituteType, leftChoice, rightChoice)) {
+		if (StatementConditionHelper.isRelationMatchQuiet(fRelation, substituteType, leftChoice, rightChoice)) {
 			return true;
 		}
 

@@ -68,8 +68,19 @@ public class StatementConditionHelper {
 	public static String removeTypeInfo(String string, String typeDescription) {
 		return StringHelper.removeFromPostfix("[" + typeDescription + "]", string);
 	}
+	
+	public static boolean isRelationMatchQuiet(
+			EStatementRelation relation, String typeName, String actualValue, String valueToMatch) {
 
+		boolean result = false;
+		try {
+			result = isRelationMatch(relation, typeName, actualValue, valueToMatch);
+		} catch (Exception e) {
+		}
 
+		return result;
+	}
+	
 	public static boolean isRelationMatch(
 			EStatementRelation relation, String typeName, String actualValue, String valueToMatch) {
 
@@ -90,6 +101,7 @@ public class StatementConditionHelper {
 		if (EStatementRelation.isEqualityMatch(relation, actualValue, valueToMatch)) {
 			return true;
 		}
+		
 		return false;
 	}
 
