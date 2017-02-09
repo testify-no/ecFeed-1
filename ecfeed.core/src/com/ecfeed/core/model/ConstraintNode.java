@@ -205,13 +205,26 @@ public class ConstraintNode extends AbstractNode{
 
 	private boolean isConsistentForParameter(MethodParameterNode parameter) {
 
-		if (JavaTypeHelper.isUserType(parameter.getType())) {
-			if (fConstraint.mentionsOrderRelation()) {
-				return false;
-			}
+		String typeName = parameter.getType();
+
+		if (isForbiddenTypeForOrderRelation(typeName) && fConstraint.mentionsOrderRelation()) {
+			return false;
 		}
 
 		if (!checkLabels(parameter)) {
+			return false;
+		}
+
+		return true;
+	}
+
+	private boolean isForbiddenTypeForOrderRelation(String typeName) {
+
+		if (JavaTypeHelper.isUserType(typeName)) {
+			return false;
+		}
+
+		if (JavaTypeHelper.isBooleanTypeName(typeName)) {
 			return false;
 		}
 
