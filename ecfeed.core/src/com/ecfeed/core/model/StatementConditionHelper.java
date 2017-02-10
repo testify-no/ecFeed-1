@@ -17,6 +17,9 @@ import com.ecfeed.core.utils.StringHelper;
 
 public class StatementConditionHelper {
 
+	private static String TYPE_INFO_PARAMETER = "parameter";
+	private static String TYPE_INFO_LABEL = "label";
+
 	public static ChoiceNode getChoiceForMethodParameter(List<ChoiceNode> choices, MethodParameterNode methodParameterNode) {
 
 		if (choices == null) {
@@ -39,36 +42,53 @@ public class StatementConditionHelper {
 	}
 
 	public static String createParameterDescription(String parameterName) {
-		return parameterName + "[parameter]";
+		return parameterName + "[" + TYPE_INFO_PARAMETER + "]";
 	}
 
 	public static String createLabelDescription(String parameterName) {
-		return parameterName + "[label]";
+		return parameterName + "[" + TYPE_INFO_LABEL + "]";
 	}	
 
-	public static boolean containsTypeInfo(String string, String typeDescription) {
+	public static boolean containsNoTypeInfo(String string) {
 
-		if (!(string.contains("["))) {
+		if (string.contains("[") &&  string.contains("]")) {
 			return false;
-		}
-
-		if (!(string.contains("]"))) {
-			return false;
-		}		
-
-		if (typeDescription != null) {
-			if (!string.contains("[" + typeDescription + "]")) {
-				return false;
-			}
 		}
 
 		return true;
 	}
 
+	public static boolean containsLabelTypeInfo(String string) {
+
+		if (containsTypeInfo(string, TYPE_INFO_LABEL)) {
+			return true;
+		}
+
+		return false;
+	}	
+
+	public static boolean containsParameterTypeInfo(String string) {
+
+		if (containsTypeInfo(string, TYPE_INFO_PARAMETER)) {
+			return true;
+		}
+
+		return false;
+	}	
+
+	private static boolean containsTypeInfo(String string, String typeDescription) {
+
+		if (string.contains("[" + typeDescription + "]")) {
+			return true;
+		}
+
+		return false;
+	}
+
 	public static String removeTypeInfo(String string, String typeDescription) {
 		return StringHelper.removeFromPostfix("[" + typeDescription + "]", string);
 	}
-	
+
 	public static boolean isRelationMatchQuiet(
 			EStatementRelation relation, String typeName, String actualValue, String valueToMatch) {
 
@@ -80,7 +100,7 @@ public class StatementConditionHelper {
 
 		return result;
 	}
-	
+
 	public static boolean isRelationMatch(
 			EStatementRelation relation, String typeName, String actualValue, String valueToMatch) {
 
@@ -101,7 +121,7 @@ public class StatementConditionHelper {
 		if (EStatementRelation.isEqualityMatch(relation, actualValue, valueToMatch)) {
 			return true;
 		}
-		
+
 		return false;
 	}
 

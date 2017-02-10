@@ -62,6 +62,7 @@ public enum EStatementRelation {
 		if (name.equals(StatementRelationNames.RELATION_NOT_EQUAL)) {
 			return true;
 		}
+
 		return false;
 	}	
 
@@ -70,10 +71,11 @@ public enum EStatementRelation {
 		if (isEquivalenceRelation(relation)) {
 			return false;
 		}
+
 		return true;
 	}
 
-	private static boolean isEquivalenceRelation(EStatementRelation relation) {
+	public static boolean isEquivalenceRelation(EStatementRelation relation) {
 
 		if (relation == EStatementRelation.EQUAL) {
 			return true;

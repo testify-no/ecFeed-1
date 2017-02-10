@@ -63,15 +63,16 @@ public class RelationStatementInterface extends AbstractStatementInterface{
 
 	private IStatementCondition createNewCondition(String string, MethodParameterNode parameter) {
 
-		if (!StatementConditionHelper.containsTypeInfo(string, null)) {
+
+		if (StatementConditionHelper.containsNoTypeInfo(string)) {
 			return new ChoiceCondition(parameter.getChoice(string), parameter, fRelation);
 		}
 
-		if (StatementConditionHelper.containsTypeInfo(string, "label")) {
+		if (StatementConditionHelper.containsLabelTypeInfo(string)) {
 			return new LabelCondition(StatementConditionHelper.removeTypeInfo(string, "label"), fRelation, parameter);
 		}
 
-		if (StatementConditionHelper.containsTypeInfo(string, "parameter")) {
+		if (StatementConditionHelper.containsParameterTypeInfo(string)) {
 			String parameterName = StatementConditionHelper.removeTypeInfo(string, "parameter"); 
 			MethodNode methodNode = parameter.getMethod();
 			MethodParameterNode rightParameter = (MethodParameterNode)methodNode.getParameter(parameterName);
@@ -80,8 +81,6 @@ public class RelationStatementInterface extends AbstractStatementInterface{
 		}
 
 		return null;
-
-
 	}
 
 	@Override

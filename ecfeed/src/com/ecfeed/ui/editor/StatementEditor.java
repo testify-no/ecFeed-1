@@ -129,8 +129,7 @@ public class StatementEditor extends Composite {
 
 		try {
 			if (fConditionCombo != null) {
-				String[] items = getAvailableConditions(fSelectedStatement);
-				fConditionCombo.setItems(items);
+				fConditionCombo.setItems(getAvailableConditions(fSelectedStatement, fRelationCombo.getText())); 
 
 				String currentConditionText = (String)fSelectedStatement.accept(new CurrentConditionProvider());
 				fConditionCombo.setText(currentConditionText);
@@ -158,14 +157,35 @@ public class StatementEditor extends Composite {
 		fRelationCombo.addSelectionListener(new RelationComboListener());
 	}
 
-	private String[] getAvailableConditions(AbstractStatement statement) {
+	private String[] getAvailableConditions(AbstractStatement statement, String relationName) {
 
 		try {
-			return (String[]) statement.accept(new AvailableConditionsProvider());
+			boolean includeLabelConditions = canAddLabelConditions(relationName);
+
+			String[] conditions = (String[])statement.accept(new AvailableConditionsProvider(includeLabelConditions));
+
+			return (conditions);
+
 		} catch (Exception e) {
 			SystemLogger.logCatch(e.getMessage());
 		}
+
 		return new String[]{};
+	}
+
+	boolean canAddLabelConditions(String relationName) {
+
+		EStatementRelation relation = EStatementRelation.getRelation(relationName);
+
+		if (relation == null) {
+			return false;
+		}
+
+		if (EStatementRelation.isOrderRelation(relation)) {
+			return false;
+		}
+
+		return true;
 	}
 
 	private String[] getStatementComboItems(AbstractStatement statement) {
@@ -190,6 +210,12 @@ public class StatementEditor extends Composite {
 	}
 
 	private class AvailableConditionsProvider implements IStatementVisitor {
+
+		private boolean fIncludeLabelConditions;
+
+		public AvailableConditionsProvider(boolean includeLabelConditions) {
+			fIncludeLabelConditions = includeLabelConditions;
+		}
 
 		@Override
 		public Object visit(StaticStatement statement) throws Exception {
@@ -223,7 +249,10 @@ public class StatementEditor extends Composite {
 			MethodParameterNode methodParameterNode = statement.getParameter();
 
 			addChoiceConditions(methodParameterNode, conditions);
-			addLabelConditions(methodParameterNode, conditions);
+
+			if (fIncludeLabelConditions) {
+				addLabelConditions(methodParameterNode, conditions);
+			}
 			addParameterConditions(methodParameterNode, conditions);
 
 			return conditions.toArray(new String[]{});
@@ -341,6 +370,20 @@ public class StatementEditor extends Composite {
 			fStatementIf.setConditionValue(fConditionCombo.getText());
 			String newText = fStatementIf.getConditionValue();
 			fConditionCombo.setText(newText);
+			refreshRelations();
+
+		}
+
+		private void refreshRelations() {
+
+			if (!(fSelectedStatement instanceof IRelationalStatement)) {
+				return;
+			}
+
+			String relationName = fRelationCombo.getText();
+			String[] items = getAvailableRelations((IRelationalStatement)fSelectedStatement, fConditionCombo.getText());
+			fRelationCombo.setItems(items);
+			fRelationCombo.setText(relationName);
 		}
 
 	}
@@ -483,7 +526,9 @@ public class StatementEditor extends Composite {
 			}
 
 			prepareRelationalStatementEditor(
-					statement, getAvailableConditions(statement), statement.getCondition().getValueString());
+					statement, 
+					getAvailableConditions(statement, fRelationCombo.getText()), 
+					statement.getCondition().getValueString());
 
 			StatementEditor.this.layout();
 
@@ -496,7 +541,9 @@ public class StatementEditor extends Composite {
 			disposeRightOperandComposite();
 			fRightOperandComposite = fConditionCombo = new ComboViewer(StatementEditor.this).getCombo();
 			prepareRelationalStatementEditor(
-					statement, getAvailableConditions(statement), statement.getCondition().toString());
+					statement, 
+					getAvailableConditions(statement, statement.getRelation().toString()), 
+					statement.getCondition().toString());
 
 			StatementEditor.this.layout();
 			return null;
@@ -527,7 +574,7 @@ public class StatementEditor extends Composite {
 		private void prepareRelationalStatementEditor(IRelationalStatement statement, String[] items, String item) {
 
 			fRelationCombo.setVisible(true);
-			fRelationCombo.setItems(getAvailableRelations(statement));
+			fRelationCombo.setItems(getAvailableRelations(statement, fConditionCombo.getText()));
 			fRelationCombo.setText(statement.getRelation().toString());
 
 			fConditionCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, CONDITION_COMBO_WIDTH, 1));
@@ -539,17 +586,31 @@ public class StatementEditor extends Composite {
 			StatementEditor.this.layout();
 		}
 
-		private String[] getAvailableRelations(IRelationalStatement statement) {
+	}
 
-			List<String> relations = new ArrayList<String>();
+	public String[] getAvailableRelations(IRelationalStatement statement, String condition) {
 
-			for (EStatementRelation r : statement.getAvailableRelations()) {
-				relations.add(r.toString());
+		boolean isLabelCondition = StatementConditionHelper.containsLabelTypeInfo(condition);
+
+		List<String> relations = new ArrayList<String>();
+
+		for (EStatementRelation relation : statement.getAvailableRelations()) {
+
+			if (canAddThisRelation(relation, isLabelCondition)) {
+				relations.add(relation.toString());
 			}
-
-			return relations.toArray(new String[]{});
 		}
 
+		return relations.toArray(new String[]{});
+	}
+
+	private boolean canAddThisRelation(EStatementRelation relation, boolean isLabelCondition) {
+
+		if (isLabelCondition && EStatementRelation.isOrderRelation(relation)) {
+			return false;
+		}
+
+		return true;
 	}
 
 }
