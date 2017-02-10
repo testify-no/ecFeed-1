@@ -54,7 +54,7 @@ public class TestCaseInterface extends AbstractNodeInterface {
 	public boolean isExecutable(TestCaseNode tc){
 		MethodInterface mIf = new MethodInterface(getUpdateContext(), fFileInfoProvider);
 		if(tc.getMethod() == null) return false;
-		mIf.setTarget(tc.getMethod());
+		mIf.setOwnNode(tc.getMethod());
 		EImplementationStatus tcStatus = getImplementationStatus(tc);
 		EImplementationStatus methodStatus = mIf.getImplementationStatus();
 		return tcStatus == EImplementationStatus.IMPLEMENTED && methodStatus != EImplementationStatus.NOT_IMPLEMENTED;
@@ -69,7 +69,7 @@ public class TestCaseInterface extends AbstractNodeInterface {
 
 		TestCaseNode testCaseNode = getOwnNode();
 		MethodNode methodNode = (MethodNode)testCaseNode.getParent();
-		methodIf.setTarget(methodNode);
+		methodIf.setOwnNode(methodNode);
 
 		methodIf.executeStaticTests(
 				new ArrayList<TestCaseNode>(Arrays.asList(new TestCaseNode[]{getOwnNode()})), fFileInfoProvider);

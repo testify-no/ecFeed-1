@@ -64,12 +64,12 @@ public class AddChildActionProvider {
 		return nodes.get(0); 
 	}
 
-	private void setTargetNode(AbstractNode abstractNode, AbstractNodeInterface abstractNodeInterface) {
+	private void setOwnNode(AbstractNode abstractNode, AbstractNodeInterface abstractNodeInterface) {
 		if (abstractNodeInterface == null ) {
 			final String MSG = "Invalid parent interface.";
 			ExceptionHelper.reportRuntimeException(MSG);
 		}
-		abstractNodeInterface.setTarget(abstractNode);
+		abstractNodeInterface.setOwnNode(abstractNode);
 	}
 
 	private void expandCurrentTreeViewerNode() {
@@ -100,7 +100,7 @@ public class AddChildActionProvider {
 				reportExceptionInvalidNodeType();
 			}
 
-			setTargetNode(selectedNode, fParentIf);
+			setOwnNode(selectedNode, fParentIf);
 
 			AbstractNode newNode = fParentIf.addNewParameter();
 			if (fSelectChild) {
@@ -140,7 +140,7 @@ public class AddChildActionProvider {
 				reportExceptionInvalidNodeType();
 			}
 
-			setTargetNode(selectedNode, fParentIf);
+			setOwnNode(selectedNode, fParentIf);
 
 			AbstractNode node = getParentInterface().addNewClass();
 			if (fSelectChild) {
@@ -174,7 +174,7 @@ public class AddChildActionProvider {
 				reportExceptionInvalidNodeType();
 			}
 
-			setTargetNode(selectedNode, fParentIf);
+			setOwnNode(selectedNode, fParentIf);
 
 			AbstractNode node = getParentInterface().addNewMethod();
 			if (fSelectChild) {
@@ -205,7 +205,7 @@ public class AddChildActionProvider {
 				reportExceptionInvalidNodeType();
 			}
 
-			setTargetNode(selectedNode, fParentIf);
+			setOwnNode(selectedNode, fParentIf);
 		}
 	}
 
@@ -320,7 +320,7 @@ public class AddChildActionProvider {
 				reportExceptionInvalidNodeType();
 			}
 
-			setTargetNode(selectedNode, fParentIf);
+			setOwnNode(selectedNode, fParentIf);
 
 			AbstractNode node = fParentIf.addNewChoice();
 			if (fSelectChild) {

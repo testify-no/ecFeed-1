@@ -193,7 +193,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 
 		IFileInfoProvider fileInfoProvider = getFileInfoProvider();
 		MethodNode methodNode = (MethodNode)getSelectedElement();
-		fMethodInterface.setTarget(methodNode);
+		fMethodInterface.setOwnNode(methodNode);
 
 		refreshMethodNameAndSignature(methodNode);
 

@@ -19,19 +19,19 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import com.ecfeed.core.model.AbstractNode;
 
 public class NodeSelectionUtils {
-	
+
 	private ISelectionProvider fSelectionProvider;
 
 	public NodeSelectionUtils(ISelectionProvider selectionProvider){
 		fSelectionProvider = selectionProvider;
 	}
-	
+
 	public SelectionInterface getSelectionInterface(IModelUpdateContext context){
 		SelectionInterface selectionIf = new SelectionInterface(context);
-		selectionIf.setTarget(getSelectedNodes());
+		selectionIf.setOwnListOfNodes(getSelectedNodes());
 		return selectionIf;
 	}
-	
+
 	public boolean isSelectionSibling(){
 		List<AbstractNode> nodes = getSelectedNodes();
 		if(nodes.isEmpty()) return false;
@@ -41,7 +41,7 @@ public class NodeSelectionUtils {
 		}
 		return true;
 	}
-	
+
 	public boolean isSelectionSingleType(){
 		List<AbstractNode> nodes = getSelectedNodes();
 		if(nodes.isEmpty()) return false;

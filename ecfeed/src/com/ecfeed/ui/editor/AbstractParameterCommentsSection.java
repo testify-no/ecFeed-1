@@ -115,7 +115,7 @@ public abstract class AbstractParameterCommentsSection extends JavaDocCommentsSe
 
 	public void setInput(AbstractParameterNode input){
 		super.setInput(input);
-		getTargetIf().setTarget(input);
+		getTargetIf().setOwnNode(input);
 	}
 
 	@Override

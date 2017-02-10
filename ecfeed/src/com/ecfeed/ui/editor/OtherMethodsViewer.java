@@ -56,7 +56,7 @@ public class OtherMethodsViewer extends CheckboxTableViewerSection {
 	}
 
 	public void setInput(ClassNode classNode){
-		fClassIf.setTarget(classNode);
+		fClassIf.setOwnNode(classNode);
 		setText("Other methods in " + JavaUtils.getLocalName(classNode));
 		super.setInput(fClassIf.getOtherMethods());
 	}

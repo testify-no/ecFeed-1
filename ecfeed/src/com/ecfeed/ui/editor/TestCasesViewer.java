@@ -194,7 +194,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 
 	public void setInput(MethodNode method){
 		fParentMethod = method;
-		fMethodIf.setTarget(method);
+		fMethodIf.setOwnNode(method);
 		fLabelProvider.setMethod(method);
 		fContentProvider.setMethod(method);
 		super.setInput(method);

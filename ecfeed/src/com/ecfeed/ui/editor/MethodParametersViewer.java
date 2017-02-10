@@ -93,7 +93,7 @@ public class MethodParametersViewer extends AbstractParametersViewer {
 		protected void setValue(Object element, Object value) {
 			MethodParameterNode node = (MethodParameterNode)element;
 			boolean expected = ((int)value == 0) ? true : false;
-			fParameterIf.setTarget(node);
+			fParameterIf.setOwnNode(node);
 			fParameterIf.setExpected(expected);
 			fCellEditor.setFocus();
 		}
@@ -121,7 +121,7 @@ public class MethodParametersViewer extends AbstractParametersViewer {
 				}
 			}
 
-			fParameterIf.setTarget(parameter);
+			fParameterIf.setOwnNode(parameter);
 			if(fParameterIf.hasLimitedValuesSet()){
 				fComboCellEditor = new ComboBoxCellEditor(getTable(), expectedValues.toArray(new String[]{}), SWT.READ_ONLY);
 			}
@@ -156,7 +156,7 @@ public class MethodParametersViewer extends AbstractParametersViewer {
 			} else{
 				valueString = ((CCombo)fComboCellEditor.getControl()).getText();
 			}
-			fParameterIf.setTarget(parameter);
+			fParameterIf.setOwnNode(parameter);
 			fParameterIf.setDefaultValue(valueString);
 		}
 
@@ -191,7 +191,7 @@ public class MethodParametersViewer extends AbstractParametersViewer {
 		protected Object getValue(Object element) {
 			MethodParameterNode parameter = (MethodParameterNode)element;
 			GlobalParameterNode link = parameter.getLink();
-			fParameterIf.setTarget(parameter);
+			fParameterIf.setOwnNode(parameter);
 			if(parameter.isLinked() == false){
 				return 0;
 			}
@@ -213,7 +213,7 @@ public class MethodParametersViewer extends AbstractParametersViewer {
 		protected void setValue(Object element, Object value) {
 			int index = (int)value;
 			String path = fCellEditor.getItems()[index];
-			fParameterIf.setTarget((MethodParameterNode)element);
+			fParameterIf.setOwnNode((MethodParameterNode)element);
 			if(path.equals(NOT_LINKED)){
 				fParameterIf.setLinked(false);
 			}
@@ -286,7 +286,7 @@ public class MethodParametersViewer extends AbstractParametersViewer {
 	public void setInput(MethodNode method, IFileInfoProvider fileInfoProvider){
 		fSelectedMethod = method;
 		showDefaultValueColumn(fSelectedMethod.getParametersNames(true).size() == 0);
-		getMethodIf().setTarget(method);
+		getMethodIf().setOwnNode(method);
 		super.setInput(method);
 	}
 

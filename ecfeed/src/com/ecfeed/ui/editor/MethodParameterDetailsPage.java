@@ -146,7 +146,7 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 		super.refresh();
 		if(getSelectedElement() instanceof MethodParameterNode){
 			MethodParameterNode parameter = (MethodParameterNode)getSelectedElement();
-			fParameterIf.setTarget(parameter);
+			fParameterIf.setOwnNode(parameter);
 
 			getMainSection().setText((parameter.isExpected()?"[e]":"") + parameter.toString());
 

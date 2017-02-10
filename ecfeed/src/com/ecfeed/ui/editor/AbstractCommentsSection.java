@@ -108,7 +108,7 @@ public abstract class AbstractCommentsSection extends TabFolderSection {
 
 	protected void setInput(AbstractNode input){
 		fTarget = input;
-		getTargetIf().setTarget(input);
+		getTargetIf().setOwnNode(input);
 		refresh();
 	}
 

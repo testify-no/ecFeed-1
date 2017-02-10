@@ -38,56 +38,56 @@ public class NodeInterfaceFactory{
 		@Override
 		public Object visit(RootNode node) throws Exception {
 			RootInterface nodeIf = new RootInterface(fContext, fFileInfoProvider);
-			nodeIf.setTarget(node);
+			nodeIf.setOwnNode(node);
 			return nodeIf;
 		}
 
 		@Override
 		public Object visit(ClassNode node) throws Exception {
 			ClassInterface nodeIf = new ClassInterface(fContext, fFileInfoProvider);
-			nodeIf.setTarget(node);
+			nodeIf.setOwnNode(node);
 			return nodeIf;
 		}
 
 		@Override
 		public Object visit(MethodNode node) throws Exception {
 			MethodInterface nodeIf = new MethodInterface(fContext, fFileInfoProvider);
-			nodeIf.setTarget(node);
+			nodeIf.setOwnNode(node);
 			return nodeIf;
 		}
 
 		@Override
 		public Object visit(MethodParameterNode node) throws Exception {
 			AbstractParameterInterface nodeIf = new MethodParameterInterface(fContext, fFileInfoProvider);
-			nodeIf.setTarget(node);
+			nodeIf.setOwnNode(node);
 			return nodeIf;
 		}
 
 		@Override
 		public Object visit(GlobalParameterNode node) throws Exception {
 			AbstractParameterInterface nodeIf = new GlobalParameterInterface(fContext, fFileInfoProvider);
-			nodeIf.setTarget(node);
+			nodeIf.setOwnNode(node);
 			return nodeIf;
 		}
 
 		@Override
 		public Object visit(TestCaseNode node) throws Exception {
 			TestCaseInterface nodeIf = new TestCaseInterface(fContext, fFileInfoProvider);
-			nodeIf.setTarget(node);
+			nodeIf.setOwnNode(node);
 			return nodeIf;
 		}
 
 		@Override
 		public Object visit(ConstraintNode node) throws Exception {
 			ConstraintInterface nodeIf = new ConstraintInterface(fContext, fFileInfoProvider);
-			nodeIf.setTarget(node);
+			nodeIf.setOwnNode(node);
 			return nodeIf;
 		}
 
 		@Override
 		public Object visit(ChoiceNode node) throws Exception {
 			ChoiceInterface nodeIf = new ChoiceInterface(fContext, fFileInfoProvider);
-			nodeIf.setTarget(node);
+			nodeIf.setOwnNode(node);
 			return nodeIf;
 		}
 	}
@@ -101,7 +101,7 @@ public class NodeInterfaceFactory{
 		}
 		catch(Exception e){SystemLogger.logCatch(e.getMessage());}
 		AbstractNodeInterface nodeIf = new AbstractNodeInterface(context, fileInfoProvider);
-		nodeIf.setTarget(node);
+		nodeIf.setOwnNode(node);
 		return nodeIf;
 	}
 }

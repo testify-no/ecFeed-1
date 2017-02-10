@@ -67,7 +67,7 @@ public class ClassViewer extends TableViewerSection {
 		}
 
 		protected void renameClass(ClassNode target, String qualifiedName){
-			classIf().setTarget(target);
+			classIf().setOwnNode(target);
 			classIf().setQualifiedName(qualifiedName);
 		}
 	}
@@ -200,7 +200,7 @@ public class ClassViewer extends TableViewerSection {
 
 	public void setInput(RootNode model){
 		super.setInput(model.getClasses());
-		fRootIf.setTarget(model);
+		fRootIf.setOwnNode(model);
 	}
 
 	private ClassInterface classIf(){

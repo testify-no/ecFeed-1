@@ -111,7 +111,7 @@ public class ChoicesViewer extends TableViewerSection {
 			ChoiceNode choice = (ChoiceNode)element;
 
 			if(newName.equals(choice.getName()) == false){
-				fTableItemIf.setTarget(choice);
+				fTableItemIf.setOwnNode(choice);
 				fTableItemIf.setName(newName);
 			}
 		}
@@ -174,7 +174,7 @@ public class ChoicesViewer extends TableViewerSection {
 			} else if(value == null){
 				valueString = fCellEditor.getViewer().getCCombo().getText();
 			}
-			fTableItemIf.setTarget((ChoiceNode)element);
+			fTableItemIf.setOwnNode((ChoiceNode)element);
 			fTableItemIf.setValue(valueString);
 		}
 
@@ -280,7 +280,7 @@ public class ChoicesViewer extends TableViewerSection {
 	public void setInput(ChoicesParentNode parent){
 		super.setInput(parent.getChoices());
 		fSelectedParent = parent;
-		fParentIf.setTarget(parent);
+		fParentIf.setOwnNode(parent);
 		if(parent == parent.getParameter()){
 			fReplaceWithDefaultButton.setVisible(true);
 		}else{

@@ -27,7 +27,7 @@ public class JavaTestRunner {
 
 	private ModelClassLoader fLoader;
 	private boolean fIsExport;
-	private MethodNode fTarget;
+	private MethodNode fMethodNode;
 	private Class<?> fTestClass;
 	private Method fTestMethod;
 	private ITestMethodInvoker fTestMethodInvoker;
@@ -40,14 +40,14 @@ public class JavaTestRunner {
 		fTestMethod = null;
 	}
 
-	public void setTarget(MethodNode target) throws RunnerException {
-		fTarget = target;
+	public void setOwnMethodNode(MethodNode methodNode) throws RunnerException {
+		fMethodNode = methodNode;
 	}
 
 	public void createTestClassAndMethod(MethodNode methodNode) throws RunnerException {
 		ClassNode classNode = methodNode.getClassNode();
 		fTestClass = getTestClass(classNode.getName());
-		fTestMethod = getTestMethod(fTestClass, fTarget);
+		fTestMethod = getTestMethod(fTestClass, fMethodNode);
 	}	
 
 	public void runTestCase(List<ChoiceNode> testData) throws RunnerException{
@@ -62,7 +62,7 @@ public class JavaTestRunner {
 			} catch (InstantiationException | IllegalAccessException e) {
 				RunnerException.report(
 						Messages.CANNOT_INVOKE_TEST_METHOD(
-								fTarget.toString(), 
+								fMethodNode.toString(), 
 								testData.toString(), 
 								e.getMessage()));
 			}
@@ -145,8 +145,8 @@ public class JavaTestRunner {
 		for(ChoiceNode parameter : testData){
 			dataTypes.add(parameter.getParameter().getType());
 		}
-		if(dataTypes.equals(fTarget.getParametersTypes()) == false){
-			RunnerException.report(Messages.WRONG_TEST_METHOD_SIGNATURE(fTarget.toString()));
+		if(dataTypes.equals(fMethodNode.getParametersTypes()) == false){
+			RunnerException.report(Messages.WRONG_TEST_METHOD_SIGNATURE(fMethodNode.toString()));
 		}
 	}
 

@@ -33,23 +33,23 @@ public class SelectionInterface extends OperationExecuter {
 		fAdapterProvider = new EclipseTypeAdapterProvider();
 	}
 
-	private List<? extends AbstractNode> fSelected;
+	private List<? extends AbstractNode> fListOfNodes;
 
-	public void setTarget(List<AbstractNode> target){
-		fSelected = target;
+	public void setOwnListOfNodes(List<AbstractNode> listOfNodes){
+		fListOfNodes = listOfNodes;
 	}
 
 	public boolean delete(){
-		if(fSelected.size() > 0){
-			return execute(new GenericRemoveNodesOperation(fSelected, fAdapterProvider, true), Messages.DIALOG_REMOVE_NODES_PROBLEM_TITLE);
+		if(fListOfNodes.size() > 0){
+			return execute(new GenericRemoveNodesOperation(fListOfNodes, fAdapterProvider, true), Messages.DIALOG_REMOVE_NODES_PROBLEM_TITLE);
 		}
 		return false;
 	}
 
 	public boolean deleteEnabled(){
-		if(fSelected.size() == 0) return false;
-		AbstractNode root = fSelected.get(0).getRoot();
-		for(AbstractNode selected : fSelected){
+		if(fListOfNodes.size() == 0) return false;
+		AbstractNode root = fListOfNodes.get(0).getRoot();
+		for(AbstractNode selected : fListOfNodes){
 			if(selected == root) return false;
 		}
 		return true;
@@ -63,10 +63,10 @@ public class SelectionInterface extends OperationExecuter {
 		try{
 			IModelOperation operation;
 			if(newIndex == -1){
-				operation = new GenericMoveOperation(fSelected, newParent, fAdapterProvider);
+				operation = new GenericMoveOperation(fListOfNodes, newParent, fAdapterProvider);
 			}
 			else{
-				operation = new GenericMoveOperation(fSelected, newParent, fAdapterProvider, newIndex);
+				operation = new GenericMoveOperation(fListOfNodes, newParent, fAdapterProvider, newIndex);
 			}
 			return execute(operation, Messages.DIALOG_MOVE_NODE_PROBLEM_TITLE);
 		}catch(ModelOperationException e){
@@ -75,14 +75,14 @@ public class SelectionInterface extends OperationExecuter {
 	}
 
 	public boolean moveUpDown(boolean up) {
-		AbstractNode parent = fSelected.get(0).getParent();
-		for(AbstractNode node : fSelected){
+		AbstractNode parent = fListOfNodes.get(0).getParent();
+		for(AbstractNode node : fListOfNodes){
 			if(node.getParent() != parent){
 				return false;
 			}
 		}
 		try{
-			IModelOperation operation = FactoryShiftOperation.getShiftOperation(fSelected, up);
+			IModelOperation operation = FactoryShiftOperation.getShiftOperation(fListOfNodes, up);
 			executeMoveOperation(operation);
 		}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
 		return false;
@@ -93,7 +93,7 @@ public class SelectionInterface extends OperationExecuter {
 		AbstractNode parent = getCommonParent();
 		if(parent != null){
 			try {
-				GenericShiftOperation operation = FactoryShiftOperation.getShiftOperation(fSelected, up);
+				GenericShiftOperation operation = FactoryShiftOperation.getShiftOperation(fListOfNodes, up);
 				return operation.getShift() != 0;
 			} catch (Exception e) {SystemLogger.logCatch(e.getMessage());}
 		}
@@ -101,18 +101,18 @@ public class SelectionInterface extends OperationExecuter {
 	}
 
 	public AbstractNode getCommonParent() {
-		if(fSelected == null || fSelected.size() == 0) return null;
-		AbstractNode parent = fSelected.get(0).getParent();
-		for(AbstractNode node : fSelected){
+		if(fListOfNodes == null || fListOfNodes.size() == 0) return null;
+		AbstractNode parent = fListOfNodes.get(0).getParent();
+		for(AbstractNode node : fListOfNodes){
 			if(node.getParent() != parent) return null;
 		}
 		return parent;
 	}
 
 	public boolean isSingleType(){
-		if(fSelected == null || fSelected.size() == 0) return false;
-		Class<?> type = fSelected.get(0).getClass();
-		for(AbstractNode node : fSelected){
+		if(fListOfNodes == null || fListOfNodes.size() == 0) return false;
+		Class<?> type = fListOfNodes.get(0).getClass();
+		for(AbstractNode node : fListOfNodes){
 			if(node.getClass().equals(type) == false) return false;
 		}
 		return true;

@@ -300,7 +300,7 @@ public class ModelNodeDropListener extends ViewerDropAdapter{
 		if(fEnabled == false) return false;
 		List<AbstractNode> dragged = NodeDnDBuffer.getInstance().getDraggedNodes();
 		SelectionInterface selectionIf = new SelectionInterface(fUpdateContext);
-		selectionIf.setTarget(dragged);
+		selectionIf.setOwnListOfNodes(dragged);
 		if((dragged.size() == 0) || (selectionIf.isSingleType() == false)) return false;
 		AbstractNode newParent = determineNewParent(getCurrentTarget(), getCurrentLocation());
 		int index = determineNewIndex((AbstractNode)getCurrentTarget(), getCurrentLocation());
@@ -346,7 +346,7 @@ public class ModelNodeDropListener extends ViewerDropAdapter{
 		}
 
 		SelectionInterface selectionIf = new SelectionInterface(fUpdateContext);
-		selectionIf.setTarget(dragged);
+		selectionIf.setOwnListOfNodes(dragged);
 		if (!selectionIf.isSingleType()) {
 			return false;
 		}

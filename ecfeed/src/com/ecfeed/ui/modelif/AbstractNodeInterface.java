@@ -54,7 +54,7 @@ import com.ecfeed.ui.dialogs.TextAreaDialog;
 public class AbstractNodeInterface extends OperationExecuter{
 
 	private IFileInfoProvider fFileInfoProvider;
-	private AbstractNode fTarget;
+	private AbstractNode fNode;
 	private EclipseImplementationStatusResolver fStatusResolver;
 	private ITypeAdapterProvider fAdapterProvider;
 
@@ -109,8 +109,8 @@ public class AbstractNodeInterface extends OperationExecuter{
 		fAdapterProvider = new EclipseTypeAdapterProvider();
 	}
 
-	public void setTarget(AbstractNode target){
-		fTarget = target;
+	public void setOwnNode(AbstractNode node){
+		fNode = node;
 	}
 
 	public EImplementationStatus getImplementationStatus(AbstractNode node){
@@ -118,7 +118,7 @@ public class AbstractNodeInterface extends OperationExecuter{
 	}
 
 	public EImplementationStatus getImplementationStatus(){
-		return getImplementationStatus(fTarget);
+		return getImplementationStatus(fNode);
 	}
 
 	static public boolean validateName(String name){
@@ -126,7 +126,7 @@ public class AbstractNodeInterface extends OperationExecuter{
 	}
 
 	public String getName(){
-		return fTarget.getName();
+		return fNode.getName();
 	}
 
 	protected IFileInfoProvider getFileInfoProvider() {
@@ -139,19 +139,19 @@ public class AbstractNodeInterface extends OperationExecuter{
 		}
 		String problemTitle = "";
 		try{
-			problemTitle = (String)fTarget.accept(new RenameParameterProblemTitleProvider());
+			problemTitle = (String)fNode.accept(new RenameParameterProblemTitleProvider());
 		}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
-		return execute(FactoryRenameOperation.getRenameOperation(fTarget, newName), problemTitle);
+		return execute(FactoryRenameOperation.getRenameOperation(fNode, newName), problemTitle);
 	}
 
 	public boolean setProperty(NodePropertyDefs.PropertyId propertyId, String value) {
-		String oldValue = fTarget.getPropertyValue(propertyId);
+		String oldValue = fNode.getPropertyValue(propertyId);
 
 		if (StringHelper.isEqual(oldValue, value)) {
 			return false;
 		}
 
-		IModelOperation operation = new AbstractNodeOperationSetProperty(propertyId, value, fTarget); 
+		IModelOperation operation = new AbstractNodeOperationSetProperty(propertyId, value, fNode); 
 		return execute(operation, Messages.DIALOG_SET_PROPERTY_PROBLEM_TITLE);
 	}	
 
@@ -168,18 +168,18 @@ public class AbstractNodeInterface extends OperationExecuter{
 		if(comments.equals(getComments())){
 			return false;
 		}
-		return execute(new GenericSetCommentsOperation(fTarget, comments), Messages.DIALOG_SET_COMMENTS_PROBLEM_TITLE);
+		return execute(new GenericSetCommentsOperation(fNode, comments), Messages.DIALOG_SET_COMMENTS_PROBLEM_TITLE);
 	}
 
 	public String getComments() {
-		if(fTarget != null && fTarget.getDescription() != null){
-			return fTarget.getDescription();
+		if(fNode != null && fNode.getDescription() != null){
+			return fNode.getDescription();
 		}
 		return "";
 	}
 
 	public boolean remove(){
-		return execute(FactoryRemoveOperation.getRemoveOperation(fTarget, fAdapterProvider, true), Messages.DIALOG_REMOVE_NODE_PROBLEM_TITLE);
+		return execute(FactoryRemoveOperation.getRemoveOperation(fNode, fAdapterProvider, true), Messages.DIALOG_REMOVE_NODE_PROBLEM_TITLE);
 	}
 
 	public boolean removeChildren(Collection<? extends AbstractNode> children, String message){
@@ -188,7 +188,7 @@ public class AbstractNodeInterface extends OperationExecuter{
 		}
 
 		for(AbstractNode node : children){
-			if(node.getParent() != fTarget) { 
+			if(node.getParent() != fNode) { 
 				return false;
 			}
 		}
@@ -200,17 +200,17 @@ public class AbstractNodeInterface extends OperationExecuter{
 	}
 
 	public boolean addChildren(Collection<? extends AbstractNode> children){
-		IModelOperation operation = new GenericAddChildrenOperation(fTarget, children, fAdapterProvider, true);
+		IModelOperation operation = new GenericAddChildrenOperation(fNode, children, fAdapterProvider, true);
 		return execute(operation, Messages.DIALOG_ADD_CHILDREN_PROBLEM_TITLE);
 	}
 
 	public boolean addChildren(Collection<? extends AbstractNode> children, int index){
 		IModelOperation operation;
 		if(index == -1){
-			operation = new GenericAddChildrenOperation(fTarget, children, fAdapterProvider, true);
+			operation = new GenericAddChildrenOperation(fNode, children, fAdapterProvider, true);
 		}
 		else{
-			operation = new GenericAddChildrenOperation(fTarget, children, index, fAdapterProvider, true);
+			operation = new GenericAddChildrenOperation(fNode, children, index, fAdapterProvider, true);
 		}
 		return execute(operation, Messages.DIALOG_ADD_CHILDREN_PROBLEM_TITLE);
 	}
@@ -222,16 +222,16 @@ public class AbstractNodeInterface extends OperationExecuter{
 	public boolean pasteEnabled(Collection<? extends AbstractNode> pasted, int index){
 		GenericAddChildrenOperation operation;
 		if(index == -1){
-			operation = new GenericAddChildrenOperation(fTarget, pasted, fAdapterProvider, true);
+			operation = new GenericAddChildrenOperation(fNode, pasted, fAdapterProvider, true);
 		}else{
-			operation = new GenericAddChildrenOperation(fTarget, pasted, index, fAdapterProvider, true);
+			operation = new GenericAddChildrenOperation(fNode, pasted, index, fAdapterProvider, true);
 		}
 		return operation.enabled();
 	}
 
 	public boolean moveUpDown(boolean up) {
 		try{
-			GenericShiftOperation operation = FactoryShiftOperation.getShiftOperation(Arrays.asList(new AbstractNode[]{fTarget}), up);
+			GenericShiftOperation operation = FactoryShiftOperation.getShiftOperation(Arrays.asList(new AbstractNode[]{fNode}), up);
 			if(operation.getShift() > 0){
 				return executeMoveOperation(operation);
 			}
@@ -248,7 +248,7 @@ public class AbstractNodeInterface extends OperationExecuter{
 	}
 
 	public AbstractNode getOwnNode(){
-		return fTarget;
+		return fNode;
 	}
 
 	public boolean goToImplementationEnabled(){
@@ -294,7 +294,7 @@ public class AbstractNodeInterface extends OperationExecuter{
 		List<IModelOperation> result = new ArrayList<IModelOperation>();
 		String javadoc = JavaDocSupport.importJavadoc(getOwnNode());
 		if(javadoc != null && getComments() != javadoc){
-			result.add(new GenericSetCommentsOperation(fTarget, javadoc));
+			result.add(new GenericSetCommentsOperation(fNode, javadoc));
 		}
 		for(AbstractNode child : getOwnNode().getChildren()){
 			AbstractNodeInterface childIf = 

@@ -52,7 +52,7 @@ public class OnlineTestRunningSupport extends AbstractOnlineSupport {
 	@Override
 	protected void prepareRunner(MethodNode target) throws RunnerException {
 		JavaTestRunner runner = getRunner();
-		runner.setTarget(target);
+		runner.setOwnMethodNode(target);
 
 		if (getTestRunMode() == TestRunMode.JUNIT) {
 			runner.createTestClassAndMethod(target);

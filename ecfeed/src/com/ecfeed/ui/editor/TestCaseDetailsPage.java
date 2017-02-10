@@ -78,7 +78,7 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 		super.refresh();
 		if(getSelectedElement() instanceof TestCaseNode){
 			TestCaseNode testCase = (TestCaseNode)getSelectedElement();
-			fTestCaseIf.setTarget(testCase);
+			fTestCaseIf.setOwnNode(testCase);
 
 			if (fFileInfoProvider.isProjectAvailable()) {
 				fCommentsSection.setInput(testCase);

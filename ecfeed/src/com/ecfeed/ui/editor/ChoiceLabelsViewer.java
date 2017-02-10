@@ -327,7 +327,7 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 	}
 
 	public void setInput(ChoiceNode	choice){
-		fChoiceIf.setTarget(choice);
+		fChoiceIf.setOwnNode(choice);
 		super.setInput(choice.getAllLabels());
 	}
 

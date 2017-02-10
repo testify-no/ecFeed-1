@@ -99,7 +99,7 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		super.refresh();
 		ChoiceNode selectedChoice = getSelectedChoice();
 		if(selectedChoice != null){
-			fChoiceIf.setTarget(selectedChoice);
+			fChoiceIf.setOwnNode(selectedChoice);
 
 			String title = getSelectedChoice().toString();
 			getMainSection().setText(title);

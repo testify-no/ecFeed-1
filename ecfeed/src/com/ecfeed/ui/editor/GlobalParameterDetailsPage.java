@@ -51,7 +51,7 @@ public class GlobalParameterDetailsPage extends AbstractParameterDetailsPage {
 		super.refresh();
 		if(getSelectedElement() instanceof GlobalParameterNode){
 			GlobalParameterNode parameter = (GlobalParameterNode)getSelectedElement();
-			fParameterIf.setTarget(parameter);
+			fParameterIf.setOwnNode(parameter);
 			getMainSection().setText(parameter.getQualifiedName() + ": " + parameter.getType());
 			fLinkingMethodsViewer.setInput(parameter);
 			fLinkingMethodsViewer.setVisible(fParameterIf.getLinkers().size() > 0);

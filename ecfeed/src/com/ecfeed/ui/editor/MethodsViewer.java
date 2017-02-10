@@ -64,7 +64,7 @@ public class MethodsViewer extends TableViewerSection {
 
 		@Override
 		protected Object getValue(Object element) {
-			fMethodIf.setTarget((MethodNode)element);
+			fMethodIf.setOwnNode((MethodNode)element);
 			return fMethodIf.getName();
 		}
 
@@ -72,7 +72,7 @@ public class MethodsViewer extends TableViewerSection {
 		protected void setValue(Object element, Object value) {
 			String newName = (String)value;
 			MethodNode method = (MethodNode)element;
-			fMethodIf.setTarget(method);
+			fMethodIf.setOwnNode(method);
 			fMethodIf.setName(newName);
 		}
 	}
@@ -133,7 +133,7 @@ public class MethodsViewer extends TableViewerSection {
 	}
 
 	public void setInput(ClassNode classNode){
-		fClassIf.setTarget(classNode);
+		fClassIf.setOwnNode(classNode);
 		super.setInput(classNode.getMethods());
 	}
 

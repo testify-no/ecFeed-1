@@ -110,7 +110,7 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 		super.refresh();
 		if(getSelectedElement() instanceof AbstractParameterNode){
 			AbstractParameterNode parameter = (AbstractParameterNode)getSelectedElement();
-			getParameterIf().setTarget(parameter);
+			getParameterIf().setOwnNode(parameter);
 
 			getMainSection().setText(parameter.toString());
 			fNameText.setText(parameter.getName());

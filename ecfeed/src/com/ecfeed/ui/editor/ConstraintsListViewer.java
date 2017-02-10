@@ -71,7 +71,7 @@ public class ConstraintsListViewer extends TableViewerSection {
 		protected void setValue(Object element, Object value){
 			String newName = (String)value;
 			ConstraintNode constraint = (ConstraintNode)element;
-			fConstraintIf.setTarget(constraint);
+			fConstraintIf.setOwnNode(constraint);
 			fConstraintIf.setName(newName);
 		}
 	}
@@ -113,7 +113,7 @@ public class ConstraintsListViewer extends TableViewerSection {
 
 	public void setInput(MethodNode method){
 		super.setInput(method.getConstraintNodes());
-		fMethodInterface.setTarget(method);
+		fMethodInterface.setOwnNode(method);
 	}
 
 	@Override

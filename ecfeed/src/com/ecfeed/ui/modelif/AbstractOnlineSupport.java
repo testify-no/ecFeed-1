@@ -45,7 +45,7 @@ public abstract class AbstractOnlineSupport {
 		OK, CANCELED
 	}
 
-	private MethodNode fTarget;
+	private MethodNode fMethodNode;
 	private JavaTestRunner fRunner;
 	private IFileInfoProvider fFileInfoProvider;
 	private String fTargetFile;
@@ -72,7 +72,7 @@ public abstract class AbstractOnlineSupport {
 		fTestRunMode = TestRunModeHelper.getTestRunMode(methodNode);
 		fTestInformer = new TestInformer();
 
-		setTargetMethod(methodNode);
+		setOwnMethodNode(methodNode);
 	}
 
 	protected TestRunMode getTestRunMode() {
@@ -97,10 +97,10 @@ public abstract class AbstractOnlineSupport {
 		return run();
 	}
 
-	private void setTargetMethod(MethodNode target) {
+	private void setOwnMethodNode(MethodNode methodNode) {
 		try {
-			prepareRunner(target);
-			fTarget = target;
+			prepareRunner(methodNode);
+			fMethodNode = methodNode;
 		} catch (RunnerException e) {
 			ErrorDialog.open(Messages.DIALOG_TEST_EXECUTION_PROBLEM_TITLE,
 					e.getMessage());
@@ -108,7 +108,7 @@ public abstract class AbstractOnlineSupport {
 	}
 
 	protected MethodNode getTargetMethod() {
-		return fTarget;
+		return fMethodNode;
 	}
 
 	protected JavaTestRunner getRunner() {
@@ -125,7 +125,7 @@ public abstract class AbstractOnlineSupport {
 
 	protected Result displayParametersDialogAndRunTests() {
 		SetupDialogOnline dialog = createSetupDialog(Display.getCurrent()
-				.getActiveShell(), fTarget, fFileInfoProvider,
+				.getActiveShell(), fMethodNode, fFileInfoProvider,
 				fInitialExportTemplate);
 
 		if (dialog.open() != IDialogConstants.OK_ID) {

@@ -50,7 +50,7 @@ public class GlobalParametersViewer extends AbstractParametersViewer {
 	}
 
 	public void setInput(GlobalParametersParentNode input){
-		fParentIf.setTarget(input);
+		fParentIf.setOwnNode(input);
 		super.setInput(input);
 	}
 

@@ -100,11 +100,11 @@ public abstract class AbstractParametersViewer extends TableViewerSection {
 				newType = ((CCombo)fCellEditor.getControl()).getText();
 			}
 			if(newType.equals(BROWSE_PARAMETER_TYPE_STRING)){
-				getParameterInterface().setTarget(node);
+				getParameterInterface().setOwnNode(node);
 				getParameterInterface().importType();
 			}
 			else{
-				getParameterInterface().setTarget(node);
+				getParameterInterface().setOwnNode(node);
 				getParameterInterface().setType(newType);
 			}
 
@@ -139,7 +139,7 @@ public abstract class AbstractParametersViewer extends TableViewerSection {
 
 		@Override
 		protected void setValue(Object element, Object value) {
-			getParameterInterface().setTarget((AbstractParameterNode)element);
+			getParameterInterface().setOwnNode((AbstractParameterNode)element);
 			getParameterInterface().setName((String)value);
 		}
 	}
@@ -195,7 +195,7 @@ public abstract class AbstractParametersViewer extends TableViewerSection {
 	}
 
 	public void setInput(ParametersParentNode parent){
-		fParentIf.setTarget(parent);
+		fParentIf.setOwnNode(parent);
 		super.setInput(parent.getParameters());
 	}
 

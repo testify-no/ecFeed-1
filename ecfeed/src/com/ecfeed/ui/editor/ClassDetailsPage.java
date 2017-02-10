@@ -262,7 +262,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		super.refresh();
 		if(getSelectedElement() instanceof ClassNode){
 			ClassNode selectedClass = (ClassNode)getSelectedElement();
-			fClassIf.setTarget(selectedClass);
+			fClassIf.setOwnNode(selectedClass);
 			String title = fClassIf.getQualifiedName();
 			//Remove implementation status for performance reasons
 			//			String title = fClassIf.getQualifiedName() + " [" + fClassIf.getImplementationStatus() + "]";

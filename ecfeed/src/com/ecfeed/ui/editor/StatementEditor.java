@@ -122,7 +122,7 @@ public class StatementEditor extends Composite {
 	public void setConstraintNode(ConstraintNode constraintNode) {
 
 		fConstraint = constraintNode;
-		fConstraintIf.setTarget(constraintNode);
+		fConstraintIf.setOwnNode(constraintNode);
 	}
 
 	public void refreshConditionCombo() {

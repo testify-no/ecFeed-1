@@ -92,7 +92,7 @@ public class ConstraintDetailsPage extends BasicDetailsPage {
 		if (fFileInfoProvider.isProjectAvailable()) {
 			fCommentsSection.setInput(constraint);
 		}
-		fConstraintIf.setTarget(constraint);
+		fConstraintIf.setOwnNode(constraint);
 	}
 
 	@Override

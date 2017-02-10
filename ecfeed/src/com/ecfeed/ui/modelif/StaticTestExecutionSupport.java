@@ -66,7 +66,7 @@ public class StaticTestExecutionSupport {
 						fTestInformer.setTestProgressMessage();
 
 						MethodNode methodNode = testCase.getMethod();
-						fRunner.setTarget(methodNode);
+						fRunner.setOwnMethodNode(methodNode);
 
 						if (fTestRunMode == TestRunMode.JUNIT) {
 							fRunner.createTestClassAndMethod(methodNode);

@@ -79,7 +79,7 @@ public class ModelDetailsPage extends BasicDetailsPage {
 		super.refresh();
 		if(getSelectedElement() instanceof RootNode){
 			RootNode selectedRoot = (RootNode)getSelectedElement();
-			fRootIf.setTarget(selectedRoot);
+			fRootIf.setOwnNode(selectedRoot);
 			fModelNameText.setText(selectedRoot.getName());
 			fClassesSection.setInput(selectedRoot);
 			fParametersSection.setInput(selectedRoot);
@@ -94,7 +94,7 @@ public class ModelDetailsPage extends BasicDetailsPage {
 	public void selectionChanged(IFormPart part, ISelection selection) {
 		super.selectionChanged(part, selection);
 		if(getSelectedElement() instanceof RootNode){
-			fRootIf.setTarget((RootNode)getSelectedElement());
+			fRootIf.setOwnNode((RootNode)getSelectedElement());
 		}
 	}
 

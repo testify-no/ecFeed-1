@@ -36,7 +36,7 @@ public class OnlineExportSupport extends AbstractOnlineSupport {
 
 	@Override
 	protected void prepareRunner(MethodNode target) throws RunnerException {
-		getRunner().setTarget(target);
+		getRunner().setOwnMethodNode(target);
 	}
 
 	@Override

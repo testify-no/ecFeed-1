@@ -104,7 +104,7 @@ public class TestDataViewer extends TableViewerSection implements ITestDataEdito
 		List<ChoiceNode> testData = testCase.getTestData();
 		MethodNode methodNode = testCase.getMethod();		
 		fValueEditingSupport.setMethod(testCase.getMethod());
-		fTestCaseIf.setTarget(testCase);
+		fTestCaseIf.setOwnNode(testCase);
 		//target and data support must be updated prior to calling super
 		List<ChoiceNode> convertedChoices = convertChoices(testData, methodNode);
 		super.setInput(convertedChoices);
