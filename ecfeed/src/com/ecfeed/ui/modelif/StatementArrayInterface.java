@@ -62,7 +62,7 @@ public class StatementArrayInterface extends AbstractStatementInterface{
 	}
 
 	@Override
-	protected StatementArray getOwnStatement(){
+	public StatementArray getOwnStatement(){
 		return (StatementArray)super.getOwnStatement();
 	}
 }

@@ -16,18 +16,13 @@ public class LabelCondition implements IStatementCondition {
 
 	private String fLabel;
 	private MethodParameterNode fParameter;
-	private EStatementRelation fRelation;
+	private RelationStatement fParentRelationStatement;
 
-	public LabelCondition(String label, EStatementRelation relation, MethodParameterNode parameter) {
+	public LabelCondition(String label, MethodParameterNode parameter, RelationStatement parentRelationStatement) {
 		fLabel = label;
-		fRelation = relation;
 		fParameter = parameter;
+		fParentRelationStatement = parentRelationStatement;
 	}
-
-	@Override
-	public void setRelation(EStatementRelation relation) {
-		fRelation = relation;
-	}	
 
 	@Override
 	public boolean evaluate(List<ChoiceNode> choices) {
@@ -45,7 +40,9 @@ public class LabelCondition implements IStatementCondition {
 
 		boolean containsLabel = choice.getAllLabels().contains(fLabel);
 
-		switch (fRelation) {
+		EStatementRelation relation = fParentRelationStatement.getRelation(); 
+
+		switch (relation) {
 
 		case EQUAL:
 			return containsLabel;
@@ -96,7 +93,7 @@ public class LabelCondition implements IStatementCondition {
 
 	@Override
 	public LabelCondition getCopy() {
-		return new LabelCondition(fLabel, fRelation, fParameter);
+		return new LabelCondition(fLabel, fParameter, fParentRelationStatement);
 	}
 
 	public String getLabel() {

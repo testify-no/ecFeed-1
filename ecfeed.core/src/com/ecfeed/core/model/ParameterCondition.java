@@ -18,19 +18,15 @@ import com.ecfeed.core.utils.JavaTypeHelper;
 public class ParameterCondition implements IStatementCondition {
 
 	private MethodParameterNode fLeftParameterNode;
-	private EStatementRelation fRelation;
 	private MethodParameterNode fRightParameterNode;
+	private RelationStatement fParentRelationStatement;
 
 	public ParameterCondition(
-			MethodParameterNode parameter, EStatementRelation relation, MethodParameterNode rightParameter) {
+			MethodParameterNode parameter, MethodParameterNode rightParameter, RelationStatement parentRelationStatement) {
 
 		fLeftParameterNode = parameter;
-		fRelation = relation;
 		fRightParameterNode = rightParameter;
-	}
-
-	public void setRelation(EStatementRelation relation) {
-		fRelation = relation;
+		fParentRelationStatement = parentRelationStatement;
 	}
 
 	@Override
@@ -49,7 +45,7 @@ public class ParameterCondition implements IStatementCondition {
 		String rightChoice = 
 				StatementConditionHelper.getChoiceForMethodParameter(choices, fRightParameterNode).getValueString();
 
-		if (StatementConditionHelper.isRelationMatchQuiet(fRelation, substituteType, leftChoice, rightChoice)) {
+		if (StatementConditionHelper.isRelationMatchQuiet(fParentRelationStatement.getRelation(), substituteType, leftChoice, rightChoice)) {
 			return true;
 		}
 
@@ -63,7 +59,7 @@ public class ParameterCondition implements IStatementCondition {
 
 	@Override
 	public ParameterCondition getCopy() {
-		return new ParameterCondition(fLeftParameterNode.makeClone(), fRelation, fRightParameterNode.makeClone());
+		return new ParameterCondition(fLeftParameterNode.makeClone(), fRightParameterNode.makeClone(), fParentRelationStatement);
 	}
 
 	@Override
@@ -89,7 +85,7 @@ public class ParameterCondition implements IStatementCondition {
 			return false;
 		}
 
-		if (fRelation != otherParamCondition.fRelation) {
+		if (fParentRelationStatement.getRelation() != otherParamCondition.fParentRelationStatement.getRelation()) {
 			return false;
 		}		
 

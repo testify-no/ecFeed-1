@@ -65,11 +65,14 @@ public class RelationStatementInterface extends AbstractStatementInterface{
 
 
 		if (StatementConditionHelper.containsNoTypeInfo(string)) {
-			return new ChoiceCondition(parameter.getChoice(string), parameter, fRelation);
+			return new ChoiceCondition(parameter.getChoice(string), parameter, getOwnStatement());
 		}
 
 		if (StatementConditionHelper.containsLabelTypeInfo(string)) {
-			return new LabelCondition(StatementConditionHelper.removeTypeInfo(string, "label"), fRelation, parameter);
+			return new LabelCondition(
+					StatementConditionHelper.removeTypeInfo(string, "label"), 
+					parameter,
+					getOwnStatement());
 		}
 
 		if (StatementConditionHelper.containsParameterTypeInfo(string)) {
@@ -77,7 +80,7 @@ public class RelationStatementInterface extends AbstractStatementInterface{
 			MethodNode methodNode = parameter.getMethod();
 			MethodParameterNode rightParameter = (MethodParameterNode)methodNode.getParameter(parameterName);
 
-			return new ParameterCondition(parameter, fRelation, rightParameter);
+			return new ParameterCondition(parameter, rightParameter, getOwnStatement());
 		}
 
 		return null;
@@ -89,7 +92,7 @@ public class RelationStatementInterface extends AbstractStatementInterface{
 	}
 
 	@Override
-	protected RelationStatement getOwnStatement() {
+	public RelationStatement getOwnStatement() {
 		return (RelationStatement)super.getOwnStatement();
 	}
 }

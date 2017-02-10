@@ -13,7 +13,6 @@ package com.ecfeed.core.model;
 import java.util.List;
 
 public interface IStatementCondition {
-	public void setRelation(EStatementRelation relation); // TODO - remove fRelation from implementing classes (should be read directly from Relation Statement) 
 	public Object getCondition();
 	public boolean evaluate(List<ChoiceNode> values);
 	public boolean adapt(List<ChoiceNode> values);

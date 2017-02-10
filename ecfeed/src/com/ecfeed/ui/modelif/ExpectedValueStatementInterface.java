@@ -45,7 +45,7 @@ public class ExpectedValueStatementInterface extends AbstractStatementInterface{
 	}
 
 	@Override
-	protected ExpectedValueStatement getOwnStatement(){
+	public ExpectedValueStatement getOwnStatement(){
 		return (ExpectedValueStatement)super.getOwnStatement();
 	}
 

@@ -19,17 +19,12 @@ public class ChoiceCondition implements IStatementCondition {
 
 	private ChoiceNode fChoice;
 	private MethodParameterNode fMethodParameterNode;
-	private EStatementRelation fRelation;
+	RelationStatement fParentRelationStatement;
 
-	public ChoiceCondition(ChoiceNode choice, MethodParameterNode parameter, EStatementRelation relation) {
+	public ChoiceCondition(ChoiceNode choice, MethodParameterNode parameter, RelationStatement parentRelationStatement) {
 		fChoice = choice;
 		fMethodParameterNode = parameter;
-		fRelation = relation;
-	}
-
-	@Override
-	public void setRelation(EStatementRelation relation) {
-		fRelation = relation;
+		fParentRelationStatement = parentRelationStatement;
 	}
 
 	@Override
@@ -51,7 +46,7 @@ public class ChoiceCondition implements IStatementCondition {
 
 	@Override
 	public ChoiceCondition getCopy() {
-		return new ChoiceCondition(fChoice.makeClone(), fMethodParameterNode, fRelation);
+		return new ChoiceCondition(fChoice.makeClone(), fMethodParameterNode, fParentRelationStatement);
 	}
 
 	@Override
@@ -100,8 +95,9 @@ public class ChoiceCondition implements IStatementCondition {
 
 	private boolean evaluateChoice(ChoiceNode actualChoice) {
 
-		if (fRelation == EStatementRelation.EQUAL || fRelation == EStatementRelation.NOT_EQUAL) {
-			return evaluateEqualityIncludingParents(fRelation, actualChoice);
+		EStatementRelation relation = fParentRelationStatement.getRelation();
+		if (relation == EStatementRelation.EQUAL || relation == EStatementRelation.NOT_EQUAL) {
+			return evaluateEqualityIncludingParents(relation, actualChoice);
 		}
 
 		String typeName = actualChoice.getParameter().getType();
@@ -109,7 +105,7 @@ public class ChoiceCondition implements IStatementCondition {
 		String actualValue = JavaTypeHelper.convertValueString(actualChoice.getValueString(), typeName);
 		String valueToMatch = JavaTypeHelper.convertValueString(fChoice.getValueString(), typeName);
 
-		return StatementConditionHelper.isRelationMatchQuiet(fRelation, typeName, actualValue, valueToMatch);
+		return StatementConditionHelper.isRelationMatchQuiet(relation, typeName, actualValue, valueToMatch);
 	}
 
 	private boolean evaluateEqualityIncludingParents(EStatementRelation relation, ChoiceNode choice) {

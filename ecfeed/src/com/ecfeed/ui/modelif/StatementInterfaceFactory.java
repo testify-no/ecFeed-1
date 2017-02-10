@@ -33,29 +33,29 @@ public class StatementInterfaceFactory{
 		@Override
 		public Object visit(StaticStatement statement) throws Exception {
 			StaticStatementInterface statementIf = new StaticStatementInterface(fUpdateContext);
-			statementIf.setTarget(statement);
+			statementIf.setOwnStatement(statement);
 			return statementIf;
 		}
 
 		@Override
 		public Object visit(StatementArray statement) throws Exception {
 			StatementArrayInterface statementIf = new StatementArrayInterface(fUpdateContext);
-			statementIf.setTarget(statement);
+			statementIf.setOwnStatement(statement);
 			return statementIf;
 		}
 
 		@Override
 		public Object visit(ExpectedValueStatement statement) throws Exception {
 			ExpectedValueStatementInterface statementIf = new ExpectedValueStatementInterface(fUpdateContext);
-			statementIf.setTarget(statement);
+			statementIf.setOwnStatement(statement);
 			return statementIf;
 		}
 
 		@Override
-		public Object visit(RelationStatement statement)
-				throws Exception {
+		public Object visit(RelationStatement statement) throws Exception {
+
 			RelationStatementInterface statementIf = new RelationStatementInterface(fUpdateContext);
-			statementIf.setTarget(statement);
+			statementIf.setOwnStatement(statement);
 			return statementIf;
 		}
 

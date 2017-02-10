@@ -17,17 +17,17 @@ import com.ecfeed.core.model.StaticStatement;
 
 public class AbstractStatementInterface extends OperationExecuter {
 
-	AbstractStatement fAbstractStatement;
+	private AbstractStatement fAbstractStatement;
 
 	public AbstractStatementInterface(IModelUpdateContext updateContext) {
 		super(updateContext);
 	}
 
-	public void setTarget(AbstractStatement target){
-		fAbstractStatement = target;
+	public void setOwnStatement(AbstractStatement abstractStatement){
+		fAbstractStatement = abstractStatement;
 	}
 
-	protected AbstractStatement getOwnStatement(){
+	public AbstractStatement getOwnStatement(){
 		return fAbstractStatement;
 	}
 
