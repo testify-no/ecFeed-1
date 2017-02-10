@@ -69,6 +69,7 @@ public class RelationStatement extends AbstractStatement implements IRelationalS
 	@Override
 	public void setRelation(EStatementRelation relation) {
 		fRelation = relation;
+		fCondition.setRelation(relation);
 	}
 
 	@Override

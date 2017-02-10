@@ -49,7 +49,11 @@ public class Constraint implements IConstraint<ChoiceNode> {
 			return false;
 		}
 
-		return fConsequence.evaluate(values);
+		if (fConsequence.evaluate(values)) {
+			return true;
+		}
+
+		return false;
 	}
 
 	@Override

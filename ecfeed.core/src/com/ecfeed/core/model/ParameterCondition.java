@@ -12,9 +12,7 @@ package com.ecfeed.core.model;
 
 import java.util.List;
 
-import com.ecfeed.core.model.IStatementCondition;
 import com.ecfeed.core.utils.JavaTypeHelper;
-import com.ecfeed.core.utils.StringHolder;
 
 
 public class ParameterCondition implements IStatementCondition {
@@ -29,6 +27,10 @@ public class ParameterCondition implements IStatementCondition {
 		fLeftParameterNode = parameter;
 		fRelation = relation;
 		fRightParameterNode = rightParameter;
+	}
+
+	public void setRelation(EStatementRelation relation) {
+		fRelation = relation;
 	}
 
 	@Override

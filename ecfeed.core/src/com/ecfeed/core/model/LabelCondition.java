@@ -25,6 +25,11 @@ public class LabelCondition implements IStatementCondition {
 	}
 
 	@Override
+	public void setRelation(EStatementRelation relation) {
+		fRelation = relation;
+	}	
+
+	@Override
 	public boolean evaluate(List<ChoiceNode> choices) {
 
 		ChoiceNode choice = StatementConditionHelper.getChoiceForMethodParameter(choices, fParameter);
