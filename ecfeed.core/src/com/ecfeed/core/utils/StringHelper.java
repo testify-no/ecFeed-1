@@ -136,17 +136,17 @@ public class StringHelper {
 		}
 		return null;
 	}
-	
+
 	public static boolean startsWithPrefix(String prefix, String str) {
 		int index = str.indexOf(prefix);
-		
+
 		if (index == 0) {
 			return true;
 		}
-		
+
 		return false;
 	}
-	
+
 	public static int countOccurencesOfChar(String str, char charToCount) {
 		int len = str.length();
 		int occurences = 0;
@@ -234,5 +234,88 @@ public class StringHelper {
 
 		return source.replace(substr, strToReplace);
 	}
-	
+
+	public static Byte convertToByte(String str) throws NumberFormatException {
+		Long result = convertToLong(str);
+
+		Long maxIntValue = new Long(Byte.MAX_VALUE);
+		if (result > maxIntValue) {
+			throw new NumberFormatException();
+		}
+
+		Long minIntValue = new Long(Byte.MIN_VALUE);
+		if (result < minIntValue) {
+			throw new NumberFormatException();
+		}		
+
+		return result.byteValue(); 
+	}
+
+	public static Short convertToShort(String str) throws NumberFormatException {
+		Long result = convertToLong(str);
+
+		Long maxIntValue = new Long(Short.MAX_VALUE);
+		if (result > maxIntValue) {
+			throw new NumberFormatException();
+		}
+
+		Long minIntValue = new Long(Short.MIN_VALUE);
+		if (result < minIntValue) {
+			throw new NumberFormatException();
+		}		
+
+		return result.shortValue(); 
+	}	
+
+	public static Integer convertToInteger(String str) throws NumberFormatException {
+		Long result = convertToLong(str);
+
+		Long maxIntValue = new Long(Integer.MAX_VALUE);
+		if (result > maxIntValue) {
+			throw new NumberFormatException();
+		}
+
+		Long minIntValue = new Long(Integer.MIN_VALUE);
+		if (result < minIntValue) {
+			throw new NumberFormatException();
+		}		
+
+		return result.intValue(); 
+	}
+
+	public static Long convertToLong(String str) throws NumberFormatException {
+		Long result = convertToLongDirectly(str);
+
+		if (result != null) {
+			return result;
+		}
+
+		return convertToLongViaDouble(str);
+	}
+
+	private static Long convertToLongDirectly(String str) {
+		Long result = null;
+
+		try {
+			result = Long.parseLong(str);
+		} catch (NumberFormatException e){
+			return null;
+		}
+
+		return result;
+	}
+
+	private static Long convertToLongViaDouble(String str) throws NumberFormatException {
+
+		Double dblResult = null;
+
+		dblResult = Double.parseDouble(str);
+
+		if (dblResult != Math.floor(dblResult)) {
+			throw new NumberFormatException();
+		}
+
+		return dblResult.longValue();
+	}
+
 }

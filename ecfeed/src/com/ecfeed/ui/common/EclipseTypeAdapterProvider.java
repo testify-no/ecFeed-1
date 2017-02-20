@@ -16,6 +16,7 @@ import com.ecfeed.core.adapter.ITypeAdapter;
 import com.ecfeed.core.adapter.ITypeAdapterProvider;
 import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.utils.JavaTypeHelper;
+import com.ecfeed.core.utils.StringHelper;
 
 public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 
@@ -262,7 +263,7 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 			String result = super.convert(value);
 			if(result == null){
 				try{
-					result = String.valueOf(Byte.parseByte(value));
+					result = String.valueOf(StringHelper.convertToByte(value));
 				}
 				catch(NumberFormatException e){
 					if(value.length() == 1){
@@ -285,7 +286,7 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 			String result = super.convert(value);
 			if(result == null){
 				try{
-					result = String.valueOf(Integer.parseInt(value));
+					result = String.valueOf(StringHelper.convertToInteger(value));
 				}
 				catch(NumberFormatException e){
 					if(value.length() == 1){
@@ -305,7 +306,7 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 			String result = super.convert(value);
 			if(result == null){
 				try{
-					result = String.valueOf(Long.parseLong(value));
+					result = String.valueOf(StringHelper.convertToLong(value));
 				}
 				catch(NumberFormatException e){
 					result = null;
@@ -321,7 +322,7 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 			String result = super.convert(value);
 			if(result == null){
 				try{
-					result = String.valueOf(Short.parseShort(value));
+					result = String.valueOf(StringHelper.convertToShort(value));
 				}
 				catch(NumberFormatException e){
 					if(value.length() == 1){
