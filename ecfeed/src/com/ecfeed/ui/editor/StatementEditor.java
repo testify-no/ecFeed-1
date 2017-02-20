@@ -527,7 +527,7 @@ public class StatementEditor extends Composite {
 
 			prepareRelationalStatementEditor(
 					statement, 
-					getAvailableConditions(statement, fRelationCombo.getText()), 
+					getAvailableConditions(statement, statement.getRelation().getName()), 
 					statement.getCondition().getValueString());
 
 			StatementEditor.this.layout();
@@ -540,9 +540,10 @@ public class StatementEditor extends Composite {
 
 			disposeRightOperandComposite();
 			fRightOperandComposite = fConditionCombo = new ComboViewer(StatementEditor.this).getCombo();
+
 			prepareRelationalStatementEditor(
 					statement, 
-					getAvailableConditions(statement, statement.getRelation().toString()), 
+					getAvailableConditions(statement, statement.getRelation().getName()), 
 					statement.getCondition().toString());
 
 			StatementEditor.this.layout();
@@ -571,15 +572,15 @@ public class StatementEditor extends Composite {
 			}
 		}
 
-		private void prepareRelationalStatementEditor(IRelationalStatement statement, String[] items, String item) {
+		private void prepareRelationalStatementEditor(IRelationalStatement statement, String[] conditionItems, String conditionItem) {
 
 			fRelationCombo.setVisible(true);
-			fRelationCombo.setItems(getAvailableRelations(statement, fConditionCombo.getText()));
+			fRelationCombo.setItems(getAvailableRelations(statement, conditionItem));
 			fRelationCombo.setText(statement.getRelation().toString());
 
 			fConditionCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, CONDITION_COMBO_WIDTH, 1));
-			fConditionCombo.setItems(items);
-			fConditionCombo.setText(item);
+			fConditionCombo.setItems(conditionItems);
+			fConditionCombo.setText(conditionItem);
 			fConditionCombo.addSelectionListener(new ConditionComboListener());
 			fConditionCombo.addFocusListener(new ConditionComboFocusLostListener());
 
