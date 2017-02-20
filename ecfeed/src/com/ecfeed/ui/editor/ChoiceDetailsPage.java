@@ -43,26 +43,6 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 	private ChoiceInterface fChoiceIf;
 	private AbstractCommentsSection fCommentsSection;
 
-	private class NameTextListener extends FocusLostListener {
-		
-		@Override
-		public void focusLost(FocusEvent e) {
-			fChoiceIf.setName(fNameText.getText());
-			fNameText.setText(fChoiceIf.getName());
-		}
-	}
-
-	private class ValueComboListener extends ComboSelectionListener {
-		@Override
-		public void widgetSelected(SelectionEvent e){
-			fChoiceIf.setValue(fValueCombo.getText());
-
-			ChoiceNode choiceNode = getSelectedChoice();
-			if (choiceNode != null) {
-				setValueComboText(choiceNode);
-			}
-		}
-	}
 
 	public ChoiceDetailsPage(
 			ModelMasterSection masterSection, 
@@ -134,7 +114,8 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		items.add(fChoiceIf.getValue());
 		fValueCombo.setItems(items.toArray(new String[]{}));
 		setValueComboText(choiceNode);
-		fValueCombo.addSelectionListener(new ValueComboListener());
+		fValueCombo.addSelectionListener(new ValueSelectedListener());
+		fValueCombo.addFocusListener(new ValueFocusLostListener());
 
 		if (choiceNode.isAbstract()) {
 			fValueCombo.setEnabled(false);
@@ -166,7 +147,7 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		fAttributesComposite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 
 		getFormObjectToolkit().createLabel(fAttributesComposite, "Name");
-		fNameText = getFormObjectToolkit().createGridText(fAttributesComposite, new NameTextListener());
+		fNameText = getFormObjectToolkit().createGridText(fAttributesComposite, new NameFocusLostListener());
 
 		getFormObjectToolkit().createLabel(fAttributesComposite, "Value");
 		getFormObjectToolkit().paintBorders(fAttributesComposite);
@@ -176,4 +157,41 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 	protected Class<? extends AbstractNode> getNodeType() {
 		return ChoiceNode.class;
 	}
+
+	private class NameFocusLostListener extends FocusLostListener {
+
+		@Override
+		public void focusLost(FocusEvent e) {
+			fChoiceIf.setName(fNameText.getText());
+			fNameText.setText(fChoiceIf.getName());
+		}
+	}
+
+	private class ValueSelectedListener extends ComboSelectionListener {
+
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			setValueComboToModel();
+		}
+	}
+
+	private class ValueFocusLostListener extends FocusLostListener {
+
+		@Override
+		public void focusLost(FocusEvent e) {
+			setValueComboToModel();
+		}
+
+	}
+
+	private void setValueComboToModel() {
+		fChoiceIf.setValue(fValueCombo.getText());
+
+		ChoiceNode choiceNode = getSelectedChoice();
+		if (choiceNode != null) {
+			setValueComboText(choiceNode);
+		}
+
+	}
+
 }
