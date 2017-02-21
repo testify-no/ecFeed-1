@@ -417,7 +417,7 @@ public class JavaTypeHelper {
 			return getSubstituteTypeForBooleans(typeName1, typeName2);
 		}
 
-		if (JavaTypeHelper.isCharTypeName(typeName1) && JavaTypeHelper.isCharTypeName(typeName2)) {
+		if (JavaTypeHelper.isTypeWithChars(typeName1) && JavaTypeHelper.isTypeWithChars(typeName2)) {
 			return TYPE_NAME_STRING;
 		}		
 
