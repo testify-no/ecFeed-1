@@ -14,6 +14,7 @@ import java.util.Set;
 
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -34,14 +35,6 @@ public class ConstraintDetailsPage extends BasicDetailsPage {
 	private ConstraintViewer fConstraintViewer;
 	private SingleTextCommentsSection fCommentsSection;
 	private IFileInfoProvider fFileInfoProvider;
-
-	private class ConstraintNameListener extends AbstractSelectionAdapter{
-		@Override
-		public void widgetSelected(SelectionEvent e) {
-			fConstraintIf.setName(fNameCombo.getText());
-			fNameCombo.setText(fConstraintIf.getName());
-		}
-	}
 
 	public ConstraintDetailsPage(
 			ModelMasterSection masterSection, 
@@ -70,7 +63,8 @@ public class ConstraintDetailsPage extends BasicDetailsPage {
 		getToolkit().createLabel(composite, "Constraint name:");
 		fNameCombo = new ComboViewer(composite, SWT.NONE).getCombo();
 		fNameCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		fNameCombo.addSelectionListener(new ConstraintNameListener());
+		fNameCombo.addSelectionListener(new ConstraintNameChangedListener());
+		fNameCombo.addFocusListener(new ConstraintNameFocusLostListener());
 	}
 
 	@Override
@@ -98,6 +92,24 @@ public class ConstraintDetailsPage extends BasicDetailsPage {
 	@Override
 	protected Class<? extends AbstractNode> getNodeType() {
 		return ConstraintNode.class;
+	}
+
+	private class ConstraintNameChangedListener extends AbstractSelectionAdapter{
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			fConstraintIf.setName(fNameCombo.getText());
+			fNameCombo.setText(fConstraintIf.getName());
+		}
+	}
+
+	private class ConstraintNameFocusLostListener extends FocusLostListener {
+
+		@Override
+		public void focusLost(FocusEvent e) {
+			fConstraintIf.setName(fNameCombo.getText());
+			fNameCombo.setText(fConstraintIf.getName());
+		}
+
 	}
 
 }
