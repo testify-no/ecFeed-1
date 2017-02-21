@@ -49,7 +49,7 @@ public class RandomAlgorithmTest {
 		List<List<String>> input = GeneratorTestUtils.prepareInput(variables, choices);
 		IAlgorithm<String> algorithm = new RandomAlgorithm<String>((int)(SAMPLE_SIZE), true);
 		try {
-			algorithm.initialize(input, EMPTY_CONSTRAINTS());
+			algorithm.initialize(input, EMPTY_CONSTRAINTS(), null);
 			List<String> next;
 			while((next = algorithm.getNext()) != null){
 				if(histogram.containsKey(next)){
@@ -91,7 +91,7 @@ public class RandomAlgorithmTest {
 		List<List<String>> input = GeneratorTestUtils.prepareInput(variables, choices);
 		RandomAlgorithm<String> algorithm = new RandomAlgorithm<String>(SAMPLE_SIZE, false);
 		try {
-			algorithm.initialize(input, EMPTY_CONSTRAINTS());
+			algorithm.initialize(input, EMPTY_CONSTRAINTS(), null);
 			List<String> next;
 			while((next = algorithm.getNext()) != null){
 				if(histogram.containsKey(next)){

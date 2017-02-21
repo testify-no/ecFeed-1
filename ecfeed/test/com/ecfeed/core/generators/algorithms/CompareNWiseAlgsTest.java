@@ -55,9 +55,9 @@ public class CompareNWiseAlgsTest {
 			Map<String, Object> params = new HashMap<>();
 			params.put("N", 3);
 			params.put("coverage", 100);
-			nWiseGen.initialize(input1, new HashSet<IConstraint<Integer>>(), params);
+			nWiseGen.initialize(input1, new HashSet<IConstraint<Integer>>(), params, null);
 
-			fast.initialize(input2, new HashSet<IConstraint<Integer>>());
+			fast.initialize(input2, new HashSet<IConstraint<Integer>>(), null);
 		} catch (GeneratorException e) {
 			fail("Unexpected exception when initializing.");
 			e.printStackTrace();
@@ -100,8 +100,8 @@ public class CompareNWiseAlgsTest {
 				100);
 
 		try {
-			fast.initialize(input1, new HashSet<IConstraint<Integer>>());
-			optimal.initialize(input2, new HashSet<IConstraint<Integer>>());
+			fast.initialize(input1, new HashSet<IConstraint<Integer>>(), null);
+			optimal.initialize(input2, new HashSet<IConstraint<Integer>>(), null);
 		} catch (GeneratorException e) {
 			fail("Unexpected exception when initializing the algorithms.");
 			e.printStackTrace();

@@ -83,17 +83,18 @@ public class TestSuiteGenerationSupport {
 		}
 
 		@Override
-		public void run(IProgressMonitor monitor)
+		public void run(IProgressMonitor progressMonitor)
 				throws InvocationTargetException, InterruptedException {
+			
 			List<ChoiceNode> next;
 			try {
-				fGenerator.initialize(fInput, fConstraints, fParameters);
-				monitor.beginTask("Generating test data", fGenerator.totalWork());
-				while((monitor.isCanceled() == false) && (next = fGenerator.next()) != null){
+				fGenerator.initialize(fInput, fConstraints, fParameters, new GeneratorProgressMonitor(progressMonitor));
+				progressMonitor.beginTask("Generating test data", fGenerator.totalWork());
+				while((progressMonitor.isCanceled() == false) && (next = fGenerator.next()) != null){
 					fGeneratedData.add(next);
-					monitor.worked(fGenerator.workProgress());
+					progressMonitor.worked(fGenerator.workProgress());
 				}
-				monitor.done();
+				progressMonitor.done();
 			} catch (GeneratorException e) {
 				throw new InvocationTargetException(e, e.getMessage());
 			}

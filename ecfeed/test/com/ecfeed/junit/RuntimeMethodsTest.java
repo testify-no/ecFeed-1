@@ -69,7 +69,7 @@ public class RuntimeMethodsTest {
 		IGenerator<ChoiceNode> generator = new CartesianProductGenerator<ChoiceNode>();
 		try {
 			Method methodUnterTest = this.getClass().getMethod("functionUnderTest", int.class, int.class);
-			generator.initialize(input, EMPTY_CONSTRAINTS, null);
+			generator.initialize(input, EMPTY_CONSTRAINTS, null, null);
 
 			String className = this.getClass().getName();
 			AbstractFrameworkMethod testedMethod =
@@ -108,7 +108,7 @@ public class RuntimeMethodsTest {
 		Set<List<Integer>> result = new HashSet<List<Integer>>();
 		CartesianProductGenerator<ChoiceNode> referenceGenerator = new CartesianProductGenerator<ChoiceNode>();
 		try {
-			referenceGenerator.initialize(input, EMPTY_CONSTRAINTS, null);
+			referenceGenerator.initialize(input, EMPTY_CONSTRAINTS, null, null);
 			List<ChoiceNode> next;
 			while((next = referenceGenerator.next()) != null){
 				List<Integer> testCase = new ArrayList<Integer>();

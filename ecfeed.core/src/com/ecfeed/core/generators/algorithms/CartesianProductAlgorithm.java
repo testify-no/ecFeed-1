@@ -16,6 +16,7 @@ import java.util.List;
 
 import com.ecfeed.core.generators.api.GeneratorException;
 import com.ecfeed.core.generators.api.IConstraint;
+import com.ecfeed.core.generators.api.IGeneratorProgressMonitor;
 
 public class CartesianProductAlgorithm<E> extends AbstractAlgorithm<E>{
 	private boolean fInitialized;
@@ -37,11 +38,12 @@ public class CartesianProductAlgorithm<E> extends AbstractAlgorithm<E>{
 	@Override
 	public void initialize(
 			List<List<E>> input, 
-			Collection<IConstraint<E>> constraints) throws GeneratorException{
+			Collection<IConstraint<E>> constraints,
+			IGeneratorProgressMonitor generatorProgressMonitor) throws GeneratorException{
 		
 		fInitialized = true;
 		setTotalWork(calculateProductSize(input));
-		super.initialize(input, constraints);
+		super.initialize(input, constraints, generatorProgressMonitor);
 	}
 	
 	public void reset(){

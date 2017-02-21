@@ -55,8 +55,8 @@ public class FastNWiseAlgorithmTest extends NWiseAlgorithmTest {
 			IAlgorithm<String> fastAlgorithm = new FastNWiseAlgorithm<String>(n, 100);
 			IAlgorithm<String> referenceAlgorithm = new OptimalNWiseAlgorithm<String>(n, 100);
 			Collection<IConstraint<String>> constraints = GeneratorTestUtils.generateRandomConstraints(input);
-			fastAlgorithm.initialize(input, constraints);
-			referenceAlgorithm.initialize(input, constraints);
+			fastAlgorithm.initialize(input, constraints, null);
+			referenceAlgorithm.initialize(input, constraints, null);
 
 			long timestampStart = new Date().getTime();
 			GeneratorTestUtils.algorithmResult(fastAlgorithm);

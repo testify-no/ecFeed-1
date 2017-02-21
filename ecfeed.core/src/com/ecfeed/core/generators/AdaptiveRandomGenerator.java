@@ -17,6 +17,7 @@ import java.util.Map;
 import com.ecfeed.core.generators.algorithms.AdaptiveRandomAlgorithm;
 import com.ecfeed.core.generators.api.GeneratorException;
 import com.ecfeed.core.generators.api.IConstraint;
+import com.ecfeed.core.generators.api.IGeneratorProgressMonitor;
 
 public class AdaptiveRandomGenerator<E> extends AbstractGenerator<E> {
 	public final String HISTORY_DEPTH_PARAMETER_NAME = "depth";
@@ -42,9 +43,10 @@ public class AdaptiveRandomGenerator<E> extends AbstractGenerator<E> {
 	@Override
 	public void initialize(List<List<E>> inputDomain,
 			Collection<IConstraint<E>> constraints,
-			Map<String, Object> parameters) throws GeneratorException{
+			Map<String, Object> parameters,
+			IGeneratorProgressMonitor generatorProgressMonitor) throws GeneratorException{
 		
-		super.initialize(inputDomain, constraints, parameters);
+		super.initialize(inputDomain, constraints, parameters, generatorProgressMonitor);
 		int executedSetSize = getIntParameter(HISTORY_DEPTH_PARAMETER_NAME);
 		int candidateSetSize = getIntParameter(CANDIDATE_SET_SIZE_PARAMETER_NAME);
 		int testSuiteSize = getIntParameter(TEST_SUITE_SIZE_PARAMETER_NAME);

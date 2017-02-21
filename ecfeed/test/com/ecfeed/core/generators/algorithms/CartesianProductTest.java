@@ -41,7 +41,7 @@ public class CartesianProductTest {
 					List<List<String>> input = GeneratorTestUtils.prepareInput(
 							variables, choices);
 					Set<List<String>> referenceSet = referenceSet(input);
-					ALGORITHM.initialize(input, EMPTY_CONSTRAINTS);
+					ALGORITHM.initialize(input, EMPTY_CONSTRAINTS, null);
 					Set<List<String>> algorithmResult = GeneratorTestUtils
 							.algorithmResult(ALGORITHM);
 					assertEquals(referenceSet.size(), algorithmResult.size());
@@ -62,7 +62,7 @@ public class CartesianProductTest {
 				try {
 					List<List<String>> input = GeneratorTestUtils.prepareInput(
 							variables, choices);
-					ALGORITHM.initialize(input, EMPTY_CONSTRAINTS);
+					ALGORITHM.initialize(input, EMPTY_CONSTRAINTS, null);
 
 					ALGORITHM.cancel();
 
@@ -88,7 +88,7 @@ public class CartesianProductTest {
 							.generateRandomConstraints(input);
 					Set<List<String>> referenceSet = referenceSet(input);
 					referenceSet = filter(referenceSet, constraints);
-					ALGORITHM.initialize(input, constraints);
+					ALGORITHM.initialize(input, constraints, null);
 					Set<List<String>> algorithmResult = GeneratorTestUtils
 							.algorithmResult(ALGORITHM);
 					assertEquals(referenceSet.size(), algorithmResult.size());

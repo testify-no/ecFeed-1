@@ -17,6 +17,7 @@ import java.util.Map;
 import com.ecfeed.core.generators.algorithms.RandomizedNWiseAlgorithm;
 import com.ecfeed.core.generators.api.GeneratorException;
 import com.ecfeed.core.generators.api.IConstraint;
+import com.ecfeed.core.generators.api.IGeneratorProgressMonitor;
 
 public class NWiseGenerator<E> extends AbstractGenerator<E>{
 	public final static String N_PARAMETER_NAME = "N";
@@ -32,8 +33,9 @@ public class NWiseGenerator<E> extends AbstractGenerator<E>{
 	@Override
 	public void initialize(List<List<E>> inputDomain,
 			Collection<IConstraint<E>> constraints,
-			Map<String, Object> parameters) throws GeneratorException{
-		super.initialize(inputDomain, constraints, parameters);
+			Map<String, Object> parameters,
+			IGeneratorProgressMonitor generatorProgressMonitor) throws GeneratorException{
+		super.initialize(inputDomain, constraints, parameters, generatorProgressMonitor);
 		int N = getIntParameter(N_PARAMETER_NAME);
 		int coverage = getIntParameter(COVERAGE_PARAMETER_NAME);
 //		setAlgorithm(new OptimalNWiseAlgorithm<E>(N, coverage));

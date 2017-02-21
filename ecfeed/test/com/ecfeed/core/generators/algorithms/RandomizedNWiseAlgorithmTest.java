@@ -59,7 +59,7 @@ public class RandomizedNWiseAlgorithmTest {
 		}
 
 		try {
-			alg.initialize(input, constraints);
+			alg.initialize(input, constraints, null);
 		} catch (GeneratorException e) {
 			fail("unexpected exception during initialization: " + e.getMessage());
 			e.printStackTrace();
@@ -294,7 +294,7 @@ public class RandomizedNWiseAlgorithmTest {
 		}
 
 		try {
-			alg.initialize(input, EMPTY_CONSTRAINTS);
+			alg.initialize(input, EMPTY_CONSTRAINTS, null);
 		} catch (GeneratorException e) {
 			fail("unexpected exception during initialization: " + e.getMessage());
 			e.printStackTrace();

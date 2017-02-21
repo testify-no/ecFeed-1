@@ -201,7 +201,7 @@ public abstract class AbstractOnlineSupport {
 				fTestInformer.setProgressMonitor(progressMonitor);
 
 				List<ChoiceNode> next;
-				fGenerator.initialize(fInput, fConstraints, fParameters);
+				fGenerator.initialize(fInput, fConstraints, fParameters, new GeneratorProgressMonitor(progressMonitor));
 				fTestInformer.beginTestExecution(fGenerator.totalWork());
 
 				while ((next = fGenerator.next()) != null

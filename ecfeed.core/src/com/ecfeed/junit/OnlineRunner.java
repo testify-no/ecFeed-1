@@ -63,7 +63,7 @@ public class OnlineRunner extends AbstractJUnitRunner {
 				Collection<IConstraint<ChoiceNode>> constraints = getConstraints(frameworkMethod, methodNode);
 				Map<String, Object> parameters = getGeneratorParameters(generator, frameworkMethod);
 				try {
-					generator.initialize(input, constraints, parameters);
+					generator.initialize(input, constraints, parameters, null);
 				} catch (GeneratorException e) {
 					RunnerException.report(Messages.GENERATOR_INITIALIZATION_PROBLEM(e.getMessage()));
 				}

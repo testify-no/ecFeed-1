@@ -481,7 +481,7 @@ public class XmlParserSerializerTest {
 			genParameters.put("length", numOfTestCases);
 			genParameters.put("duplicates", true);
 
-			generator.initialize(input, constraints, genParameters);
+			generator.initialize(input, constraints, genParameters, null);
 			List<ChoiceNode> next;
 			while((next = generator.next()) != null){
 				result.add(new TestCaseNode(randomName(), next));

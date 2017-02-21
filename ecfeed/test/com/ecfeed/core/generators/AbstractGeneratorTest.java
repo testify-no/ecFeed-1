@@ -83,14 +83,14 @@ public class AbstractGeneratorTest {
 		values.put(STRING_PARAMETER_NAME, fStringParameterValue);
 		
 		try {
-			generator.initialize(inputDomain, constraints, values);
+			generator.initialize(inputDomain, constraints, values, null);
 		} catch (GeneratorException e) {
 			fail("Unexpected GeneratorException: " + e.getMessage());
 		}
 		
 		values.put(INT_PARAMETER_NAME, fDoubleParameterValue);
 		try {
-			generator.initialize(inputDomain, constraints, values);
+			generator.initialize(inputDomain, constraints, values, null);
 			fail("GeneratorException expected");
 		} catch (GeneratorException e) {
 		}
@@ -110,11 +110,11 @@ public class AbstractGeneratorTest {
 			values.put(INT_PARAMETER_NAME, 0);
 			values.put(DOUBLE_PARAMETER_NAME, 0.0);
 
-			generator.initialize(inputDomain, constraints, values);
+			generator.initialize(inputDomain, constraints, values, null);
 			values.put(INT_PARAMETER_NAME, 5);
 
 			try{
-				generator.initialize(inputDomain, constraints, values);
+				generator.initialize(inputDomain, constraints, values, null);
 				fail("GeneratorException expected");
 			} catch (GeneratorException e) {
 			}
@@ -136,11 +136,11 @@ public class AbstractGeneratorTest {
 			values.put(INT_PARAMETER_NAME, 0);
 			values.put(DOUBLE_PARAMETER_NAME, 0.0);
 
-			generator.initialize(inputDomain, constraints, values);
+			generator.initialize(inputDomain, constraints, values, null);
 			values.put(INT_PARAMETER_NAME, 5);
 
 			try{
-				generator.initialize(inputDomain, constraints, values);
+				generator.initialize(inputDomain, constraints, values, null);
 				fail("GeneratorException expected");
 			} catch (GeneratorException e) {
 			}
@@ -162,14 +162,14 @@ public class AbstractGeneratorTest {
 		values.put(INT_PARAMETER_NAME, 0);
 
 		try{
-			generator.initialize(inputDomain, constraints, values);
+			generator.initialize(inputDomain, constraints, values, null);
 			fail("GeneratorException expected");
 		} catch (GeneratorException e) {
 		}
 
 		values.put(DOUBLE_PARAMETER_NAME, 0.0);
 		try{
-			generator.initialize(inputDomain, constraints, values);
+			generator.initialize(inputDomain, constraints, values, null);
 		} catch (GeneratorException e) {
 			fail("Unexpected GeneratorException: " + e.getMessage());
 		}
@@ -186,21 +186,21 @@ public class AbstractGeneratorTest {
 
 		Map<String, Object> values = new HashMap<String, Object>();
 		try{
-			generator.initialize(inputDomain, constraints, values);
+			generator.initialize(inputDomain, constraints, values, null);
 		} catch (GeneratorException e) {
 			fail("Unexpected GeneratorException: " + e.getMessage());
 		}
 
 		values.put(INT_PARAMETER_NAME, 0);
 		try{
-			generator.initialize(inputDomain, constraints, values);
+			generator.initialize(inputDomain, constraints, values, null);
 		} catch (GeneratorException e) {
 			fail("Unexpected GeneratorException: " + e.getMessage());
 		}
 
 		values.put(DOUBLE_PARAMETER_NAME, 0.0);
 		try{
-			generator.initialize(inputDomain, constraints, values);
+			generator.initialize(inputDomain, constraints, values, null);
 		} catch (GeneratorException e) {
 			fail("Unexpected GeneratorException: " + e.getMessage());
 		}
@@ -218,14 +218,14 @@ public class AbstractGeneratorTest {
 		values.put(INT_PARAMETER_NAME, 0);
 
 		try{
-			generator.initialize(inputDomain, constraints, values);
+			generator.initialize(inputDomain, constraints, values, null);
 		} catch (GeneratorException e) {
 			fail("Unexpected GeneratorException: " + e.getMessage());
 		}
 
 		values.put(DOUBLE_PARAMETER_NAME, 0.0);
 		try{
-			generator.initialize(inputDomain, constraints, values);
+			generator.initialize(inputDomain, constraints, values, null);
 			fail("GeneratorException expected");
 		} catch (GeneratorException e) {
 		}
@@ -249,7 +249,7 @@ public class AbstractGeneratorTest {
 		values.put(STRING_PARAMETER_NAME, fStringParameterValue);
 		
 		try {
-			generator.initialize(inputDomain, constraints, values);
+			generator.initialize(inputDomain, constraints, values, null);
 			
 			int intParameter = generator.getIntParameter(INT_PARAMETER_NAME);
 			double doubleParameter = generator.getDoubleParameter(DOUBLE_PARAMETER_NAME);
@@ -279,7 +279,7 @@ public class AbstractGeneratorTest {
 		Map<String, Object> values = new HashMap<String, Object>();
 		
 		try {
-			generator.initialize(inputDomain, constraints, values);
+			generator.initialize(inputDomain, constraints, values, null);
 			
 			int intParameter = generator.getIntParameter(INT_PARAMETER_NAME);
 			double doubleParameter = generator.getDoubleParameter(DOUBLE_PARAMETER_NAME);
@@ -300,7 +300,7 @@ public class AbstractGeneratorTest {
 		values.put(STRING_PARAMETER_NAME, fStringParameterValue);
 		
 		try {
-			generator.initialize(inputDomain, constraints, values);
+			generator.initialize(inputDomain, constraints, values, null);
 			
 			int intParameter = generator.getIntParameter(INT_PARAMETER_NAME);
 			double doubleParameter = generator.getDoubleParameter(DOUBLE_PARAMETER_NAME);
@@ -324,7 +324,7 @@ public class AbstractGeneratorTest {
 		Collection<IConstraint<String>> constraints = new ArrayList<IConstraint<String>>(); 
 
 		try{
-			generator.initialize(inputDomain, constraints, null);
+			generator.initialize(inputDomain, constraints, null, null);
 			fail("GeneratorException expected");
 		} catch (GeneratorException e) {
 		}

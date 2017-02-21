@@ -43,7 +43,7 @@ public class NWiseAlgorithmTest{
 				List<List<String>> input = GeneratorTestUtils.prepareInput(numOfVariables, choicesPerVariable);
 				try{
 					IAlgorithm<String> algorithmUnderTest = getAlgorithm(algorithmUnderTestClass, n);
-					algorithmUnderTest.initialize(input, EMPTY_CONSTRAINTS);
+					algorithmUnderTest.initialize(input, EMPTY_CONSTRAINTS, null);
 					Set<List<String>> algorithmResult = GeneratorTestUtils.algorithmResult(algorithmUnderTest);
 					assertTrue(containsAllTuples(algorithmResult, input, n));
 				} catch (Exception e) {
@@ -64,7 +64,7 @@ public class NWiseAlgorithmTest{
 				Collection<IConstraint<String>> constraints = GeneratorTestUtils.generateRandomConstraints(input);
 				try {
 					IAlgorithm<String> algorithmUnderTest = getAlgorithm(algorithmUnderTestClass, n);
-					algorithmUnderTest.initialize(input, constraints);
+					algorithmUnderTest.initialize(input, constraints, null);
 					Set<List<String>> algorithmResult = GeneratorTestUtils.algorithmResult(algorithmUnderTest);
 					for(List<String> vector : algorithmResult){
 						for(IConstraint<String> constraint : constraints){
@@ -115,7 +115,7 @@ public class NWiseAlgorithmTest{
 					OptimalNWiseAlgorithm<String> nwise = new OptimalNWiseAlgorithm<String>(
 							n, p);
 
-					nwise.initialize(input, EMPTY_CONSTRAINTS);
+					nwise.initialize(input, EMPTY_CONSTRAINTS, null);
 
 					List<List<String>> nwiseSuite = new ArrayList<List<String>>();
 
@@ -144,7 +144,7 @@ public class NWiseAlgorithmTest{
 			while(parameterTuples.hasNext()){
 				List<List<String>> next = parameterTuples.next();
 				CartesianProductGenerator<String> generator = new CartesianProductGenerator<String>();
-				generator.initialize(next, EMPTY_CONSTRAINTS, null);
+				generator.initialize(next, EMPTY_CONSTRAINTS, null, null);
 				List<String> tuple;
 				while((tuple = generator.next()) != null){
 					result.add(tuple);

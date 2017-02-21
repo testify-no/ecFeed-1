@@ -23,6 +23,7 @@ import javax.management.RuntimeErrorException;
 
 import com.ecfeed.core.generators.api.GeneratorException;
 import com.ecfeed.core.generators.api.IConstraint;
+import com.ecfeed.core.generators.api.IGeneratorProgressMonitor;
 
 public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 
@@ -65,7 +66,15 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 	@Override
 	public List<E> getNext() throws GeneratorException {
 
+		IGeneratorProgressMonitor generatorProgressMonitor = getGeneratorProgressMonitor();
+		
 		while (true) {
+			
+			if (generatorProgressMonitor != null) {
+				if (generatorProgressMonitor.isCanceled()) {
+					return null;
+				}
+			}
 
 			if (fRemainingTuples.size() <= fIgnoreCount)
 				return null;
@@ -273,7 +282,7 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 			}
 
 			CartesianProductAlgorithm<Variable<E>> cartAlg = new CartesianProductAlgorithm<>();
-			cartAlg.initialize(tempIn, new HashSet<IConstraint<Variable<E>>>());
+			cartAlg.initialize(tempIn, new HashSet<IConstraint<Variable<E>>>(), getGeneratorProgressMonitor());
 			List<Variable<E>> tuple = null;
 			while ((tuple = cartAlg.getNext()) != null) {
 				// Generate a full tuple from this nTuple to make sure that it
@@ -303,7 +312,7 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 				tempIn.add(getInput().get(comb.get(i)));
 
 			CartesianProductAlgorithm<E> cartAlg = new CartesianProductAlgorithm<>();
-			cartAlg.initialize(tempIn, (Collection<IConstraint<E>>) getConstraints());
+			cartAlg.initialize(tempIn, (Collection<IConstraint<E>>) getConstraints(), getGeneratorProgressMonitor());
 			List<E> tuple = null;
 			while ((tuple = cartAlg.getNext()) != null) {
 				List<Variable<E>> extendedTuple = new ArrayList<>();

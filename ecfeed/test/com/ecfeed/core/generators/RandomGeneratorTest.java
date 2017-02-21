@@ -39,7 +39,7 @@ public class RandomGeneratorTest {
 			Map<String, Object> parameters = new HashMap<String, Object>();
 			parameters.put("length", 100);
 
-			generator.initialize(inputDomain, constraints, parameters);
+			generator.initialize(inputDomain, constraints, parameters, null);
 			IAlgorithm<String> algorithm = generator.getAlgorithm(); 
 			assertTrue(algorithm instanceof RandomAlgorithm);
 			assertEquals(false, ((RandomAlgorithm<String>)algorithm).getDuplicates());
@@ -47,7 +47,7 @@ public class RandomGeneratorTest {
 			
 			try{
 				parameters.put("duplicates", true);
-				generator.initialize(inputDomain, constraints, parameters);
+				generator.initialize(inputDomain, constraints, parameters, null);
 				assertEquals(false, ((RandomAlgorithm<String>)algorithm).getDuplicates());
 			}catch(GeneratorException e) {
 				fail("Unexpected GeneratorException: " + e.getMessage());

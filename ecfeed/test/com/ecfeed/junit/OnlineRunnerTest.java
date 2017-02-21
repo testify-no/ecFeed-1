@@ -281,7 +281,7 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 			List<List<ChoiceNode>> input,
 			Collection<IConstraint<ChoiceNode>> constraints) throws GeneratorException {
 		IGenerator<ChoiceNode> generator = new CartesianProductGenerator<ChoiceNode>();
-		generator.initialize(input, constraints, null);
+		generator.initialize(input, constraints, null, null);
 		return generator;
 	}
 
@@ -292,7 +292,7 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 		NWiseGenerator<ChoiceNode> result = new NWiseGenerator<ChoiceNode>();
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("N", n);
-		result.initialize(input, constraints, parameters);
+		result.initialize(input, constraints, parameters, null);
 		return result;
 	}
 

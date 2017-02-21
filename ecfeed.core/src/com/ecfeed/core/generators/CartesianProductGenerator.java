@@ -17,14 +17,16 @@ import java.util.Map;
 import com.ecfeed.core.generators.algorithms.CartesianProductAlgorithm;
 import com.ecfeed.core.generators.api.GeneratorException;
 import com.ecfeed.core.generators.api.IConstraint;
+import com.ecfeed.core.generators.api.IGeneratorProgressMonitor;
 
 public class CartesianProductGenerator<E> extends AbstractGenerator<E> {
 	@Override
 	public void initialize(List<List<E>> inputDomain,
 			Collection<IConstraint<E>> constraints,
-			Map<String, Object> parameters) throws GeneratorException {
+			Map<String, Object> parameters,
+			IGeneratorProgressMonitor generatorProgressMonitor) throws GeneratorException {
 		
-		super.initialize(inputDomain, constraints, parameters);
+		super.initialize(inputDomain, constraints, parameters, generatorProgressMonitor);
 		setAlgorithm(new CartesianProductAlgorithm<E>());
 	}
 }

@@ -16,6 +16,7 @@ import java.util.List;
 
 import com.ecfeed.core.generators.api.GeneratorException;
 import com.ecfeed.core.generators.api.IConstraint;
+import com.ecfeed.core.generators.api.IGeneratorProgressMonitor;
 
 public abstract class AbstractAlgorithm<E> implements IAlgorithm<E> {
 
@@ -23,19 +24,22 @@ public abstract class AbstractAlgorithm<E> implements IAlgorithm<E> {
 	private int fProgress;
 	private int fTotalProgress;
 	protected boolean fCancel;
+	private IGeneratorProgressMonitor fGeneratorProgressMonitor;
 
 	private List<List<E>> fInput;
 	private Collection<IConstraint<E>> fConstraints;
 	
 	@Override
 	public void initialize(List<List<E>> input,
-			Collection<IConstraint<E>> constraints)
-			throws GeneratorException {
+			Collection<IConstraint<E>> constraints,
+			IGeneratorProgressMonitor generatorProgressMonitor) throws GeneratorException {
+		
 		if(input == null || constraints == null){
 			GeneratorException.report("input or constraints of algorithm cannot be null");
 		}
 		fInput = input;
 		fConstraints = constraints;
+		fGeneratorProgressMonitor = generatorProgressMonitor;
 		reset();
 	}
 
@@ -56,6 +60,9 @@ public abstract class AbstractAlgorithm<E> implements IAlgorithm<E> {
 		return fTotalProgress;
 	}
 
+	public IGeneratorProgressMonitor getGeneratorProgressMonitor() {
+		 return fGeneratorProgressMonitor;
+	}
 	
 	public void reset(){
 		fProgress = 0;

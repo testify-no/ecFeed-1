@@ -20,6 +20,7 @@ import com.ecfeed.core.generators.api.GeneratorException;
 import com.ecfeed.core.generators.api.IConstraint;
 import com.ecfeed.core.generators.api.IGenerator;
 import com.ecfeed.core.generators.api.IGeneratorParameter;
+import com.ecfeed.core.generators.api.IGeneratorProgressMonitor;
 
 public class AbstractGenerator<E> implements IGenerator<E> {
 
@@ -28,18 +29,22 @@ public class AbstractGenerator<E> implements IGenerator<E> {
 	private IAlgorithm<E> fAlgorithm = null;
 	private List<List<E>> fInput;
 	private Collection<IConstraint<E>> fConstraints;
+	private IGeneratorProgressMonitor fGeneratorProgressMonitor;
+	
 	private boolean fInitialized = false;
 	
 	@Override
 	public void initialize(List<List<E>> inputDomain,
 			Collection<IConstraint<E>> constraints,
-			Map<String, Object> parameters)
+			Map<String, Object> parameters,
+			IGeneratorProgressMonitor generatorProgressMonitor)
 			throws GeneratorException {
 		validateInput(inputDomain);
 		validateParameters(parameters);
 		fParameterValues = parameters;
 		fInput = inputDomain;
 		fConstraints = constraints;
+		fGeneratorProgressMonitor = generatorProgressMonitor;
 	
 		fInitialized = true; 
 	}
@@ -135,7 +140,7 @@ public class AbstractGenerator<E> implements IGenerator<E> {
 	
 	protected void setAlgorithm(IAlgorithm<E> algorithm) throws GeneratorException{
 		fAlgorithm = algorithm;
-		fAlgorithm.initialize(fInput, fConstraints);
+		fAlgorithm.initialize(fInput, fConstraints, fGeneratorProgressMonitor);
 	}
 
 	protected IAlgorithm<E> getAlgorithm(){

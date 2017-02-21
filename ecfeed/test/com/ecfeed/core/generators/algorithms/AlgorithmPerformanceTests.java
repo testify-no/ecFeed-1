@@ -53,10 +53,10 @@ public class AlgorithmPerformanceTests {
 						n, 100);
 				CartesianProductAlgorithm<String> cart = new CartesianProductAlgorithm<String>();
 
-				adRandom.initialize(input, EMPTY_CONSTRAINTS);
-				random.initialize(input, EMPTY_CONSTRAINTS);
-				nwise.initialize(input, EMPTY_CONSTRAINTS);
-				cart.initialize(input, EMPTY_CONSTRAINTS);
+				adRandom.initialize(input, EMPTY_CONSTRAINTS, null);
+				random.initialize(input, EMPTY_CONSTRAINTS, null);
+				nwise.initialize(input, EMPTY_CONSTRAINTS, null);
+				cart.initialize(input, EMPTY_CONSTRAINTS, null);
 
 				List<List<String>> adRandomSuite = new ArrayList<List<String>>();
 				List<List<String>> randomSuite = new ArrayList<List<String>>();
@@ -130,8 +130,8 @@ public class AlgorithmPerformanceTests {
 				AdaptiveRandomAlgorithm<String> random = new AdaptiveRandomAlgorithm<String>(
 						0, 1, length, false);
 
-				adRandom.initialize(input, EMPTY_CONSTRAINTS);
-				random.initialize(input, EMPTY_CONSTRAINTS);
+				adRandom.initialize(input, EMPTY_CONSTRAINTS, null);
+				random.initialize(input, EMPTY_CONSTRAINTS, null);
 
 				List<List<String>> adRandomSuite = new ArrayList<List<String>>();
 				List<List<String>> randomSuite = new ArrayList<List<String>>();
@@ -168,7 +168,7 @@ public class AlgorithmPerformanceTests {
 					OptimalNWiseAlgorithm<String> nwise = new OptimalNWiseAlgorithm<String>(
 							n, p);
 
-					nwise.initialize(input, EMPTY_CONSTRAINTS);
+					nwise.initialize(input, EMPTY_CONSTRAINTS, null);
 
 					List<List<String>> nwiseSuite = new ArrayList<List<String>>();
 

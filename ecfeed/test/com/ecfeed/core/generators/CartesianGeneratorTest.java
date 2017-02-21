@@ -35,7 +35,7 @@ public class CartesianGeneratorTest{
 		Collection<IConstraint<String>> constraints = new ArrayList<IConstraint<String>>();
 
 		try {
-			generator.initialize(inputDomain, constraints, null);
+			generator.initialize(inputDomain, constraints, null, null);
 		} catch (GeneratorException e) {
 			fail("Unexpected GeneratorException: " + e.getMessage());
 		}
@@ -43,7 +43,7 @@ public class CartesianGeneratorTest{
 		
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		try {
-			generator.initialize(inputDomain, constraints, parameters);
+			generator.initialize(inputDomain, constraints, parameters, null);
 		} catch (GeneratorException e) {
 			fail("Unexpected GeneratorException: " + e.getMessage());
 		}

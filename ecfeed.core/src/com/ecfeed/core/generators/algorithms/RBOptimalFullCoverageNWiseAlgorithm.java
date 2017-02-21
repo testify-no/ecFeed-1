@@ -18,6 +18,7 @@ import java.util.Set;
 
 import com.ecfeed.core.generators.api.GeneratorException;
 import com.ecfeed.core.generators.api.IConstraint;
+import com.ecfeed.core.generators.api.IGeneratorProgressMonitor;
 
 public class RBOptimalFullCoverageNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 
@@ -26,15 +27,20 @@ public class RBOptimalFullCoverageNWiseAlgorithm<E> extends AbstractNWiseAlgorit
 
 	private List<List<E>> all = null;
 	private int next = -1;
+	
+	IGeneratorProgressMonitor fGeneratorProgressMonitor;
 
 	public RBOptimalFullCoverageNWiseAlgorithm(int n) {
 		super(n, 100);
 	}
 
 	@Override
-	public void initialize(List<List<E>> input, Collection<IConstraint<E>> constraints) throws GeneratorException {
-		super.initialize(input, constraints);
+	public void initialize(
+			List<List<E>> input, Collection<IConstraint<E>> constraints, IGeneratorProgressMonitor generatorProgressMonitor) throws GeneratorException {
+		
+		super.initialize(input, constraints, generatorProgressMonitor);
 
+		fGeneratorProgressMonitor = generatorProgressMonitor;
 		myConstraints = constraints;
 
 		for (int i = 0; i < input.size(); i++) {
@@ -245,7 +251,7 @@ public class RBOptimalFullCoverageNWiseAlgorithm<E> extends AbstractNWiseAlgorit
 		}
 
 		CartesianProductAlgorithm<E> alg = new CartesianProductAlgorithm<>();
-		alg.initialize(startingList, myConstraints);
+		alg.initialize(startingList, myConstraints, fGeneratorProgressMonitor);
 
 		List<List<E>> allCombs = new ArrayList<>();
 		List<E> comb = alg.getNext();

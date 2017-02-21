@@ -53,7 +53,7 @@ public class OptimalNWiseTest extends NWiseAlgorithmTest {
 						Collection<IConstraint<String>> constraints = EMPTY_CONSTRAINTS;
 						IAlgorithm<String> algorithm = new OptimalNWiseAlgorithm<String>(n, 100);
 
-						algorithm.initialize(input, constraints);
+						algorithm.initialize(input, constraints, null);
 						int generatedDataSize = GeneratorTestUtils.algorithmResult(algorithm).size();
 						int referenceDataSize = referenceResult(input, n).size();
 						assertTrue(Math.abs(generatedDataSize - referenceDataSize) <= referenceDataSize / 30);

@@ -43,26 +43,26 @@ public class NWiseGeneratorTest {
 			Map<String, Object> parameters = new HashMap<String, Object>();
 			parameters.put("N", 2);
 
-			generator.initialize(inputDomain, constraints, parameters);
+			generator.initialize(inputDomain, constraints, parameters, null);
 			IAlgorithm<String> algorithm = generator.getAlgorithm();
 			assertTrue(algorithm instanceof AbstractNWiseAlgorithm);
 			assertEquals(2, ((AbstractNWiseAlgorithm<String>) algorithm).getN());
 
 			try {
 				parameters.put("N", 5);
-				generator.initialize(inputDomain, constraints, parameters);
+				generator.initialize(inputDomain, constraints, parameters, null);
 				fail("GeneratorException expected");
 			} catch (GeneratorException e) {
 			}
 			try {
 				parameters.put("N", -1);
-				generator.initialize(inputDomain, constraints, parameters);
+				generator.initialize(inputDomain, constraints, parameters, null);
 				fail("GeneratorException expected");
 			} catch (GeneratorException e) {
 			}
 			try {
 				parameters.put("N", 2);
-				generator.initialize(inputDomain, constraints, parameters);
+				generator.initialize(inputDomain, constraints, parameters, null);
 			} catch (GeneratorException e) {
 				fail("Unexpected GeneratorException");
 			}
@@ -84,7 +84,7 @@ public class NWiseGeneratorTest {
 			parameters.put("N", 2);
 			parameters.put("coverage", 100);
 
-			generator.initialize(inputDomain, constraints, parameters);
+			generator.initialize(inputDomain, constraints, parameters, null);
 			IAlgorithm<String> algorithm = generator.getAlgorithm();
 			assertTrue(algorithm instanceof AbstractNWiseAlgorithm);
 			assertEquals(100,
@@ -92,19 +92,19 @@ public class NWiseGeneratorTest {
 
 			try {
 				parameters.put("coverage", 101);
-				generator.initialize(inputDomain, constraints, parameters);
+				generator.initialize(inputDomain, constraints, parameters, null);
 				fail("GeneratorException expected");
 			} catch (GeneratorException e) {
 			}
 			try {
 				parameters.put("coverage", -1);
-				generator.initialize(inputDomain, constraints, parameters);
+				generator.initialize(inputDomain, constraints, parameters, null);
 				fail("GeneratorException expected");
 			} catch (GeneratorException e) {
 			}
 			try {
 				parameters.put("coverage", 50);
-				generator.initialize(inputDomain, constraints, parameters);
+				generator.initialize(inputDomain, constraints, parameters, null);
 			} catch (GeneratorException e) {
 				fail("Unexpected GeneratorException");
 			}

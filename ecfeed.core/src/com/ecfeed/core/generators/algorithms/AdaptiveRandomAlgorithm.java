@@ -19,6 +19,7 @@ import java.util.Set;
 
 import com.ecfeed.core.generators.api.GeneratorException;
 import com.ecfeed.core.generators.api.IConstraint;
+import com.ecfeed.core.generators.api.IGeneratorProgressMonitor;
 
 public class AdaptiveRandomAlgorithm<E> extends AbstractAlgorithm<E> implements IAlgorithm<E> {
 
@@ -71,14 +72,15 @@ public class AdaptiveRandomAlgorithm<E> extends AbstractAlgorithm<E> implements 
 	
 	@Override
 	public void initialize(List<List<E>> input,
-			Collection<IConstraint<E>> constraints)
-			throws GeneratorException {
+			Collection<IConstraint<E>> constraints,
+			IGeneratorProgressMonitor generatorProgressMonitor) throws GeneratorException {
+		
 		if(fDuplicates == false){
 			constraints.add(new BlackList(fHistory));
 		}
-		fCartesianAlgorithm.initialize(input, constraints);
+		fCartesianAlgorithm.initialize(input, constraints, generatorProgressMonitor);
 		setTotalWork(fLength);
-		super.initialize(input, constraints);
+		super.initialize(input, constraints, generatorProgressMonitor);
 	}
 	
 	@Override
