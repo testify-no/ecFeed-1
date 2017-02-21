@@ -39,17 +39,33 @@ public class ParameterCondition implements IStatementCondition {
 			return false;
 		}
 
-		String leftChoice = 
-				StatementConditionHelper.getChoiceForMethodParameter(choices, fLeftParameterNode).getValueString();
+		String leftChoiceStr = getChoiceString(choices, fLeftParameterNode);
+		if (leftChoiceStr == null) {
+			return false;
+		}
 
-		String rightChoice = 
-				StatementConditionHelper.getChoiceForMethodParameter(choices, fRightParameterNode).getValueString();
+		String rightChoiceStr = getChoiceString(choices, fRightParameterNode);
+		if (rightChoiceStr == null) {
+			return false;
+		}
 
-		if (StatementConditionHelper.isRelationMatchQuiet(fParentRelationStatement.getRelation(), substituteType, leftChoice, rightChoice)) {
+		if (StatementConditionHelper.isRelationMatchQuiet(
+				fParentRelationStatement.getRelation(), substituteType, leftChoiceStr, rightChoiceStr)) {
 			return true;
 		}
 
 		return false;
+	}
+
+	private static String getChoiceString(List<ChoiceNode> choices, MethodParameterNode methodParameterNode) {
+
+		ChoiceNode choiceNode = StatementConditionHelper.getChoiceForMethodParameter(choices, methodParameterNode);
+
+		if (choiceNode == null) {
+			return null;
+		}
+
+		return choiceNode.getValueString();
 	}
 
 	@Override
@@ -59,16 +75,19 @@ public class ParameterCondition implements IStatementCondition {
 
 	@Override
 	public ParameterCondition getCopy() {
+
 		return new ParameterCondition(fLeftParameterNode.makeClone(), fRightParameterNode.makeClone(), fParentRelationStatement);
 	}
 
 	@Override
 	public boolean updateReferences(MethodParameterNode parameter) {
+
 		return true;
 	}
 
 	@Override
 	public Object getCondition(){
+
 		return null; // TODO
 	}
 
@@ -98,14 +117,17 @@ public class ParameterCondition implements IStatementCondition {
 
 	@Override
 	public Object accept(IStatementVisitor visitor) throws Exception {
+
 		return visitor.visit(this);
 	}
 
 	public String toString() {
+
 		return StatementConditionHelper.createParameterDescription(fRightParameterNode.getName());
 	}
 
 	public MethodParameterNode getRightMethodParameterNode() {
+
 		return fRightParameterNode;
 	}	
 
