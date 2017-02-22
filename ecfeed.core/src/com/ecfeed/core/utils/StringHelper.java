@@ -13,6 +13,7 @@ package com.ecfeed.core.utils;
 public class StringHelper {
 
 	public static boolean isNullOrEmpty(String str) {
+
 		if (str == null) {
 			return true;
 		}
@@ -23,6 +24,7 @@ public class StringHelper {
 	}
 
 	public static boolean isNullOrBlank(String str) {
+
 		if (str == null) {
 			return true;
 		}
@@ -33,6 +35,7 @@ public class StringHelper {
 	}
 
 	public static boolean hasNonBlankContents(String str) {
+
 		if (isNullOrBlank(str)) {
 			return false;
 		}
@@ -40,10 +43,12 @@ public class StringHelper {
 	}
 
 	public static boolean isTrimmedEmpty(String str) {
+
 		return str.trim().isEmpty();
 	}
 
 	public static String removePrefix(String prefix, String fromStr) {
+
 		int index = fromStr.indexOf(prefix);
 
 		if (index == -1) {
@@ -53,6 +58,7 @@ public class StringHelper {
 	}
 
 	public static String removeFromPostfix(String postfix, String fromStr) {
+
 		int index = fromStr.lastIndexOf(postfix);
 
 		if (index == -1) {
@@ -62,10 +68,12 @@ public class StringHelper {
 	}	
 
 	public static String removeFromLastNewline(String fromString) {
+
 		return removeFromPostfix(newLine(), fromString);
 	}
 
 	public static String removeStrgAtEnd(String pattern, String strg) {
+
 		int index = strg.lastIndexOf(pattern);
 
 		if (index == -1) {
@@ -80,18 +88,40 @@ public class StringHelper {
 	}
 
 	public static String removeNewlineAtEnd(String fromString) {
+
 		return removeStrgAtEnd(newLine(), fromString);
 	}	
 
 	public static String appendNewline(String line) {
+
 		return line + StringHelper.newLine();
 	}
 
+	public static String appendSpacesToLength(String line, int lengthAfterAppend) {
+
+		if (line.length() >= lengthAfterAppend) {
+			return line;
+		}
+
+		return line + createString(" ", lengthAfterAppend - line.length());
+	}	
+
+	public static String insertSpacesToLength(String line, int lengthAfterInsert) {
+
+		if (line.length() >= lengthAfterInsert) {
+			return line;
+		}
+
+		return createString(" ", lengthAfterInsert - line.length()) + line;
+	}	
+
 	public static String newLine() {
+
 		return System.lineSeparator();
 	}
 
 	public static String getLastToken(String tokenizedString, String tokenSeparator) {
+
 		int separatorPosition = tokenizedString.lastIndexOf(tokenSeparator);
 
 		if (separatorPosition == -1) {
@@ -101,6 +131,7 @@ public class StringHelper {
 	}
 
 	public static String getFirstToken(String tokenizedString, String tokenSeparator) {
+
 		int separatorPosition = tokenizedString.indexOf(tokenSeparator);
 
 		if (separatorPosition == -1) {
@@ -110,6 +141,7 @@ public class StringHelper {
 	}	
 
 	public static String getAllBeforeLastToken(String packageWithClass, String tokenSeparator) {
+
 		int separatorPosition = packageWithClass.lastIndexOf(tokenSeparator);
 
 		if (separatorPosition == -1) {
@@ -119,6 +151,7 @@ public class StringHelper {
 	}
 
 	public static boolean isCharAt(int index, String strg, String chr) {
+
 		if (strg.charAt(index) == chr.charAt(0)) {
 			return true;
 		}
@@ -126,9 +159,11 @@ public class StringHelper {
 	}
 
 	public static String containsOnlyAllowedChars(String str, String allowedCharsRegex) {
+
 		int len = str.length();
 
 		for (int index = 0; index < len; ++index) {
+
 			String substr = str.substring(index, index+1);
 			if (!substr.matches(allowedCharsRegex)) {
 				return substr;
@@ -138,6 +173,7 @@ public class StringHelper {
 	}
 
 	public static boolean startsWithPrefix(String prefix, String str) {
+
 		int index = str.indexOf(prefix);
 
 		if (index == 0) {
@@ -148,11 +184,13 @@ public class StringHelper {
 	}
 
 	public static int countOccurencesOfChar(String str, char charToCount) {
+
 		int len = str.length();
 		int occurences = 0;
 		String strgToCount = Character.toString(charToCount);
 
 		for (int index = 0; index < len; ++index) {
+
 			String substr = str.substring(index, index+1);
 
 			if (strgToCount.equals(substr)) {
@@ -163,6 +201,7 @@ public class StringHelper {
 	}
 
 	public static String createString(String baseString, int repetitions) {
+
 		StringBuilder builder = new StringBuilder();
 
 		for (int cnt = 0; cnt < repetitions; ++ cnt) {
@@ -173,6 +212,7 @@ public class StringHelper {
 	}
 
 	public static boolean isEqual(String s1, String s2) {
+
 		if (s1 == null && s2 == null) {
 			return true;
 		}
@@ -189,6 +229,7 @@ public class StringHelper {
 	}
 
 	public static boolean isEqualIgnoreCase(String s1, String s2) {
+
 		if (s1 == null && s2 == null) {
 			return true;
 		}
@@ -205,6 +246,7 @@ public class StringHelper {
 	}
 
 	public static String getSubstringWithBoundaries(String source, int boundaryChar) {
+
 		if (source == null) {
 			return null;
 		}
@@ -227,6 +269,7 @@ public class StringHelper {
 	}
 
 	public static String replaceSubstringWithBoundaries(String source, int boundaryChar, String strToReplace) {
+
 		String substr = getSubstringWithBoundaries(source, boundaryChar);
 		if (substr == null) {
 			return null;
@@ -236,6 +279,7 @@ public class StringHelper {
 	}
 
 	public static Byte convertToByte(String str) throws NumberFormatException {
+
 		Long result = convertToLong(str);
 
 		Long maxIntValue = new Long(Byte.MAX_VALUE);
@@ -252,6 +296,7 @@ public class StringHelper {
 	}
 
 	public static Short convertToShort(String str) throws NumberFormatException {
+
 		Long result = convertToLong(str);
 
 		Long maxIntValue = new Long(Short.MAX_VALUE);
@@ -268,6 +313,7 @@ public class StringHelper {
 	}	
 
 	public static Integer convertToInteger(String str) throws NumberFormatException {
+
 		Long result = convertToLong(str);
 
 		Long maxIntValue = new Long(Integer.MAX_VALUE);
@@ -284,6 +330,7 @@ public class StringHelper {
 	}
 
 	public static Long convertToLong(String str) throws NumberFormatException {
+
 		Long result = convertToLongDirectly(str);
 
 		if (result != null) {
@@ -294,6 +341,7 @@ public class StringHelper {
 	}
 
 	private static Long convertToLongDirectly(String str) {
+
 		Long result = null;
 
 		try {

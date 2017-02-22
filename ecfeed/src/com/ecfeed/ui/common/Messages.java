@@ -83,8 +83,6 @@ public class Messages {
 	public static final String DIALOG_RENAME_METHOD_MESSAGE = "Select compatible method from the list.";
 	public static final String DIALOG_ADD_TEST_CASE_TITLE = "New test case";
 	public static final String DIALOG_ADD_TEST_CASE_MESSAGE = "Set test suite name and edit test data.";
-	public static final String DIALOG_CALCULATE_COVERAGE_TITLE = "Calculate n-wise coverage";
-	public static final String DIALOG_CALCULATE_COVERAGE_MESSAGE = "Select test cases to include in evaluation.";
 
 	public static final String WIZARD_NEW_ECT_FILE_TITLE = "New Equivalence Class Model";
 	public static final String WIZARD_NEW_ECT_FILE_MESSAGE = "Create new file with equivalence class model";
