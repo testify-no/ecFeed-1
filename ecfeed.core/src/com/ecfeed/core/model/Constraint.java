@@ -133,12 +133,12 @@ public class Constraint implements IConstraint<ChoiceNode> {
 		return fPremise.mentions(choice) || fConsequence.mentions(choice);
 	}
 
-	public boolean mentionsOrderRelation() {
+	public boolean mentionsParameterAndOrderRelation(MethodParameterNode parameter) {
 
-		if (fPremise.mentionsOrderRelation()) {
+		if (fPremise.mentionsParameterAndOrderRelation(parameter)) {
 			return true;
 		}
-		if (fConsequence.mentionsOrderRelation()) {
+		if (fConsequence.mentionsParameterAndOrderRelation(parameter)) {
 			return true;
 		}
 

@@ -207,8 +207,11 @@ public class ConstraintNode extends AbstractNode{
 
 		String typeName = parameter.getType();
 
-		if (isForbiddenTypeForOrderRelation(typeName) && fConstraint.mentionsOrderRelation()) {
-			return false;
+		if (isForbiddenTypeForOrderRelations(typeName)) {
+
+			if (fConstraint.mentionsParameterAndOrderRelation(parameter)) {
+				return false;
+			}
 		}
 
 		if (!checkLabels(parameter)) {
@@ -218,17 +221,17 @@ public class ConstraintNode extends AbstractNode{
 		return true;
 	}
 
-	private boolean isForbiddenTypeForOrderRelation(String typeName) {
+	private boolean isForbiddenTypeForOrderRelations(String typeName) {
 
 		if (JavaTypeHelper.isUserType(typeName)) {
-			return false;
+			return true;
 		}
 
 		if (JavaTypeHelper.isBooleanTypeName(typeName)) {
-			return false;
+			return true;
 		}
 
-		return true;
+		return false;
 	}
 
 	private boolean checkLabels(MethodParameterNode parameter) {

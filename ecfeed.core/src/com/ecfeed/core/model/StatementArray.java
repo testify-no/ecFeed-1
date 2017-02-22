@@ -78,10 +78,10 @@ public class StatementArray extends AbstractStatement {
 	}
 
 	@Override
-	public boolean mentionsOrderRelation() {
+	public boolean mentionsParameterAndOrderRelation(MethodParameterNode parameter) {
 
 		for (AbstractStatement child : fStatements) {
-			if (child.mentionsOrderRelation()) {
+			if (child.mentionsParameterAndOrderRelation(parameter)) {
 				return true;
 			}
 		}

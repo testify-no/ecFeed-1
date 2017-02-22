@@ -70,7 +70,7 @@ public abstract class AbstractStatement implements IStatement {
 		return false;
 	}
 
-	public boolean mentionsOrderRelation() {
+	public boolean mentionsParameterAndOrderRelation(MethodParameterNode parameter) {
 		return false;
 	}
 

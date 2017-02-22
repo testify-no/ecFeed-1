@@ -153,9 +153,17 @@ public class RelationStatement extends AbstractStatement implements IRelationalS
 	}
 
 	@Override
-	public boolean mentionsOrderRelation() {
+	public boolean mentionsParameterAndOrderRelation(MethodParameterNode parameter) {
 
-		return EStatementRelation.isOrderRelation(fRelation);
+		if (!(parameter.isMatch(fParameter))) {
+			return false;
+		}
+
+		if (EStatementRelation.isOrderRelation(fRelation)) {
+			return true;
+		}
+
+		return false;
 	}
 
 	@Override
