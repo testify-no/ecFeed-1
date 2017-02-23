@@ -28,12 +28,12 @@ public abstract class AbstractAlgorithm<E> implements IAlgorithm<E> {
 
 	private List<List<E>> fInput;
 	private Collection<IConstraint<E>> fConstraints;
-	
+
 	@Override
 	public void initialize(List<List<E>> input,
 			Collection<IConstraint<E>> constraints,
 			IGeneratorProgressMonitor generatorProgressMonitor) throws GeneratorException {
-		
+
 		if(input == null || constraints == null){
 			GeneratorException.report("input or constraints of algorithm cannot be null");
 		}
@@ -54,16 +54,16 @@ public abstract class AbstractAlgorithm<E> implements IAlgorithm<E> {
 		fProgress = 0;
 		return progress;
 	}
-	
+
 	@Override
 	public int totalProgress(){
 		return fTotalProgress;
 	}
 
 	public IGeneratorProgressMonitor getGeneratorProgressMonitor() {
-		 return fGeneratorProgressMonitor;
+		return fGeneratorProgressMonitor;
 	}
-	
+
 	public void reset(){
 		fProgress = 0;
 	}
@@ -91,11 +91,11 @@ public abstract class AbstractAlgorithm<E> implements IAlgorithm<E> {
 		fProgress += progress;
 		fTotalProgress += progress;
 	}
-	
+
 	protected void setTotalWork(int totalWork){
 		fTotalWork = totalWork;
 	}
-	
+
 	protected List<E> instance(List<Integer> vector) {
 		if (vector == null) return null;
 		List<E> instance = new ArrayList<E>();
@@ -105,7 +105,7 @@ public abstract class AbstractAlgorithm<E> implements IAlgorithm<E> {
 		}
 		return instance;
 	}
-	
+
 	protected List<Integer> representation(List<E> vector){
 		if(vector == null) return null;
 		List<Integer> representation = new ArrayList<Integer>();
@@ -121,15 +121,20 @@ public abstract class AbstractAlgorithm<E> implements IAlgorithm<E> {
 	}
 
 	protected boolean checkConstraints(List<E> vector) {
-			if (vector == null) return true;
-			for(IConstraint<E> constraint : fConstraints){
-				if(constraint.evaluate(vector) == false){
-					return false;
-				}
-			}
+
+		if (vector == null) { 
 			return true;
+		}
+
+		for(IConstraint<E> constraint : fConstraints) {
+			if(constraint.evaluate(vector) == false) {
+				return false;
+			}
+		}
+
+		return true;
 	}
-	
+
 	@Override
 	public void cancel() {
 		fCancel = true;

@@ -67,9 +67,9 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 	public List<E> getNext() throws GeneratorException {
 
 		IGeneratorProgressMonitor generatorProgressMonitor = getGeneratorProgressMonitor();
-		
+
 		while (true) {
-			
+
 			if (generatorProgressMonitor != null) {
 				if (generatorProgressMonitor.isCanceled()) {
 					return null;
@@ -211,43 +211,97 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 	/*
 	 * Randomly generates a test that contains 'nTuple' and satisfies all the
 	 * constraints.
+	 * nTuple - list of n values selected from available choices
 	 */
 	private List<E> generateRandomTest(List<Variable<E>> nTuple) {
 
+		//debugPrintTuple(nTuple);
+
 		List<E> bestTest = null;
-		int bestCov = 1;
-		List<List<E>> tInput = getInput();
+		int bestCoverage = 1;
 
-		for (int r = 0; r < RANDOM_TEST_TRIES; r++) {
-			List<E> candidate = null;
-			int itr = 0;
-			do {
-				candidate = new ArrayList<>();
-				for (int i = 0; i < tInput.size(); i++) {
-					List<E> features = tInput.get(i);
-					candidate.add(features.get((new Random()).nextInt(features.size())));
-				}
+		//List<List<E>> paramsWithChoices = getInput();
+		//debugPrintParametersAndChoices(paramsWithChoices);
 
-				// plug the tuple into the randomly generated test
-				for (Variable<E> var : nTuple)
-					candidate.set(var.dimension, var.selectedFeature);
+		for (int cnt = 0; cnt < RANDOM_TEST_TRIES; cnt++) {
 
-			} while (!checkConstraints(candidate) && ++itr < CONSISTENCY_LOOP_LIM);
+			List<E> currentTest = findTestSatisfyingAllConstraints(nTuple);
 
-			if (itr < CONSISTENCY_LOOP_LIM) {
-				if (fRemainingTuples.size() <= fIgnoreCount)
-					return candidate;
-				// one extra point for the current tuple
-				int cov = getCoverage(candidate) + 1;
-				// System.out.println("[RB] cov: " + cov);
-				if (cov >= bestCov) {
-					bestTest = candidate;
-					bestCov = cov;
-				}
+			if (currentTest == null) {
+				continue;
+			}
+
+			if (fRemainingTuples.size() <= fIgnoreCount) {
+				return currentTest;
+			}
+
+			int currentCoverage = getCoverage(currentTest) + 1; // one extra point for the current tuple
+
+			if (currentCoverage >= bestCoverage) {
+				bestTest = currentTest;
+				bestCoverage = currentCoverage;
 			}
 		}
 
 		return bestTest;
+	}
+
+	private List<E> findTestSatisfyingAllConstraints(List<Variable<E>> nTuple) {
+
+		List<List<E>> paramsWithChoices = getInput();
+		List<E> test = null;
+		int itr = 0;
+
+		do {
+			test = createOneTest(paramsWithChoices, nTuple);
+			//debugPrintListOfElements("candidate", test);
+
+			if (checkConstraints(test)) {
+				return test;
+			}
+
+		} while (++itr < CONSISTENCY_LOOP_LIM);
+
+		return null;
+	}
+
+	protected void debugPrintTuple(List<Variable<E>> nTuple) {
+		System.out.println("XYX tuple");
+
+		for (Variable<E> var : nTuple) {
+			System.out.println("   " + var.toString());
+		}
+	}
+
+	protected void debugPrintParametersAndChoices(List<List<E>> tInput) {
+		System.out.println("XYX tInput");
+
+		for (List<E> list : tInput) {
+			debugPrintListOfElements("list", list);
+		}
+	}
+
+	protected void debugPrintListOfElements(String message, List<E> list) {
+		System.out.println("    " + message);
+		for (E elem : list) {
+			System.out.println("        " + elem.toString());
+		}
+	}
+
+	private List<E> createOneTest(List<List<E>> tInput, List<Variable<E>> nTuple) {
+
+		List<E> candidate = new ArrayList<>();
+
+		for (int i = 0; i < tInput.size(); i++) {
+			List<E> features = tInput.get(i);
+			candidate.add(features.get((new Random()).nextInt(features.size())));
+		}
+
+		// plug the tuple into the randomly generated test
+		for (Variable<E> var : nTuple)
+			candidate.set(var.dimension, var.selectedFeature);
+
+		return candidate;
 	}
 
 	private int getCoverage(List<E> test) {
@@ -326,7 +380,7 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 	protected static class Variable<E> {
 		// list of features of this variable
 		E selectedFeature;
-		// dimension of this variable
+		// dimension of this variable (index of method parameter)
 		int dimension;
 
 		public Variable(int d, E f) {
@@ -341,6 +395,11 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 
 			Variable<?> var = (Variable<?>) obj;
 			return var.dimension == this.dimension && this.selectedFeature.equals(var.selectedFeature);
+		}
+
+		@Override
+		public String toString() {
+			return ("dim:" + dimension + " feature:" + selectedFeature.toString());
 		}
 
 	}
