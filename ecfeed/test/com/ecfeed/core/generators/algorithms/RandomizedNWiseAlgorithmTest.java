@@ -27,7 +27,7 @@ import org.junit.Test;
 
 import com.ecfeed.core.generators.algorithms.RandomizedNWiseAlgorithm;
 import com.ecfeed.core.generators.algorithms.Tuples;
-import com.ecfeed.core.generators.algorithms.RandomizedNWiseAlgorithm.Variable;
+import com.ecfeed.core.generators.algorithms.RandomizedNWiseAlgorithm.DimensionedItem;
 import com.ecfeed.core.generators.api.GeneratorException;
 import com.ecfeed.core.generators.api.IConstraint;
 
@@ -121,7 +121,7 @@ public class RandomizedNWiseAlgorithmTest {
 			method = RandomizedNWiseAlgorithm.class.getDeclaredMethod("getAllNTuples");
 			method.setAccessible(true);
 			@SuppressWarnings("unchecked")
-			Map<Boolean, Set<List<Variable<Integer>>>> result = (Map<Boolean, Set<List<Variable<Integer>>>>) method.invoke(alg);
+			Map<Boolean, Set<List<DimensionedItem<Integer>>>> result = (Map<Boolean, Set<List<DimensionedItem<Integer>>>>) method.invoke(alg);
 
 			assertNotNull(result);
 			assertEquals("The expected number of N-Tuples is 28", 28, result.get(true).size() + result.get(null).size());
@@ -233,7 +233,7 @@ public class RandomizedNWiseAlgorithmTest {
 			Method method = RandomizedNWiseAlgorithm.class.getDeclaredMethod("getAllNTuples");
 			method.setAccessible(true);
 			@SuppressWarnings("unchecked")
-			Map<Boolean, Set<List<Variable<Integer>>>> result = (Map<Boolean, Set<List<Variable<Integer>>>>) method.invoke(alg);
+			Map<Boolean, Set<List<DimensionedItem<Integer>>>> result = (Map<Boolean, Set<List<DimensionedItem<Integer>>>>) method.invoke(alg);
 			assertNotNull(result);
 			assertEquals("The expected number of N-Tuples is 32", 32, result.get(true).size());
 
@@ -245,7 +245,7 @@ public class RandomizedNWiseAlgorithmTest {
 					"< - 0 1 0 >", "< - 0 1 1 >", "< - 1 0 0 >", "< - 1 0 1 >", "< - 1 1 0 >", "< - 1 1 1 >" }));
 
 			ArrayList<String> actual = new ArrayList<>();
-			for (List<Variable<Integer>> ntup : result.get(true))
+			for (List<DimensionedItem<Integer>> ntup : result.get(true))
 				actual.add(ntupleToString(ntup, inputCount));
 
 			assertTrue(expected.containsAll(actual));
@@ -260,11 +260,11 @@ public class RandomizedNWiseAlgorithmTest {
 		}
 	}
 
-	private String ntupleToString(List<Variable<Integer>> ntup, int count) {
+	private String ntupleToString(List<DimensionedItem<Integer>> ntup, int count) {
 		ArrayList<Integer> list = new ArrayList<>();
 		for (int i = 0; i < count; i++)
 			list.add(-1);
-		for (Variable<Integer> v : ntup)
+		for (DimensionedItem<Integer> v : ntup)
 			list.set(v.fDimension, v.fItem);
 
 		String str = "< ";
@@ -301,14 +301,14 @@ public class RandomizedNWiseAlgorithmTest {
 		}
 
 		Random random = new Random();
-		List<Variable<Integer>> nTuple = new ArrayList<>();
+		List<DimensionedItem<Integer>> nTuple = new ArrayList<>();
 		Set<Integer> indices = new HashSet<>();
 		// sample 'n' distinct integers in the range [0, 'inputCount')
 		while (indices.size() != n)
 			indices.add(random.nextInt(inputCount));
 
 		for (Integer i : indices)
-			nTuple.add(new Variable<Integer>(i, random.nextInt(2)));
+			nTuple.add(new DimensionedItem<Integer>(i, random.nextInt(2)));
 
 		Method method = null;
 		try {
@@ -345,7 +345,7 @@ public class RandomizedNWiseAlgorithmTest {
 				+ "% is required", cnt >= SAMPLE_COUNT * requiredAccuracy);
 	}
 
-	private double[] sampleRandomTests(RandomizedNWiseAlgorithm<Integer> alg, List<Variable<Integer>> nTuple,
+	private double[] sampleRandomTests(RandomizedNWiseAlgorithm<Integer> alg, List<DimensionedItem<Integer>> nTuple,
 			Method method) {
 		double[] samples = new double[SAMPLE_COUNT];
 
@@ -355,7 +355,7 @@ public class RandomizedNWiseAlgorithmTest {
 				try {
 					@SuppressWarnings("unchecked")
 					List<Integer> test = (List<Integer>) method.invoke(alg, nTuple);
-					for (Variable<Integer> v : nTuple) {
+					for (DimensionedItem<Integer> v : nTuple) {
 						assertEquals(v.fItem, test.get(v.fDimension));
 						test.set(v.fDimension, -1);
 					}
