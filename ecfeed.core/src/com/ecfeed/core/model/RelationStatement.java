@@ -141,9 +141,17 @@ public class RelationStatement extends AbstractStatement implements IRelationalS
 	}
 
 	@Override
-	public boolean mentions(MethodParameterNode parameter) {
+	public boolean mentions(MethodParameterNode methodParameterNode) {
 
-		return getParameter() == parameter;
+		if (getParameter() == methodParameterNode) {
+			return true;
+		}
+
+		if (fCondition.mentions(methodParameterNode)) {
+			return true;
+		}
+
+		return false;
 	}
 
 	@Override
@@ -172,6 +180,18 @@ public class RelationStatement extends AbstractStatement implements IRelationalS
 		return getConditionValue() == choice;
 	}
 
+	@Override
+	public boolean mentions(int methodParameterIndex) {
+
+		MethodNode methodNode = fParameter.getMethod();
+		MethodParameterNode methodParameterNode = methodNode.getMethodParameter(methodParameterIndex);
+
+		if (mentions(methodParameterNode)) {
+			return true;
+		}
+
+		return false;
+	}	
 
 	public MethodParameterNode getParameter(){
 		return fParameter;

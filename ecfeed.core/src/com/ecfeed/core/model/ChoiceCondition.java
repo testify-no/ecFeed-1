@@ -89,6 +89,16 @@ public class ChoiceCondition implements IStatementCondition {
 		return fChoice.getQualifiedName();
 	}
 
+	@Override
+	public boolean mentions(MethodParameterNode methodParameterNode) {
+
+		if (fMethodParameterNode == methodParameterNode) {
+			return true;
+		}
+
+		return false;
+	}	
+
 	public ChoiceNode getChoice() {
 		return fChoice;
 	}

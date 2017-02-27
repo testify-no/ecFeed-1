@@ -26,4 +26,5 @@ import java.util.List;
 public interface IConstraint<E> {
 	public boolean evaluate(List<E> values);
 	public boolean adapt(List<E> values);
+	public boolean mentions(int dimension);
 }

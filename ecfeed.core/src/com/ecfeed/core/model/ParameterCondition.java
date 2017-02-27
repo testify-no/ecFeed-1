@@ -121,15 +121,30 @@ public class ParameterCondition implements IStatementCondition {
 		return visitor.visit(this);
 	}
 
+	@Override
 	public String toString() {
 
 		return StatementConditionHelper.createParameterDescription(fRightParameterNode.getName());
 	}
 
+	@Override
+	public boolean mentions(MethodParameterNode methodParameterNode) {
+
+		if (fLeftParameterNode == methodParameterNode) {
+			return true;
+		}
+
+		if (fRightParameterNode == methodParameterNode) {
+			return true;
+		}
+
+		return false;
+	}	
+
 	public MethodParameterNode getRightMethodParameterNode() {
 
 		return fRightParameterNode;
-	}	
+	}
 
 }	
 

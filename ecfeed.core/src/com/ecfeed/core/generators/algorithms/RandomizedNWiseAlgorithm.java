@@ -114,9 +114,13 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 		}
 	}
 
-	private boolean canGenerateTest(List<DimensionedItem<E>> nTuple) {
+	private boolean canGenerateTest(List<DimensionedItem<E>> nTuple) throws GeneratorException {
 
-		List<Integer> dimensions = createDimensions(nTuple);
+		List<Integer> dimensions = createDimensionsByConstraints(nTuple);
+
+		if (dimensions.size() == 0) {
+			return true;
+		}
 
 		IterableTestSubinput<E> inputValuesList = new IterableTestSubinput<E>(getInput(), dimensions);
 
@@ -130,12 +134,12 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 		return false;
 	}
 
-	private List<Integer> createDimensions(List<DimensionedItem<E>> nTuple) {
+	private List<Integer> createDimensionsByConstraints(List<DimensionedItem<E>> nTuple) {
 
 		List<Integer> dimensionsToCheck = getDimensionsToCheck(nTuple);
 
 		List<Integer> selectedDimensions = 
-				selectDimensionsByConstraints(dimensionsToCheck);
+				getDimensionsMentionedInConstraints(dimensionsToCheck);
 
 		return selectedDimensions;
 	}
@@ -199,8 +203,16 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 		return false;
 	}
 
-	private List<Integer> selectDimensionsByConstraints(List<Integer> dimensions) {
-		return dimensions; // TODO
+	private List<Integer> getDimensionsMentionedInConstraints(List<Integer> dimensions) {
+
+		List<Integer> dimensionsMentionedInContstraints = new ArrayList<Integer>();
+
+		for (Integer dimension : dimensions) {
+			if (isDimensionMentionedInConstraints(dimension))
+				dimensionsMentionedInContstraints.add(dimension);
+		}
+
+		return dimensionsMentionedInContstraints;
 	}
 
 	private String toString(List<DimensionedItem<E>> nTuple) {

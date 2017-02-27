@@ -135,6 +135,17 @@ public abstract class AbstractAlgorithm<E> implements IAlgorithm<E> {
 		return true;
 	}
 
+	protected boolean isDimensionMentionedInConstraints(int dimension) {
+
+		for (IConstraint<E> constraint : fConstraints) {
+			if (constraint.mentions(dimension)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	@Override
 	public void cancel() {
 		fCancel = true;

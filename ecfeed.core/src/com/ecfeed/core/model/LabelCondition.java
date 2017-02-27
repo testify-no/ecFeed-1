@@ -15,43 +15,25 @@ import java.util.List;
 public class LabelCondition implements IStatementCondition {
 
 	private String fLabel;
-	private MethodParameterNode fParameter;
+	private MethodParameterNode fMethodParameterNode;
 	private RelationStatement fParentRelationStatement;
 
-	public LabelCondition(String label, MethodParameterNode parameter, RelationStatement parentRelationStatement) {
+	public LabelCondition(String label, MethodParameterNode methodParameterNode, RelationStatement parentRelationStatement) {
 		fLabel = label;
-		fParameter = parameter;
+		fMethodParameterNode = methodParameterNode;
 		fParentRelationStatement = parentRelationStatement;
 	}
 
 	@Override
 	public boolean evaluate(List<ChoiceNode> choices) {
 
-		ChoiceNode choice = StatementConditionHelper.getChoiceForMethodParameter(choices, fParameter);
+		ChoiceNode choice = StatementConditionHelper.getChoiceForMethodParameter(choices, fMethodParameterNode);
 
 		if (choice == null) {
 			return false;
 		}
 
 		return evaluateContainsLabel(choice);
-	}
-
-	private boolean evaluateContainsLabel(ChoiceNode choice) {
-
-		boolean containsLabel = choice.getAllLabels().contains(fLabel);
-
-		EStatementRelation relation = fParentRelationStatement.getRelation(); 
-
-		switch (relation) {
-
-		case EQUAL:
-			return containsLabel;
-		case NOT_EQUAL:
-			return !containsLabel;
-		default:
-			return false;
-		}
-
 	}
 
 	@Override
@@ -93,12 +75,42 @@ public class LabelCondition implements IStatementCondition {
 
 	@Override
 	public LabelCondition getCopy() {
-		return new LabelCondition(fLabel, fParameter, fParentRelationStatement);
+		return new LabelCondition(fLabel, fMethodParameterNode, fParentRelationStatement);
 	}
 
 	public String getLabel() {
 		return fLabel;
 	}
+
+	@Override
+	public boolean mentions(MethodParameterNode methodParameterNode) {
+
+		if (fMethodParameterNode == methodParameterNode) {
+			return true;
+		}
+
+		return false;
+	}
+
+	private boolean evaluateContainsLabel(ChoiceNode choice) {
+
+		boolean containsLabel = choice.getAllLabels().contains(fLabel);
+
+		EStatementRelation relation = fParentRelationStatement.getRelation(); 
+
+		switch (relation) {
+
+		case EQUAL:
+			return containsLabel;
+		case NOT_EQUAL:
+			return !containsLabel;
+		default:
+			return false;
+		}
+
+	}
+
+
 
 }
 

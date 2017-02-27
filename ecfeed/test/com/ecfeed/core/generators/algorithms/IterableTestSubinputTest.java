@@ -16,6 +16,8 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.ecfeed.core.generators.api.GeneratorException;
+
 public class IterableTestSubinputTest {
 
 	@Test
@@ -29,7 +31,13 @@ public class IterableTestSubinputTest {
 		List<List<Integer>> testInput = new ArrayList<List<Integer>>();
 		testInput.add(paramValues);
 
-		IterableTestSubinput<Integer> testInputList = new IterableTestSubinput<Integer>(testInput, paramDimensions);
+		IterableTestSubinput<Integer> testInputList = null;
+
+		try {
+			testInputList = new IterableTestSubinput<Integer>(testInput, paramDimensions);
+		} catch (GeneratorException e) {
+			fail();
+		}
 
 		int loopCount = 0;
 
@@ -58,7 +66,13 @@ public class IterableTestSubinputTest {
 		List<List<Integer>> testInput = new ArrayList<List<Integer>>();
 		testInput.add(paramValues);
 
-		IterableTestSubinput<Integer> testInputList = new IterableTestSubinput<Integer>(testInput, paramDimensions);
+		IterableTestSubinput<Integer> testInputList = null;
+
+		try {
+			testInputList = new IterableTestSubinput<Integer>(testInput, paramDimensions);
+		} catch (GeneratorException e) {
+			fail();
+		}
 
 		int loopCount = 0;
 
@@ -101,7 +115,12 @@ public class IterableTestSubinputTest {
 		paramValues1.add("1");
 		testInput.add(paramValues1);
 
-		IterableTestSubinput<String> testInputList = new IterableTestSubinput<String>(testInput, paramDimensions);
+		IterableTestSubinput<String> testInputList = null;
+		try {
+			testInputList = new IterableTestSubinput<String>(testInput, paramDimensions);
+		} catch (GeneratorException e) {
+			fail();
+		}
 
 		int loopCount = 0;
 
@@ -152,7 +171,13 @@ public class IterableTestSubinputTest {
 		testInput.add(paramValues4);		
 
 
-		IterableTestSubinput<String> testInputList = new IterableTestSubinput<String>(testInput, paramDimensions);
+		IterableTestSubinput<String> testInputList = null;
+
+		try {
+			testInputList = new IterableTestSubinput<String>(testInput, paramDimensions);
+		} catch (GeneratorException e) {
+			fail();
+		}
 
 		int loopCount = 0;
 

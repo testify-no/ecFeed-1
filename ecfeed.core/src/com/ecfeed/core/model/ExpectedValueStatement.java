@@ -63,6 +63,19 @@ public class ExpectedValueStatement extends AbstractStatement implements IRelati
 	public void setRelation(EStatementRelation relation) {
 	}
 
+	@Override
+	public boolean mentions(int methodParameterIndex) {
+
+		MethodNode methodNode = fParameter.getMethod();
+		MethodParameterNode methodParameterNode = methodNode.getMethodParameter(methodParameterIndex);
+
+		if (mentions(methodParameterNode)) {
+			return true;
+		}
+
+		return false;
+	}	
+
 	public MethodParameterNode getParameter(){
 		return fParameter;
 	}
@@ -129,4 +142,5 @@ public class ExpectedValueStatement extends AbstractStatement implements IRelati
 	public boolean isParameterPrimitive(){
 		return fPredicate.isPrimitive(fParameter.getType());
 	}
+
 }

@@ -14,12 +14,24 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.ecfeed.core.generators.api.GeneratorException;
+
 public class IterableTestSubinput<E> implements Iterable<List<E>>{
 
 	List<List<E>> fTestInput;	
 	List<Integer> fDimensionsToIterate;
 
-	public IterableTestSubinput(List<List<E>> testInput, List<Integer> dimensionsToIterate) {
+	public IterableTestSubinput(List<List<E>> testInput, List<Integer> dimensionsToIterate) throws GeneratorException {
+
+		final String EMPTY_DIM_LIST = "Empty list of dimensions.";
+
+		if (dimensionsToIterate == null) {
+			GeneratorException.report(EMPTY_DIM_LIST);
+		}
+
+		if (dimensionsToIterate.size() == 0) {
+			GeneratorException.report(EMPTY_DIM_LIST);
+		}
 
 		fTestInput = testInput;
 		fDimensionsToIterate = dimensionsToIterate;

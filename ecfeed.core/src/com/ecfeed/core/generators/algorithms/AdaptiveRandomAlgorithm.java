@@ -27,14 +27,14 @@ public class AdaptiveRandomAlgorithm<E> extends AbstractAlgorithm<E> implements 
 	private final int fCandidatesSize;
 	private final int fLength;
 	private final boolean fDuplicates;
-	
+
 	private CartesianProductAlgorithm<E> fCartesianAlgorithm;
 
 	private List<List<E>> fHistory;
 
 	protected class BlackList implements IConstraint<E>{
 		Collection<List<E>> fBlackList;
-		
+
 		public BlackList(Collection<List<E>> blackList){
 			fBlackList = blackList;
 		}
@@ -43,21 +43,26 @@ public class AdaptiveRandomAlgorithm<E> extends AbstractAlgorithm<E> implements 
 		public boolean evaluate(List<E> values) {
 			return !fBlackList.contains(values);
 		}
-		
+
 		@Override
 		public boolean adapt(List<E> values) {
 			return false;
 		}
-		
+
 		public void setBlackList(Collection<List<E>> newBlackList){
 			fBlackList = newBlackList;
 		}
-		
+
 		public Collection<List<E>> getBlackList(){
 			return fBlackList;
 		}
+
+		@Override
+		public boolean mentions(int dimension) {
+			return false;
+		}
 	}
-	
+
 	public AdaptiveRandomAlgorithm(int depth, int candidatesSize, 
 			int length, boolean duplicates) {
 		if(depth == -1) depth = Integer.MAX_VALUE;
@@ -65,16 +70,16 @@ public class AdaptiveRandomAlgorithm<E> extends AbstractAlgorithm<E> implements 
 		fCandidatesSize = candidatesSize;
 		fLength = length;
 		fDuplicates = duplicates;
-		
+
 		fHistory = new ArrayList<List<E>>();
 		fCartesianAlgorithm = new CartesianProductAlgorithm<E>();
 	}
-	
+
 	@Override
 	public void initialize(List<List<E>> input,
 			Collection<IConstraint<E>> constraints,
 			IGeneratorProgressMonitor generatorProgressMonitor) throws GeneratorException {
-		
+
 		if(fDuplicates == false){
 			constraints.add(new BlackList(fHistory));
 		}
@@ -82,7 +87,7 @@ public class AdaptiveRandomAlgorithm<E> extends AbstractAlgorithm<E> implements 
 		setTotalWork(fLength);
 		super.initialize(input, constraints, generatorProgressMonitor);
 	}
-	
+
 	@Override
 	public List<E> getNext() throws GeneratorException {
 		if(fHistory.size() >= fLength){
@@ -148,7 +153,7 @@ public class AdaptiveRandomAlgorithm<E> extends AbstractAlgorithm<E> implements 
 
 	protected List<E> getOptimalCandidate(List<List<E>> candidates, List<List<E>> history) {
 		if(candidates.size() == 0) return null;
-		
+
 		List<E> optimalCandidate = null;
 		int optimalCandidateMinDistance = 0;
 		for(List<E> candidate : candidates){

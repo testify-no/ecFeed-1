@@ -93,6 +93,17 @@ public class Constraint implements IConstraint<ChoiceNode> {
 		return false;
 	}
 
+	@Override
+	public boolean mentions(int dimension) {
+		if (fPremise.mentions(dimension)) {
+			return true;
+		}
+		if (fConsequence.mentions(dimension)) {
+			return true;
+		}		
+		return false;
+	}
+
 	public int getId(){
 
 		return fId;

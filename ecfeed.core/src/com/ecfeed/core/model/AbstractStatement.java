@@ -27,6 +27,7 @@ public abstract class AbstractStatement implements IStatement {
 	}
 
 	public abstract String getLeftOperandName();
+	public abstract boolean mentions(int methodParameterIndex);
 
 	public AbstractStatement getParent() {
 		return fParent;
@@ -57,6 +58,8 @@ public abstract class AbstractStatement implements IStatement {
 		newStatement.setParent(this);
 		children.set(index, newStatement);
 	}
+
+
 
 	public boolean mentions(ChoiceNode choice) {
 		return false;

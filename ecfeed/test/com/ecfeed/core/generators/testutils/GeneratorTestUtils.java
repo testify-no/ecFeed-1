@@ -32,7 +32,7 @@ public class GeneratorTestUtils{
 		public Constraint(Set<String> restrictedValues){
 			fRestrictedValues = restrictedValues;
 		}
-		
+
 		@Override
 		public boolean evaluate(List<String> values) {
 			for(String value : values){
@@ -42,7 +42,7 @@ public class GeneratorTestUtils{
 			}
 			return true;
 		}
-		
+
 		@Override public String toString(){
 			return fRestrictedValues.toString();
 		}
@@ -51,13 +51,18 @@ public class GeneratorTestUtils{
 		public boolean adapt(List<String> values) {
 			return false;
 		}
-		
+
+		@Override
+		public boolean mentions(int dimension) {
+			return false;
+		}
+
 	}
-	
+
 	private static final String[] VARIABLE_NAMES = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", 
-			"k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "aa", "ab", 
-			"ac", "ad", "ae", "af", "ag", "ah", "ai", "aj", "ak", "al", "am", "an", "ao", "ap", "aq"};
-	
+		"k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "aa", "ab", 
+		"ac", "ad", "ae", "af", "ag", "ah", "ai", "aj", "ak", "al", "am", "an", "ao", "ap", "aq"};
+
 	public static List<List<String>> prepareInput(int variables, int choices){
 		List<List<String>> input = new ArrayList<List<String>>();
 		for(int i = 0; i < variables; i++){
@@ -70,7 +75,7 @@ public class GeneratorTestUtils{
 		}
 		return input;
 	}
-	
+
 	public static List<Set<String>> referenceInput(List<List<String>> input){
 		List<Set<String>> referenceInput = new ArrayList<Set<String>>();
 		for(List<String> parameter : input){
@@ -78,7 +83,7 @@ public class GeneratorTestUtils{
 		}
 		return referenceInput;
 	}
-	
+
 	public static Set<List<String>> algorithmResult(IAlgorithm<String> initializedAlgorithm) {
 		Set<List<String>> result = new HashSet<List<String>>();
 		try {
@@ -113,7 +118,7 @@ public class GeneratorTestUtils{
 		}
 		return result;
 	}
-	
+
 	public static String randomString(int length){
 		Random rand = new Random();
 		String validCharacters = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890 ";

@@ -110,6 +110,11 @@ public class RandomizedNWiseAlgorithmTest {
 			public boolean adapt(List<Integer> values) {
 				return true;
 			}
+
+			@Override
+			public boolean mentions(int dimension) {
+				return false;
+			}
 		};
 
 		Collection<IConstraint<Integer>> constraints = new HashSet<IConstraint<Integer>>();

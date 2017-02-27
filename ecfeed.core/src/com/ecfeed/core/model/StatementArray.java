@@ -24,28 +24,6 @@ public class StatementArray extends AbstractStatement {
 		fOperator = operator;
 	}
 
-	public String getLeftOperandName() {
-		return fOperator.toString();
-	}
-
-	public EStatementOperator getOperator() {
-		return fOperator;
-	}
-
-	public void setOperator(EStatementOperator operator) {
-		fOperator = operator;
-	}
-
-	public void addStatement(AbstractStatement statement, int index) {
-
-		fStatements.add(index, statement);
-		statement.setParent(this);
-	}
-
-	public void addStatement(AbstractStatement statement) {
-		addStatement(statement, fStatements.size());
-	}
-
 	@Override
 	public List<AbstractStatement> getChildren() {
 		return fStatements;
@@ -186,4 +164,39 @@ public class StatementArray extends AbstractStatement {
 	public Object accept(IStatementVisitor visitor) throws Exception {
 		return visitor.visit(this);
 	}
+
+	@Override
+	public boolean mentions(int methodParameterIndex) {
+
+		for ( AbstractStatement abstractStatement : fStatements) {
+			if (abstractStatement.mentions(methodParameterIndex)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public String getLeftOperandName() {
+		return fOperator.toString();
+	}
+
+	public EStatementOperator getOperator() {
+		return fOperator;
+	}
+
+	public void setOperator(EStatementOperator operator) {
+		fOperator = operator;
+	}
+
+	public void addStatement(AbstractStatement statement, int index) {
+
+		fStatements.add(index, statement);
+		statement.setParent(this);
+	}
+
+	public void addStatement(AbstractStatement statement) {
+		addStatement(statement, fStatements.size());
+	}
+
 }

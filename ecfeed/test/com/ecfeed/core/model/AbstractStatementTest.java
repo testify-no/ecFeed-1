@@ -48,13 +48,17 @@ public class AbstractStatementTest {
 		public Object accept(IStatementVisitor visitor) {
 			return null;
 		}
+		@Override
+		public boolean mentions(int methodParameterIndex) {
+			return false;
+		}
 	}
-	
+
 	@Test
 	public void testParent() {
 		AbstractStatement statement1 = new StatementImplementation();
 		AbstractStatement statement2 = new StatementImplementation();
-		
+
 		statement2.setParent(statement1);
 		assertEquals(statement1, statement2.getParent());
 	}
@@ -67,7 +71,7 @@ public class AbstractStatementTest {
 
 		array.addStatement(statement2);
 		array.addStatement(statement3);
-		
+
 		List<AbstractStatement> children = array.getChildren();
 		assertEquals(2, children.size());
 		assertTrue(children.contains(statement2));
@@ -84,7 +88,7 @@ public class AbstractStatementTest {
 		List<AbstractStatement> children = array.getChildren();
 		assertEquals(1, children.size());
 		assertTrue(children.contains(statement2));
-		
+
 		array.replaceChild(statement2, statement3);
 		children = array.getChildren();
 		assertEquals(1, children.size());
@@ -103,12 +107,12 @@ public class AbstractStatementTest {
 		assertEquals(2, children.size());
 		assertTrue(children.contains(statement2));
 		assertTrue(children.contains(statement3));
-		
+
 		array.removeChild(statement2);
 		children = array.getChildren();
 		assertEquals(1, children.size());
 		assertFalse(children.contains(statement2));
 		assertTrue(children.contains(statement3));
-		
+
 	}
 }

@@ -60,6 +60,11 @@ public class TestSuiteGenerationSupport {
 			}
 			return true;
 		}
+
+		@Override
+		public boolean mentions(int dimension) {
+			return false;
+		}
 	}
 
 	private class GeneratorRunnable implements IRunnableWithProgress{
@@ -85,7 +90,7 @@ public class TestSuiteGenerationSupport {
 		@Override
 		public void run(IProgressMonitor progressMonitor)
 				throws InvocationTargetException, InterruptedException {
-			
+
 			List<ChoiceNode> next;
 			try {
 				fGenerator.initialize(fInput, fConstraints, fParameters, new GeneratorProgressMonitor(progressMonitor));

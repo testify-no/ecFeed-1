@@ -188,6 +188,10 @@ public class MethodNode extends ParametersParentNode {
 		return names;
 	}
 
+	public MethodParameterNode getMethodParameter(int index) {
+		return (MethodParameterNode)(getParameters().get(index));
+	}
+
 	public List<ConstraintNode> getConstraintNodes(){
 		return fConstraints;
 	}
