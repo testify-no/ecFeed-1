@@ -122,7 +122,7 @@ public class RandomizedNWiseAlgorithmTest {
 			method.setAccessible(true);
 			@SuppressWarnings("unchecked")
 			Map<Boolean, Set<List<Variable<Integer>>>> result = (Map<Boolean, Set<List<Variable<Integer>>>>) method.invoke(alg);
-			
+
 			assertNotNull(result);
 			assertEquals("The expected number of N-Tuples is 28", 28, result.get(true).size() + result.get(null).size());
 
@@ -265,7 +265,7 @@ public class RandomizedNWiseAlgorithmTest {
 		for (int i = 0; i < count; i++)
 			list.add(-1);
 		for (Variable<Integer> v : ntup)
-			list.set(v.dimension, v.selectedFeature);
+			list.set(v.fDimension, v.fItem);
 
 		String str = "< ";
 		for (Integer v : list)
@@ -356,8 +356,8 @@ public class RandomizedNWiseAlgorithmTest {
 					@SuppressWarnings("unchecked")
 					List<Integer> test = (List<Integer>) method.invoke(alg, nTuple);
 					for (Variable<Integer> v : nTuple) {
-						assertEquals(v.selectedFeature, test.get(v.dimension));
-						test.set(v.dimension, -1);
+						assertEquals(v.fItem, test.get(v.fDimension));
+						test.set(v.fDimension, -1);
 					}
 
 					// assumption: each test represents a binary number

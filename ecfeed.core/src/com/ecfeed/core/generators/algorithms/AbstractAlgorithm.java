@@ -120,14 +120,14 @@ public abstract class AbstractAlgorithm<E> implements IAlgorithm<E> {
 		return representation;
 	}
 
-	protected boolean checkConstraints(List<E> vector) {
+	protected boolean checkConstraints(List<E> test) {
 
-		if (vector == null) { 
+		if (test == null) { 
 			return true;
 		}
 
 		for(IConstraint<E> constraint : fConstraints) {
-			if(constraint.evaluate(vector) == false) {
+			if(constraint.evaluate(test) == false) {
 				return false;
 			}
 		}

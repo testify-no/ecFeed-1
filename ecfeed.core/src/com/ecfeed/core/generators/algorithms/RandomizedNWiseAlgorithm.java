@@ -83,6 +83,15 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 			List<Variable<E>> nTuple = fRemainingTuples.iterator().next();
 			fRemainingTuples.remove(nTuple);
 
+			boolean canGenerate = canGenerateTest(nTuple);
+
+			//			String message = canGenerate ? "CAN GENERATE: " : "CAN NOT GENERATE: ";
+			//			debugPrintTuple(message, nTuple);
+
+			if (!canGenerate) {
+				continue;
+			}
+
 			List<E> randomTest = generateRandomTest(nTuple);
 
 			if (randomTest != null) {
@@ -105,10 +114,99 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 		}
 	}
 
+	private boolean canGenerateTest(List<Variable<E>> nTuple) {
+
+		List<Integer> dimensions = createDimensions(nTuple);
+
+		IterableTestSubinput<E> inputValuesList = new IterableTestSubinput<E>(getInput(), dimensions);
+
+		for (List<E> partialValues : inputValuesList ) {
+
+			if (canGenerateTestForPartialValues(partialValues, dimensions, nTuple)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private List<Integer> createDimensions(List<Variable<E>> nTuple) {
+
+		List<Integer> dimensionsToCheck = getDimensionsToCheck(nTuple);
+
+		List<Integer> selectedDimensions = 
+				selectDimensionsByConstraints(dimensionsToCheck);
+
+		return selectedDimensions;
+	}
+
+	private boolean canGenerateTestForPartialValues(
+			List<E> partialValues, List<Integer> selectedDimensions, List<Variable<E>> nTuple) {
+
+		List<Variable<E>> partialTuple = createInputTuple(partialValues, selectedDimensions);
+
+		List<E> test = createOneTest(getInput(), nTuple, partialTuple);
+
+		if (checkConstraints(test)) {
+			return true;
+		}
+
+		return false;
+	}
+
+	private List<Variable<E>> createInputTuple(List<E> input, List<Integer> dimensions) {
+
+		int inputSize = input.size();
+
+		if (inputSize != dimensions.size()) {
+			return null;
+		}
+
+		List<Variable<E>> result = new ArrayList<Variable<E>>();
+
+		for (int index = 0; index < inputSize; index++) {
+			Variable<E> item = new Variable<E>(dimensions.get(index), input.get(index));
+			result.add(item);
+		}
+
+		return result;
+	}
+
+	private List<Integer> getDimensionsToCheck(List<Variable<E>> nTuple) {
+
+		List<Integer> result = new ArrayList<Integer>();
+		int maxDimension = getInput().size();
+
+		for (int dimension = 0; dimension < maxDimension; dimension++) {
+			if (tupleContainsIndex(nTuple, dimension)) {
+				continue;
+			}
+
+			result.add(dimension);
+		}
+
+		return result;
+	}
+
+	private boolean tupleContainsIndex(List<Variable<E>> nTuple, int dimension) {
+
+		for (Variable<E> variable : nTuple) {
+			if (variable.fDimension == dimension) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private List<Integer> selectDimensionsByConstraints(List<Integer> dimensions) {
+		return dimensions; // TODO
+	}
+
 	private String toString(List<Variable<E>> nTuple) {
 		String str = "< ";
 		for (Variable<E> var : nTuple)
-			str += "(" + var.dimension + ", " + var.selectedFeature + ") ";
+			str += "(" + var.fDimension + ", " + var.fItem + ") ";
 		return str + ">";
 	}
 
@@ -136,7 +234,7 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 
 			boolean isCovered = true;
 			for (Variable<E> var : nTuple)
-				if (!test.get(var.dimension).equals(var.selectedFeature)) {
+				if (!test.get(var.fDimension).equals(var.fItem)) {
 					isCovered = false;
 					break;
 				}
@@ -204,7 +302,7 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 			dims.put(i, i);
 
 		for (int i = 0; i < nTuple.size(); i++)
-			dims.remove(nTuple.get(i).dimension);
+			dims.remove(nTuple.get(i).fDimension);
 		return dims;
 	}
 
@@ -215,13 +313,8 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 	 */
 	private List<E> generateRandomTest(List<Variable<E>> nTuple) {
 
-		//debugPrintTuple(nTuple);
-
 		List<E> bestTest = null;
 		int bestCoverage = 1;
-
-		//List<List<E>> paramsWithChoices = getInput();
-		//debugPrintParametersAndChoices(paramsWithChoices);
 
 		for (int cnt = 0; cnt < RANDOM_TEST_TRIES; cnt++) {
 
@@ -254,7 +347,6 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 
 		do {
 			test = createOneTest(paramsWithChoices, nTuple);
-			//debugPrintListOfElements("candidate", test);
 
 			if (checkConstraints(test)) {
 				return test;
@@ -265,43 +357,62 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 		return null;
 	}
 
-	protected void debugPrintTuple(List<Variable<E>> nTuple) {
-		System.out.println("XYX tuple");
+	protected void debugPrintTuple(String message, List<Variable<E>> nTuple) {
+		System.out.println(message);
 
 		for (Variable<E> var : nTuple) {
 			System.out.println("   " + var.toString());
 		}
 	}
 
-	protected void debugPrintParametersAndChoices(List<List<E>> tInput) {
-		System.out.println("XYX tInput");
+	protected void debugPrintParametersAndChoices(String message, List<List<E>> tInput) {
+		System.out.println(message);
 
 		for (List<E> list : tInput) {
 			debugPrintListOfElements("list", list);
 		}
 	}
 
-	protected void debugPrintListOfElements(String message, List<E> list) {
-		System.out.println("    " + message);
-		for (E elem : list) {
-			System.out.println("        " + elem.toString());
+	protected <T> void debugPrintListOfElements(String message, List<T> list) {
+		System.out.println(message);
+		for (T elem : list) {
+			System.out.println("   " + elem.toString());
 		}
 	}
 
-	private List<E> createOneTest(List<List<E>> tInput, List<Variable<E>> nTuple) {
+	private List<E> createOneTest(List<List<E>> tInput, List<Variable<E>> tuple) {
 
-		List<E> candidate = new ArrayList<>();
+		List<E> result = createRandomTest(tInput);
+		return plugInTupleIntoList(tuple, result);
+	}
+
+	private List<E> createOneTest(
+			List<List<E>> tInput, List<Variable<E>> tuple1, List<Variable<E>> tuple2) {
+
+		List<E> result = createRandomTest(tInput);
+		result = plugInTupleIntoList(tuple1, result);
+		return plugInTupleIntoList(tuple2, result);
+	}	
+
+	private List<E> createRandomTest(List<List<E>> tInput) {
+
+		List<E> result = new ArrayList<>();
 
 		for (int i = 0; i < tInput.size(); i++) {
 			List<E> features = tInput.get(i);
-			candidate.add(features.get((new Random()).nextInt(features.size())));
+			result.add(features.get((new Random()).nextInt(features.size())));
 		}
 
-		// plug the tuple into the randomly generated test
-		for (Variable<E> var : nTuple)
-			candidate.set(var.dimension, var.selectedFeature);
+		return result;
+	}
 
-		return candidate;
+	private List<E> plugInTupleIntoList(List<Variable<E>> nTuple, List<E> listOfItems) {
+
+		for (Variable<E> var : nTuple) {
+			listOfItems.set(var.fDimension, var.fItem);
+		}
+
+		return listOfItems;
 	}
 
 	private int getCoverage(List<E> test) {
@@ -345,7 +456,7 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 				for (int i = 0; i < getInput().size(); i++)
 					fullTuple.add(null);
 				for (Variable<E> var : tuple)
-					fullTuple.set(var.dimension, var.selectedFeature);
+					fullTuple.set(var.fDimension, var.fItem);
 
 				Boolean check = checkConstraintsOnExtendedNTuple(fullTuple);
 				if (check == null)
@@ -378,35 +489,43 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 	}
 
 	protected static class Variable<E> {
-		// list of features of this variable
-		E selectedFeature;
-		// dimension of this variable (index of method parameter)
-		int dimension;
 
-		public Variable(int d, E f) {
-			dimension = d;
-			selectedFeature = f;
+		int fDimension; // e.g. index of method parameter
+		E fItem;
+
+		public Variable(int dimension, E item) {
+			fDimension = dimension;
+			fItem = item;
 		}
 
 		@Override
 		public boolean equals(Object obj) {
+
 			if (!(obj instanceof Variable))
 				return false;
 
 			Variable<?> var = (Variable<?>) obj;
-			return var.dimension == this.dimension && this.selectedFeature.equals(var.selectedFeature);
+
+			if (var.fDimension == this.fDimension && this.fItem.equals(var.fItem)) {
+				return true;
+			}
+
+			return false;
 		}
 
 		@Override
 		public String toString() {
-			return ("dim:" + dimension + " feature:" + selectedFeature.toString());
+
+			return ("dim:" + fDimension + " item:" + fItem.toString());
 		}
 
 	}
 
 	protected Set<List<Integer>> getAllDimCombs() {
+
 		if (allDimCombs == null)
 			allDimCombs = getAllDimensionCombinations();
+
 		return allDimCombs;
 	}
 
