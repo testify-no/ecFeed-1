@@ -31,13 +31,13 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 
 	private Set<List<Integer>> allDimCombs = null;
 
-	private Set<List<Variable<E>>> fPotentiallyRemainingTuples = null;
+	private Set<List<DimensionedItem<E>>> fPotentiallyRemainingTuples = null;
 
 	// The set of all n-tuples for which none of the constraints fail (this set
 	// includes both the n-tuples for which all the constraints can be evaluated
 	// and pass, as well as the constraints for which at least one of
 	// constraints cannot be evaluated).
-	private Set<List<Variable<E>>> fRemainingTuples = null;
+	private Set<List<DimensionedItem<E>>> fRemainingTuples = null;
 
 	private int fIgnoreCount = 0;
 
@@ -50,7 +50,7 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 	@Override
 	public void reset() {
 		try {
-			Map<Boolean, Set<List<Variable<E>>>> nTuples = getAllNTuples();
+			Map<Boolean, Set<List<DimensionedItem<E>>>> nTuples = getAllNTuples();
 			fPotentiallyRemainingTuples = nTuples.get(null);
 			fRemainingTuples = nTuples.get(true);
 			fRemainingTuples.addAll(fPotentiallyRemainingTuples);
@@ -80,7 +80,7 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 				return null;
 
 
-			List<Variable<E>> nTuple = fRemainingTuples.iterator().next();
+			List<DimensionedItem<E>> nTuple = fRemainingTuples.iterator().next();
 			fRemainingTuples.remove(nTuple);
 
 			boolean canGenerate = canGenerateTest(nTuple);
@@ -114,7 +114,7 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 		}
 	}
 
-	private boolean canGenerateTest(List<Variable<E>> nTuple) {
+	private boolean canGenerateTest(List<DimensionedItem<E>> nTuple) {
 
 		List<Integer> dimensions = createDimensions(nTuple);
 
@@ -130,7 +130,7 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 		return false;
 	}
 
-	private List<Integer> createDimensions(List<Variable<E>> nTuple) {
+	private List<Integer> createDimensions(List<DimensionedItem<E>> nTuple) {
 
 		List<Integer> dimensionsToCheck = getDimensionsToCheck(nTuple);
 
@@ -141,9 +141,9 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 	}
 
 	private boolean canGenerateTestForPartialValues(
-			List<E> partialValues, List<Integer> selectedDimensions, List<Variable<E>> nTuple) {
+			List<E> partialValues, List<Integer> selectedDimensions, List<DimensionedItem<E>> nTuple) {
 
-		List<Variable<E>> partialTuple = createInputTuple(partialValues, selectedDimensions);
+		List<DimensionedItem<E>> partialTuple = createInputTuple(partialValues, selectedDimensions);
 
 		List<E> test = createOneTest(getInput(), nTuple, partialTuple);
 
@@ -154,7 +154,7 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 		return false;
 	}
 
-	private List<Variable<E>> createInputTuple(List<E> input, List<Integer> dimensions) {
+	private List<DimensionedItem<E>> createInputTuple(List<E> input, List<Integer> dimensions) {
 
 		int inputSize = input.size();
 
@@ -162,17 +162,17 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 			return null;
 		}
 
-		List<Variable<E>> result = new ArrayList<Variable<E>>();
+		List<DimensionedItem<E>> result = new ArrayList<DimensionedItem<E>>();
 
 		for (int index = 0; index < inputSize; index++) {
-			Variable<E> item = new Variable<E>(dimensions.get(index), input.get(index));
+			DimensionedItem<E> item = new DimensionedItem<E>(dimensions.get(index), input.get(index));
 			result.add(item);
 		}
 
 		return result;
 	}
 
-	private List<Integer> getDimensionsToCheck(List<Variable<E>> nTuple) {
+	private List<Integer> getDimensionsToCheck(List<DimensionedItem<E>> nTuple) {
 
 		List<Integer> result = new ArrayList<Integer>();
 		int maxDimension = getInput().size();
@@ -188,9 +188,9 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 		return result;
 	}
 
-	private boolean tupleContainsIndex(List<Variable<E>> nTuple, int dimension) {
+	private boolean tupleContainsIndex(List<DimensionedItem<E>> nTuple, int dimension) {
 
-		for (Variable<E> variable : nTuple) {
+		for (DimensionedItem<E> variable : nTuple) {
 			if (variable.fDimension == dimension) {
 				return true;
 			}
@@ -203,9 +203,9 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 		return dimensions; // TODO
 	}
 
-	private String toString(List<Variable<E>> nTuple) {
+	private String toString(List<DimensionedItem<E>> nTuple) {
 		String str = "< ";
-		for (Variable<E> var : nTuple)
+		for (DimensionedItem<E> var : nTuple)
 			str += "(" + var.fDimension + ", " + var.fItem + ") ";
 		return str + ">";
 	}
@@ -217,23 +217,23 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 	 * @param improvedTest
 	 */
 	private int removeCoveredNTuples(List<E> test) {
-		Set<List<Variable<E>>> coveredTuples = getCoveredNTuples(test);
+		Set<List<DimensionedItem<E>>> coveredTuples = getCoveredNTuples(test);
 		int cov = coveredTuples.size();
 		fRemainingTuples.removeAll(coveredTuples);
 		fPotentiallyRemainingTuples.removeAll(coveredTuples);
 		return cov;
 	}
 
-	private Set<List<Variable<E>>> getCoveredNTuples(List<E> test) {
+	private Set<List<DimensionedItem<E>>> getCoveredNTuples(List<E> test) {
 		int k = allDimCombs.size();
-		Set<List<Variable<E>>> coveredTuples = new HashSet<>();
+		Set<List<DimensionedItem<E>>> coveredTuples = new HashSet<>();
 
-		for (List<Variable<E>> nTuple : fRemainingTuples) {
+		for (List<DimensionedItem<E>> nTuple : fRemainingTuples) {
 			if (k == 0)
 				break;
 
 			boolean isCovered = true;
-			for (Variable<E> var : nTuple)
+			for (DimensionedItem<E> var : nTuple)
 				if (!test.get(var.fDimension).equals(var.fItem)) {
 					isCovered = false;
 					break;
@@ -246,7 +246,7 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 		return coveredTuples;
 	}
 
-	private List<E> improveCoverageOfTest(List<E> randomTest, List<Variable<E>> nTuple) {
+	private List<E> improveCoverageOfTest(List<E> randomTest, List<DimensionedItem<E>> nTuple) {
 		/*
 		 * while you can improve coverage, make a random ordering of modifiable
 		 * indices for each index in the list, check all available values for
@@ -295,7 +295,7 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 		return improvedTest;
 	}
 
-	private Map<Integer, Integer> getModifiableDimensions(List<E> randomTest, List<Variable<E>> nTuple) {
+	private Map<Integer, Integer> getModifiableDimensions(List<E> randomTest, List<DimensionedItem<E>> nTuple) {
 		// make a list of dimensions that do not appear in nTuple
 		Map<Integer, Integer> dims = new HashMap<>();
 		for (int i = 0; i < randomTest.size(); i++)
@@ -311,7 +311,7 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 	 * constraints.
 	 * nTuple - list of n values selected from available choices
 	 */
-	private List<E> generateRandomTest(List<Variable<E>> nTuple) {
+	private List<E> generateRandomTest(List<DimensionedItem<E>> nTuple) {
 
 		List<E> bestTest = null;
 		int bestCoverage = 1;
@@ -339,7 +339,7 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 		return bestTest;
 	}
 
-	private List<E> findTestSatisfyingAllConstraints(List<Variable<E>> nTuple) {
+	private List<E> findTestSatisfyingAllConstraints(List<DimensionedItem<E>> nTuple) {
 
 		List<List<E>> paramsWithChoices = getInput();
 		List<E> test = null;
@@ -357,10 +357,10 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 		return null;
 	}
 
-	protected void debugPrintTuple(String message, List<Variable<E>> nTuple) {
+	protected void debugPrintTuple(String message, List<DimensionedItem<E>> nTuple) {
 		System.out.println(message);
 
-		for (Variable<E> var : nTuple) {
+		for (DimensionedItem<E> var : nTuple) {
 			System.out.println("   " + var.toString());
 		}
 	}
@@ -380,14 +380,14 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 		}
 	}
 
-	private List<E> createOneTest(List<List<E>> tInput, List<Variable<E>> tuple) {
+	private List<E> createOneTest(List<List<E>> tInput, List<DimensionedItem<E>> tuple) {
 
 		List<E> result = createRandomTest(tInput);
 		return plugInTupleIntoList(tuple, result);
 	}
 
 	private List<E> createOneTest(
-			List<List<E>> tInput, List<Variable<E>> tuple1, List<Variable<E>> tuple2) {
+			List<List<E>> tInput, List<DimensionedItem<E>> tuple1, List<DimensionedItem<E>> tuple2) {
 
 		List<E> result = createRandomTest(tInput);
 		result = plugInTupleIntoList(tuple1, result);
@@ -406,9 +406,9 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 		return result;
 	}
 
-	private List<E> plugInTupleIntoList(List<Variable<E>> nTuple, List<E> listOfItems) {
+	private List<E> plugInTupleIntoList(List<DimensionedItem<E>> nTuple, List<E> listOfItems) {
 
-		for (Variable<E> var : nTuple) {
+		for (DimensionedItem<E> var : nTuple) {
 			listOfItems.set(var.fDimension, var.fItem);
 		}
 
@@ -428,34 +428,34 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 		return (new Tuples<Integer>(dimentions, N)).getAll();
 	}
 
-	private Map<Boolean, Set<List<Variable<E>>>> getAllNTuples() throws GeneratorException {
+	private Map<Boolean, Set<List<DimensionedItem<E>>>> getAllNTuples() throws GeneratorException {
 
 		Set<List<Integer>> allCombs = getAllDimCombs();
-		Map<Boolean, Set<List<Variable<E>>>> allNTuples = new HashMap<>();
-		Set<List<Variable<E>>> validNTuple = new HashSet<>();
-		Set<List<Variable<E>>> unevaluableNTuples = new HashSet<>();
+		Map<Boolean, Set<List<DimensionedItem<E>>>> allNTuples = new HashMap<>();
+		Set<List<DimensionedItem<E>>> validNTuple = new HashSet<>();
+		Set<List<DimensionedItem<E>>> unevaluableNTuples = new HashSet<>();
 		allNTuples.put(true, validNTuple);
 		allNTuples.put(null, unevaluableNTuples);
 
 		for (List<Integer> comb : allCombs) {
-			List<List<Variable<E>>> tempIn = new ArrayList<>();
+			List<List<DimensionedItem<E>>> tempIn = new ArrayList<>();
 			for (int i = 0; i < comb.size(); i++) {
-				List<Variable<E>> values = new ArrayList<>();
+				List<DimensionedItem<E>> values = new ArrayList<>();
 				for (E e : getInput().get(comb.get(i)))
-					values.add(new Variable<E>(comb.get(i), e));
+					values.add(new DimensionedItem<E>(comb.get(i), e));
 				tempIn.add(values);
 			}
 
-			CartesianProductAlgorithm<Variable<E>> cartAlg = new CartesianProductAlgorithm<>();
-			cartAlg.initialize(tempIn, new HashSet<IConstraint<Variable<E>>>(), getGeneratorProgressMonitor());
-			List<Variable<E>> tuple = null;
+			CartesianProductAlgorithm<DimensionedItem<E>> cartAlg = new CartesianProductAlgorithm<>();
+			cartAlg.initialize(tempIn, new HashSet<IConstraint<DimensionedItem<E>>>(), getGeneratorProgressMonitor());
+			List<DimensionedItem<E>> tuple = null;
 			while ((tuple = cartAlg.getNext()) != null) {
 				// Generate a full tuple from this nTuple to make sure that it
 				// is consistent with the constraints
 				List<E> fullTuple = new ArrayList<>();
 				for (int i = 0; i < getInput().size(); i++)
 					fullTuple.add(null);
-				for (Variable<E> var : tuple)
+				for (DimensionedItem<E> var : tuple)
 					fullTuple.set(var.fDimension, var.fItem);
 
 				Boolean check = checkConstraintsOnExtendedNTuple(fullTuple);
@@ -470,7 +470,7 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 	}
 
 	@SuppressWarnings("unchecked")
-	void generateNTuples(Set<List<Integer>> allCombs, Set<List<Variable<E>>> allNTuples) throws GeneratorException {
+	void generateNTuples(Set<List<Integer>> allCombs, Set<List<DimensionedItem<E>>> allNTuples) throws GeneratorException {
 		for (List<Integer> comb : allCombs) {
 			List<List<E>> tempIn = new ArrayList<>();
 			for (int i = 0; i < comb.size(); i++)
@@ -480,20 +480,20 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 			cartAlg.initialize(tempIn, (Collection<IConstraint<E>>) getConstraints(), getGeneratorProgressMonitor());
 			List<E> tuple = null;
 			while ((tuple = cartAlg.getNext()) != null) {
-				List<Variable<E>> extendedTuple = new ArrayList<>();
+				List<DimensionedItem<E>> extendedTuple = new ArrayList<>();
 				for (int i = 0; i < comb.size(); i++)
-					extendedTuple.add(new Variable<>(comb.get(i), tuple.get(i)));
+					extendedTuple.add(new DimensionedItem<>(comb.get(i), tuple.get(i)));
 				allNTuples.add(extendedTuple);
 			}
 		}
 	}
 
-	protected static class Variable<E> {
+	protected static class DimensionedItem<E> {
 
 		int fDimension; // e.g. index of method parameter
 		E fItem;
 
-		public Variable(int dimension, E item) {
+		public DimensionedItem(int dimension, E item) {
 			fDimension = dimension;
 			fItem = item;
 		}
@@ -501,10 +501,10 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 		@Override
 		public boolean equals(Object obj) {
 
-			if (!(obj instanceof Variable))
+			if (!(obj instanceof DimensionedItem))
 				return false;
 
-			Variable<?> var = (Variable<?>) obj;
+			DimensionedItem<?> var = (DimensionedItem<?>) obj;
 
 			if (var.fDimension == this.fDimension && this.fItem.equals(var.fItem)) {
 				return true;
