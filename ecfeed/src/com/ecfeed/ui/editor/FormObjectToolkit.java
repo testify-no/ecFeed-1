@@ -102,45 +102,50 @@ public class FormObjectToolkit {
 		return button;
 	}
 
-	public Combo createReadOnlyGridCombo(Composite parentComposite, ComboSelectionListener selectionListener) {
+	public Combo createReadOnlyGridCombo(
+			Composite parentComposite, 
+			IValueApplier valueApplier) {
+		
 		Combo combo = new Combo(parentComposite, SWT.DROP_DOWN | SWT.READ_ONLY);
-		configureCombo(combo, selectionListener, null);
+		configureCombo(combo, valueApplier);
+		
 		return combo;
 	}
 
 	public Combo createReadWriteGridCombo(
 			Composite parentComposite, 
-			ComboSelectionListener selectionListener, 
-			FocusLostListener focusLostListener) {
+			IValueApplier valueApplier) {
+		
 		Combo combo = new Combo(parentComposite, SWT.DROP_DOWN);
-		configureCombo(combo, selectionListener, focusLostListener);
+		configureCombo(combo, valueApplier);
+		
 		return combo;
 	}	
 
 	private void configureCombo(
-			Combo combo, 
-			ComboSelectionListener selectionListener, 
-			FocusLostListener focusLostListener) {
-
+			Combo combo,
+			IValueApplier valueApplier) {
+		
 		combo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-
-		if (selectionListener != null) {
-			combo.addSelectionListener(selectionListener);
-		}
-
-		if (focusLostListener != null) {
-			combo.addFocusListener(focusLostListener);
-		}
+		
+		ApplyValueForComboListener selectionListener = new ApplyValueForComboListener(valueApplier);
+		combo.addSelectionListener(selectionListener);
+		
+		ApplyValueWhenFocusLostListener focusLostListener = new ApplyValueWhenFocusLostListener(valueApplier); 
+		combo.addFocusListener(focusLostListener);
 	}
 
-	public Button createGridCheckBox(Composite parentComposite, String checkboxLabel, CheckBoxClickListener selectionListener) {
+	public Button createGridCheckBox(
+			Composite parentComposite, 
+			String checkboxLabel,
+			IValueApplier valueApplier) {
+		
 		Button checkbox = fFormToolkit.createButton(parentComposite, checkboxLabel, SWT.CHECK);
 		GridData checkboxGridData = new GridData(SWT.FILL,  SWT.CENTER, true, false);
 		checkbox.setLayoutData(checkboxGridData);
 
-		if (selectionListener != null) {
-			checkbox.addSelectionListener(selectionListener);
-		}
+		ApplyValueWhenSelectionListener selectionListener = new ApplyValueWhenSelectionListener(valueApplier); 
+		checkbox.addSelectionListener(selectionListener);
 
 		return checkbox;
 	}
@@ -212,5 +217,19 @@ public class FormObjectToolkit {
 		}
 
 	}	
+	
+	private class ApplyValueForComboListener extends ComboSelectionListener {
+		
+		IValueApplier fValueApplier;
+		
+		ApplyValueForComboListener(IValueApplier valueApplier) {
+			fValueApplier = valueApplier;
+		}
+		
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			fValueApplier.applyValue();
+		}
+	}
 
 }

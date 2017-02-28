@@ -10,7 +10,6 @@
 
 package com.ecfeed.ui.editor;
 
-import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
@@ -45,18 +44,10 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 		}
 	}	
 
-	private class SetTypeListener extends ComboSelectionListener {
-		@Override
-		public void widgetSelected(SelectionEvent e) {
-			getParameterIf().setType(fTypeCombo.getText());
-			fTypeCombo.setText(getParameterIf().getType());
-		}
-	}
-
-	private class TypeFocusLostListener extends FocusLostListener {
+	private class TypeApplier implements IValueApplier {
 
 		@Override
-		public void focusLost(FocusEvent e) {
+		public void applyValue() {
 			getParameterIf().setType(fTypeCombo.getText());
 			fTypeCombo.setText(getParameterIf().getType());
 		}
@@ -167,15 +158,14 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 
 	private void createParameterTypeCombo(FormObjectToolkit formObjectToolkit) {
 
-		SetTypeListener setTypeListener = new SetTypeListener();
-		TypeFocusLostListener typeFocusLostListener = new TypeFocusLostListener();
+		TypeApplier typeApplier = new TypeApplier();
 
 		if (fFileInfoProvider.isProjectAvailable()) {
 			fTypeCombo = formObjectToolkit.createReadWriteGridCombo(
-					fAttributesComposite, setTypeListener, typeFocusLostListener);
+					fAttributesComposite, typeApplier);
 		} else {
 			fTypeCombo = formObjectToolkit.createReadOnlyGridCombo(
-					fAttributesComposite, setTypeListener);
+					fAttributesComposite, typeApplier);
 		}
 	}
 

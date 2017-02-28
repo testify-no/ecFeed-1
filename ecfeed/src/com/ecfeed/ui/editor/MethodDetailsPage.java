@@ -166,14 +166,16 @@ public class MethodDetailsPage extends BasicDetailsPage {
 
 		formObjectToolkit.createLabel(gridComposite, "Runner");
 
-		fRunnerCombo = formObjectToolkit.createReadOnlyGridCombo(gridComposite, new RunnerChangedAdapter());
+		fRunnerCombo = formObjectToolkit.createReadOnlyGridCombo(gridComposite, new RunnerApplier());
 		fRunnerCombo.setItems(NodePropertyDefs.getValueSet(fRunnerPropertyId, null).getPossibleValues()); 
 		fRunnerCombo.setText(NodePropertyDefs.getPropertyDefaultValue(fRunnerPropertyId, null));
 	}	
 
-	private class RunnerChangedAdapter extends ComboSelectionListener {
+	private class RunnerApplier implements IValueApplier {
+
 		@Override
-		public void widgetSelected(SelectionEvent e) {
+		public void applyValue() {
+			
 			fMethodInterface.setProperty(fRunnerPropertyId, fRunnerCombo.getText());
 		}
 	}	

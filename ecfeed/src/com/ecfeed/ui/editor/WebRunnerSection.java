@@ -77,14 +77,14 @@ public class WebRunnerSection extends BasicSection  {
 		fFormObjectToolkit.createEmptyLabel(gridComposite);
 		fMapBrowserCheckbox = 
 				fFormObjectToolkit.createGridCheckBox(
-						gridComposite, "Map browser to method parameter", new SetMapBrowserListener());
+						gridComposite, "Map browser to method parameter", new MapBrowserApplier());
 		fFormObjectToolkit.setHorizontalSpan(fMapBrowserCheckbox, 2);
 	}
 
 	private void createBrowserCombo(Composite gridComposite) {
 
 		fFormObjectToolkit.createLabel(gridComposite, "Browser");
-		fBrowserCombo = fFormObjectToolkit.createReadOnlyGridCombo(gridComposite, new BrowserChangedAdapter());
+		fBrowserCombo = fFormObjectToolkit.createReadOnlyGridCombo(gridComposite, new BrowserApplier());
 		fBrowserCombo.setItems(NodePropertyDefs.getValueSet(fBrowserPropertyId, null).getPossibleValues());
 		fFormObjectToolkit.setHorizontalSpan(fBrowserCombo, 2);
 	}
@@ -101,7 +101,7 @@ public class WebRunnerSection extends BasicSection  {
 		fFormObjectToolkit.createEmptyLabel(gridComposite);
 		fMapStartUrlCheckbox = 
 				fFormObjectToolkit.createGridCheckBox(
-						gridComposite, "Map start URL to method parameter", new SetMapStartUrlListener());
+						gridComposite, "Map start URL to method parameter", new MapStartUrlApplier());
 		fFormObjectToolkit.setHorizontalSpan(fMapStartUrlCheckbox, 2);
 	}
 
@@ -173,11 +173,11 @@ public class WebRunnerSection extends BasicSection  {
 		checkBox.setSelection(isSelected);
 	}
 
-	private class SetMapBrowserListener extends CheckBoxClickListener {
+	private class MapBrowserApplier implements IValueApplier {
 
 		@Override
-		public void widgetSelected(SelectionEvent e) {
-
+		public void applyValue() {
+			
 			boolean selected = fMapBrowserCheckbox.getSelection();
 
 			if (fSectionEnabled) {
@@ -190,11 +190,11 @@ public class WebRunnerSection extends BasicSection  {
 		}
 	}	
 
-	private class SetMapStartUrlListener extends CheckBoxClickListener {
+	private class MapStartUrlApplier implements IValueApplier {
 
 		@Override
-		public void widgetSelected(SelectionEvent e) {
-
+		public void applyValue() {
+			
 			boolean selected = fMapStartUrlCheckbox.getSelection();
 
 			if (fSectionEnabled) {
@@ -207,18 +207,20 @@ public class WebRunnerSection extends BasicSection  {
 		}
 	}	
 
-	private class BrowserChangedAdapter extends ComboSelectionListener {
+	private class BrowserApplier implements IValueApplier {
 
 		@Override
-		public void widgetSelected(SelectionEvent e) {
+		public void applyValue() {
+			
 			fMethodInterface.setProperty(fBrowserPropertyId, fBrowserCombo.getText());
 		}
 	}
-
+	
 	private class BrowserDriverApplier implements IValueApplier {
 
 		@Override
 		public void applyValue() {
+			
 			fMethodInterface.setProperty(fBrowserDriverPropertyId, fBrowserDriverText.getText());
 		}
 	}	
@@ -240,6 +242,7 @@ public class WebRunnerSection extends BasicSection  {
 
 		@Override
 		public void applyValue() {
+			
 			fMethodInterface.setProperty(fStartUrlPropertyId, fStartUrlText.getText());
 		}
 	}

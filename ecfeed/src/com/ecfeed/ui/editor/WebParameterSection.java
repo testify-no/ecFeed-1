@@ -10,7 +10,6 @@
 
 package com.ecfeed.ui.editor;
 
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
@@ -76,10 +75,10 @@ public class WebParameterSection extends BasicSection {
 
 		//
 		fFormObjectToolkit.createLabel(fGridComposite, "Element type");
-		fWebElementTypeCombo = fFormObjectToolkit.createReadOnlyGridCombo(fGridComposite, new ElementTypeChangedAdapter());
+		fWebElementTypeCombo = fFormObjectToolkit.createReadOnlyGridCombo(fGridComposite, new ElementTypeApplier());
 
 		//
-		fOptionalCheckbox = fFormObjectToolkit.createGridCheckBox(fGridComposite, "Optional", new OptionalChangedAdapter() );
+		fOptionalCheckbox = fFormObjectToolkit.createGridCheckBox(fGridComposite, "Optional", new OptionalValueApplier() );
 		fOptionalCheckbox.setEnabled(false);
 		setParamsForTheFirstColumn(fOptionalCheckbox);
 
@@ -90,14 +89,14 @@ public class WebParameterSection extends BasicSection {
 		fFormObjectToolkit.createSpacer(fGridComposite, 1);
 
 		//
-		fFindByElemTypeCombo = fFormObjectToolkit.createReadOnlyGridCombo(fGridComposite, new FindByTypeChangedAdapter());
+		fFindByElemTypeCombo = fFormObjectToolkit.createReadOnlyGridCombo(fGridComposite, new FindByTypeApplier());
 		setParamsForTheFirstColumn(fFindByElemTypeCombo);
 
 		fFindByElemValueText = fFormObjectToolkit.createGridText(fGridComposite, new FindByValueApplier());
 
 		//
 		fFormObjectToolkit.createLabel(fGridComposite, "Action ");
-		fActionCombo = fFormObjectToolkit.createReadOnlyGridCombo(fGridComposite, new ActionChangedAdapter());
+		fActionCombo = fFormObjectToolkit.createReadOnlyGridCombo(fGridComposite, new ActionApplier());
 	}
 
 	private void setParamsForTheFirstColumn(Control control) {
@@ -314,10 +313,11 @@ public class WebParameterSection extends BasicSection {
 		refreshCombo(fActionCombo, valueSet, webElementType, currentPropertyValue);
 	}	
 
-	private class ElementTypeChangedAdapter extends ComboSelectionListener {
-		@Override
-		public void widgetSelected(SelectionEvent e) {
+	private class ElementTypeApplier implements IValueApplier {
 
+		@Override
+		public void applyValue() {
+			
 			String webElementType = fWebElementTypeCombo.getText();
 			fAbstractParameterInterface.setProperty(fWebElementTypePropertyId, webElementType);
 
@@ -325,10 +325,11 @@ public class WebParameterSection extends BasicSection {
 			refreshAction(webElementType);
 		}
 	}
+	
+	private class FindByTypeApplier implements IValueApplier {
 
-	private class FindByTypeChangedAdapter extends ComboSelectionListener {
 		@Override
-		public void widgetSelected(SelectionEvent e) {
+		public void applyValue() {
 			fAbstractParameterInterface.setProperty(fFindByElemTypePropertyId, fFindByElemTypeCombo.getText());
 		}
 	}
@@ -341,16 +342,20 @@ public class WebParameterSection extends BasicSection {
 		}
 	}	
 
-	private class ActionChangedAdapter extends ComboSelectionListener {
+	private class ActionApplier implements IValueApplier {
+
 		@Override
-		public void widgetSelected(SelectionEvent e) {
+		public void applyValue() {
+			
 			fAbstractParameterInterface.setProperty(fActionPropertyId, fActionCombo.getText());
 		}
-	}
+	}	
 
-	private class OptionalChangedAdapter extends CheckBoxClickListener {
+	private class OptionalValueApplier implements IValueApplier {
+
 		@Override
-		public void widgetSelected(SelectionEvent e) {
+		public void applyValue() {
+			
 			String isOptionalStr = BooleanHelper.toString(fOptionalCheckbox.getSelection());
 			fAbstractParameterInterface.setProperty(fOptionalPropertyId, isOptionalStr);
 		}
