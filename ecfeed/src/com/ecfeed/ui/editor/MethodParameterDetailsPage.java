@@ -59,21 +59,25 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 		}
 	}	
 
-	private class SetExpectedListener extends CheckBoxClickListener {
+	private class ExpectedApplier implements IValueApplier {
+
 		@Override
-		public void widgetSelected(SelectionEvent e) {
+		public void applyValue() {
+
 			fParameterIf.setExpected(fExpectedCheckbox.getSelection());
 			fExpectedCheckbox.setSelection(fParameterIf.isExpected());
 		}
 	}
 
-	private class SetLinkedListener extends CheckBoxClickListener {
+	private class LinkedApplier implements IValueApplier {
+
 		@Override
-		public void widgetSelected(SelectionEvent e) {
+		public void applyValue() {
+
 			fParameterIf.setLinked(fLinkedCheckbox.getSelection());
 			fLinkedCheckbox.setSelection(fParameterIf.isLinked());
 		}
-	}
+	}	
 
 	private class SetLinkListener extends ComboSelectionListener {
 		@Override
@@ -84,7 +88,6 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 			fLinkCombo.setText(linkName(fParameterIf.getLink()));
 		}
 	}
-
 
 	public MethodParameterDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext,
 			IFileInfoProvider fileInfoProvider) {
@@ -110,15 +113,17 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 	protected Composite createAttributesComposite(){
 		Composite attributesComposite = super.createAttributesComposite();
 
-		GridData checkboxGridData = new GridData(SWT.FILL,  SWT.CENTER, true, false);
-		checkboxGridData.horizontalSpan = 3;
+		FormObjectToolkit formObjectToolkit = getFormObjectToolkit(); 
 
 		GridData comboGridData = new GridData(SWT.FILL,  SWT.CENTER, true, false);
 		comboGridData.horizontalSpan = 2;
 
-		fExpectedCheckbox = getToolkit().createButton(attributesComposite, "Expected", SWT.CHECK);
-		fExpectedCheckbox.setLayoutData(checkboxGridData);
-		fExpectedCheckbox.addSelectionListener(new SetExpectedListener());
+		fExpectedCheckbox = 
+				formObjectToolkit.createGridCheckBox(
+						attributesComposite, "Expected", new ExpectedApplier());
+
+		formObjectToolkit.setHorizontalSpan(fExpectedCheckbox, 3);
+
 
 		getToolkit().createLabel(attributesComposite, "Default value: ", SWT.NONE);
 		fDefaultValueComboComposite = getToolkit().createComposite(attributesComposite);
@@ -128,9 +133,12 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 		fDefaultValueComboComposite.setLayout(gl);
 		fDefaultValueComboComposite.setLayoutData(comboGridData);
 
-		fLinkedCheckbox = getToolkit().createButton(attributesComposite, "Linked", SWT.CHECK);
-		fLinkedCheckbox.setLayoutData(checkboxGridData);
-		fLinkedCheckbox.addSelectionListener(new SetLinkedListener());
+		fLinkedCheckbox = 
+				formObjectToolkit.createGridCheckBox(
+						attributesComposite, "Linked", new LinkedApplier());
+
+		formObjectToolkit.setHorizontalSpan(fLinkedCheckbox, 3);
+
 
 		getToolkit().createLabel(attributesComposite, "Parameter link: ", SWT.NONE);
 

@@ -84,11 +84,11 @@ public class FormObjectToolkit {
 		ApplyValueWhenSelectionListener onApplyListener = 
 				new ApplyValueWhenSelectionListener(valueApplier);
 		text.addSelectionListener(onApplyListener);
-		
+
 		OnSaveKeyListener onSaveKeyListener = 
 				new OnSaveKeyListener(valueApplier);
 		text.addKeyListener(onSaveKeyListener);
-		
+
 		return text;
 	}	
 
@@ -105,32 +105,32 @@ public class FormObjectToolkit {
 	public Combo createReadOnlyGridCombo(
 			Composite parentComposite, 
 			IValueApplier valueApplier) {
-		
+
 		Combo combo = new Combo(parentComposite, SWT.DROP_DOWN | SWT.READ_ONLY);
 		configureCombo(combo, valueApplier);
-		
+
 		return combo;
 	}
 
 	public Combo createReadWriteGridCombo(
 			Composite parentComposite, 
 			IValueApplier valueApplier) {
-		
+
 		Combo combo = new Combo(parentComposite, SWT.DROP_DOWN);
 		configureCombo(combo, valueApplier);
-		
+
 		return combo;
 	}	
 
 	private void configureCombo(
 			Combo combo,
 			IValueApplier valueApplier) {
-		
+
 		combo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		
+
 		ApplyValueForComboListener selectionListener = new ApplyValueForComboListener(valueApplier);
 		combo.addSelectionListener(selectionListener);
-		
+
 		ApplyValueWhenFocusLostListener focusLostListener = new ApplyValueWhenFocusLostListener(valueApplier); 
 		combo.addFocusListener(focusLostListener);
 	}
@@ -139,9 +139,9 @@ public class FormObjectToolkit {
 			Composite parentComposite, 
 			String checkboxLabel,
 			IValueApplier valueApplier) {
-		
+
 		Button checkbox = fFormToolkit.createButton(parentComposite, checkboxLabel, SWT.CHECK);
-		GridData checkboxGridData = new GridData(SWT.FILL,  SWT.CENTER, true, false);
+		GridData checkboxGridData = new GridData(SWT.FILL, SWT.CENTER, true, false);
 		checkbox.setLayoutData(checkboxGridData);
 
 		ApplyValueWhenSelectionListener selectionListener = new ApplyValueWhenSelectionListener(valueApplier); 
@@ -189,9 +189,9 @@ public class FormObjectToolkit {
 	}
 
 	private class ApplyValueWhenFocusLostListener extends FocusLostListener {
-		
+
 		IValueApplier fValueApplier;
-		
+
 		ApplyValueWhenFocusLostListener(IValueApplier valueApplier) {
 			fValueApplier = valueApplier;
 		}
@@ -200,32 +200,32 @@ public class FormObjectToolkit {
 		public void focusLost(FocusEvent e) {
 			fValueApplier.applyValue();
 		}
-		
+
 	}
-	
+
 	private class ApplyValueWhenSelectionListener extends AbstractSelectionAdapter {
 
 		IValueApplier fValueApplier;
-		
+
 		ApplyValueWhenSelectionListener(IValueApplier valueApplier) {
 			fValueApplier = valueApplier;
 		}
-		
+
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			fValueApplier.applyValue();
 		}
 
 	}	
-	
+
 	private class ApplyValueForComboListener extends ComboSelectionListener {
-		
+
 		IValueApplier fValueApplier;
-		
+
 		ApplyValueForComboListener(IValueApplier valueApplier) {
 			fValueApplier = valueApplier;
 		}
-		
+
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			fValueApplier.applyValue();

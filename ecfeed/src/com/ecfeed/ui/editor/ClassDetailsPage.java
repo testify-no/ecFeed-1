@@ -101,9 +101,11 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		}
 	}	
 
-	private class RunOnAndroidCheckBoxAdapter extends CheckBoxClickListener {
+	private class RunOnAndroidApplier implements IValueApplier {
+
 		@Override
-		public void widgetSelected(SelectionEvent e) {
+		public void applyValue() {
+
 			boolean selection = fRunOnAndroidCheckbox.getSelection();
 			fClassIf.setRunOnAndroid(selection);
 
@@ -111,9 +113,10 @@ public class ClassDetailsPage extends BasicDetailsPage {
 				adjustAndroidBaseRunner();
 			}
 			refresh();
-		}
+		}		
 
 		private void adjustAndroidBaseRunner() {
+
 			final String defaultBaseAndroidBaseRunner = 
 					AndroidBaseRunnerHelper.getDefaultAndroidBaseRunnerName();
 
@@ -128,7 +131,9 @@ public class ClassDetailsPage extends BasicDetailsPage {
 				fClassIf.setAndroidBaseRunner(defaultBaseAndroidBaseRunner);
 			}
 		}
+
 	}
+
 
 	public ClassDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider) {
 		super(masterSection, updateContext, fileInfoProvider);
@@ -200,18 +205,22 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	}
 
 	private void initAndFillAndroidComposite(Composite composite) {
+
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 
 		// row 1
 
 		// col 1 and 2
-		fRunOnAndroidCheckbox = getToolkit().createButton(composite, "Run on Android", SWT.CHECK);
 
-		GridData checkboxGridData = new GridData(SWT.FILL,  SWT.CENTER, true, false);
-		checkboxGridData.horizontalSpan = 2;
-		fRunOnAndroidCheckbox.setLayoutData(checkboxGridData);
-		fRunOnAndroidCheckbox.addSelectionListener(new RunOnAndroidCheckBoxAdapter());
+		FormObjectToolkit formObjectToolkit = getFormObjectToolkit();
+
+		fRunOnAndroidCheckbox = 
+				formObjectToolkit.createGridCheckBox(
+						composite, "Run on Android", new RunOnAndroidApplier());
+
+		formObjectToolkit.setHorizontalSpan(fRunOnAndroidCheckbox, 2);
+
 
 		// row 2
 
