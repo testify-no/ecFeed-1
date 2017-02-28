@@ -10,8 +10,10 @@
 package com.ecfeed.ui.editor;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
@@ -70,16 +72,23 @@ public class FormObjectToolkit {
 		return label;
 	}
 
-	public Text createGridText(Composite parentGridComposite, FocusLostListener focusLostListener) {
+	public Text createGridText(Composite parentGridComposite, IValueApplier valueApplier) {
+
 		Text text = fFormToolkit.createText(parentGridComposite, null, SWT.NONE);
 		text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
-		if (focusLostListener != null) {
-			TypedListener typedListener = new TypedListener(focusLostListener);
-			text.addListener(SWT.FocusOut, typedListener);
-		}
+		TypedListener onLostFocusListener = 
+				new TypedListener(new ApplyValueWhenFocusLostListener(valueApplier));
+		text.addListener(SWT.FocusOut, onLostFocusListener);
 
-		text.addKeyListener(new SaveKeyListener(focusLostListener));
+		ApplyValueWhenSelectionListener onApplyListener = 
+				new ApplyValueWhenSelectionListener(valueApplier);
+		text.addSelectionListener(onApplyListener);
+		
+		OnSaveKeyListener onSaveKeyListener = 
+				new OnSaveKeyListener(valueApplier);
+		text.addKeyListener(onSaveKeyListener);
+		
 		return text;
 	}	
 
@@ -145,12 +154,12 @@ public class FormObjectToolkit {
 		gridData.horizontalSpan = span;
 	}
 
-	private class SaveKeyListener implements KeyListener {
+	private class OnSaveKeyListener implements KeyListener {
 
-		FocusLostListener fFocusLostListener;
+		IValueApplier fValueApplier;
 
-		public SaveKeyListener(FocusLostListener focusLostListener) {
-			fFocusLostListener = focusLostListener;
+		public OnSaveKeyListener(IValueApplier valueApplier) {
+			fValueApplier = valueApplier;
 		}
 
 		@Override
@@ -168,10 +177,40 @@ public class FormObjectToolkit {
 				return;
 			}
 
-			fFocusLostListener.focusLost(null);
+			fValueApplier.applyValue();
 			ModelEditorHelper.saveActiveEditor();
 		}
 
 	}
+
+	private class ApplyValueWhenFocusLostListener extends FocusLostListener {
+		
+		IValueApplier fValueApplier;
+		
+		ApplyValueWhenFocusLostListener(IValueApplier valueApplier) {
+			fValueApplier = valueApplier;
+		}
+
+		@Override
+		public void focusLost(FocusEvent e) {
+			fValueApplier.applyValue();
+		}
+		
+	}
+	
+	private class ApplyValueWhenSelectionListener extends AbstractSelectionAdapter {
+
+		IValueApplier fValueApplier;
+		
+		ApplyValueWhenSelectionListener(IValueApplier valueApplier) {
+			fValueApplier = valueApplier;
+		}
+		
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			fValueApplier.applyValue();
+		}
+
+	}	
 
 }

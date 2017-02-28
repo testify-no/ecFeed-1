@@ -11,7 +11,6 @@
 package com.ecfeed.ui.editor;
 
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IFormPart;
@@ -70,7 +69,7 @@ public class ModelDetailsPage extends BasicDetailsPage {
 		Composite composite = formObjectToolkit.createGridComposite(parent, 2);		
 
 		formObjectToolkit.createLabel(composite, "Model name");
-		fModelNameText = formObjectToolkit.createGridText(composite, new ModelNameFocusLostListener());
+		fModelNameText = formObjectToolkit.createGridText(composite, new ModelNameApplier());
 		formObjectToolkit.paintBorders(composite);
 	}
 
@@ -103,10 +102,10 @@ public class ModelDetailsPage extends BasicDetailsPage {
 		return RootNode.class;
 	}
 	
-	private class ModelNameFocusLostListener extends FocusLostListener{
+	private class ModelNameApplier implements IValueApplier{
 
 		@Override
-		public void focusLost(FocusEvent e) {
+		public void applyValue() {
 			fRootIf.setName(fModelNameText.getText());
 			fModelNameText.setText(fRootIf.getName());
 		}

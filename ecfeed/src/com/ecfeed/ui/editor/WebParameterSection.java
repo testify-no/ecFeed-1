@@ -10,7 +10,6 @@
 
 package com.ecfeed.ui.editor;
 
-import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
@@ -94,7 +93,7 @@ public class WebParameterSection extends BasicSection {
 		fFindByElemTypeCombo = fFormObjectToolkit.createReadOnlyGridCombo(fGridComposite, new FindByTypeChangedAdapter());
 		setParamsForTheFirstColumn(fFindByElemTypeCombo);
 
-		fFindByElemValueText = fFormObjectToolkit.createGridText(fGridComposite, new FindByValueFocusLostListener());
+		fFindByElemValueText = fFormObjectToolkit.createGridText(fGridComposite, new FindByValueApplier());
 
 		//
 		fFormObjectToolkit.createLabel(fGridComposite, "Action ");
@@ -334,10 +333,10 @@ public class WebParameterSection extends BasicSection {
 		}
 	}
 
-	private class FindByValueFocusLostListener extends FocusLostListener {
+	private class FindByValueApplier implements IValueApplier {
 
 		@Override
-		public void focusLost(FocusEvent e) {
+		public void applyValue() {
 			fAbstractParameterInterface.setProperty(fFindByElemValuePropertyId, fFindByElemValueText.getText());
 		}
 	}	

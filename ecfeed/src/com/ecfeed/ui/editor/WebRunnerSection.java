@@ -10,7 +10,6 @@
 
 package com.ecfeed.ui.editor;
 
-import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
@@ -93,7 +92,7 @@ public class WebRunnerSection extends BasicSection  {
 	private void createBrowserDriverPathText(Composite gridComposite) {
 
 		fFormObjectToolkit.createLabel(gridComposite, "Web driver  ");
-		fBrowserDriverText = fFormObjectToolkit.createGridText(gridComposite, new BrowserDriverFocusLostListener());
+		fBrowserDriverText = fFormObjectToolkit.createGridText(gridComposite, new BrowserDriverApplier());
 		fFormObjectToolkit.createButton(gridComposite, "Browse...", new BrowseButtonSelectionAdapter());
 	}
 
@@ -109,7 +108,7 @@ public class WebRunnerSection extends BasicSection  {
 	private void createUrlText(Composite gridComposite) {
 
 		fFormObjectToolkit.createLabel(gridComposite, "Start URL");
-		fStartUrlText = fFormObjectToolkit.createGridText(gridComposite, new UrlFocusLostListener());
+		fStartUrlText = fFormObjectToolkit.createGridText(gridComposite, new UrlApplier());
 
 		fFormObjectToolkit.setHorizontalSpan(fStartUrlText, 2);
 	}
@@ -216,10 +215,10 @@ public class WebRunnerSection extends BasicSection  {
 		}
 	}
 
-	private class BrowserDriverFocusLostListener extends FocusLostListener {
+	private class BrowserDriverApplier implements IValueApplier {
 
 		@Override
-		public void focusLost(FocusEvent e) {
+		public void applyValue() {
 			fMethodInterface.setProperty(fBrowserDriverPropertyId, fBrowserDriverText.getText());
 		}
 	}	
@@ -237,10 +236,10 @@ public class WebRunnerSection extends BasicSection  {
 		}
 	}
 
-	private class UrlFocusLostListener extends FocusLostListener {
+	private class UrlApplier implements IValueApplier {
 
 		@Override
-		public void focusLost(FocusEvent e) {
+		public void applyValue() {
 			fMethodInterface.setProperty(fStartUrlPropertyId, fStartUrlText.getText());
 		}
 	}

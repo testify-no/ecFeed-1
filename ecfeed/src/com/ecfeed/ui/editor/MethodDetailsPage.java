@@ -10,7 +10,6 @@
 
 package com.ecfeed.ui.editor;
 
-import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
@@ -76,10 +75,10 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		}
 	}
 
-	private class MethodNameFocusLostListener extends FocusLostListener {
+	private class MethodNameApplier implements IValueApplier {
 
 		@Override
-		public void focusLost(FocusEvent e) {
+		public void applyValue() {
 			fMethodInterface.setName(fMethodNameText.getText());
 			fMethodNameText.setText(fMethodInterface.getName());
 		}
@@ -135,7 +134,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 
 		getFormObjectToolkit().createLabel(gridComposite, "Method name ");
 		fMethodNameText = getFormObjectToolkit().createGridText(gridComposite,
-				new MethodNameFocusLostListener());
+				new MethodNameApplier());
 
 		if (fileInfoProvider.isProjectAvailable()) {
 			fBrowseButton = getFormObjectToolkit().createButton(gridComposite,

@@ -147,7 +147,7 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		fAttributesComposite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 
 		getFormObjectToolkit().createLabel(fAttributesComposite, "Name");
-		fNameText = getFormObjectToolkit().createGridText(fAttributesComposite, new NameFocusLostListener());
+		fNameText = getFormObjectToolkit().createGridText(fAttributesComposite, new NameApplier());
 
 		getFormObjectToolkit().createLabel(fAttributesComposite, "Value");
 		getFormObjectToolkit().paintBorders(fAttributesComposite);
@@ -158,10 +158,10 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		return ChoiceNode.class;
 	}
 
-	private class NameFocusLostListener extends FocusLostListener {
+	private class NameApplier implements IValueApplier {
 
 		@Override
-		public void focusLost(FocusEvent e) {
+		public void applyValue() {
 			fChoiceIf.setName(fNameText.getText());
 			fNameText.setText(fChoiceIf.getName());
 		}

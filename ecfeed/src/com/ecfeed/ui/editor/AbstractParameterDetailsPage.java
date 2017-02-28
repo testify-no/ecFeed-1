@@ -36,10 +36,10 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 	private WebParameterSection fWebParameterSection;
 	private AbstractParameterCommentsSection fCommentsSection;
 
-	private class NameFocusLostListener extends FocusLostListener {
+	private class NameApplier implements IValueApplier {
 
 		@Override
-		public void focusLost(FocusEvent e) {
+		public void applyValue() {
 			getParameterIf().setName(fNameText.getText());
 			fNameText.setText(getParameterIf().getName());
 		}
@@ -150,7 +150,7 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 
 
 		formObjectToolkit.createLabel(fAttributesComposite, "Parameter name: ");
-		fNameText = formObjectToolkit.createGridText(fAttributesComposite, new NameFocusLostListener());
+		fNameText = formObjectToolkit.createGridText(fAttributesComposite, new NameApplier());
 		formObjectToolkit.setHorizontalSpan(fNameText, 2);
 
 

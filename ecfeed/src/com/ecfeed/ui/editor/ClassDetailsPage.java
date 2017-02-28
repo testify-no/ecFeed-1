@@ -83,19 +83,19 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		}
 	}	
 
-	private class ClassNameFocusLostListener extends FocusLostListener {
+	private class ClassNameApplier implements IValueApplier {
 
 		@Override
-		public void focusLost(FocusEvent e) {
+		public void applyValue() {
 			fClassIf.setLocalName(fClassNameText.getText());
 			fClassNameText.setText(fClassIf.getLocalName());
 		}
 	}	
 
-	private class PackageNameFocusLostListener extends FocusLostListener {
+	private class PackageNameApplier implements IValueApplier {
 
 		@Override
-		public void focusLost(FocusEvent e) {
+		public void applyValue() {
 			fClassIf.setPackageName(fPackageNameText.getText());
 			fPackageNameText.setText(fClassIf.getPackageName());
 		}
@@ -186,12 +186,12 @@ public class ClassDetailsPage extends BasicDetailsPage {
 
 
 		formObjectToolkit.createLabel(composite, "Package name");
-		fPackageNameText = formObjectToolkit.createGridText(composite, new PackageNameFocusLostListener());
+		fPackageNameText = formObjectToolkit.createGridText(composite, new PackageNameApplier());
 		formObjectToolkit.createEmptyLabel(composite);
 
 
 		formObjectToolkit.createLabel(composite, "Class name");
-		fClassNameText = formObjectToolkit.createGridText(composite, new ClassNameFocusLostListener());
+		fClassNameText = formObjectToolkit.createGridText(composite, new ClassNameApplier());
 		if (fFileInfoProvider.isProjectAvailable()) {
 			formObjectToolkit.createButton(composite, "Browse...", new BrowseClassesSelectionListener());
 		}
