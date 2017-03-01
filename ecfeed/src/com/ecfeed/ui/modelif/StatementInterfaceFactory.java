@@ -19,6 +19,7 @@ import com.ecfeed.core.model.StatementArray;
 import com.ecfeed.core.model.StaticStatement;
 import com.ecfeed.core.model.ChoiceCondition;
 import com.ecfeed.core.model.LabelCondition;
+import com.ecfeed.core.model.ValueCondition;
 
 public class StatementInterfaceFactory{
 
@@ -71,6 +72,11 @@ public class StatementInterfaceFactory{
 
 		@Override
 		public Object visit(ParameterCondition condition) throws Exception {
+			return null;
+		}
+
+		@Override
+		public Object visit(ValueCondition condition) throws Exception {
 			return null;
 		}
 	}

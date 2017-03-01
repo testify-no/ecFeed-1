@@ -181,8 +181,8 @@ public class EctSerializerTest {
 		methodNode.addParameter(parameter);
 
 		Constraint constraint = new Constraint(
-				new RelationStatement(parameter, EStatementRelation.EQUAL, choice),
-				new RelationStatement(parameter, EStatementRelation.EQUAL, choice));
+				RelationStatement.createStatementWithChoiceCondition(parameter, EStatementRelation.EQUAL, choice),
+				RelationStatement.createStatementWithChoiceCondition(parameter, EStatementRelation.EQUAL, choice));
 
 		ConstraintNode constraintNode = new ConstraintNode("name1", constraint);
 		methodNode.addConstraint(constraintNode);

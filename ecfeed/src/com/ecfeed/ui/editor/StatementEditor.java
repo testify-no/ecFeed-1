@@ -45,6 +45,7 @@ import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.StatementArray;
 import com.ecfeed.core.model.StatementConditionHelper;
 import com.ecfeed.core.model.StaticStatement;
+import com.ecfeed.core.model.ValueCondition;
 import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.modelif.AbstractParameterInterface;
@@ -265,10 +266,11 @@ public class StatementEditor extends Composite {
 			for (ChoiceNode choice : allChoices) {
 
 				IStatementCondition condition = 
-						new RelationStatement(
+						RelationStatement.createStatementWithChoiceCondition(
 								methodParameterNode, EStatementRelation.EQUAL, choice).getCondition();
 
-				inOutConditions.add(condition.toString());
+				String description = condition.toString();
+				inOutConditions.add(description);
 			}
 		}
 
@@ -279,7 +281,7 @@ public class StatementEditor extends Composite {
 			for (String label : allLabels) {
 
 				IStatementCondition condition = 
-						new RelationStatement(
+						RelationStatement.createStatementWithLabelCondition(
 								methodParameterNode, EStatementRelation.EQUAL, label).getCondition();
 
 				inOutConditions.add(condition.toString());
@@ -310,6 +312,11 @@ public class StatementEditor extends Composite {
 
 		@Override
 		public Object visit(ParameterCondition condition) throws Exception {
+			return new String[]{};
+		}
+
+		@Override
+		public Object visit(ValueCondition condition) throws Exception {
 			return new String[]{};
 		}
 	}
@@ -351,6 +358,11 @@ public class StatementEditor extends Composite {
 			return "";
 		}
 
+		@Override
+		public Object visit(ValueCondition condition) throws Exception {
+			return null;
+		}
+
 	}
 
 	private class ConditionComboListener implements SelectionListener {
@@ -367,7 +379,7 @@ public class StatementEditor extends Composite {
 
 		protected void applyNewValue() {
 
-			fStatementIf.setConditionValue(fConditionCombo.getText());
+			fStatementIf.setNewCondition(fConditionCombo.getText());
 			String newText = fStatementIf.getConditionValue();
 			fConditionCombo.setText(newText);
 			refreshRelations();
@@ -393,7 +405,7 @@ public class StatementEditor extends Composite {
 		@Override
 		public void focusLost(FocusEvent e) {
 
-			fStatementIf.setConditionValue(fConditionCombo.getText());
+			fStatementIf.setNewCondition(fConditionCombo.getText());
 			String newText = fStatementIf.getConditionValue();
 			fConditionCombo.setText(newText);
 		}
@@ -460,8 +472,8 @@ public class StatementEditor extends Composite {
 			}
 			else if (parameter != null && parameter.getChoices().size() > 0) {
 
-				ChoiceNode condition = parameter.getChoices().get(0);
-				return new RelationStatement(parameter, relation, condition);
+				ChoiceNode choiceNode = parameter.getChoices().get(0);
+				return RelationStatement.createStatementWithChoiceCondition(parameter, relation, choiceNode);
 			}
 
 			return null;
@@ -539,7 +551,7 @@ public class StatementEditor extends Composite {
 		public Object visit(RelationStatement statement) throws Exception {
 
 			disposeRightOperandComposite();
-			fRightOperandComposite = fConditionCombo = new ComboViewer(StatementEditor.this).getCombo();
+			fRightOperandComposite = fConditionCombo = new ComboViewer(StatementEditor.this, SWT.BORDER).getCombo();
 
 			prepareRelationalStatementEditor(
 					statement, 
@@ -585,6 +597,11 @@ public class StatementEditor extends Composite {
 			fConditionCombo.addFocusListener(new ConditionComboFocusLostListener());
 
 			StatementEditor.this.layout();
+		}
+
+		@Override
+		public Object visit(ValueCondition condition) throws Exception {
+			return null;
 		}
 
 	}

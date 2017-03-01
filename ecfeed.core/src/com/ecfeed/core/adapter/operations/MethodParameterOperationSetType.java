@@ -39,6 +39,7 @@ import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.model.StatementArray;
 import com.ecfeed.core.model.StaticStatement;
 import com.ecfeed.core.model.TestCaseNode;
+import com.ecfeed.core.model.ValueCondition;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.SystemLogger;
 
@@ -127,6 +128,11 @@ public class MethodParameterOperationSetType extends BulkOperation {
 			public Object visit(ParameterCondition condition) throws Exception {
 				return true;
 			}
+
+			@Override
+			public Object visit(ValueCondition condition) throws Exception {
+				return null;
+			}
 		}
 
 		private class ReverseSetTypeOperation extends AbstractParameterOperationSetType.ReverseOperation{
@@ -178,6 +184,11 @@ public class MethodParameterOperationSetType extends BulkOperation {
 				@Override
 				public Object visit(ParameterCondition condition)
 						throws Exception {
+					return null;
+				}
+
+				@Override
+				public Object visit(ValueCondition condition) throws Exception {
 					return null;
 				}
 			}

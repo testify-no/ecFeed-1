@@ -86,7 +86,8 @@ public class ChoiceCondition implements IStatementCondition {
 
 	@Override
 	public String toString() {
-		return fChoice.getQualifiedName();
+
+		return StatementConditionHelper.createChoiceDescription(fChoice.getQualifiedName());
 	}
 
 	@Override

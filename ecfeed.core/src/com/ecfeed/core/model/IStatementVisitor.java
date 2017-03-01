@@ -23,4 +23,5 @@ public interface IStatementVisitor {
 	public Object visit(LabelCondition condition) throws Exception;
 	public Object visit(ChoiceCondition condition) throws Exception;
 	public Object visit(ParameterCondition condition) throws Exception;
+	public Object visit(ValueCondition condition) throws Exception;
 }

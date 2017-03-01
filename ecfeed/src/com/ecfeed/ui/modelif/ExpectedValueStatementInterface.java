@@ -34,7 +34,7 @@ public class ExpectedValueStatementInterface extends AbstractStatementInterface{
 	}
 
 	@Override
-	public boolean setConditionValue(String newValue) {
+	public boolean setNewCondition(String newValue) {
 		IModelOperation operation = new ChoiceOperationSetValue(getOwnStatement().getCondition(), newValue, new EclipseTypeAdapterProvider());
 		return 	execute(operation, Messages.DIALOG_EDIT_STATEMENT_PROBLEM_TITLE);
 	}

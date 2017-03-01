@@ -64,6 +64,10 @@ public class JavaTypeHelper {
 		return SUPPORTED_PRIMITIVE_TYPES;
 	}
 
+	public static String getStringType() {
+		return TYPE_NAME_STRING;
+	}
+
 	public static boolean hasLimitedValuesSet(String type){
 
 		return isJavaType(type) == false || type.equals(getBooleanTypeName());

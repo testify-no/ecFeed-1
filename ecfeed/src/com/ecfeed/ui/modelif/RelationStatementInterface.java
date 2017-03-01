@@ -22,6 +22,7 @@ import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ParameterCondition;
 import com.ecfeed.core.model.RelationStatement;
 import com.ecfeed.core.model.StatementConditionHelper;
+import com.ecfeed.core.model.ValueCondition;
 import com.ecfeed.ui.common.Messages;
 
 public class RelationStatementInterface extends AbstractStatementInterface{
@@ -45,7 +46,7 @@ public class RelationStatementInterface extends AbstractStatementInterface{
 	}
 
 	@Override
-	public boolean setConditionValue(String text) {
+	public boolean setNewCondition(String text) {
 
 		String conditionName = getOwnStatement().getConditionName();
 
@@ -61,26 +62,29 @@ public class RelationStatementInterface extends AbstractStatementInterface{
 		return execute(operation, Messages.DIALOG_EDIT_STATEMENT_PROBLEM_TITLE);
 	}
 
-	private IStatementCondition createNewCondition(String string, MethodParameterNode parameter) {
+	private IStatementCondition createNewCondition(String text, MethodParameterNode parameter) {
 
-
-		if (StatementConditionHelper.containsNoTypeInfo(string)) {
-			return new ChoiceCondition(parameter.getChoice(string), parameter, getOwnStatement());
+		if (StatementConditionHelper.containsChoiceTypeInfo(text)) {
+			return new ChoiceCondition(parameter.getChoice(text), parameter, getOwnStatement());
 		}
 
-		if (StatementConditionHelper.containsLabelTypeInfo(string)) {
+		if (StatementConditionHelper.containsLabelTypeInfo(text)) {
 			return new LabelCondition(
-					StatementConditionHelper.removeTypeInfo(string, "label"), 
+					StatementConditionHelper.removeTypeInfo(text, "label"), 
 					parameter,
 					getOwnStatement());
 		}
 
-		if (StatementConditionHelper.containsParameterTypeInfo(string)) {
-			String parameterName = StatementConditionHelper.removeTypeInfo(string, "parameter"); 
+		if (StatementConditionHelper.containsParameterTypeInfo(text)) {
+			String parameterName = StatementConditionHelper.removeTypeInfo(text, "parameter"); 
 			MethodNode methodNode = parameter.getMethod();
 			MethodParameterNode rightParameter = (MethodParameterNode)methodNode.getParameter(parameterName);
 
 			return new ParameterCondition(parameter, rightParameter, getOwnStatement());
+		}
+
+		if (StatementConditionHelper.containsNoTypeInfo(text)) {
+			return new ValueCondition(parameter, text, getOwnStatement());
 		}
 
 		return null;

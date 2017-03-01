@@ -17,6 +17,7 @@ import com.ecfeed.core.utils.StringHelper;
 
 public class StatementConditionHelper {
 
+	private static String TYPE_INFO_CHOICE = "choice";
 	private static String TYPE_INFO_PARAMETER = "parameter";
 	private static String TYPE_INFO_LABEL = "label";
 
@@ -39,6 +40,10 @@ public class StatementConditionHelper {
 		}
 
 		return choices.get(index);
+	}
+
+	public static String createChoiceDescription(String parameterName) {
+		return parameterName + "[" + TYPE_INFO_CHOICE + "]";
 	}
 
 	public static String createParameterDescription(String parameterName) {
@@ -70,6 +75,15 @@ public class StatementConditionHelper {
 	public static boolean containsParameterTypeInfo(String string) {
 
 		if (containsTypeInfo(string, TYPE_INFO_PARAMETER)) {
+			return true;
+		}
+
+		return false;
+	}	
+
+	public static boolean containsChoiceTypeInfo(String string) {
+
+		if (containsTypeInfo(string, TYPE_INFO_CHOICE)) {
 			return true;
 		}
 

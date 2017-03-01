@@ -20,28 +20,48 @@ public class RelationStatement extends AbstractStatement implements IRelationalS
 	private EStatementRelation fRelation;
 	private IStatementCondition fCondition;
 
-	public RelationStatement(
-			MethodParameterNode parameter, EStatementRelation relation, String labelCondition) {
+	public static RelationStatement createStatementWithLabelCondition(
+			MethodParameterNode parameter, EStatementRelation relation, String label) {
 
-		fParameter = parameter;
-		fRelation = relation;
-		fCondition = new LabelCondition(labelCondition, parameter, this);
+		RelationStatement relationStatement = new RelationStatement(parameter, relation, null);
+
+		IStatementCondition condition = new LabelCondition(label, parameter, relationStatement);
+		relationStatement.setCondition(condition);
+
+		return relationStatement;
 	}
 
-	public RelationStatement(
-			MethodParameterNode parameter, EStatementRelation relation, ChoiceNode choiceCondition) {
+	public static RelationStatement createStatementWithChoiceCondition(
+			MethodParameterNode parameter, EStatementRelation relation, ChoiceNode choiceNode) {
 
-		fParameter = parameter;
-		fRelation = relation;
-		fCondition = new ChoiceCondition(choiceCondition, fParameter, this);
+		RelationStatement relationStatement = new RelationStatement(parameter, relation, null);
+
+		IStatementCondition condition = new ChoiceCondition(choiceNode, parameter, relationStatement);
+		relationStatement.setCondition(condition);
+
+		return relationStatement;
 	}
 
-	public RelationStatement(
+	public static RelationStatement createStatementWithParameterCondition(
 			MethodParameterNode parameter, EStatementRelation relation, MethodParameterNode rightParameter) {
 
-		fParameter = parameter;
-		fRelation = relation;
-		fCondition = new ParameterCondition(parameter, rightParameter, this);
+		RelationStatement relationStatement = new RelationStatement(parameter, relation, null);
+
+		IStatementCondition condition = new ParameterCondition(parameter, rightParameter, relationStatement);
+		relationStatement.setCondition(condition);
+
+		return relationStatement;
+	}	
+
+	public static RelationStatement createStatementWithValueCondition(
+			MethodParameterNode parameter, EStatementRelation relation, String textValue) {
+
+		RelationStatement relationStatement = new RelationStatement(parameter, relation, null);
+
+		IStatementCondition condition = new ValueCondition(parameter, textValue, relationStatement);
+		relationStatement.setCondition(condition);
+
+		return relationStatement;
 	}	
 
 	private RelationStatement(

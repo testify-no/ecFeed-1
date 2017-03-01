@@ -49,7 +49,7 @@ import com.ecfeed.testutils.ModelTestUtils;
 @Constraints(Constraints.ALL)
 public class MethodOperationRemoveParameterTest{
 
-//	@Test
+	//	@Test
 	public void signatureCheckTest(boolean sameParameterNames, boolean sameParameterTypes, boolean sameMethodName, boolean duplicate){
 		ClassNode classNode = new ClassNode("TestClass");
 		String similarMethodName = "testMethod";
@@ -129,7 +129,9 @@ public class MethodOperationRemoveParameterTest{
 			consequence = new ExpectedValueStatement(removedParameter, condition, new JavaPrimitiveTypePredicate());
 		}
 		else{
-			consequence = new RelationStatement(removedParameter, EStatementRelation.EQUAL, removedChoice);
+			consequence = 
+					RelationStatement.createStatementWithChoiceCondition(
+							removedParameter, EStatementRelation.EQUAL, removedChoice);
 		}
 		ConstraintNode removedConstraint = new ConstraintNode("removed constraint", new Constraint(new StaticStatement(true), consequence));
 		target.addConstraint(dummyConstraint);

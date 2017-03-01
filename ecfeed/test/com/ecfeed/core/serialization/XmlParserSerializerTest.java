@@ -178,9 +178,15 @@ public class XmlParserSerializerTest {
 			testData.add(choice2);
 			TestCaseNode testCase = new TestCaseNode("test", testData);
 			Constraint choiceConstraint = new Constraint(new StaticStatement(true),
-					new RelationStatement(choicesParentParameter, EStatementRelation.EQUAL, choice1));
-			Constraint labelConstraint = new Constraint(new StaticStatement(true),
-					new RelationStatement(choicesParentParameter, EStatementRelation.EQUAL, "label"));
+					RelationStatement.createStatementWithChoiceCondition(
+							choicesParentParameter, EStatementRelation.EQUAL, choice1));
+
+			Constraint labelConstraint = 
+					new Constraint(
+							new StaticStatement(true),
+							RelationStatement.createStatementWithLabelCondition(
+									choicesParentParameter, EStatementRelation.EQUAL, "label"));
+
 			Constraint expectedConstraint = new Constraint(new StaticStatement(true),
 					new ExpectedValueStatement(expectedParameter, new ChoiceNode("expected", "n"), new JavaPrimitiveTypePredicate()));
 			ConstraintNode choiceConstraintNode = new ConstraintNode("choice constraint", choiceConstraint);
@@ -416,14 +422,16 @@ public class XmlParserSerializerTest {
 			parameter.getChoices().get(0).addLabel(label);
 		}
 		EStatementRelation relation = pickRelation();
-		return new RelationStatement(parameter, relation, label);
+		return RelationStatement.createStatementWithLabelCondition(parameter, relation, label);
 	}
 
 	private AbstractStatement createChoiceStatement(List<MethodParameterNode> parameters) {
 		MethodParameterNode parameter = parameters.get(rand.nextInt(parameters.size()));
-		ChoiceNode choice = new ArrayList<ChoiceNode>(parameter.getLeafChoices()).get(rand.nextInt(parameter.getChoices().size()));
+		ChoiceNode choiceNode = 
+				new ArrayList<ChoiceNode>(parameter.getLeafChoices()).get(rand.nextInt(parameter.getChoices().size()));
+
 		EStatementRelation relation = pickRelation();
-		return new RelationStatement(parameter, relation, choice);
+		return RelationStatement.createStatementWithChoiceCondition(parameter, relation, choiceNode);
 	}
 
 	private EStatementRelation pickRelation() {

@@ -467,7 +467,11 @@ public class MethodNodeTest {
 		MethodNode method = new MethodNode("method");
 		MethodParameterNode parameter = new MethodParameterNode("parameter", "type", "0", false);
 		ChoiceNode choice = new ChoiceNode("choice", "value");
-		Constraint mentioningConstraint = new Constraint(new RelationStatement(parameter, EStatementRelation.EQUAL, choice), new StaticStatement(false));
+		Constraint mentioningConstraint = 
+				new Constraint(
+						RelationStatement.createStatementWithChoiceCondition(
+								parameter, EStatementRelation.EQUAL, choice), new StaticStatement(false));
+
 		Constraint notMentioningConstraint = new Constraint(new StaticStatement(false), new StaticStatement(false));
 		ConstraintNode mentioningConstraintNode = new ConstraintNode("constraint", mentioningConstraint);
 		ConstraintNode notMentioningConstraintNode = new ConstraintNode("constraint", notMentioningConstraint);

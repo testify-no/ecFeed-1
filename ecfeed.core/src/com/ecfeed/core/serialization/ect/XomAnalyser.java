@@ -446,6 +446,9 @@ public abstract class XomAnalyser {
 		case Constants.CONSTRAINT_PARAMETER_STATEMENT_NODE_NAME:
 			return parseParameterStatement(element, method);
 
+		case Constants.CONSTRAINT_VALUE_STATEMENT_NODE_NAME:
+			return parseValueStatement(element, method);
+
 		case Constants.CONSTRAINT_LABEL_STATEMENT_NODE_NAME:
 			return parseLabelStatement(element, method);
 
@@ -520,7 +523,7 @@ public abstract class XomAnalyser {
 		String relationName = getAttributeValue(element, Constants.STATEMENT_RELATION_ATTRIBUTE_NAME);
 		EStatementRelation relation = getRelation(relationName);
 
-		return new RelationStatement(parameter, relation, choice);
+		return RelationStatement.createStatementWithChoiceCondition(parameter, relation, choice);
 	}
 
 	public RelationStatement parseParameterStatement(Element element, MethodNode method) throws ParserException { 
@@ -543,8 +546,27 @@ public abstract class XomAnalyser {
 		String relationName = getAttributeValue(element, Constants.STATEMENT_RELATION_ATTRIBUTE_NAME);
 		EStatementRelation relation = getRelation(relationName);
 
-		return new RelationStatement(leftParameterNode, relation, rightParameterNode);
-	}	
+		return RelationStatement.createStatementWithParameterCondition(leftParameterNode, relation, rightParameterNode);
+	}
+
+	public RelationStatement parseValueStatement(Element element, MethodNode method) throws ParserException {
+
+		assertNodeTag(element.getQualifiedName(), Constants.CONSTRAINT_VALUE_STATEMENT_NODE_NAME);
+
+		String parameterName = getAttributeValue(element, getStatementParameterAttributeName());
+
+		MethodParameterNode leftParameterNode = (MethodParameterNode)method.getParameter(parameterName);
+		if (leftParameterNode == null || leftParameterNode.isExpected()) {
+			ParserException.report(Messages.WRONG_PARAMETER_NAME(parameterName, method.getName()));
+		}
+
+		String text = getAttributeValue(element, Constants.STATEMENT_RIGHT_VALUE_ATTRIBUTE_NAME);
+
+		String relationName = getAttributeValue(element, Constants.STATEMENT_RELATION_ATTRIBUTE_NAME);
+		EStatementRelation relation = getRelation(relationName);
+
+		return RelationStatement.createStatementWithValueCondition(leftParameterNode, relation, text);
+	}
 
 	public RelationStatement parseLabelStatement(Element element, MethodNode method) throws ParserException {
 		assertNodeTag(element.getQualifiedName(), CONSTRAINT_LABEL_STATEMENT_NODE_NAME);
@@ -559,7 +581,7 @@ public abstract class XomAnalyser {
 		}
 		EStatementRelation relation = getRelation(relationName);
 
-		return new RelationStatement(parameter, relation, label);
+		return RelationStatement.createStatementWithLabelCondition(parameter, relation, label);
 	}
 
 	public ExpectedValueStatement parseExpectedValueStatement(Element element, MethodNode method) throws ParserException {

@@ -70,7 +70,7 @@ public class AbstractStatementInterface extends OperationExecuter {
 		return false;
 	}
 
-	public boolean setConditionValue(String text) {
+	public boolean setNewCondition(String text) {
 		return false;
 	}
 

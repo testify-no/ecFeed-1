@@ -14,6 +14,7 @@ import static com.ecfeed.core.serialization.ect.Constants.CONSTRAINT_CHOICE_STAT
 import static com.ecfeed.core.serialization.ect.Constants.CONSTRAINT_EXPECTED_STATEMENT_NODE_NAME;
 import static com.ecfeed.core.serialization.ect.Constants.CONSTRAINT_LABEL_STATEMENT_NODE_NAME;
 import static com.ecfeed.core.serialization.ect.Constants.CONSTRAINT_PARAMETER_STATEMENT_NODE_NAME;
+import static com.ecfeed.core.serialization.ect.Constants.CONSTRAINT_VALUE_STATEMENT_NODE_NAME;
 import static com.ecfeed.core.serialization.ect.Constants.CONSTRAINT_STATEMENT_ARRAY_NODE_NAME;
 import static com.ecfeed.core.serialization.ect.Constants.CONSTRAINT_STATIC_STATEMENT_NODE_NAME;
 import static com.ecfeed.core.serialization.ect.Constants.STATEMENT_EXPECTED_VALUE_ATTRIBUTE_NAME;
@@ -23,6 +24,7 @@ import static com.ecfeed.core.serialization.ect.Constants.STATEMENT_OPERATOR_ATT
 import static com.ecfeed.core.serialization.ect.Constants.STATEMENT_OPERATOR_OR_ATTRIBUTE_VALUE;
 import static com.ecfeed.core.serialization.ect.Constants.STATEMENT_RELATION_ATTRIBUTE_NAME;
 import static com.ecfeed.core.serialization.ect.Constants.STATEMENT_RIGHT_PARAMETER_ATTRIBUTE_NAME;
+import static com.ecfeed.core.serialization.ect.Constants.STATEMENT_RIGHT_VALUE_ATTRIBUTE_NAME;
 import static com.ecfeed.core.serialization.ect.Constants.STATEMENT_STATIC_VALUE_ATTRIBUTE_NAME;
 import static com.ecfeed.core.serialization.ect.Constants.STATIC_STATEMENT_FALSE_VALUE;
 import static com.ecfeed.core.serialization.ect.Constants.STATIC_STATEMENT_TRUE_VALUE;
@@ -41,6 +43,7 @@ import com.ecfeed.core.model.ParameterCondition;
 import com.ecfeed.core.model.RelationStatement;
 import com.ecfeed.core.model.StatementArray;
 import com.ecfeed.core.model.StaticStatement;
+import com.ecfeed.core.model.ValueCondition;
 import com.ecfeed.core.serialization.WhiteCharConverter;
 
 public class XomStatementBuilder implements IStatementVisitor {
@@ -168,6 +171,19 @@ public class XomStatementBuilder implements IStatementVisitor {
 		XomBuilder.encodeAndAddAttribute(
 				targetParameterElement, 
 				new Attribute(STATEMENT_RIGHT_PARAMETER_ATTRIBUTE_NAME, rightMethodParameterNode.getName()), 
+				fWhiteCharConverter);
+
+		return targetParameterElement;
+	}
+
+	@Override
+	public Object visit(ValueCondition condition) throws Exception {
+
+		Element targetParameterElement = new Element(CONSTRAINT_VALUE_STATEMENT_NODE_NAME);
+
+		XomBuilder.encodeAndAddAttribute(
+				targetParameterElement, 
+				new Attribute(STATEMENT_RIGHT_VALUE_ATTRIBUTE_NAME, condition.getRightValue()), 
 				fWhiteCharConverter);
 
 		return targetParameterElement;

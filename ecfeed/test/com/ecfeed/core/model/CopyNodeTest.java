@@ -153,8 +153,8 @@ public class CopyNodeTest{
 
 		StatementArray premise = new StatementArray(EStatementOperator.OR);
 		premise.addStatement(new StaticStatement(true));
-		premise.addStatement(new RelationStatement(par1, EStatementRelation.EQUAL, choice1));
-		premise.addStatement(new RelationStatement(par1, EStatementRelation.NOT_EQUAL, "label"));
+		premise.addStatement(RelationStatement.createStatementWithChoiceCondition(par1, EStatementRelation.EQUAL, choice1));
+		premise.addStatement(RelationStatement.createStatementWithLabelCondition(par1, EStatementRelation.NOT_EQUAL, "label"));
 		ExpectedValueStatement consequence = new ExpectedValueStatement(par2, expectedChoice, new JavaPrimitiveTypePredicate());
 
 		ConstraintNode constraint = new ConstraintNode("constraint", new Constraint(premise, consequence));
@@ -239,8 +239,10 @@ public class CopyNodeTest{
 		parameter.addChoice(choice);
 		choice.addLabel("label");
 
-		RelationStatement statement1 = new RelationStatement(parameter, EStatementRelation.EQUAL, choice);
-		RelationStatement statement2 = new RelationStatement(parameter, EStatementRelation.EQUAL, "label");
+		RelationStatement statement1 = 
+				RelationStatement.createStatementWithChoiceCondition(parameter, EStatementRelation.EQUAL, choice);
+		RelationStatement statement2 = 
+				RelationStatement.createStatementWithLabelCondition(parameter, EStatementRelation.EQUAL, "label");
 
 		RelationStatement copy1 = statement1.getCopy();
 		RelationStatement copy2 = statement2.getCopy();

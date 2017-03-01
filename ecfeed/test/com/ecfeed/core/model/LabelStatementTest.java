@@ -77,14 +77,23 @@ public class LabelStatementTest {
 		List<ChoiceNode> p21q = new ArrayList<ChoiceNode>();
 		p21q.add(p21); p21q.add(q);
 
-		RelationStatement pEqual = new RelationStatement(c1, EStatementRelation.EQUAL, "p");
-		RelationStatement pNotEqual = new RelationStatement(c1, EStatementRelation.NOT_EQUAL, "p");
+		RelationStatement pEqual = 
+				RelationStatement.createStatementWithLabelCondition(c1, EStatementRelation.EQUAL, "p");
 
-		RelationStatement p1Equal = new RelationStatement(c1, EStatementRelation.EQUAL, "p1");
-		RelationStatement p1NotEqual = new RelationStatement(c1, EStatementRelation.NOT_EQUAL, "p1");
+		RelationStatement pNotEqual = 
+				RelationStatement.createStatementWithLabelCondition(c1, EStatementRelation.NOT_EQUAL, "p");
 
-		RelationStatement p11Equal = new RelationStatement(c1, EStatementRelation.EQUAL, "p11");
-		RelationStatement p11NotEqual = new RelationStatement(c1, EStatementRelation.NOT_EQUAL, "p11");
+		RelationStatement p1Equal = 
+				RelationStatement.createStatementWithLabelCondition(c1, EStatementRelation.EQUAL, "p1");
+
+		RelationStatement p1NotEqual = 
+				RelationStatement.createStatementWithLabelCondition(c1, EStatementRelation.NOT_EQUAL, "p1");
+
+		RelationStatement p11Equal = 
+				RelationStatement.createStatementWithLabelCondition(c1, EStatementRelation.EQUAL, "p11");
+
+		RelationStatement p11NotEqual = 
+				RelationStatement.createStatementWithLabelCondition(c1, EStatementRelation.NOT_EQUAL, "p11");
 
 		//Check that all pEqual statements evaluates to true for all vectors
 		assertTrue(pEqual.evaluate(pq));

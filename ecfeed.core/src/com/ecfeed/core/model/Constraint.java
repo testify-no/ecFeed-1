@@ -285,6 +285,12 @@ public class Constraint implements IConstraint<ChoiceNode> {
 		public Object visit(ParameterCondition condition) throws Exception {
 
 			return new HashSet<ChoiceNode>();
+		}
+
+		@Override
+		public Object visit(ValueCondition condition) throws Exception {
+
+			return new HashSet<ChoiceNode>();
 		}		
 
 	}
@@ -345,6 +351,13 @@ public class Constraint implements IConstraint<ChoiceNode> {
 
 		@Override
 		public Object visit(ParameterCondition condition) throws Exception {
+
+			return new HashSet<MethodParameterNode>();
+		}
+
+		@Override
+		public Object visit(ValueCondition condition) throws Exception {
+
 			return new HashSet<MethodParameterNode>();
 		}
 	}
@@ -412,6 +425,11 @@ public class Constraint implements IConstraint<ChoiceNode> {
 
 		@Override
 		public Object visit(ParameterCondition condition) throws Exception {
+			return EMPTY_SET;
+		}
+
+		@Override
+		public Object visit(ValueCondition condition) throws Exception {
 			return EMPTY_SET;
 		}
 

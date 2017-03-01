@@ -44,7 +44,7 @@ public class ConstraintTest {
 		AbstractStatement statement1 = new StaticStatement(true); 
 		AbstractStatement statement2 = new StaticStatement(false); 
 		AbstractStatement statement3 = new StaticStatement(false);
-		
+
 		Constraint constraint = new Constraint(statement1, statement2);
 		assertTrue(constraint.getPremise().equals(statement1));
 		constraint.setPremise(statement3);
@@ -56,7 +56,7 @@ public class ConstraintTest {
 		AbstractStatement statement1 = new StaticStatement(true); 
 		AbstractStatement statement2 = new StaticStatement(false); 
 		AbstractStatement statement3 = new StaticStatement(false);
-		
+
 		Constraint constraint = new Constraint(statement1, statement2);
 		assertTrue(constraint.getConsequence().equals(statement2));
 		constraint.setConsequence(statement3);
@@ -69,21 +69,22 @@ public class ConstraintTest {
 		MethodParameterNode parameter = new MethodParameterNode("parameter", "type", "0", false);
 		parameter.addChoice(choice);
 
-		AbstractStatement mentioningStatement = new RelationStatement(parameter, EStatementRelation.EQUAL, choice);
+		AbstractStatement mentioningStatement = 
+				RelationStatement.createStatementWithChoiceCondition(parameter, EStatementRelation.EQUAL, choice);
 		AbstractStatement notMentioningStatement = new StaticStatement(false);
-		
+
 		assertTrue(new Constraint(mentioningStatement, notMentioningStatement).mentions(parameter));
 		assertTrue(new Constraint(mentioningStatement, notMentioningStatement).mentions(choice));
-		
+
 		assertTrue(new Constraint(notMentioningStatement, mentioningStatement).mentions(parameter));
 		assertTrue(new Constraint(notMentioningStatement, mentioningStatement).mentions(choice));
-		
+
 		assertTrue(new Constraint(mentioningStatement, mentioningStatement).mentions(parameter));
 		assertTrue(new Constraint(mentioningStatement, mentioningStatement).mentions(choice));
-		
+
 		assertFalse(new Constraint(notMentioningStatement, notMentioningStatement).mentions(parameter));
 		assertFalse(new Constraint(notMentioningStatement, notMentioningStatement).mentions(choice));
-		
+
 	}
 
 }
