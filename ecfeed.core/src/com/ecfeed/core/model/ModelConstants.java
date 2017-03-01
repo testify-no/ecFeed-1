@@ -10,6 +10,6 @@
 
 package com.ecfeed.core.model;
 
-public class Constants {
+public class ModelConstants {
 	public static final String EXPECTED_VALUE_CHOICE_NAME = "@expected";
 }

@@ -10,7 +10,7 @@
 
 package com.ecfeed.core.serialization.ect;
 
-import static com.ecfeed.core.model.Constants.EXPECTED_VALUE_CHOICE_NAME;
+import static com.ecfeed.core.model.ModelConstants.EXPECTED_VALUE_CHOICE_NAME;
 import static com.ecfeed.core.serialization.ect.SerializationConstants.ANDROID_RUNNER_ATTRIBUTE_NAME;
 import static com.ecfeed.core.serialization.ect.SerializationConstants.CLASS_NODE_NAME;
 import static com.ecfeed.core.serialization.ect.SerializationConstants.CONSTRAINT_CHOICE_STATEMENT_NODE_NAME;

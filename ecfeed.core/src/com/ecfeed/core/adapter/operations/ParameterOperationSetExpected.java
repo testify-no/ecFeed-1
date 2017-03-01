@@ -16,7 +16,7 @@ import java.util.ListIterator;
 
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.model.ChoiceNode;
-import com.ecfeed.core.model.Constants;
+import com.ecfeed.core.model.ModelConstants;
 import com.ecfeed.core.model.ConstraintNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
@@ -105,7 +105,7 @@ public class ParameterOperationSetExpected extends AbstractModelOperation {
 			while(tcIt.hasNext()){
 				TestCaseNode testCase = tcIt.next();
 				if(fExpected){
-					ChoiceNode p = new ChoiceNode(Constants.EXPECTED_VALUE_CHOICE_NAME, fTarget.getDefaultValue());
+					ChoiceNode p = new ChoiceNode(ModelConstants.EXPECTED_VALUE_CHOICE_NAME, fTarget.getDefaultValue());
 					p.setParent(fTarget);
 					TestCaseNode newTestCase = testCase.makeClone();
 					newTestCase.setParent(methodNode);

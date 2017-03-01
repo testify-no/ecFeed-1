@@ -20,7 +20,7 @@ import org.eclipse.swt.graphics.Color;
 import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ChoiceNode;
-import com.ecfeed.core.model.Constants;
+import com.ecfeed.core.model.ModelConstants;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.TestCaseNode;
@@ -129,7 +129,7 @@ public class TestDataViewer extends TableViewerSection implements ITestDataEdito
 
 	@Override
 	public void testDataChanged(int index, ChoiceNode choiceToUpdate) {
-		if (choiceToUpdate.getName().equals(Constants.EXPECTED_VALUE_CHOICE_NAME)) { 
+		if (choiceToUpdate.getName().equals(ModelConstants.EXPECTED_VALUE_CHOICE_NAME)) { 
 			fTestCaseIf.updateTestData(index, choiceToUpdate);
 			return;
 		}
