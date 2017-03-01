@@ -22,6 +22,7 @@ public class ChoiceCondition implements IStatementCondition {
 	RelationStatement fParentRelationStatement;
 
 	public ChoiceCondition(ChoiceNode choice, MethodParameterNode parameter, RelationStatement parentRelationStatement) {
+
 		fChoice = choice;
 		fMethodParameterNode = parameter;
 		fParentRelationStatement = parentRelationStatement;
@@ -52,13 +53,13 @@ public class ChoiceCondition implements IStatementCondition {
 	@Override
 	public boolean updateReferences(MethodParameterNode parameter) {
 
-		ChoiceNode condition = parameter.getChoice(fChoice.getQualifiedName());
+		ChoiceNode choiceNode = parameter.getChoice(fChoice.getQualifiedName());
 
-		if (condition == null) {
+		if (choiceNode == null) {
 			return false;
 		}
 
-		fChoice = condition;
+		fChoice = choiceNode;
 		return true;
 	}
 

@@ -70,7 +70,11 @@ public class StatementConditionHelper {
 		}
 
 		return false;
-	}	
+	}
+
+	public static String removeLabelTypeInfo(String string) {
+		return removeTypeInfo(string, TYPE_INFO_LABEL);
+	}
 
 	public static boolean containsParameterTypeInfo(String string) {
 
@@ -79,7 +83,11 @@ public class StatementConditionHelper {
 		}
 
 		return false;
-	}	
+	}
+
+	public static String removeParameterTypeInfo(String string) {
+		return removeTypeInfo(string, TYPE_INFO_PARAMETER);
+	}
 
 	public static boolean containsChoiceTypeInfo(String string) {
 
@@ -90,6 +98,10 @@ public class StatementConditionHelper {
 		return false;
 	}	
 
+	public static String removeChoiceTypeInfo(String string) {
+		return removeTypeInfo(string, TYPE_INFO_CHOICE);
+	}
+
 	private static boolean containsTypeInfo(String string, String typeDescription) {
 
 		if (string.contains("[" + typeDescription + "]")) {
@@ -99,7 +111,7 @@ public class StatementConditionHelper {
 		return false;
 	}
 
-	public static String removeTypeInfo(String string, String typeDescription) {
+	private static String removeTypeInfo(String string, String typeDescription) {
 		return StringHelper.removeFromPostfix("[" + typeDescription + "]", string);
 	}
 
