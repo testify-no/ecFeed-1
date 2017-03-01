@@ -55,7 +55,7 @@ import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.SystemLogger;
-import com.ecfeed.ui.common.Constants;
+import com.ecfeed.ui.common.CommonConstants;
 import com.ecfeed.ui.common.ImageManager;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.editor.actions.AbstractAddChildAction;
@@ -127,7 +127,7 @@ public class ModelMasterSection extends TreeViewerSection{
 				children.addAll(method.getConstraintNodes());
 				for(String testSuite : method.getTestSuites()){
 					Collection<TestCaseNode> testCases = method.getTestCases(testSuite);
-					if(testCases.size() <= Constants.MAX_DISPLAYED_TEST_CASES_PER_SUITE){
+					if(testCases.size() <= CommonConstants.MAX_DISPLAYED_TEST_CASES_PER_SUITE){
 						children.addAll(testCases);
 					}
 				}
@@ -145,7 +145,7 @@ public class ModelMasterSection extends TreeViewerSection{
 			}
 			if(parentElement instanceof AbstractNode){
 				AbstractNode node = (AbstractNode)parentElement;
-				if(node.getChildren().size() < Constants.MAX_DISPLAYED_CHILDREN_PER_NODE){
+				if(node.getChildren().size() < CommonConstants.MAX_DISPLAYED_CHILDREN_PER_NODE){
 					return node.getChildren().toArray();
 				}
 			}

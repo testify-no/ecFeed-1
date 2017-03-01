@@ -16,7 +16,7 @@ import com.ecfeed.core.adapter.operations.GenericOperationAddParameter;
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ParametersParentNode;
 import com.ecfeed.core.utils.JavaTypeHelper;
-import com.ecfeed.ui.common.Constants;
+import com.ecfeed.ui.common.CommonConstants;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 
@@ -42,9 +42,9 @@ public abstract class ParametersParentInterface extends AbstractNodeInterface {
 
 	protected String generateNewParameterName() {
 		int i = 0;
-		String name = Constants.DEFAULT_NEW_PARAMETER_NAME + i++;
+		String name = CommonConstants.DEFAULT_NEW_PARAMETER_NAME + i++;
 		while(getOwnNode().getParameter(name) != null){
-			name = Constants.DEFAULT_NEW_PARAMETER_NAME + i++;
+			name = CommonConstants.DEFAULT_NEW_PARAMETER_NAME + i++;
 		}
 		return name;
 	}

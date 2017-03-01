@@ -60,7 +60,7 @@ import com.ecfeed.core.serialization.IModelSerializer;
 import com.ecfeed.core.serialization.ect.EctSerializer;
 import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.SystemLogger;
-import com.ecfeed.ui.common.Constants;
+import com.ecfeed.ui.common.CommonConstants;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
@@ -230,11 +230,11 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 		if (newPageIndex != fSourcePageIndex)
 			return;
 
-		if (fModel.subtreeSize() <= Constants.SOURCE_VIEWER_MAX_SUBTREE_SIZE) {
+		if (fModel.subtreeSize() <= CommonConstants.SOURCE_VIEWER_MAX_SUBTREE_SIZE) {
 			refreshSourceViewer();
 		}
 		else {
-			fSourcePageEditor.refreshContent(Messages.MODEL_SOURCE_SIZE_EXCEEDED(Constants.SOURCE_VIEWER_MAX_SUBTREE_SIZE));
+			fSourcePageEditor.refreshContent(Messages.MODEL_SOURCE_SIZE_EXCEEDED(CommonConstants.SOURCE_VIEWER_MAX_SUBTREE_SIZE));
 		}
 	}
 

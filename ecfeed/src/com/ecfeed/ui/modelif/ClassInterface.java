@@ -37,7 +37,7 @@ import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.utils.EcException;
 import com.ecfeed.core.utils.PackageClassHelper;
 import com.ecfeed.core.utils.SystemLogger;
-import com.ecfeed.ui.common.Constants;
+import com.ecfeed.ui.common.CommonConstants;
 import com.ecfeed.ui.common.EclipseModelBuilder;
 import com.ecfeed.ui.common.JavaModelAnalyser;
 import com.ecfeed.ui.common.Messages;
@@ -241,10 +241,10 @@ public class ClassInterface extends GlobalParametersParentInterface {
 	}
 
 	private String generateNewMethodName() {
-		String name = Constants.DEFAULT_NEW_METHOD_NAME;
+		String name = CommonConstants.DEFAULT_NEW_METHOD_NAME;
 		int i = 0;
 		while(getOwnNode().getMethod(name, new ArrayList<String>()) != null){
-			name = Constants.DEFAULT_NEW_METHOD_NAME + i++;
+			name = CommonConstants.DEFAULT_NEW_METHOD_NAME + i++;
 		}
 		return name;
 	}

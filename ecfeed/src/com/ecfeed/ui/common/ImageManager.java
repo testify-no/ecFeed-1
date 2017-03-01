@@ -37,7 +37,7 @@ public class ImageManager {
 	}
 
 	public ImageDescriptor getImageDescriptor(String fileName){
-		String path = Constants.ICONS_FOLDER_NAME + "/" + fileName;
+		String path = CommonConstants.ICONS_FOLDER_NAME + "/" + fileName;
 		if(fDescriptors.containsKey(path) == false){
 			Bundle bundle = FrameworkUtil.getBundle(this.getClass());
 			URL url = FileLocator.find(bundle, new Path(path), null);

@@ -23,7 +23,7 @@ import com.ecfeed.core.adapter.operations.RootOperationAddNewClass;
 import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.model.RootNode;
-import com.ecfeed.ui.common.Constants;
+import com.ecfeed.ui.common.CommonConstants;
 import com.ecfeed.ui.common.EclipseModelBuilder;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
@@ -91,7 +91,7 @@ public class RootInterface extends GlobalParametersParentInterface {
 	}
 
 	private String generateClassName() {
-		String className = Constants.DEFAULT_NEW_PACKAGE_NAME + "." + Constants.DEFAULT_NEW_CLASS_NAME;
+		String className = CommonConstants.DEFAULT_NEW_PACKAGE_NAME + "." + CommonConstants.DEFAULT_NEW_CLASS_NAME;
 		if(getOwnNode().getClassModel(className) != null){
 			int i = 0;
 			while(getOwnNode().getClassModel(className + String.valueOf(i)) != null){

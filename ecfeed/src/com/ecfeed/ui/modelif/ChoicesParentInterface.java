@@ -24,7 +24,7 @@ import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.ChoicesParentNode;
 import com.ecfeed.core.model.MethodNode;
-import com.ecfeed.ui.common.Constants;
+import com.ecfeed.ui.common.CommonConstants;
 import com.ecfeed.ui.common.EclipseModelBuilder;
 import com.ecfeed.ui.common.EclipseTypeAdapterProvider;
 import com.ecfeed.ui.common.Messages;
@@ -118,7 +118,7 @@ public class ChoicesParentInterface extends AbstractNodeInterface {
 	}
 
 	protected String generateChoiceName(){
-		String name = Constants.DEFAULT_NEW_PARTITION_NAME;
+		String name = CommonConstants.DEFAULT_NEW_PARTITION_NAME;
 		int i = 0;
 
 		ArrayList<String> choiceNames = new ArrayList<>();
@@ -127,7 +127,7 @@ public class ChoicesParentInterface extends AbstractNodeInterface {
 		}
 
 		while(choiceNames.contains(name)){
-			name = Constants.DEFAULT_NEW_PARTITION_NAME + i++;
+			name = CommonConstants.DEFAULT_NEW_PARTITION_NAME + i++;
 		}
 		return name;
 	}

@@ -63,7 +63,7 @@ import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.StringHolder;
-import com.ecfeed.ui.common.Constants;
+import com.ecfeed.ui.common.CommonConstants;
 import com.ecfeed.ui.common.EclipseImplementationStatusResolver;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.NodeNameColumnLabelProvider;
@@ -374,7 +374,7 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 				updateOkButtonAndErrorMsg();
 			}
 		});
-		fTestSuiteCombo.setText(Constants.DEFAULT_NEW_TEST_SUITE_NAME);
+		fTestSuiteCombo.setText(CommonConstants.DEFAULT_NEW_TEST_SUITE_NAME);
 	}
 
 	private void updateOkButtonAndErrorMsg() {

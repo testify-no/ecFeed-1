@@ -101,23 +101,23 @@ public class EclipseModelBuilder extends JavaModelAnalyser{
 		List<String> result = new ArrayList<String>();
 		switch(typeName){
 		case JavaTypeHelper.TYPE_NAME_BOOLEAN:
-			result.addAll(Arrays.asList(Constants.BOOLEAN_SPECIAL_VALUES));
+			result.addAll(Arrays.asList(CommonConstants.BOOLEAN_SPECIAL_VALUES));
 			break;
 		case JavaTypeHelper.TYPE_NAME_CHAR:
-			result.addAll(Arrays.asList(Constants.DEFAULT_EXPECTED_CHAR_VALUE));
+			result.addAll(Arrays.asList(CommonConstants.DEFAULT_EXPECTED_CHAR_VALUE));
 			break;
 		case JavaTypeHelper.TYPE_NAME_BYTE:
 		case JavaTypeHelper.TYPE_NAME_INT:
 		case JavaTypeHelper.TYPE_NAME_LONG:
 		case JavaTypeHelper.TYPE_NAME_SHORT:
-			result.addAll(Arrays.asList(Constants.INTEGER_SPECIAL_VALUES));
+			result.addAll(Arrays.asList(CommonConstants.INTEGER_SPECIAL_VALUES));
 			break;
 		case JavaTypeHelper.TYPE_NAME_DOUBLE:
 		case JavaTypeHelper.TYPE_NAME_FLOAT:
-			result.addAll(Arrays.asList(Constants.FLOAT_SPECIAL_VALUES));
+			result.addAll(Arrays.asList(CommonConstants.FLOAT_SPECIAL_VALUES));
 			break;
 		case JavaTypeHelper.TYPE_NAME_STRING:
-			result.addAll(Arrays.asList(Constants.STRING_SPECIAL_VALUES));
+			result.addAll(Arrays.asList(CommonConstants.STRING_SPECIAL_VALUES));
 			break;
 		default:
 			result.addAll(enumValues(typeName));
@@ -130,23 +130,23 @@ public class EclipseModelBuilder extends JavaModelAnalyser{
 	public String getDefaultExpectedValue(String type) {
 		switch(type){
 		case JavaTypeHelper.TYPE_NAME_BYTE:
-			return Constants.DEFAULT_EXPECTED_BYTE_VALUE;
+			return CommonConstants.DEFAULT_EXPECTED_BYTE_VALUE;
 		case JavaTypeHelper.TYPE_NAME_BOOLEAN:
-			return Constants.DEFAULT_EXPECTED_BOOLEAN_VALUE;
+			return CommonConstants.DEFAULT_EXPECTED_BOOLEAN_VALUE;
 		case JavaTypeHelper.TYPE_NAME_CHAR:
-			return Constants.DEFAULT_EXPECTED_CHAR_VALUE;
+			return CommonConstants.DEFAULT_EXPECTED_CHAR_VALUE;
 		case JavaTypeHelper.TYPE_NAME_DOUBLE:
-			return Constants.DEFAULT_EXPECTED_DOUBLE_VALUE;
+			return CommonConstants.DEFAULT_EXPECTED_DOUBLE_VALUE;
 		case JavaTypeHelper.TYPE_NAME_FLOAT:
-			return Constants.DEFAULT_EXPECTED_FLOAT_VALUE;
+			return CommonConstants.DEFAULT_EXPECTED_FLOAT_VALUE;
 		case JavaTypeHelper.TYPE_NAME_INT:
-			return Constants.DEFAULT_EXPECTED_INT_VALUE;
+			return CommonConstants.DEFAULT_EXPECTED_INT_VALUE;
 		case JavaTypeHelper.TYPE_NAME_LONG:
-			return Constants.DEFAULT_EXPECTED_LONG_VALUE;
+			return CommonConstants.DEFAULT_EXPECTED_LONG_VALUE;
 		case JavaTypeHelper.TYPE_NAME_SHORT:
-			return Constants.DEFAULT_EXPECTED_SHORT_VALUE;
+			return CommonConstants.DEFAULT_EXPECTED_SHORT_VALUE;
 		case JavaTypeHelper.TYPE_NAME_STRING:
-			return Constants.DEFAULT_EXPECTED_STRING_VALUE;
+			return CommonConstants.DEFAULT_EXPECTED_STRING_VALUE;
 		default:
 			return defaultEnumExpectedValue(type);
 		}
@@ -175,7 +175,7 @@ public class EclipseModelBuilder extends JavaModelAnalyser{
 
 
 	protected String defaultEnumExpectedValue(String type) {
-		String value = Constants.DEFAULT_EXPECTED_ENUM_VALUE;
+		String value = CommonConstants.DEFAULT_EXPECTED_ENUM_VALUE;
 
 		List<String> enumValues = enumValues(type);
 		if(enumValues.size() > 0){
@@ -196,8 +196,8 @@ public class EclipseModelBuilder extends JavaModelAnalyser{
 
 	protected HashMap<String, String> predefinedBooleanValues() {
 		HashMap<String, String> values = new HashMap<String, String>();
-		values.put("true", Constants.BOOLEAN_TRUE_STRING_REPRESENTATION);
-		values.put("false", Constants.BOOLEAN_FALSE_STRING_REPRESENTATION);
+		values.put("true", CommonConstants.BOOLEAN_TRUE_STRING_REPRESENTATION);
+		values.put("false", CommonConstants.BOOLEAN_FALSE_STRING_REPRESENTATION);
 		return values;
 	}
 
@@ -212,8 +212,8 @@ public class EclipseModelBuilder extends JavaModelAnalyser{
 
 	protected HashMap<String, String> predefinedIntegerValues() {
 		HashMap<String, String> values = new HashMap<String, String>();
-		values.put("min", Constants.MIN_VALUE_STRING_REPRESENTATION);
-		values.put("max", Constants.MAX_VALUE_STRING_REPRESENTATION);
+		values.put("min", CommonConstants.MIN_VALUE_STRING_REPRESENTATION);
+		values.put("max", CommonConstants.MAX_VALUE_STRING_REPRESENTATION);
 		return values;
 	}
 
@@ -228,10 +228,10 @@ public class EclipseModelBuilder extends JavaModelAnalyser{
 
 	protected HashMap<String, String> predefinedFloatValues() {
 		HashMap<String, String> values = new HashMap<String, String>();
-		values.put("min", Constants.MIN_VALUE_STRING_REPRESENTATION);
-		values.put("max", Constants.MAX_VALUE_STRING_REPRESENTATION);
-		values.put("positive infinity", Constants.POSITIVE_INFINITY_STRING_REPRESENTATION);
-		values.put("negative infinity", Constants.NEGATIVE_INFINITY_STRING_REPRESENTATION);
+		values.put("min", CommonConstants.MIN_VALUE_STRING_REPRESENTATION);
+		values.put("max", CommonConstants.MAX_VALUE_STRING_REPRESENTATION);
+		values.put("positive infinity", CommonConstants.POSITIVE_INFINITY_STRING_REPRESENTATION);
+		values.put("negative infinity", CommonConstants.NEGATIVE_INFINITY_STRING_REPRESENTATION);
 		return values;
 	}
 
@@ -246,7 +246,7 @@ public class EclipseModelBuilder extends JavaModelAnalyser{
 
 	protected HashMap<String, String> predefinedStringValues() {
 		HashMap<String, String> values = new HashMap<String, String>();
-		values.put("null", Constants.NULL_VALUE_STRING_REPRESENTATION);
+		values.put("null", CommonConstants.NULL_VALUE_STRING_REPRESENTATION);
 		return values;
 	}
 

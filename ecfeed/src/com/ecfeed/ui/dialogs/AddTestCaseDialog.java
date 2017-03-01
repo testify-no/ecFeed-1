@@ -41,7 +41,7 @@ import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.ui.common.ColorConstants;
 import com.ecfeed.ui.common.ColorManager;
-import com.ecfeed.ui.common.Constants;
+import com.ecfeed.ui.common.CommonConstants;
 import com.ecfeed.ui.common.ITestDataEditorListener;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.TestDataValueEditingSupport;
@@ -191,7 +191,7 @@ public class AddTestCaseDialog extends TitleAreaDialog implements ITestDataEdito
 				validateTestSuiteName();
 			}
 		});
-		fTestSuiteCombo.setText(Constants.DEFAULT_NEW_TEST_SUITE_NAME);
+		fTestSuiteCombo.setText(CommonConstants.DEFAULT_NEW_TEST_SUITE_NAME);
 	}
 
 	/**

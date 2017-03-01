@@ -33,7 +33,7 @@ import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.serialization.ect.EctSerializer;
 import com.ecfeed.core.utils.DiskFileHelper;
 import com.ecfeed.core.utils.StringHelper;
-import com.ecfeed.ui.common.Constants;
+import com.ecfeed.ui.common.CommonConstants;
 import com.ecfeed.ui.common.Messages;
 
 class NewEctFileCreationPage extends WizardNewFileCreationPage {
@@ -70,9 +70,9 @@ public class NewEcFileWizard extends Wizard implements INewWizard {
 
 	public void addPages() {
 		fPage = new NewEctFileCreationPage(Messages.WIZARD_NEW_ECT_FILE_TITLE, fSelection);
-		fPage.setFileName(Constants.DEFAULT_NEW_ECT_FILE_NAME);
+		fPage.setFileName(CommonConstants.DEFAULT_NEW_ECT_FILE_NAME);
 		fPage.setAllowExistingResources(true);
-		fPage.setFileExtension(Constants.EQUIVALENCE_CLASS_FILE_EXTENSION);
+		fPage.setFileExtension(CommonConstants.EQUIVALENCE_CLASS_FILE_EXTENSION);
 		fPage.setTitle(Messages.WIZARD_NEW_ECT_FILE_TITLE);
 		fPage.setDescription(Messages.WIZARD_NEW_ECT_FILE_MESSAGE);
 
@@ -99,7 +99,7 @@ public class NewEcFileWizard extends Wizard implements INewWizard {
 			final IPath newFileFullPath = fPage.getContainerFullPath().append(fPage.getFileName()); 
 			String modelName = newFileFullPath.removeFileExtension().lastSegment();
 			RootNode model = new RootNode(
-					modelName != null ? modelName : Constants.DEFAULT_NEW_ECT_MODEL_NAME, 
+					modelName != null ? modelName : CommonConstants.DEFAULT_NEW_ECT_MODEL_NAME, 
 							ModelVersionDistributor.getCurrentSoftwareVersion());
 
 			ByteArrayOutputStream ostream = new ByteArrayOutputStream();
@@ -110,7 +110,7 @@ public class NewEcFileWizard extends Wizard implements INewWizard {
 			//open new file in an ect editor
 			IWorkbenchPage page =  PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 
-			page.openEditor(new FileEditorInput(file), Constants.ECT_EDITOR_ID);
+			page.openEditor(new FileEditorInput(file), CommonConstants.ECT_EDITOR_ID);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

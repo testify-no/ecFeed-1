@@ -55,7 +55,7 @@ import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.serialization.export.TestCasesExporter;
-import com.ecfeed.ui.common.Constants;
+import com.ecfeed.ui.common.CommonConstants;
 import com.ecfeed.ui.common.EclipseModelBuilder;
 import com.ecfeed.ui.common.EclipseTypeAdapterProvider;
 import com.ecfeed.ui.common.JavaModelAnalyser;
@@ -137,7 +137,7 @@ public class MethodInterface extends ParametersParentInterface {
 		Constraint constraint = new Constraint(new StaticStatement(true),
 				new StaticStatement(true));
 		ConstraintNode node = new ConstraintNode(
-				Constants.DEFAULT_NEW_CONSTRAINT_NAME, constraint);
+				CommonConstants.DEFAULT_NEW_CONSTRAINT_NAME, constraint);
 		if (addNewConstraint(node)) {
 			return node;
 		}
@@ -232,7 +232,7 @@ public class MethodInterface extends ParametersParentInterface {
 					Messages.DIALOG_EMPTY_TEST_SUITE_GENERATED_MESSAGE);
 			return false;
 		}
-		if (testData.size() > Constants.TEST_SUITE_SIZE_WARNING_LIMIT) {
+		if (testData.size() > CommonConstants.TEST_SUITE_SIZE_WARNING_LIMIT) {
 			if (MessageDialog
 					.openConfirm(
 							Display.getDefault().getActiveShell(),
@@ -469,7 +469,7 @@ public class MethodInterface extends ParametersParentInterface {
 				return type;
 			}
 		}
-		String type = Constants.DEFAULT_USER_TYPE_NAME;
+		String type = CommonConstants.DEFAULT_USER_TYPE_NAME;
 		int i = 0;
 		while (true) {
 			List<String> newTypes = getOwnNode().getParametersTypes();
@@ -478,7 +478,7 @@ public class MethodInterface extends ParametersParentInterface {
 					newTypes) == null) {
 				break;
 			} else {
-				type = Constants.DEFAULT_USER_TYPE_NAME + i++;
+				type = CommonConstants.DEFAULT_USER_TYPE_NAME + i++;
 			}
 		}
 		return type;

@@ -42,7 +42,7 @@ public class TestCasesViewerContentProvider extends TreeNodeContentProvider impl
 	public Object[] getChildren(Object parentElement){
 		if(parentElement instanceof String){
 			Collection<TestCaseNode> testCases = fMethodNode.getTestCases((String)parentElement);
-			if(testCases.size() <= Constants.MAX_DISPLAYED_TEST_CASES_PER_SUITE){
+			if(testCases.size() <= CommonConstants.MAX_DISPLAYED_TEST_CASES_PER_SUITE){
 				return testCases.toArray();
 			}
 		}

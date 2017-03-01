@@ -32,7 +32,7 @@ import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.SystemLogger;
-import com.ecfeed.ui.common.Constants;
+import com.ecfeed.ui.common.CommonConstants;
 import com.ecfeed.ui.common.EclipseTypeAdapterProvider;
 import com.ecfeed.ui.common.JavaModelAnalyser;
 import com.ecfeed.ui.common.Messages;
@@ -76,10 +76,10 @@ public class ChoiceInterface extends ChoicesParentInterface{
 	}
 
 	public String addNewLabel() {
-		String newLabel = Constants.DEFAULT_NEW_PARTITION_LABEL;
+		String newLabel = CommonConstants.DEFAULT_NEW_PARTITION_LABEL;
 		int i = 1;
 		while(getOwnNode().getLeafLabels().contains(newLabel)){
-			newLabel = Constants.DEFAULT_NEW_PARTITION_LABEL + "(" + i + ")";
+			newLabel = CommonConstants.DEFAULT_NEW_PARTITION_LABEL + "(" + i + ")";
 			i++;
 		}
 		if(addLabel(newLabel)){

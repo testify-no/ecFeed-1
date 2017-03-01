@@ -63,18 +63,18 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 		}
 
 		public String convert(String value){
-			if(value.toLowerCase().equals(Constants.BOOLEAN_TRUE_STRING_REPRESENTATION.toLowerCase())){
-				return Constants.BOOLEAN_TRUE_STRING_REPRESENTATION;
+			if(value.toLowerCase().equals(CommonConstants.BOOLEAN_TRUE_STRING_REPRESENTATION.toLowerCase())){
+				return CommonConstants.BOOLEAN_TRUE_STRING_REPRESENTATION;
 			}
-			else if(value.toLowerCase().equals(Constants.BOOLEAN_FALSE_STRING_REPRESENTATION.toLowerCase())){
-				return Constants.BOOLEAN_FALSE_STRING_REPRESENTATION;
+			else if(value.toLowerCase().equals(CommonConstants.BOOLEAN_FALSE_STRING_REPRESENTATION.toLowerCase())){
+				return CommonConstants.BOOLEAN_FALSE_STRING_REPRESENTATION;
 			};
 			return null;
 		}
 
 		@Override
 		public String defaultValue() {
-			return Constants.DEFAULT_EXPECTED_BOOLEAN_VALUE;
+			return CommonConstants.DEFAULT_EXPECTED_BOOLEAN_VALUE;
 		}
 
 		@Override
@@ -95,7 +95,7 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 
 		@Override
 		public String defaultValue() {
-			return Constants.DEFAULT_EXPECTED_STRING_VALUE;
+			return CommonConstants.DEFAULT_EXPECTED_STRING_VALUE;
 		}
 
 		@Override
@@ -162,7 +162,7 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 
 		@Override
 		public String defaultValue() {
-			return Constants.DEFAULT_EXPECTED_CHAR_VALUE;
+			return CommonConstants.DEFAULT_EXPECTED_CHAR_VALUE;
 		}
 
 		@Override
@@ -174,8 +174,8 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 	private abstract class NumericTypeAdapter implements ITypeAdapter{
 
 		private String[] NUMERIC_SPECIAL_VALUES = new String[]{
-				Constants.MAX_VALUE_STRING_REPRESENTATION,
-				Constants.MIN_VALUE_STRING_REPRESENTATION
+				CommonConstants.MAX_VALUE_STRING_REPRESENTATION,
+				CommonConstants.MIN_VALUE_STRING_REPRESENTATION
 		};
 
 		@Override
@@ -190,7 +190,7 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 
 		@Override
 		public String defaultValue(){
-			return Constants.DEFAULT_EXPECTED_NUMERIC_VALUE;
+			return CommonConstants.DEFAULT_EXPECTED_NUMERIC_VALUE;
 		}
 
 		@Override
@@ -201,8 +201,8 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 
 	private abstract class FloatingPointTypeAdapter extends NumericTypeAdapter{
 		private String[] FLOATING_POINT_SPECIAL_VALUES = new String[]{
-				Constants.POSITIVE_INFINITY_STRING_REPRESENTATION,
-				Constants.NEGATIVE_INFINITY_STRING_REPRESENTATION
+				CommonConstants.POSITIVE_INFINITY_STRING_REPRESENTATION,
+				CommonConstants.NEGATIVE_INFINITY_STRING_REPRESENTATION
 		};
 
 		@Override
@@ -221,7 +221,7 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 
 		@Override
 		public String defaultValue(){
-			return Constants.DEFAULT_EXPECTED_FLOATING_POINT_VALUE;
+			return CommonConstants.DEFAULT_EXPECTED_FLOATING_POINT_VALUE;
 		}
 	}
 
