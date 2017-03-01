@@ -11,25 +11,25 @@
 package com.ecfeed.core.serialization.ect;
 
 import static com.ecfeed.core.model.Constants.EXPECTED_VALUE_CHOICE_NAME;
-import static com.ecfeed.core.serialization.ect.Constants.ANDROID_RUNNER_ATTRIBUTE_NAME;
-import static com.ecfeed.core.serialization.ect.Constants.CLASS_NODE_NAME;
-import static com.ecfeed.core.serialization.ect.Constants.CONSTRAINT_CHOICE_STATEMENT_NODE_NAME;
-import static com.ecfeed.core.serialization.ect.Constants.CONSTRAINT_EXPECTED_STATEMENT_NODE_NAME;
-import static com.ecfeed.core.serialization.ect.Constants.CONSTRAINT_LABEL_STATEMENT_NODE_NAME;
-import static com.ecfeed.core.serialization.ect.Constants.CONSTRAINT_NODE_NAME;
-import static com.ecfeed.core.serialization.ect.Constants.CONSTRAINT_STATEMENT_ARRAY_NODE_NAME;
-import static com.ecfeed.core.serialization.ect.Constants.CONSTRAINT_STATIC_STATEMENT_NODE_NAME;
-import static com.ecfeed.core.serialization.ect.Constants.DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME;
-import static com.ecfeed.core.serialization.ect.Constants.METHOD_NODE_NAME;
-import static com.ecfeed.core.serialization.ect.Constants.PARAMETER_IS_EXPECTED_ATTRIBUTE_NAME;
-import static com.ecfeed.core.serialization.ect.Constants.PARAMETER_IS_LINKED_ATTRIBUTE_NAME;
-import static com.ecfeed.core.serialization.ect.Constants.PARAMETER_LINK_ATTRIBUTE_NAME;
-import static com.ecfeed.core.serialization.ect.Constants.ROOT_NODE_NAME;
-import static com.ecfeed.core.serialization.ect.Constants.RUN_ON_ANDROID_ATTRIBUTE_NAME;
-import static com.ecfeed.core.serialization.ect.Constants.TEST_CASE_NODE_NAME;
-import static com.ecfeed.core.serialization.ect.Constants.TEST_SUITE_NAME_ATTRIBUTE;
-import static com.ecfeed.core.serialization.ect.Constants.TYPE_NAME_ATTRIBUTE;
-import static com.ecfeed.core.serialization.ect.Constants.VALUE_ATTRIBUTE;
+import static com.ecfeed.core.serialization.ect.SerializationConstants.ANDROID_RUNNER_ATTRIBUTE_NAME;
+import static com.ecfeed.core.serialization.ect.SerializationConstants.CLASS_NODE_NAME;
+import static com.ecfeed.core.serialization.ect.SerializationConstants.CONSTRAINT_CHOICE_STATEMENT_NODE_NAME;
+import static com.ecfeed.core.serialization.ect.SerializationConstants.CONSTRAINT_EXPECTED_STATEMENT_NODE_NAME;
+import static com.ecfeed.core.serialization.ect.SerializationConstants.CONSTRAINT_LABEL_STATEMENT_NODE_NAME;
+import static com.ecfeed.core.serialization.ect.SerializationConstants.CONSTRAINT_NODE_NAME;
+import static com.ecfeed.core.serialization.ect.SerializationConstants.CONSTRAINT_STATEMENT_ARRAY_NODE_NAME;
+import static com.ecfeed.core.serialization.ect.SerializationConstants.CONSTRAINT_STATIC_STATEMENT_NODE_NAME;
+import static com.ecfeed.core.serialization.ect.SerializationConstants.DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME;
+import static com.ecfeed.core.serialization.ect.SerializationConstants.METHOD_NODE_NAME;
+import static com.ecfeed.core.serialization.ect.SerializationConstants.PARAMETER_IS_EXPECTED_ATTRIBUTE_NAME;
+import static com.ecfeed.core.serialization.ect.SerializationConstants.PARAMETER_IS_LINKED_ATTRIBUTE_NAME;
+import static com.ecfeed.core.serialization.ect.SerializationConstants.PARAMETER_LINK_ATTRIBUTE_NAME;
+import static com.ecfeed.core.serialization.ect.SerializationConstants.ROOT_NODE_NAME;
+import static com.ecfeed.core.serialization.ect.SerializationConstants.RUN_ON_ANDROID_ATTRIBUTE_NAME;
+import static com.ecfeed.core.serialization.ect.SerializationConstants.TEST_CASE_NODE_NAME;
+import static com.ecfeed.core.serialization.ect.SerializationConstants.TEST_SUITE_NAME_ATTRIBUTE;
+import static com.ecfeed.core.serialization.ect.SerializationConstants.TYPE_NAME_ATTRIBUTE;
+import static com.ecfeed.core.serialization.ect.SerializationConstants.VALUE_ATTRIBUTE;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -93,7 +93,7 @@ public abstract class XomAnalyser {
 				System.err.println("Exception: " + e.getMessage());
 			}
 		}
-		for (Element child : getIterableChildren(element, Constants.CLASS_NODE_NAME)) {
+		for (Element child : getIterableChildren(element, SerializationConstants.CLASS_NODE_NAME)) {
 			try{
 				targetRootNode.addClass(parseClass(child, targetRootNode));
 			}catch(ParserException e) {
@@ -127,7 +127,7 @@ public abstract class XomAnalyser {
 			}
 		}
 
-		for (Element child : getIterableChildren(classElement, Constants.METHOD_NODE_NAME)) {
+		for (Element child : getIterableChildren(classElement, SerializationConstants.METHOD_NODE_NAME)) {
 			try{
 				targetClassNode.addMethod(parseMethod(child, targetClassNode));
 			}catch(ParserException e) {
@@ -194,7 +194,7 @@ public abstract class XomAnalyser {
 			}
 		}
 
-		for (Element child : getIterableChildren(methodElement, Constants.TEST_CASE_NODE_NAME)) {
+		for (Element child : getIterableChildren(methodElement, SerializationConstants.TEST_CASE_NODE_NAME)) {
 			try{
 				targetMethodNode.addTestCase(parseTestCase(child, targetMethodNode));
 			}catch(ParserException e) {
@@ -202,7 +202,7 @@ public abstract class XomAnalyser {
 			}
 		}
 
-		for (Element child : getIterableChildren(methodElement, Constants.CONSTRAINT_NODE_NAME)) {
+		for (Element child : getIterableChildren(methodElement, SerializationConstants.CONSTRAINT_NODE_NAME)) {
 			try{
 				targetMethodNode.addConstraint(parseConstraint(child, targetMethodNode));
 			}catch(ParserException e) {
@@ -364,15 +364,15 @@ public abstract class XomAnalyser {
 			MethodParameterNode parameter = parameters.get(i);
 			ChoiceNode testValue = null;
 
-			if (testParameterElement.getLocalName().equals(Constants.TEST_PARAMETER_NODE_NAME)) {
+			if (testParameterElement.getLocalName().equals(SerializationConstants.TEST_PARAMETER_NODE_NAME)) {
 				String choiceName = getAttributeValue(testParameterElement, getChoiceAttributeName());
 				testValue = parameter.getChoice(choiceName);
 				if (testValue == null) {
 					ParserException.report(Messages.PARTITION_DOES_NOT_EXIST(parameter.getName(), choiceName));
 				}
 			}
-			else if (testParameterElement.getLocalName().equals(Constants.EXPECTED_PARAMETER_NODE_NAME)) {
-				String valueString = getAttributeValue(testParameterElement, Constants.VALUE_ATTRIBUTE_NAME);
+			else if (testParameterElement.getLocalName().equals(SerializationConstants.EXPECTED_PARAMETER_NODE_NAME)) {
+				String valueString = getAttributeValue(testParameterElement, SerializationConstants.VALUE_ATTRIBUTE_NAME);
 				if (valueString == null) {
 					ParserException.report(Messages.MISSING_VALUE_ATTRIBUTE_IN_TEST_CASE_ELEMENT);
 				}
@@ -394,12 +394,12 @@ public abstract class XomAnalyser {
 		AbstractStatement premise = null;
 		AbstractStatement consequence = null;
 
-		if ((getIterableChildren(element, Constants.CONSTRAINT_PREMISE_NODE_NAME).size() != 1) ||
-				(getIterableChildren(element, Constants.CONSTRAINT_CONSEQUENCE_NODE_NAME).size() != 1)) {
+		if ((getIterableChildren(element, SerializationConstants.CONSTRAINT_PREMISE_NODE_NAME).size() != 1) ||
+				(getIterableChildren(element, SerializationConstants.CONSTRAINT_CONSEQUENCE_NODE_NAME).size() != 1)) {
 			ParserException.report(Messages.MALFORMED_CONSTRAINT_NODE_DEFINITION(method.getName(), name));
 		}
-		for (Element child : getIterableChildren(element, Constants.CONSTRAINT_PREMISE_NODE_NAME)) {
-			if (child.getLocalName().equals(Constants.CONSTRAINT_PREMISE_NODE_NAME)) {
+		for (Element child : getIterableChildren(element, SerializationConstants.CONSTRAINT_PREMISE_NODE_NAME)) {
+			if (child.getLocalName().equals(SerializationConstants.CONSTRAINT_PREMISE_NODE_NAME)) {
 				if (getIterableChildren(child).size() == 1) {
 					//there is only one statement per premise or consequence that is either
 					//a single statement or statement array
@@ -410,8 +410,8 @@ public abstract class XomAnalyser {
 				}
 			}
 		}
-		for (Element child : getIterableChildren(element, Constants.CONSTRAINT_CONSEQUENCE_NODE_NAME)) {
-			if (child.getLocalName().equals(Constants.CONSTRAINT_CONSEQUENCE_NODE_NAME)) {
+		for (Element child : getIterableChildren(element, SerializationConstants.CONSTRAINT_CONSEQUENCE_NODE_NAME)) {
+			if (child.getLocalName().equals(SerializationConstants.CONSTRAINT_CONSEQUENCE_NODE_NAME)) {
 				if (getIterableChildren(child).size() == 1) {
 					consequence = parseStatement(child.getChildElements().get(0), method);
 				}
@@ -440,25 +440,25 @@ public abstract class XomAnalyser {
 
 		switch(localName) {
 
-		case Constants.CONSTRAINT_CHOICE_STATEMENT_NODE_NAME:
+		case SerializationConstants.CONSTRAINT_CHOICE_STATEMENT_NODE_NAME:
 			return parseChoiceStatement(element, method);
 
-		case Constants.CONSTRAINT_PARAMETER_STATEMENT_NODE_NAME:
+		case SerializationConstants.CONSTRAINT_PARAMETER_STATEMENT_NODE_NAME:
 			return parseParameterStatement(element, method);
 
-		case Constants.CONSTRAINT_VALUE_STATEMENT_NODE_NAME:
+		case SerializationConstants.CONSTRAINT_VALUE_STATEMENT_NODE_NAME:
 			return parseValueStatement(element, method);
 
-		case Constants.CONSTRAINT_LABEL_STATEMENT_NODE_NAME:
+		case SerializationConstants.CONSTRAINT_LABEL_STATEMENT_NODE_NAME:
 			return parseLabelStatement(element, method);
 
-		case Constants.CONSTRAINT_STATEMENT_ARRAY_NODE_NAME:
+		case SerializationConstants.CONSTRAINT_STATEMENT_ARRAY_NODE_NAME:
 			return parseStatementArray(element, method);
 
-		case Constants.CONSTRAINT_STATIC_STATEMENT_NODE_NAME:
+		case SerializationConstants.CONSTRAINT_STATIC_STATEMENT_NODE_NAME:
 			return parseStaticStatement(element);
 
-		case Constants.CONSTRAINT_EXPECTED_STATEMENT_NODE_NAME:
+		case SerializationConstants.CONSTRAINT_EXPECTED_STATEMENT_NODE_NAME:
 			return parseExpectedValueStatement(element, method);
 
 		default: return null;
@@ -469,12 +469,12 @@ public abstract class XomAnalyser {
 		assertNodeTag(element.getQualifiedName(), CONSTRAINT_STATEMENT_ARRAY_NODE_NAME);
 
 		StatementArray statementArray = null;
-		String operatorValue = getAttributeValue(element, Constants.STATEMENT_OPERATOR_ATTRIBUTE_NAME);
+		String operatorValue = getAttributeValue(element, SerializationConstants.STATEMENT_OPERATOR_ATTRIBUTE_NAME);
 		switch(operatorValue) {
-		case Constants.STATEMENT_OPERATOR_OR_ATTRIBUTE_VALUE:
+		case SerializationConstants.STATEMENT_OPERATOR_OR_ATTRIBUTE_VALUE:
 			statementArray = new StatementArray(EStatementOperator.OR);
 			break;
-		case Constants.STATEMENT_OPERATOR_AND_ATTRIBUTE_VALUE:
+		case SerializationConstants.STATEMENT_OPERATOR_AND_ATTRIBUTE_VALUE:
 			statementArray = new StatementArray(EStatementOperator.AND);
 			break;
 		default:
@@ -492,11 +492,11 @@ public abstract class XomAnalyser {
 	public StaticStatement parseStaticStatement(Element element) throws ParserException {
 		assertNodeTag(element.getQualifiedName(), CONSTRAINT_STATIC_STATEMENT_NODE_NAME);
 
-		String valueString = getAttributeValue(element, Constants.STATIC_VALUE_ATTRIBUTE_NAME);
+		String valueString = getAttributeValue(element, SerializationConstants.STATIC_VALUE_ATTRIBUTE_NAME);
 		switch(valueString) {
-		case Constants.STATIC_STATEMENT_TRUE_VALUE:
+		case SerializationConstants.STATIC_STATEMENT_TRUE_VALUE:
 			return new StaticStatement(true);
-		case Constants.STATIC_STATEMENT_FALSE_VALUE:
+		case SerializationConstants.STATIC_STATEMENT_FALSE_VALUE:
 			return new StaticStatement(false);
 		default:
 			ParserException.report(Messages.WRONG_STATIC_STATEMENT_VALUE(valueString));
@@ -520,14 +520,14 @@ public abstract class XomAnalyser {
 			ParserException.report(Messages.WRONG_PARTITION_NAME(choiceName, parameterName, method.getName()));
 		}
 
-		String relationName = getAttributeValue(element, Constants.STATEMENT_RELATION_ATTRIBUTE_NAME);
+		String relationName = getAttributeValue(element, SerializationConstants.STATEMENT_RELATION_ATTRIBUTE_NAME);
 		EStatementRelation relation = getRelation(relationName);
 
 		return RelationStatement.createStatementWithChoiceCondition(parameter, relation, choice);
 	}
 
 	public RelationStatement parseParameterStatement(Element element, MethodNode method) throws ParserException { 
-		assertNodeTag(element.getQualifiedName(), Constants.CONSTRAINT_PARAMETER_STATEMENT_NODE_NAME);
+		assertNodeTag(element.getQualifiedName(), SerializationConstants.CONSTRAINT_PARAMETER_STATEMENT_NODE_NAME);
 
 		String parameterName = getAttributeValue(element, getStatementParameterAttributeName());
 
@@ -536,14 +536,14 @@ public abstract class XomAnalyser {
 			ParserException.report(Messages.WRONG_PARAMETER_NAME(parameterName, method.getName()));
 		}
 
-		String rightParameterName = getAttributeValue(element, Constants.STATEMENT_RIGHT_PARAMETER_ATTRIBUTE_NAME);
+		String rightParameterName = getAttributeValue(element, SerializationConstants.STATEMENT_RIGHT_PARAMETER_ATTRIBUTE_NAME);
 
 		MethodParameterNode rightParameterNode = (MethodParameterNode)method.getParameter(rightParameterName);
 		if (rightParameterNode == null) {
 			ParserException.report(Messages.WRONG_PARAMETER_NAME(rightParameterName, method.getName()));
 		}
 
-		String relationName = getAttributeValue(element, Constants.STATEMENT_RELATION_ATTRIBUTE_NAME);
+		String relationName = getAttributeValue(element, SerializationConstants.STATEMENT_RELATION_ATTRIBUTE_NAME);
 		EStatementRelation relation = getRelation(relationName);
 
 		return RelationStatement.createStatementWithParameterCondition(leftParameterNode, relation, rightParameterNode);
@@ -551,7 +551,7 @@ public abstract class XomAnalyser {
 
 	public RelationStatement parseValueStatement(Element element, MethodNode method) throws ParserException {
 
-		assertNodeTag(element.getQualifiedName(), Constants.CONSTRAINT_VALUE_STATEMENT_NODE_NAME);
+		assertNodeTag(element.getQualifiedName(), SerializationConstants.CONSTRAINT_VALUE_STATEMENT_NODE_NAME);
 
 		String parameterName = getAttributeValue(element, getStatementParameterAttributeName());
 
@@ -560,9 +560,9 @@ public abstract class XomAnalyser {
 			ParserException.report(Messages.WRONG_PARAMETER_NAME(parameterName, method.getName()));
 		}
 
-		String text = getAttributeValue(element, Constants.STATEMENT_RIGHT_VALUE_ATTRIBUTE_NAME);
+		String text = getAttributeValue(element, SerializationConstants.STATEMENT_RIGHT_VALUE_ATTRIBUTE_NAME);
 
-		String relationName = getAttributeValue(element, Constants.STATEMENT_RELATION_ATTRIBUTE_NAME);
+		String relationName = getAttributeValue(element, SerializationConstants.STATEMENT_RELATION_ATTRIBUTE_NAME);
 		EStatementRelation relation = getRelation(relationName);
 
 		return RelationStatement.createStatementWithValueCondition(leftParameterNode, relation, text);
@@ -572,8 +572,8 @@ public abstract class XomAnalyser {
 		assertNodeTag(element.getQualifiedName(), CONSTRAINT_LABEL_STATEMENT_NODE_NAME);
 
 		String parameterName = getAttributeValue(element, getStatementParameterAttributeName());
-		String label = getAttributeValue(element, Constants.STATEMENT_LABEL_ATTRIBUTE_NAME);
-		String relationName = getAttributeValue(element, Constants.STATEMENT_RELATION_ATTRIBUTE_NAME);
+		String label = getAttributeValue(element, SerializationConstants.STATEMENT_LABEL_ATTRIBUTE_NAME);
+		String relationName = getAttributeValue(element, SerializationConstants.STATEMENT_RELATION_ATTRIBUTE_NAME);
 
 		MethodParameterNode parameter = method.getMethodParameter(parameterName);
 		if (parameter == null || parameter.isExpected()) {
@@ -588,7 +588,7 @@ public abstract class XomAnalyser {
 		assertNodeTag(element.getQualifiedName(), CONSTRAINT_EXPECTED_STATEMENT_NODE_NAME);
 
 		String parameterName = getAttributeValue(element, getStatementParameterAttributeName());
-		String valueString = getAttributeValue(element, Constants.STATEMENT_EXPECTED_VALUE_ATTRIBUTE_NAME);
+		String valueString = getAttributeValue(element, SerializationConstants.STATEMENT_EXPECTED_VALUE_ATTRIBUTE_NAME);
 		MethodParameterNode parameter = method.getMethodParameter(parameterName);
 		if (parameter == null || !parameter.isExpected()) {
 			ParserException.report(Messages.WRONG_PARAMETER_NAME(parameterName, method.getName()));
@@ -616,8 +616,8 @@ public abstract class XomAnalyser {
 				}
 
 			}
-			if (child.getLocalName() == Constants.LABEL_NODE_NAME) {
-				choice.addLabel(fWhiteCharConverter.decode(child.getAttributeValue(Constants.LABEL_ATTRIBUTE_NAME)));
+			if (child.getLocalName() == SerializationConstants.LABEL_NODE_NAME) {
+				choice.addLabel(fWhiteCharConverter.decode(child.getAttributeValue(SerializationConstants.LABEL_ATTRIBUTE_NAME)));
 			}
 		}
 
@@ -654,9 +654,9 @@ public abstract class XomAnalyser {
 	}
 
 	protected String getElementName(Element element) throws ParserException {
-		String name = element.getAttributeValue(Constants.NODE_NAME_ATTRIBUTE);
+		String name = element.getAttributeValue(SerializationConstants.NODE_NAME_ATTRIBUTE);
 		if (name == null) {
-			ParserException.report(Messages.MISSING_ATTRIBUTE(element, Constants.NODE_NAME_ATTRIBUTE));
+			ParserException.report(Messages.MISSING_ATTRIBUTE(element, SerializationConstants.NODE_NAME_ATTRIBUTE));
 		}
 		return fWhiteCharConverter.decode(name);
 	}
@@ -681,10 +681,10 @@ public abstract class XomAnalyser {
 	}
 
 	protected String parseComments(Element element) {
-		if (element.getChildElements(Constants.COMMENTS_BLOCK_TAG_NAME).size() > 0) {
-			Element comments = element.getChildElements(Constants.COMMENTS_BLOCK_TAG_NAME).get(0);
-			if (comments.getChildElements(Constants.BASIC_COMMENTS_BLOCK_TAG_NAME).size() > 0) {
-				Element basicComments = comments.getChildElements(Constants.BASIC_COMMENTS_BLOCK_TAG_NAME).get(0);
+		if (element.getChildElements(SerializationConstants.COMMENTS_BLOCK_TAG_NAME).size() > 0) {
+			Element comments = element.getChildElements(SerializationConstants.COMMENTS_BLOCK_TAG_NAME).get(0);
+			if (comments.getChildElements(SerializationConstants.BASIC_COMMENTS_BLOCK_TAG_NAME).size() > 0) {
+				Element basicComments = comments.getChildElements(SerializationConstants.BASIC_COMMENTS_BLOCK_TAG_NAME).get(0);
 				return fWhiteCharConverter.decode(basicComments.getValue());
 			}
 		}
@@ -692,10 +692,10 @@ public abstract class XomAnalyser {
 	}
 
 	protected String parseTypeComments(Element element) {
-		if (element.getChildElements(Constants.COMMENTS_BLOCK_TAG_NAME).size() > 0) {
-			Element comments = element.getChildElements(Constants.COMMENTS_BLOCK_TAG_NAME).get(0);
-			if (comments.getChildElements(Constants.TYPE_COMMENTS_BLOCK_TAG_NAME).size() > 0) {
-				Element typeComments = comments.getChildElements(Constants.TYPE_COMMENTS_BLOCK_TAG_NAME).get(0);
+		if (element.getChildElements(SerializationConstants.COMMENTS_BLOCK_TAG_NAME).size() > 0) {
+			Element comments = element.getChildElements(SerializationConstants.COMMENTS_BLOCK_TAG_NAME).get(0);
+			if (comments.getChildElements(SerializationConstants.TYPE_COMMENTS_BLOCK_TAG_NAME).size() > 0) {
+				Element typeComments = comments.getChildElements(SerializationConstants.TYPE_COMMENTS_BLOCK_TAG_NAME).get(0);
 				return fWhiteCharConverter.decode(typeComments.getValue());
 			}
 		}
@@ -726,21 +726,21 @@ public abstract class XomAnalyser {
 	}	
 
 	private static Elements getPropertyElements(Element parentElement) {
-		Elements propertyBlockElements = parentElement.getChildElements(Constants.PROPERTIES_BLOCK_TAG_NAME);
+		Elements propertyBlockElements = parentElement.getChildElements(SerializationConstants.PROPERTIES_BLOCK_TAG_NAME);
 		if (propertyBlockElements.size() == 0) {
 			return null;
 		}
 
 		Element firstBlockElement = propertyBlockElements.get(0);
-		return firstBlockElement.getChildElements(Constants.PROPERTY_TAG_NAME);
+		return firstBlockElement.getChildElements(SerializationConstants.PROPERTY_TAG_NAME);
 	}
 
 	private static String getNameFromPropertyElem(Element property) {
-		return property.getAttributeValue(Constants.PROPERTY_ATTRIBUTE_NAME);
+		return property.getAttributeValue(SerializationConstants.PROPERTY_ATTRIBUTE_NAME);
 	}
 
 	private static String getValueFromPropertyElem(Element property) {
-		return property.getAttributeValue(Constants.PROPERTY_ATTRIBUTE_VALUE);
+		return property.getAttributeValue(SerializationConstants.PROPERTY_ATTRIBUTE_VALUE);
 	}	
 
 }

@@ -10,7 +10,7 @@
 
 package com.ecfeed.core.serialization.ect;
 
-public class Constants {
+public class SerializationConstants {
 	public static final String ROOT_NODE_NAME = "Model";
 	public static final String CLASS_NODE_NAME = "Class";
 	public static final String METHOD_NODE_NAME = "Method";

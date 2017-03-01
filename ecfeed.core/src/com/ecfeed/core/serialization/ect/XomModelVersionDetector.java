@@ -10,8 +10,8 @@
 
 package com.ecfeed.core.serialization.ect;
 
-import static com.ecfeed.core.serialization.ect.Constants.ROOT_NODE_NAME;
-import static com.ecfeed.core.serialization.ect.Constants.VERSION_ATTRIBUTE;
+import static com.ecfeed.core.serialization.ect.SerializationConstants.ROOT_NODE_NAME;
+import static com.ecfeed.core.serialization.ect.SerializationConstants.VERSION_ATTRIBUTE;
 import nu.xom.Element;
 
 import com.ecfeed.core.serialization.ParserException;

@@ -38,7 +38,7 @@ import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.StatementArray;
 import com.ecfeed.core.model.StaticStatement;
 import com.ecfeed.core.model.TestCaseNode;
-import com.ecfeed.core.serialization.ect.Constants;
+import com.ecfeed.core.serialization.ect.SerializationConstants;
 import com.ecfeed.core.serialization.ect.SerializationHelperVersion0;
 import com.ecfeed.core.serialization.ect.SerializationHelperVersion1;
 import com.ecfeed.core.serialization.ect.XomAnalyser;
@@ -298,10 +298,10 @@ public class XomParserTest {
 
 				RelationStatement parsedS = null;
 				switch(element.getLocalName()){
-				case Constants.CONSTRAINT_LABEL_STATEMENT_NODE_NAME:
+				case SerializationConstants.CONSTRAINT_LABEL_STATEMENT_NODE_NAME:
 					parsedS = analyser.parseLabelStatement(element, m);
 					break;
-				case Constants.CONSTRAINT_CHOICE_STATEMENT_NODE_NAME:
+				case SerializationConstants.CONSTRAINT_CHOICE_STATEMENT_NODE_NAME:
 					parsedS = analyser.parseChoiceStatement(element, m);
 					break;
 				}

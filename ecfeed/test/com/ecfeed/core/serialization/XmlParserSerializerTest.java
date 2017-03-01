@@ -50,7 +50,7 @@ import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.serialization.IModelParser;
 import com.ecfeed.core.serialization.IModelSerializer;
 import com.ecfeed.core.serialization.ParserException;
-import com.ecfeed.core.serialization.ect.Constants;
+import com.ecfeed.core.serialization.ect.SerializationConstants;
 import com.ecfeed.core.serialization.ect.EctParser;
 import com.ecfeed.core.serialization.ect.EctSerializer;
 import com.ecfeed.core.utils.JavaTypeHelper;
@@ -82,9 +82,9 @@ public class XmlParserSerializerTest {
 	static int nextInt = 0;
 
 	private final String[] CATEGORY_TYPES = new String[]{
-			Constants.TYPE_NAME_BOOLEAN, Constants.TYPE_NAME_BYTE, Constants.TYPE_NAME_CHAR,
-			Constants.TYPE_NAME_DOUBLE, Constants.TYPE_NAME_FLOAT, Constants.TYPE_NAME_INT,
-			Constants.TYPE_NAME_LONG, Constants.TYPE_NAME_SHORT, Constants.TYPE_NAME_STRING
+			SerializationConstants.TYPE_NAME_BOOLEAN, SerializationConstants.TYPE_NAME_BYTE, SerializationConstants.TYPE_NAME_CHAR,
+			SerializationConstants.TYPE_NAME_DOUBLE, SerializationConstants.TYPE_NAME_FLOAT, SerializationConstants.TYPE_NAME_INT,
+			SerializationConstants.TYPE_NAME_LONG, SerializationConstants.TYPE_NAME_SHORT, SerializationConstants.TYPE_NAME_STRING
 	};
 
 	@Test
@@ -307,27 +307,27 @@ public class XmlParserSerializerTest {
 
 	private String createRandomValue(String type) {
 		switch(type){
-		case Constants.TYPE_NAME_BOOLEAN:
+		case SerializationConstants.TYPE_NAME_BOOLEAN:
 			return Boolean.toString(rand.nextBoolean());
-		case Constants.TYPE_NAME_BYTE:
+		case SerializationConstants.TYPE_NAME_BYTE:
 			return Byte.toString((byte)rand.nextInt());
-		case Constants.TYPE_NAME_CHAR:
+		case SerializationConstants.TYPE_NAME_CHAR:
 			int random = rand.nextInt(255);
 			if (random >= 32) {
 				return new String ("\\" + String.valueOf(random));
 			}
 			return new String ("\\");
-		case Constants.TYPE_NAME_DOUBLE:
+		case SerializationConstants.TYPE_NAME_DOUBLE:
 			return Double.toString(rand.nextDouble());
-		case Constants.TYPE_NAME_FLOAT:
+		case SerializationConstants.TYPE_NAME_FLOAT:
 			return Float.toString(rand.nextFloat());
-		case Constants.TYPE_NAME_INT:
+		case SerializationConstants.TYPE_NAME_INT:
 			return Integer.toString(rand.nextInt());
-		case Constants.TYPE_NAME_LONG:
+		case SerializationConstants.TYPE_NAME_LONG:
 			return Long.toString(rand.nextLong());
-		case Constants.TYPE_NAME_SHORT:
+		case SerializationConstants.TYPE_NAME_SHORT:
 			return Short.toString((short)rand.nextInt());
-		case Constants.TYPE_NAME_STRING:
+		case SerializationConstants.TYPE_NAME_STRING:
 			if(rand.nextInt(5) == 0){
 				return com.ecfeed.ui.common.Constants.NULL_VALUE_STRING_REPRESENTATION;
 			}

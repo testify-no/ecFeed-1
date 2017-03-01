@@ -18,7 +18,7 @@ import nu.xom.ParsingException;
 public class Messages {
 
 	public static final String WRONG_ROOT_ELEMENT_TAG = 
-			"Parsing error: The XML root element must be " + Constants.ROOT_NODE_NAME;
+			"Parsing error: The XML root element must be " + SerializationConstants.ROOT_NODE_NAME;
 
 	public static final String PARSING_EXCEPTION(ParsingException e) {
 		return "Parsing exception in line " + e.getLineNumber() + ": " + e.getMessage();
