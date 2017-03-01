@@ -10,7 +10,7 @@
 
 package com.ecfeed.core.model;
 
-import static com.ecfeed.testutils.Constants.SUPPORTED_TYPES;
+import static com.ecfeed.testutils.TestUtilConstants.SUPPORTED_TYPES;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

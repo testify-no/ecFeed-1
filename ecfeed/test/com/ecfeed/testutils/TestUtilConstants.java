@@ -12,7 +12,7 @@ package com.ecfeed.testutils;
 
 import com.ecfeed.core.utils.JavaTypeHelper;
 
-public class Constants {
+public class TestUtilConstants {
 	public static final String USER_TYPE = "user.type";
 	public static final String[] SUPPORTED_TYPES = {
 		JavaTypeHelper.TYPE_NAME_BOOLEAN,

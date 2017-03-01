@@ -10,7 +10,7 @@
 
 package com.ecfeed.core.serialization;
 
-import static com.ecfeed.testutils.Constants.SUPPORTED_TYPES;
+import static com.ecfeed.testutils.TestUtilConstants.SUPPORTED_TYPES;
 import static org.junit.Assert.fail;
 
 import java.io.ByteArrayOutputStream;
