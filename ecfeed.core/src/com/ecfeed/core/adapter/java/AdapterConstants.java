@@ -11,7 +11,7 @@
 package com.ecfeed.core.adapter.java;
 
 
-public class Constants {
+public class AdapterConstants {
 
 	public static final int MAX_NODE_NAME_LENGTH = 64;
 	public static final int MAX_PARTITION_VALUE_STRING_LENGTH = 512;

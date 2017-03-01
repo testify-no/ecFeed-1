@@ -14,7 +14,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import com.ecfeed.core.adapter.java.Constants;
+import com.ecfeed.core.adapter.java.AdapterConstants;
 
 public class RegexTest {
 
@@ -23,7 +23,7 @@ public class RegexTest {
 	}
 
 	boolean matchTextWithRegexAlphaSp64(String text) {
-		return matchTextWithRegex(text, Constants.REGEX_ALPHANUMERIC_WITH_SPACES_64);
+		return matchTextWithRegex(text, AdapterConstants.REGEX_ALPHANUMERIC_WITH_SPACES_64);
 	}
 
 	@Test

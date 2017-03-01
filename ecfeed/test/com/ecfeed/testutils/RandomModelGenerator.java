@@ -10,18 +10,18 @@
 
 package com.ecfeed.testutils;
 
-import static com.ecfeed.core.adapter.java.Constants.REGEX_CATEGORY_NODE_NAME;
-import static com.ecfeed.core.adapter.java.Constants.REGEX_CATEGORY_TYPE_NAME;
-import static com.ecfeed.core.adapter.java.Constants.REGEX_CHAR_TYPE_VALUE;
-import static com.ecfeed.core.adapter.java.Constants.REGEX_CLASS_NODE_NAME;
-import static com.ecfeed.core.adapter.java.Constants.REGEX_CONSTRAINT_NODE_NAME;
-import static com.ecfeed.core.adapter.java.Constants.REGEX_METHOD_NODE_NAME;
-import static com.ecfeed.core.adapter.java.Constants.REGEX_PARTITION_LABEL;
-import static com.ecfeed.core.adapter.java.Constants.REGEX_PARTITION_NODE_NAME;
-import static com.ecfeed.core.adapter.java.Constants.REGEX_ROOT_NODE_NAME;
-import static com.ecfeed.core.adapter.java.Constants.REGEX_STRING_TYPE_VALUE;
-import static com.ecfeed.core.adapter.java.Constants.REGEX_TEST_CASE_NODE_NAME;
-import static com.ecfeed.core.adapter.java.Constants.REGEX_USER_TYPE_VALUE;
+import static com.ecfeed.core.adapter.java.AdapterConstants.REGEX_CATEGORY_NODE_NAME;
+import static com.ecfeed.core.adapter.java.AdapterConstants.REGEX_CATEGORY_TYPE_NAME;
+import static com.ecfeed.core.adapter.java.AdapterConstants.REGEX_CHAR_TYPE_VALUE;
+import static com.ecfeed.core.adapter.java.AdapterConstants.REGEX_CLASS_NODE_NAME;
+import static com.ecfeed.core.adapter.java.AdapterConstants.REGEX_CONSTRAINT_NODE_NAME;
+import static com.ecfeed.core.adapter.java.AdapterConstants.REGEX_METHOD_NODE_NAME;
+import static com.ecfeed.core.adapter.java.AdapterConstants.REGEX_PARTITION_LABEL;
+import static com.ecfeed.core.adapter.java.AdapterConstants.REGEX_PARTITION_NODE_NAME;
+import static com.ecfeed.core.adapter.java.AdapterConstants.REGEX_ROOT_NODE_NAME;
+import static com.ecfeed.core.adapter.java.AdapterConstants.REGEX_STRING_TYPE_VALUE;
+import static com.ecfeed.core.adapter.java.AdapterConstants.REGEX_TEST_CASE_NODE_NAME;
+import static com.ecfeed.core.adapter.java.AdapterConstants.REGEX_USER_TYPE_VALUE;
 import static com.ecfeed.testutils.Constants.SUPPORTED_TYPES;
 
 import java.util.ArrayList;

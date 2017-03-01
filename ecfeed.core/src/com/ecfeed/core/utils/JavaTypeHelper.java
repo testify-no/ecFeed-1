@@ -12,7 +12,7 @@ package com.ecfeed.core.utils;
 
 import java.util.Arrays;
 
-import com.ecfeed.core.adapter.java.Constants;
+import com.ecfeed.core.adapter.java.AdapterConstants;
 
 public class JavaTypeHelper {
 
@@ -401,7 +401,7 @@ public class JavaTypeHelper {
 
 	private static Object parseStringValue(String valueString) {
 
-		if(valueString.equals(Constants.VALUE_REPRESENTATION_NULL)){
+		if(valueString.equals(AdapterConstants.VALUE_REPRESENTATION_NULL)){
 			return null;
 		}
 		return valueString;

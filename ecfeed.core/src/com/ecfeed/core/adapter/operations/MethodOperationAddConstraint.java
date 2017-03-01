@@ -11,7 +11,7 @@
 package com.ecfeed.core.adapter.operations;
 
 import com.ecfeed.core.adapter.IModelOperation;
-import com.ecfeed.core.adapter.java.Constants;
+import com.ecfeed.core.adapter.java.AdapterConstants;
 import com.ecfeed.core.adapter.java.Messages;
 import com.ecfeed.core.model.ConstraintNode;
 import com.ecfeed.core.model.MethodNode;
@@ -39,7 +39,7 @@ public class MethodOperationAddConstraint extends AbstractModelOperation {
 		if(fIndex == -1){
 			fIndex = fTarget.getConstraintNodes().size();
 		}
-		if(fConstraint.getName().matches(Constants.REGEX_CONSTRAINT_NODE_NAME) == false){
+		if(fConstraint.getName().matches(AdapterConstants.REGEX_CONSTRAINT_NODE_NAME) == false){
 			ModelOperationException.report(Messages.CONSTRAINT_NAME_REGEX_PROBLEM);
 		}
 		if(fConstraint.updateReferences(fTarget) == false){

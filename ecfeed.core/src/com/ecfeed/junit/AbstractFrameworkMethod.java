@@ -17,7 +17,7 @@ import java.util.List;
 import org.junit.runners.model.FrameworkMethod;
 
 import com.ecfeed.core.adapter.java.ChoiceValueParser;
-import com.ecfeed.core.adapter.java.Constants;
+import com.ecfeed.core.adapter.java.AdapterConstants;
 import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.adapter.java.ModelClassLoader;
 import com.ecfeed.core.model.ChoiceNode;
@@ -52,7 +52,7 @@ public class AbstractFrameworkMethod extends FrameworkMethod {
 
 		if(JavaUtils.isString(type) || JavaTypeHelper.isUserType(type)){
 			//null value acceptable
-			if(choice.getValueString().equals(Constants.VALUE_REPRESENTATION_NULL)){
+			if(choice.getValueString().equals(AdapterConstants.VALUE_REPRESENTATION_NULL)){
 				return null;
 			}
 		}

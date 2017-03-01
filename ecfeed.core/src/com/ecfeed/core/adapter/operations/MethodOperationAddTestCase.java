@@ -13,7 +13,7 @@ package com.ecfeed.core.adapter.operations;
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.ITypeAdapter;
 import com.ecfeed.core.adapter.ITypeAdapterProvider;
-import com.ecfeed.core.adapter.java.Constants;
+import com.ecfeed.core.adapter.java.AdapterConstants;
 import com.ecfeed.core.adapter.java.Messages;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.MethodNode;
@@ -45,7 +45,7 @@ public class MethodOperationAddTestCase extends AbstractModelOperation {
 		if(fIndex == -1){
 			fIndex = fTarget.getTestCases().size();
 		}
-		if(fTestCase.getName().matches(Constants.REGEX_TEST_CASE_NODE_NAME) == false){
+		if(fTestCase.getName().matches(AdapterConstants.REGEX_TEST_CASE_NODE_NAME) == false){
 			ModelOperationException.report(Messages.TEST_CASE_NAME_REGEX_PROBLEM);
 		}
 		if(fTestCase.updateReferences(fTarget) == false){

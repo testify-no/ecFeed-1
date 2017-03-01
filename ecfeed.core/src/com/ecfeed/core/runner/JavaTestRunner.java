@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ecfeed.core.adapter.java.ChoiceValueParser;
-import com.ecfeed.core.adapter.java.Constants;
+import com.ecfeed.core.adapter.java.AdapterConstants;
 import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.adapter.java.ModelClassLoader;
 import com.ecfeed.core.model.ChoiceNode;
@@ -120,7 +120,7 @@ public class JavaTestRunner {
 				String type = choice.getParameter().getType();
 				//check if null value acceptable
 				if(JavaUtils.isString(type) || JavaTypeHelper.isUserType(type)){
-					if(choice.getValueString().equals(Constants.VALUE_REPRESENTATION_NULL) == false){
+					if(choice.getValueString().equals(AdapterConstants.VALUE_REPRESENTATION_NULL) == false){
 						RunnerException.report(Messages.CANNOT_PARSE_PARAMETER(type, choice.getValueString()));
 					}
 				}

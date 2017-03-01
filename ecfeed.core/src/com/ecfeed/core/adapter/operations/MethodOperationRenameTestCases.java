@@ -12,7 +12,7 @@ package com.ecfeed.core.adapter.operations;
 
 import java.util.Collection;
 
-import com.ecfeed.core.adapter.java.Constants;
+import com.ecfeed.core.adapter.java.AdapterConstants;
 import com.ecfeed.core.adapter.java.Messages;
 import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.model.TestCaseNode;
@@ -21,7 +21,7 @@ public class MethodOperationRenameTestCases extends BulkOperation {
 
 	public MethodOperationRenameTestCases(Collection<TestCaseNode> testCases, String newName) throws ModelOperationException {
 		super(OperationNames.RENAME_TEST_CASE, false);
-		if(newName.matches(Constants.REGEX_TEST_CASE_NODE_NAME) == false){
+		if(newName.matches(AdapterConstants.REGEX_TEST_CASE_NODE_NAME) == false){
 			ModelOperationException.report(Messages.TEST_CASE_NAME_REGEX_PROBLEM);
 		}
 		for(TestCaseNode testCase : testCases){

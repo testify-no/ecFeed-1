@@ -12,7 +12,7 @@ package com.ecfeed.core.adapter.operations;
 
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.ITypeAdapterProvider;
-import com.ecfeed.core.adapter.java.Constants;
+import com.ecfeed.core.adapter.java.AdapterConstants;
 import com.ecfeed.core.adapter.java.Messages;
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ChoiceNode;
@@ -128,7 +128,7 @@ public class ChoiceOperationSetValue extends AbstractModelOperation {
 	}
 
 	private String validateChoiceValue(String type, String value) {
-		if (value.length() > Constants.MAX_PARTITION_VALUE_STRING_LENGTH) return null;
+		if (value.length() > AdapterConstants.MAX_PARTITION_VALUE_STRING_LENGTH) return null;
 
 		return fAdapterProvider.getAdapter(type).convert(value);
 	}

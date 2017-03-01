@@ -11,7 +11,7 @@
 package com.ecfeed.core.adapter.operations;
 
 import com.ecfeed.core.adapter.IModelOperation;
-import com.ecfeed.core.adapter.java.Constants;
+import com.ecfeed.core.adapter.java.AdapterConstants;
 import com.ecfeed.core.adapter.java.Messages;
 import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.ModelOperationException;
@@ -40,7 +40,7 @@ public class RootOperationAddNewClass extends AbstractModelOperation {
 		if(fIndex == -1){
 			fIndex = fTarget.getClasses().size();
 		}
-		if(name.matches(Constants.REGEX_CLASS_NODE_NAME) == false){
+		if(name.matches(AdapterConstants.REGEX_CLASS_NODE_NAME) == false){
 			ModelOperationException.report(Messages.CLASS_NAME_REGEX_PROBLEM);
 		}
 		if(fTarget.getClassModel(name) != null){

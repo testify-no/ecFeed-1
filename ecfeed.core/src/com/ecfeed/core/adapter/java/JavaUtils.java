@@ -27,7 +27,7 @@ public class JavaUtils {
 	public static boolean isValidTypeName(String name){
 		if(name == null) return false;
 		if(JavaTypeHelper.isJavaType(name)) return true;
-		if(name.matches(Constants.REGEX_CLASS_NODE_NAME) == false) return false;
+		if(name.matches(AdapterConstants.REGEX_CLASS_NODE_NAME) == false) return false;
 		StringTokenizer tokenizer = new StringTokenizer(name, ".");
 		while(tokenizer.hasMoreTokens()){
 			String segment = tokenizer.nextToken();
@@ -39,11 +39,11 @@ public class JavaUtils {
 	}
 
 	public static boolean isJavaKeyword(String word){
-		return Arrays.asList(Constants.JAVA_KEYWORDS).contains(word);
+		return Arrays.asList(AdapterConstants.JAVA_KEYWORDS).contains(word);
 	}
 
 	public static String[] javaKeywords(){
-		return Constants.JAVA_KEYWORDS;
+		return AdapterConstants.JAVA_KEYWORDS;
 	}
 
 	public static boolean isString(String typeName){
@@ -109,7 +109,7 @@ public class JavaUtils {
 	}
 
 	public static boolean isValidJavaIdentifier(String value) {
-		return (value.matches(Constants.REGEX_JAVA_IDENTIFIER) && isJavaKeyword(value) == false);
+		return (value.matches(AdapterConstants.REGEX_JAVA_IDENTIFIER) && isJavaKeyword(value) == false);
 	}
 
 	public static String getStringTypeName(){
@@ -117,15 +117,15 @@ public class JavaUtils {
 	}
 
 	public static boolean isValidTestCaseName(String name) {
-		return name.matches(Constants.REGEX_TEST_CASE_NODE_NAME);
+		return name.matches(AdapterConstants.REGEX_TEST_CASE_NODE_NAME);
 	}
 
 	public static boolean isValidConstraintName(String name) {
-		return name.matches(Constants.REGEX_CONSTRAINT_NODE_NAME);
+		return name.matches(AdapterConstants.REGEX_CONSTRAINT_NODE_NAME);
 	}
 
 	public static boolean validateTestCaseName(String name){
-		return name.matches(Constants.REGEX_TEST_CASE_NODE_NAME);
+		return name.matches(AdapterConstants.REGEX_TEST_CASE_NODE_NAME);
 	}
 
 	public static List<String> getArgNames(MethodNode method) {
@@ -149,8 +149,8 @@ public class JavaUtils {
 	}
 
 	public static boolean validateMethodName(String name, List<String> problems) {
-		boolean valid = name.matches(Constants.REGEX_METHOD_NODE_NAME);
-		valid &= Arrays.asList(Constants.JAVA_KEYWORDS).contains(name) == false;
+		boolean valid = name.matches(AdapterConstants.REGEX_METHOD_NODE_NAME);
+		valid &= Arrays.asList(AdapterConstants.JAVA_KEYWORDS).contains(name) == false;
 		if(valid == false){
 			if(problems != null){
 				problems.add(Messages.METHOD_NAME_REGEX_PROBLEM);

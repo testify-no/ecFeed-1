@@ -11,7 +11,7 @@
 package com.ecfeed.core.adapter.operations;
 
 import com.ecfeed.core.adapter.IModelOperation;
-import com.ecfeed.core.adapter.java.Constants;
+import com.ecfeed.core.adapter.java.AdapterConstants;
 import com.ecfeed.core.adapter.java.Messages;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ChoiceNode;
@@ -80,42 +80,42 @@ public class GenericOperationRename extends AbstractModelOperation {
 
 		@Override
 		public Object visit(RootNode node) throws Exception {
-			return Constants.REGEX_ROOT_NODE_NAME;
+			return AdapterConstants.REGEX_ROOT_NODE_NAME;
 		}
 
 		@Override
 		public Object visit(ClassNode node) throws Exception {
-			return Constants.REGEX_CLASS_NODE_NAME;
+			return AdapterConstants.REGEX_CLASS_NODE_NAME;
 		}
 
 		@Override
 		public Object visit(MethodNode node) throws Exception {
-			return Constants.REGEX_METHOD_NODE_NAME;
+			return AdapterConstants.REGEX_METHOD_NODE_NAME;
 		}
 
 		@Override
 		public Object visit(MethodParameterNode node) throws Exception {
-			return Constants.REGEX_CATEGORY_NODE_NAME;
+			return AdapterConstants.REGEX_CATEGORY_NODE_NAME;
 		}
 
 		@Override
 		public Object visit(GlobalParameterNode node) throws Exception {
-			return Constants.REGEX_CATEGORY_NODE_NAME;
+			return AdapterConstants.REGEX_CATEGORY_NODE_NAME;
 		}
 
 		@Override
 		public Object visit(TestCaseNode node) throws Exception {
-			return Constants.REGEX_TEST_CASE_NODE_NAME;
+			return AdapterConstants.REGEX_TEST_CASE_NODE_NAME;
 		}
 
 		@Override
 		public Object visit(ConstraintNode node) throws Exception {
-			return Constants.REGEX_CONSTRAINT_NODE_NAME;
+			return AdapterConstants.REGEX_CONSTRAINT_NODE_NAME;
 		}
 
 		@Override
 		public Object visit(ChoiceNode node) throws Exception {
-			return Constants.REGEX_PARTITION_NODE_NAME;
+			return AdapterConstants.REGEX_PARTITION_NODE_NAME;
 		}
 	}
 
