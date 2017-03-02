@@ -229,4 +229,18 @@ public class ValueStatementTest {
 		evaluateOne(methodParameterNode, "b", EStatementRelation.GREATER_EQUAL, "a", AssertType.TRUE);
 	}	
 
+	@Test
+	public void copyAndEqualityTest() {
+		MethodParameterNode methodParameterNode = new MethodParameterNode("par1", JavaTypeHelper.TYPE_NAME_STRING, "", false);
+
+		RelationStatement statement = 
+				RelationStatement.createStatementWithValueCondition(
+						methodParameterNode, EStatementRelation.EQUAL, "ABC");
+
+		RelationStatement copy = statement.getCopy();
+
+		boolean result = statement.compare(copy);
+		assertEquals(true, result);
+
+	}
 }

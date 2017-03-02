@@ -138,21 +138,25 @@ public class RelationStatement extends AbstractStatement implements IRelationalS
 	@Override
 	public boolean compare(IStatement statement) {
 
-		if(statement instanceof RelationStatement == false){
+		if (statement instanceof RelationStatement == false) {
 			return false;
 		}
 
 		RelationStatement compared = (RelationStatement)statement;
 
-		if(getParameter().getName().equals(compared.getParameter().getName()) == false) {
+		if (getParameter().getName().equals(compared.getParameter().getName()) == false) {
 			return false;
 		}
 
-		if(getRelation() != compared.getRelation()) {
+		if (getRelation() != compared.getRelation()) {
 			return false;
 		}
 
-		return getCondition().compare(compared.getCondition());
+		if (!getCondition().compare(compared.getCondition())) {
+			return false;
+		}
+
+		return true;
 	}
 
 	@Override

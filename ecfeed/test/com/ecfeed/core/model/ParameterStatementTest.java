@@ -242,4 +242,19 @@ public class ParameterStatementTest {
 		evaluateOne(leftParam, rightParam, "b", EStatementRelation.GREATER_EQUAL, "a", AssertType.TRUE);
 	}	
 
+	@Test
+	public void copyAndEqualityTest() {
+		MethodParameterNode leftParam = new MethodParameterNode("par1", JavaTypeHelper.TYPE_NAME_STRING, "", false);
+		MethodParameterNode rightParam = new MethodParameterNode("par2", JavaTypeHelper.TYPE_NAME_STRING, "", false);
+
+		RelationStatement statement = 
+				RelationStatement.createStatementWithParameterCondition(
+						leftParam, EStatementRelation.EQUAL, rightParam);
+
+		RelationStatement copy = statement.getCopy();
+
+		boolean result = statement.compare(copy);
+		assertEquals(true, result);
+
+	}	
 }

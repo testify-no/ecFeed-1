@@ -100,7 +100,7 @@ public class ParameterCondition implements IStatementCondition {
 
 		ParameterCondition otherParamCondition = (ParameterCondition)otherCondition;
 
-		if (fLeftParameterNode != otherParamCondition.fLeftParameterNode) {
+		if (!fLeftParameterNode.isMatch(otherParamCondition.fLeftParameterNode)) {
 			return false;
 		}
 
@@ -108,7 +108,7 @@ public class ParameterCondition implements IStatementCondition {
 			return false;
 		}		
 
-		if (fRightParameterNode != otherParamCondition.fRightParameterNode) {
+		if (!fRightParameterNode.isMatch(otherParamCondition.fRightParameterNode)) {
 			return false;
 		}
 

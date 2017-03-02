@@ -96,7 +96,7 @@ public class ValueCondition implements IStatementCondition {
 
 		ValueCondition otherValueCondition = (ValueCondition)otherCondition;
 
-		if (fLeftParameterNode != otherValueCondition.fLeftParameterNode) {
+		if (!fLeftParameterNode.isMatch(otherValueCondition.fLeftParameterNode)) {
 			return false;
 		}
 
@@ -104,7 +104,7 @@ public class ValueCondition implements IStatementCondition {
 			return false;
 		}		
 
-		if (StringHelper.isEqual(fRightValue, otherValueCondition.fRightValue)) {
+		if (!StringHelper.isEqual(fRightValue, otherValueCondition.fRightValue)) {
 			return false;
 		}
 
