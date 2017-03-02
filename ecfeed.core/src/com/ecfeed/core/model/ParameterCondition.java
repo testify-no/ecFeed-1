@@ -88,7 +88,7 @@ public class ParameterCondition implements IStatementCondition {
 	@Override
 	public Object getCondition(){
 
-		return null; // TODO
+		return null;
 	}
 
 	@Override
