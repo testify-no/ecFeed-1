@@ -263,7 +263,7 @@ public class JavaTypeHelper {
 		}
 	}
 
-	private static Object parseBooleanValue(String valueString) {
+	public static Object parseBooleanValue(String valueString) {
 
 		if(valueString.toLowerCase().equals(VALUE_REPRESENTATION_TRUE.toLowerCase())){
 			return true;
@@ -418,7 +418,7 @@ public class JavaTypeHelper {
 		}
 
 		if (JavaTypeHelper.isBooleanTypeName(typeName1) || JavaTypeHelper.isBooleanTypeName(typeName2)) {
-			return getSubstituteTypeForBooleans(typeName1, typeName2);
+			return TYPE_NAME_BOOLEAN;
 		}
 
 		if (JavaTypeHelper.isTypeWithChars(typeName1) && JavaTypeHelper.isTypeWithChars(typeName2)) {
@@ -431,23 +431,5 @@ public class JavaTypeHelper {
 
 		return TYPE_NAME_LONG;
 	}
-
-	private static String getSubstituteTypeForBooleans(String typeName1, String typeName2) {
-
-		if (JavaTypeHelper.isBooleanTypeName(typeName1) && !JavaTypeHelper.isBooleanTypeName(typeName2)) {
-			return null;
-		}		
-
-		if (!JavaTypeHelper.isBooleanTypeName(typeName1) && JavaTypeHelper.isBooleanTypeName(typeName2)) {
-			return null;
-		}
-
-		if (JavaTypeHelper.isBooleanTypeName(typeName1) && JavaTypeHelper.isBooleanTypeName(typeName2)) {
-			return TYPE_NAME_BOOLEAN;
-		}
-
-		return null;
-	}
-
 
 }

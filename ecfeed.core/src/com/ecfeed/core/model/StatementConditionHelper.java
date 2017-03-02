@@ -144,6 +144,13 @@ public class StatementConditionHelper {
 			return false;
 		}
 
+		if (JavaTypeHelper.isBooleanTypeName(typeName)) {
+			if (EStatementRelation.isEqualityMatchForBooleans(relation, actualValue, valueToMatch)) {
+				return true;
+			}
+			return false;
+		}		
+
 		if (EStatementRelation.isEqualityMatch(relation, actualValue, valueToMatch)) {
 			return true;
 		}

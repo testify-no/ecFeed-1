@@ -202,4 +202,17 @@ public enum EStatementRelation {
 			return false;
 		}
 	}	
+
+	public static boolean isEqualityMatchForBooleans(EStatementRelation relation, String actualValue, String valueToMatch) {
+
+		if (JavaTypeHelper.parseBooleanValue(actualValue) == null) {
+			return false;
+		}
+
+		if (JavaTypeHelper.parseBooleanValue(valueToMatch) == null) {
+			return false;
+		}		
+
+		return isEqualityMatch(relation, actualValue, valueToMatch);
+	}
 }
