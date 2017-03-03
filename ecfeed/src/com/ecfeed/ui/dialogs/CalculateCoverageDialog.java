@@ -10,7 +10,6 @@
 
 package com.ecfeed.ui.dialogs;
 
-import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -21,31 +20,23 @@ import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.ScrollBar;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Tree;
 
 import com.ecfeed.core.adapter.IImplementationStatusResolver;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.TestCaseNode;
-import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.ui.common.EclipseImplementationStatusResolver;
 import com.ecfeed.ui.common.TestCasesViewerContentProvider;
 import com.ecfeed.ui.common.TestCasesViewerLabelProvider;
@@ -57,7 +48,6 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 	public static final String DIALOG_CALCULATE_COVERAGE_MESSAGE = "Select test cases to include in evaluation.";
 	public static final String DIALOG_CALCULATE_COVERAGE_TITLE = "Calculate n-wise coverage";
 
-	private Canvas[] fCanvasSet;
 	private CoverageCalculator fCalculator;
 	private MethodNode fMethod;
 	IFileInfoProvider fFileInfoProvider;
@@ -66,6 +56,7 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 	private final Object[] fInitChecked;
 	private final Object[] fInitGrayed;
 	private CheckboxTreeViewer fTestCasesViewer;
+	private Table fCoverageTable;
 	private CoverageTreeViewerListener fCheckStateListener;
 	private IImplementationStatusResolver fStatusResolver;
 
@@ -103,7 +94,7 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 
 			if (fCalculator.calculateCoverage()) {
 				fTreeState = getViewer().getCheckedElements();
-				drawTiles();
+				fillCoverageTableRows();
 			} else {
 				revertLastTreeChange();
 			}
@@ -204,7 +195,7 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 		mainContainer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		createTestCaseComposite(mainContainer);
-		createCoverageGraphComposite(mainContainer);
+		createCoverageTable(mainContainer);
 
 		setInitialSelection(fTestCasesViewer, fInitChecked, fInitGrayed);
 
@@ -212,7 +203,7 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
-				drawTiles();
+				fillCoverageTableRows();
 			}
 		});
 
@@ -269,60 +260,29 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 		fTestCasesViewer.addCheckStateListener(fCheckStateListener);
 	}
 
-	private void createCoverageGraphComposite(Composite parent) {
+	private void createCoverageTable(Composite parent) {
 
-		ScrolledComposite scrolled = new ScrolledComposite(parent, SWT.BORDER | SWT.FILL | SWT.V_SCROLL);
-		GridData scrolledgriddata = new GridData(SWT.FILL, SWT.FILL, true, true);
+		Composite composite = new Composite(parent, SWT.FILL);
 
-		scrolledgriddata.minimumWidth = 100;
-		scrolledgriddata.minimumHeight = 150;
-		scrolled.setLayout(new GridLayout(1, false));
-		scrolled.setLayoutData(scrolledgriddata);
-		scrolled.setExpandHorizontal(true);
-		scrolled.setExpandVertical(true);
+		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
+		gridData.minimumWidth = 100;
+		gridData.minimumHeight = 150;
 
-		Composite composite = new Composite(scrolled, SWT.BORDER | SWT.FILL);
 		composite.setLayout(new GridLayout(1, false));
-		GridData griddata = new GridData(SWT.FILL, SWT.FILL, true, true);
-		griddata.minimumHeight = 100;
-		composite.setLayoutData(griddata);
-		createCoverageGraphViewer(composite);
+		composite.setLayoutData(gridData);
 
-		scrolled.setMinSize(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-		scrolled.setContent(composite);
-		final ScrollBar vBar = scrolled.getVerticalBar();
-		SelectionListener listener = new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				drawTiles();
-			}
-		};
+		fCoverageTable = new Table(composite, SWT.BORDER);
+		createColumns(fCoverageTable);
 
-		vBar.addSelectionListener(listener);
-	}
-
-	private void createCoverageGraphViewer(Composite parent) {
-
-		fCanvasSet = new Canvas[getN()];
-
-		for (int n = 0; n < getN(); n++) {
-			fCanvasSet[n] = new Canvas(parent, SWT.FILL);
-			fCanvasSet[n].setSize(getInitialSize().x, 40);
-			GridData griddata = new GridData(SWT.FILL, SWT.FILL, true, false);
-			griddata.minimumHeight = 40;
-			fCanvasSet[n].setLayoutData(griddata);
+		for (int index = 0; index < getN(); index++) {
+			TableItem tableItem = new TableItem(fCoverageTable, SWT.NONE);
+			tableItem.setText(new String[] { "", "" });
 		}
 
-		parent.getParent().addListener(SWT.Resize, new Listener() {
-			@Override
-			public void handleEvent(Event e) {
-				drawTiles();
-			}
-		});
+		fillCoverageTableRows();	    
 	}
 
-
-	private void drawTiles() {
+	private void fillCoverageTableRows() {
 
 		double[] coverage = fCalculator.getCoverage();
 
@@ -331,81 +291,29 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 		}
 
 		for (int n = 0; n < getN(); n++) {
-			drawOneTile(coverage, n);
+			TableItem tableItem = fCoverageTable.getItem(n);
+			fillTableItem(tableItem, n, coverage[n]);
 		}
 	}
 
-	private void drawOneTile(double[] coverage, int n) {
+	private void fillTableItem(TableItem tableItem, int n, double coverage) {
 
-		Display display = Display.getCurrent();
-		Canvas canvas = getCanvas(n);
+		tableItem.setText(0, new Integer(n+1).toString());
 
-		Font font = createFont(display, canvas);	
-		GC gc = createGraphicContext(display, canvas, font);
-
-		String tileDescription = createTileDescription(coverage, n);
-
-		drawCenteredText(tileDescription, canvas, gc);		
-
-		font.dispose();
-		gc.dispose();
+		tableItem.setText(1, String.format( "%.2f", coverage ));
 	}
 
-	private Canvas getCanvas(int n) {
 
-		Canvas canvas = fCanvasSet[n];
-		canvas.setSize(canvas.getParent().getSize().x, 40);
+	private void createColumns(Table table) {
+		TableColumn columnN = new TableColumn(table, SWT.CENTER);
+		TableColumn columnCoverage = new TableColumn(table, SWT.CENTER);
+		columnN.setText("N");
+		columnCoverage.setText("Coverage");
 
-		return canvas;
-	}
+		columnN.setWidth(280);
+		columnCoverage.setWidth(280);
 
-	private static Font createFont(Display display, Canvas fCanvas) {
-
-		int fontHeight = fCanvas.getSize().y / 3;
-		return new Font(display, display.getSystemFont().getFontData()[0].getName(), fontHeight, 1);
-	}
-
-	private static GC createGraphicContext(Display display, Canvas canvas, Font font) {
-
-		GC gc = new GC(canvas);
-
-		gc.setBackground(display.getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
-		gc.fillRectangle(0, 0, canvas.getSize().x, canvas.getSize().y);
-		gc.setFont(font);
-
-		return gc;
-	}
-
-	private static String createTileDescription(double[] coverages, int n) {
-
-		String nDescription = StringHelper.appendSpacesToLength("N = " + (n + 1), 15);
-		String percentageDescription = createPercentageDescription(coverages[n]);
-
-		return nDescription + percentageDescription;
-	}
-
-	private static String createPercentageDescription(double coverage) {
-
-		String description;
-
-		if (coverage == 0.0) {
-			description = " 0.00%";
-		} else {
-			DecimalFormat df = new DecimalFormat("#.00");
-			description = df.format(coverage) + "%";
-		}
-
-		return StringHelper.insertSpacesToLength(description, 7);
-	}
-
-	private static void drawCenteredText(String barDescription, Canvas canvas, GC gc) {
-
-		Point textExtent = gc.textExtent(barDescription);
-
-		int testY = (canvas.getSize().y / 2) - (textExtent.y / 2);
-		int testX = (canvas.getSize().x / 2) - (textExtent.x / 2);
-
-		gc.drawString(barDescription, testX, testY, true);
+		table.setHeaderVisible(true);
 	}
 
 	private int getN(){
