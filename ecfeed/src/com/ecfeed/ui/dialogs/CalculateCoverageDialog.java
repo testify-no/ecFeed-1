@@ -196,7 +196,7 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 		mainContainer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		createTestCaseComposite(mainContainer);
-		createCoverageTable(mainContainer);
+		createCoverageTableWithMargins(mainContainer);
 
 		setInitialSelection(fTestCasesViewer, fInitChecked, fInitGrayed);
 
@@ -259,6 +259,20 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 
 		fCheckStateListener = new CoverageTreeViewerListener(fTestCasesViewer);
 		fTestCasesViewer.addCheckStateListener(fCheckStateListener);
+	}
+
+	private void createCoverageTableWithMargins(Composite parent) {
+
+		Composite compositeAligningMargins = new Composite(parent, SWT.FILL);
+
+		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
+		gridData.minimumWidth = 100;
+		gridData.minimumHeight = 150;
+
+		compositeAligningMargins.setLayout(new GridLayout(1, false));
+		compositeAligningMargins.setLayoutData(gridData);
+
+		createCoverageTable(compositeAligningMargins);
 	}
 
 	private void createCoverageTable(Composite parent) {
