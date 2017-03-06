@@ -63,6 +63,9 @@ public class MethodParameterNode extends AbstractParameterNode {
 		MethodParameterNode copy = new MethodParameterNode(getName(),
 				getType(), getDefaultValue(), isExpected());
 
+		copy.fLinked = fLinked;
+		copy.fLink = fLink;
+
 		copy.setProperties(getProperties());
 		copy.setParent(this.getParent());
 
