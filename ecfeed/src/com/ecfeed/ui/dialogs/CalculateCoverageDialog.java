@@ -21,6 +21,7 @@ import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -268,7 +269,7 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 		gridData.minimumWidth = 100;
 		gridData.minimumHeight = 150;
 
-		composite.setLayout(new GridLayout(1, false));
+		composite.setLayout(new FillLayout());
 		composite.setLayoutData(gridData);
 
 		fCoverageTable = new Table(composite, SWT.BORDER);
