@@ -28,7 +28,6 @@ import com.ecfeed.android.utils.AndroidBaseRunnerHelper;
 import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.ITypeAdapterProvider;
-import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.adapter.operations.MethodOperationAddConstraint;
 import com.ecfeed.core.adapter.operations.MethodOperationAddParameter;
 import com.ecfeed.core.adapter.operations.MethodOperationAddTestCase;
@@ -41,6 +40,7 @@ import com.ecfeed.core.model.Constraint;
 import com.ecfeed.core.model.ConstraintNode;
 import com.ecfeed.core.model.GlobalParameterNode;
 import com.ecfeed.core.model.MethodNode;
+import com.ecfeed.core.model.MethodNodeHelper;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.model.StaticStatement;
@@ -85,11 +85,11 @@ public class MethodInterface extends ParametersParentInterface {
 	}
 
 	public List<String> getArgTypes(MethodNode method) {
-		return JavaUtils.getArgTypes(method);
+		return MethodNodeHelper.getArgTypes(method);
 	}
 
 	public List<String> getArgNames(MethodNode method) {
-		return JavaUtils.getArgNames(method);
+		return MethodNodeHelper.getArgNames(method);
 	}
 
 	public boolean convertTo(MethodNode method) {

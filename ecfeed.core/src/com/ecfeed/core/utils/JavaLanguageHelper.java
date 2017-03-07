@@ -10,7 +10,10 @@
 
 package com.ecfeed.core.utils;
 
+import java.net.URLClassLoader;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import com.ecfeed.core.adapter.java.AdapterConstants;
@@ -60,4 +63,22 @@ public class JavaLanguageHelper {
 		return true;
 	}	
 
+	public static List<String> getEnumValuesNames(URLClassLoader loader, String enumTypeName) {
+		
+		List<String> values = new ArrayList<String>();
+		
+		try {
+			Class<?> enumType = loader.loadClass(enumTypeName);
+			
+			if(enumType != null && enumType.isEnum()){
+				for (Object object: enumType.getEnumConstants()) {
+					values.add(((Enum<?>)object).name());
+				}
+			}
+		} catch (ClassNotFoundException e) {
+		}
+		
+		return values;
+	}
+	
 }

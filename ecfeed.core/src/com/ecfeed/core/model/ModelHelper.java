@@ -10,6 +10,8 @@
 
 package com.ecfeed.core.model;
 
+import com.ecfeed.core.adapter.java.AdapterConstants;
+
 
 public class ModelHelper {
 	
@@ -24,14 +26,41 @@ public class ModelHelper {
 		return qualifiedName.substring(lastDotIndex + 1);
 	}
 
-	public static String getQualifiedName(String packageName, String localName){
+	public static String getQualifiedName(String packageName, String localName) {
+		
 		return packageName + "." + localName;
 	}
 	
-	public static String getPackageName(String qualifiedName){
+	public static String getPackageName(String qualifiedName) {
+		
 		int lastDotIndex = qualifiedName.lastIndexOf('.');
+		
 		return (lastDotIndex == -1)? "" : qualifiedName.substring(0, lastDotIndex);
 	}
 	
+	public static boolean isValidTestCaseName(String name) {
+		
+		return name.matches(AdapterConstants.REGEX_TEST_CASE_NODE_NAME);
+	}
+
+	public static boolean isValidConstraintName(String name) {
+		
+		return name.matches(AdapterConstants.REGEX_CONSTRAINT_NODE_NAME);
+	}
+
+	public static boolean validateTestCaseName(String name){
+		
+		return name.matches(AdapterConstants.REGEX_TEST_CASE_NODE_NAME);
+	}
+	
+	public static String convertParameterToSimplifiedString(AbstractParameterNode parameter) {
+		
+		String result = parameter.toString();
+		String type = parameter.getType();
+		
+		result.replace(type, ModelHelper.convertToLocalName(type));
+		
+		return result;
+	}
 	
 }

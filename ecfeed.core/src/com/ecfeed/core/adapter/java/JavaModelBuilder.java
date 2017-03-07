@@ -22,6 +22,7 @@ import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelOperationException;
+import com.ecfeed.core.utils.JavaLanguageHelper;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.SystemLogger;
 
@@ -145,7 +146,7 @@ public class JavaModelBuilder {
 
 	protected String defaultEnumExpectedValueString(String typeName) {
 		String value = "VALUE";
-		List<String> values = JavaUtils.enumValuesNames(fLoader, typeName);
+		List<String> values = JavaLanguageHelper.getEnumValuesNames(fLoader, typeName);
 		if(values.size() > 0){
 			value = values.get(0);
 		}

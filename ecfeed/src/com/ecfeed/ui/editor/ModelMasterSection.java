@@ -42,7 +42,6 @@ import org.eclipse.ui.forms.IDetailsPage;
 
 import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.adapter.EImplementationStatus;
-import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.ClassNode;
@@ -52,6 +51,7 @@ import com.ecfeed.core.model.IModelVisitor;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodNodeHelper;
 import com.ecfeed.core.model.MethodParameterNode;
+import com.ecfeed.core.model.ModelHelper;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.utils.ExceptionHelper;
@@ -188,7 +188,7 @@ public class ModelMasterSection extends TreeViewerSection{
 
 			@Override
 			public Object visit(MethodParameterNode node) throws Exception {
-				String result = JavaUtils.simplifiedToString(node);
+				String result = ModelHelper.convertParameterToSimplifiedString(node);
 				if(node.isLinked()){
 					result += "[LINKED]->" + node.getLink().getQualifiedName();
 				}
@@ -197,7 +197,7 @@ public class ModelMasterSection extends TreeViewerSection{
 
 			@Override
 			public Object visit(GlobalParameterNode node) throws Exception {
-				return JavaUtils.simplifiedToString(node);
+				return ModelHelper.convertParameterToSimplifiedString(node);
 			}
 
 			@Override

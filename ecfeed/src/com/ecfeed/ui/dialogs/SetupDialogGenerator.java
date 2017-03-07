@@ -45,7 +45,6 @@ import org.eclipse.swt.widgets.Tree;
 
 import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.adapter.IImplementationStatusResolver;
-import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.generators.DoubleParameter;
 import com.ecfeed.core.generators.GeneratorFactory;
 import com.ecfeed.core.generators.IntegerParameter;
@@ -61,6 +60,7 @@ import com.ecfeed.core.model.Constraint;
 import com.ecfeed.core.model.ConstraintNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
+import com.ecfeed.core.model.ModelHelper;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.StringHolder;
 import com.ecfeed.ui.common.CommonConstants;
@@ -406,7 +406,7 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 		boolean testSuiteValid = true;
 
 		if (fTestSuiteCombo != null && fTestSuiteCombo.isDisposed() == false) {
-			testSuiteValid = JavaUtils.isValidTestCaseName(fTestSuiteCombo.getText());
+			testSuiteValid = ModelHelper.isValidTestCaseName(fTestSuiteCombo.getText());
 			if (testSuiteValid) {
 				fTestSuiteName = fTestSuiteCombo.getText();
 			}
