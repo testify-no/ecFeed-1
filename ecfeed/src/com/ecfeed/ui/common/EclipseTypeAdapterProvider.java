@@ -14,7 +14,7 @@ import java.util.Arrays;
 
 import com.ecfeed.core.adapter.ITypeAdapter;
 import com.ecfeed.core.adapter.ITypeAdapterProvider;
-import com.ecfeed.core.adapter.java.JavaUtils;
+import com.ecfeed.core.utils.JavaLanguageHelper;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.StringHelper;
 
@@ -118,7 +118,7 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 		}
 
 		public String convert(String value){
-			return JavaUtils.isValidJavaIdentifier(value) ? value : null;
+			return JavaLanguageHelper.isValidJavaIdentifier(value) ? value : null;
 		}
 
 		@Override

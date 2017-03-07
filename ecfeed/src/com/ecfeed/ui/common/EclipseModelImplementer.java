@@ -57,7 +57,9 @@ import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.GlobalParameterNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
+import com.ecfeed.core.model.ModelHelper;
 import com.ecfeed.core.utils.EcException;
+import com.ecfeed.core.utils.JavaLanguageHelper;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.PackageClassHelper;
 import com.ecfeed.core.utils.SystemLogger;
@@ -164,7 +166,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 		IClassImplementHelper implementHelper = new EclipseClassImplementHelper(fFileInfoProvider);
 
 		String thePackage = JavaUtils.getPackageName(classNode.getName());
-		String classNameWithoutExtension = JavaUtils.getLocalName(classNode.getName());
+		String classNameWithoutExtension = ModelHelper.convertToLocalName(classNode.getName());
 
 		if (classNode.getRunOnAndroid()) {
 			AndroidUserClassImplementerExt.implementContent(
@@ -200,7 +202,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 			return;
 		}
 		String packageName = JavaUtils.getPackageName(typeName);
-		String localName = JavaUtils.getLocalName(typeName);
+		String localName = ModelHelper.convertToLocalName(typeName);
 		String unitName = localName + ".java";
 		//		IPackageFragment packageFragment = getPackageFragment(packageName);
 		IPackageFragment packageFragment = 
@@ -344,7 +346,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 			}
 		}
 
-		return JavaUtils.isValidJavaIdentifier(node.getValueString());
+		return JavaLanguageHelper.isValidJavaIdentifier(node.getValueString());
 	}
 
 	@Override
@@ -446,7 +448,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 
 		for(int i = 0; i < parameters.size(); ++i) {
 			AbstractParameterNode param = parameters.get(i);
-			args += JavaUtils.getLocalName(param.getType()) + " " + param.getName();
+			args += ModelHelper.convertToLocalName(param.getType()) + " " + param.getName();
 			if(i != parameters.size() - 1){
 				args += ", ";
 			}
@@ -462,7 +464,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 			}
 			fieldsDefinition = fieldsDefinition.substring(0, fieldsDefinition.length() - 2);
 		}
-		String result = "public enum " + JavaUtils.getLocalName(node.getType()) + "{\n\t" + fieldsDefinition + "\n}";
+		String result = "public enum " + ModelHelper.convertToLocalName(node.getType()) + "{\n\t" + fieldsDefinition + "\n}";
 		return result;
 	}
 
@@ -523,7 +525,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 	}
 
 	private EnumDeclaration getEnumDeclaration(CompilationUnit unit, String typeName) {
-		String className = JavaUtils.getLocalName(typeName);
+		String className = ModelHelper.convertToLocalName(typeName);
 		for (Object object : unit.types()) {
 			AbstractTypeDeclaration declaration = (AbstractTypeDeclaration)object;
 			if (declaration.getName().toString().equals(className) && declaration instanceof EnumDeclaration) {

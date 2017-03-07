@@ -19,6 +19,7 @@ import com.ecfeed.core.adapter.java.Messages;
 import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.ModelOperationException;
+import com.ecfeed.core.utils.StringHelper;
 
 public class ClassOperationAddMethod extends AbstractModelOperation{
 	
@@ -44,7 +45,7 @@ public class ClassOperationAddMethod extends AbstractModelOperation{
 			fIndex = fTarget.getMethods().size();
 		}
 		if(JavaUtils.validateNewMethodSignature(fTarget, fMethod.getName(), fMethod.getParametersTypes(), problems) == false){
-			ModelOperationException.report(JavaUtils.consolidate(problems));
+			ModelOperationException.report(StringHelper.convertToMultilineString(problems));
 		}
 		if(fTarget.addMethod(fMethod, fIndex) == false){
 			ModelOperationException.report(Messages.UNEXPECTED_PROBLEM_WHILE_ADDING_ELEMENT);

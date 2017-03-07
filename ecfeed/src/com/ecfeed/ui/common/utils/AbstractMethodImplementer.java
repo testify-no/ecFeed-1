@@ -17,6 +17,7 @@ import com.ecfeed.android.external.IMethodImplementHelper;
 import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.MethodNode;
+import com.ecfeed.core.model.ModelHelper;
 import com.ecfeed.core.utils.JavaTypeHelper;
 
 public abstract class AbstractMethodImplementer implements IImplementerExt {
@@ -101,7 +102,7 @@ public abstract class AbstractMethodImplementer implements IImplementerExt {
 
 		for(int i = 0; i < parameters.size(); ++i) {
 			AbstractParameterNode param = parameters.get(i);
-			args += JavaUtils.getLocalName(param.getType()) + " " + param.getName();
+			args += ModelHelper.convertToLocalName(param.getType()) + " " + param.getName();
 			if(i != parameters.size() - 1){
 				args += ", ";
 			}

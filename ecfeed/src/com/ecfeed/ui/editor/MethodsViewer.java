@@ -21,10 +21,10 @@ import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 
-import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
+import com.ecfeed.core.model.ModelHelper;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.ecfeed.ui.common.NodeViewerColumnLabelProvider;
@@ -100,7 +100,7 @@ public class MethodsViewer extends TableViewerSection {
 			List<MethodParameterNode> parameters = ((MethodNode)element).getMethodParameters();
 			String result = "";
 			for(int i = 0; i < argTypes.size(); i++){
-				result += (parameters.get(i).isExpected()?"[e]":"") + JavaUtils.getLocalName(argTypes.get(i)) + " " + argNames.get(i);
+				result += (parameters.get(i).isExpected()?"[e]":"") + ModelHelper.convertToLocalName(argTypes.get(i)) + " " + argNames.get(i);
 				if(i < argTypes.size() - 1){
 					result += ", ";
 				}

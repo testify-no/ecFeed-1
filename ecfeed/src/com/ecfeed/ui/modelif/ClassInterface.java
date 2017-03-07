@@ -33,6 +33,7 @@ import com.ecfeed.core.adapter.operations.ClassOperationSetRunOnAndroid;
 import com.ecfeed.core.adapter.operations.FactoryRenameOperation;
 import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.MethodNode;
+import com.ecfeed.core.model.ModelHelper;
 import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.utils.EcException;
 import com.ecfeed.core.utils.PackageClassHelper;
@@ -67,7 +68,7 @@ public class ClassInterface extends GlobalParametersParentInterface {
 	}
 
 	public static String getLocalName(ClassNode classNode){
-		return JavaUtils.getLocalName(classNode.getName());
+		return ModelHelper.convertToLocalName(classNode.getName());
 	}
 
 	public static String getPackageName(ClassNode classNode){

@@ -13,13 +13,14 @@ package com.ecfeed.core.adapter.java;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.StringTokenizer;
 
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.MethodNode;
+import com.ecfeed.core.model.ModelHelper;
+import com.ecfeed.core.utils.JavaLanguageHelper;
 import com.ecfeed.core.utils.JavaTypeHelper;
 
 public class JavaUtils {
@@ -31,28 +32,11 @@ public class JavaUtils {
 		StringTokenizer tokenizer = new StringTokenizer(name, ".");
 		while(tokenizer.hasMoreTokens()){
 			String segment = tokenizer.nextToken();
-			if(isValidJavaIdentifier(segment) == false){
+			if(JavaLanguageHelper.isValidJavaIdentifier(segment) == false){
 				return false;
 			}
 		}
 		return true;
-	}
-
-	public static boolean isJavaKeyword(String word){
-		return Arrays.asList(AdapterConstants.JAVA_KEYWORDS).contains(word);
-	}
-
-	public static String[] javaKeywords(){
-		return AdapterConstants.JAVA_KEYWORDS;
-	}
-
-	public static String consolidate(Collection<String> strings){
-		
-		String consolidated = "";
-		for(String string : strings){
-			consolidated += string + "\n";
-		}
-		return consolidated;
 	}
 
 	public static List<String> enumValuesNames(URLClassLoader loader, String enumTypeName){
@@ -67,10 +51,6 @@ public class JavaUtils {
 		} catch (ClassNotFoundException e) {
 		}
 		return values;
-	}
-
-	public static boolean isValidJavaIdentifier(String value) {
-		return (value.matches(AdapterConstants.REGEX_JAVA_IDENTIFIER) && isJavaKeyword(value) == false);
 	}
 
 	public static boolean isValidTestCaseName(String name) {
@@ -116,13 +96,8 @@ public class JavaUtils {
 		return valid;
 	}
 
-	public static String getLocalName(String qualifiedName){
-		int lastDotIndex = qualifiedName.lastIndexOf('.');
-		return (lastDotIndex == -1)?qualifiedName: qualifiedName.substring(lastDotIndex + 1);
-	}
-
 	public static String getLocalName(ClassNode node){
-		return getLocalName(node.getName());
+		return ModelHelper.convertToLocalName(node.getName());
 	}
 
 	public static String getPackageName(ClassNode classNode){
@@ -137,7 +112,7 @@ public class JavaUtils {
 	public static String simplifiedToString(AbstractParameterNode parameter){
 		String result = parameter.toString();
 		String type = parameter.getType();
-		result.replace(type, JavaUtils.getLocalName(type));
+		result.replace(type, ModelHelper.convertToLocalName(type));
 		return result;
 	}
 
@@ -145,7 +120,7 @@ public class JavaUtils {
 		String result = method.toString();
 		for(AbstractParameterNode parameter : method.getParameters()){
 			String type = parameter.getType();
-			String newType = JavaUtils.getLocalName(type);
+			String newType = ModelHelper.convertToLocalName(type);
 			result = result.replaceAll(type, newType);
 		}
 		return result;
@@ -153,10 +128,6 @@ public class JavaUtils {
 
 	public static String getQualifiedName(ClassNode classNode){
 		return classNode.getName();
-	}
-
-	public static String getQualifiedName(String packageName, String localName){
-		return packageName + "." + localName;
 	}
 
 	public static boolean validateNewMethodSignature(ClassNode parent, String methodName, List<String> argTypes){

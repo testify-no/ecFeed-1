@@ -23,10 +23,10 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
 import com.ecfeed.core.adapter.EImplementationStatus;
-import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.GlobalParameterNode;
 import com.ecfeed.core.model.MethodParameterNode;
+import com.ecfeed.core.model.ModelHelper;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
@@ -250,7 +250,7 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 	}
 
 	private String linkName(GlobalParameterNode parameter) {
-		return parameter.getQualifiedName() + " [" + JavaUtils.getLocalName(parameter.getType()) + "]";
+		return parameter.getQualifiedName() + " [" + ModelHelper.convertToLocalName(parameter.getType()) + "]";
 	}
 
 	private String linkPath(String linkName){

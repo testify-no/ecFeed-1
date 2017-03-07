@@ -10,6 +10,8 @@
 
 package com.ecfeed.core.utils;
 
+import java.util.Collection;
+
 public class StringHelper {
 
 	public static boolean isNullOrEmpty(String str) {
@@ -365,5 +367,14 @@ public class StringHelper {
 
 		return dblResult.longValue();
 	}
+	
+	public static String convertToMultilineString(Collection<String> strings){
+		
+		String consolidated = "";
+		for(String string : strings){
+			consolidated += string + "\n";
+		}
+		return consolidated;
+	}	
 
 }

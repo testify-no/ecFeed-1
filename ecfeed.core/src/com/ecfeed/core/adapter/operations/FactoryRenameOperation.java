@@ -27,6 +27,8 @@ import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.TestCaseNode;
+import com.ecfeed.core.utils.JavaLanguageHelper;
+import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.core.utils.SystemLogger;
 
 public class FactoryRenameOperation {
@@ -45,7 +47,7 @@ public class FactoryRenameOperation {
 		@Override
 		protected void verifyNewName(String newName) throws ModelOperationException {
 			for(String token : getNewName().split("\\.")){
-				if(JavaUtils.isJavaKeyword(token)){
+				if(JavaLanguageHelper.isJavaKeyword(token)){
 					ModelOperationException.report(Messages.CLASS_NAME_CONTAINS_KEYWORD_PROBLEM);
 				}
 			}
@@ -71,7 +73,7 @@ public class FactoryRenameOperation {
 			List<String> problems = new ArrayList<String>();
 			MethodNode target = (MethodNode)getOwnNode();
 			if(JavaUtils.validateNewMethodSignature(target.getClassNode(), getNewName(), target.getParametersTypes(), problems) == false){
-				ModelOperationException.report(JavaUtils.consolidate(problems));
+				ModelOperationException.report(StringHelper.convertToMultilineString(problems));
 			}
 		}
 	}
@@ -90,7 +92,7 @@ public class FactoryRenameOperation {
 		@Override
 		protected void verifyNewName(String newName) throws ModelOperationException {
 			GlobalParameterNode target = (GlobalParameterNode) getOwnNode();
-			if(JavaUtils.isJavaKeyword(newName)){
+			if(JavaLanguageHelper.isJavaKeyword(newName)){
 				ModelOperationException.report(Messages.CATEGORY_NAME_REGEX_PROBLEM);
 			}
 			if(target.getParametersParent().getParameter(newName) != null){
@@ -113,7 +115,7 @@ public class FactoryRenameOperation {
 		@Override
 		protected void verifyNewName(String newName) throws ModelOperationException {
 			MethodParameterNode target = (MethodParameterNode)getOwnNode();
-			if(JavaUtils.isJavaKeyword(newName)){
+			if(JavaLanguageHelper.isJavaKeyword(newName)){
 				ModelOperationException.report(Messages.CATEGORY_NAME_REGEX_PROBLEM);
 			}
 			if(target.getMethod().getParameter(newName) != null){
