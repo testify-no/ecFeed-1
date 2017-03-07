@@ -14,5 +14,16 @@ package com.ecfeed.core.model;
 
 public class ClassNodeHelper  {
 
+	public static String getLocalName(ClassNode node){
+		return ModelHelper.convertToLocalName(node.getName());
+	}
 	
+	public static String getPackageName(ClassNode classNode){
+		return ModelHelper.getPackageName(classNode.getName());
+	}
+	
+	public static String getQualifiedName(ClassNode classNode){
+		return classNode.getName();
+	}
+
 }

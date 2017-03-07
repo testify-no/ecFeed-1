@@ -54,6 +54,7 @@ import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.ClassNode;
+import com.ecfeed.core.model.ClassNodeHelper;
 import com.ecfeed.core.model.GlobalParameterNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
@@ -165,7 +166,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 		String projectPath = new EclipseProjectHelper(fFileInfoProvider).getProjectPath();
 		IClassImplementHelper implementHelper = new EclipseClassImplementHelper(fFileInfoProvider);
 
-		String thePackage = JavaUtils.getPackageName(classNode.getName());
+		String thePackage = ModelHelper.getPackageName(classNode.getName());
 		String classNameWithoutExtension = ModelHelper.convertToLocalName(classNode.getName());
 
 		if (classNode.getRunOnAndroid()) {
@@ -201,7 +202,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 		if(JavaUtils.isValidTypeName(typeName) == false){
 			return;
 		}
-		String packageName = JavaUtils.getPackageName(typeName);
+		String packageName = ModelHelper.getPackageName(typeName);
 		String localName = ModelHelper.convertToLocalName(typeName);
 		String unitName = localName + ".java";
 		//		IPackageFragment packageFragment = getPackageFragment(packageName);
@@ -386,7 +387,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 	}
 
 	private IImplementerExt createMethodImplementer(MethodNode methodNode) {
-		final String className = JavaUtils.getQualifiedName(methodNode.getClassNode());
+		final String className = ClassNodeHelper.getQualifiedName(methodNode.getClassNode());
 
 		IMethodImplementHelper fMethodImplementHelper = 
 				new EclipseMethodImplementHelper(fFileInfoProvider, className, methodNode);

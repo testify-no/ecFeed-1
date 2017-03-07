@@ -23,6 +23,7 @@ import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.ClassNode;
+import com.ecfeed.core.model.ClassNodeHelper;
 import com.ecfeed.core.model.ConstraintNode;
 import com.ecfeed.core.model.GlobalParameterNode;
 import com.ecfeed.core.model.IModelVisitor;
@@ -122,7 +123,7 @@ public class JavaImplementationStatusResolver extends AbstractImplementationStat
 
 	@Override
 	protected boolean methodDefinitionImplemented(MethodNode methodModel){
-		Class<?> parentClass = loadClass(JavaUtils.getQualifiedName(methodModel.getClassNode()));
+		Class<?> parentClass = loadClass(ClassNodeHelper.getQualifiedName(methodModel.getClassNode()));
 		if(parentClass == null){
 			return false;
 		}

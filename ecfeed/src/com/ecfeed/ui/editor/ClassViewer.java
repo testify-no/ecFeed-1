@@ -22,8 +22,8 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 
 import com.ecfeed.core.adapter.EImplementationStatus;
-import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.model.ClassNode;
+import com.ecfeed.core.model.ClassNodeHelper;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.ui.common.ColorConstants;
 import com.ecfeed.ui.common.ColorManager;
@@ -193,7 +193,7 @@ public class ClassViewer extends TableViewerSection {
 		fPackageNameColumn = addColumn("Package", 150, new ClassViewerColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
-				return JavaUtils.getPackageName((ClassNode)element);
+				return ClassNodeHelper.getPackageName((ClassNode)element);
 			}
 		});
 	}

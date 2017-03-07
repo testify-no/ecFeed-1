@@ -14,13 +14,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.ecfeed.core.adapter.java.ChoiceValueParser;
-import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ChoiceNode;
+import com.ecfeed.core.model.ClassNodeHelper;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.TestCaseNode;
-import com.ecfeed.core.serialization.export.Expression;
 
 public class TestCasesExportHelper {
 
@@ -38,8 +37,8 @@ public class TestCasesExportHelper {
 	private static final String ARITHMETIC_EXPRESSION_SEQUENCE_GENERIC_PATTERN = "\\$\\(.*\\)";
 
 	public static String generateSection(MethodNode method, String template) {
-		String result = template.replace(CLASS_NAME_SEQUENCE, JavaUtils.getLocalName(method.getClassNode()));
-		result = result.replace(PACKAGE_NAME_SEQUENCE, JavaUtils.getPackageName(method.getClassNode()));
+		String result = template.replace(CLASS_NAME_SEQUENCE, ClassNodeHelper.getLocalName(method.getClassNode()));
+		result = result.replace(PACKAGE_NAME_SEQUENCE, ClassNodeHelper.getPackageName(method.getClassNode()));
 		result = result.replace(METHOD_NAME_SEQUENCE, method.getName());
 		result = replaceParameterSequences(method, result);
 		result = evaluateExpressions(result);

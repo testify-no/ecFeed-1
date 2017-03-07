@@ -19,8 +19,8 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.ui.forms.widgets.Section;
 
-import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.model.ClassNode;
+import com.ecfeed.core.model.ClassNodeHelper;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
@@ -57,7 +57,7 @@ public class OtherMethodsViewer extends CheckboxTableViewerSection {
 
 	public void setInput(ClassNode classNode){
 		fClassIf.setOwnNode(classNode);
-		setText("Other methods in " + JavaUtils.getLocalName(classNode));
+		setText("Other methods in " + ClassNodeHelper.getLocalName(classNode));
 		super.setInput(fClassIf.getOtherMethods());
 	}
 

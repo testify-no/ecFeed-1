@@ -24,7 +24,6 @@ import com.ecfeed.android.utils.AndroidBaseRunnerHelper;
 import com.ecfeed.android.utils.AndroidManifestAccessor;
 import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.adapter.IModelOperation;
-import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.adapter.operations.ClassOperationAddMethod;
 import com.ecfeed.core.adapter.operations.ClassOperationAddMethods;
 import com.ecfeed.core.adapter.operations.ClassOperationRemoveMethod;
@@ -32,6 +31,7 @@ import com.ecfeed.core.adapter.operations.ClassOperationSetAndroidBaseRunner;
 import com.ecfeed.core.adapter.operations.ClassOperationSetRunOnAndroid;
 import com.ecfeed.core.adapter.operations.FactoryRenameOperation;
 import com.ecfeed.core.model.ClassNode;
+import com.ecfeed.core.model.ClassNodeHelper;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.ModelHelper;
 import com.ecfeed.core.model.ModelOperationException;
@@ -72,7 +72,7 @@ public class ClassInterface extends GlobalParametersParentInterface {
 	}
 
 	public static String getPackageName(ClassNode classNode){
-		return JavaUtils.getPackageName(classNode.getName());
+		return ModelHelper.getPackageName(classNode.getName());
 	}
 
 	public String getPackageName(){
@@ -193,7 +193,7 @@ public class ClassInterface extends GlobalParametersParentInterface {
 		List<MethodNode> otherMethods = new ArrayList<MethodNode>();
 		EclipseModelBuilder builder = new EclipseModelBuilder();
 		try{
-			ClassNode completeModel = builder.buildClassModel(JavaUtils.getQualifiedName(target), false);
+			ClassNode completeModel = builder.buildClassModel(ClassNodeHelper.getQualifiedName(target), false);
 			for(MethodNode method : completeModel.getMethods()){
 				if(target.getMethod(method.getName(), method.getParametersTypes()) == null){
 					otherMethods.add(method);

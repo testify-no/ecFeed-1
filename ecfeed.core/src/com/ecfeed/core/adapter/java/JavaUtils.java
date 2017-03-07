@@ -96,19 +96,6 @@ public class JavaUtils {
 		return valid;
 	}
 
-	public static String getLocalName(ClassNode node){
-		return ModelHelper.convertToLocalName(node.getName());
-	}
-
-	public static String getPackageName(ClassNode classNode){
-		return getPackageName(classNode.getName());
-	}
-
-	public static String getPackageName(String qualifiedName){
-		int lastDotIndex = qualifiedName.lastIndexOf('.');
-		return (lastDotIndex == -1)? "" : qualifiedName.substring(0, lastDotIndex);
-	}
-
 	public static String simplifiedToString(AbstractParameterNode parameter){
 		String result = parameter.toString();
 		String type = parameter.getType();
@@ -124,10 +111,6 @@ public class JavaUtils {
 			result = result.replaceAll(type, newType);
 		}
 		return result;
-	}
-
-	public static String getQualifiedName(ClassNode classNode){
-		return classNode.getName();
 	}
 
 	public static boolean validateNewMethodSignature(ClassNode parent, String methodName, List<String> argTypes){

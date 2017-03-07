@@ -28,4 +28,10 @@ public class ModelHelper {
 		return packageName + "." + localName;
 	}
 	
+	public static String getPackageName(String qualifiedName){
+		int lastDotIndex = qualifiedName.lastIndexOf('.');
+		return (lastDotIndex == -1)? "" : qualifiedName.substring(0, lastDotIndex);
+	}
+	
+	
 }
