@@ -14,8 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ecfeed.core.adapter.IModelOperation;
-import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.adapter.java.Messages;
+import com.ecfeed.core.model.ClassNodeHelper;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelOperationException;
@@ -86,7 +86,7 @@ public class MethodOperationRemoveParameter extends BulkOperation{
 			List<String> types = getMethodTarget().getParametersTypes();
 			int index = getParameter().getIndex();
 			types.remove(index);
-			return JavaUtils.validateNewMethodSignature(getMethodTarget().getClassNode(), getMethodTarget().getName(), types);
+			return ClassNodeHelper.validateNewMethodSignature(getMethodTarget().getClassNode(), getMethodTarget().getName(), types);
 		}
 	}
 

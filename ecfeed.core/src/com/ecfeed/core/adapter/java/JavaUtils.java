@@ -12,32 +12,13 @@ package com.ecfeed.core.adapter.java;
 
 import java.net.URLClassLoader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import com.ecfeed.core.model.AbstractParameterNode;
-import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.ModelHelper;
-import com.ecfeed.core.utils.JavaLanguageHelper;
-import com.ecfeed.core.utils.JavaTypeHelper;
 
 public class JavaUtils {
-
-	public static boolean isValidTypeName(String name){
-		if(name == null) return false;
-		if(JavaTypeHelper.isJavaType(name)) return true;
-		if(name.matches(AdapterConstants.REGEX_CLASS_NODE_NAME) == false) return false;
-		StringTokenizer tokenizer = new StringTokenizer(name, ".");
-		while(tokenizer.hasMoreTokens()){
-			String segment = tokenizer.nextToken();
-			if(JavaLanguageHelper.isValidJavaIdentifier(segment) == false){
-				return false;
-			}
-		}
-		return true;
-	}
 
 	public static List<String> enumValuesNames(URLClassLoader loader, String enumTypeName){
 		List<String> values = new ArrayList<String>();
@@ -81,21 +62,6 @@ public class JavaUtils {
 		return result;
 	}
 
-	public static boolean validateMethodName(String name) {
-		return validateMethodName(name, null);
-	}
-
-	public static boolean validateMethodName(String name, List<String> problems) {
-		boolean valid = name.matches(AdapterConstants.REGEX_METHOD_NODE_NAME);
-		valid &= Arrays.asList(AdapterConstants.JAVA_KEYWORDS).contains(name) == false;
-		if(valid == false){
-			if(problems != null){
-				problems.add(Messages.METHOD_NAME_REGEX_PROBLEM);
-			}
-		}
-		return valid;
-	}
-
 	public static String simplifiedToString(AbstractParameterNode parameter){
 		String result = parameter.toString();
 		String type = parameter.getType();
@@ -103,29 +69,4 @@ public class JavaUtils {
 		return result;
 	}
 
-	public static String simplifiedToString(MethodNode method){
-		String result = method.toString();
-		for(AbstractParameterNode parameter : method.getParameters()){
-			String type = parameter.getType();
-			String newType = ModelHelper.convertToLocalName(type);
-			result = result.replaceAll(type, newType);
-		}
-		return result;
-	}
-
-	public static boolean validateNewMethodSignature(ClassNode parent, String methodName, List<String> argTypes){
-		return validateNewMethodSignature(parent, methodName, argTypes, null);
-	}
-
-	public static boolean validateNewMethodSignature(ClassNode parent, String methodName,
-			List<String> argTypes, List<String> problems){
-		boolean valid = JavaUtils.validateMethodName(methodName, problems);
-		if(parent.getMethod(methodName, argTypes) != null){
-			valid = false;
-			if(problems != null){
-				problems.add(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM(parent.getName(), methodName));
-			}
-		}
-		return valid;
-	}
 }

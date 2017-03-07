@@ -19,7 +19,6 @@ import java.util.Map;
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.ITypeAdapter;
 import com.ecfeed.core.adapter.ITypeAdapterProvider;
-import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.adapter.java.Messages;
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ChoiceNode;
@@ -29,6 +28,7 @@ import com.ecfeed.core.model.GlobalParameterNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelOperationException;
+import com.ecfeed.core.utils.JavaLanguageHelper;
 
 public class AbstractParameterOperationSetType extends AbstractModelOperation {
 
@@ -93,7 +93,7 @@ public class AbstractParameterOperationSetType extends AbstractModelOperation {
 		saveChoices(fTarget);
 		saveValues(fTarget);
 
-		if(JavaUtils.isValidTypeName(fNewType) == false){
+		if(JavaLanguageHelper.isValidTypeName(fNewType) == false){
 			ModelOperationException.report(Messages.CATEGORY_TYPE_REGEX_PROBLEM);
 		}
 		// Check for duplicate signatures possibly caused by global parameter type change

@@ -50,6 +50,7 @@ import com.ecfeed.core.model.ConstraintNode;
 import com.ecfeed.core.model.GlobalParameterNode;
 import com.ecfeed.core.model.IModelVisitor;
 import com.ecfeed.core.model.MethodNode;
+import com.ecfeed.core.model.MethodNodeHelper;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.TestCaseNode;
@@ -182,7 +183,7 @@ public class ModelMasterSection extends TreeViewerSection{
 
 			@Override
 			public Object visit(MethodNode node) throws Exception {
-				return JavaUtils.simplifiedToString(node);
+				return MethodNodeHelper.simplifiedToString(node);
 			}
 
 			@Override

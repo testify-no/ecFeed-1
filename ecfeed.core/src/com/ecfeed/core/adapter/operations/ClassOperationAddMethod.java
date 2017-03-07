@@ -14,22 +14,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ecfeed.core.adapter.IModelOperation;
-import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.adapter.java.Messages;
 import com.ecfeed.core.model.ClassNode;
+import com.ecfeed.core.model.ClassNodeHelper;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.utils.StringHelper;
 
 public class ClassOperationAddMethod extends AbstractModelOperation{
 	
-	private ClassNode fTarget;
+	private ClassNode fClassNode;
 	private MethodNode fMethod;
 	private int fIndex;
 
 	public ClassOperationAddMethod(ClassNode target, MethodNode method, int index) {
 		super(OperationNames.ADD_METHOD);
-		fTarget = target;
+		fClassNode = target;
 		fMethod = method;
 		fIndex = index;
 	}
@@ -42,12 +42,12 @@ public class ClassOperationAddMethod extends AbstractModelOperation{
 	public void execute() throws ModelOperationException {
 		List<String> problems = new ArrayList<String>();
 		if(fIndex == -1){
-			fIndex = fTarget.getMethods().size();
+			fIndex = fClassNode.getMethods().size();
 		}
-		if(JavaUtils.validateNewMethodSignature(fTarget, fMethod.getName(), fMethod.getParametersTypes(), problems) == false){
+		if(ClassNodeHelper.validateNewMethodSignature(fClassNode, fMethod.getName(), fMethod.getParametersTypes(), problems) == false){
 			ModelOperationException.report(StringHelper.convertToMultilineString(problems));
 		}
-		if(fTarget.addMethod(fMethod, fIndex) == false){
+		if(fClassNode.addMethod(fMethod, fIndex) == false){
 			ModelOperationException.report(Messages.UNEXPECTED_PROBLEM_WHILE_ADDING_ELEMENT);
 		}
 		markModelUpdated();
@@ -55,7 +55,7 @@ public class ClassOperationAddMethod extends AbstractModelOperation{
 
 	@Override
 	public IModelOperation reverseOperation() {
-		return new ClassOperationRemoveMethod(fTarget, fMethod);
+		return new ClassOperationRemoveMethod(fClassNode, fMethod);
 	}
 
 }

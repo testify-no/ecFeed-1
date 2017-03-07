@@ -14,11 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ecfeed.core.adapter.IModelOperation;
-import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.adapter.java.Messages;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.ClassNode;
+import com.ecfeed.core.model.ClassNodeHelper;
 import com.ecfeed.core.model.ConstraintNode;
 import com.ecfeed.core.model.GlobalParameterNode;
 import com.ecfeed.core.model.IModelVisitor;
@@ -72,7 +72,7 @@ public class FactoryRenameOperation {
 		protected void verifyNewName(String newName) throws ModelOperationException {
 			List<String> problems = new ArrayList<String>();
 			MethodNode target = (MethodNode)getOwnNode();
-			if(JavaUtils.validateNewMethodSignature(target.getClassNode(), getNewName(), target.getParametersTypes(), problems) == false){
+			if(ClassNodeHelper.validateNewMethodSignature(target.getClassNode(), getNewName(), target.getParametersTypes(), problems) == false){
 				ModelOperationException.report(StringHelper.convertToMultilineString(problems));
 			}
 		}

@@ -14,8 +14,8 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.generators.CartesianProductGenerator;
+import com.ecfeed.core.utils.JavaLanguageHelper;
 import com.ecfeed.junit.OnlineRunner;
 import com.ecfeed.junit.annotations.Constraints;
 import com.ecfeed.junit.annotations.EcModel;
@@ -43,7 +43,7 @@ public class JavaUtilsTest {
 		else{
 			typeName = className;
 		}
-		boolean result = JavaUtils.isValidTypeName(typeName);
+		boolean result = JavaLanguageHelper.isValidTypeName(typeName);
 		assertEquals(valid, result);
 	}
 

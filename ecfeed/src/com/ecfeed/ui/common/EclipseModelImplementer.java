@@ -49,7 +49,6 @@ import com.ecfeed.android.external.ImplementerExt;
 import com.ecfeed.core.adapter.AbstractJavaModelImplementer;
 import com.ecfeed.core.adapter.CachedImplementationStatusResolver;
 import com.ecfeed.core.adapter.EImplementationStatus;
-import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ChoiceNode;
@@ -199,7 +198,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 		if(JavaTypeHelper.isJavaType(typeName)){
 			return;
 		}
-		if(JavaUtils.isValidTypeName(typeName) == false){
+		if(JavaLanguageHelper.isValidTypeName(typeName) == false){
 			return;
 		}
 		String packageName = ModelHelper.getPackageName(typeName);

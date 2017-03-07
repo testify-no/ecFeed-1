@@ -17,9 +17,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
 import com.ecfeed.core.adapter.EImplementationStatus;
-import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.MethodNode;
+import com.ecfeed.core.model.MethodNodeHelper;
 import com.ecfeed.core.model.NodePropertyDefs;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
@@ -210,7 +210,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	}
 
 	private void refreshMethodNameAndSignature(MethodNode methodNode) {
-		getMainSection().setText(JavaUtils.simplifiedToString(methodNode));
+		getMainSection().setText(MethodNodeHelper.simplifiedToString(methodNode));
 		fMethodNameText.setText(fMethodInterface.getName());
 	}
 

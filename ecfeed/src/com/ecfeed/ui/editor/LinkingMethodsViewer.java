@@ -21,11 +21,11 @@ import org.eclipse.jface.viewers.TreeNodeContentProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 
-import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.GlobalParameterNode;
 import com.ecfeed.core.model.MethodNode;
+import com.ecfeed.core.model.MethodNodeHelper;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
@@ -94,7 +94,7 @@ public class LinkingMethodsViewer extends TreeViewerSection {
 			if(element instanceof ClassNode){
 				return ((ClassNode)element).getName();
 			} else if(element instanceof MethodNode){
-				return JavaUtils.simplifiedToString((MethodNode)element);
+				return MethodNodeHelper.simplifiedToString((MethodNode)element);
 			}
 			return "";
 		}
