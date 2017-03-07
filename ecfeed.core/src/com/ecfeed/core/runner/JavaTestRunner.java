@@ -14,9 +14,8 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ecfeed.core.adapter.java.ChoiceValueParser;
 import com.ecfeed.core.adapter.java.AdapterConstants;
-import com.ecfeed.core.adapter.java.JavaUtils;
+import com.ecfeed.core.adapter.java.ChoiceValueParser;
 import com.ecfeed.core.adapter.java.ModelClassLoader;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.ClassNode;
@@ -106,7 +105,7 @@ public class JavaTestRunner {
 		Class<?>[] parameterTypes = method.getParameterTypes();
 		List<String> types = new ArrayList<String>();
 		for(Class<?> type : parameterTypes){
-			types.add(JavaUtils.getTypeName(type.getCanonicalName()));
+			types.add(JavaTypeHelper.getTypeName(type.getCanonicalName()));
 		}
 		return methodName.equals(methodModel.getName()) && types.equals(methodModel.getParametersTypes());
 	}
@@ -119,7 +118,7 @@ public class JavaTestRunner {
 			if(value == null){
 				String type = choice.getParameter().getType();
 				//check if null value acceptable
-				if(JavaUtils.isString(type) || JavaTypeHelper.isUserType(type)){
+				if(JavaTypeHelper.isStringTypeName(type) || JavaTypeHelper.isUserType(type)){
 					if(choice.getValueString().equals(AdapterConstants.VALUE_REPRESENTATION_NULL) == false){
 						RunnerException.report(Messages.CANNOT_PARSE_PARAMETER(type, choice.getValueString()));
 					}

@@ -34,7 +34,7 @@ public class ValueCondition implements IStatementCondition {
 	public boolean evaluate(List<ChoiceNode> choices) {
 
 		String substituteType = 
-				JavaTypeHelper.getSubstituteType(fLeftParameterNode.getType(), JavaTypeHelper.getStringType());
+				JavaTypeHelper.getSubstituteType(fLeftParameterNode.getType(), JavaTypeHelper.getStringTypeName());
 
 		if (substituteType == null) {
 			return false;

@@ -68,7 +68,7 @@ public class JavaModelBuilder {
 	}
 
 	public MethodParameterNode buildParameterModel(String name, Class<?>type, boolean expected){
-		String typeName = JavaUtils.getTypeName(type.getName());
+		String typeName = JavaTypeHelper.getTypeName(type.getName());
 		String defaultValue = getDefaultExpectedValueString(typeName);
 		MethodParameterNode parameter = new MethodParameterNode(name, typeName, defaultValue, expected);
 		parameter.setDefaultValueString(getDefaultExpectedValueString(typeName));
@@ -258,7 +258,7 @@ public class JavaModelBuilder {
 
 	private boolean hasSupportedParameterTypes(Method method) {
 		for(Class<?> type : method.getParameterTypes()){
-			String typeName = JavaUtils.getTypeName(type.getCanonicalName()); 
+			String typeName = JavaTypeHelper.getTypeName(type.getCanonicalName()); 
 			if(JavaTypeHelper.isJavaType(typeName)){
 				return false;
 			}
