@@ -132,7 +132,7 @@ public class ChoiceNode extends ChoicesParentNode{
 		return getChoices().size() != 0;
 	}
 
-	public boolean isMatchIncludingParents(ChoiceNode choice){
+	public boolean isMatchIncludingParents(ChoiceNode choice) {
 
 		if (this == choice) {
 			return true;

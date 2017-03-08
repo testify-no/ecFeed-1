@@ -24,6 +24,7 @@ import javax.management.RuntimeErrorException;
 import com.ecfeed.core.generators.api.GeneratorException;
 import com.ecfeed.core.generators.api.IConstraint;
 import com.ecfeed.core.generators.api.IGeneratorProgressMonitor;
+import com.ecfeed.core.utils.SystemLogger;
 
 public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 
@@ -381,14 +382,7 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 		System.out.println(message);
 
 		for (List<E> list : tInput) {
-			debugPrintListOfElements("list", list);
-		}
-	}
-
-	protected <T> void debugPrintListOfElements(String message, List<T> list) {
-		System.out.println(message);
-		for (T elem : list) {
-			System.out.println("   " + elem.toString());
+			SystemLogger.logListOfElements("list", list);
 		}
 	}
 
@@ -548,6 +542,7 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 	 * be evaluated and the method returns null; otherwise it returns false.
 	 */
 	protected Boolean checkConstraintsOnExtendedNTuple(List<E> vector) {
+
 		boolean hasNull = false;
 		if (vector == null)
 			return true;

@@ -14,6 +14,7 @@ import java.util.List;
 
 import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.JavaTypeHelper;
+import com.ecfeed.core.utils.ObjectHelper;
 
 public class ChoiceCondition implements IStatementCondition {
 
@@ -32,10 +33,6 @@ public class ChoiceCondition implements IStatementCondition {
 	public boolean evaluate(List<ChoiceNode> choices) {
 
 		ChoiceNode choice = StatementConditionHelper.getChoiceForMethodParameter(choices, fMethodParameterNode);
-
-		if (choice == null) {
-			return false;
-		}
 
 		return evaluateChoice(choice);
 	}
@@ -122,7 +119,13 @@ public class ChoiceCondition implements IStatementCondition {
 
 	private boolean evaluateEqualityIncludingParents(EStatementRelation relation, ChoiceNode choice) {
 
-		boolean isMatch = choice.isMatchIncludingParents(fChoice);
+		boolean isMatch = false;
+
+		if (choice == null || fChoice == null) {
+			isMatch = ObjectHelper.isEqualWhenOneOrTwoNulls(choice, fChoice);
+		} else {
+			isMatch = choice.isMatchIncludingParents(fChoice);
+		}
 
 		switch (relation) {
 

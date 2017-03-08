@@ -11,6 +11,7 @@
 package com.ecfeed.core.utils;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
@@ -21,11 +22,11 @@ public class SystemLogger {
 	private static final String EC_FEED_INFO = "ECFEEDINF";
 	private static final int ONE_LEVEL_DOWN_ON_STACK = 1;  // level1: logCatch
 	private static final int TWO_LEVELS_DOWN_ON_STACK = 2; // level1: logThrow, level2 SomeException.report
-	
+
 	private static final String LOG = "ecFeedLog.txt";
 	private static boolean fLogToFile = false;
 	private static boolean fFirstLogError = true;
-	
+
 	public static void setLogToFileAndOutput() {
 		fLogToFile = true;
 	}
@@ -92,14 +93,14 @@ public class SystemLogger {
 	private static void logEmptyLine() {
 		logLine("");
 	}
-	
+
 	public static void logLine(String line) {
 		System.out.println(line);
-		
+
 		if (!fLogToFile) {
 			return;
 		}
-		
+
 		try {
 			TextFileHelper.appendLine(LOG, line);
 		} catch (IOException e) {
@@ -112,4 +113,29 @@ public class SystemLogger {
 			}
 		}
 	}
+
+	public static <T> void logListOfElements(String message, List<T> list) {
+
+		StringBuilder sb = new StringBuilder();
+		sb.append(message + " - ");
+
+		boolean firstTime = true;
+
+		for (T element : list) {
+
+			if (!firstTime) {
+				sb.append(", ");
+			}
+			sb.append(ObjectHelper.convertToExtendedString(element));
+			firstTime = false;
+		}
+
+		logLine(sb.toString());
+	}
+
+	public static void logObject(Object object) {
+
+		logLine(ObjectHelper.convertToExtendedString(object));
+	}
+
 }

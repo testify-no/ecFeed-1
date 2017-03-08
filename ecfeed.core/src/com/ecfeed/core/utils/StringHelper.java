@@ -215,35 +215,23 @@ public class StringHelper {
 
 	public static boolean isEqual(String s1, String s2) {
 
-		if (s1 == null && s2 == null) {
+		if (ObjectHelper.isEqual(s1, s2)) {
 			return true;
 		}
-		if (s1 == null && s2 != null) {
-			return false;
-		}
-		if (s1 != null && s2 == null) {
-			return false;
-		}
-		if (s1.equals(s2)) {
-			return true;
-		}
+
 		return false;
 	}
 
 	public static boolean isEqualIgnoreCase(String s1, String s2) {
 
-		if (s1 == null && s2 == null) {
-			return true;
+		if (s1 == null || s2 == null) {
+			return ObjectHelper.isEqualWhenOneOrTwoNulls(s1, s2);
 		}
-		if (s1 == null && s2 != null) {
-			return false;
-		}
-		if (s1 != null && s2 == null) {
-			return false;
-		}
+
 		if (s1.equalsIgnoreCase(s2)) {
 			return true;
 		}
+
 		return false;
 	}
 
@@ -367,9 +355,9 @@ public class StringHelper {
 
 		return dblResult.longValue();
 	}
-	
+
 	public static String convertToMultilineString(Collection<String> strings){
-		
+
 		String consolidated = "";
 		for(String string : strings){
 			consolidated += string + "\n";
