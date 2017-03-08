@@ -155,6 +155,32 @@ public class ChoiceStatementTest {
 		assertFalse(statement4.evaluate(fList2));
 		assertTrue(statement4.evaluate(fList3));
 	}
+	
+	@Test
+	public void testEvaluateNull() {
+
+		List<ChoiceNode> nullList = new ArrayList<ChoiceNode>();
+		nullList.add(null);
+
+		RelationStatement statementNotEqualWithNotNull = 
+				RelationStatement.createStatementWithChoiceCondition(fParameter, EStatementRelation.NOT_EQUAL, fChoice2);
+		assertTrue(statementNotEqualWithNotNull.evaluate(nullList));
+		
+		
+		RelationStatement statementNotEqualWithNull = 
+				RelationStatement.createStatementWithChoiceCondition(fParameter, EStatementRelation.NOT_EQUAL, null);
+		assertFalse(statementNotEqualWithNull.evaluate(nullList));
+
+		
+		RelationStatement statementEqualWithNull = 
+				RelationStatement.createStatementWithChoiceCondition(fParameter, EStatementRelation.EQUAL, null);
+		assertTrue(statementEqualWithNull.evaluate(nullList));		
+
+		
+		RelationStatement statementEqualWithNotNull = 
+				RelationStatement.createStatementWithChoiceCondition(fParameter, EStatementRelation.EQUAL, fChoice1);
+		assertFalse(statementEqualWithNotNull.evaluate(nullList));		
+	}	
 
 	@Test
 	public void testMentionsChoiceNode() {
