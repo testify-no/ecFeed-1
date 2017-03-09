@@ -28,12 +28,14 @@ public class StatementConditionHelper {
 		}
 
 		MethodNode methodNode = methodParameterNode.getMethod();
-
 		if (methodNode == null) {
 			return null;
 		}
 
-		int index = methodNode.getParameters().indexOf(methodParameterNode);
+		int index = methodNode.getParameters().indexOf(methodParameterNode);		
+		if (index == -1) {
+			return null;
+		}
 
 		if(choices.size() < index + 1) {
 			return null;

@@ -214,7 +214,7 @@ public class ParameterStatementTest {
 	public void evaluateChar() {
 
 		MethodParameterNode leftParam = new MethodParameterNode("par1", JavaTypeHelper.TYPE_NAME_CHAR, "", false);
-		MethodParameterNode rightParam = new MethodParameterNode("par1", JavaTypeHelper.TYPE_NAME_CHAR, "", false);
+		MethodParameterNode rightParam = new MethodParameterNode("par2", JavaTypeHelper.TYPE_NAME_CHAR, "", false);
 
 		evaluateOne(leftParam, rightParam, "a", EStatementRelation.EQUAL, "a", AssertType.TRUE);
 		evaluateOne(leftParam, rightParam, "a", EStatementRelation.NOT_EQUAL, "a", AssertType.FALSE);

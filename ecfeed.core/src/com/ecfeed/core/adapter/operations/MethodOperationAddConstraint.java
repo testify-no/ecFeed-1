@@ -19,13 +19,13 @@ import com.ecfeed.core.model.ModelOperationException;
 
 public class MethodOperationAddConstraint extends AbstractModelOperation {
 
-	private MethodNode fTarget;
+	private MethodNode fMethodNode;
 	private ConstraintNode fConstraint;
 	private int fIndex;
 
-	public MethodOperationAddConstraint(MethodNode target, ConstraintNode constraint, int index){
+	public MethodOperationAddConstraint(MethodNode methodNode, ConstraintNode constraint, int index){
 		super(OperationNames.ADD_CONSTRAINT);
-		fTarget = target;
+		fMethodNode = methodNode;
 		fConstraint = constraint;
 		fIndex = index;
 	}
@@ -37,21 +37,21 @@ public class MethodOperationAddConstraint extends AbstractModelOperation {
 	@Override
 	public void execute() throws ModelOperationException {
 		if(fIndex == -1){
-			fIndex = fTarget.getConstraintNodes().size();
+			fIndex = fMethodNode.getConstraintNodes().size();
 		}
 		if(fConstraint.getName().matches(AdapterConstants.REGEX_CONSTRAINT_NODE_NAME) == false){
 			ModelOperationException.report(Messages.CONSTRAINT_NAME_REGEX_PROBLEM);
 		}
-		if(fConstraint.updateReferences(fTarget) == false){
+		if(fConstraint.updateReferences(fMethodNode) == false){
 			ModelOperationException.report(Messages.INCOMPATIBLE_CONSTRAINT_PROBLEM);
 		}
-		fTarget.addConstraint(fConstraint, fIndex);
+		fMethodNode.addConstraint(fConstraint, fIndex);
 		markModelUpdated();
 	}
 
 	@Override
 	public IModelOperation reverseOperation() {
-		return new MethodOperationRemoveConstraint(fTarget, fConstraint);
+		return new MethodOperationRemoveConstraint(fMethodNode, fConstraint);
 	}
 
 }

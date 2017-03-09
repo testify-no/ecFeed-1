@@ -27,9 +27,26 @@ public abstract class ParametersParentNode extends AbstractNode {
 	}
 
 	public void addParameter(AbstractParameterNode parameter, int index) {
+
+		//		if (parameterWithNameExists(parameter)) {
+		//			ExceptionHelper.reportRuntimeException("Parameter: " + parameter.getName() + " already exists.");
+		//		}
+
 		fParameters.add(index, parameter);
 		parameter.setParent(this);
 	}
+
+	//	private boolean parameterWithNameExists(AbstractParameterNode abstractParameterNode) {
+	//		
+	//		for (AbstractParameterNode abstractParam : fParameters) {
+	//			
+	//			if (abstractParam.getName().equals(abstractParameterNode.getName())) {
+	//				return true;
+	//			}
+	//		}
+	//		
+	//		return false;
+	//	}
 
 	public List<AbstractParameterNode> getParameters(){
 		return fParameters;

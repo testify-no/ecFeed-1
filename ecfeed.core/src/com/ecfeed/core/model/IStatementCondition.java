@@ -17,7 +17,7 @@ public interface IStatementCondition {
 	public boolean evaluate(List<ChoiceNode> values);
 	public boolean adapt(List<ChoiceNode> values);
 	public IStatementCondition getCopy();
-	public boolean updateReferences(MethodParameterNode parameter);
+	public boolean updateReferences(MethodNode methodNode);
 	public boolean compare(IStatementCondition condition);
 	public Object accept(IStatementVisitor visitor) throws Exception;
 	public boolean mentions(MethodParameterNode methodParameterNode);

@@ -37,7 +37,14 @@ public class LabelCondition implements IStatementCondition {
 	}
 
 	@Override
-	public boolean updateReferences(MethodParameterNode parameter) {
+	public boolean updateReferences(MethodNode methodNode) {
+
+		MethodParameterNode tmpParameterNode = methodNode.getMethodParameter(fMethodParameterNode.getName());
+		if (tmpParameterNode == null) {
+			return false;
+		}
+
+		fMethodParameterNode = tmpParameterNode;
 		return true;
 	}
 

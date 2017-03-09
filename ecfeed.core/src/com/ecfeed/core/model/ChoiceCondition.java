@@ -48,15 +48,20 @@ public class ChoiceCondition implements IStatementCondition {
 	}
 
 	@Override
-	public boolean updateReferences(MethodParameterNode parameter) {
+	public boolean updateReferences(MethodNode methodNode) {
 
-		ChoiceNode choiceNode = parameter.getChoice(fChoice.getQualifiedName());
+		MethodParameterNode tmpParameterNode = methodNode.getMethodParameter(fMethodParameterNode.getName());
+		if (tmpParameterNode == null) {
+			return false;
+		}
+		fMethodParameterNode = tmpParameterNode; 
 
+		ChoiceNode choiceNode = fMethodParameterNode.getChoice(fChoice.getQualifiedName());
 		if (choiceNode == null) {
 			return false;
 		}
-
 		fChoice = choiceNode;
+
 		return true;
 	}
 

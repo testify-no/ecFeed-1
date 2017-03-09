@@ -44,14 +44,14 @@ public class StatementArrayTest {
 	@BeforeClass
 	public static void prepareModel(){
 		fMethod = new MethodNode("method");
-		fParameter1 = new MethodParameterNode("parameter", "type", "0", false);
+		fParameter1 = new MethodParameterNode("parameter1", "type", "0", false);
 		fChoice11 = new ChoiceNode("choice11", null);
 		fChoice12 = new ChoiceNode("choice12", null);
 		fChoice13 = new ChoiceNode("choice13", null);
 		fParameter1.addChoice(fChoice11);
 		fParameter1.addChoice(fChoice12);
 		fParameter1.addChoice(fChoice13);
-		fParameter2 = new MethodParameterNode("parameter", "type", "0", false);
+		fParameter2 = new MethodParameterNode("parameter2", "type", "0", false);
 		fChoice21 = new ChoiceNode("choice21", null);
 		fChoice22 = new ChoiceNode("choice22", null);
 		fChoice23 = new ChoiceNode("choice23", null);
