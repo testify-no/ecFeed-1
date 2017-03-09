@@ -401,7 +401,7 @@ public class Constraint implements IConstraint<ChoiceNode> {
 		@Override
 		public Object visit(RelationStatement statement) throws Exception {
 
-			if (fParameter == statement.getParameter()) {
+			if (fParameter == statement.getLeftParameter()) {
 				return statement.getCondition().accept(this);
 			}
 

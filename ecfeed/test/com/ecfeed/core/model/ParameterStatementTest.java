@@ -280,12 +280,12 @@ public class ParameterStatementTest {
 
 		ParameterCondition parameterCondition = (ParameterCondition)statement.getCondition();
 
-		assertNotEquals(method2LeftParameterNode.hashCode(), parameterCondition.getLeftMethodParameterNode().hashCode());
+		assertNotEquals(method2LeftParameterNode.hashCode(), statement.getLeftParameter().hashCode());
 		assertNotEquals(method2RightParameterNode.hashCode(), parameterCondition.getRightParameterNode().hashCode());
 
-		parameterCondition.updateReferences(method2);
+		statement.updateReferences(method2);
 
-		assertEquals(method2LeftParameterNode.hashCode(), parameterCondition.getLeftMethodParameterNode().hashCode());
+		assertEquals(method2LeftParameterNode.hashCode(), statement.getLeftParameter().hashCode());
 		assertEquals(method2RightParameterNode.hashCode(), parameterCondition.getRightParameterNode().hashCode());
 	}	
 

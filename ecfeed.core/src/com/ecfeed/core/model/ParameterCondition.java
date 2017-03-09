@@ -17,14 +17,11 @@ import com.ecfeed.core.utils.JavaTypeHelper;
 
 public class ParameterCondition implements IStatementCondition {
 
-	private MethodParameterNode fLeftParameterNode;
 	private MethodParameterNode fRightParameterNode;
 	private RelationStatement fParentRelationStatement;
 
-	public ParameterCondition(
-			MethodParameterNode leftParameter, MethodParameterNode rightParameter, RelationStatement parentRelationStatement) {
+	public ParameterCondition(MethodParameterNode rightParameter, RelationStatement parentRelationStatement) {
 
-		fLeftParameterNode = leftParameter;
 		fRightParameterNode = rightParameter;
 		fParentRelationStatement = parentRelationStatement;
 	}
@@ -33,13 +30,13 @@ public class ParameterCondition implements IStatementCondition {
 	public boolean evaluate(List<ChoiceNode> choices) {
 
 		String substituteType = 
-				JavaTypeHelper.getSubstituteType(fLeftParameterNode.getType(), fRightParameterNode.getType());
+				JavaTypeHelper.getSubstituteType(fParentRelationStatement.getLeftParameter().getType(), fRightParameterNode.getType());
 
 		if (substituteType == null) {
 			return false;
 		}
 
-		String leftChoiceStr = getChoiceString(choices, fLeftParameterNode);
+		String leftChoiceStr = getChoiceString(choices, fParentRelationStatement.getLeftParameter());
 		if (leftChoiceStr == null) {
 			return false;
 		}
@@ -76,19 +73,13 @@ public class ParameterCondition implements IStatementCondition {
 	@Override
 	public ParameterCondition getCopy() {
 
-		return new ParameterCondition(fLeftParameterNode.makeClone(), fRightParameterNode.makeClone(), fParentRelationStatement);
+		return new ParameterCondition(fRightParameterNode.makeClone(), fParentRelationStatement);
 	}
 
 	@Override
 	public boolean updateReferences(MethodNode methodNode) {
 
-		MethodParameterNode tmpParameterNode = methodNode.getMethodParameter(fLeftParameterNode.getName());
-		if (tmpParameterNode == null) {
-			return false;
-		}
-		fLeftParameterNode = tmpParameterNode;
-
-		tmpParameterNode = methodNode.getMethodParameter(fRightParameterNode.getName());
+		MethodParameterNode tmpParameterNode = methodNode.getMethodParameter(fRightParameterNode.getName());
 		if (tmpParameterNode == null) {
 			return false;
 		}
@@ -111,10 +102,6 @@ public class ParameterCondition implements IStatementCondition {
 		}
 
 		ParameterCondition otherParamCondition = (ParameterCondition)otherCondition;
-
-		if (!fLeftParameterNode.isMatch(otherParamCondition.fLeftParameterNode)) {
-			return false;
-		}
 
 		if (fParentRelationStatement.getRelation() != otherParamCondition.fParentRelationStatement.getRelation()) {
 			return false;
@@ -142,21 +129,12 @@ public class ParameterCondition implements IStatementCondition {
 	@Override
 	public boolean mentions(MethodParameterNode methodParameterNode) {
 
-		if (fLeftParameterNode == methodParameterNode) {
-			return true;
-		}
-
 		if (fRightParameterNode == methodParameterNode) {
 			return true;
 		}
 
 		return false;
 	}	
-
-	public MethodParameterNode getLeftMethodParameterNode() {
-
-		return fLeftParameterNode;
-	}
 
 	public MethodParameterNode getRightParameterNode() {
 

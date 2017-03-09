@@ -14,20 +14,19 @@ import java.util.List;
 
 public class LabelCondition implements IStatementCondition {
 
-	private MethodParameterNode fLeftMethodParameterNode;
 	private String fRightLabel;
 	private RelationStatement fParentRelationStatement;
 
-	public LabelCondition(MethodParameterNode methodParameterNode, String label, RelationStatement parentRelationStatement) {
+	public LabelCondition(String label, RelationStatement parentRelationStatement) {
 		fRightLabel = label;
-		fLeftMethodParameterNode = methodParameterNode;
 		fParentRelationStatement = parentRelationStatement;
 	}
 
 	@Override
 	public boolean evaluate(List<ChoiceNode> choices) {
 
-		ChoiceNode choice = StatementConditionHelper.getChoiceForMethodParameter(choices, fLeftMethodParameterNode);
+		ChoiceNode choice = 
+				StatementConditionHelper.getChoiceForMethodParameter(choices, fParentRelationStatement.getLeftParameter());
 
 		if (choice == null) {
 			return false;
@@ -39,12 +38,6 @@ public class LabelCondition implements IStatementCondition {
 	@Override
 	public boolean updateReferences(MethodNode methodNode) {
 
-		MethodParameterNode tmpParameterNode = methodNode.getMethodParameter(fLeftMethodParameterNode.getName());
-		if (tmpParameterNode == null) {
-			return false;
-		}
-
-		fLeftMethodParameterNode = tmpParameterNode;
 		return true;
 	}
 
@@ -82,7 +75,7 @@ public class LabelCondition implements IStatementCondition {
 
 	@Override
 	public LabelCondition getCopy() {
-		return new LabelCondition(fLeftMethodParameterNode, fRightLabel, fParentRelationStatement);
+		return new LabelCondition(fRightLabel, fParentRelationStatement);
 	}
 
 	public String getRightLabel() {
@@ -91,10 +84,6 @@ public class LabelCondition implements IStatementCondition {
 
 	@Override
 	public boolean mentions(MethodParameterNode methodParameterNode) {
-
-		if (fLeftMethodParameterNode == methodParameterNode) {
-			return true;
-		}
 
 		return false;
 	}
@@ -116,12 +105,6 @@ public class LabelCondition implements IStatementCondition {
 		}
 
 	}
-
-	public MethodParameterNode getLeftParameterNode() {
-		return fLeftMethodParameterNode;
-	}
-
-
 
 }
 

@@ -18,14 +18,13 @@ import com.ecfeed.core.utils.StringHelper;
 
 public class ValueCondition implements IStatementCondition {
 
-	private MethodParameterNode fLeftParameterNode;
+	//	private MethodParameterNode fLeftParameterNode; // XYX REMOVE
 	private String fRightValue;
 	private RelationStatement fParentRelationStatement;
 
-	public ValueCondition(
-			MethodParameterNode leftParameter, String rightValue, RelationStatement parentRelationStatement) {
+	public ValueCondition(String rightValue, RelationStatement parentRelationStatement) {
 
-		fLeftParameterNode = leftParameter;
+		//		fLeftParameterNode = parentRelationStatement.getLeftParameter(); TUTAJ
 		fRightValue = rightValue;
 		fParentRelationStatement = parentRelationStatement;
 	}
@@ -34,13 +33,13 @@ public class ValueCondition implements IStatementCondition {
 	public boolean evaluate(List<ChoiceNode> choices) {
 
 		String substituteType = 
-				JavaTypeHelper.getSubstituteType(fLeftParameterNode.getType(), JavaTypeHelper.getStringTypeName());
+				JavaTypeHelper.getSubstituteType(fParentRelationStatement.getLeftParameter().getType(), JavaTypeHelper.getStringTypeName());
 
 		if (substituteType == null) {
 			return false;
 		}
 
-		String leftChoiceStr = getChoiceString(choices, fLeftParameterNode);
+		String leftChoiceStr = getChoiceString(choices, fParentRelationStatement.getLeftParameter());
 		if (leftChoiceStr == null) {
 			return false;
 		}
@@ -72,18 +71,12 @@ public class ValueCondition implements IStatementCondition {
 	@Override
 	public ValueCondition getCopy() {
 
-		return new ValueCondition(fLeftParameterNode.makeClone(), new String(fRightValue), fParentRelationStatement);
+		return new ValueCondition(new String(fRightValue), fParentRelationStatement);
 	}
 
 	@Override
 	public boolean updateReferences(MethodNode methodNode) {
 
-		MethodParameterNode tmpParameterNode = methodNode.getMethodParameter(fLeftParameterNode.getName());
-		if (tmpParameterNode == null) {
-			return false;
-		}
-
-		fLeftParameterNode = tmpParameterNode;
 		return true;
 	}
 
@@ -101,10 +94,6 @@ public class ValueCondition implements IStatementCondition {
 		}
 
 		ValueCondition otherValueCondition = (ValueCondition)otherCondition;
-
-		if (!fLeftParameterNode.isMatch(otherValueCondition.fLeftParameterNode)) {
-			return false;
-		}
 
 		if (fParentRelationStatement.getRelation() != otherValueCondition.fParentRelationStatement.getRelation()) {
 			return false;
@@ -132,16 +121,8 @@ public class ValueCondition implements IStatementCondition {
 	@Override
 	public boolean mentions(MethodParameterNode methodParameterNode) {
 
-		if (fLeftParameterNode == methodParameterNode) {
-			return true;
-		}
-
 		return false;
 	}	
-
-	public MethodParameterNode getLeftParameterNode() {
-		return fLeftParameterNode;
-	}
 
 	public String getRightValue() {
 		return fRightValue;

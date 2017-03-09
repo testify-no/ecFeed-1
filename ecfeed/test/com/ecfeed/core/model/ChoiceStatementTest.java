@@ -272,12 +272,15 @@ public class ChoiceStatementTest {
 
 		ChoiceCondition choiceCondition = (ChoiceCondition)statement.getCondition();
 
-		assertNotEquals(method2ParameterNode.hashCode(), choiceCondition.getLeftParameterNode().hashCode());
+		assertEquals(method1choiceNode.hashCode(), choiceCondition.getRightChoice().hashCode());
+		assertEquals(method1ParameterNode.hashCode(), statement.getLeftParameter().hashCode());
+
+		assertNotEquals(method2ParameterNode.hashCode(), statement.getLeftParameter().hashCode());
 		assertNotEquals(method2choiceNode.hashCode(), choiceCondition.getRightChoice().hashCode());
 
-		choiceCondition.updateReferences(method2);
+		statement.updateReferences(method2);
 
-		assertEquals(method2ParameterNode.hashCode(), choiceCondition.getLeftParameterNode().hashCode());
+		assertEquals(method2ParameterNode.hashCode(), statement.getLeftParameter().hashCode());
 		assertEquals(method2choiceNode.hashCode(), choiceCondition.getRightChoice().hashCode());
 	}	
 }

@@ -247,7 +247,7 @@ public class StatementEditor extends Composite {
 		public Object visit(RelationStatement statement) throws Exception {
 
 			List<String> conditions = new ArrayList<String>();
-			MethodParameterNode methodParameterNode = statement.getParameter();
+			MethodParameterNode methodParameterNode = statement.getLeftParameter();
 
 			addChoiceConditions(methodParameterNode, conditions);
 

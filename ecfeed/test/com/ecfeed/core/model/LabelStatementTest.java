@@ -152,12 +152,10 @@ public class LabelStatementTest {
 		MethodParameterNode method2ParameterNode = new MethodParameterNode("par1", JavaTypeHelper.TYPE_NAME_STRING, "", false);
 		method2.addParameter(method2ParameterNode);
 
-		LabelCondition valueCondition = (LabelCondition)statement.getCondition();
+		assertNotEquals(method2ParameterNode.hashCode(), statement.getLeftParameter().hashCode());
 
-		assertNotEquals(method2ParameterNode.hashCode(), valueCondition.getLeftParameterNode().hashCode());
+		statement.updateReferences(method2);
 
-		valueCondition.updateReferences(method2);
-
-		assertEquals(method2ParameterNode.hashCode(), valueCondition.getLeftParameterNode().hashCode());
+		assertEquals(method2ParameterNode.hashCode(), statement.getLeftParameter().hashCode());
 	}	
 }

@@ -16,16 +16,16 @@ import com.ecfeed.core.utils.SystemLogger;
 
 public class RelationStatement extends AbstractStatement implements IRelationalStatement{
 
-	private MethodParameterNode fParameter;
+	private MethodParameterNode fLeftParameter;
 	private EStatementRelation fRelation;
-	private IStatementCondition fCondition;
+	private IStatementCondition fRightCondition;
 
 	public static RelationStatement createStatementWithLabelCondition(
 			MethodParameterNode parameter, EStatementRelation relation, String label) {
 
 		RelationStatement relationStatement = new RelationStatement(parameter, relation, null);
 
-		IStatementCondition condition = new LabelCondition(parameter, label, relationStatement);
+		IStatementCondition condition = new LabelCondition(label, relationStatement);
 		relationStatement.setCondition(condition);
 
 		return relationStatement;
@@ -36,7 +36,7 @@ public class RelationStatement extends AbstractStatement implements IRelationalS
 
 		RelationStatement relationStatement = new RelationStatement(parameter, relation, null);
 
-		IStatementCondition condition = new ChoiceCondition(parameter, choiceNode, relationStatement);
+		IStatementCondition condition = new ChoiceCondition(choiceNode, relationStatement);
 		relationStatement.setCondition(condition);
 
 		return relationStatement;
@@ -47,7 +47,7 @@ public class RelationStatement extends AbstractStatement implements IRelationalS
 
 		RelationStatement relationStatement = new RelationStatement(parameter, relation, null);
 
-		IStatementCondition condition = new ParameterCondition(parameter, rightParameter, relationStatement);
+		IStatementCondition condition = new ParameterCondition(rightParameter, relationStatement);
 		relationStatement.setCondition(condition);
 
 		return relationStatement;
@@ -58,7 +58,7 @@ public class RelationStatement extends AbstractStatement implements IRelationalS
 
 		RelationStatement relationStatement = new RelationStatement(parameter, relation, null);
 
-		IStatementCondition condition = new ValueCondition(parameter, textValue, relationStatement);
+		IStatementCondition condition = new ValueCondition(textValue, relationStatement);
 		relationStatement.setCondition(condition);
 
 		return relationStatement;
@@ -67,9 +67,9 @@ public class RelationStatement extends AbstractStatement implements IRelationalS
 	private RelationStatement(
 			MethodParameterNode parameter, EStatementRelation relation, IStatementCondition condition) {
 
-		fParameter = parameter;
+		fLeftParameter = parameter;
 		fRelation = relation;
-		fCondition = condition;
+		fRightCondition = condition;
 	}
 
 	@Override
@@ -77,7 +77,7 @@ public class RelationStatement extends AbstractStatement implements IRelationalS
 
 		boolean result;
 		try {
-			result = fCondition.evaluate(values);
+			result = fRightCondition.evaluate(values);
 		} catch (Exception e) {
 			SystemLogger.logCatch(e.getMessage());
 			return false;
@@ -99,36 +99,36 @@ public class RelationStatement extends AbstractStatement implements IRelationalS
 	@Override
 	public String getLeftOperandName() {
 
-		return getParameter().getName();
+		return getLeftParameter().getName();
 	}
 
 	@Override
 	public String toString() {
 
-		return getLeftOperandName() + getRelation() + fCondition.toString();
+		return getLeftOperandName() + getRelation() + fRightCondition.toString();
 	}
 
 	@Override
 	public EStatementRelation[] getAvailableRelations() {
 
-		return EStatementRelation.getAvailableRelations(getParameter().getType());
+		return EStatementRelation.getAvailableRelations(getLeftParameter().getType());
 	}
 
 	@Override
 	public RelationStatement getCopy() {
 
-		return new RelationStatement(fParameter, fRelation, fCondition.getCopy());
+		return new RelationStatement(fLeftParameter, fRelation, fRightCondition.getCopy());
 	}
 
 	@Override
 	public boolean updateReferences(MethodNode methodNode) {
 
-		MethodParameterNode methodParameterNode = (MethodParameterNode)methodNode.getParameter(fParameter.getName());
+		MethodParameterNode tmpParameterNode = methodNode.getMethodParameter(fLeftParameter.getName());
 
-		if (methodParameterNode != null && !methodParameterNode.isExpected()) {
+		if (tmpParameterNode != null && !tmpParameterNode.isExpected()) {
 
-			if (fCondition.updateReferences(methodNode)) {
-				fParameter = methodParameterNode;
+			if (fRightCondition.updateReferences(methodNode)) {
+				fLeftParameter = tmpParameterNode;
 				return true;
 			}
 		}
@@ -144,7 +144,7 @@ public class RelationStatement extends AbstractStatement implements IRelationalS
 
 		RelationStatement compared = (RelationStatement)statement;
 
-		if (getParameter().getName().equals(compared.getParameter().getName()) == false) {
+		if (getLeftParameter().getName().equals(compared.getLeftParameter().getName()) == false) {
 			return false;
 		}
 
@@ -167,11 +167,11 @@ public class RelationStatement extends AbstractStatement implements IRelationalS
 	@Override
 	public boolean mentions(MethodParameterNode methodParameterNode) {
 
-		if (getParameter() == methodParameterNode) {
+		if (getLeftParameter() == methodParameterNode) {
 			return true;
 		}
 
-		if (fCondition.mentions(methodParameterNode)) {
+		if (fRightCondition.mentions(methodParameterNode)) {
 			return true;
 		}
 
@@ -181,13 +181,13 @@ public class RelationStatement extends AbstractStatement implements IRelationalS
 	@Override
 	public boolean mentions(MethodParameterNode parameter, String label) {
 
-		return getParameter() == parameter && getConditionValue().equals(label);
+		return getLeftParameter() == parameter && getConditionValue().equals(label);
 	}
 
 	@Override
 	public boolean mentionsParameterAndOrderRelation(MethodParameterNode parameter) {
 
-		if (!(parameter.isMatch(fParameter))) {
+		if (!(parameter.isMatch(fLeftParameter))) {
 			return false;
 		}
 
@@ -207,7 +207,7 @@ public class RelationStatement extends AbstractStatement implements IRelationalS
 	@Override
 	public boolean mentions(int methodParameterIndex) {
 
-		MethodNode methodNode = fParameter.getMethod();
+		MethodNode methodNode = fLeftParameter.getMethod();
 		MethodParameterNode methodParameterNode = methodNode.getMethodParameter(methodParameterIndex);
 
 		if (mentions(methodParameterNode)) {
@@ -217,36 +217,36 @@ public class RelationStatement extends AbstractStatement implements IRelationalS
 		return false;
 	}	
 
-	public MethodParameterNode getParameter(){
-		return fParameter;
+	public MethodParameterNode getLeftParameter(){
+		return fLeftParameter;
 	}
 
 	public void setCondition(IStatementCondition condition) {
-		fCondition = condition;
+		fRightCondition = condition;
 	}
 
 	public void setCondition(String label) {
-		fCondition = new LabelCondition(fParameter, label, this);
+		fRightCondition = new LabelCondition(label, this);
 	}
 
 	public void setCondition(ChoiceNode choice) {
-		fCondition = new ChoiceCondition(fParameter, choice, this);
+		fRightCondition = new ChoiceCondition(choice, this);
 	}
 
 	public void setCondition(MethodParameterNode parameter, ChoiceNode choice) {
-		fCondition = new ChoiceCondition(fParameter, choice, this);
+		fRightCondition = new ChoiceCondition(choice, this);
 	}
 
 	public IStatementCondition getCondition() {
-		return fCondition;
+		return fRightCondition;
 	}
 
 	public Object getConditionValue() {
-		return fCondition.getCondition();
+		return fRightCondition.getCondition();
 	}
 
 	public String getConditionName() {
-		return fCondition.toString();
+		return fRightCondition.toString();
 	}
 
 }

@@ -54,7 +54,7 @@ public class RelationStatementInterface extends AbstractStatementInterface{
 			return false;
 		}
 
-		MethodParameterNode leftParameter = getOwnStatement().getParameter();
+		MethodParameterNode leftParameter = getOwnStatement().getLeftParameter();
 
 		IStatementCondition newCondition = createNewCondition(text, leftParameter);
 		IModelOperation operation = new StatementOperationSetCondition(getOwnStatement(), newCondition);
@@ -67,15 +67,12 @@ public class RelationStatementInterface extends AbstractStatementInterface{
 		if (StatementConditionHelper.containsChoiceTypeInfo(text)) {
 
 			String choiceName = StatementConditionHelper.removeChoiceTypeInfo(text);
-			return new ChoiceCondition(parameter, parameter.getChoice(choiceName), getOwnStatement());
+			return new ChoiceCondition(parameter.getChoice(choiceName), getOwnStatement());
 		}
 
 		if (StatementConditionHelper.containsLabelTypeInfo(text)) {
 
-			return new LabelCondition(
-					parameter,
-					StatementConditionHelper.removeLabelTypeInfo(text),
-					getOwnStatement());
+			return new LabelCondition(StatementConditionHelper.removeLabelTypeInfo(text), getOwnStatement());
 		}
 
 		if (StatementConditionHelper.containsParameterTypeInfo(text)) {
@@ -84,12 +81,12 @@ public class RelationStatementInterface extends AbstractStatementInterface{
 			MethodNode methodNode = parameter.getMethod();
 			MethodParameterNode rightParameter = (MethodParameterNode)methodNode.getParameter(parameterName);
 
-			return new ParameterCondition(parameter, rightParameter, getOwnStatement());
+			return new ParameterCondition(rightParameter, getOwnStatement());
 		}
 
 		if (StatementConditionHelper.containsNoTypeInfo(text)) {
 
-			return new ValueCondition(parameter, text, getOwnStatement());
+			return new ValueCondition(text, getOwnStatement());
 		}
 
 		return null;

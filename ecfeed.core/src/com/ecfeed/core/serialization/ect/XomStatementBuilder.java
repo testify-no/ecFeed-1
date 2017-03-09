@@ -118,7 +118,7 @@ public class XomStatementBuilder implements IStatementVisitor {
 	@Override
 	public Object visit(RelationStatement statement) throws Exception {
 
-		String parameterName = statement.getParameter().getName();
+		String parameterName = statement.getLeftParameter().getName();
 
 		Attribute parameterAttribute =
 				new Attribute(fStatementParameterAttributeName, parameterName);

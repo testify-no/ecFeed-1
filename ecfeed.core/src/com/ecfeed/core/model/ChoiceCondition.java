@@ -18,22 +18,19 @@ import com.ecfeed.core.utils.ObjectHelper;
 
 public class ChoiceCondition implements IStatementCondition {
 
-	private MethodParameterNode fLeftMethodParameterNode;
 	private ChoiceNode fRightChoice;
 	RelationStatement fParentRelationStatement;
 
-	public ChoiceCondition(
-			MethodParameterNode leftMethodParameterNode, ChoiceNode rightChoice, RelationStatement parentRelationStatement) {
+	public ChoiceCondition(ChoiceNode rightChoice, RelationStatement parentRelationStatement) {
 
 		fRightChoice = rightChoice;
-		fLeftMethodParameterNode = leftMethodParameterNode;
 		fParentRelationStatement = parentRelationStatement;
 	}
 
 	@Override
 	public boolean evaluate(List<ChoiceNode> choices) {
 
-		ChoiceNode choice = StatementConditionHelper.getChoiceForMethodParameter(choices, fLeftMethodParameterNode);
+		ChoiceNode choice = StatementConditionHelper.getChoiceForMethodParameter(choices, fParentRelationStatement.getLeftParameter());
 
 		return evaluateChoice(choice);
 	}
@@ -45,19 +42,18 @@ public class ChoiceCondition implements IStatementCondition {
 
 	@Override
 	public ChoiceCondition getCopy() {
-		return new ChoiceCondition(fLeftMethodParameterNode, fRightChoice.makeClone(), fParentRelationStatement);
+		return new ChoiceCondition(fRightChoice.makeClone(), fParentRelationStatement);
 	}
 
 	@Override
 	public boolean updateReferences(MethodNode methodNode) {
 
-		MethodParameterNode tmpParameterNode = methodNode.getMethodParameter(fLeftMethodParameterNode.getName());
-		if (tmpParameterNode == null) {
-			return false;
-		}
-		fLeftMethodParameterNode = tmpParameterNode; 
+		String parameterName = fParentRelationStatement.getLeftParameter().getName();
+		MethodParameterNode methodParameterNode = methodNode.getMethodParameter(parameterName);
 
-		ChoiceNode choiceNode = fLeftMethodParameterNode.getChoice(fRightChoice.getQualifiedName());
+		String choiceName = fRightChoice.getQualifiedName();
+		ChoiceNode choiceNode = methodParameterNode.getChoice(choiceName);
+
 		if (choiceNode == null) {
 			return false;
 		}
@@ -97,16 +93,8 @@ public class ChoiceCondition implements IStatementCondition {
 	@Override
 	public boolean mentions(MethodParameterNode methodParameterNode) {
 
-		if (fLeftMethodParameterNode == methodParameterNode) {
-			return true;
-		}
-
 		return false;
 	}	
-
-	MethodParameterNode getLeftParameterNode() {
-		return fLeftMethodParameterNode;
-	}
 
 	public ChoiceNode getRightChoice() {
 		return fRightChoice;

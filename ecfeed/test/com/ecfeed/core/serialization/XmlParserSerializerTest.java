@@ -627,7 +627,7 @@ public class XmlParserSerializerTest {
 	}
 
 	private void compareRelationStatements(RelationStatement statement1, RelationStatement statement2) {
-		compareParameters(statement1.getParameter(), statement2.getParameter());
+		compareParameters(statement1.getLeftParameter(), statement2.getLeftParameter());
 		if((statement1.getRelation() != statement2.getRelation())){
 			fail("Compared statements have different relations: " +
 					statement1.getRelation() + " and " + statement2.getRelation());
