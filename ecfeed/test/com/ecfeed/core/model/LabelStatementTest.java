@@ -10,7 +10,9 @@
 
 package com.ecfeed.core.model;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
@@ -23,6 +25,7 @@ import com.ecfeed.core.model.RelationStatement;
 import com.ecfeed.core.model.EStatementRelation;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
+import com.ecfeed.core.utils.JavaTypeHelper;
 
 public class LabelStatementTest {
 
@@ -135,4 +138,26 @@ public class LabelStatementTest {
 		assertTrue(p11NotEqual.evaluate(p21q));
 	}
 
+	@Test
+	public void updateReferencesTest() {
+		MethodNode method1 = new MethodNode("method1");
+		MethodParameterNode method1ParameterNode = new MethodParameterNode("par1", JavaTypeHelper.TYPE_NAME_STRING, "", false);
+		method1.addParameter(method1ParameterNode);
+
+		RelationStatement statement = 
+				RelationStatement.createStatementWithLabelCondition(
+						method1ParameterNode, EStatementRelation.EQUAL, "ABC");
+
+		MethodNode method2 = new MethodNode("method2");
+		MethodParameterNode method2ParameterNode = new MethodParameterNode("par1", JavaTypeHelper.TYPE_NAME_STRING, "", false);
+		method2.addParameter(method2ParameterNode);
+
+		LabelCondition valueCondition = (LabelCondition)statement.getCondition();
+
+		assertNotEquals(method2ParameterNode.hashCode(), valueCondition.getLeftParameterNode().hashCode());
+
+		valueCondition.updateReferences(method2);
+
+		assertEquals(method2ParameterNode.hashCode(), valueCondition.getLeftParameterNode().hashCode());
+	}	
 }

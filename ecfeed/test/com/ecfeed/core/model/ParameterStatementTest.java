@@ -11,6 +11,7 @@
 package com.ecfeed.core.model;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 import java.util.Arrays;
 import java.util.List;
@@ -256,5 +257,36 @@ public class ParameterStatementTest {
 		boolean result = statement.compare(copy);
 		assertEquals(true, result);
 
+	}
+
+	@Test
+	public void updateReferencesTest() {
+		MethodNode method1 = new MethodNode("method1");
+		MethodParameterNode method1LeftParameterNode = new MethodParameterNode("par1", JavaTypeHelper.TYPE_NAME_STRING, "", false);
+		method1.addParameter(method1LeftParameterNode);
+		MethodParameterNode method1RightParameterNode = new MethodParameterNode("par2", JavaTypeHelper.TYPE_NAME_STRING, "", false);
+		method1.addParameter(method1RightParameterNode);
+
+		RelationStatement statement = 
+				RelationStatement.createStatementWithParameterCondition(
+						method1LeftParameterNode, EStatementRelation.EQUAL, method1RightParameterNode);
+
+		MethodNode method2 = new MethodNode("method2");
+		MethodParameterNode method2LeftParameterNode = new MethodParameterNode("par1", JavaTypeHelper.TYPE_NAME_STRING, "", false);
+		method2.addParameter(method2LeftParameterNode);
+		MethodParameterNode method2RightParameterNode = new MethodParameterNode("par2", JavaTypeHelper.TYPE_NAME_STRING, "", false);
+		method2.addParameter(method2RightParameterNode);
+
+
+		ParameterCondition parameterCondition = (ParameterCondition)statement.getCondition();
+
+		assertNotEquals(method2LeftParameterNode.hashCode(), parameterCondition.getLeftMethodParameterNode().hashCode());
+		assertNotEquals(method2RightParameterNode.hashCode(), parameterCondition.getRightParameterNode().hashCode());
+
+		parameterCondition.updateReferences(method2);
+
+		assertEquals(method2LeftParameterNode.hashCode(), parameterCondition.getLeftMethodParameterNode().hashCode());
+		assertEquals(method2RightParameterNode.hashCode(), parameterCondition.getRightParameterNode().hashCode());
 	}	
+
 }

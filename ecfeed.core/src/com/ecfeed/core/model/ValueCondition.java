@@ -23,10 +23,10 @@ public class ValueCondition implements IStatementCondition {
 	private RelationStatement fParentRelationStatement;
 
 	public ValueCondition(
-			MethodParameterNode parameter, String value, RelationStatement parentRelationStatement) {
+			MethodParameterNode leftParameter, String rightValue, RelationStatement parentRelationStatement) {
 
-		fLeftParameterNode = parameter;
-		fRightValue = value;
+		fLeftParameterNode = leftParameter;
+		fRightValue = rightValue;
 		fParentRelationStatement = parentRelationStatement;
 	}
 
@@ -90,7 +90,7 @@ public class ValueCondition implements IStatementCondition {
 	@Override
 	public Object getCondition(){
 
-		return null;
+		return fRightValue;
 	}
 
 	@Override
@@ -138,6 +138,10 @@ public class ValueCondition implements IStatementCondition {
 
 		return false;
 	}	
+
+	public MethodParameterNode getLeftParameterNode() {
+		return fLeftParameterNode;
+	}
 
 	public String getRightValue() {
 		return fRightValue;

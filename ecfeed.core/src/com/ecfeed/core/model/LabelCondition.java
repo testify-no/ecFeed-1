@@ -14,20 +14,20 @@ import java.util.List;
 
 public class LabelCondition implements IStatementCondition {
 
-	private String fLabel;
-	private MethodParameterNode fMethodParameterNode;
+	private MethodParameterNode fLeftMethodParameterNode;
+	private String fRightLabel;
 	private RelationStatement fParentRelationStatement;
 
-	public LabelCondition(String label, MethodParameterNode methodParameterNode, RelationStatement parentRelationStatement) {
-		fLabel = label;
-		fMethodParameterNode = methodParameterNode;
+	public LabelCondition(MethodParameterNode methodParameterNode, String label, RelationStatement parentRelationStatement) {
+		fRightLabel = label;
+		fLeftMethodParameterNode = methodParameterNode;
 		fParentRelationStatement = parentRelationStatement;
 	}
 
 	@Override
 	public boolean evaluate(List<ChoiceNode> choices) {
 
-		ChoiceNode choice = StatementConditionHelper.getChoiceForMethodParameter(choices, fMethodParameterNode);
+		ChoiceNode choice = StatementConditionHelper.getChoiceForMethodParameter(choices, fLeftMethodParameterNode);
 
 		if (choice == null) {
 			return false;
@@ -39,18 +39,18 @@ public class LabelCondition implements IStatementCondition {
 	@Override
 	public boolean updateReferences(MethodNode methodNode) {
 
-		MethodParameterNode tmpParameterNode = methodNode.getMethodParameter(fMethodParameterNode.getName());
+		MethodParameterNode tmpParameterNode = methodNode.getMethodParameter(fLeftMethodParameterNode.getName());
 		if (tmpParameterNode == null) {
 			return false;
 		}
 
-		fMethodParameterNode = tmpParameterNode;
+		fLeftMethodParameterNode = tmpParameterNode;
 		return true;
 	}
 
 	@Override
 	public Object getCondition(){
-		return fLabel;
+		return fRightLabel;
 	}
 
 	@Override
@@ -77,22 +77,22 @@ public class LabelCondition implements IStatementCondition {
 
 	@Override
 	public String toString() {
-		return StatementConditionHelper.createLabelDescription(fLabel);
+		return StatementConditionHelper.createLabelDescription(fRightLabel);
 	}
 
 	@Override
 	public LabelCondition getCopy() {
-		return new LabelCondition(fLabel, fMethodParameterNode, fParentRelationStatement);
+		return new LabelCondition(fLeftMethodParameterNode, fRightLabel, fParentRelationStatement);
 	}
 
-	public String getLabel() {
-		return fLabel;
+	public String getRightLabel() {
+		return fRightLabel;
 	}
 
 	@Override
 	public boolean mentions(MethodParameterNode methodParameterNode) {
 
-		if (fMethodParameterNode == methodParameterNode) {
+		if (fLeftMethodParameterNode == methodParameterNode) {
 			return true;
 		}
 
@@ -101,7 +101,7 @@ public class LabelCondition implements IStatementCondition {
 
 	private boolean evaluateContainsLabel(ChoiceNode choice) {
 
-		boolean containsLabel = choice.getAllLabels().contains(fLabel);
+		boolean containsLabel = choice.getAllLabels().contains(fRightLabel);
 
 		EStatementRelation relation = fParentRelationStatement.getRelation(); 
 
@@ -115,6 +115,10 @@ public class LabelCondition implements IStatementCondition {
 			return false;
 		}
 
+	}
+
+	public MethodParameterNode getLeftParameterNode() {
+		return fLeftMethodParameterNode;
 	}
 
 

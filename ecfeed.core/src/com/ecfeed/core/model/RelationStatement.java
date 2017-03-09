@@ -25,7 +25,7 @@ public class RelationStatement extends AbstractStatement implements IRelationalS
 
 		RelationStatement relationStatement = new RelationStatement(parameter, relation, null);
 
-		IStatementCondition condition = new LabelCondition(label, parameter, relationStatement);
+		IStatementCondition condition = new LabelCondition(parameter, label, relationStatement);
 		relationStatement.setCondition(condition);
 
 		return relationStatement;
@@ -36,7 +36,7 @@ public class RelationStatement extends AbstractStatement implements IRelationalS
 
 		RelationStatement relationStatement = new RelationStatement(parameter, relation, null);
 
-		IStatementCondition condition = new ChoiceCondition(choiceNode, parameter, relationStatement);
+		IStatementCondition condition = new ChoiceCondition(parameter, choiceNode, relationStatement);
 		relationStatement.setCondition(condition);
 
 		return relationStatement;
@@ -226,15 +226,15 @@ public class RelationStatement extends AbstractStatement implements IRelationalS
 	}
 
 	public void setCondition(String label) {
-		fCondition = new LabelCondition(label, fParameter, this);
+		fCondition = new LabelCondition(fParameter, label, this);
 	}
 
 	public void setCondition(ChoiceNode choice) {
-		fCondition = new ChoiceCondition(choice, fParameter, this);
+		fCondition = new ChoiceCondition(fParameter, choice, this);
 	}
 
 	public void setCondition(MethodParameterNode parameter, ChoiceNode choice) {
-		fCondition = new ChoiceCondition(choice, fParameter, this);
+		fCondition = new ChoiceCondition(fParameter, choice, this);
 	}
 
 	public IStatementCondition getCondition() {

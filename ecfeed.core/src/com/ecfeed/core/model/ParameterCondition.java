@@ -22,9 +22,9 @@ public class ParameterCondition implements IStatementCondition {
 	private RelationStatement fParentRelationStatement;
 
 	public ParameterCondition(
-			MethodParameterNode parameter, MethodParameterNode rightParameter, RelationStatement parentRelationStatement) {
+			MethodParameterNode leftParameter, MethodParameterNode rightParameter, RelationStatement parentRelationStatement) {
 
-		fLeftParameterNode = parameter;
+		fLeftParameterNode = leftParameter;
 		fRightParameterNode = rightParameter;
 		fParentRelationStatement = parentRelationStatement;
 	}
@@ -100,7 +100,7 @@ public class ParameterCondition implements IStatementCondition {
 	@Override
 	public Object getCondition(){
 
-		return null;
+		return fRightParameterNode;
 	}
 
 	@Override
@@ -153,7 +153,12 @@ public class ParameterCondition implements IStatementCondition {
 		return false;
 	}	
 
-	public MethodParameterNode getRightMethodParameterNode() {
+	public MethodParameterNode getLeftMethodParameterNode() {
+
+		return fLeftParameterNode;
+	}
+
+	public MethodParameterNode getRightParameterNode() {
 
 		return fRightParameterNode;
 	}

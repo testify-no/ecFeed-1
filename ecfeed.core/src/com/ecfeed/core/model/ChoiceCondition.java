@@ -18,21 +18,22 @@ import com.ecfeed.core.utils.ObjectHelper;
 
 public class ChoiceCondition implements IStatementCondition {
 
-	private ChoiceNode fChoice;
-	private MethodParameterNode fMethodParameterNode;
+	private MethodParameterNode fLeftMethodParameterNode;
+	private ChoiceNode fRightChoice;
 	RelationStatement fParentRelationStatement;
 
-	public ChoiceCondition(ChoiceNode choice, MethodParameterNode parameter, RelationStatement parentRelationStatement) {
+	public ChoiceCondition(
+			MethodParameterNode leftMethodParameterNode, ChoiceNode rightChoice, RelationStatement parentRelationStatement) {
 
-		fChoice = choice;
-		fMethodParameterNode = parameter;
+		fRightChoice = rightChoice;
+		fLeftMethodParameterNode = leftMethodParameterNode;
 		fParentRelationStatement = parentRelationStatement;
 	}
 
 	@Override
 	public boolean evaluate(List<ChoiceNode> choices) {
 
-		ChoiceNode choice = StatementConditionHelper.getChoiceForMethodParameter(choices, fMethodParameterNode);
+		ChoiceNode choice = StatementConditionHelper.getChoiceForMethodParameter(choices, fLeftMethodParameterNode);
 
 		return evaluateChoice(choice);
 	}
@@ -44,30 +45,30 @@ public class ChoiceCondition implements IStatementCondition {
 
 	@Override
 	public ChoiceCondition getCopy() {
-		return new ChoiceCondition(fChoice.makeClone(), fMethodParameterNode, fParentRelationStatement);
+		return new ChoiceCondition(fLeftMethodParameterNode, fRightChoice.makeClone(), fParentRelationStatement);
 	}
 
 	@Override
 	public boolean updateReferences(MethodNode methodNode) {
 
-		MethodParameterNode tmpParameterNode = methodNode.getMethodParameter(fMethodParameterNode.getName());
+		MethodParameterNode tmpParameterNode = methodNode.getMethodParameter(fLeftMethodParameterNode.getName());
 		if (tmpParameterNode == null) {
 			return false;
 		}
-		fMethodParameterNode = tmpParameterNode; 
+		fLeftMethodParameterNode = tmpParameterNode; 
 
-		ChoiceNode choiceNode = fMethodParameterNode.getChoice(fChoice.getQualifiedName());
+		ChoiceNode choiceNode = fLeftMethodParameterNode.getChoice(fRightChoice.getQualifiedName());
 		if (choiceNode == null) {
 			return false;
 		}
-		fChoice = choiceNode;
+		fRightChoice = choiceNode;
 
 		return true;
 	}
 
 	@Override
 	public Object getCondition(){
-		return fChoice;
+		return fRightChoice;
 	}
 
 	@Override
@@ -79,7 +80,7 @@ public class ChoiceCondition implements IStatementCondition {
 
 		ChoiceCondition compared = (ChoiceCondition)condition;
 
-		return (fChoice.isMatch((ChoiceNode)compared.getCondition()));
+		return (fRightChoice.isMatch((ChoiceNode)compared.getCondition()));
 	}
 
 	@Override
@@ -90,21 +91,25 @@ public class ChoiceCondition implements IStatementCondition {
 	@Override
 	public String toString() {
 
-		return StatementConditionHelper.createChoiceDescription(fChoice.getQualifiedName());
+		return StatementConditionHelper.createChoiceDescription(fRightChoice.getQualifiedName());
 	}
 
 	@Override
 	public boolean mentions(MethodParameterNode methodParameterNode) {
 
-		if (fMethodParameterNode == methodParameterNode) {
+		if (fLeftMethodParameterNode == methodParameterNode) {
 			return true;
 		}
 
 		return false;
 	}	
 
-	public ChoiceNode getChoice() {
-		return fChoice;
+	MethodParameterNode getLeftParameterNode() {
+		return fLeftMethodParameterNode;
+	}
+
+	public ChoiceNode getRightChoice() {
+		return fRightChoice;
 	}
 
 	private boolean evaluateChoice(ChoiceNode actualChoice) {
@@ -117,7 +122,7 @@ public class ChoiceCondition implements IStatementCondition {
 		String typeName = actualChoice.getParameter().getType();
 
 		String actualValue = JavaTypeHelper.convertValueString(actualChoice.getValueString(), typeName);
-		String valueToMatch = JavaTypeHelper.convertValueString(fChoice.getValueString(), typeName);
+		String valueToMatch = JavaTypeHelper.convertValueString(fRightChoice.getValueString(), typeName);
 
 		return StatementConditionHelper.isRelationMatchQuiet(relation, typeName, actualValue, valueToMatch);
 	}
@@ -126,10 +131,10 @@ public class ChoiceCondition implements IStatementCondition {
 
 		boolean isMatch = false;
 
-		if (choice == null || fChoice == null) {
-			isMatch = ObjectHelper.isEqualWhenOneOrTwoNulls(choice, fChoice);
+		if (choice == null || fRightChoice == null) {
+			isMatch = ObjectHelper.isEqualWhenOneOrTwoNulls(choice, fRightChoice);
 		} else {
-			isMatch = choice.isMatchIncludingParents(fChoice);
+			isMatch = choice.isMatchIncludingParents(fRightChoice);
 		}
 
 		switch (relation) {

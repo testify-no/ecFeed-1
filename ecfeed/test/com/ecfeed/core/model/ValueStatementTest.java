@@ -11,6 +11,7 @@
 package com.ecfeed.core.model;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 import java.util.Arrays;
 import java.util.List;
@@ -241,6 +242,28 @@ public class ValueStatementTest {
 
 		boolean result = statement.compare(copy);
 		assertEquals(true, result);
-
 	}
+
+	@Test
+	public void updateReferencesTest() {
+		MethodNode method1 = new MethodNode("method1");
+		MethodParameterNode method1ParameterNode = new MethodParameterNode("par1", JavaTypeHelper.TYPE_NAME_STRING, "", false);
+		method1.addParameter(method1ParameterNode);
+
+		RelationStatement statement = 
+				RelationStatement.createStatementWithValueCondition(
+						method1ParameterNode, EStatementRelation.EQUAL, "ABC");
+
+		MethodNode method2 = new MethodNode("method2");
+		MethodParameterNode method2ParameterNode = new MethodParameterNode("par1", JavaTypeHelper.TYPE_NAME_STRING, "", false);
+		method2.addParameter(method2ParameterNode);
+
+		ValueCondition valueCondition = (ValueCondition)statement.getCondition();
+
+		assertNotEquals(method2ParameterNode.hashCode(), valueCondition.getLeftParameterNode().hashCode());
+
+		valueCondition.updateReferences(method2);
+
+		assertEquals(method2ParameterNode.hashCode(), valueCondition.getLeftParameterNode().hashCode());
+	}	
 }

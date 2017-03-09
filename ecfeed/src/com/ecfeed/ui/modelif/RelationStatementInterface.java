@@ -67,14 +67,14 @@ public class RelationStatementInterface extends AbstractStatementInterface{
 		if (StatementConditionHelper.containsChoiceTypeInfo(text)) {
 
 			String choiceName = StatementConditionHelper.removeChoiceTypeInfo(text);
-			return new ChoiceCondition(parameter.getChoice(choiceName), parameter, getOwnStatement());
+			return new ChoiceCondition(parameter, parameter.getChoice(choiceName), getOwnStatement());
 		}
 
 		if (StatementConditionHelper.containsLabelTypeInfo(text)) {
 
 			return new LabelCondition(
-					StatementConditionHelper.removeLabelTypeInfo(text), 
 					parameter,
+					StatementConditionHelper.removeLabelTypeInfo(text),
 					getOwnStatement());
 		}
 

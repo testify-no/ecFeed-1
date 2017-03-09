@@ -142,7 +142,7 @@ public class XomStatementBuilder implements IStatementVisitor {
 
 		XomBuilder.encodeAndAddAttribute(
 				targetLabelElement, 
-				new Attribute(STATEMENT_LABEL_ATTRIBUTE_NAME, condition.getLabel()), 
+				new Attribute(STATEMENT_LABEL_ATTRIBUTE_NAME, condition.getRightLabel()), 
 				fWhiteCharConverter);
 
 		return targetLabelElement;
@@ -151,7 +151,7 @@ public class XomStatementBuilder implements IStatementVisitor {
 	@Override
 	public Object visit(ChoiceCondition condition) throws Exception {
 
-		ChoiceNode choice = condition.getChoice();
+		ChoiceNode choice = condition.getRightChoice();
 		Element targetChoiceElement = new Element(CONSTRAINT_CHOICE_STATEMENT_NODE_NAME);
 
 		XomBuilder.encodeAndAddAttribute(
@@ -165,7 +165,7 @@ public class XomStatementBuilder implements IStatementVisitor {
 	@Override
 	public Object visit(ParameterCondition condition) throws Exception {
 
-		MethodParameterNode rightMethodParameterNode = condition.getRightMethodParameterNode();
+		MethodParameterNode rightMethodParameterNode = condition.getRightParameterNode();
 		Element targetParameterElement = new Element(CONSTRAINT_PARAMETER_STATEMENT_NODE_NAME);
 
 		XomBuilder.encodeAndAddAttribute(

@@ -276,7 +276,7 @@ public class Constraint implements IConstraint<ChoiceNode> {
 		public Object visit(ChoiceCondition condition) throws Exception {
 
 			Set<ChoiceNode> set = new HashSet<ChoiceNode>();
-			set.add(condition.getChoice());
+			set.add(condition.getRightChoice());
 
 			return set;
 		}
@@ -340,7 +340,7 @@ public class Constraint implements IConstraint<ChoiceNode> {
 		public Object visit(ChoiceCondition condition) throws Exception {
 
 			Set<AbstractParameterNode> set = new HashSet<AbstractParameterNode>();
-			AbstractParameterNode parameter = condition.getChoice().getParameter();
+			AbstractParameterNode parameter = condition.getRightChoice().getParameter();
 
 			if (parameter != null) {
 				set.add(parameter);
@@ -412,7 +412,7 @@ public class Constraint implements IConstraint<ChoiceNode> {
 		public Object visit(LabelCondition condition) throws Exception {
 
 			Set<String> result = new HashSet<String>();
-			result.add(condition.getLabel());
+			result.add(condition.getRightLabel());
 
 			return result;
 		}

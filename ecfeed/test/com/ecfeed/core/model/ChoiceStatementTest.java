@@ -12,6 +12,7 @@ package com.ecfeed.core.model;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ import com.ecfeed.core.model.RelationStatement;
 import com.ecfeed.core.model.EStatementRelation;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
+import com.ecfeed.core.utils.JavaTypeHelper;
 
 public class ChoiceStatementTest {
 
@@ -155,7 +157,7 @@ public class ChoiceStatementTest {
 		assertFalse(statement4.evaluate(fList2));
 		assertTrue(statement4.evaluate(fList3));
 	}
-	
+
 	@Test
 	public void testEvaluateNull() {
 
@@ -165,18 +167,18 @@ public class ChoiceStatementTest {
 		RelationStatement statementNotEqualWithNotNull = 
 				RelationStatement.createStatementWithChoiceCondition(fParameter, EStatementRelation.NOT_EQUAL, fChoice2);
 		assertTrue(statementNotEqualWithNotNull.evaluate(nullList));
-		
-		
+
+
 		RelationStatement statementNotEqualWithNull = 
 				RelationStatement.createStatementWithChoiceCondition(fParameter, EStatementRelation.NOT_EQUAL, null);
 		assertFalse(statementNotEqualWithNull.evaluate(nullList));
 
-		
+
 		RelationStatement statementEqualWithNull = 
 				RelationStatement.createStatementWithChoiceCondition(fParameter, EStatementRelation.EQUAL, null);
 		assertTrue(statementEqualWithNull.evaluate(nullList));		
 
-		
+
 		RelationStatement statementEqualWithNotNull = 
 				RelationStatement.createStatementWithChoiceCondition(fParameter, EStatementRelation.EQUAL, fChoice1);
 		assertFalse(statementEqualWithNotNull.evaluate(nullList));		
@@ -249,4 +251,33 @@ public class ChoiceStatementTest {
 		s2.setRelation(EStatementRelation.EQUAL);
 		assertTrue(s1.compare(s2));
 	}
+
+	@Test
+	public void updateReferencesTest() {
+		MethodNode method1 = new MethodNode("method1");
+		MethodParameterNode method1ParameterNode = new MethodParameterNode("par1", JavaTypeHelper.TYPE_NAME_STRING, "", false);
+		method1.addParameter(method1ParameterNode);
+		ChoiceNode method1choiceNode = new ChoiceNode("choice1", "1");
+		method1ParameterNode.addChoice(method1choiceNode);
+
+		RelationStatement statement = 
+				RelationStatement.createStatementWithChoiceCondition(
+						method1ParameterNode, EStatementRelation.EQUAL, method1choiceNode);
+
+		MethodNode method2 = new MethodNode("method2");
+		MethodParameterNode method2ParameterNode = new MethodParameterNode("par1", JavaTypeHelper.TYPE_NAME_STRING, "", false);
+		method2.addParameter(method2ParameterNode);
+		ChoiceNode method2choiceNode = new ChoiceNode("choice1", "1");
+		method2ParameterNode.addChoice(method2choiceNode);
+
+		ChoiceCondition choiceCondition = (ChoiceCondition)statement.getCondition();
+
+		assertNotEquals(method2ParameterNode.hashCode(), choiceCondition.getLeftParameterNode().hashCode());
+		assertNotEquals(method2choiceNode.hashCode(), choiceCondition.getRightChoice().hashCode());
+
+		choiceCondition.updateReferences(method2);
+
+		assertEquals(method2ParameterNode.hashCode(), choiceCondition.getLeftParameterNode().hashCode());
+		assertEquals(method2choiceNode.hashCode(), choiceCondition.getRightChoice().hashCode());
+	}	
 }
