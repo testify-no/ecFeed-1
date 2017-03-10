@@ -29,13 +29,6 @@ public class ParameterCondition implements IStatementCondition {
 	@Override
 	public boolean evaluate(List<ChoiceNode> choices) {
 
-		String substituteType = 
-				JavaTypeHelper.getSubstituteType(fParentRelationStatement.getLeftParameter().getType(), fRightParameterNode.getType());
-
-		if (substituteType == null) {
-			return false;
-		}
-
 		String leftChoiceStr = getChoiceString(choices, fParentRelationStatement.getLeftParameter());
 		if (leftChoiceStr == null) {
 			return false;
@@ -46,8 +39,12 @@ public class ParameterCondition implements IStatementCondition {
 			return false;
 		}
 
-		if (StatementConditionHelper.isRelationMatchQuiet(
-				fParentRelationStatement.getRelation(), substituteType, leftChoiceStr, rightChoiceStr)) {
+		String substituteType = 
+				JavaTypeHelper.getSubstituteType(fParentRelationStatement.getLeftParameter().getType(), fRightParameterNode.getType());
+
+		EStatementRelation relation = fParentRelationStatement.getRelation();
+
+		if (StatementConditionHelper.isRelationMatchQuiet(relation, substituteType, leftChoiceStr, rightChoiceStr)) {
 			return true;
 		}
 

@@ -117,12 +117,11 @@ public class StatementConditionHelper {
 		return StringHelper.removeFromPostfix("[" + typeDescription + "]", string);
 	}
 
-	public static boolean isRelationMatchQuiet(
-			EStatementRelation relation, String typeName, String actualValue, String valueToMatch) {
+	public static boolean isRelationMatchQuiet(EStatementRelation relation, String typeName, String leftString, String rightString) {
 
 		boolean result = false;
 		try {
-			result = isRelationMatch(relation, typeName, actualValue, valueToMatch);
+			result = isRelationMatch(relation, typeName, leftString, rightString);
 		} catch (Exception e) {
 		}
 
@@ -130,30 +129,41 @@ public class StatementConditionHelper {
 	}
 
 	public static boolean isRelationMatch(
-			EStatementRelation relation, String typeName, String actualValue, String valueToMatch) {
+			EStatementRelation relation, String typeName, String leftString, String rightString) {
+
+		if (typeName == null) {
+			return false;
+		}
+
+		if (relation == EStatementRelation.EQUAL && StringHelper.isEqual(leftString, rightString)) {
+			return true;
+		}
+		if (relation == EStatementRelation.NOT_EQUAL && !StringHelper.isEqual(leftString, rightString)) {
+			return true;
+		}		
 
 		if (JavaTypeHelper.isNumericTypeName(typeName)) {
-			if (isMatchForNumericTypes(typeName, relation, actualValue, valueToMatch)) {
+			if (isMatchForNumericTypes(typeName, relation, leftString, rightString)) {
 				return true;
 			}
 			return false;
 		}
 
 		if (JavaTypeHelper.isTypeWithChars(typeName)) {
-			if (EStatementRelation.isMatch(relation, actualValue, valueToMatch)) {
+			if (EStatementRelation.isMatch(relation, leftString, rightString)) {
 				return true;
 			}
 			return false;
 		}
 
 		if (JavaTypeHelper.isBooleanTypeName(typeName)) {
-			if (EStatementRelation.isEqualityMatchForBooleans(relation, actualValue, valueToMatch)) {
+			if (EStatementRelation.isEqualityMatchForBooleans(relation, leftString, rightString)) {
 				return true;
 			}
 			return false;
 		}		
 
-		if (EStatementRelation.isEqualityMatch(relation, actualValue, valueToMatch)) {
+		if (EStatementRelation.isEqualityMatch(relation, leftString, rightString)) {
 			return true;
 		}
 

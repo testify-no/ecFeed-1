@@ -73,7 +73,7 @@ public class CopyNodeTest{
 	public void copyMethodTest(){
 		MethodNode method = new MethodNode("method");
 		MethodParameterNode par1 = new MethodParameterNode("par1", "int", "0", false);
-		MethodParameterNode par2 = new MethodParameterNode("par1", "int", "0", true);
+		MethodParameterNode par2 = new MethodParameterNode("par2", "int", "0", true);
 		ConstraintNode constraint1 = new ConstraintNode("constraint1", new Constraint(new StaticStatement(true), new StaticStatement(true)));
 		ConstraintNode constraint2 = new ConstraintNode("constraint2", new Constraint(new StaticStatement(true), new StaticStatement(true)));
 		ChoiceNode choice1 = new ChoiceNode("choice1", "0");
@@ -140,7 +140,7 @@ public class CopyNodeTest{
 	public void copyConstraintTest(){
 		MethodNode method = new MethodNode("method");
 		MethodParameterNode par1 = new MethodParameterNode("par1", "int", "0", false);
-		MethodParameterNode par2 = new MethodParameterNode("par1", "int", "0", true);
+		MethodParameterNode par2 = new MethodParameterNode("par2", "int", "0", true);
 		ChoiceNode choice1 = new ChoiceNode("choice1", "0");
 		choice1.addLabel("label");
 		par1.addChoice(choice1);
@@ -168,7 +168,7 @@ public class CopyNodeTest{
 	public void copyTestCaseTest(){
 		MethodNode method = new MethodNode("method");
 		MethodParameterNode par1 = new MethodParameterNode("par1", "int", "0", false);
-		MethodParameterNode par2 = new MethodParameterNode("par1", "int", "0", true);
+		MethodParameterNode par2 = new MethodParameterNode("par2", "int", "0", true);
 		ChoiceNode choice1 = new ChoiceNode("choice1", "0");
 		par1.addChoice(choice1);
 		ChoiceNode expectedChoice1 = new ChoiceNode("expected", "0");

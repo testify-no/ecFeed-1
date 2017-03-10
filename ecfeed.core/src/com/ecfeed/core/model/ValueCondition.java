@@ -18,13 +18,11 @@ import com.ecfeed.core.utils.StringHelper;
 
 public class ValueCondition implements IStatementCondition {
 
-	//	private MethodParameterNode fLeftParameterNode; // XYX REMOVE
 	private String fRightValue;
 	private RelationStatement fParentRelationStatement;
 
 	public ValueCondition(String rightValue, RelationStatement parentRelationStatement) {
 
-		//		fLeftParameterNode = parentRelationStatement.getLeftParameter(); TUTAJ
 		fRightValue = rightValue;
 		fParentRelationStatement = parentRelationStatement;
 	}
@@ -44,8 +42,10 @@ public class ValueCondition implements IStatementCondition {
 			return false;
 		}
 
-		if (StatementConditionHelper.isRelationMatchQuiet(
-				fParentRelationStatement.getRelation(), substituteType, leftChoiceStr, fRightValue)) {
+		EStatementRelation relation = fParentRelationStatement.getRelation();
+
+
+		if (StatementConditionHelper.isRelationMatchQuiet(relation, substituteType, leftChoiceStr, fRightValue)) {
 			return true;
 		}
 

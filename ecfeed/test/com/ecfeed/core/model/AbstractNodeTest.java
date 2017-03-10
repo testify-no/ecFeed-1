@@ -111,8 +111,8 @@ public class AbstractNodeTest{
 		RootNode root = new RootNode("root", ModelVersionDistributor.getCurrentSoftwareVersion());
 		ClassNode classNode = new ClassNode("class");
 		MethodNode method = new MethodNode("method");
-		MethodParameterNode parameter = new MethodParameterNode("name", "type", "0", false);
-		MethodParameterNode expCat = new MethodParameterNode("name", "type", "0", true);
+		MethodParameterNode parameter = new MethodParameterNode("name1", "type", "0", false);
+		MethodParameterNode expCat = new MethodParameterNode("name2", "type", "0", true);
 		expCat.setDefaultValueString("0");
 		ConstraintNode constraint = new ConstraintNode("name", new Constraint(new StaticStatement(true), new StaticStatement(false)));
 		TestCaseNode testCase = new TestCaseNode("name", new ArrayList<ChoiceNode>());
@@ -168,8 +168,8 @@ public class AbstractNodeTest{
 		RootNode root = new RootNode("root", ModelVersionDistributor.getCurrentSoftwareVersion());
 		ClassNode classNode = new ClassNode("class");
 		MethodNode method = new MethodNode("method");
-		MethodParameterNode parameter = new MethodParameterNode("name", "type", "0", false);
-		MethodParameterNode expCat = new MethodParameterNode("name", "type", "0", true);
+		MethodParameterNode parameter = new MethodParameterNode("name1", "type", "0", false);
+		MethodParameterNode expCat = new MethodParameterNode("name2", "type", "0", true);
 		expCat.setDefaultValueString("0");
 		ConstraintNode constraint = new ConstraintNode("name", new Constraint(new StaticStatement(true), new StaticStatement(false)));
 		TestCaseNode testCase = new TestCaseNode("name", new ArrayList<ChoiceNode>());

@@ -14,6 +14,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.ecfeed.core.utils.StringHelper;
+
 public class ChoiceNode extends ChoicesParentNode{
 
 	public static final String ABSTRACT_CHOICE_MARKER = "[ABSTRACT]";
@@ -138,7 +140,7 @@ public class ChoiceNode extends ChoicesParentNode{
 			return true;
 		}
 
-		if ((getParameter() == choice.getParameter()) && (getQualifiedName() == choice.getQualifiedName())) {
+		if (isParameterAndNameMatch(choice)) {
 			return true;
 		}
 
@@ -147,6 +149,25 @@ public class ChoiceNode extends ChoicesParentNode{
 		}
 
 		return false;
+	}
+
+	private boolean isParameterAndNameMatch(ChoiceNode choice) {
+
+		AbstractParameterNode param = getParameter();
+		AbstractParameterNode otherParam = choice.getParameter();
+
+		if (param != otherParam) {
+			return false;
+		}
+
+		String name = getQualifiedName();
+		String otherName = choice.getQualifiedName();
+
+		if (!StringHelper.isEqual(name, otherName)) {
+			return false;
+		}
+
+		return true;
 	}
 
 	public int level(){

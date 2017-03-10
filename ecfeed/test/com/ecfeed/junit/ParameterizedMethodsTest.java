@@ -113,7 +113,7 @@ public class ParameterizedMethodsTest {
 			MethodNode methodNode = new MethodNode(FUNCTION_UNDER_TEST_NAME);
 			classNode.addMethod(methodNode);
 			methodNode.addParameter(new MethodParameterNode("c1", "int", "0", false));
-			methodNode.addParameter(new MethodParameterNode("c1", "int", "0", false));
+			methodNode.addParameter(new MethodParameterNode("c2", "int", "0", false));
 
 
 			fExecuted = new HashSet<List<Integer>>();

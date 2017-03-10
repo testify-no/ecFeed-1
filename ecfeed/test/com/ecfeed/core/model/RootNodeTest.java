@@ -136,6 +136,7 @@ public class RootNodeTest{
 			RootNode root = generator.generateModel(3);
 			RootNode copy = root.makeClone();
 
+
 			assertTrue(copy.isMatch(root));
 		}
 	}

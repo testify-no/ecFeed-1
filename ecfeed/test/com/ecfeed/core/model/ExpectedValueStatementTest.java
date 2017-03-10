@@ -40,10 +40,10 @@ public class ExpectedValueStatementTest{
 		fMethod = new MethodNode("method");
 		fExpectedValue1 = "value1";
 
-		fExpParameter1 = new MethodParameterNode("parameter", "type","0",  true);
+		fExpParameter1 = new MethodParameterNode("parameterE1", "type","0",  true);
 		fExpParameter1.setDefaultValueString(fExpectedValue1);
-		fPartParameter1 = new MethodParameterNode("parameter", "type","0",  false);
-		fPartParameter2 = new MethodParameterNode("parameter", "type", "0", false);
+		fPartParameter1 = new MethodParameterNode("parameterP1", "type","0",  false);
+		fPartParameter2 = new MethodParameterNode("parameterP2", "type", "0", false);
 
 		fMethod.addParameter(fPartParameter1);
 		fMethod.addParameter(fExpParameter1);

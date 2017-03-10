@@ -73,8 +73,8 @@ public class RelationStatement extends AbstractStatement implements IRelationalS
 	}
 
 	@Override
-	public boolean evaluate(List<ChoiceNode> values) {
 
+	public boolean evaluate(List<ChoiceNode> values) {
 		boolean result;
 		try {
 			result = fRightCondition.evaluate(values);

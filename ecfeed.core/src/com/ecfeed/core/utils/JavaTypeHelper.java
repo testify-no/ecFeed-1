@@ -47,7 +47,7 @@ public class JavaTypeHelper {
 	};
 
 	public static String getTypeName(String cannonicalName) {
-		
+
 		if (cannonicalName.equals(boolean.class.getName())) {
 			return JavaTypeHelper.TYPE_NAME_BOOLEAN;
 		}
@@ -78,7 +78,7 @@ public class JavaTypeHelper {
 
 		return cannonicalName;
 	}
-	
+
 	public static boolean isJavaType(String typeName) {
 
 		return Arrays.asList(SUPPORTED_PRIMITIVE_TYPES).contains(typeName);
@@ -195,7 +195,8 @@ public class JavaTypeHelper {
 
 		return false;
 	}
-	public static boolean isNumericTypeName(String typeName) {
+
+	public static boolean isExtendedIntTypeName(String typeName) {
 
 		if (isByteTypeName(typeName)) {
 			return true;
@@ -207,6 +208,14 @@ public class JavaTypeHelper {
 			return true;
 		}		
 		if (isShortTypeName(typeName)) {
+			return true;
+		}
+		return false;
+	}
+
+	public static boolean isNumericTypeName(String typeName) {
+
+		if (isExtendedIntTypeName(typeName)) {
 			return true;
 		}
 		if (isFloatTypeName(typeName)) {
@@ -464,5 +473,27 @@ public class JavaTypeHelper {
 
 		return TYPE_NAME_LONG;
 	}
+
+	public static String getSubstituteType(String typeName1) {
+
+		if (typeName1 == null) {
+			return null;
+		}
+
+		if (JavaTypeHelper.isTypeWithChars(typeName1)) {
+			return TYPE_NAME_STRING;
+		}		
+
+		if (JavaTypeHelper.isFloatingPointTypeName(typeName1)) {
+			return TYPE_NAME_DOUBLE;
+		}
+
+		if (JavaTypeHelper.isExtendedIntTypeName(typeName1)) {
+			return TYPE_NAME_LONG;
+		}
+
+		return typeName1;
+	}
+
 
 }

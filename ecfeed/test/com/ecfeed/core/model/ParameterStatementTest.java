@@ -103,14 +103,14 @@ public class ParameterStatementTest {
 		evaluateOne(leftParam, rightParam, "99999", EStatementRelation.LESS_THAN, "100000", AssertType.TRUE); 
 
 		evaluateOne(leftParam, rightParam, "1", EStatementRelation.EQUAL,         "a", AssertType.FALSE);
-		evaluateOne(leftParam, rightParam, "1", EStatementRelation.NOT_EQUAL,     "a", AssertType.FALSE);
+		evaluateOne(leftParam, rightParam, "1", EStatementRelation.NOT_EQUAL,     "a", AssertType.TRUE);
 		evaluateOne(leftParam, rightParam, "1", EStatementRelation.LESS_THAN,     "a", AssertType.FALSE);
 		evaluateOne(leftParam, rightParam, "1", EStatementRelation.LESS_EQUAL,    "a", AssertType.FALSE);
 		evaluateOne(leftParam, rightParam, "1", EStatementRelation.GREATER_THAN,  "a", AssertType.FALSE);
 		evaluateOne(leftParam, rightParam, "1", EStatementRelation.GREATER_EQUAL, "a", AssertType.FALSE);
 
 		evaluateOne(leftParam, rightParam, "a", EStatementRelation.EQUAL,         "1", AssertType.FALSE);
-		evaluateOne(leftParam, rightParam, "a", EStatementRelation.NOT_EQUAL,     "1", AssertType.FALSE);
+		evaluateOne(leftParam, rightParam, "a", EStatementRelation.NOT_EQUAL,     "1", AssertType.TRUE);
 		evaluateOne(leftParam, rightParam, "a", EStatementRelation.LESS_THAN,     "1", AssertType.FALSE);
 		evaluateOne(leftParam, rightParam, "a", EStatementRelation.LESS_EQUAL,    "1", AssertType.FALSE);
 		evaluateOne(leftParam, rightParam, "a", EStatementRelation.GREATER_THAN,  "1", AssertType.FALSE);
@@ -162,14 +162,14 @@ public class ParameterStatementTest {
 		evaluateOne(leftParam, rightParam, "99999", EStatementRelation.LESS_THAN, "100000", AssertType.TRUE);
 
 		evaluateOne(leftParam, rightParam, "1.0", EStatementRelation.EQUAL,         "a", AssertType.FALSE);
-		evaluateOne(leftParam, rightParam, "1.0", EStatementRelation.NOT_EQUAL,     "a", AssertType.FALSE);
+		evaluateOne(leftParam, rightParam, "1.0", EStatementRelation.NOT_EQUAL,     "a", AssertType.TRUE);
 		evaluateOne(leftParam, rightParam, "1.0", EStatementRelation.LESS_THAN,     "a", AssertType.FALSE);
 		evaluateOne(leftParam, rightParam, "1.0", EStatementRelation.LESS_EQUAL,    "a", AssertType.FALSE);
 		evaluateOne(leftParam, rightParam, "1.0", EStatementRelation.GREATER_THAN,  "a", AssertType.FALSE);
 		evaluateOne(leftParam, rightParam, "1.0", EStatementRelation.GREATER_EQUAL, "a", AssertType.FALSE);
 
 		evaluateOne(leftParam, rightParam, "a", EStatementRelation.EQUAL,         "1.0", AssertType.FALSE);
-		evaluateOne(leftParam, rightParam, "a", EStatementRelation.NOT_EQUAL,     "1.0", AssertType.FALSE);
+		evaluateOne(leftParam, rightParam, "a", EStatementRelation.NOT_EQUAL,     "1.0", AssertType.TRUE);
 		evaluateOne(leftParam, rightParam, "a", EStatementRelation.LESS_THAN,     "1.0", AssertType.FALSE);
 		evaluateOne(leftParam, rightParam, "a", EStatementRelation.LESS_EQUAL,    "1.0", AssertType.FALSE);
 		evaluateOne(leftParam, rightParam, "a", EStatementRelation.GREATER_THAN,  "1.0", AssertType.FALSE);
@@ -196,9 +196,9 @@ public class ParameterStatementTest {
 		evaluateOne(leftParam, rightParam, "true", EStatementRelation.EQUAL, "false", AssertType.FALSE);
 
 		evaluateOne(leftParam, rightParam, "true", EStatementRelation.EQUAL, "x", AssertType.FALSE);
-		evaluateOne(leftParam, rightParam, "true", EStatementRelation.NOT_EQUAL, "x", AssertType.FALSE);
+		evaluateOne(leftParam, rightParam, "true", EStatementRelation.NOT_EQUAL, "x", AssertType.TRUE);
 		evaluateOne(leftParam, rightParam, "x", EStatementRelation.EQUAL, "true", AssertType.FALSE);
-		evaluateOne(leftParam, rightParam, "x", EStatementRelation.NOT_EQUAL, "false", AssertType.FALSE);
+		evaluateOne(leftParam, rightParam, "x", EStatementRelation.NOT_EQUAL, "false", AssertType.TRUE);
 
 		evaluateOne(leftParam, rightParam, "true", EStatementRelation.LESS_THAN, "true", AssertType.FALSE);
 		evaluateOne(leftParam, rightParam, "true", EStatementRelation.LESS_THAN, "false", AssertType.FALSE);

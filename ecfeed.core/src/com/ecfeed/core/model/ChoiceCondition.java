@@ -100,19 +100,25 @@ public class ChoiceCondition implements IStatementCondition {
 		return fRightChoice;
 	}
 
-	private boolean evaluateChoice(ChoiceNode actualChoice) {
+	private boolean evaluateChoice(ChoiceNode actualLeftChoice) {
 
 		EStatementRelation relation = fParentRelationStatement.getRelation();
 		if (relation == EStatementRelation.EQUAL || relation == EStatementRelation.NOT_EQUAL) {
-			return evaluateEqualityIncludingParents(relation, actualChoice);
+			return evaluateEqualityIncludingParents(relation, actualLeftChoice);
 		}
 
-		String typeName = actualChoice.getParameter().getType();
+		String typeName1 = actualLeftChoice.getParameter().getType();
+		String substituteType = JavaTypeHelper.getSubstituteType(typeName1);
 
-		String actualValue = JavaTypeHelper.convertValueString(actualChoice.getValueString(), typeName);
-		String valueToMatch = JavaTypeHelper.convertValueString(fRightChoice.getValueString(), typeName);
+		String actualLeftValue = JavaTypeHelper.convertValueString(actualLeftChoice.getValueString(), substituteType);
+		String rightValue = JavaTypeHelper.convertValueString(fRightChoice.getValueString(), substituteType);
 
-		return StatementConditionHelper.isRelationMatchQuiet(relation, typeName, actualValue, valueToMatch);
+
+		if (StatementConditionHelper.isRelationMatchQuiet(relation, substituteType, actualLeftValue, rightValue)) {
+			return true;
+		}
+
+		return false;
 	}
 
 	private boolean evaluateEqualityIncludingParents(EStatementRelation relation, ChoiceNode choice) {
