@@ -217,4 +217,20 @@ public class StringHelperTest{
 		assertEquals("XXABCYY", StringHelper.replaceSubstringWithBoundaries("XX%abc%YY", '%', "ABC"));
 	}
 
+	@Test
+	public void shouldFindNumericPostifxA() {
+		assertEquals("0", StringHelper.findNumericPostfix("a0"));
+	}	
+
+	@Test
+	public void shouldFindNumericPostifxB() {
+		assertEquals("0", StringHelper.findNumericPostfix("0"));
+	}
+
+	@Test
+	public void shouldFindNumericPostifxC() {
+		assertEquals(null, StringHelper.findNumericPostfix("a"));
+	}	
+
+
 }

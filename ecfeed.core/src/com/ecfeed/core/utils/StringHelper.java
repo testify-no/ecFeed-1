@@ -74,6 +74,37 @@ public class StringHelper {
 		return removeFromPostfix(newLine(), fromString);
 	}
 
+	public static String removeFromNumericPostfix(String fromString) {
+
+		String numericPostfix = findNumericPostfix(fromString);
+
+		if (numericPostfix == null) {
+			return fromString;
+		}
+
+		return removeStrgAtEnd(numericPostfix, fromString);
+	}
+
+	public static String findNumericPostfix(String fromStr) {
+
+		int lastIndex = fromStr.length() - 1;
+		Character lastChar = fromStr.charAt(lastIndex);
+
+		if (!Character.isDigit(lastChar)) {
+			return null;
+		}
+
+		for (int index = lastIndex; index >= 0; index--) {
+			Character character = fromStr.charAt(index);
+
+			if (Character.isDigit(character)) {
+				return fromStr.substring(index);
+			}
+		}
+
+		return fromStr;
+	}
+
 	public static String removeStrgAtEnd(String pattern, String strg) {
 
 		int index = strg.lastIndexOf(pattern);

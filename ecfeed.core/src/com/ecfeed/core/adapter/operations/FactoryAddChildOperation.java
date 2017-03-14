@@ -23,7 +23,9 @@ import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.model.RootNode;
+import com.ecfeed.core.model.RootNodeHelper;
 import com.ecfeed.core.model.TestCaseNode;
+import com.ecfeed.core.utils.StringHelper;
 
 public class FactoryAddChildOperation implements IModelVisitor{
 
@@ -44,28 +46,61 @@ public class FactoryAddChildOperation implements IModelVisitor{
 	}
 
 	@Override
-	public Object visit(RootNode node) throws Exception {
-		if(fChild instanceof ClassNode){
-			if(fIndex == -1){
-				return new RootOperationAddNewClass(node, (ClassNode)fChild);
-			}
-			return new RootOperationAddNewClass(node, (ClassNode)fChild, fIndex);
-		}else if(fChild instanceof AbstractParameterNode){
-			//It might be problematic that we actually add a copy of the requested node, so the option to add
-			//a MethodParameterNode to GlobalParameterParent (and vice versa) might be removed
-			GlobalParameterNode globalParameter = new GlobalParameterNode((AbstractParameterNode)fChild);
-			if(fIndex == -1){
-				return new GenericOperationAddParameter(node, globalParameter);
-			}
-			return new GenericOperationAddParameter(node, globalParameter, fIndex);
+	public Object visit(RootNode rootNode) throws Exception {
+
+		if (fChild instanceof ClassNode) {
+
+			return createOperationAddClass(rootNode);
+
+		} else if (fChild instanceof AbstractParameterNode) {
+
+			return createOperationAddParameter(rootNode);
 		}
 
 		reportOperationNotSupportedException();
 		return null;
 	}
 
+	private Object createOperationAddParameter(RootNode rootNode) {
+
+		AbstractParameterNode abstractParameterNode = (AbstractParameterNode)fChild;
+
+		//It might be problematic that we actually add a copy of the requested node, so the option to add
+		//a MethodParameterNode to GlobalParameterParent (and vice versa) might be removed
+		GlobalParameterNode globalParameter = new GlobalParameterNode(abstractParameterNode);
+
+		if(fIndex == -1) {
+			return new GenericOperationAddParameter(rootNode, globalParameter);
+		}
+
+		return new GenericOperationAddParameter(rootNode, globalParameter, fIndex);
+	}
+
+	private Object createOperationAddClass(RootNode rootNode) {
+
+		ClassNode classNode = (ClassNode)fChild;
+
+		generateUniqueNameForClass(rootNode, classNode);
+
+		if (fIndex == -1) {
+			return new RootOperationAddNewClass(rootNode, classNode);
+		}
+
+		return new RootOperationAddNewClass(rootNode, classNode, fIndex);
+	}
+
+	private void generateUniqueNameForClass(RootNode rootNode, ClassNode classNode) {
+
+		String oldName = classNode.getName();
+		String oldNameCore = StringHelper.removeFromNumericPostfix(oldName);
+		String newName = RootNodeHelper.generateNewClassName(rootNode, oldNameCore);
+
+		classNode.setName(newName);
+	}
+
 	@Override
 	public Object visit(ClassNode node) throws Exception {
+
 		if(fChild instanceof MethodNode){
 			if(fIndex == -1){
 				return new ClassOperationAddMethod(node, (MethodNode)fChild);

@@ -19,40 +19,40 @@ import com.ecfeed.core.model.RootNode;
 
 public class RootOperationAddNewClass extends AbstractModelOperation {
 
-	private RootNode fTarget;
-	private ClassNode fAddedClass;
-	private int fIndex;
+	private RootNode fRootNode;
+	private ClassNode fclassToAdd;
+	private int fAddIndex;
 
-	public RootOperationAddNewClass(RootNode target, ClassNode addedClass, int index) {
+	public RootOperationAddNewClass(RootNode rootNode, ClassNode classToAdd, int addIndex) {
 		super(OperationNames.ADD_CLASS);
-		fTarget = target;
-		fAddedClass = addedClass;
-		fIndex = index;
+		fRootNode = rootNode;
+		fclassToAdd = classToAdd;
+		fAddIndex = addIndex;
 	}
 
-	public RootOperationAddNewClass(RootNode target, ClassNode addedClass) {
-		this(target, addedClass, -1);
+	public RootOperationAddNewClass(RootNode target, ClassNode classToAdd) {
+		this(target, classToAdd, -1);
 	}
 
 	@Override
 	public void execute() throws ModelOperationException {
-		String name = fAddedClass.getName();
-		if(fIndex == -1){
-			fIndex = fTarget.getClasses().size();
+		String name = fclassToAdd.getName();
+		if(fAddIndex == -1){
+			fAddIndex = fRootNode.getClasses().size();
 		}
 		if(name.matches(AdapterConstants.REGEX_CLASS_NODE_NAME) == false){
 			ModelOperationException.report(Messages.CLASS_NAME_REGEX_PROBLEM);
 		}
-		if(fTarget.getClassModel(name) != null){
+		if(fRootNode.getClassModel(name) != null){
 			ModelOperationException.report(Messages.CLASS_NAME_DUPLICATE_PROBLEM);
 		}
-		fTarget.addClass(fAddedClass, fIndex);
+		fRootNode.addClass(fclassToAdd, fAddIndex);
 		markModelUpdated();
 	}
 
 	@Override
 	public IModelOperation reverseOperation() {
-		return new RootOperationRemoveClass(fTarget, fAddedClass);
+		return new RootOperationRemoveClass(fRootNode, fclassToAdd);
 	}
 
 }
