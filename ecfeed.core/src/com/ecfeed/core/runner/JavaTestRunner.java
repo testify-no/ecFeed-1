@@ -107,7 +107,7 @@ public class JavaTestRunner {
 		for(Class<?> type : parameterTypes){
 			types.add(JavaTypeHelper.getTypeName(type.getCanonicalName()));
 		}
-		return methodName.equals(methodModel.getName()) && types.equals(methodModel.getParametersTypes());
+		return methodName.equals(methodModel.getName()) && types.equals(methodModel.getParameterTypes());
 	}
 
 	protected Object[] getArguments(List<ChoiceNode> testData) throws RunnerException {
@@ -144,7 +144,7 @@ public class JavaTestRunner {
 		for(ChoiceNode parameter : testData){
 			dataTypes.add(parameter.getParameter().getType());
 		}
-		if(dataTypes.equals(fMethodNode.getParametersTypes()) == false){
+		if(dataTypes.equals(fMethodNode.getParameterTypes()) == false){
 			RunnerException.report(Messages.WRONG_TEST_METHOD_SIGNATURE(fMethodNode.toString()));
 		}
 	}

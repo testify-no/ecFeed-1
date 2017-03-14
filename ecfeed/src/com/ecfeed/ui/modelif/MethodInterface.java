@@ -425,7 +425,7 @@ public class MethodInterface extends ParametersParentInterface {
 		List<MethodNode> compatibleMethods = new ArrayList<MethodNode>();
 		for (MethodNode m : ClassInterface.getOtherMethods(getOwnNode()
 				.getClassNode())) {
-			if (m.getParametersTypes().equals(getOwnNode().getParametersTypes())) {
+			if (m.getParameterTypes().equals(getOwnNode().getParameterTypes())) {
 				compatibleMethods.add(m);
 			}
 		}
@@ -463,7 +463,7 @@ public class MethodInterface extends ParametersParentInterface {
 	@Override
 	protected String generateNewParameterType() {
 		for (String type : JavaTypeHelper.getSupportedJavaTypes()) {
-			List<String> newTypes = getOwnNode().getParametersTypes();
+			List<String> newTypes = getOwnNode().getParameterTypes();
 			newTypes.add(type);
 			if (getOwnNode().getClassNode().getMethod(getOwnNode().getName(), newTypes) == null) {
 				return type;
@@ -472,7 +472,7 @@ public class MethodInterface extends ParametersParentInterface {
 		String type = CommonConstants.DEFAULT_USER_TYPE_NAME;
 		int i = 0;
 		while (true) {
-			List<String> newTypes = getOwnNode().getParametersTypes();
+			List<String> newTypes = getOwnNode().getParameterTypes();
 			newTypes.add(type);
 			if (getOwnNode().getClassNode().getMethod(getOwnNode().getName(),
 					newTypes) == null) {

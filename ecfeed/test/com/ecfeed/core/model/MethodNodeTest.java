@@ -53,9 +53,9 @@ public class MethodNodeTest {
 		assertEquals(parameter, method.getParameter("parameter"));
 		assertEquals(expCat, method.getParameter("expCat"));
 
-		assertEquals(2, method.getParametersTypes().size());
-		assertTrue(method.getParametersTypes().contains("type1"));
-		assertTrue(method.getParametersTypes().contains("type2"));
+		assertEquals(2, method.getParameterTypes().size());
+		assertTrue(method.getParameterTypes().contains("type1"));
+		assertTrue(method.getParameterTypes().contains("type2"));
 
 	}
 

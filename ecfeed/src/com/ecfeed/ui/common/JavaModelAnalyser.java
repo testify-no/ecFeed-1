@@ -92,7 +92,7 @@ public class JavaModelAnalyser {
 				for(ILocalVariable parameter : methodDef.getParameters()){
 					parameterTypes.add(getTypeName(methodDef, parameter));
 				}
-				if(parameterTypes.equals(method.getParametersTypes())){
+				if(parameterTypes.equals(method.getParameterTypes())){
 					return methodDef;
 				}
 			}

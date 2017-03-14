@@ -49,7 +49,7 @@ public class ClassOperationAddMethod extends AbstractModelOperation{
 
 		generateUniqeMethodName(fMethod);
 
-		if(ClassNodeHelper.validateNewMethodSignature(fClassNode, fMethod.getName(), fMethod.getParametersTypes(), problems) == false){
+		if(ClassNodeHelper.validateNewMethodSignature(fClassNode, fMethod.getName(), fMethod.getParameterTypes(), problems) == false){
 			ModelOperationException.report(StringHelper.convertToMultilineString(problems));
 		}
 
@@ -64,7 +64,7 @@ public class ClassOperationAddMethod extends AbstractModelOperation{
 
 		String oldName = methodNode.getName();
 		String oldNameCore = StringHelper.removeFromNumericPostfix(oldName);
-		String newName = ClassNodeHelper.generateNewMethodName(fClassNode, oldNameCore, methodNode.getParametersTypes());
+		String newName = ClassNodeHelper.generateNewMethodName(fClassNode, oldNameCore, methodNode.getParameterTypes());
 		methodNode.setName(newName);
 	}
 

@@ -195,7 +195,7 @@ public class ClassInterface extends GlobalParametersParentInterface {
 		try{
 			ClassNode completeModel = builder.buildClassModel(ClassNodeHelper.getQualifiedName(target), false);
 			for(MethodNode method : completeModel.getMethods()){
-				if(target.getMethod(method.getName(), method.getParametersTypes()) == null){
+				if(target.getMethod(method.getName(), method.getParameterTypes()) == null){
 					otherMethods.add(method);
 				}
 			}

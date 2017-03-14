@@ -63,7 +63,7 @@ public class MethodParameterShiftOperation extends GenericShiftOperation {
 		if(super.shiftAllowed(shifted, shift) == false) return false;
 		if(shifted.get(0) instanceof MethodParameterNode == false) return false;
 		MethodNode method = ((MethodParameterNode)shifted.get(0)).getMethod();
-		List<String> parameterTypes = method.getParametersTypes();
+		List<String> parameterTypes = method.getParameterTypes();
 		List<Integer> indices = indices(method.getParameters(), shifted);
 		shiftElements(parameterTypes, indices, shift);
 		MethodNode sibling = method.getClassNode().getMethod(method.getName(), parameterTypes);

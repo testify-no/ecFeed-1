@@ -76,7 +76,7 @@ public class MethodNode extends ParametersParentNode {
 	@Override
 	public String toString(){
 		String result = new String(getName()) + "(";
-		List<String> types = getParametersTypes();
+		List<String> types = getParameterTypes();
 		List<String> names = getParametersNames();
 		for(int i = 0; i < types.size(); i++){
 			if(getMethodParameters().get(i).isExpected()){
@@ -142,7 +142,7 @@ public class MethodNode extends ParametersParentNode {
 	}
 
 	public boolean checkDuplicate(int index, String newType){
-		List<String> argTypes = getParametersTypes();
+		List<String> argTypes = getParameterTypes();
 		argTypes.set(index, newType);
 		return getSibling(argTypes) != null;
 	}

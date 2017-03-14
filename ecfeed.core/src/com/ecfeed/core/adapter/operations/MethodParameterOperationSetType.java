@@ -235,7 +235,7 @@ public class MethodParameterOperationSetType extends BulkOperation {
 		public void execute() throws ModelOperationException {
 
 			MethodNode method = fMethodParameterNode.getMethod();
-			List<String> types = method.getParametersTypes();
+			List<String> types = method.getParameterTypes();
 			types.set(fMethodParameterNode.getIndex(), getNewType());
 
 			if (method.getClassNode().getMethod(method.getName(), types) != null && method.getClassNode().getMethod(method.getName(), types) != method) {

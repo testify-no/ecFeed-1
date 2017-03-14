@@ -67,7 +67,7 @@ public abstract class ParametersParentNode extends AbstractNode {
 		return null;
 	}
 
-	public List<String> getParametersTypes() {
+	public List<String> getParameterTypes() {
 		List<String> types = new ArrayList<String>();
 		for(AbstractParameterNode parameter : fParameters){
 			types.add(parameter.getType());

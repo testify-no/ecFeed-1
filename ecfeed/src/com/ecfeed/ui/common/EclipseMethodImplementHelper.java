@@ -111,7 +111,7 @@ public class EclipseMethodImplementHelper implements IMethodImplementHelper {
 				final MethodNode model = builder.buildMethodModel(method);
 				if (model != null 
 						&& model.getName().equals(fMethodNode.getName()) 
-						&& model.getParametersTypes().equals(fMethodNode.getParametersTypes())){
+						&& model.getParameterTypes().equals(fMethodNode.getParameterTypes())){
 					return true;
 				}
 			}

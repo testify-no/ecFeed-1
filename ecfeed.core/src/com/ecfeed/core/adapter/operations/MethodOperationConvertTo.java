@@ -29,12 +29,12 @@ public class MethodOperationConvertTo extends AbstractModelOperation {
 
 	@Override
 	public void execute() throws ModelOperationException {
-		if(fTarget.getClassNode().getMethod(fSource.getName(), fSource.getParametersTypes()) != null){
+		if(fTarget.getClassNode().getMethod(fSource.getName(), fSource.getParameterTypes()) != null){
 			String className = fTarget.getClassNode().getName();
 			String methodName = fSource.getName();
 			ModelOperationException.report(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM(className, methodName));
 		}
-		if(fTarget.getParametersTypes().equals(fSource.getParametersTypes()) == false){
+		if(fTarget.getParameterTypes().equals(fSource.getParameterTypes()) == false){
 			ModelOperationException.report(Messages.METHODS_INCOMPATIBLE_PROBLEM);
 		}
 

@@ -83,7 +83,7 @@ public class MethodOperationRemoveParameter extends BulkOperation{
 		}
 
 		private boolean validateNewSignature() {
-			List<String> types = getMethodTarget().getParametersTypes();
+			List<String> types = getMethodTarget().getParameterTypes();
 			int index = getParameter().getIndex();
 			types.remove(index);
 			return ClassNodeHelper.validateNewMethodSignature(getMethodTarget().getClassNode(), getMethodTarget().getName(), types);

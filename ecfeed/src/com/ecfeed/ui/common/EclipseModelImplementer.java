@@ -480,7 +480,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 			if(type != null){
 				for(IMethod method : type.getMethods()){
 					MethodNode model = builder.buildMethodModel(method);
-					if(model.getName().equals(node.getName()) && model.getParametersTypes().equals(node.getParametersTypes())){
+					if(model.getName().equals(node.getName()) && model.getParameterTypes().equals(node.getParameterTypes())){
 						return hasImplementableNode(node.getChildren());
 					}
 				}

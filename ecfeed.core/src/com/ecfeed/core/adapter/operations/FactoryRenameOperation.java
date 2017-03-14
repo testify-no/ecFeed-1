@@ -72,7 +72,7 @@ public class FactoryRenameOperation {
 		protected void verifyNewName(String newName) throws ModelOperationException {
 			List<String> problems = new ArrayList<String>();
 			MethodNode target = (MethodNode)getOwnNode();
-			if(ClassNodeHelper.validateNewMethodSignature(target.getClassNode(), getNewName(), target.getParametersTypes(), problems) == false){
+			if(ClassNodeHelper.validateNewMethodSignature(target.getClassNode(), getNewName(), target.getParameterTypes(), problems) == false){
 				ModelOperationException.report(StringHelper.convertToMultilineString(problems));
 			}
 		}

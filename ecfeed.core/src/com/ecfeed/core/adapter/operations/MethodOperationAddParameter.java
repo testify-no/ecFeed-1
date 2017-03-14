@@ -60,7 +60,7 @@ public class MethodOperationAddParameter extends GenericOperationAddParameter {
 
 	@Override
 	public void execute() throws ModelOperationException {
-		List<String> types = fTarget.getParametersTypes();
+		List<String> types = fTarget.getParameterTypes();
 		types.add(fNewIndex, fParameter.getType());
 		if(fTarget.getClassNode() != null && fTarget.getClassNode().getMethod(fTarget.getName(), types) != null){
 			String className = fTarget.getClassNode().getName();

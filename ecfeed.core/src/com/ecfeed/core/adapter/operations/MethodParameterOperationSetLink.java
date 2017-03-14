@@ -52,7 +52,7 @@ public class MethodParameterOperationSetLink extends BulkOperation {
 		@Override
 		public void execute() throws ModelOperationException {
 			MethodNode method = fTarget.getMethod();
-			List<String> types = method.getParametersTypes();
+			List<String> types = method.getParameterTypes();
 			types.set(fTarget.getIndex(), fNewLink.getType());
 			if(method.checkDuplicate(fTarget.getIndex(), fNewLink.getType())){
 				ModelOperationException.report(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM(method.getClassNode().getName(), method.getName()));

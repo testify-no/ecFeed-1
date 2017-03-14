@@ -113,7 +113,7 @@ public class AbstractParameterOperationSetType extends AbstractModelOperation {
 							&& methodNode.getParameters().size() == testedMethod.getParameters().size()){
 						// if method links edited global parameter - replace types before matching
 						if(target.getMethods().contains(methodNode)){
-							List<String> types = methodNode.getParametersTypes();
+							List<String> types = methodNode.getParameterTypes();
 							for(AbstractParameterNode parameter: methodNode.getParameters()){
 								MethodParameterNode param = (MethodParameterNode)parameter;
 								if(param.isLinked() && param.getLink().equals(target)){
@@ -124,7 +124,7 @@ public class AbstractParameterOperationSetType extends AbstractModelOperation {
 						}
 						// else add parameter list without alterations
 						else {
-							methods.put(methodNode, methodNode.getParametersTypes());
+							methods.put(methodNode, methodNode.getParameterTypes());
 						}		
 						// remove from linking parameter list, so no methods are matched twice
 						linkingMethods.remove(methodNode);	

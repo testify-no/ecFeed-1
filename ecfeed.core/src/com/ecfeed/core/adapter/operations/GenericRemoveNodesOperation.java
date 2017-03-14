@@ -248,10 +248,10 @@ public class GenericRemoveNodesOperation extends BulkOperation {
 				}
 				if(!duplicatesMap.get(clazz).get(classMethod.getName()).containsKey(classMethod)){
 					duplicatesMap.get(clazz).get(classMethod.getName())
-							.put(classMethod, new ArrayList<String>(classMethod.getParametersTypes()));
+							.put(classMethod, new ArrayList<String>(classMethod.getParameterTypes()));
 				}
 				if(!duplicatesMap.get(clazz).get(classMethod.getName()).containsKey(method)){
-					duplicatesMap.get(clazz).get(classMethod.getName()).put(method, new ArrayList<String>(method.getParametersTypes()));
+					duplicatesMap.get(clazz).get(classMethod.getName()).put(method, new ArrayList<String>(method.getParameterTypes()));
 				}
 				hasDuplicate = true;
 			}
