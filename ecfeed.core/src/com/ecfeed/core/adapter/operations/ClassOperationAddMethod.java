@@ -22,7 +22,7 @@ import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.utils.StringHelper;
 
 public class ClassOperationAddMethod extends AbstractModelOperation{
-	
+
 	private ClassNode fClassNode;
 	private MethodNode fMethod;
 	private int fIndex;
@@ -40,17 +40,32 @@ public class ClassOperationAddMethod extends AbstractModelOperation{
 
 	@Override
 	public void execute() throws ModelOperationException {
+
 		List<String> problems = new ArrayList<String>();
+
 		if(fIndex == -1){
 			fIndex = fClassNode.getMethods().size();
 		}
+
+		generateUniqeMethodName(fMethod);
+
 		if(ClassNodeHelper.validateNewMethodSignature(fClassNode, fMethod.getName(), fMethod.getParametersTypes(), problems) == false){
 			ModelOperationException.report(StringHelper.convertToMultilineString(problems));
 		}
+
 		if(fClassNode.addMethod(fMethod, fIndex) == false){
 			ModelOperationException.report(Messages.UNEXPECTED_PROBLEM_WHILE_ADDING_ELEMENT);
 		}
+
 		markModelUpdated();
+	}
+
+	private void generateUniqeMethodName(MethodNode methodNode) {
+
+		String oldName = methodNode.getName();
+		String oldNameCore = StringHelper.removeFromNumericPostfix(oldName);
+		String newName = ClassNodeHelper.generateNewMethodName(fClassNode, oldNameCore, methodNode.getParametersTypes());
+		methodNode.setName(newName);
 	}
 
 	@Override

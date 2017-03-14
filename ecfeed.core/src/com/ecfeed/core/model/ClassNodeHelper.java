@@ -19,39 +19,55 @@ import com.ecfeed.core.adapter.java.Messages;
 public class ClassNodeHelper {
 
 	public static String getLocalName(ClassNode node) {
-		
+
 		return ModelHelper.convertToLocalName(node.getName());
 	}
-	
+
 	public static String getPackageName(ClassNode classNode) {
-		
+
 		return ModelHelper.getPackageName(classNode.getName());
 	}
-	
+
 	public static String getQualifiedName(ClassNode classNode) {
-		
+
 		return classNode.getName();
 	}
 
 	public static boolean validateNewMethodSignature(ClassNode parent, String methodName, List<String> argTypes) {
-		
+
 		return validateNewMethodSignature(parent, methodName, argTypes, null);
 	}
 
-	public static boolean validateNewMethodSignature(ClassNode parent, String methodName,
-			List<String> argTypes, List<String> problems) {
-		
+	public static boolean validateNewMethodSignature(
+			ClassNode parent, String methodName, List<String> argTypes, List<String> problems) {
+
 		boolean valid = MethodNodeHelper.validateMethodName(methodName, problems);
-		
+
 		if (parent.getMethod(methodName, argTypes) != null) {
-			
+
 			valid = false;
-			
+
 			if (problems != null) {
 				problems.add(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM(parent.getName(), methodName));
 			}
 		}
 		return valid;
 	}
-	
+
+	public static String generateNewMethodName(ClassNode classNode, String startMethodName, List<String> argTypes) {
+
+		if (validateNewMethodSignature(classNode, startMethodName, argTypes)) {
+			return startMethodName;
+		}
+
+		for (int i = 0;   ; i++) {
+
+			String newMethodName = startMethodName + String.valueOf(i);
+
+			if (validateNewMethodSignature(classNode, newMethodName, argTypes)) {
+				return newMethodName;
+			}
+		}
+	}
+
 }
