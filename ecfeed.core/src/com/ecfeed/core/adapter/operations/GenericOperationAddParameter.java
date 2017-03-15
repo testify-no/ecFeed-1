@@ -15,11 +15,12 @@ import com.ecfeed.core.adapter.java.Messages;
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.model.ParametersParentNode;
+import com.ecfeed.core.utils.StringHelper;
 
 public class GenericOperationAddParameter extends AbstractModelOperation {
 
-	private ParametersParentNode fTarget;
-	private AbstractParameterNode fParameter;
+	private ParametersParentNode fParametersParentNode;
+	private AbstractParameterNode fAbstractParameterNode;
 	private int fNewIndex;
 
 	protected class ReverseOperation extends AbstractModelOperation{
@@ -49,8 +50,8 @@ public class GenericOperationAddParameter extends AbstractModelOperation {
 
 	public GenericOperationAddParameter(ParametersParentNode target, AbstractParameterNode parameter, int index) {
 		super(OperationNames.ADD_PARAMETER);
-		fTarget = target;
-		fParameter = parameter;
+		fParametersParentNode = target;
+		fAbstractParameterNode = parameter;
 		fNewIndex = (index == -1)? target.getParameters().size() : index;
 	}
 
@@ -61,23 +62,35 @@ public class GenericOperationAddParameter extends AbstractModelOperation {
 
 	@Override
 	public void execute() throws ModelOperationException {
-		String parameterName = fParameter.getName();
+
+		generateUniqueParameterName(fAbstractParameterNode);
+		String parameterName = fAbstractParameterNode.getName();
+
 		if(fNewIndex < 0){
 			ModelOperationException.report(Messages.NEGATIVE_INDEX_PROBLEM);
 		}
-		if(fNewIndex > fTarget.getParameters().size()){
+		if(fNewIndex > fParametersParentNode.getParameters().size()){
 			ModelOperationException.report(Messages.TOO_HIGH_INDEX_PROBLEM);
 		}
-		if(fTarget.getParameter(parameterName) != null){
+		if(fParametersParentNode.getParameter(parameterName) != null){
 			ModelOperationException.report(Messages.CATEGORY_NAME_DUPLICATE_PROBLEM);
 		}
-		fTarget.addParameter(fParameter, fNewIndex);
+
+		fParametersParentNode.addParameter(fAbstractParameterNode, fNewIndex);
 		markModelUpdated();
+	}
+
+	private void generateUniqueParameterName(AbstractParameterNode abstractParameterNode) {
+
+		String oldName = abstractParameterNode.getName();
+		String oldNameCore = StringHelper.removeFromNumericPostfix(oldName);
+		String newName = ParametersParentNode.generateNewParameterName(fParametersParentNode, oldNameCore);
+		abstractParameterNode.setName(newName);
 	}
 
 	@Override
 	public IModelOperation reverseOperation() {
-		return new ReverseOperation(fTarget, fParameter);
+		return new ReverseOperation(fParametersParentNode, fAbstractParameterNode);
 	}
 
 }

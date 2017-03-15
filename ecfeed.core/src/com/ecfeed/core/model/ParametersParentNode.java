@@ -67,6 +67,15 @@ public abstract class ParametersParentNode extends AbstractNode {
 		return null;
 	}
 
+	public boolean parameterExists(String parameterName) {
+
+		if (getParameter(parameterName) == null) {
+			return false;
+		}
+
+		return true;
+	}
+
 	public List<String> getParameterTypes() {
 		List<String> types = new ArrayList<String>();
 		for(AbstractParameterNode parameter : fParameters){
@@ -117,4 +126,20 @@ public abstract class ParametersParentNode extends AbstractNode {
 	}
 
 	public abstract List<MethodNode> getMethods(AbstractParameterNode parameter);
+
+	public static String generateNewParameterName(ParametersParentNode fParametersParentNode, String startParameterName) {
+
+		if (!fParametersParentNode.parameterExists(startParameterName)) {
+			return startParameterName;
+		}
+
+		for (int i = 0;   ; i++) {
+
+			String newParameterName = startParameterName + String.valueOf(i);
+
+			if (!fParametersParentNode.parameterExists(newParameterName)) {
+				return newParameterName;
+			}
+		}
+	}
 }

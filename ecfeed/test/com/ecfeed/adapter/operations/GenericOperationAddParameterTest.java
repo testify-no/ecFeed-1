@@ -43,7 +43,7 @@ import com.ecfeed.testutils.ENodeType;
 public class GenericOperationAddParameterTest{
 
 	@Test
-	public void executeTest(ENodeType parentType, EIndexValue indexValue, boolean nameExists, boolean success){
+	public void executeTest(ENodeType parentType, EIndexValue indexValue, boolean nameExists, boolean successExpected){
 
 		//		parentType = ENodeType.METHOD;
 		//		indexValue = EIndexValue.NO_VALUE;
@@ -74,12 +74,12 @@ public class GenericOperationAddParameterTest{
 
 		try{
 			operation.execute();
-			if(success == false){
+			if (!successExpected) {
 				fail("Exception expected");
 			}
 			assertEquals(index, parent.getParameters().indexOf(parameter));
 		}catch(Exception e){
-			if(success){
+			if(successExpected){
 				fail("Unexpected exception");
 			}
 		}

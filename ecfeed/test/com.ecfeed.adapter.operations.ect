@@ -39,17 +39,14 @@
             </Parameter>
             <Constraint name="expected\svalue">
                 <Premise>
-                    <StatementArray operator="and">
-                        <StatementArray operator="or">
-                            <Statement choice="no\svalue" parameter="index" relation="="/>
-                            <Statement choice="0" parameter="index" relation="="/>
-                            <Statement choice="1" parameter="index" relation="="/>
-                            <Statement choice="valid\spositive" parameter="index" relation="="/>
-                            <Statement choice="last\sexisting" parameter="index" relation="="/>
-                            <Statement choice="one\safter\sthe\sarray" parameter="index" relation="="/>
-                            <Statement choice="-1" parameter="index" relation="="/>
-                        </StatementArray>
-                        <Statement choice="does\snot\sexist" parameter="nameExists" relation="="/>
+                    <StatementArray operator="or">
+                        <Statement choice="no\svalue" parameter="index" relation="="/>
+                        <Statement choice="0" parameter="index" relation="="/>
+                        <Statement choice="1" parameter="index" relation="="/>
+                        <Statement choice="valid\spositive" parameter="index" relation="="/>
+                        <Statement choice="last\sexisting" parameter="index" relation="="/>
+                        <Statement choice="one\safter\sthe\sarray" parameter="index" relation="="/>
+                        <Statement choice="-1" parameter="index" relation="="/>
                     </StatementArray>
                 </Premise>
                 <Consequence>
