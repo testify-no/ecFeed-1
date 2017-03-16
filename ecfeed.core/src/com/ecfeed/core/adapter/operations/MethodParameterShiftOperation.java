@@ -14,7 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.ecfeed.core.adapter.IModelOperation;
-import com.ecfeed.core.adapter.java.Messages;
+import com.ecfeed.core.model.Messages;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.MethodNode;

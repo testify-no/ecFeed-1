@@ -21,19 +21,34 @@ import com.ecfeed.core.adapter.java.AdapterConstants;
 
 public class JavaLanguageHelper {
 
+	public static final String[] JAVA_KEYWORDS = new String[]
+			{ "abstract", "continue", "for", "new", "switch", "assert", "default", "goto", "package", "synchronized", "boolean", "do",
+		"if", "private", "this", "break", "double", "implements", "protected", "throw", "byte", "else", "import", "public",
+		"throws", "case", "enum", "instanceof", "return", "transient", "catch", "extends", "int", "short", "try", "char",
+		"final", "interface", "static", "void", "class", "finally", "long", "strictfp", "volatile", "const", "float",
+		"native", "super", "while", "null", "true", "false" };
+	
 	public static boolean isJavaKeyword(String word) {
 
-		return Arrays.asList(AdapterConstants.JAVA_KEYWORDS).contains(word);
+		return Arrays.asList(JAVA_KEYWORDS).contains(word);
 	}
 
 	public static boolean isValidJavaIdentifier(String value) {
 
-		return (value.matches(AdapterConstants.REGEX_JAVA_IDENTIFIER) && JavaLanguageHelper.isJavaKeyword(value) == false);
+		if (!value.matches(AdapterConstants.REGEX_JAVA_IDENTIFIER)) {
+			return false;
+		}
+		
+		if (JavaLanguageHelper.isJavaKeyword(value)) {
+			return false;
+		}
+			
+		return true;
 	}
 
-	public static String[] javaKeywords() {
+	public static String[] getJavaKeywords() {
 
-		return AdapterConstants.JAVA_KEYWORDS;
+		return JAVA_KEYWORDS;
 	}
 
 	public static boolean isValidTypeName(String name) {

@@ -11,11 +11,11 @@
 package com.ecfeed.core.model;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import com.ecfeed.core.adapter.java.AdapterConstants;
 import com.ecfeed.core.adapter.java.Messages;
+import com.ecfeed.core.utils.JavaLanguageHelper;
 
 
 public class MethodNodeHelper {
@@ -40,15 +40,28 @@ public class MethodNodeHelper {
 
 	public static boolean validateMethodName(String name, List<String> problems) {
 		
-		boolean valid = name.matches(AdapterConstants.REGEX_METHOD_NODE_NAME);
-		valid &= Arrays.asList(AdapterConstants.JAVA_KEYWORDS).contains(name) == false;
-		
-		if(valid == false){
-			if(problems != null){
-				problems.add(Messages.METHOD_NAME_REGEX_PROBLEM);
-			}
+		if (isValid(name)) {
+			return true;
 		}
-		return valid;
+		
+		if(problems != null){
+			problems.add(Messages.METHOD_NAME_REGEX_PROBLEM);
+		}
+		
+		return false;
+	}
+	
+	private static boolean isValid(String name) {
+		
+		if (!name.matches(AdapterConstants.REGEX_METHOD_NODE_NAME)) {
+			return false;
+		}
+		
+		if (!JavaLanguageHelper.isValidJavaIdentifier(name)) {
+			return false;
+		}
+		
+		return true;
 	}
 	
 	public static List<String> getArgNames(MethodNode method) {

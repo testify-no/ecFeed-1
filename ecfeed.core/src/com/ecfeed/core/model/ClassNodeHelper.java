@@ -12,7 +12,7 @@ package com.ecfeed.core.model;
 
 import java.util.List;
 
-import com.ecfeed.core.adapter.java.Messages;
+import com.ecfeed.core.model.Messages;
 
 
 

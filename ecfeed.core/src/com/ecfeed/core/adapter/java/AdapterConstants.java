@@ -35,13 +35,6 @@ public class AdapterConstants {
 	public static final String REGEX_STRING_TYPE_VALUE = "[A-Za-z1-9 !@#$%^&*()_+=;':,.<>/?]{0,1024}";
 	public static final String REGEX_CHAR_TYPE_VALUE = "[A-Za-z1-9 !@#$%^&*()_+=;':,.<>/?]";
 
-	public static final String[] JAVA_KEYWORDS = new String[]
-			{ "abstract", "continue", "for", "new", "switch", "assert", "default", "goto", "package", "synchronized", "boolean", "do",
-		"if", "private", "this", "break", "double", "implements", "protected", "throw", "byte", "else", "import", "public",
-		"throws", "case", "enum", "instanceof", "return", "transient", "catch", "extends", "int", "short", "try", "char",
-		"final", "interface", "static", "void", "class", "finally", "long", "strictfp", "volatile", "const", "float",
-		"native", "super", "while", "null", "true", "false" };
-
 	public static final String VALUE_REPRESENTATION_NULL = "/null";
 
 }

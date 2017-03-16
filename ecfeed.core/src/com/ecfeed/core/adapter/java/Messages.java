@@ -29,13 +29,12 @@ public class Messages {
 	public static final String CLASS_NAME_DUPLICATE_PROBLEM = "The model already contains a class with this name";
 	public static final String MISSING_PARENT_PROBLEM = "Missing current or new parent of moved class";
 	public static final String METHOD_NAME_REGEX_PROBLEM = "The method name should fulfill all rules for naming method in Java";
-	public static final String METHOD_SIGNATURE_DUPLICATE_PROBLEM(String className, String methodName){return "The class: " + className + " already contains model of a method: " + methodName + " with identical signature";}
+	
 	public static final String METHOD_GLOBAL_PARAMETER_SIGNATURE_DUPLICATE_PROBLEM(String className, String methodName, String types1, String types2){
 		return "This action would result in duplicate methods in class:\n" + className + "\nmethods:\n" + methodName + types1 + "\n" + methodName + types2; 
 	}
 	public static final String UNEXPECTED_PROBLEM_WHILE_ADDING_ELEMENT = "Element could not be added to the model";
 	public static final String UNEXPECTED_PROBLEM_WHILE_REMOVING_ELEMENT = "Element could not be removed from the model";
-	public static final String METHODS_INCOMPATIBLE_PROBLEM = "The converted methods do not have the same parameter count and types";
 	public static final String CATEGORY_NAME_DUPLICATE_PROBLEM = "A parameter with this name already exists in the element.";
 	public static final String CATEGORY_NAME_REGEX_PROBLEM = "Parameter name must be a valid Java identifier (only alphanumeric characters or underscore, no spaces, should not begin with a digit).";
 	public static final String CATEGORY_TYPE_REGEX_PROBLEM = "Parameter type must be a valid type identifier in Java, i.e. it must be either a primitive type name or String or a valid qualified type name of user type";
@@ -53,6 +52,4 @@ public class Messages {
 	public static final String TEST_DATA_CATEGORY_MISMATCH_PROBLEM = "New test value has wrong parent parameter.";
 	public static final String CHOICE_NAME_DUPLICATE_PROBLEM(String parentName, String choiceName){return "The choice " + choiceName + " already exists in parent " + parentName;}
 	public static final String EXPECTED_USER_TYPE_CATEGORY_LAST_PARTITION_PROBLEM = "User type expected parameters must have at least one choice. It's value will define the default expected value of the parameter";
-	public static final String LINK_NOT_SET_PROBLEM = "The link to global parameter is not defined";
-
 }
