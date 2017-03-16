@@ -18,18 +18,38 @@ import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.ChoicesParentNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.ModelOperationException;
+import com.ecfeed.core.utils.StringHelper;
 
 public class GenericOperationAddChoice extends BulkOperation {
 
-	private class AddChoiceOperation extends AbstractModelOperation{
-		private ChoicesParentNode fTarget;
+	public GenericOperationAddChoice(
+			ChoicesParentNode target, ChoiceNode choice, ITypeAdapterProvider adapterProvider, int index, boolean validate) {
+
+		super(OperationNames.ADD_PARTITION, true);
+		addOperation(new AddChoiceOperation(target, choice, adapterProvider, index));
+
+		for (MethodNode method : target.getParameter().getMethods()) {
+			if((method != null) && validate){
+				addOperation(new MethodOperationMakeConsistent(method));
+			}
+		}
+	}
+
+	public GenericOperationAddChoice(ChoicesParentNode target, ChoiceNode choice, ITypeAdapterProvider adapterProvider, boolean validate) {
+
+		this(target, choice, adapterProvider, -1, validate);
+	}
+
+	private class AddChoiceOperation extends AbstractModelOperation {
+		private ChoicesParentNode fChoicesParentNode;
 		private ChoiceNode fChoice;
 		private int fIndex;
 		private ITypeAdapterProvider fAdapterProvider;
 
 		public AddChoiceOperation(ChoicesParentNode target, ChoiceNode choice, ITypeAdapterProvider adapterProvider, int index) {
+
 			super(OperationNames.ADD_PARTITION);
-			fTarget = target;
+			fChoicesParentNode = target;
 			fChoice = choice;
 			fIndex = index;
 			fAdapterProvider = adapterProvider;
@@ -37,55 +57,61 @@ public class GenericOperationAddChoice extends BulkOperation {
 
 		@Override
 		public void execute() throws ModelOperationException {
-			if(fIndex == -1){
-				fIndex = fTarget.getChoices().size();
+
+			generateUniqueChoiceName(fChoice);
+
+			if(fIndex == -1) {
+				fIndex = fChoicesParentNode.getChoices().size();
 			}
-			if(fTarget.getChoiceNames().contains(fChoice.getName())){
-				ModelOperationException.report(Messages.CHOICE_NAME_DUPLICATE_PROBLEM(fTarget.getName(), fChoice.getName()));
+			if(fChoicesParentNode.getChoiceNames().contains(fChoice.getName())){
+				ModelOperationException.report(Messages.CHOICE_NAME_DUPLICATE_PROBLEM(fChoicesParentNode.getName(), fChoice.getName()));
 			}
 			if(fIndex < 0){
 				ModelOperationException.report(Messages.NEGATIVE_INDEX_PROBLEM);
 			}
-			if(fIndex > fTarget.getChoices().size()){
+			if(fIndex > fChoicesParentNode.getChoices().size()){
 				ModelOperationException.report(Messages.TOO_HIGH_INDEX_PROBLEM);
 			}
+
 			validateChoiceValue(fChoice);
-			fTarget.addChoice(fChoice, fIndex);
+			fChoicesParentNode.addChoice(fChoice, fIndex);
+
 			markModelUpdated();
+		}
+
+		private void generateUniqueChoiceName(ChoiceNode choiceNode) {
+
+			String oldName = choiceNode.getName();
+			String oldNameCore = StringHelper.removeFromNumericPostfix(oldName);
+			String newName = ChoicesParentNode.generateNewChoiceName(fChoicesParentNode, oldNameCore);
+
+			choiceNode.setName(newName);
 		}
 
 		@Override
 		public IModelOperation reverseOperation() {
-			return new GenericOperationRemoveChoice(fTarget, fChoice, fAdapterProvider, false);
+
+			return new GenericOperationRemoveChoice(fChoicesParentNode, fChoice, fAdapterProvider, false);
 		}
 
-		private void validateChoiceValue(ChoiceNode choice) throws ModelOperationException{
-			if(choice.isAbstract() == false){
-				String type = fTarget.getParameter().getType();
+		private void validateChoiceValue(ChoiceNode choice) throws ModelOperationException {
+
+			if (choice.isAbstract() == false) {
+
+				String type = fChoicesParentNode.getParameter().getType();
 				ITypeAdapter adapter = fAdapterProvider.getAdapter(type);
 				String newValue = adapter.convert(choice.getValueString());
+
 				if(newValue == null){
 					ModelOperationException.report(Messages.PARTITION_VALUE_PROBLEM(choice.getValueString()));
 				}
 			}
-			else{
-				for(ChoiceNode child : choice.getChoices()){
+			else {
+				for(ChoiceNode child : choice.getChoices()) {
 					validateChoiceValue(child);
 				}
 			}
 		}
 	}
 
-	public GenericOperationAddChoice(ChoicesParentNode target, ChoiceNode choice, ITypeAdapterProvider adapterProvider, int index, boolean validate) {
-		super(OperationNames.ADD_PARTITION, true);
-		addOperation(new AddChoiceOperation(target, choice, adapterProvider, index));
-		for(MethodNode method : target.getParameter().getMethods())
-		if((method != null) && validate){
-			addOperation(new MethodOperationMakeConsistent(method));
-		}
-	}
-
-	public GenericOperationAddChoice(ChoicesParentNode target, ChoiceNode choice, ITypeAdapterProvider adapterProvider, boolean validate) {
-		this(target, choice, adapterProvider, -1, validate);
-	}
 }

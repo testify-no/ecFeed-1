@@ -25,6 +25,8 @@ public abstract class ChoicesParentNode extends AbstractNode{
 		fChoices = new ArrayList<ChoiceNode>();
 	}
 
+	public abstract Object accept(IChoicesParentVisitor visitor) throws Exception;
+
 	@Override
 	public List<? extends AbstractNode> getChildren(){
 		return fChoices;
@@ -77,9 +79,20 @@ public abstract class ChoicesParentNode extends AbstractNode{
 		return (ChoiceNode)getChild(qualifiedName);
 	}
 
+	public boolean choiceExistsAsDirectChild(String choiceNameToFind) {
+
+		for (ChoiceNode choiceNode : fChoices) {
+			if (choiceNode.getName().equals(choiceNameToFind)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	public List<ChoiceNode> getLeafChoices() {
 		return getLeafChoices(getChoices());
-	}
+	}	
 
 	public List<ChoiceNode> getLeafChoicesWithCopies() {
 		return getLeafChoices(getChoicesWithCopies());
@@ -176,5 +189,19 @@ public abstract class ChoicesParentNode extends AbstractNode{
 		return result;
 	}
 
-	public abstract Object accept(IChoicesParentVisitor visitor) throws Exception;
+	public static String generateNewChoiceName(ChoicesParentNode fChoicesParentNode, String startChoiceName) {
+
+		if (!fChoicesParentNode.choiceExistsAsDirectChild(startChoiceName)) {
+			return startChoiceName;
+		}
+
+		for (int i = 0;   ; i++) {
+
+			String newParameterName = startChoiceName + String.valueOf(i);
+
+			if (!fChoicesParentNode.choiceExistsAsDirectChild(newParameterName)) {
+				return newParameterName;
+			}
+		}
+	}	
 }
