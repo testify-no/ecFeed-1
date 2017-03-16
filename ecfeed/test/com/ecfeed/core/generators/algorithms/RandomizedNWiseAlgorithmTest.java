@@ -27,7 +27,6 @@ import org.junit.Test;
 
 import com.ecfeed.core.generators.algorithms.RandomizedNWiseAlgorithm;
 import com.ecfeed.core.generators.algorithms.Tuples;
-import com.ecfeed.core.generators.algorithms.RandomizedNWiseAlgorithm.DimensionedItem;
 import com.ecfeed.core.generators.api.GeneratorException;
 import com.ecfeed.core.generators.api.IConstraint;
 
