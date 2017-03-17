@@ -28,7 +28,7 @@ public class TestInformer {
 
 	IProgressMonitor fProgressMonitor;
 	int fTotalWork;
-	private int fTotalTestCases = 0;
+	private int fExecutedTestCases = 0;
 	private List<Status> fUnsuccesfullExecutionStatuses;
 
 
@@ -46,12 +46,12 @@ public class TestInformer {
 	}
 
 	protected void setTestProgressMessage() {
-		String message = "Total: " + fTotalWork + "  Executed: " + fTotalTestCases + "  Failed: " + fUnsuccesfullExecutionStatuses.size();
+		String message = "Executed: " + fExecutedTestCases + "  Failed: " + fUnsuccesfullExecutionStatuses.size();		
 		fProgressMonitor.subTask(message);
 	}
 
 	protected void incrementTotalTestcases(){
-		fTotalTestCases++;
+		fExecutedTestCases++;
 	}
 
 	protected void incrementFailedTestcases(String message){
@@ -71,7 +71,7 @@ public class TestInformer {
 
 	protected void displayTestStatusDialog() {
 		if(fUnsuccesfullExecutionStatuses.size() > 0){
-			String msg = Messages.DIALOG_UNSUCCESSFUL_TEST_EXECUTION(fTotalTestCases, fUnsuccesfullExecutionStatuses.size());
+			String msg = Messages.DIALOG_UNSUCCESSFUL_TEST_EXECUTION(fExecutedTestCases, fUnsuccesfullExecutionStatuses.size());
 			MultiStatus ms = 
 					new MultiStatus(
 							Activator.PLUGIN_ID, 
@@ -83,8 +83,8 @@ public class TestInformer {
 			ErrorDialog.openError(null, Messages.DIALOG_TEST_EXECUTION_REPORT_TITLE, msg, ms);
 			return;
 		}
-		if (fTotalTestCases > 0) {
-			String msg = Messages.DIALOG_SUCCESFUL_TEST_EXECUTION(fTotalTestCases);
+		if (fExecutedTestCases > 0) {
+			String msg = Messages.DIALOG_SUCCESFUL_TEST_EXECUTION(fExecutedTestCases);
 			MessageDialog.openInformation(null, Messages.DIALOG_TEST_EXECUTION_REPORT_TITLE, msg);
 		}
 	}
