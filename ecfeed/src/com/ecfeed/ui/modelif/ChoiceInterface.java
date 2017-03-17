@@ -162,23 +162,7 @@ public class ChoiceInterface extends ChoicesParentInterface{
 
 	@Override
 	public String canAddChildren(Collection<? extends AbstractNode> newChildren) {
-		String existingChoiceName = choiceNameAlreadyExists(newChildren);
-
-		if (existingChoiceName != null) {
-			return Messages.CHOICE_ALREADY_EXISTS(existingChoiceName); 
-		}
-		return null;
-	}
-
-	private String choiceNameAlreadyExists(Collection<? extends AbstractNode> newChildren) {
-		List<String> existingChildrenNames = getListOfChildrenChoiceNames();
-
-		for (AbstractNode newChild : newChildren) {
-			String newChildName = newChild.getName();
-			if (existingChildrenNames.indexOf(newChildName) != -1) {
-				return newChildName;
-			}
-		}
+		// Always can add. For colliding choice names other names will be generated later.
 		return null;
 	}
 
