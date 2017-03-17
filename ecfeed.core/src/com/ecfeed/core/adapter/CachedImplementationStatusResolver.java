@@ -13,7 +13,6 @@ package com.ecfeed.core.adapter;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.ecfeed.core.adapter.java.JavaPrimitiveTypePredicate;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.ClassNode;
@@ -94,7 +93,7 @@ public abstract class CachedImplementationStatusResolver extends AbstractImpleme
 	}
 
 	public CachedImplementationStatusResolver(IPrimitiveTypePredicate primitiveTypePredicate) {
-		super(new JavaPrimitiveTypePredicate());
+		super(primitiveTypePredicate);
 		fCacheCleaner = new CacheCleaner();
 	}
 
