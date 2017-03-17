@@ -203,7 +203,7 @@ public class JavaDocCommentsSection extends AbstractCommentsSection {
 	}
 
 	protected boolean importExportEnabled(){
-		return getTargetIf().commentsImportExportEnabled();
+		return getTargetIf().nodeImplementedFullyOrPartially();
 	}
 
 	protected Menu getExportButtonMenu(){

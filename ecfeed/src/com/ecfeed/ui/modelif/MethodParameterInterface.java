@@ -171,7 +171,7 @@ public class MethodParameterInterface extends AbstractParameterInterface {
 	}
 
 	@Override
-	public boolean commentsImportExportEnabled(){
+	public boolean nodeImplementedFullyOrPartially(){
 		if(getImplementationStatus(getOwnNode().getMethod()) != EImplementationStatus.NOT_IMPLEMENTED){
 			return true;
 		}

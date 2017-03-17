@@ -103,7 +103,7 @@ public abstract class AbstractParameterCommentsSection extends JavaDocCommentsSe
 			getTextFromTabItem(getTypeCommentsTab()).setText("");
 		}
 
-		boolean importExportEnabled = getTargetIf().commentsImportExportEnabled();
+		boolean importExportEnabled = getTargetIf().nodeImplementedFullyOrPartially();
 		getExportButton().setEnabled(importExportEnabled);
 		getImportButton().setEnabled(importExportEnabled);
 	}

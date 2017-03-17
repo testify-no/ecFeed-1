@@ -40,8 +40,8 @@ public class GlobalParameterInterface extends AbstractParameterInterface {
 	}
 
 	@Override
-	public boolean commentsImportExportEnabled(){
-		return super.commentsImportExportEnabled() && JavaTypeHelper.isUserType(getType());
+	public boolean nodeImplementedFullyOrPartially(){
+		return super.nodeImplementedFullyOrPartially() && JavaTypeHelper.isUserType(getType());
 	}
 
 	@Override

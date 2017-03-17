@@ -173,8 +173,8 @@ public class ChoiceInterface extends ChoicesParentInterface {
 	}
 
 	@Override
-	public boolean commentsImportExportEnabled() {
-		return super.commentsImportExportEnabled() && getImplementationStatus() != EImplementationStatus.NOT_IMPLEMENTED;
+	public boolean nodeImplementedFullyOrPartially() {
+		return super.nodeImplementedFullyOrPartially() && getImplementationStatus() != EImplementationStatus.NOT_IMPLEMENTED;
 	}
 
 	@Override

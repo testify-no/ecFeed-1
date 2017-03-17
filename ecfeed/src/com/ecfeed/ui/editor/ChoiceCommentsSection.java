@@ -13,6 +13,7 @@ package com.ecfeed.ui.editor;
 import org.eclipse.swt.events.SelectionEvent;
 
 import com.ecfeed.core.model.ChoiceNode;
+import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
@@ -77,10 +78,12 @@ public class ChoiceCommentsSection extends JavaDocCommentsSection {
 	}
 
 	private void updateExportImportButtons() {
-		boolean importExportEnabled = getTargetIf().commentsImportExportEnabled();
-		getExportButton().setEnabled(importExportEnabled);
-		getImportButton().setEnabled(importExportEnabled);
-		getJavaDocText().setEnabled(importExportEnabled);
+		
+		boolean isImportExportEnabled = isImportExportEnabled();
+		getExportButton().setEnabled(isImportExportEnabled);
+		getImportButton().setEnabled(isImportExportEnabled);
+		getJavaDocText().setEnabled(isImportExportEnabled);
+		
 		if(getOwnNode().isAbstract()){
 			getExportButton().setText("Export all");
 			getExportButton().setToolTipText(Messages.TOOLTIP_EXPORT_CHOICE_SUBTREE_COMMENTS_TO_JAVADOC);
@@ -92,5 +95,17 @@ public class ChoiceCommentsSection extends JavaDocCommentsSection {
 			getImportButton().setText("Import");
 			getImportButton().setToolTipText(Messages.TOOLTIP_IMPORT_CHOICE_COMMENTS_FROM_JAVADOC);
 		}
+	}
+	
+	private boolean isImportExportEnabled() {
+		
+		ChoiceNode choiceNode = getOwnNode();
+		String parameterType = choiceNode.getParameter().getType();
+		
+		if (JavaTypeHelper.isJavaType(parameterType)) {
+			return false;
+		}
+		
+		return getTargetIf().nodeImplementedFullyOrPartially();
 	}
 }
