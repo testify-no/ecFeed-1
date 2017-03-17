@@ -10,6 +10,7 @@
 
 package com.ecfeed.core.model;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -116,18 +117,30 @@ public class ChoiceNode extends ChoicesParentNode{
 		return super.getLeafLabels();
 	}
 
-
 	public Set<String> getAllLabels(){
 		Set<String> allLabels = getInheritedLabels();
 		allLabels.addAll(fLabels);
 		return allLabels;
 	}
 
-	public Set<String> getInheritedLabels(){
+	public Set<String> getInheritedLabels() {
 		if(parentChoice() != null){
 			return parentChoice().getAllLabels();
 		}
 		return new LinkedHashSet<String>();
+	}
+	
+	public List<String> getListOfChildrenChoiceNames() {
+		
+		List<ChoiceNode> existingChoices = getChoices();
+
+		List<String> names = new ArrayList<String>();
+
+		for (ChoiceNode choice : existingChoices) {
+			names.add(choice.getName());
+		}
+		
+		return names;
 	}
 
 	public boolean isAbstract(){
