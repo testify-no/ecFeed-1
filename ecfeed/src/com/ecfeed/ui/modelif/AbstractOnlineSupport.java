@@ -52,7 +52,7 @@ public abstract class AbstractOnlineSupport {
 	private String fExportTemplate;
 	private String fInitialExportTemplate;
 	private TestRunMode fTestRunMode;
-	protected TestInformer fTestInformer;
+	protected AbstractTestInformer fTestInformer;
 
 	public AbstractOnlineSupport(
 			MethodNode methodNode, ITestMethodInvoker testMethodInvoker, 
@@ -70,9 +70,18 @@ public abstract class AbstractOnlineSupport {
 		fFileInfoProvider = fileInfoProvider;
 		fInitialExportTemplate = initialExportTemplate;
 		fTestRunMode = TestRunModeHelper.getTestRunMode(methodNode);
-		fTestInformer = new TestInformer();
+		fTestInformer = createTestInformer(isExport);
 
 		setOwnMethodNode(methodNode);
+	}
+
+	private AbstractTestInformer createTestInformer(boolean isExport) {
+
+		if (isExport) {
+			return new ExportTestInformer();
+		}
+
+		return new ExecutionTestInformer();
 	}
 
 	protected TestRunMode getTestRunMode() {

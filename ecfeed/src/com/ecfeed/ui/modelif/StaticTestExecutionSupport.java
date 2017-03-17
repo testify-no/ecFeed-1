@@ -43,7 +43,7 @@ public class StaticTestExecutionSupport {
 	private List<TestCaseNode> fFailedTests;
 	private IFileInfoProvider fFileInfoProvider;
 	private TestRunMode fTestRunMode;
-	private TestInformer fTestInformer;
+	private AbstractTestInformer fTestInformer;
 
 	private class ExecuteRunnable implements IRunnableWithProgress{
 
@@ -98,7 +98,7 @@ public class StaticTestExecutionSupport {
 		fFailedTests = new ArrayList<>();
 		fFileInfoProvider = fileInfoProvider;
 		fTestRunMode = testRunMode;
-		fTestInformer = new TestInformer();
+		fTestInformer = new ExecutionTestInformer();
 	}
 
 	public void proceed(){

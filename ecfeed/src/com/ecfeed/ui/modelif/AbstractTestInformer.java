@@ -24,30 +24,34 @@ import com.ecfeed.core.runner.RunnerException;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.plugin.Activator;
 
-public class TestInformer {
+public abstract class AbstractTestInformer {
 
 	IProgressMonitor fProgressMonitor;
 	int fTotalWork;
 	private int fExecutedTestCases = 0;
 	private List<Status> fUnsuccesfullExecutionStatuses;
 
-
-	public TestInformer(){
+	public AbstractTestInformer(){
 		fUnsuccesfullExecutionStatuses = new ArrayList<>();
 	}
+
+	protected abstract void setTestProgressMessage();
 
 	protected void setProgressMonitor(IProgressMonitor progressMonitor) {
 		fProgressMonitor = progressMonitor;
 	}
 
+	protected int getExecutedTestCases() {
+		return fExecutedTestCases;
+	}
+
+	protected int getFailedTestCases() {
+		return fUnsuccesfullExecutionStatuses.size();
+	}
+
 	protected void beginTestExecution(int totalWork) {
 		fTotalWork = totalWork;
 		fProgressMonitor.beginTask(Messages.EXECUTING_TEST_WITH_PARAMETERS, totalWork);
-	}
-
-	protected void setTestProgressMessage() {
-		String message = "Executed: " + fExecutedTestCases + "  Failed: " + fUnsuccesfullExecutionStatuses.size();		
-		fProgressMonitor.subTask(message);
 	}
 
 	protected void incrementTotalTestcases(){
