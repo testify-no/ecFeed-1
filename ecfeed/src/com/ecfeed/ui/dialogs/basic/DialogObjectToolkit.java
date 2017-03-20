@@ -20,12 +20,15 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import com.ecfeed.core.utils.StringHelper;
+import com.ecfeed.ui.common.CommonEditHelper;
+import com.ecfeed.ui.editor.IValueApplier;
 import com.ecfeed.utils.EclipseHelper;
 
 public class DialogObjectToolkit {
@@ -76,8 +79,9 @@ public class DialogObjectToolkit {
 		return composite;
 	}
 
-	public Text createGridText(Composite parentGridComposite, int heightHint,
-			String initialText) {
+	public Text createGridText(
+			Composite parentGridComposite, int heightHint, String initialText) {
+
 		Text templateText = new Text(parentGridComposite, SWT.WRAP | SWT.MULTI
 				| SWT.BORDER | SWT.V_SCROLL);
 
@@ -149,6 +153,14 @@ public class DialogObjectToolkit {
 		createBrowseButton(childComposite, browseSelectionListener);
 		return targetFileText;
 	}
+
+	public Combo createReadOnlyGridCombo(Composite parentComposite,	IValueApplier valueApplier) {
+		return CommonEditHelper.createReadOnlyGridCombo(parentComposite, valueApplier);
+	}
+
+	public Combo createReadWriteGridCombo(Composite parentComposite,	IValueApplier valueApplier) {
+		return CommonEditHelper.createReadWriteGridCombo(parentComposite, valueApplier);
+	}	
 
 	class FileDialogSelectionAdapter extends SelectionAdapter {
 		int fDialogStyle;

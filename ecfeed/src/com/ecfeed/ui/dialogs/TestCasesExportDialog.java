@@ -19,9 +19,9 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Text;
 
 import com.ecfeed.core.resources.ResourceHelper;
@@ -33,6 +33,7 @@ import com.ecfeed.ui.dialogs.basic.FileOpenAndReadDialog;
 import com.ecfeed.ui.dialogs.basic.FileSaveDialog;
 import com.ecfeed.ui.dialogs.basic.InfoDialog;
 import com.ecfeed.ui.dialogs.basic.YesNoDialog;
+import com.ecfeed.ui.editor.IValueApplier;
 import com.ecfeed.utils.EclipseHelper;
 
 public class TestCasesExportDialog extends TitleAreaDialog {
@@ -46,6 +47,7 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 	private String fTargetFile;
 	private DialogObjectToolkit fDialogObjectToolkit;
 	private FileCompositeVisibility fFileCompositeVisibility;
+	private Combo fExportFormatCombo;
 
 	public enum FileCompositeVisibility {
 		VISIBLE, NOT_VISIBLE
@@ -86,8 +88,8 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		setDialogTitle(this);
 		setDialogMessage(this);
 
-		Composite dialogAreaComposite = (Composite) super
-				.createDialogArea(parentComposite);
+		Composite dialogAreaComposite = 
+				(Composite) super.createDialogArea(parentComposite);
 
 		dialogAreaComposite.addHelpListener(new HelpListener() {
 
@@ -97,8 +99,8 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 			}
 		});
 
-		Composite childComposite = fDialogObjectToolkit.createGridComposite(
-				dialogAreaComposite, 1);
+		Composite childComposite = 
+				fDialogObjectToolkit.createGridComposite(dialogAreaComposite, 1);
 
 		createTemplateTextComposite(childComposite);
 
@@ -109,90 +111,6 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		setFocusedControl();
 
 		return dialogAreaComposite;
-	}
-
-	private void setFocusedControl() {
-		if (fFileCompositeVisibility == FileCompositeVisibility.VISIBLE) {
-			fTargetFileText.setFocus();
-		} else {
-			fTemplateText.setFocus();
-		}
-	}
-
-	public void setDialogTitle(TitleAreaDialog dialog) {
-		final String EXPORT_TEST_DATA_TITLE = "Export template definition";
-		setTitle(EXPORT_TEST_DATA_TITLE);
-	}
-
-	public void setDialogMessage(TitleAreaDialog dialog) {
-		final String EXPORT_TEST_DATA_MESSAGE = "Define template for data export and select target file";
-		setMessage(EXPORT_TEST_DATA_MESSAGE);
-	}
-
-	private void setDialogMessageSelectFile() {
-		final String SELECT_TARGET = "Select target export file";
-		setMessage(SELECT_TARGET);
-	}
-
-	private void createTemplateTextComposite(Composite parentComposite) {
-		Composite childComposite = fDialogObjectToolkit.createGridComposite(
-				parentComposite, 1);
-
-		createTemplateLabelAndButtonsComposite(childComposite);
-		fTemplateText = fDialogObjectToolkit.createGridText(childComposite,
-				150, fTemplate);
-	}
-
-	private void createTemplateLabelAndButtonsComposite(
-			Composite parentComposite) {
-		Composite fillComposite = fDialogObjectToolkit
-				.createFillComposite(parentComposite);
-
-		final String DEFINE_TEMPLATE = "Template for data export";
-		fDialogObjectToolkit.createLabel(fillComposite, DEFINE_TEMPLATE);
-		fDialogObjectToolkit.createSpacer(fillComposite, 40);
-		createButtonsComposite(fillComposite);
-	}
-
-	private void createButtonsComposite(Composite parentComposite) {
-		Composite buttonComposite = fDialogObjectToolkit
-				.createFillComposite(parentComposite);
-
-		fDialogObjectToolkit.createButton(buttonComposite, "Load...",
-				new LoadButtonSelectionAdapter());
-		fDialogObjectToolkit.createButton(buttonComposite, "Save As...",
-				new SaveAsButtonSelectionAdapter());
-	}
-
-	private String readHelpFromResource() {
-		final String DEFAULT_TEMPLATE_TEXT_FILE = "res/TestCasesExportTemplate.txt";
-		String templateText = null;
-
-		try {
-			templateText = ResourceHelper.readTextFromResource(this.getClass(),
-					DEFAULT_TEMPLATE_TEXT_FILE);
-		} catch (Exception e) {
-			ExceptionCatchDialog.open("Can not read template", e.getMessage());
-		}
-
-		return templateText;
-	}
-
-	public static String[] getExportFileExtensions() {
-		String[] extensionsFilter = { "*.csv", "*.txt", "*.*" };
-		return extensionsFilter;
-	}
-
-	private void createTargetFileComposite(Composite parent) {
-		final String TARGET_FILE = "Target file";
-
-		fTargetFileText = 
-				fDialogObjectToolkit.createFileSelectionComposite(
-						parent, TARGET_FILE, getExportFileExtensions(), new FileTextModifyListener());
-
-		if (fTargetFile != null) {
-			fTargetFileText.setText(fTargetFile);
-		}
 	}
 
 	@Override
@@ -221,6 +139,94 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		}
 
 		super.okPressed();
+	}
+
+	@Override
+	protected void cancelPressed() {
+		super.cancelPressed();
+	}
+
+	public void setDialogTitle(TitleAreaDialog dialog) {
+		final String EXPORT_TEST_DATA_TITLE = "Export template definition";
+		setTitle(EXPORT_TEST_DATA_TITLE);
+	}
+
+	public void setDialogMessage(TitleAreaDialog dialog) {
+		final String EXPORT_TEST_DATA_MESSAGE = "Define template for data export and select target file";
+		setMessage(EXPORT_TEST_DATA_MESSAGE);
+	}
+
+	private String readHelpFromResource() {
+		final String DEFAULT_TEMPLATE_TEXT_FILE = "res/TestCasesExportTemplate.txt";
+		String templateText = null;
+
+		try {
+			templateText = ResourceHelper.readTextFromResource(this.getClass(),
+					DEFAULT_TEMPLATE_TEXT_FILE);
+		} catch (Exception e) {
+			ExceptionCatchDialog.open("Can not read template", e.getMessage());
+		}
+
+		return templateText;
+	}
+
+	private void createTemplateTextComposite(Composite parentComposite) {
+		Composite childComposite = 
+				fDialogObjectToolkit.createGridComposite(parentComposite, 1);
+
+		createTemplateLabelAndButtonsComposite(childComposite);
+		fTemplateText = fDialogObjectToolkit.createGridText(childComposite, 150, fTemplate);
+	}
+
+	private void createTemplateLabelAndButtonsComposite(
+			Composite parentComposite) {
+
+		Composite composite = fDialogObjectToolkit.createGridComposite(parentComposite, 4);
+
+		final String DEFINE_TEMPLATE = "Template: ";
+		fDialogObjectToolkit.createLabel(composite, DEFINE_TEMPLATE);
+
+		fExportFormatCombo = fDialogObjectToolkit.createReadOnlyGridCombo(composite, new ExportFormatComboValueApplier());
+		String[] exportFormats = { "CVS", "XML" };
+		fExportFormatCombo.setItems(exportFormats);
+		fExportFormatCombo.setText("CVS");
+
+		createButtonsComposite(composite);
+	}
+
+	private void createButtonsComposite(Composite parentComposite) {
+		Composite buttonComposite = fDialogObjectToolkit
+				.createFillComposite(parentComposite);
+
+		fDialogObjectToolkit.createButton(buttonComposite, "Load...",
+				new LoadButtonSelectionAdapter());
+		fDialogObjectToolkit.createButton(buttonComposite, "Save As...",
+				new SaveAsButtonSelectionAdapter());
+	}
+
+	private void createTargetFileComposite(Composite parent) {
+		final String TARGET_FILE = "Target file";
+
+		fTargetFileText = 
+				fDialogObjectToolkit.createFileSelectionComposite(
+						parent, TARGET_FILE, getExportFileExtensions(), new FileTextModifyListener());
+
+		if (fTargetFile != null) {
+			fTargetFileText.setText(fTargetFile);
+		}
+	}
+
+	public static String[] getExportFileExtensions() {
+		String[] extensionsFilter = { "*.csv", "*.txt", "*.*" };
+		return extensionsFilter;
+	}
+
+	private void setFocusedControl() {
+		if (fFileCompositeVisibility == FileCompositeVisibility.VISIBLE) {
+			fTargetFileText.setFocus();
+		} else {
+			fTemplateText.setFocus();
+		}
 	}
 
 	private boolean isTemplateModified() {
@@ -255,11 +261,6 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		fTemplate = fTemplateText.getText();
 	}
 
-	@Override
-	protected void cancelPressed() {
-		super.cancelPressed();
-	}
-
 	public String getTemplate() {
 		return fTemplate;
 	}
@@ -281,6 +282,11 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		}
 	}
 
+	private void setDialogMessageSelectFile() {
+		final String SELECT_TARGET = "Select target export file";
+		setMessage(SELECT_TARGET);
+	}
+
 	private void setOkEnabled(boolean enabled) {
 		Button okButton = getButton(IDialogConstants.OK_ID);
 
@@ -291,7 +297,7 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		okButton.setEnabled(enabled);
 	}
 
-	class LoadButtonSelectionAdapter extends SelectionAdapter {
+	private class LoadButtonSelectionAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 
@@ -316,7 +322,7 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 
 	}
 
-	class SaveAsButtonSelectionAdapter extends SelectionAdapter {
+	private class SaveAsButtonSelectionAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			final String SAVE_DEF_FILE = "Save template definition file"; 
@@ -328,18 +334,20 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		}
 	}
 
-	class FileTextModifyListener implements ModifyListener {
+	private class FileTextModifyListener implements ModifyListener {
 		@Override
 		public void modifyText(ModifyEvent e) {
 			updateStatus();
 		}
 	}
 
-	class BrowseSelectionAdapter extends SelectionAdapter {
+	private class ExportFormatComboValueApplier implements IValueApplier {
+
 		@Override
-		public void widgetSelected(SelectionEvent e) {
-			FileDialog dialog = new FileDialog(getParentShell());
-			fTargetFileText.setText(dialog.open());
+		public void applyValue() {
+			System.out.println("Selected");
+
 		}
 	}
+
 }

@@ -10,10 +10,8 @@
 package com.ecfeed.ui.editor;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
@@ -27,6 +25,7 @@ import org.eclipse.swt.widgets.TypedListener;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.ecfeed.core.utils.StringHelper;
+import com.ecfeed.ui.common.CommonEditHelper;
 
 public class FormObjectToolkit {
 
@@ -78,11 +77,13 @@ public class FormObjectToolkit {
 		text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
 		TypedListener onLostFocusListener = 
-				new TypedListener(new ApplyValueWhenFocusLostListener(valueApplier));
+				new TypedListener(new CommonEditHelper.ApplyValueWhenFocusLostListener(valueApplier));
+
 		text.addListener(SWT.FocusOut, onLostFocusListener);
 
-		ApplyValueWhenSelectionListener onApplyListener = 
-				new ApplyValueWhenSelectionListener(valueApplier);
+		CommonEditHelper.ApplyValueWhenSelectionListener onApplyListener = 
+				new CommonEditHelper.ApplyValueWhenSelectionListener(valueApplier);
+
 		text.addSelectionListener(onApplyListener);
 
 		OnSaveKeyListener onSaveKeyListener = 
@@ -102,39 +103,6 @@ public class FormObjectToolkit {
 		return button;
 	}
 
-	public Combo createReadOnlyGridCombo(
-			Composite parentComposite, 
-			IValueApplier valueApplier) {
-
-		Combo combo = new Combo(parentComposite, SWT.DROP_DOWN | SWT.READ_ONLY);
-		configureCombo(combo, valueApplier);
-
-		return combo;
-	}
-
-	public Combo createReadWriteGridCombo(
-			Composite parentComposite, 
-			IValueApplier valueApplier) {
-
-		Combo combo = new Combo(parentComposite, SWT.DROP_DOWN);
-		configureCombo(combo, valueApplier);
-
-		return combo;
-	}	
-
-	private void configureCombo(
-			Combo combo,
-			IValueApplier valueApplier) {
-
-		combo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-
-		ApplyValueForComboListener selectionListener = new ApplyValueForComboListener(valueApplier);
-		combo.addSelectionListener(selectionListener);
-
-		ApplyValueWhenFocusLostListener focusLostListener = new ApplyValueWhenFocusLostListener(valueApplier); 
-		combo.addFocusListener(focusLostListener);
-	}
-
 	public Button createGridCheckBox(
 			Composite parentComposite, 
 			String checkboxLabel,
@@ -144,11 +112,21 @@ public class FormObjectToolkit {
 		GridData checkboxGridData = new GridData(SWT.FILL, SWT.CENTER, true, false);
 		checkbox.setLayoutData(checkboxGridData);
 
-		ApplyValueWhenSelectionListener selectionListener = new ApplyValueWhenSelectionListener(valueApplier); 
+		CommonEditHelper.ApplyValueWhenSelectionListener selectionListener = 
+				new CommonEditHelper.ApplyValueWhenSelectionListener(valueApplier);
+
 		checkbox.addSelectionListener(selectionListener);
 
 		return checkbox;
 	}
+
+	public Combo createReadOnlyGridCombo(Composite parentComposite,	IValueApplier valueApplier) {
+		return CommonEditHelper.createReadOnlyGridCombo(parentComposite, valueApplier);
+	}
+
+	public Combo createReadWriteGridCombo(Composite parentComposite,	IValueApplier valueApplier) {
+		return CommonEditHelper.createReadWriteGridCombo(parentComposite, valueApplier);
+	}	
 
 	public GridData getGridData(Control control) {
 		return (GridData)control.getLayoutData();
@@ -186,50 +164,6 @@ public class FormObjectToolkit {
 			ModelEditorHelper.saveActiveEditor();
 		}
 
-	}
-
-	private class ApplyValueWhenFocusLostListener extends FocusLostListener {
-
-		IValueApplier fValueApplier;
-
-		ApplyValueWhenFocusLostListener(IValueApplier valueApplier) {
-			fValueApplier = valueApplier;
-		}
-
-		@Override
-		public void focusLost(FocusEvent e) {
-			fValueApplier.applyValue();
-		}
-
-	}
-
-	private class ApplyValueWhenSelectionListener extends AbstractSelectionAdapter {
-
-		IValueApplier fValueApplier;
-
-		ApplyValueWhenSelectionListener(IValueApplier valueApplier) {
-			fValueApplier = valueApplier;
-		}
-
-		@Override
-		public void widgetSelected(SelectionEvent e) {
-			fValueApplier.applyValue();
-		}
-
-	}	
-
-	private class ApplyValueForComboListener extends ComboSelectionListener {
-
-		IValueApplier fValueApplier;
-
-		ApplyValueForComboListener(IValueApplier valueApplier) {
-			fValueApplier = valueApplier;
-		}
-
-		@Override
-		public void widgetSelected(SelectionEvent e) {
-			fValueApplier.applyValue();
-		}
 	}
 
 }

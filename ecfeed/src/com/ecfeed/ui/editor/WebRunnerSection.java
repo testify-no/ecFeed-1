@@ -177,7 +177,7 @@ public class WebRunnerSection extends BasicSection  {
 
 		@Override
 		public void applyValue() {
-			
+
 			boolean selected = fMapBrowserCheckbox.getSelection();
 
 			if (fSectionEnabled) {
@@ -194,7 +194,7 @@ public class WebRunnerSection extends BasicSection  {
 
 		@Override
 		public void applyValue() {
-			
+
 			boolean selected = fMapStartUrlCheckbox.getSelection();
 
 			if (fSectionEnabled) {
@@ -211,16 +211,16 @@ public class WebRunnerSection extends BasicSection  {
 
 		@Override
 		public void applyValue() {
-			
+
 			fMethodInterface.setProperty(fBrowserPropertyId, fBrowserCombo.getText());
 		}
 	}
-	
+
 	private class BrowserDriverApplier implements IValueApplier {
 
 		@Override
 		public void applyValue() {
-			
+
 			fMethodInterface.setProperty(fBrowserDriverPropertyId, fBrowserDriverText.getText());
 		}
 	}	
@@ -242,7 +242,7 @@ public class WebRunnerSection extends BasicSection  {
 
 		@Override
 		public void applyValue() {
-			
+
 			fMethodInterface.setProperty(fStartUrlPropertyId, fStartUrlText.getText());
 		}
 	}
