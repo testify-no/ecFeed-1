@@ -34,7 +34,7 @@ import com.ecfeed.ui.dialogs.basic.FileOpenAndReadDialog;
 import com.ecfeed.ui.dialogs.basic.FileSaveDialog;
 import com.ecfeed.ui.dialogs.basic.InfoDialog;
 import com.ecfeed.ui.dialogs.basic.YesNoDialog;
-import com.ecfeed.ui.editor.ComboSelectionListener;
+import com.ecfeed.ui.editor.IValueApplier;
 import com.ecfeed.utils.EclipseHelper;
 
 public class TestCasesExportDialog extends TitleAreaDialog {
@@ -154,10 +154,9 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		final String DEFINE_TEMPLATE = "Template: ";
 		fDialogObjectToolkit.createLabel(composite, DEFINE_TEMPLATE);
 
+		fExportFormatCombo = fDialogObjectToolkit.createReadOnlyGridCombo(composite, new ExportFormatValueApplier());
 		String[] exportFormats = { "CVS", "XML" };
-		fExportFormatCombo = 
-				fDialogObjectToolkit.createGridReadOnlyCombo(
-						composite, exportFormats, new FormatComboSelectionListener());
+		fExportFormatCombo.setItems(exportFormats);
 		fExportFormatCombo.setText("CVS");
 
 		createButtonsComposite(composite);
@@ -352,10 +351,12 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		}
 	}
 
-	private class FormatComboSelectionListener extends ComboSelectionListener {
+	private class ExportFormatValueApplier implements IValueApplier {
+
 		@Override
-		public void widgetSelected(SelectionEvent e) {
+		public void applyValue() {
 			System.out.println("Selected");
+
 		}
 	}
 
