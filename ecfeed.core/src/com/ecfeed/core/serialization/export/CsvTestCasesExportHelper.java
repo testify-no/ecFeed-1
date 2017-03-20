@@ -21,7 +21,7 @@ import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.TestCaseNode;
 
-public class TestCasesExportHelper {
+public class CsvTestCasesExportHelper {
 
 	private static final String CLASS_NAME_SEQUENCE = "%class";
 	private static final String PACKAGE_NAME_SEQUENCE = "%package";

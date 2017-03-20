@@ -17,7 +17,8 @@ import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.core.utils.StringHolder;
 
-public class ExportTemplateParser {
+public class CsvExportTemplateParser implements IExportTemplateParser {
+	
 	private int fMethodParametersCount;
 	private String fHeaderTemplate;
 	private String fTestCaseTemplate;
@@ -27,16 +28,17 @@ public class ExportTemplateParser {
 	public static final String TEST_CASE_MARKER = "[TestCase]";
 	public static final String FOOTER_MARKER = "[Footer]";
 
-	public ExportTemplateParser(int methodParametersCount) {
+	public CsvExportTemplateParser(int methodParametersCount) {
 		fMethodParametersCount = methodParametersCount;
 	}
 
+	@Override
 	public void createSubTemplates(String template) {
 		if (template == null) {
 			ExceptionHelper.reportRuntimeException("Template text must not be empty.");
 		}
 
-		Map<String, String> templateMap = parseTemplate(template);
+		Map<String, String> templateMap = divideIntoSubtemplates(template);
 
 		fHeaderTemplate = createUserHeaderTemplate(templateMap);
 		fTestCaseTemplate = createUserTestCaseTemplate(templateMap);
@@ -44,6 +46,7 @@ public class ExportTemplateParser {
 		return;
 	}
 
+	@Override
 	public String createInitialTemplate() {
 		return StringHelper.appendNewline(HEADER_MARKER)
 				+ StringHelper.appendNewline(createDefaultHeaderTemplate(fMethodParametersCount))
@@ -52,14 +55,17 @@ public class ExportTemplateParser {
 				+ StringHelper.appendNewline(FOOTER_MARKER);
 	}
 
+	@Override
 	public String getHeaderTemplate() {
 		return fHeaderTemplate;
 	}
 
+	@Override
 	public String getTestCaseTemplate() {
 		return fTestCaseTemplate;
 	}
 
+	@Override
 	public String getFooterTemplate() {
 		return fFooterTemplate;
 	}
@@ -106,7 +112,7 @@ public class ExportTemplateParser {
 		return createParameterTemplate(VALUE_TAG, methodParametersCount);
 	}
 
-	public static Map<String, String> parseTemplate(String templateText) {
+	public Map<String, String> divideIntoSubtemplates(String templateText) {
 		Map<String, String> resultMap = new HashMap<String, String>();
 		StringTokenizer tokenizer = new StringTokenizer(templateText, StringHelper.newLine());
 		StringHolder currentSectionMarker = new StringHolder();

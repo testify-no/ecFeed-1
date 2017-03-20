@@ -49,7 +49,8 @@ import com.ecfeed.core.runner.ITestMethodInvoker;
 import com.ecfeed.core.runner.java.ExportTestMethodInvoker;
 import com.ecfeed.core.runner.java.JUnitTestMethodInvoker;
 import com.ecfeed.core.runner.java.SeleniumTestMethodInvoker;
-import com.ecfeed.core.serialization.export.ExportTemplateParser;
+import com.ecfeed.core.serialization.export.CsvExportTemplateParser;
+import com.ecfeed.core.serialization.export.IExportTemplateParser;
 import com.ecfeed.core.utils.EcException;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.StringHelper;
@@ -272,16 +273,15 @@ public class MethodInterface extends ParametersParentInterface {
 		if (!isValidClassConfiguration(classNode))
 			return;
 
-		ExportTestMethodInvoker methodInvoker = new ExportTestMethodInvoker(
-				getOwnNode());
+		ExportTestMethodInvoker methodInvoker = new ExportTestMethodInvoker(getOwnNode());
 
-		ExportTemplateParser exportParser = new ExportTemplateParser(
-				getOwnNode().getParametersCount());
+		IExportTemplateParser exportTemplateParser = 
+				new CsvExportTemplateParser(getOwnNode().getParametersCount());
 
 		OnlineExportSupport exportSupport = 
 				new OnlineExportSupport(
 						getOwnNode(), methodInvoker, 
-						fileInfoProvider, exportParser.createInitialTemplate(), 
+						fileInfoProvider, exportTemplateParser.createInitialTemplate(),
 						ApplicationContext.getExportTargetFile());
 
 		AbstractOnlineSupport.Result result = exportSupport.proceed();
@@ -297,12 +297,12 @@ public class MethodInterface extends ParametersParentInterface {
 
 		ApplicationContext.setExportTargetFile(exportSupport.getTargetFile());
 		String exportTemplate = exportSupport.getExportTemplate();
-		exportParser.createSubTemplates(exportTemplate);
+		exportTemplateParser.createSubTemplates(exportTemplate);
 
 		runExport(methodInvoker.getTestCasesToExport(),
-				exportParser.getHeaderTemplate(),
-				exportParser.getTestCaseTemplate(),
-				exportParser.getFooterTemplate(), exportSupport.getTargetFile());
+				exportTemplateParser.getHeaderTemplate(),
+				exportTemplateParser.getTestCaseTemplate(),
+				exportTemplateParser.getFooterTemplate(), exportSupport.getTargetFile());
 	}
 
 	public void executeStaticTests(Collection<TestCaseNode> testCases,
@@ -324,7 +324,7 @@ public class MethodInterface extends ParametersParentInterface {
 
 	public void exportTestCases(Collection<TestCaseNode> checkedTestCases) {
 
-		ExportTemplateParser exportParser = new ExportTemplateParser(
+		CsvExportTemplateParser exportParser = new CsvExportTemplateParser(
 				getOwnNode().getParametersCount());
 		String initialTemplate = exportParser.createInitialTemplate();
 
@@ -348,8 +348,8 @@ public class MethodInterface extends ParametersParentInterface {
 			String footerTemplate, String targetFile) {
 
 		try {
-			TestCasesExporter exporter = new TestCasesExporter(headerTemplate,
-					testCaseTemplate, footerTemplate);
+			TestCasesExporter exporter = 
+					new TestCasesExporter(headerTemplate, testCaseTemplate, footerTemplate);
 
 			exporter.runExport(getOwnNode(), testCases, targetFile);
 		} catch (Exception e) {

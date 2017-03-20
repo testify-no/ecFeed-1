@@ -18,10 +18,10 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import com.ecfeed.core.serialization.export.ExportTemplateParser;
+import com.ecfeed.core.serialization.export.CsvExportTemplateParser;
 import com.ecfeed.core.utils.StringHelper;
 
-public class ExportTemplateParserTest {
+public class CsvExportTemplateParserTest {
 
 	@Test
 	public void ShouldNotThrowWhenEmpty() {
@@ -29,9 +29,10 @@ public class ExportTemplateParserTest {
 		String templateText = new String();
 
 		Map<String, String> result = null;
+		CsvExportTemplateParser csvExportTemplateParser = new CsvExportTemplateParser(1);
 
 		try {
-			result = ExportTemplateParser.parseTemplate(templateText);
+			result = csvExportTemplateParser.divideIntoSubtemplates(templateText);
 		} catch (Exception e) {
 			fail("Exception thrown during export.");
 		}
@@ -43,53 +44,55 @@ public class ExportTemplateParserTest {
 	public void ShouldParseForTwoParamsTemplate() {
 
 		String templateText = 
-				StringHelper.appendNewline(ExportTemplateParser.HEADER_MARKER)
+				StringHelper.appendNewline(CsvExportTemplateParser.HEADER_MARKER)
 				+ StringHelper.appendNewline("$1.name,$2.name") 
-				+ StringHelper.appendNewline(ExportTemplateParser.TEST_CASE_MARKER) 
+				+ StringHelper.appendNewline(CsvExportTemplateParser.TEST_CASE_MARKER) 
 				+ StringHelper.appendNewline("$1.value,$2.value")
-				+ StringHelper.appendNewline(ExportTemplateParser.FOOTER_MARKER);
+				+ StringHelper.appendNewline(CsvExportTemplateParser.FOOTER_MARKER);
 
 		Map<String, String> result = null;
+		CsvExportTemplateParser csvExportTemplateParser = new CsvExportTemplateParser(2);
 
 		try {
-			result = ExportTemplateParser.parseTemplate(templateText);
+			result = csvExportTemplateParser.divideIntoSubtemplates(templateText);
 		} catch (Exception e) {
 			fail("Exception thrown during export.");
 		}
 
-		assertEquals("$1.name,$2.name", result.get(ExportTemplateParser.HEADER_MARKER));
-		assertEquals("$1.value,$2.value", result.get(ExportTemplateParser.TEST_CASE_MARKER));
+		assertEquals("$1.name,$2.name", result.get(CsvExportTemplateParser.HEADER_MARKER));
+		assertEquals("$1.value,$2.value", result.get(CsvExportTemplateParser.TEST_CASE_MARKER));
 	}
 
 	@Test
 	public void ShouldParseMultiLineSectionsTemplate() {
 
 		String templateText = 
-				StringHelper.appendNewline(ExportTemplateParser.HEADER_MARKER)
+				StringHelper.appendNewline(CsvExportTemplateParser.HEADER_MARKER)
 				+ StringHelper.appendNewline("HEADER")
 				+ StringHelper.appendNewline("$1.name,$2.name") 
 
-				+ StringHelper.appendNewline(ExportTemplateParser.TEST_CASE_MARKER)
+				+ StringHelper.appendNewline(CsvExportTemplateParser.TEST_CASE_MARKER)
 				+ StringHelper.appendNewline("TEST CASE")
 				+ StringHelper.appendNewline("$1.value,$2.value")
 
-				+ StringHelper.appendNewline(ExportTemplateParser.FOOTER_MARKER)
+				+ StringHelper.appendNewline(CsvExportTemplateParser.FOOTER_MARKER)
 				+ StringHelper.appendNewline("FOOTER 1")
 				+ StringHelper.appendNewline("FOOTER 2");
 
 		Map<String, String> resultMap = null;
+		CsvExportTemplateParser csvExportTemplateParser = new CsvExportTemplateParser(2);
 
 		try {
-			resultMap = ExportTemplateParser.parseTemplate(templateText);
+			resultMap = csvExportTemplateParser.divideIntoSubtemplates(templateText);
 		} catch (Exception e) {
 			fail("Exception thrown during export.");
 		}
 
-		String header = resultMap.get(ExportTemplateParser.HEADER_MARKER);
+		String header = resultMap.get(CsvExportTemplateParser.HEADER_MARKER);
 		String expectedHeader = "HEADER" + StringHelper.newLine() + "$1.name,$2.name";
 		assertEquals(expectedHeader, header);
 
-		String testCase = resultMap.get(ExportTemplateParser.TEST_CASE_MARKER); 
+		String testCase = resultMap.get(CsvExportTemplateParser.TEST_CASE_MARKER); 
 		String expectedTestCase = "TEST CASE" + StringHelper.newLine() + "$1.value,$2.value";
 
 		assertEquals(expectedTestCase, testCase);
@@ -101,9 +104,10 @@ public class ExportTemplateParserTest {
 		String templateText = "[xxx]";
 
 		Map<String, String> result = null;
+		CsvExportTemplateParser csvExportTemplateParser = new CsvExportTemplateParser(1);
 
 		try {
-			result = ExportTemplateParser.parseTemplate(templateText);
+			result = csvExportTemplateParser.divideIntoSubtemplates(templateText);
 		} catch (Exception e) {
 			fail("Exception thrown during export.");
 		}
@@ -115,20 +119,21 @@ public class ExportTemplateParserTest {
 	public void ShouldIgnoreInvalidMarker() {
 
 		String templateText = "[Xxx]" + "\n" + "$1.name\n"
-				+ ExportTemplateParser.TEST_CASE_MARKER + "\n" + "$1.value\n"
-				+ ExportTemplateParser.FOOTER_MARKER;
+				+ CsvExportTemplateParser.TEST_CASE_MARKER + "\n" + "$1.value\n"
+				+ CsvExportTemplateParser.FOOTER_MARKER;
 
 		Map<String, String> result = null;
+		CsvExportTemplateParser csvExportTemplateParser = new CsvExportTemplateParser(1);
 
 		try {
-			result = ExportTemplateParser.parseTemplate(templateText);
+			result = csvExportTemplateParser.divideIntoSubtemplates(templateText);
 		} catch (Exception e) {
 			fail("Exception thrown during export.");
 		}
 
 		assertEquals(1, result.size());
 		assertEquals("$1.value",
-				result.get(ExportTemplateParser.TEST_CASE_MARKER));
+				result.get(CsvExportTemplateParser.TEST_CASE_MARKER));
 	}
 
 }

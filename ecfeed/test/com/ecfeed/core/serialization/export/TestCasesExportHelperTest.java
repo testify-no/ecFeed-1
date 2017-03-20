@@ -22,7 +22,7 @@ import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.TestCaseNode;
-import com.ecfeed.core.serialization.export.TestCasesExportHelper;
+import com.ecfeed.core.serialization.export.CsvTestCasesExportHelper;
 
 public class TestCasesExportHelperTest {
 
@@ -63,7 +63,7 @@ public class TestCasesExportHelperTest {
 		TestCaseNode testCase = new TestCaseNode("default", choices);
 		testCase.setParent(method);
 
-		String result = TestCasesExportHelper.generateTestCaseString(sequenceIndex, testCase, template);
+		String result = CsvTestCasesExportHelper.generateTestCaseString(sequenceIndex, testCase, template);
 		assertEquals(expectedResult, result);
 	}
 
