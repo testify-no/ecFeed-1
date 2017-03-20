@@ -20,12 +20,14 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import com.ecfeed.core.utils.StringHelper;
+import com.ecfeed.ui.editor.ComboSelectionListener;
 import com.ecfeed.utils.EclipseHelper;
 
 public class DialogObjectToolkit {
@@ -148,6 +150,18 @@ public class DialogObjectToolkit {
 				new FileDialogSelectionAdapter(SWT.SAVE, extensionsFilter, targetFileText);
 		createBrowseButton(childComposite, browseSelectionListener);
 		return targetFileText;
+	}
+
+	public Combo createGridReadOnlyCombo(
+			Composite parent, String[] items, ComboSelectionListener comboSelectionListener) {
+
+		Combo combo = new Combo(parent, SWT.READ_ONLY);
+		combo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+
+		combo.setItems(items);
+		combo.addSelectionListener(comboSelectionListener);
+
+		return combo;
 	}
 
 	class FileDialogSelectionAdapter extends SelectionAdapter {

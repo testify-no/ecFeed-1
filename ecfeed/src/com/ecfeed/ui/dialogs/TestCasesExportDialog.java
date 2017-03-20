@@ -19,6 +19,7 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.FileDialog;
@@ -33,6 +34,7 @@ import com.ecfeed.ui.dialogs.basic.FileOpenAndReadDialog;
 import com.ecfeed.ui.dialogs.basic.FileSaveDialog;
 import com.ecfeed.ui.dialogs.basic.InfoDialog;
 import com.ecfeed.ui.dialogs.basic.YesNoDialog;
+import com.ecfeed.ui.editor.ComboSelectionListener;
 import com.ecfeed.utils.EclipseHelper;
 
 public class TestCasesExportDialog extends TitleAreaDialog {
@@ -46,6 +48,7 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 	private String fTargetFile;
 	private DialogObjectToolkit fDialogObjectToolkit;
 	private FileCompositeVisibility fFileCompositeVisibility;
+	private Combo fExportFormatCombo;
 
 	public enum FileCompositeVisibility {
 		VISIBLE, NOT_VISIBLE
@@ -145,13 +148,19 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 
 	private void createTemplateLabelAndButtonsComposite(
 			Composite parentComposite) {
-		Composite fillComposite = fDialogObjectToolkit
-				.createFillComposite(parentComposite);
 
-		final String DEFINE_TEMPLATE = "Template for data export";
-		fDialogObjectToolkit.createLabel(fillComposite, DEFINE_TEMPLATE);
-		fDialogObjectToolkit.createSpacer(fillComposite, 40);
-		createButtonsComposite(fillComposite);
+		Composite composite = fDialogObjectToolkit.createGridComposite(parentComposite, 4);
+
+		final String DEFINE_TEMPLATE = "Template: ";
+		fDialogObjectToolkit.createLabel(composite, DEFINE_TEMPLATE);
+
+		String[] exportFormats = { "CVS", "XML" };
+		fExportFormatCombo = 
+				fDialogObjectToolkit.createGridReadOnlyCombo(
+						composite, exportFormats, new FormatComboSelectionListener());
+		fExportFormatCombo.setText("CVS");
+
+		createButtonsComposite(composite);
 	}
 
 	private void createButtonsComposite(Composite parentComposite) {
@@ -342,4 +351,12 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 			fTargetFileText.setText(dialog.open());
 		}
 	}
+
+	private class FormatComboSelectionListener extends ComboSelectionListener {
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			System.out.println("Selected");
+		}
+	}
+
 }
