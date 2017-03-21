@@ -25,6 +25,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 
 import com.ecfeed.core.resources.ResourceHelper;
+import com.ecfeed.core.serialization.export.ExportTemplateControllerFactory;
+import com.ecfeed.core.serialization.export.IExportTemplateController;
 import com.ecfeed.core.utils.DiskFileHelper;
 import com.ecfeed.ui.dialogs.basic.AskIfOverwriteFileDialog;
 import com.ecfeed.ui.dialogs.basic.DialogObjectToolkit;
@@ -48,6 +50,8 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 	private DialogObjectToolkit fDialogObjectToolkit;
 	private FileCompositeVisibility fFileCompositeVisibility;
 	private Combo fExportFormatCombo;
+	private int fMethodParametersCount;
+
 
 	public enum FileCompositeVisibility {
 		VISIBLE, NOT_VISIBLE
@@ -56,7 +60,8 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 	public TestCasesExportDialog(
 			FileCompositeVisibility fileCompositeVisibility,
 			String initialTemplate,
-			String targetFile) {
+			String targetFile,
+			int methodParametersCount) {
 		super(EclipseHelper.getActiveShell());
 		setHelpAvailable(true);
 		setDialogHelpAvailable(false);
@@ -65,6 +70,7 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		fInitialTemplate = initialTemplate;
 		fTemplate = initialTemplate;
 		fTargetFile = targetFile;
+		fMethodParametersCount = methodParametersCount;
 
 		fDialogObjectToolkit = DialogObjectToolkit.getInstance();
 	}
@@ -187,9 +193,12 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		fDialogObjectToolkit.createLabel(composite, DEFINE_TEMPLATE);
 
 		fExportFormatCombo = fDialogObjectToolkit.createReadOnlyGridCombo(composite, new ExportFormatComboValueApplier());
-		String[] exportFormats = { "CVS", "XML" };
+
+		String[] exportFormats = ExportTemplateControllerFactory.getAvailableExportFormats();
 		fExportFormatCombo.setItems(exportFormats);
-		fExportFormatCombo.setText("CVS");
+
+		String defaultformat = ExportTemplateControllerFactory.getDefaultFormat();
+		fExportFormatCombo.setText(defaultformat);
 
 		createButtonsComposite(composite);
 	}
@@ -345,8 +354,17 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 
 		@Override
 		public void applyValue() {
-			System.out.println("Selected");
+			String formatName = fExportFormatCombo.getText();
 
+			IExportTemplateController exportTemplateController = 
+					ExportTemplateControllerFactory.createController(formatName);
+
+			if (exportTemplateController == null) {
+				return;
+			}
+
+			fInitialTemplate = exportTemplateController.createDefaultTemplate(fMethodParametersCount);
+			fTemplateText.setText(fInitialTemplate);
 		}
 	}
 

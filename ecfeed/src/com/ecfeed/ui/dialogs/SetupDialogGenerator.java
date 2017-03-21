@@ -927,8 +927,12 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 
-			TestCasesExportDialog dialog = new TestCasesExportDialog(
-					FileCompositeVisibility.NOT_VISIBLE, fExportTemplate, fTargetFile);
+			TestCasesExportDialog dialog = 
+					new TestCasesExportDialog(
+							FileCompositeVisibility.NOT_VISIBLE, 
+							fExportTemplate, 
+							fTargetFile, 
+							fMethod.getParametersCount());
 
 			if (dialog.open() != IDialogConstants.OK_ID) {
 				return;

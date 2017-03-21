@@ -327,8 +327,12 @@ public class MethodInterface extends ParametersParentInterface {
 		IExportTemplateController exportTemplateController = new CsvExportTemplateController();
 		String initialTemplate = exportTemplateController.createDefaultTemplate(getOwnNode().getParametersCount());
 
-		TestCasesExportDialog dialog = new TestCasesExportDialog(
-				FileCompositeVisibility.VISIBLE, initialTemplate, ApplicationContext.getExportTargetFile());
+		TestCasesExportDialog dialog = 
+				new TestCasesExportDialog(
+						FileCompositeVisibility.VISIBLE, 
+						initialTemplate, 
+						ApplicationContext.getExportTargetFile(),
+						getOwnNode().getParametersCount());
 
 		if (dialog.open() != IDialogConstants.OK_ID) {
 			return;

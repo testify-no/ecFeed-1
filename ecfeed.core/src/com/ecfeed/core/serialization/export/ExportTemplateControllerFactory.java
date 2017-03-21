@@ -13,7 +13,26 @@ package com.ecfeed.core.serialization.export;
 public class ExportTemplateControllerFactory {
 
 	public static IExportTemplateController createDefaultController() {
-		return new CsvExportTemplateController();
+		return createController(getDefaultFormat());
+	}
+
+	public static IExportTemplateController createController(String formatName) {
+		if (formatName.equals("CSV")) {
+			return new CsvExportTemplateController();
+		}
+		if (formatName.equals("XML")) {
+			return new XmlExportTemplateController();
+		}
+		return null;
+	}
+
+	public static String[] getAvailableExportFormats() {
+		String[] formats = { "CSV", "XML" };
+		return formats;
+	}
+
+	public static String getDefaultFormat() {
+		return "CSV";
 	}
 
 }
