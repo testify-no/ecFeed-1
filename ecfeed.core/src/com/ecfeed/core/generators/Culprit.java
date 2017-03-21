@@ -10,20 +10,10 @@
 
 package com.ecfeed.core.generators;
 
-public class DimItem {
+import java.util.List;
 
-	String fDimension; // e.g. index of method parameter
-	int fItem;
+public class Culprit {
 
-	public DimItem(String dimension, int item) {
-		fDimension = dimension;
-		fItem = item;
-	}
-	String getDim(){
-		return fDimension;
-	}
-	int getItem(){
-		return fItem;
-	}
-
+	List<DimItem> fItems;
+	int fFailureCount;
 }

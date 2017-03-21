@@ -10,20 +10,25 @@
 
 package com.ecfeed.core.generators;
 
-public class DimItem {
+import static org.junit.Assert.assertEquals;
 
-	String fDimension; // e.g. index of method parameter
-	int fItem;
+import java.util.ArrayList;
+import java.util.List;
 
-	public DimItem(String dimension, int item) {
-		fDimension = dimension;
-		fItem = item;
-	}
-	String getDim(){
-		return fDimension;
-	}
-	int getItem(){
-		return fItem;
-	}
+import org.junit.Test;
 
+public class TestResultTest {
+	
+	
+	@Test
+	public void shouldReturnTestResult() {
+		
+		List<String> testcases = new ArrayList<String>();
+		boolean result = false;
+		
+		TestResult testresult = new TestResult(testcases, result);
+		
+		assertEquals(testcases, testresult.getTestCases());
+		assertEquals(result, testresult.getResult());
+	}
 }
