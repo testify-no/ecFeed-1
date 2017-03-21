@@ -33,51 +33,45 @@ public class TestCasesExporterTest {
 
 	@Test
 	public void shouldExportAllSections() {
-		String headerTemplate = "$1.name, $2.name";
-		String testCaseTemplate = "$1.value, $2.value";
-		String footerTemplate = "end";
+		IExportTemplateController exportTemplateController = new CsvExportTemplateController(2);
+		exportTemplateController.setHeaderTemplate("$1.name, $2.name");
+		exportTemplateController.setTestCaseTemplate("$1.value, $2.value");
+		exportTemplateController.setFooterTemplate("end");
 
 		String expectedResult = "par0, par1" + StringHelper.newLine() + "0, 1"
 				+ StringHelper.newLine() + "end" + StringHelper.newLine();
 
-		performTwoParamsTest(headerTemplate, testCaseTemplate, footerTemplate,
-				expectedResult);
+		performTwoParamsTest(exportTemplateController, expectedResult);
 	}
 
 	public void shouldExportHeaderOnly() {
-		String headerTemplate = "$1.name, $2.name";
-		String testCaseTemplate = null;
-		String footerTemplate = null;
+		IExportTemplateController exportTemplateController = new CsvExportTemplateController(2);
+		exportTemplateController.setHeaderTemplate("$1.name, $2.name");
 
 		String expectedResult = "par0, par1";
 
-		performTwoParamsTest(headerTemplate, testCaseTemplate, footerTemplate,
-				expectedResult);
+		performTwoParamsTest(exportTemplateController, expectedResult);
 	}
 
 	public void shouldExportTestCasesOnly() {
-		String headerTemplate = null;
-		String testCaseTemplate = "$1.value, $2.value";
-		String footerTemplate = null;
+		IExportTemplateController exportTemplateController = new CsvExportTemplateController(2);
+		exportTemplateController.setTestCaseTemplate("$1.value, $2.value");
 
 		String expectedResult = "0, 1";
-		performTwoParamsTest(headerTemplate, testCaseTemplate, footerTemplate,
-				expectedResult);
+		performTwoParamsTest(exportTemplateController, expectedResult);
 	}
 
 	public void shouldExportFooterOnly() {
-		String headerTemplate = null;
-		String testCaseTemplate = null;
-		String footerTemplate = "end";
+		IExportTemplateController exportTemplateController = new CsvExportTemplateController(2);
+		exportTemplateController.setFooterTemplate("end");
 
 		String expectedResult = "end";
 
-		performTwoParamsTest(headerTemplate, testCaseTemplate, footerTemplate,
-				expectedResult);
+		performTwoParamsTest(exportTemplateController, expectedResult);
 	}
 
-	private void performTwoParamsTest(String headerTemplate,
-			String testCaseTemplate, String footerTemplate,
+	private void performTwoParamsTest(
+			IExportTemplateController exportTemplateController,
 			String expectedResult) {
 		ClassNode theClass = new ClassNode("Test");
 
@@ -106,8 +100,7 @@ public class TestCasesExporterTest {
 		Collection<TestCaseNode> testCases = new ArrayList<TestCaseNode>();
 		testCases.add(testCase);
 
-		TestCasesExporter exporter = new TestCasesExporter(headerTemplate,
-				testCaseTemplate, footerTemplate);
+		TestCasesExporter exporter = new TestCasesExporter(exportTemplateController);
 
 		OutputStream stream = new ByteArrayOutputStream();
 

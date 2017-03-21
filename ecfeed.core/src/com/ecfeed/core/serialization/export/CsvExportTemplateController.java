@@ -17,8 +17,8 @@ import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.core.utils.StringHolder;
 
-public class CsvExportTemplateParser implements IExportTemplateParser {
-	
+public class CsvExportTemplateController implements IExportTemplateController {
+
 	private int fMethodParametersCount;
 	private String fHeaderTemplate;
 	private String fTestCaseTemplate;
@@ -28,12 +28,14 @@ public class CsvExportTemplateParser implements IExportTemplateParser {
 	public static final String TEST_CASE_MARKER = "[TestCase]";
 	public static final String FOOTER_MARKER = "[Footer]";
 
-	public CsvExportTemplateParser(int methodParametersCount) {
+	public CsvExportTemplateController(int methodParametersCount) {
+
 		fMethodParametersCount = methodParametersCount;
 	}
 
 	@Override
-	public void createSubTemplates(String template) {
+	public void setTemplateText(String template) {
+
 		if (template == null) {
 			ExceptionHelper.reportRuntimeException("Template text must not be empty.");
 		}
@@ -47,7 +49,8 @@ public class CsvExportTemplateParser implements IExportTemplateParser {
 	}
 
 	@Override
-	public String createInitialTemplate() {
+	public String createDefaultTemplate() {
+
 		return StringHelper.appendNewline(HEADER_MARKER)
 				+ StringHelper.appendNewline(createDefaultHeaderTemplate(fMethodParametersCount))
 				+ StringHelper.appendNewline(TEST_CASE_MARKER)
@@ -57,20 +60,24 @@ public class CsvExportTemplateParser implements IExportTemplateParser {
 
 	@Override
 	public String getHeaderTemplate() {
+
 		return fHeaderTemplate;
 	}
 
 	@Override
 	public String getTestCaseTemplate() {
+
 		return fTestCaseTemplate;
 	}
 
 	@Override
 	public String getFooterTemplate() {
+
 		return fFooterTemplate;
 	}
 
 	private static String createUserHeaderTemplate(Map<String, String> template) {
+
 		String headerTemplate = template.get(HEADER_MARKER);
 
 		if (headerTemplate == null) {
@@ -80,8 +87,7 @@ public class CsvExportTemplateParser implements IExportTemplateParser {
 		return StringHelper.removeNewlineAtEnd(headerTemplate.trim());
 	}
 
-	private static String createUserTestCaseTemplate(
-			Map<String, String> template) {
+	private static String createUserTestCaseTemplate(Map<String, String> template) {
 
 		String testCaseTemplate = template.get(TEST_CASE_MARKER);
 
@@ -102,17 +108,19 @@ public class CsvExportTemplateParser implements IExportTemplateParser {
 	}
 
 	private static String createDefaultHeaderTemplate(int methodParametersCount) {
+
 		final String NAME_TAG = "name";
 		return createParameterTemplate(NAME_TAG, methodParametersCount);
 	}
 
-	private static String createDefaultTestCaseTemplate(
-			int methodParametersCount) {
+	private static String createDefaultTestCaseTemplate(int methodParametersCount) {
+
 		final String VALUE_TAG = "value";
 		return createParameterTemplate(VALUE_TAG, methodParametersCount);
 	}
 
-	public Map<String, String> divideIntoSubtemplates(String templateText) {
+	private static Map<String, String> divideIntoSubtemplates(String templateText) {
+
 		Map<String, String> resultMap = new HashMap<String, String>();
 		StringTokenizer tokenizer = new StringTokenizer(templateText, StringHelper.newLine());
 		StringHolder currentSectionMarker = new StringHolder();
@@ -134,27 +142,33 @@ public class CsvExportTemplateParser implements IExportTemplateParser {
 
 			updateResultMap(currentSectionMarker.get(), line, resultMap);
 		}
+
 		return resultMap;
 	}
 
 	private static boolean isCommentLine(String line) {
+
 		final String COMMENTED_LINE_REGEX = "^\\s*#.*";
+
 		if (line.matches(COMMENTED_LINE_REGEX)) {
 			return true;
 		}
 		return false;
 	}
 
-	private static boolean setSectionMarker(String line,
-			StringHolder currentMarker) {
+	private static boolean setSectionMarker(String line, StringHolder currentMarker) {
+
 		if (!isSectionMarker(line)) {
 			return false;
 		}
+
 		currentMarker.set(getMarker(line));
+
 		return true;
 	}
 
 	private static boolean isSectionMarker(String line) {
+
 		String trimmedLine = line.trim();
 
 		if (trimmedLine.equals(HEADER_MARKER)) {
@@ -172,8 +186,8 @@ public class CsvExportTemplateParser implements IExportTemplateParser {
 		return false;
 	}
 
-	private static void updateResultMap(String marker, String line,
-			Map<String, String> result) {
+	private static void updateResultMap(String marker, String line, Map<String, String> result) {
+
 		if (!result.containsKey(marker)) {
 			result.put(marker, line);
 			return;
@@ -185,13 +199,15 @@ public class CsvExportTemplateParser implements IExportTemplateParser {
 	}
 
 	private static String getMarker(String line) {
+
 		int sectionTitleStart = line.indexOf('[');
 		int sectionTitleStop = line.indexOf(']') + 1;
+
 		return line.substring(sectionTitleStart, sectionTitleStop);
 	}
 
-	private static String createParameterTemplate(String parameterTag,
-			int methodParametersCount) {
+	private static String createParameterTemplate( String parameterTag, int methodParametersCount) {
+
 		String template = new String();
 
 		for (int cnt = 1; cnt <= methodParametersCount; ++cnt) {
@@ -203,5 +219,23 @@ public class CsvExportTemplateParser implements IExportTemplateParser {
 		}
 
 		return template;
+	}
+
+	@Override
+	public void setFooterTemplate(String template) {
+
+		fFooterTemplate = template;
+	}
+
+	@Override
+	public void setHeaderTemplate(String template) {
+
+		fHeaderTemplate = template;
+	}
+
+	@Override
+	public void setTestCaseTemplate(String template) {
+
+		fTestCaseTemplate = template;
 	}
 }

@@ -9,16 +9,18 @@
  *******************************************************************************/
 package com.ecfeed.core.serialization.export;
 
-import java.util.Map;
 
+public interface IExportTemplateController {
 
-public interface IExportTemplateParser {
-	
-	String createInitialTemplate();
-	void createSubTemplates(String template);
+	String createDefaultTemplate();
+
+	void setTemplateText(String summaryTemplate);
+
+	void setFooterTemplate(String template);
+	void setHeaderTemplate(String template);
+	void setTestCaseTemplate(String template);
+
 	String getFooterTemplate();
 	String getHeaderTemplate();
 	String getTestCaseTemplate();
-	Map<String, String> divideIntoSubtemplates(String templateText);
-	
 }
