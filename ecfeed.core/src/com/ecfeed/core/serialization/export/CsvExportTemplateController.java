@@ -19,7 +19,6 @@ import com.ecfeed.core.utils.StringHolder;
 
 public class CsvExportTemplateController implements IExportTemplateController {
 
-	private int fMethodParametersCount;
 	private String fHeaderTemplate;
 	private String fTestCaseTemplate;
 	private String fFooterTemplate;
@@ -28,9 +27,7 @@ public class CsvExportTemplateController implements IExportTemplateController {
 	public static final String TEST_CASE_MARKER = "[TestCase]";
 	public static final String FOOTER_MARKER = "[Footer]";
 
-	public CsvExportTemplateController(int methodParametersCount) {
-
-		fMethodParametersCount = methodParametersCount;
+	public CsvExportTemplateController() {
 	}
 
 	@Override
@@ -49,12 +46,12 @@ public class CsvExportTemplateController implements IExportTemplateController {
 	}
 
 	@Override
-	public String createDefaultTemplate() {
+	public String createDefaultTemplate(int methodParametersCount) {
 
 		return StringHelper.appendNewline(HEADER_MARKER)
-				+ StringHelper.appendNewline(createDefaultHeaderTemplate(fMethodParametersCount))
+				+ StringHelper.appendNewline(createDefaultHeaderTemplate(methodParametersCount))
 				+ StringHelper.appendNewline(TEST_CASE_MARKER)
-				+ StringHelper.appendNewline(createDefaultTestCaseTemplate(fMethodParametersCount))
+				+ StringHelper.appendNewline(createDefaultTestCaseTemplate(methodParametersCount))
 				+ StringHelper.appendNewline(FOOTER_MARKER);
 	}
 

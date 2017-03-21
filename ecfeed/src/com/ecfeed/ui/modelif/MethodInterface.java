@@ -275,13 +275,11 @@ public class MethodInterface extends ParametersParentInterface {
 
 		ExportTestMethodInvoker methodInvoker = new ExportTestMethodInvoker(getOwnNode());
 
-		IExportTemplateController exportTemplateController = 
-				new CsvExportTemplateController(getOwnNode().getParametersCount());
-
 		OnlineExportSupport onlineExportSupport = 
 				new OnlineExportSupport(
-						getOwnNode(), methodInvoker, 
-						fileInfoProvider, exportTemplateController.createDefaultTemplate(),
+						getOwnNode(), 
+						methodInvoker, 
+						fileInfoProvider, 
 						ApplicationContext.getExportTargetFile());
 
 		AbstractOnlineSupport.Result result = onlineExportSupport.proceed();
@@ -297,12 +295,13 @@ public class MethodInterface extends ParametersParentInterface {
 
 		String targetFile = onlineExportSupport.getTargetFile();
 		ApplicationContext.setExportTargetFile(targetFile);
-		exportTemplateController.setTemplateText(onlineExportSupport.getExportTemplate());
 
-		runExport(
-				methodInvoker.getTestCasesToExport(),
-				exportTemplateController,
-				targetFile);
+		IExportTemplateController basicTemplateController = 
+				new CsvExportTemplateController(); // TODO Create and use BasicExportTemplateController
+
+		basicTemplateController.setTemplateText(onlineExportSupport.getExportTemplate());
+
+		runExport(methodInvoker.getTestCasesToExport(), basicTemplateController, targetFile);
 	}
 
 
@@ -325,9 +324,8 @@ public class MethodInterface extends ParametersParentInterface {
 
 	public void exportTestCases(Collection<TestCaseNode> checkedTestCases) {
 
-		IExportTemplateController exportTemplateController = new CsvExportTemplateController(
-				getOwnNode().getParametersCount());
-		String initialTemplate = exportTemplateController.createDefaultTemplate();
+		IExportTemplateController exportTemplateController = new CsvExportTemplateController();
+		String initialTemplate = exportTemplateController.createDefaultTemplate(getOwnNode().getParametersCount());
 
 		TestCasesExportDialog dialog = new TestCasesExportDialog(
 				FileCompositeVisibility.VISIBLE, initialTemplate, ApplicationContext.getExportTargetFile());

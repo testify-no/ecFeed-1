@@ -61,6 +61,8 @@ import com.ecfeed.core.model.ConstraintNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelHelper;
+import com.ecfeed.core.serialization.export.ExportTemplateControllerFactory;
+import com.ecfeed.core.serialization.export.IExportTemplateController;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.StringHolder;
 import com.ecfeed.ui.common.CommonConstants;
@@ -94,8 +96,7 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 	private Text fTargetFileText;
 	private int fContent;
 	private String fTargetFile;
-
-	String fExportTemplate;
+	private String fExportTemplate;
 
 	public final static int CONSTRAINTS_COMPOSITE = 1;
 	public final static int CHOICES_COMPOSITE = 1 << 1;
@@ -105,22 +106,25 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 
 	public SetupDialogGenerator(Shell parentShell, MethodNode method,
 			boolean generateExecutables, IFileInfoProvider fileInfoProvider,
-			String initialExportTemplate,
 			String targetFile) {
+
 		super(parentShell);
 		setHelpAvailable(false);
-		setShellStyle(SWT.BORDER | SWT.RESIZE | SWT.TITLE
-				| SWT.APPLICATION_MODAL);
+		setShellStyle(SWT.BORDER | SWT.RESIZE | SWT.TITLE | SWT.APPLICATION_MODAL);
+
 		fMethod = method;
 		fGeneratorFactory = new GeneratorFactory<ChoiceNode>();
 		fGenerateExecutableContent = generateExecutables;
-		fStatusResolver = new EclipseImplementationStatusResolver(
-				fileInfoProvider);
+
+		fStatusResolver = new EclipseImplementationStatusResolver(fileInfoProvider);
 		fFileInfoProvider = fileInfoProvider;
 		fDialogObjectToolkit = DialogObjectToolkit.getInstance();
 
 		fTargetFile = null;
-		fExportTemplate = initialExportTemplate;
+		IExportTemplateController exportTemplateController = 
+				ExportTemplateControllerFactory.createDefaultController();
+
+		fExportTemplate = exportTemplateController.createDefaultTemplate(method.getParametersCount());
 		fTargetFile = targetFile;
 	}
 

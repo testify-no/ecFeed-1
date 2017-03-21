@@ -50,25 +50,23 @@ public abstract class AbstractOnlineSupport {
 	private IFileInfoProvider fFileInfoProvider;
 	private String fTargetFile;
 	private String fExportTemplate;
-	private String fInitialExportTemplate;
 	private TestRunMode fTestRunMode;
 	protected TestInformer fTestInformer;
 
 	public AbstractOnlineSupport(
 			MethodNode methodNode, ITestMethodInvoker testMethodInvoker, 
 			IFileInfoProvider fileInfoProvider) {
-		this(methodNode, testMethodInvoker, fileInfoProvider, false, null);
+		this(methodNode, testMethodInvoker, fileInfoProvider, false);
 	}
 
 	public AbstractOnlineSupport(
 			MethodNode methodNode, ITestMethodInvoker testMethodInvoker,
 			IFileInfoProvider fileInfoProvider,
-			boolean isExport, String initialExportTemplate) {
+			boolean isExport) {
 		ILoaderProvider loaderProvider = new EclipseLoaderProvider();
 		ModelClassLoader loader = loaderProvider.getLoader(true, null);
 		fRunner = new JavaTestRunner(loader, isExport, testMethodInvoker);
 		fFileInfoProvider = fileInfoProvider;
-		fInitialExportTemplate = initialExportTemplate;
 		fTestRunMode = TestRunModeHelper.getTestRunMode(methodNode);
 		fTestInformer = new TestInformer();
 
@@ -83,7 +81,7 @@ public abstract class AbstractOnlineSupport {
 
 	protected abstract SetupDialogOnline createSetupDialog(
 			Shell activeShell, MethodNode methodNode,
-			IFileInfoProvider fileInfoProvider, String initialExportTemplate);
+			IFileInfoProvider fileInfoProvider);
 
 	protected abstract void prepareRun() throws InvocationTargetException;
 
@@ -124,9 +122,10 @@ public abstract class AbstractOnlineSupport {
 	}
 
 	protected Result displayParametersDialogAndRunTests() {
-		SetupDialogOnline dialog = createSetupDialog(Display.getCurrent()
-				.getActiveShell(), fMethodNode, fFileInfoProvider,
-				fInitialExportTemplate);
+
+		SetupDialogOnline dialog = 
+				createSetupDialog(
+						Display.getCurrent().getActiveShell(), fMethodNode, fFileInfoProvider);
 
 		if (dialog.open() != IDialogConstants.OK_ID) {
 			return Result.CANCELED;

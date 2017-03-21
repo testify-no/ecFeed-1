@@ -25,7 +25,7 @@ public class CsvExportTemplateControllerTest {
 
 		String templateText = new String();
 
-		CsvExportTemplateController csvExportTemplateController = new CsvExportTemplateController(1);
+		CsvExportTemplateController csvExportTemplateController = new CsvExportTemplateController();
 
 		try {
 			csvExportTemplateController.setTemplateText(templateText);
@@ -48,7 +48,7 @@ public class CsvExportTemplateControllerTest {
 				+ StringHelper.appendNewline("$1.value,$2.value")
 				+ StringHelper.appendNewline(CsvExportTemplateController.FOOTER_MARKER);
 
-		CsvExportTemplateController csvExportTemplateController = new CsvExportTemplateController(2);
+		CsvExportTemplateController csvExportTemplateController = new CsvExportTemplateController();
 
 		try {
 			csvExportTemplateController.setTemplateText(templateText);
@@ -77,7 +77,7 @@ public class CsvExportTemplateControllerTest {
 				+ StringHelper.appendNewline("FOOTER 1")
 				+ StringHelper.appendNewline("FOOTER 2");
 
-		CsvExportTemplateController csvExportTemplateController = new CsvExportTemplateController(2);
+		CsvExportTemplateController csvExportTemplateController = new CsvExportTemplateController();
 
 		try {
 			csvExportTemplateController.setTemplateText(templateText);
@@ -100,7 +100,7 @@ public class CsvExportTemplateControllerTest {
 
 		String templateText = "[xxx]";
 
-		CsvExportTemplateController csvExportTemplateController = new CsvExportTemplateController(1);
+		CsvExportTemplateController csvExportTemplateController = new CsvExportTemplateController();
 
 		try {
 			csvExportTemplateController.setTemplateText(templateText);
@@ -120,7 +120,7 @@ public class CsvExportTemplateControllerTest {
 				+ CsvExportTemplateController.TEST_CASE_MARKER + "\n" + "$1.value\n"
 				+ CsvExportTemplateController.FOOTER_MARKER;
 
-		CsvExportTemplateController csvExportTemplateController = new CsvExportTemplateController(1);
+		CsvExportTemplateController csvExportTemplateController = new CsvExportTemplateController();
 
 		try {
 			csvExportTemplateController.setTemplateText(templateText);

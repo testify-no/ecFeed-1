@@ -33,7 +33,7 @@ public class TestCasesExporterTest {
 
 	@Test
 	public void shouldExportAllSections() {
-		IExportTemplateController exportTemplateController = new CsvExportTemplateController(2);
+		IExportTemplateController exportTemplateController = new CsvExportTemplateController();
 		exportTemplateController.setHeaderTemplate("$1.name, $2.name");
 		exportTemplateController.setTestCaseTemplate("$1.value, $2.value");
 		exportTemplateController.setFooterTemplate("end");
@@ -45,7 +45,7 @@ public class TestCasesExporterTest {
 	}
 
 	public void shouldExportHeaderOnly() {
-		IExportTemplateController exportTemplateController = new CsvExportTemplateController(2);
+		IExportTemplateController exportTemplateController = new CsvExportTemplateController();
 		exportTemplateController.setHeaderTemplate("$1.name, $2.name");
 
 		String expectedResult = "par0, par1";
@@ -54,7 +54,7 @@ public class TestCasesExporterTest {
 	}
 
 	public void shouldExportTestCasesOnly() {
-		IExportTemplateController exportTemplateController = new CsvExportTemplateController(2);
+		IExportTemplateController exportTemplateController = new CsvExportTemplateController();
 		exportTemplateController.setTestCaseTemplate("$1.value, $2.value");
 
 		String expectedResult = "0, 1";
@@ -62,7 +62,7 @@ public class TestCasesExporterTest {
 	}
 
 	public void shouldExportFooterOnly() {
-		IExportTemplateController exportTemplateController = new CsvExportTemplateController(2);
+		IExportTemplateController exportTemplateController = new CsvExportTemplateController();
 		exportTemplateController.setFooterTemplate("end");
 
 		String expectedResult = "end";

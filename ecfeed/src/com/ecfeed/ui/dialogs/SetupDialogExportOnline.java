@@ -18,8 +18,8 @@ import com.ecfeed.ui.common.utils.IFileInfoProvider;
 public class SetupDialogExportOnline extends SetupDialogOnline {
 
 	public SetupDialogExportOnline(Shell parentShell, MethodNode method,
-			IFileInfoProvider fileInfoProvider, String initialExportTemplate, String targetFile) {
-		super(parentShell, method, false, fileInfoProvider, initialExportTemplate, targetFile);
+			IFileInfoProvider fileInfoProvider, String targetFile) {
+		super(parentShell, method, false, fileInfoProvider, targetFile);
 	}
 
 	@Override

@@ -27,9 +27,11 @@ public class OnlineExportSupport extends AbstractOnlineSupport {
 	String fTargetFile; 
 
 	public OnlineExportSupport(
-			MethodNode methodNode, ITestMethodInvoker testMethodInvoker,
-			IFileInfoProvider fileInfoProvider, String initialExportTemplate, String targetFile) {
-		super(methodNode, testMethodInvoker, fileInfoProvider, true, initialExportTemplate);
+			MethodNode methodNode, 
+			ITestMethodInvoker testMethodInvoker,
+			IFileInfoProvider fileInfoProvider, 
+			String targetFile) {
+		super(methodNode, testMethodInvoker, fileInfoProvider, true);
 
 		fTargetFile = targetFile;
 	}
@@ -41,10 +43,10 @@ public class OnlineExportSupport extends AbstractOnlineSupport {
 
 	@Override
 	protected SetupDialogOnline createSetupDialog(Shell activeShell,
-			MethodNode methodNode, IFileInfoProvider fileInfoProvider,
-			String initialExportTemplate) {
+			MethodNode methodNode, IFileInfoProvider fileInfoProvider) {
+
 		return new SetupDialogExportOnline(activeShell, methodNode,
-				fileInfoProvider, initialExportTemplate, fTargetFile);
+				fileInfoProvider, fTargetFile);
 	}
 
 	@Override
@@ -69,4 +71,5 @@ public class OnlineExportSupport extends AbstractOnlineSupport {
 	@Override
 	protected void displayRunSummary() {
 	}
+
 }

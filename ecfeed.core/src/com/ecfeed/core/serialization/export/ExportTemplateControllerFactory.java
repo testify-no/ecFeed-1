@@ -10,17 +10,10 @@
 package com.ecfeed.core.serialization.export;
 
 
-public interface IExportTemplateController {
+public class ExportTemplateControllerFactory {
 
-	String createDefaultTemplate(int methodParametersCount);
+	public static IExportTemplateController createDefaultController() {
+		return new CsvExportTemplateController();
+	}
 
-	void setTemplateText(String summaryTemplate);
-
-	void setFooterTemplate(String template);
-	void setHeaderTemplate(String template);
-	void setTestCaseTemplate(String template);
-
-	String getFooterTemplate();
-	String getHeaderTemplate();
-	String getTestCaseTemplate();
 }
