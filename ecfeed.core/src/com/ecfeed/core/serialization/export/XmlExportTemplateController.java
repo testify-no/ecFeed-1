@@ -18,14 +18,14 @@ public class XmlExportTemplateController extends BasicExportTemplateController {
 	public static final String TEST_CASE_MARKER = "[TestCase]";
 	public static final String FOOTER_MARKER = "[Footer]";
 
-	MethodNode fMethodNode;
-
 	public XmlExportTemplateController(MethodNode methodNode) {
-		fMethodNode = methodNode;
+		super(methodNode);
 	}
 
 	@Override
-	public String createDefaultTemplateText(int methodParametersCount) {
+	public String createDefaultTemplateText() {
+
+		int methodParametersCount = getMethodNode().getParametersCount();
 
 		String defaultTemplateText =
 				StringHelper.appendNewline(HEADER_MARKER)

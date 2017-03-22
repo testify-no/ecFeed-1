@@ -14,6 +14,9 @@ import com.ecfeed.core.model.MethodNode;
 
 public class ExportTemplateControllerFactory {
 
+	private static String FORMAT_CSV = "CSV";
+	private static String FORMAT_XML = "XML";
+
 	MethodNode fMethodNode;
 
 	public ExportTemplateControllerFactory(MethodNode methodNode) {
@@ -25,22 +28,31 @@ public class ExportTemplateControllerFactory {
 	}
 
 	public IExportTemplateController createController(String formatName) {
-		if (formatName.equals("CSV")) {
+
+		IExportTemplateController exportTemplateController = createControllerIntr(formatName);
+		exportTemplateController.initialize();
+
+		return exportTemplateController;
+	}
+
+	private IExportTemplateController createControllerIntr(String formatName) {
+
+		if (formatName.equals(FORMAT_CSV)) {
 			return new CsvExportTemplateController(fMethodNode);
 		}
-		if (formatName.equals("XML")) {
+		if (formatName.equals(FORMAT_XML)) {
 			return new XmlExportTemplateController(fMethodNode);
 		}
 		return null;
 	}
 
 	public static String[] getAvailableExportFormats() {
-		String[] formats = { "CSV", "XML" };
+		String[] formats = { FORMAT_CSV, FORMAT_XML };
 		return formats;
 	}
 
 	public static String getDefaultFormat() {
-		return "CSV";
+		return FORMAT_CSV;
 	}
 
 }

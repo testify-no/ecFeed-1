@@ -298,7 +298,7 @@ public class MethodInterface extends ParametersParentInterface {
 		ApplicationContext.setExportTargetFile(targetFile);
 
 		IExportTemplateController basicTemplateController = 
-				new BasicExportTemplateController();
+				new BasicExportTemplateController(null);
 
 		basicTemplateController.setTemplateText(onlineExportSupport.getExportTemplate());
 

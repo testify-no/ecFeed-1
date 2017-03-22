@@ -52,7 +52,6 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 	private DialogObjectToolkit fDialogObjectToolkit;
 	private FileCompositeVisibility fFileCompositeVisibility;
 	private Combo fExportFormatCombo;
-	private int fMethodParametersCount;
 	private ExportTemplateControllerFactory fExportTemplateControllerFactory;
 
 	public enum FileCompositeVisibility {
@@ -71,10 +70,8 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		fFileCompositeVisibility = fileCompositeVisibility;
 		fExportTemplateControllerFactory = exportTemplateControllerFactory;
 		fExportTemplateController = exportTemplateControllerFactory.createDefaultController();
-		fExportTemplateController.initialize(methodParametersCount);
+		fExportTemplateController.initialize();
 		fTargetFile = targetFile;
-		fMethodParametersCount = methodParametersCount;
-
 		fDialogObjectToolkit = DialogObjectToolkit.getInstance();
 	}
 
@@ -364,7 +361,7 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 			}
 
 			fExportTemplateController = fExportTemplateControllerFactory.createController(exportFormat);
-			String templateDefaultText = fExportTemplateController.createDefaultTemplateText(fMethodParametersCount);
+			String templateDefaultText = fExportTemplateController.createDefaultTemplateText();
 			fExportTemplateController.setTemplateText(templateDefaultText);
 			fTemplateTextField.setText(templateDefaultText);
 

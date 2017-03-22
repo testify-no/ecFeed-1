@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.core.utils.StringHolder;
@@ -30,12 +31,15 @@ public class BasicExportTemplateController implements IExportTemplateController 
 	private String fDefaultTemplateText;
 	private String fTemplateText;
 
-	public BasicExportTemplateController() {
+	private MethodNode fMethodNode;
+
+	public BasicExportTemplateController(MethodNode methodNode) {
+		fMethodNode = methodNode;
 	}
 
 	@Override
-	public void initialize(int methodParametersCount) {
-		String defaultTemplateText = createDefaultTemplateText(methodParametersCount);
+	public void initialize() {
+		String defaultTemplateText = createDefaultTemplateText();
 		setTemplateText(defaultTemplateText);
 	}
 
@@ -56,7 +60,7 @@ public class BasicExportTemplateController implements IExportTemplateController 
 	}
 
 	@Override
-	public String createDefaultTemplateText(int methodParametersCount) {
+	public String createDefaultTemplateText() {
 		return null;
 	}
 
@@ -96,6 +100,10 @@ public class BasicExportTemplateController implements IExportTemplateController 
 
 	protected void setDefaultTemplateText(String defaultTemplateText) {
 		fDefaultTemplateText = defaultTemplateText;
+	}
+
+	protected MethodNode getMethodNode() {
+		return fMethodNode;
 	}
 
 	private static String createUserHeaderTemplate(Map<String, String> template) {

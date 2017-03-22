@@ -12,9 +12,9 @@ package com.ecfeed.core.serialization.export;
 
 public interface IExportTemplateController {
 
-	void initialize(int methodParametersCount);
+	void initialize();
 
-	String createDefaultTemplateText(int methodParametersCount);
+	String createDefaultTemplateText();
 	void setTemplateText(String summaryTemplate);
 	String getTemplateText();
 	boolean isTemplateTextModified();

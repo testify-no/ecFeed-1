@@ -128,7 +128,7 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 		IExportTemplateController exportTemplateController = 
 				fExportTemplateControllerFactory.createDefaultController();
 
-		fExportTemplate = exportTemplateController.createDefaultTemplateText(method.getParametersCount());
+		fExportTemplate = exportTemplateController.createDefaultTemplateText();
 		fTargetFile = targetFile;
 	}
 
