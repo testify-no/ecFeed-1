@@ -49,6 +49,7 @@ import com.ecfeed.core.runner.ITestMethodInvoker;
 import com.ecfeed.core.runner.java.ExportTestMethodInvoker;
 import com.ecfeed.core.runner.java.JUnitTestMethodInvoker;
 import com.ecfeed.core.runner.java.SeleniumTestMethodInvoker;
+import com.ecfeed.core.serialization.export.BasicExportTemplateController;
 import com.ecfeed.core.serialization.export.CsvExportTemplateController;
 import com.ecfeed.core.serialization.export.IExportTemplateController;
 import com.ecfeed.core.utils.EcException;
@@ -297,7 +298,7 @@ public class MethodInterface extends ParametersParentInterface {
 		ApplicationContext.setExportTargetFile(targetFile);
 
 		IExportTemplateController basicTemplateController = 
-				new CsvExportTemplateController(); // TODO Create and use BasicExportTemplateController
+				new BasicExportTemplateController();
 
 		basicTemplateController.setTemplateText(onlineExportSupport.getExportTemplate());
 
