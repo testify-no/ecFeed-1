@@ -325,13 +325,12 @@ public class MethodInterface extends ParametersParentInterface {
 
 	public void exportTestCases(Collection<TestCaseNode> checkedTestCases) {
 
-		IExportTemplateController exportTemplateController = new CsvExportTemplateController();
-		String initialTemplate = exportTemplateController.createDefaultTemplate(getOwnNode().getParametersCount());
+		IExportTemplateController exportTemplateController = new CsvExportTemplateController(); // TODO FROM FACTORY
 
 		TestCasesExportDialog dialog = 
 				new TestCasesExportDialog(
 						FileCompositeVisibility.VISIBLE, 
-						initialTemplate, 
+						exportTemplateController,
 						ApplicationContext.getExportTargetFile(),
 						getOwnNode().getParametersCount());
 
@@ -340,10 +339,10 @@ public class MethodInterface extends ParametersParentInterface {
 		}
 
 		ApplicationContext.setExportTargetFile(dialog.getTargetFile());
-		exportTemplateController.setTemplateText(dialog.getTemplate());
+		IExportTemplateController currentExportTemplateController = dialog.getExportTemplateController();
 
 		runExport(checkedTestCases, 
-				exportTemplateController,
+				currentExportTemplateController,
 				dialog.getTargetFile());
 	}
 

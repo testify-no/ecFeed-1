@@ -44,9 +44,8 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 
 	private static final String[] templateFileExtension = { "*.eet" };
 
-	private String fInitialTemplate;
-	private String fTemplate;
-	private Text fTemplateText;
+	IExportTemplateController fExportTemplateController;
+	private Text fTemplateTextField;
 	private String fCurrentTemplateFormat;	
 	private Text fTargetFileText;
 	private String fTargetFile;
@@ -55,14 +54,13 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 	private Combo fExportFormatCombo;
 	private int fMethodParametersCount;
 
-
 	public enum FileCompositeVisibility {
 		VISIBLE, NOT_VISIBLE
 	}
 
 	public TestCasesExportDialog(
 			FileCompositeVisibility fileCompositeVisibility,
-			String initialTemplate,
+			IExportTemplateController exportTemplateController, 
 			String targetFile,
 			int methodParametersCount) {
 		super(EclipseHelper.getActiveShell());
@@ -70,8 +68,8 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		setDialogHelpAvailable(false);
 
 		fFileCompositeVisibility = fileCompositeVisibility;
-		fInitialTemplate = initialTemplate;
-		fTemplate = initialTemplate;
+		fExportTemplateController = exportTemplateController;
+		exportTemplateController.initialize(methodParametersCount);
 		fTargetFile = targetFile;
 		fMethodParametersCount = methodParametersCount;
 
@@ -125,12 +123,12 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 	@Override
 	protected void okPressed() {
 
+		fExportTemplateController.setTemplateText(fTemplateTextField.getText());
+
 		if (!canOverwriteExistingTemplate()) {
 			return;
 
 		}
-
-		createTemplate();
 
 		if (fFileCompositeVisibility != FileCompositeVisibility.VISIBLE) {
 			fTargetFile = null;
@@ -180,7 +178,10 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 				fDialogObjectToolkit.createGridComposite(parentComposite, 1);
 
 		createTemplateLabelAndButtonsComposite(childComposite);
-		fTemplateText = fDialogObjectToolkit.createGridText(childComposite, 150, fTemplate);
+		fTemplateTextField = 
+				fDialogObjectToolkit.createGridText(
+						childComposite, 150, 
+						fExportTemplateController.getTemplateText());
 	}
 
 	private void createTemplateLabelAndButtonsComposite(
@@ -236,17 +237,8 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		if (fFileCompositeVisibility == FileCompositeVisibility.VISIBLE) {
 			fTargetFileText.setFocus();
 		} else {
-			fTemplateText.setFocus();
+			fTemplateTextField.setFocus();
 		}
-	}
-
-	private boolean isTemplateModified() {
-		String currentTemplate = fTemplateText.getText();
-		if (currentTemplate.equals(fInitialTemplate)) {
-			return false;
-		}
-
-		return true;
 	}
 
 	public static boolean canOverwriteFile(String targetFile) {
@@ -263,17 +255,8 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		return true;
 	}
 
-	private void createTemplate() {
-		if (fTemplateText == null) {
-			fTemplate = null;
-			return;
-		}
-
-		fTemplate = fTemplateText.getText();
-	}
-
-	public String getTemplate() {
-		return fTemplate;
+	public IExportTemplateController getExportTemplateController() {
+		return fExportTemplateController;
 	}
 
 	public String getTargetFile() {
@@ -310,7 +293,7 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 
 	private boolean canOverwriteExistingTemplate() {
 
-		if (!isTemplateModified()) {
+		if (!fExportTemplateController.isTemplateTextModified()) {
 			return true;
 		}
 
@@ -328,6 +311,8 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 
+			fExportTemplateController.setTemplateText(fTemplateTextField.getText());
+
 			if (!canOverwriteExistingTemplate()) {
 				return;
 			}
@@ -336,10 +321,9 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 			String text = FileOpenAndReadDialog.open(LOAD_DEF_FILE, templateFileExtension);
 
 			if (text != null) {
-				fTemplateText.setText(text);
-				fInitialTemplate = text;
+				fExportTemplateController.setTemplateText(text);
+				fTemplateTextField.setText(text);
 			}
-
 		}
 
 	}
@@ -348,10 +332,10 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			final String SAVE_DEF_FILE = "Save template definition file"; 
-			FileSaveDialog.Result result = FileSaveDialog.open(SAVE_DEF_FILE , fTemplateText.getText(), templateFileExtension);
+			FileSaveDialog.Result result = FileSaveDialog.open(SAVE_DEF_FILE , fTemplateTextField.getText(), templateFileExtension);
 
 			if (result == FileSaveDialog.Result.SAVED) {
-				fInitialTemplate = fTemplateText.getText();
+				fExportTemplateController.setTemplateText(fTemplateTextField.getText());
 			}
 		}
 	}
@@ -377,22 +361,14 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 				return;
 			}
 
-			setTemplateText(exportFormat);
-		}
+			fExportTemplateController = ExportTemplateControllerFactory.createController(exportFormat);
+			String templateDefaultText = fExportTemplateController.createDefaultTemplateText(fMethodParametersCount);
+			fExportTemplateController.setTemplateText(templateDefaultText);
+			fTemplateTextField.setText(templateDefaultText);
 
-		private void setTemplateText(String exportFormat) {
-
-			IExportTemplateController exportTemplateController = 
-					ExportTemplateControllerFactory.createController(exportFormat);
-
-			if (exportTemplateController == null) {
-				return;
-			}
-
-			fInitialTemplate = exportTemplateController.createDefaultTemplate(fMethodParametersCount);
-			fTemplateText.setText(fInitialTemplate);
 			fCurrentTemplateFormat = exportFormat;
 		}
+
 	}
 
 }

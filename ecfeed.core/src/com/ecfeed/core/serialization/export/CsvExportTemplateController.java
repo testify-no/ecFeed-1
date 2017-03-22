@@ -21,13 +21,18 @@ public class CsvExportTemplateController extends BasicExportTemplateController {
 	}
 
 	@Override
-	public String createDefaultTemplate(int methodParametersCount) {
+	public String createDefaultTemplateText(int methodParametersCount) {
 
-		return StringHelper.appendNewline(HEADER_MARKER)
+		String defaultTemplateText = 
+				StringHelper.appendNewline(HEADER_MARKER)
 				+ StringHelper.appendNewline(createDefaultHeaderTemplate(methodParametersCount))
 				+ StringHelper.appendNewline(TEST_CASE_MARKER)
 				+ StringHelper.appendNewline(createDefaultTestCaseTemplate(methodParametersCount))
 				+ StringHelper.appendNewline(FOOTER_MARKER);
+
+		setDefaultTemplateText(defaultTemplateText);
+
+		return defaultTemplateText;
 	}
 
 	private static String createDefaultHeaderTemplate(int methodParametersCount) {

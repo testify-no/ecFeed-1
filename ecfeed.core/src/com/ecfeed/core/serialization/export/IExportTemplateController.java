@@ -12,13 +12,16 @@ package com.ecfeed.core.serialization.export;
 
 public interface IExportTemplateController {
 
-	String createDefaultTemplate(int methodParametersCount);
+	void initialize(int methodParametersCount);
 
+	String createDefaultTemplateText(int methodParametersCount);
 	void setTemplateText(String summaryTemplate);
+	String getTemplateText();
+	boolean isTemplateTextModified();
 
-	void setFooterTemplate(String template);
-	void setHeaderTemplate(String template);
-	void setTestCaseTemplate(String template);
+	void setHeaderTemplate(String headerTemplate);
+	void setTestCaseTemplate(String testCaseTemplate);
+	void setFooterTemplate(String footerTemplate);
 
 	String getFooterTemplate();
 	String getHeaderTemplate();

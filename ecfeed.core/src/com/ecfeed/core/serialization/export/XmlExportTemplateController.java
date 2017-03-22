@@ -21,14 +21,19 @@ public class XmlExportTemplateController extends BasicExportTemplateController {
 	}
 
 	@Override
-	public String createDefaultTemplate(int methodParametersCount) {
+	public String createDefaultTemplateText(int methodParametersCount) {
 
-		return StringHelper.appendNewline(HEADER_MARKER)
+		String defaultTemplateText =
+				StringHelper.appendNewline(HEADER_MARKER)
 				+ StringHelper.appendNewline(createDefaultHeaderTemplate())
 				+ StringHelper.appendNewline(TEST_CASE_MARKER)
 				+ StringHelper.appendNewline(createDefaultTestCaseTemplate(methodParametersCount))
 				+ StringHelper.appendNewline(FOOTER_MARKER)
 				+ StringHelper.appendNewline(createDefaultFooterTemplate());
+
+		setDefaultTemplateText(defaultTemplateText);
+
+		return defaultTemplateText;		
 	}
 
 	private static String createDefaultHeaderTemplate() {

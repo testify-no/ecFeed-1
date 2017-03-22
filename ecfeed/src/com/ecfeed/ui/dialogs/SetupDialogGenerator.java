@@ -61,6 +61,7 @@ import com.ecfeed.core.model.ConstraintNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelHelper;
+import com.ecfeed.core.serialization.export.CsvExportTemplateController;
 import com.ecfeed.core.serialization.export.ExportTemplateControllerFactory;
 import com.ecfeed.core.serialization.export.IExportTemplateController;
 import com.ecfeed.core.utils.JavaTypeHelper;
@@ -124,7 +125,7 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 		IExportTemplateController exportTemplateController = 
 				ExportTemplateControllerFactory.createDefaultController();
 
-		fExportTemplate = exportTemplateController.createDefaultTemplate(method.getParametersCount());
+		fExportTemplate = exportTemplateController.createDefaultTemplateText(method.getParametersCount());
 		fTargetFile = targetFile;
 	}
 
@@ -927,10 +928,12 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 
+			IExportTemplateController exportTemplateController = new CsvExportTemplateController(); // TODO FROM FACTORY
+
 			TestCasesExportDialog dialog = 
 					new TestCasesExportDialog(
 							FileCompositeVisibility.NOT_VISIBLE, 
-							fExportTemplate, 
+							exportTemplateController,
 							fTargetFile, 
 							fMethod.getParametersCount());
 
@@ -938,7 +941,10 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 				return;
 			}
 
-			fExportTemplate = dialog.getTemplate();
+
+			IExportTemplateController currentExportTemplateController = dialog.getExportTemplateController();
+
+			fExportTemplate = currentExportTemplateController.getTemplateText();
 		}
 	}
 

@@ -27,17 +27,27 @@ public class BasicExportTemplateController implements IExportTemplateController 
 	public static final String TEST_CASE_MARKER = "[TestCase]";
 	public static final String FOOTER_MARKER = "[Footer]";
 
+	private String fDefaultTemplateText;
+	private String fTemplateText;
+
 	public BasicExportTemplateController() {
 	}
 
 	@Override
-	public void setTemplateText(String template) {
+	public void initialize(int methodParametersCount) {
+		String defaultTemplateText = createDefaultTemplateText(methodParametersCount);
+		setTemplateText(defaultTemplateText);
+	}
 
-		if (template == null) {
+	@Override
+	public void setTemplateText(String templateText) {
+
+		if (templateText == null) {
 			ExceptionHelper.reportRuntimeException("Template text must not be empty.");
 		}
 
-		Map<String, String> templateMap = divideIntoSubtemplates(template);
+		fTemplateText = templateText;
+		Map<String, String> templateMap = divideIntoSubtemplates(templateText);
 
 		fHeaderTemplate = createUserHeaderTemplate(templateMap);
 		fTestCaseTemplate = createUserTestCaseTemplate(templateMap);
@@ -46,8 +56,14 @@ public class BasicExportTemplateController implements IExportTemplateController 
 	}
 
 	@Override
-	public String createDefaultTemplate(int methodParametersCount) {
+	public String createDefaultTemplateText(int methodParametersCount) {
 		return null;
+	}
+
+	@Override
+	public String getTemplateText() {
+
+		return fTemplateText;
 	}
 
 	@Override
@@ -66,6 +82,20 @@ public class BasicExportTemplateController implements IExportTemplateController 
 	public String getFooterTemplate() {
 
 		return fFooterTemplate;
+	}
+
+	@Override
+	public boolean isTemplateTextModified() {
+
+		if (StringHelper.isEqual(fTemplateText, fDefaultTemplateText)) {
+			return false;
+		}
+
+		return true;
+	}
+
+	protected void setDefaultTemplateText(String defaultTemplateText) {
+		fDefaultTemplateText = defaultTemplateText;
 	}
 
 	private static String createUserHeaderTemplate(Map<String, String> template) {
