@@ -23,33 +23,37 @@ import com.ecfeed.ui.editor.IValueApplier;
 
 public class CommonEditHelper {
 
-	public static Combo createReadOnlyGridCombo(Composite parentComposite,	IValueApplier valueApplier) {
+	public static Combo createReadOnlyGridCombo(
+			Composite parentComposite,	IValueApplier valueApplier, ApplyValueMode applyValueMode) {
 
 		Combo combo = new Combo(parentComposite, SWT.DROP_DOWN | SWT.READ_ONLY);
-		configureCombo(combo, valueApplier);
+		configureCombo(combo, valueApplier, applyValueMode);
 
 		return combo;
 	}
 
-	public static Combo createReadWriteGridCombo( Composite parentComposite, IValueApplier valueApplier) {
+	public static Combo createReadWriteGridCombo( 
+			Composite parentComposite, IValueApplier valueApplier, ApplyValueMode applyValueMode) {
 
 		Combo combo = new Combo(parentComposite, SWT.DROP_DOWN);
-		configureCombo(combo, valueApplier);
+		configureCombo(combo, valueApplier, applyValueMode);
 
 		return combo;
 	}	
 
-	private static void configureCombo(Combo combo, IValueApplier valueApplier) {
+	private static void configureCombo(Combo combo, IValueApplier valueApplier, ApplyValueMode applyValueMode) {
 
 		combo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
 		ApplyValueForComboListener selectionListener = new ApplyValueForComboListener(valueApplier);
 		combo.addSelectionListener(selectionListener);
 
-		ApplyValueWhenFocusLostListener focusLostListener = 
-				new ApplyValueWhenFocusLostListener(valueApplier);
+		if (applyValueMode == ApplyValueMode.ON_SELECTION_AND_FOCUS_LOST) {
+			ApplyValueWhenFocusLostListener focusLostListener = 
+					new ApplyValueWhenFocusLostListener(valueApplier);
 
-		combo.addFocusListener(focusLostListener);
+			combo.addFocusListener(focusLostListener);
+		}
 	}
 
 	public static class ApplyValueWhenFocusLostListener extends FocusLostListener {

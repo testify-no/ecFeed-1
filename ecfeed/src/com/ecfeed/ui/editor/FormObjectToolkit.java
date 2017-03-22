@@ -25,6 +25,7 @@ import org.eclipse.swt.widgets.TypedListener;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.ecfeed.core.utils.StringHelper;
+import com.ecfeed.ui.common.ApplyValueMode;
 import com.ecfeed.ui.common.CommonEditHelper;
 
 public class FormObjectToolkit {
@@ -121,11 +122,13 @@ public class FormObjectToolkit {
 	}
 
 	public Combo createReadOnlyGridCombo(Composite parentComposite,	IValueApplier valueApplier) {
-		return CommonEditHelper.createReadOnlyGridCombo(parentComposite, valueApplier);
+		return CommonEditHelper.createReadOnlyGridCombo(
+				parentComposite, valueApplier, ApplyValueMode.ON_SELECTION_AND_FOCUS_LOST);
 	}
 
 	public Combo createReadWriteGridCombo(Composite parentComposite,	IValueApplier valueApplier) {
-		return CommonEditHelper.createReadWriteGridCombo(parentComposite, valueApplier);
+		return CommonEditHelper.createReadWriteGridCombo(
+				parentComposite, valueApplier, ApplyValueMode.ON_SELECTION_AND_FOCUS_LOST);
 	}	
 
 	public GridData getGridData(Control control) {

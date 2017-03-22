@@ -28,6 +28,8 @@ import com.ecfeed.core.resources.ResourceHelper;
 import com.ecfeed.core.serialization.export.ExportTemplateControllerFactory;
 import com.ecfeed.core.serialization.export.IExportTemplateController;
 import com.ecfeed.core.utils.DiskFileHelper;
+import com.ecfeed.core.utils.StringHelper;
+import com.ecfeed.ui.common.ApplyValueMode;
 import com.ecfeed.ui.dialogs.basic.AskIfOverwriteFileDialog;
 import com.ecfeed.ui.dialogs.basic.DialogObjectToolkit;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
@@ -45,6 +47,7 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 	private String fInitialTemplate;
 	private String fTemplate;
 	private Text fTemplateText;
+	private String fCurrentTemplateFormat;	
 	private Text fTargetFileText;
 	private String fTargetFile;
 	private DialogObjectToolkit fDialogObjectToolkit;
@@ -122,13 +125,9 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 	@Override
 	protected void okPressed() {
 
-		if (isTemplateModified()) {
-			final String CONTINUE_WITHOUT_SAVING = "Current template is modified. Do you want to continue without saving it?";
-			YesNoDialog.Result result = YesNoDialog.open(CONTINUE_WITHOUT_SAVING);
+		if (!canOverwriteExistingTemplate()) {
+			return;
 
-			if (result == YesNoDialog.Result.NO) {
-				return;
-			}
 		}
 
 		createTemplate();
@@ -192,13 +191,16 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		final String DEFINE_TEMPLATE = "Template: ";
 		fDialogObjectToolkit.createLabel(composite, DEFINE_TEMPLATE);
 
-		fExportFormatCombo = fDialogObjectToolkit.createReadOnlyGridCombo(composite, new ExportFormatComboValueApplier());
+		fExportFormatCombo = 
+				fDialogObjectToolkit.createReadOnlyGridCombo(
+						composite, new ExportFormatComboValueApplier(), ApplyValueMode.ON_SELECTION_ONLY);
 
 		String[] exportFormats = ExportTemplateControllerFactory.getAvailableExportFormats();
 		fExportFormatCombo.setItems(exportFormats);
 
 		String defaultformat = ExportTemplateControllerFactory.getDefaultFormat();
 		fExportFormatCombo.setText(defaultformat);
+		fCurrentTemplateFormat = defaultformat;
 
 		createButtonsComposite(composite);
 	}
@@ -306,17 +308,28 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		okButton.setEnabled(enabled);
 	}
 
+	private boolean canOverwriteExistingTemplate() {
+
+		if (!isTemplateModified()) {
+			return true;
+		}
+
+		final String CONTINUE_WITHOUT_SAVING = "Current template is modified. Do you want to continue without saving it?";
+		YesNoDialog.Result result = YesNoDialog.open(CONTINUE_WITHOUT_SAVING);
+
+		if (result == YesNoDialog.Result.NO) {
+			return false;
+		}
+
+		return true;
+	}
+
 	private class LoadButtonSelectionAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 
-			if (isTemplateModified()) {
-				final String LOAD_TEMPLATE = "Current template is modified. Do you want to load a new one?";
-				YesNoDialog.Result result = YesNoDialog.open(LOAD_TEMPLATE);
-
-				if (result == YesNoDialog.Result.NO) {
-					return;
-				}
+			if (!canOverwriteExistingTemplate()) {
+				return;
 			}
 
 			final String LOAD_DEF_FILE = "Load template definition file"; 
@@ -354,10 +367,23 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 
 		@Override
 		public void applyValue() {
-			String formatName = fExportFormatCombo.getText();
+			String exportFormat = fExportFormatCombo.getText();
+
+			if (StringHelper.isEqual(exportFormat, fCurrentTemplateFormat)) {
+				return;
+			}
+
+			if (!canOverwriteExistingTemplate()) {
+				return;
+			}
+
+			setTemplateText(exportFormat);
+		}
+
+		private void setTemplateText(String exportFormat) {
 
 			IExportTemplateController exportTemplateController = 
-					ExportTemplateControllerFactory.createController(formatName);
+					ExportTemplateControllerFactory.createController(exportFormat);
 
 			if (exportTemplateController == null) {
 				return;
@@ -365,6 +391,7 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 
 			fInitialTemplate = exportTemplateController.createDefaultTemplate(fMethodParametersCount);
 			fTemplateText.setText(fInitialTemplate);
+			fCurrentTemplateFormat = exportFormat;
 		}
 	}
 

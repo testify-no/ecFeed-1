@@ -27,6 +27,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import com.ecfeed.core.utils.StringHelper;
+import com.ecfeed.ui.common.ApplyValueMode;
 import com.ecfeed.ui.common.CommonEditHelper;
 import com.ecfeed.ui.editor.IValueApplier;
 import com.ecfeed.utils.EclipseHelper;
@@ -154,12 +155,28 @@ public class DialogObjectToolkit {
 		return targetFileText;
 	}
 
+	public Combo createReadOnlyGridCombo(
+			Composite parentComposite,	IValueApplier valueApplier, ApplyValueMode applyValueMode) {
+		
+		return CommonEditHelper.createReadOnlyGridCombo(
+				parentComposite, valueApplier, applyValueMode);
+	}
+	
 	public Combo createReadOnlyGridCombo(Composite parentComposite,	IValueApplier valueApplier) {
-		return CommonEditHelper.createReadOnlyGridCombo(parentComposite, valueApplier);
+		return CommonEditHelper.createReadOnlyGridCombo(
+				parentComposite, valueApplier, ApplyValueMode.ON_SELECTION_AND_FOCUS_LOST);
 	}
 
-	public Combo createReadWriteGridCombo(Composite parentComposite,	IValueApplier valueApplier) {
-		return CommonEditHelper.createReadWriteGridCombo(parentComposite, valueApplier);
+	public Combo createReadWriteGridCombo(
+			Composite parentComposite, IValueApplier valueApplier, ApplyValueMode applyValueMode) {
+		
+		return CommonEditHelper.createReadWriteGridCombo(
+				parentComposite, valueApplier, applyValueMode);
+	}	
+	
+	public Combo createReadWriteGridCombo(Composite parentComposite, IValueApplier valueApplier) {
+		return CommonEditHelper.createReadWriteGridCombo(
+				parentComposite, valueApplier, ApplyValueMode.ON_SELECTION_AND_FOCUS_LOST);
 	}	
 
 	class FileDialogSelectionAdapter extends SelectionAdapter {
