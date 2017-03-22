@@ -33,7 +33,9 @@ public class TestCasesExporterTest {
 
 	@Test
 	public void shouldExportAllSections() {
-		IExportTemplateController exportTemplateController = new CsvExportTemplateController();
+		IExportTemplateController exportTemplateController = 
+				new CsvExportTemplateController(createMethodNode());
+
 		exportTemplateController.setHeaderTemplate("$1.name, $2.name");
 		exportTemplateController.setTestCaseTemplate("$1.value, $2.value");
 		exportTemplateController.setFooterTemplate("end");
@@ -45,7 +47,9 @@ public class TestCasesExporterTest {
 	}
 
 	public void shouldExportHeaderOnly() {
-		IExportTemplateController exportTemplateController = new CsvExportTemplateController();
+		IExportTemplateController exportTemplateController = 
+				new CsvExportTemplateController(createMethodNode());
+
 		exportTemplateController.setHeaderTemplate("$1.name, $2.name");
 
 		String expectedResult = "par0, par1";
@@ -54,7 +58,9 @@ public class TestCasesExporterTest {
 	}
 
 	public void shouldExportTestCasesOnly() {
-		IExportTemplateController exportTemplateController = new CsvExportTemplateController();
+		IExportTemplateController exportTemplateController = 
+				new CsvExportTemplateController(createMethodNode());
+
 		exportTemplateController.setTestCaseTemplate("$1.value, $2.value");
 
 		String expectedResult = "0, 1";
@@ -62,7 +68,9 @@ public class TestCasesExporterTest {
 	}
 
 	public void shouldExportFooterOnly() {
-		IExportTemplateController exportTemplateController = new CsvExportTemplateController();
+		IExportTemplateController exportTemplateController = 
+				new CsvExportTemplateController(createMethodNode());
+
 		exportTemplateController.setFooterTemplate("end");
 
 		String expectedResult = "end";
@@ -114,5 +122,10 @@ public class TestCasesExporterTest {
 
 		assertEquals(expectedResult, result);
 	}
+
+	private MethodNode createMethodNode() {
+		return new MethodNode("methodName");
+	}
+
 
 }

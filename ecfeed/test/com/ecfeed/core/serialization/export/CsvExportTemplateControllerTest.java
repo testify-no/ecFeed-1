@@ -16,6 +16,7 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
+import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.utils.StringHelper;
 
 public class CsvExportTemplateControllerTest {
@@ -25,7 +26,7 @@ public class CsvExportTemplateControllerTest {
 
 		String templateText = new String();
 
-		CsvExportTemplateController csvExportTemplateController = new CsvExportTemplateController();
+		CsvExportTemplateController csvExportTemplateController = new CsvExportTemplateController(createMethodNode());
 
 		try {
 			csvExportTemplateController.setTemplateText(templateText);
@@ -48,7 +49,8 @@ public class CsvExportTemplateControllerTest {
 				+ StringHelper.appendNewline("$1.value,$2.value")
 				+ StringHelper.appendNewline(CsvExportTemplateController.FOOTER_MARKER);
 
-		CsvExportTemplateController csvExportTemplateController = new CsvExportTemplateController();
+		CsvExportTemplateController csvExportTemplateController = 
+				new CsvExportTemplateController(createMethodNode());
 
 		try {
 			csvExportTemplateController.setTemplateText(templateText);
@@ -77,7 +79,8 @@ public class CsvExportTemplateControllerTest {
 				+ StringHelper.appendNewline("FOOTER 1")
 				+ StringHelper.appendNewline("FOOTER 2");
 
-		CsvExportTemplateController csvExportTemplateController = new CsvExportTemplateController();
+		CsvExportTemplateController csvExportTemplateController = 
+				new CsvExportTemplateController(createMethodNode());
 
 		try {
 			csvExportTemplateController.setTemplateText(templateText);
@@ -100,7 +103,8 @@ public class CsvExportTemplateControllerTest {
 
 		String templateText = "[xxx]";
 
-		CsvExportTemplateController csvExportTemplateController = new CsvExportTemplateController();
+		CsvExportTemplateController csvExportTemplateController = 
+				new CsvExportTemplateController(createMethodNode());
 
 		try {
 			csvExportTemplateController.setTemplateText(templateText);
@@ -120,7 +124,8 @@ public class CsvExportTemplateControllerTest {
 				+ CsvExportTemplateController.TEST_CASE_MARKER + "\n" + "$1.value\n"
 				+ CsvExportTemplateController.FOOTER_MARKER;
 
-		CsvExportTemplateController csvExportTemplateController = new CsvExportTemplateController();
+		CsvExportTemplateController csvExportTemplateController = 
+				new CsvExportTemplateController(createMethodNode());
 
 		try {
 			csvExportTemplateController.setTemplateText(templateText);
@@ -129,6 +134,10 @@ public class CsvExportTemplateControllerTest {
 		}
 
 		assertEquals("$1.value", csvExportTemplateController.getTestCaseTemplate());
+	}
+
+	private MethodNode createMethodNode() {
+		return new MethodNode("methodName");
 	}
 
 }

@@ -9,19 +9,27 @@
  *******************************************************************************/
 package com.ecfeed.core.serialization.export;
 
+import com.ecfeed.core.model.MethodNode;
+
 
 public class ExportTemplateControllerFactory {
 
-	public static IExportTemplateController createDefaultController() {
+	MethodNode fMethodNode;
+
+	public ExportTemplateControllerFactory(MethodNode methodNode) {
+		fMethodNode = methodNode;
+	}
+
+	public IExportTemplateController createDefaultController() {
 		return createController(getDefaultFormat());
 	}
 
-	public static IExportTemplateController createController(String formatName) {
+	public IExportTemplateController createController(String formatName) {
 		if (formatName.equals("CSV")) {
-			return new CsvExportTemplateController();
+			return new CsvExportTemplateController(fMethodNode);
 		}
 		if (formatName.equals("XML")) {
-			return new XmlExportTemplateController();
+			return new XmlExportTemplateController(fMethodNode);
 		}
 		return null;
 	}

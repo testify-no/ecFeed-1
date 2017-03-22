@@ -9,6 +9,7 @@
  *******************************************************************************/
 package com.ecfeed.core.serialization.export;
 
+import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.utils.StringHelper;
 
 public class XmlExportTemplateController extends BasicExportTemplateController {
@@ -17,7 +18,10 @@ public class XmlExportTemplateController extends BasicExportTemplateController {
 	public static final String TEST_CASE_MARKER = "[TestCase]";
 	public static final String FOOTER_MARKER = "[Footer]";
 
-	public XmlExportTemplateController() {
+	MethodNode fMethodNode;
+
+	public XmlExportTemplateController(MethodNode methodNode) {
+		fMethodNode = methodNode;
 	}
 
 	@Override

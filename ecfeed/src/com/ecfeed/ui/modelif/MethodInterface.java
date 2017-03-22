@@ -50,7 +50,7 @@ import com.ecfeed.core.runner.java.ExportTestMethodInvoker;
 import com.ecfeed.core.runner.java.JUnitTestMethodInvoker;
 import com.ecfeed.core.runner.java.SeleniumTestMethodInvoker;
 import com.ecfeed.core.serialization.export.BasicExportTemplateController;
-import com.ecfeed.core.serialization.export.CsvExportTemplateController;
+import com.ecfeed.core.serialization.export.ExportTemplateControllerFactory;
 import com.ecfeed.core.serialization.export.IExportTemplateController;
 import com.ecfeed.core.utils.EcException;
 import com.ecfeed.core.utils.JavaTypeHelper;
@@ -325,12 +325,13 @@ public class MethodInterface extends ParametersParentInterface {
 
 	public void exportTestCases(Collection<TestCaseNode> checkedTestCases) {
 
-		IExportTemplateController exportTemplateController = new CsvExportTemplateController(); // TODO FROM FACTORY
+		ExportTemplateControllerFactory exportTemplateControllerFactory =
+				new ExportTemplateControllerFactory(getOwnNode());
 
 		TestCasesExportDialog dialog = 
 				new TestCasesExportDialog(
 						FileCompositeVisibility.VISIBLE, 
-						exportTemplateController,
+						exportTemplateControllerFactory,
 						ApplicationContext.getExportTargetFile(),
 						getOwnNode().getParametersCount());
 
