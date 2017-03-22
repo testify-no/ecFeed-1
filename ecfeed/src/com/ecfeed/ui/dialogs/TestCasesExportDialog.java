@@ -47,7 +47,7 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 	IExportTemplateController fExportTemplateController;
 	private Text fTemplateTextField;
 	private String fCurrentTemplateFormat;	
-	private Text fTargetFileText;
+	private Text fTargetFileTextField;
 	private String fTargetFile;
 	private DialogObjectToolkit fDialogObjectToolkit;
 	private FileCompositeVisibility fFileCompositeVisibility;
@@ -135,7 +135,7 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 			return;
 		}
 
-		fTargetFile = fTargetFileText.getText();
+		fTargetFile = fTargetFileTextField.getText();
 		if (!canOverwriteFile(fTargetFile)) {
 			return;
 		}
@@ -218,12 +218,12 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 	private void createTargetFileComposite(Composite parent) {
 		final String TARGET_FILE = "Target file";
 
-		fTargetFileText = 
+		fTargetFileTextField = 
 				fDialogObjectToolkit.createFileSelectionComposite(
 						parent, TARGET_FILE, getExportFileExtensions(), new FileTextModifyListener());
 
 		if (fTargetFile != null) {
-			fTargetFileText.setText(fTargetFile);
+			fTargetFileTextField.setText(fTargetFile);
 		}
 	}
 
@@ -234,7 +234,7 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 
 	private void setFocusedControl() {
 		if (fFileCompositeVisibility == FileCompositeVisibility.VISIBLE) {
-			fTargetFileText.setFocus();
+			fTargetFileTextField.setFocus();
 		} else {
 			fTemplateTextField.setFocus();
 		}
@@ -263,7 +263,7 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 	}
 
 	private void updateStatus() {
-		if (fTargetFileText == null || fTargetFileText.getText().isEmpty()) {
+		if (fTargetFileTextField == null || fTargetFileTextField.getText().isEmpty()) {
 			setDialogMessageSelectFile();
 
 			if (fFileCompositeVisibility == FileCompositeVisibility.VISIBLE) {
@@ -350,6 +350,9 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 
 		@Override
 		public void applyValue() {
+
+			fExportTemplateController.setTemplateText(fTemplateTextField.getText());
+
 			String exportFormat = fExportFormatCombo.getText();
 
 			if (StringHelper.isEqual(exportFormat, fCurrentTemplateFormat)) {
