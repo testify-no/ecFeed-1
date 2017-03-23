@@ -127,25 +127,6 @@ public class DialogObjectToolkit {
 		return targetFileText;
 	}
 
-	public Button createButton(
-			Composite parent, String buttonText, SelectionListener selectionListener) {
-		Button button = new Button(parent, SWT.NONE);
-		button.setText(buttonText);
-
-		if (selectionListener != null) {
-			button.addSelectionListener(selectionListener);
-		}
-
-		return button;
-	}
-
-	public Button createBrowseButton(
-			Composite parent, SelectionListener selectionListener) {
-
-		final String BROWSE_LABEL = "Browse...";
-		return createButton(parent, BROWSE_LABEL, selectionListener);
-	}
-
 	public Combo createReadOnlyGridCombo(
 			Composite parentComposite,	IValueApplier valueApplier, ApplyValueMode applyValueMode) {
 
@@ -223,7 +204,7 @@ public class DialogObjectToolkit {
 
 		private Composite fChildComposite;
 		private Text fTargetFileText;
-		SelectionListener fBrowseSelectionListener;
+		ButtonEx fButtonEx;
 
 		FileSelectionComposite(
 				Composite parent, 
@@ -238,18 +219,76 @@ public class DialogObjectToolkit {
 
 			fTargetFileText = createFileSelectionText(fChildComposite, textModifyListener);
 
-			fBrowseSelectionListener = 
+			SelectionListener selectionListener = 
 					new FileDialogSelectionAdapter(
 							SWT.SAVE, extensionsFilter, fTargetFileText);
 
-			createBrowseButton(fChildComposite, fBrowseSelectionListener);
-
+			fButtonEx = createBrowseButton(fChildComposite, selectionListener);
 		}
 
 		public Text getTextField() {
 			return fTargetFileText;
 		}
 
+		public void setExtensionFilter(String[] extensionsFilter) {
+
+			SelectionListener fBrowseSelectionListener = 
+					new FileDialogSelectionAdapter(
+							SWT.SAVE, extensionsFilter, fTargetFileText);
+
+			fButtonEx.setSelectionListener(fBrowseSelectionListener);
+		}
+
 	}
+
+	public ButtonEx createBrowseButton(
+			Composite parent, SelectionListener selectionListener) {
+
+		final String BROWSE_LABEL = "Browse...";
+		return createButton(parent, BROWSE_LABEL, selectionListener);
+	}
+
+	public ButtonEx createButton(
+			Composite parent, String buttonText, SelectionListener selectionListener) {
+
+		return new ButtonEx(parent, buttonText, selectionListener);
+	}
+
+	public class ButtonEx {
+
+		Button fButton;
+		SelectionListener fSelectionListener;
+
+		ButtonEx(Composite parent, String buttonText, SelectionListener selectionListener) {
+
+			fButton = new Button(parent, SWT.NONE);
+			fButton.setText(buttonText);
+
+			fSelectionListener = selectionListener;
+
+			if (fSelectionListener != null) {
+				fButton.addSelectionListener(fSelectionListener);
+			}
+
+		}
+
+		public Button getButton() {
+			return fButton;
+		}
+
+		public void setSelectionListener(SelectionListener selectionListener) {
+
+			if (selectionListener == null) {
+				return;
+			}
+
+			if (fSelectionListener != null) {
+				fButton.removeSelectionListener(fSelectionListener);
+			}
+
+			fButton.addSelectionListener(selectionListener);
+		}
+	}
+
 
 }

@@ -39,6 +39,11 @@ public class CsvExportTemplateController extends BasicExportTemplateController {
 		return defaultTemplateText;
 	}
 
+	@Override
+	public String getFileExtension() {
+		return "csv";
+	}
+
 	private static String createDefaultHeaderTemplate(int methodParametersCount) {
 
 		final String NAME_TAG = "name";

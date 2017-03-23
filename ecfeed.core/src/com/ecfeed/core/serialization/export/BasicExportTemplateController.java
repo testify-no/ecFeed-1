@@ -98,6 +98,11 @@ public class BasicExportTemplateController implements IExportTemplateController 
 		return true;
 	}
 
+	@Override
+	public String getFileExtension() {
+		return null;
+	}
+
 	protected void setDefaultTemplateText(String defaultTemplateText) {
 		fDefaultTemplateText = defaultTemplateText;
 	}

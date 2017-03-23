@@ -46,7 +46,8 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 
 	IExportTemplateController fExportTemplateController;
 	private Text fTemplateTextField;
-	private String fCurrentTemplateFormat;	
+	private String fCurrentTemplateFormat;
+	DialogObjectToolkit.FileSelectionComposite fFileSelectionComposite;
 	private Text fTargetFileTextField;
 	private String fTargetFile;
 	private DialogObjectToolkit fDialogObjectToolkit;
@@ -218,11 +219,11 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 	private void createTargetFileComposite(Composite parent) {
 		final String TARGET_FILE = "Target file";
 
-		DialogObjectToolkit.FileSelectionComposite fileSelectionComposite = 
+		fFileSelectionComposite =  
 				fDialogObjectToolkit.createFileSelectionComposite(
 						parent, TARGET_FILE, getExportFileExtensions(), new FileTextModifyListener());
 
-		fTargetFileTextField = fileSelectionComposite.getTextField();
+		fTargetFileTextField = fFileSelectionComposite.getTextField();
 
 		if (fTargetFile != null) {
 			fTargetFileTextField.setText(fTargetFile);
@@ -230,6 +231,8 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 	}
 
 	public static String[] getExportFileExtensions() {
+
+		//		String fileExtension = fExportTemplateController.getFileExtension();
 		String[] extensionsFilter = { "*.csv", "*.txt", "*.*" };
 		return extensionsFilter;
 	}
