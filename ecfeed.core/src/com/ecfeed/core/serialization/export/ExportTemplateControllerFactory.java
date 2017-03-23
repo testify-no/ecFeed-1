@@ -51,7 +51,7 @@ public class ExportTemplateControllerFactory {
 		return formats;
 	}
 
-	public static String getDefaultFormat() {
+	private static String getDefaultFormat() {
 		return FORMAT_CSV;
 	}
 

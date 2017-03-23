@@ -45,6 +45,11 @@ public class XmlExportTemplateController extends BasicExportTemplateController {
 		return "xml";
 	}
 
+	@Override 
+	public String getTemplateFormat() {
+		return "XML";
+	}
+
 	private static String createDefaultHeaderTemplate() {
 		return "<TestCases>";
 	}

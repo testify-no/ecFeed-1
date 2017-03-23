@@ -103,6 +103,11 @@ public class BasicExportTemplateController implements IExportTemplateController 
 		return null;
 	}
 
+	@Override 
+	public String getTemplateFormat() {
+		return null;
+	}
+
 	protected void setDefaultTemplateText(String defaultTemplateText) {
 		fDefaultTemplateText = defaultTemplateText;
 	}

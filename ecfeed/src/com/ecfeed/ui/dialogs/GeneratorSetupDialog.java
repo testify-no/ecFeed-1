@@ -99,7 +99,6 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 	private Text fTargetFileText;
 	private int fContent;
 	private String fTargetFile;
-	private String fExportTemplate;
 	private ExportTemplateControllerFactory fExportTemplateControllerFactory;
 	private IExportTemplateController fExportTemplateController;
 
@@ -137,7 +136,6 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 			fExportTemplateController = exportTemplateControllerFactory.createDefaultController();
 		}
 
-		fExportTemplate = fExportTemplateController.createDefaultTemplateText();
 		fTargetFile = targetFile;
 	}
 
@@ -163,6 +161,10 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 
 	public Map<String, Object> getGeneratorParameters() {
 		return fParameters;
+	}
+
+	public String getExportTemplate() {
+		return fExportTemplateController.getTemplateText();
 	}
 
 	@Override
@@ -573,9 +575,8 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		String[] exportFormats = ExportTemplateControllerFactory.getAvailableExportFormats();
 		fExportFormatCombo.setItems(exportFormats);
 
-		String defaultformat = ExportTemplateControllerFactory.getDefaultFormat();
-		fExportFormatCombo.setText(defaultformat);
-		//		fCurrentTemplateFormat = defaultformat; TODO
+		String format = fExportTemplateController.getTemplateFormat();
+		fExportFormatCombo.setText(format);
 	}
 
 	private void createFileSelectionComposite(Composite parentComposite) {
@@ -594,10 +595,6 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		if (fTargetFile != null) {
 			fTargetFileText.setText(fTargetFile);
 		}
-	}
-
-	public String getExportTemplate() {
-		return fExportTemplate;
 	}
 
 	public String getTargetFile() {
@@ -970,6 +967,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 					new TestCasesExportDialog(
 							FileCompositeVisibility.NOT_VISIBLE, 
 							fExportTemplateControllerFactory,
+							fExportTemplateController,
 							fTargetFile, 
 							fMethod.getParametersCount());
 
@@ -978,9 +976,8 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 			}
 
 
-			IExportTemplateController currentExportTemplateController = dialog.getExportTemplateController();
-
-			fExportTemplate = currentExportTemplateController.getTemplateText();
+			fExportTemplateController = dialog.getExportTemplateController();
+			fExportFormatCombo.setText(fExportTemplateController.getTemplateFormat());
 		}
 	}
 
@@ -997,13 +994,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		public void applyValue() {
 
 			String exportFormat = fExportFormatCombo.getText();
-
-			//			if (StringHelper.isEqual(exportFormat, fCurrentTemplateFormat)) { TODO
-			//				return;
-			//			}
-
 			fExportTemplateController = fExportTemplateControllerFactory.createController(exportFormat);
-
 		}
 
 	}	

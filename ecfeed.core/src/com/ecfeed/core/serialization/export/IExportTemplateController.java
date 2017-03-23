@@ -19,6 +19,7 @@ public interface IExportTemplateController {
 	String getTemplateText();
 	boolean isTemplateTextModified();
 	String getFileExtension();
+	String getTemplateFormat();
 
 	void setHeaderTemplate(String headerTemplate);
 	void setTestCaseTemplate(String testCaseTemplate);

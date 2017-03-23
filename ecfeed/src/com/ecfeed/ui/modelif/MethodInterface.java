@@ -328,10 +328,14 @@ public class MethodInterface extends ParametersParentInterface {
 		ExportTemplateControllerFactory exportTemplateControllerFactory =
 				new ExportTemplateControllerFactory(getOwnNode());
 
+		IExportTemplateController exportTemplateController =
+				exportTemplateControllerFactory.createDefaultController();
+
 		TestCasesExportDialog dialog = 
 				new TestCasesExportDialog(
 						FileCompositeVisibility.VISIBLE, 
 						exportTemplateControllerFactory,
+						exportTemplateController,
 						ApplicationContext.getExportTargetFile(),
 						getOwnNode().getParametersCount());
 

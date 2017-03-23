@@ -62,6 +62,7 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 	public TestCasesExportDialog(
 			FileCompositeVisibility fileCompositeVisibility,
 			ExportTemplateControllerFactory exportTemplateControllerFactory,
+			IExportTemplateController exportTemplateController,
 			String targetFile,
 			int methodParametersCount) {
 		super(EclipseHelper.getActiveShell());
@@ -70,8 +71,7 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 
 		fFileCompositeVisibility = fileCompositeVisibility;
 		fExportTemplateControllerFactory = exportTemplateControllerFactory;
-		fExportTemplateController = exportTemplateControllerFactory.createDefaultController();
-		fExportTemplateController.initialize();
+		fExportTemplateController = exportTemplateController;
 		fTargetFile = targetFile;
 		fDialogObjectToolkit = DialogObjectToolkit.getInstance();
 	}
@@ -204,9 +204,9 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		String[] exportFormats = ExportTemplateControllerFactory.getAvailableExportFormats();
 		fExportFormatCombo.setItems(exportFormats);
 
-		String defaultformat = ExportTemplateControllerFactory.getDefaultFormat();
-		fExportFormatCombo.setText(defaultformat);
-		fCurrentTemplateFormat = defaultformat;
+		String format = fExportTemplateController.getTemplateFormat();
+		fExportFormatCombo.setText(format);
+		fCurrentTemplateFormat = format;
 	}
 
 	private void createButtonsComposite(Composite parentComposite) {
