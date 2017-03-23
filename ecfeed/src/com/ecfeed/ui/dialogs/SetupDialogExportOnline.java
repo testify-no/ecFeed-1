@@ -13,13 +13,24 @@ package com.ecfeed.ui.dialogs;
 import org.eclipse.swt.widgets.Shell;
 
 import com.ecfeed.core.model.MethodNode;
+import com.ecfeed.core.serialization.export.ExportTemplateControllerFactory;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 
 public class SetupDialogExportOnline extends SetupDialogOnline {
 
-	public SetupDialogExportOnline(Shell parentShell, MethodNode method,
-			IFileInfoProvider fileInfoProvider, String targetFile) {
-		super(parentShell, method, false, fileInfoProvider, targetFile);
+	public SetupDialogExportOnline(
+			Shell parentShell, 
+			MethodNode method,
+			IFileInfoProvider fileInfoProvider,
+			ExportTemplateControllerFactory exportTemplateControllerFactory,
+			String targetFile) {
+
+		super(parentShell, 
+				method, 
+				false, 
+				fileInfoProvider,
+				exportTemplateControllerFactory,
+				targetFile);
 	}
 
 	@Override

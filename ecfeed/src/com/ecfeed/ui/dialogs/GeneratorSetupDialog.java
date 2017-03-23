@@ -65,6 +65,7 @@ import com.ecfeed.core.serialization.export.ExportTemplateControllerFactory;
 import com.ecfeed.core.serialization.export.IExportTemplateController;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.StringHolder;
+import com.ecfeed.ui.common.ApplyValueMode;
 import com.ecfeed.ui.common.CommonConstants;
 import com.ecfeed.ui.common.EclipseImplementationStatusResolver;
 import com.ecfeed.ui.common.Messages;
@@ -73,6 +74,7 @@ import com.ecfeed.ui.common.TreeCheckStateListener;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.dialogs.TestCasesExportDialog.FileCompositeVisibility;
 import com.ecfeed.ui.dialogs.basic.DialogObjectToolkit;
+import com.ecfeed.ui.editor.IValueApplier;
 
 public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 	private Combo fTestSuiteCombo;
@@ -93,11 +95,13 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 	private IImplementationStatusResolver fStatusResolver;
 	private IFileInfoProvider fFileInfoProvider;
 	private DialogObjectToolkit fDialogObjectToolkit;
+	private Combo fExportFormatCombo;
 	private Text fTargetFileText;
 	private int fContent;
 	private String fTargetFile;
 	private String fExportTemplate;
 	private ExportTemplateControllerFactory fExportTemplateControllerFactory;
+	private IExportTemplateController fExportTemplateController;
 
 	public final static int CONSTRAINTS_COMPOSITE = 1;
 	public final static int CHOICES_COMPOSITE = 1 << 1;
@@ -105,8 +109,12 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 	public final static int GENERATOR_SELECTION_COMPOSITE = 1 << 3;
 	public final static int TEST_CASES_EXPORT_COMPOSITE = 1 << 4;
 
-	public GeneratorSetupDialog(Shell parentShell, MethodNode method,
-			boolean generateExecutables, IFileInfoProvider fileInfoProvider,
+	public GeneratorSetupDialog(
+			Shell parentShell, 
+			MethodNode method,
+			boolean generateExecutables, 
+			IFileInfoProvider fileInfoProvider,
+			ExportTemplateControllerFactory exportTemplateControllerFactory,
 			String targetFile) {
 
 		super(parentShell);
@@ -123,12 +131,13 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 
 		fTargetFile = null;
 
-		fExportTemplateControllerFactory = new ExportTemplateControllerFactory(fMethod);
+		fExportTemplateControllerFactory = exportTemplateControllerFactory;
 
-		IExportTemplateController exportTemplateController = 
-				fExportTemplateControllerFactory.createDefaultController();
+		if (fExportTemplateControllerFactory != null) {
+			fExportTemplateController = exportTemplateControllerFactory.createDefaultController();
+		}
 
-		fExportTemplate = exportTemplateController.createDefaultTemplateText();
+		fExportTemplate = fExportTemplateController.createDefaultTemplateText();
 		fTargetFile = targetFile;
 	}
 
@@ -548,6 +557,28 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		fDialogObjectToolkit.createButton(advancedButtonComposite,
 				"Advanced...", new ExportDefinitionSelectionAdapter());
 
+
+		createExportTemplateCombo(parentComposite);
+		createFileSelectionComposite(parentComposite);
+	}
+
+	private void createExportTemplateCombo(Composite composite) {
+		final String DEFINE_TEMPLATE = "Template: ";
+		fDialogObjectToolkit.createLabel(composite, DEFINE_TEMPLATE);
+
+		fExportFormatCombo = 
+				fDialogObjectToolkit.createReadOnlyGridCombo(
+						composite, new ExportFormatComboValueApplier(), ApplyValueMode.ON_SELECTION_ONLY);
+
+		String[] exportFormats = ExportTemplateControllerFactory.getAvailableExportFormats();
+		fExportFormatCombo.setItems(exportFormats);
+
+		String defaultformat = ExportTemplateControllerFactory.getDefaultFormat();
+		fExportFormatCombo.setText(defaultformat);
+		//		fCurrentTemplateFormat = defaultformat; TODO
+	}
+
+	private void createFileSelectionComposite(Composite parentComposite) {
 		final String TARGET_FILE = "Export target file";
 
 		DialogObjectToolkit.FileSelectionComposite fileSelectionComposite = 
@@ -959,5 +990,22 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 			updateOkButtonAndErrorMsg();
 		}
 	}
+
+	private class ExportFormatComboValueApplier implements IValueApplier {
+
+		@Override
+		public void applyValue() {
+
+			String exportFormat = fExportFormatCombo.getText();
+
+			//			if (StringHelper.isEqual(exportFormat, fCurrentTemplateFormat)) { TODO
+			//				return;
+			//			}
+
+			fExportTemplateController = fExportTemplateControllerFactory.createController(exportFormat);
+
+		}
+
+	}	
 
 }

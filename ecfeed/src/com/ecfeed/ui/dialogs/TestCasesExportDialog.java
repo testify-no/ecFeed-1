@@ -189,6 +189,11 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 
 		Composite composite = fDialogObjectToolkit.createGridComposite(parentComposite, 4);
 
+		createExportTemplateCombo(composite);
+		createButtonsComposite(composite);
+	}
+
+	private void createExportTemplateCombo(Composite composite) {
 		final String DEFINE_TEMPLATE = "Template: ";
 		fDialogObjectToolkit.createLabel(composite, DEFINE_TEMPLATE);
 
@@ -202,8 +207,6 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		String defaultformat = ExportTemplateControllerFactory.getDefaultFormat();
 		fExportFormatCombo.setText(defaultformat);
 		fCurrentTemplateFormat = defaultformat;
-
-		createButtonsComposite(composite);
 	}
 
 	private void createButtonsComposite(Composite parentComposite) {
