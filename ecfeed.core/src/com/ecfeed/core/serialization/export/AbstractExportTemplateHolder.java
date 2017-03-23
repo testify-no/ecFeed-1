@@ -18,7 +18,7 @@ import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.core.utils.StringHolder;
 
-public class BasicExportTemplateController implements IExportTemplateController {
+public abstract class AbstractExportTemplateHolder implements IExportTemplateHolder {
 
 	protected String fHeaderTemplate;
 	protected String fTestCaseTemplate;
@@ -33,7 +33,7 @@ public class BasicExportTemplateController implements IExportTemplateController 
 
 	private MethodNode fMethodNode;
 
-	public BasicExportTemplateController(MethodNode methodNode) {
+	public AbstractExportTemplateHolder(MethodNode methodNode) {
 		fMethodNode = methodNode;
 	}
 
@@ -57,11 +57,6 @@ public class BasicExportTemplateController implements IExportTemplateController 
 		fTestCaseTemplate = createUserTestCaseTemplate(templateMap);
 		fFooterTemplate = createUserFooterTemplate(templateMap);
 		return;
-	}
-
-	@Override
-	public String createDefaultTemplateText() {
-		return null;
 	}
 
 	@Override
@@ -96,16 +91,6 @@ public class BasicExportTemplateController implements IExportTemplateController 
 		}
 
 		return true;
-	}
-
-	@Override
-	public String getFileExtension() {
-		return null;
-	}
-
-	@Override 
-	public String getTemplateFormat() {
-		return null;
 	}
 
 	protected void setDefaultTemplateText(String defaultTemplateText) {

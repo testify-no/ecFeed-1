@@ -49,9 +49,9 @@ import com.ecfeed.core.runner.ITestMethodInvoker;
 import com.ecfeed.core.runner.java.ExportTestMethodInvoker;
 import com.ecfeed.core.runner.java.JUnitTestMethodInvoker;
 import com.ecfeed.core.runner.java.SeleniumTestMethodInvoker;
-import com.ecfeed.core.serialization.export.BasicExportTemplateController;
-import com.ecfeed.core.serialization.export.ExportTemplateControllerFactory;
-import com.ecfeed.core.serialization.export.IExportTemplateController;
+import com.ecfeed.core.serialization.export.BasicExportTemplateHolder;
+import com.ecfeed.core.serialization.export.ExportTemplateHolderFactory;
+import com.ecfeed.core.serialization.export.IExportTemplateHolder;
 import com.ecfeed.core.utils.EcException;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.StringHelper;
@@ -297,12 +297,12 @@ public class MethodInterface extends ParametersParentInterface {
 		String targetFile = onlineExportSupport.getTargetFile();
 		ApplicationContext.setExportTargetFile(targetFile);
 
-		IExportTemplateController basicTemplateController = 
-				new BasicExportTemplateController(null);
+		IExportTemplateHolder basicTemplateHolder = 
+				new BasicExportTemplateHolder(null);
 
-		basicTemplateController.setTemplateText(onlineExportSupport.getExportTemplate());
+		basicTemplateHolder.setTemplateText(onlineExportSupport.getExportTemplate());
 
-		runExport(methodInvoker.getTestCasesToExport(), basicTemplateController, targetFile);
+		runExport(methodInvoker.getTestCasesToExport(), basicTemplateHolder, targetFile);
 	}
 
 
@@ -325,17 +325,17 @@ public class MethodInterface extends ParametersParentInterface {
 
 	public void exportTestCases(Collection<TestCaseNode> checkedTestCases) {
 
-		ExportTemplateControllerFactory exportTemplateControllerFactory =
-				new ExportTemplateControllerFactory(getOwnNode());
+		ExportTemplateHolderFactory exportTemplateHolderFactory =
+				new ExportTemplateHolderFactory(getOwnNode());
 
-		IExportTemplateController exportTemplateController =
-				exportTemplateControllerFactory.createDefaultController();
+		IExportTemplateHolder exportTemplateHolder =
+				exportTemplateHolderFactory.createDefaultHolder();
 
 		TestCasesExportDialog dialog = 
 				new TestCasesExportDialog(
 						FileCompositeVisibility.VISIBLE, 
-						exportTemplateControllerFactory,
-						exportTemplateController,
+						exportTemplateHolderFactory,
+						exportTemplateHolder,
 						ApplicationContext.getExportTargetFile(),
 						getOwnNode().getParametersCount());
 
@@ -344,20 +344,20 @@ public class MethodInterface extends ParametersParentInterface {
 		}
 
 		ApplicationContext.setExportTargetFile(dialog.getTargetFile());
-		IExportTemplateController currentExportTemplateController = dialog.getExportTemplateController();
+		IExportTemplateHolder currentExportTemplateHolder = dialog.getExportTemplateHolder();
 
 		runExport(checkedTestCases, 
-				currentExportTemplateController,
+				currentExportTemplateHolder,
 				dialog.getTargetFile());
 	}
 
 	private void runExport(
 			Collection<TestCaseNode> testCases,
-			IExportTemplateController exportTemplateController,
+			IExportTemplateHolder exportTemplateHolder,
 			String targetFile) {
 
 		try {
-			TestCasesExporter exporter = new TestCasesExporter(exportTemplateController);
+			TestCasesExporter exporter = new TestCasesExporter(exportTemplateHolder);
 
 			exporter.runExport(getOwnNode(), testCases, targetFile);
 

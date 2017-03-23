@@ -13,7 +13,7 @@ package com.ecfeed.ui.dialogs;
 import org.eclipse.swt.widgets.Shell;
 
 import com.ecfeed.core.model.MethodNode;
-import com.ecfeed.core.serialization.export.ExportTemplateControllerFactory;
+import com.ecfeed.core.serialization.export.ExportTemplateHolderFactory;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 
 public class SetupDialogExportOnline extends SetupDialogOnline {
@@ -22,14 +22,14 @@ public class SetupDialogExportOnline extends SetupDialogOnline {
 			Shell parentShell, 
 			MethodNode method,
 			IFileInfoProvider fileInfoProvider,
-			ExportTemplateControllerFactory exportTemplateControllerFactory,
+			ExportTemplateHolderFactory exportTemplateHolderFactory,
 			String targetFile) {
 
 		super(parentShell, 
 				method, 
 				false, 
 				fileInfoProvider,
-				exportTemplateControllerFactory,
+				exportTemplateHolderFactory,
 				targetFile);
 	}
 

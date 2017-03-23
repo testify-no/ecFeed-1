@@ -12,13 +12,13 @@ package com.ecfeed.core.serialization.export;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.utils.StringHelper;
 
-public class XmlExportTemplateController extends BasicExportTemplateController {
+public class XmlExportTemplateHolder extends AbstractExportTemplateHolder {
 
 	public static final String HEADER_MARKER = "[Header]";
 	public static final String TEST_CASE_MARKER = "[TestCase]";
 	public static final String FOOTER_MARKER = "[Footer]";
 
-	public XmlExportTemplateController(MethodNode methodNode) {
+	public XmlExportTemplateHolder(MethodNode methodNode) {
 		super(methodNode);
 	}
 

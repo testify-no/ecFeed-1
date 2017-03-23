@@ -61,8 +61,8 @@ import com.ecfeed.core.model.ConstraintNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelHelper;
-import com.ecfeed.core.serialization.export.ExportTemplateControllerFactory;
-import com.ecfeed.core.serialization.export.IExportTemplateController;
+import com.ecfeed.core.serialization.export.ExportTemplateHolderFactory;
+import com.ecfeed.core.serialization.export.IExportTemplateHolder;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.StringHolder;
 import com.ecfeed.ui.common.ApplyValueMode;
@@ -99,8 +99,8 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 	private Text fTargetFileText;
 	private int fContent;
 	private String fTargetFile;
-	private ExportTemplateControllerFactory fExportTemplateControllerFactory;
-	private IExportTemplateController fExportTemplateController;
+	private ExportTemplateHolderFactory fExportTemplateHolderFactory;
+	private IExportTemplateHolder fExportTemplateHolder;
 
 	public final static int CONSTRAINTS_COMPOSITE = 1;
 	public final static int CHOICES_COMPOSITE = 1 << 1;
@@ -113,7 +113,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 			MethodNode method,
 			boolean generateExecutables, 
 			IFileInfoProvider fileInfoProvider,
-			ExportTemplateControllerFactory exportTemplateControllerFactory,
+			ExportTemplateHolderFactory exportTemplateHolderFactory,
 			String targetFile) {
 
 		super(parentShell);
@@ -130,10 +130,10 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 
 		fTargetFile = null;
 
-		fExportTemplateControllerFactory = exportTemplateControllerFactory;
+		fExportTemplateHolderFactory = exportTemplateHolderFactory;
 
-		if (fExportTemplateControllerFactory != null) {
-			fExportTemplateController = exportTemplateControllerFactory.createDefaultController();
+		if (fExportTemplateHolderFactory != null) {
+			fExportTemplateHolder = exportTemplateHolderFactory.createDefaultHolder();
 		}
 
 		fTargetFile = targetFile;
@@ -164,7 +164,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 	}
 
 	public String getExportTemplate() {
-		return fExportTemplateController.getTemplateText();
+		return fExportTemplateHolder.getTemplateText();
 	}
 
 	@Override
@@ -572,10 +572,10 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 				fDialogObjectToolkit.createReadOnlyGridCombo(
 						composite, new ExportFormatComboValueApplier(), ApplyValueMode.ON_SELECTION_ONLY);
 
-		String[] exportFormats = ExportTemplateControllerFactory.getAvailableExportFormats();
+		String[] exportFormats = ExportTemplateHolderFactory.getAvailableExportFormats();
 		fExportFormatCombo.setItems(exportFormats);
 
-		String format = fExportTemplateController.getTemplateFormat();
+		String format = fExportTemplateHolder.getTemplateFormat();
 		fExportFormatCombo.setText(format);
 	}
 
@@ -966,8 +966,8 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 			TestCasesExportDialog dialog = 
 					new TestCasesExportDialog(
 							FileCompositeVisibility.NOT_VISIBLE, 
-							fExportTemplateControllerFactory,
-							fExportTemplateController,
+							fExportTemplateHolderFactory,
+							fExportTemplateHolder,
 							fTargetFile, 
 							fMethod.getParametersCount());
 
@@ -976,8 +976,8 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 			}
 
 
-			fExportTemplateController = dialog.getExportTemplateController();
-			fExportFormatCombo.setText(fExportTemplateController.getTemplateFormat());
+			fExportTemplateHolder = dialog.getExportTemplateHolder();
+			fExportFormatCombo.setText(fExportTemplateHolder.getTemplateFormat());
 		}
 	}
 
@@ -994,7 +994,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		public void applyValue() {
 
 			String exportFormat = fExportFormatCombo.getText();
-			fExportTemplateController = fExportTemplateControllerFactory.createController(exportFormat);
+			fExportTemplateHolder = fExportTemplateHolderFactory.createHolder(exportFormat);
 		}
 
 	}	

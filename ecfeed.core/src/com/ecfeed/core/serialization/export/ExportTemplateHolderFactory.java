@@ -12,36 +12,36 @@ package com.ecfeed.core.serialization.export;
 import com.ecfeed.core.model.MethodNode;
 
 
-public class ExportTemplateControllerFactory {
+public class ExportTemplateHolderFactory {
 
 	private static String FORMAT_CSV = "CSV";
 	private static String FORMAT_XML = "XML";
 
 	MethodNode fMethodNode;
 
-	public ExportTemplateControllerFactory(MethodNode methodNode) {
+	public ExportTemplateHolderFactory(MethodNode methodNode) {
 		fMethodNode = methodNode;
 	}
 
-	public IExportTemplateController createDefaultController() {
-		return createController(getDefaultFormat());
+	public IExportTemplateHolder createDefaultHolder() {
+		return createHolder(getDefaultFormat());
 	}
 
-	public IExportTemplateController createController(String formatName) {
+	public IExportTemplateHolder createHolder(String formatName) {
 
-		IExportTemplateController exportTemplateController = createControllerIntr(formatName);
-		exportTemplateController.initialize();
+		IExportTemplateHolder exportTemplateHolder = createHolderIntr(formatName);
+		exportTemplateHolder.initialize();
 
-		return exportTemplateController;
+		return exportTemplateHolder;
 	}
 
-	private IExportTemplateController createControllerIntr(String formatName) {
+	private IExportTemplateHolder createHolderIntr(String formatName) {
 
 		if (formatName.equals(FORMAT_CSV)) {
-			return new CsvExportTemplateController(fMethodNode);
+			return new CsvExportTemplateHolder(fMethodNode);
 		}
 		if (formatName.equals(FORMAT_XML)) {
-			return new XmlExportTemplateController(fMethodNode);
+			return new XmlExportTemplateHolder(fMethodNode);
 		}
 		return null;
 	}

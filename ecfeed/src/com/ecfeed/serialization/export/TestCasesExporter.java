@@ -23,19 +23,19 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.serialization.export.CsvTestCasesExportHelper;
-import com.ecfeed.core.serialization.export.IExportTemplateController;
+import com.ecfeed.core.serialization.export.IExportTemplateHolder;
 import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.utils.EclipseHelper;
 
 public class TestCasesExporter {
 
-	IExportTemplateController fExportTemplateController;
+	IExportTemplateHolder fExportTemplateHolder;
 	int fExportedTestCases;
 
-	public TestCasesExporter(IExportTemplateController exportTemplateController) {
+	public TestCasesExporter(IExportTemplateHolder exportTemplateHolder) {
 
-		fExportTemplateController = exportTemplateController;
+		fExportTemplateHolder = exportTemplateHolder;
 	}
 
 	public void runExport(MethodNode method,
@@ -74,10 +74,10 @@ public class TestCasesExporter {
 	private void exportHeader(
 			MethodNode method, OutputStream outputStream) throws IOException {
 
-		if (fExportTemplateController.getHeaderTemplate() != null) {
+		if (fExportTemplateHolder.getHeaderTemplate() != null) {
 			String section = 
 					CsvTestCasesExportHelper.generateSection(
-							method, fExportTemplateController.getHeaderTemplate()) + StringHelper.newLine();
+							method, fExportTemplateHolder.getHeaderTemplate()) + StringHelper.newLine();
 
 			outputStream.write(section.getBytes());
 		}
@@ -90,7 +90,7 @@ public class TestCasesExporter {
 
 		String testCaseText = 
 				CsvTestCasesExportHelper.generateTestCaseString(
-						fExportedTestCases, testCase, fExportTemplateController.getTestCaseTemplate())
+						fExportedTestCases, testCase, fExportTemplateHolder.getTestCaseTemplate())
 						+ StringHelper.newLine();
 
 		outputStream.write(testCaseText.getBytes());
@@ -99,9 +99,9 @@ public class TestCasesExporter {
 
 	private void exportFooter(MethodNode method, OutputStream outputStream)
 			throws IOException {
-		if (fExportTemplateController.getFooterTemplate() != null) {
+		if (fExportTemplateHolder.getFooterTemplate() != null) {
 			String section = CsvTestCasesExportHelper.generateSection(
-					method, fExportTemplateController.getFooterTemplate()) + StringHelper.newLine();
+					method, fExportTemplateHolder.getFooterTemplate()) + StringHelper.newLine();
 
 			outputStream.write(section.getBytes());
 		}
@@ -145,7 +145,7 @@ public class TestCasesExporter {
 		private void exportTestCases(ExportMonitor exportMonitor)
 				throws IOException {
 
-			if (fExportTemplateController.getTestCaseTemplate() == null) {
+			if (fExportTemplateHolder.getTestCaseTemplate() == null) {
 				return;
 			}
 

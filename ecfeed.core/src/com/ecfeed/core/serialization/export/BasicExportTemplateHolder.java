@@ -9,23 +9,28 @@
  *******************************************************************************/
 package com.ecfeed.core.serialization.export;
 
+import com.ecfeed.core.model.MethodNode;
 
-public interface IExportTemplateController {
+public class BasicExportTemplateHolder extends AbstractExportTemplateHolder {
 
-	void initialize();
+	public BasicExportTemplateHolder(MethodNode methodNode) {
+		super(methodNode);
+	}
 
-	String createDefaultTemplateText();
-	void setTemplateText(String summaryTemplate);
-	String getTemplateText();
-	boolean isTemplateTextModified();
-	String getFileExtension();
-	String getTemplateFormat();
+	@Override
+	public String createDefaultTemplateText() {
 
-	void setHeaderTemplate(String headerTemplate);
-	void setTestCaseTemplate(String testCaseTemplate);
-	void setFooterTemplate(String footerTemplate);
+		return null;
+	}
 
-	String getFooterTemplate();
-	String getHeaderTemplate();
-	String getTestCaseTemplate();
+	@Override
+	public String getFileExtension() {
+		return null;
+	}
+
+	@Override 
+	public String getTemplateFormat() {
+		return null;
+	}
+
 }

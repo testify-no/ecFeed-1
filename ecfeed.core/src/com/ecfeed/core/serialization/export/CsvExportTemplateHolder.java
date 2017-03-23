@@ -12,13 +12,13 @@ package com.ecfeed.core.serialization.export;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.utils.StringHelper;
 
-public class CsvExportTemplateController extends BasicExportTemplateController {
+public class CsvExportTemplateHolder extends AbstractExportTemplateHolder {
 
 	public static final String HEADER_MARKER = "[Header]";
 	public static final String TEST_CASE_MARKER = "[TestCase]";
 	public static final String FOOTER_MARKER = "[Footer]";
 
-	public CsvExportTemplateController(MethodNode methodNode) {
+	public CsvExportTemplateHolder(MethodNode methodNode) {
 		super(methodNode);
 	}
 

@@ -18,7 +18,7 @@ import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.runner.ITestMethodInvoker;
 import com.ecfeed.core.runner.RunnerException;
-import com.ecfeed.core.serialization.export.ExportTemplateControllerFactory;
+import com.ecfeed.core.serialization.export.ExportTemplateHolderFactory;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.dialogs.SetupDialogExportOnline;
 import com.ecfeed.ui.dialogs.SetupDialogOnline;
@@ -46,12 +46,12 @@ public class OnlineExportSupport extends AbstractOnlineSupport {
 	protected SetupDialogOnline createSetupDialog(Shell activeShell,
 			MethodNode methodNode, IFileInfoProvider fileInfoProvider) {
 
-		ExportTemplateControllerFactory exportTemplateControllerFactory = 
-				new ExportTemplateControllerFactory(methodNode);
+		ExportTemplateHolderFactory exportTemplateHolderFactory = 
+				new ExportTemplateHolderFactory(methodNode);
 
 		return new SetupDialogExportOnline(activeShell, methodNode,
 				fileInfoProvider,
-				exportTemplateControllerFactory,
+				exportTemplateHolderFactory,
 				fTargetFile);
 	}
 
