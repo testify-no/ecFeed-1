@@ -46,8 +46,10 @@ public class DialogObjectToolkit {
 	}
 
 	private static String[] createFileExtensionTab(String fileExtension) {
+
 		String[] fileExtensions = new String[1];
 		fileExtensions[0] = fileExtension;
+
 		return fileExtensions;
 	}
 
@@ -63,6 +65,7 @@ public class DialogObjectToolkit {
 	}
 
 	public Composite createRowComposite(Composite parentComposite) {
+
 		Composite composite = new Composite(parentComposite, SWT.NONE);
 
 		RowLayout rowLayout = new RowLayout();
@@ -72,6 +75,7 @@ public class DialogObjectToolkit {
 	}
 
 	public Composite createFillComposite(Composite parentComposite) {
+
 		Composite composite = new Composite(parentComposite, SWT.NONE);
 
 		FillLayout rowLayout = new FillLayout();
@@ -98,20 +102,23 @@ public class DialogObjectToolkit {
 	}
 
 	public Label createLabel(Composite parent, String text) {
+
 		Label label = new Label(parent, SWT.NONE);
 		label.setText(text);
+
 		return label;
 	}
 
 	public Label createSpacer(Composite parent, int size) {
+
 		return createLabel(parent, StringHelper.createString(" ", size));
 	}
 
-	public Text createFileSelectionText(Composite targetFileContainer,
-			ModifyListener modifyListener) {
+	public Text createFileSelectionText(
+			Composite targetFileContainer, ModifyListener modifyListener) {
+
 		Text targetFileText = new Text(targetFileContainer, SWT.BORDER);
-		targetFileText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
-				false));
+		targetFileText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 
 		if (modifyListener != null) {
 			targetFileText.addModifyListener(modifyListener);
@@ -120,8 +127,8 @@ public class DialogObjectToolkit {
 		return targetFileText;
 	}
 
-	public Button createButton(Composite parent, String buttonText,
-			SelectionListener selectionListener) {
+	public Button createButton(
+			Composite parent, String buttonText, SelectionListener selectionListener) {
 		Button button = new Button(parent, SWT.NONE);
 		button.setText(buttonText);
 
@@ -132,74 +139,65 @@ public class DialogObjectToolkit {
 		return button;
 	}
 
-	public Button createBrowseButton(Composite parent,
-			SelectionListener selectionListener) {
+	public Button createBrowseButton(
+			Composite parent, SelectionListener selectionListener) {
+
 		final String BROWSE_LABEL = "Browse...";
 		return createButton(parent, BROWSE_LABEL, selectionListener);
 	}
 
-	public Text createFileSelectionComposite(Composite parent,
-			String labelText, String[] extensionsFilter, ModifyListener textModifyListener) {
-		Composite childComposite = createGridComposite(parent, 2);
-
-		createLabel(childComposite, labelText);
-
-		createSpacer(childComposite, 1);
-
-		Text targetFileText = createFileSelectionText(childComposite,
-				textModifyListener);
-
-		SelectionListener browseSelectionListener = 
-				new FileDialogSelectionAdapter(SWT.SAVE, extensionsFilter, targetFileText);
-		createBrowseButton(childComposite, browseSelectionListener);
-		return targetFileText;
-	}
-
 	public Combo createReadOnlyGridCombo(
 			Composite parentComposite,	IValueApplier valueApplier, ApplyValueMode applyValueMode) {
-		
+
 		return CommonEditHelper.createReadOnlyGridCombo(
 				parentComposite, valueApplier, applyValueMode);
 	}
-	
+
 	public Combo createReadOnlyGridCombo(Composite parentComposite,	IValueApplier valueApplier) {
+
 		return CommonEditHelper.createReadOnlyGridCombo(
 				parentComposite, valueApplier, ApplyValueMode.ON_SELECTION_AND_FOCUS_LOST);
 	}
 
 	public Combo createReadWriteGridCombo(
 			Composite parentComposite, IValueApplier valueApplier, ApplyValueMode applyValueMode) {
-		
+
 		return CommonEditHelper.createReadWriteGridCombo(
 				parentComposite, valueApplier, applyValueMode);
 	}	
-	
+
 	public Combo createReadWriteGridCombo(Composite parentComposite, IValueApplier valueApplier) {
+
 		return CommonEditHelper.createReadWriteGridCombo(
 				parentComposite, valueApplier, ApplyValueMode.ON_SELECTION_AND_FOCUS_LOST);
 	}	
 
 	class FileDialogSelectionAdapter extends SelectionAdapter {
+
 		int fDialogStyle;
 		String[] fFileExtensions;
 		Text fTargetFileText;
 
 		FileDialogSelectionAdapter(int dialogStyle, String[] fileExtensions, Text targetFileText) {
+
 			fDialogStyle = dialogStyle;
 			fFileExtensions = fileExtensions;
 			fTargetFileText = targetFileText;
 		}
 
 		FileDialogSelectionAdapter(int dialogStyle, String fileExtension, Text targetFileText) {
+
 			this(dialogStyle, createFileExtensionTab(fileExtension), targetFileText);
 		}
 
 		FileDialogSelectionAdapter(int dialogStyle, Text targetFileText) {
+
 			this(dialogStyle, new String(), targetFileText);
 		}		
 
 		@Override
 		public void widgetSelected(SelectionEvent e) {
+
 			FileDialog dialog = new FileDialog(EclipseHelper.getActiveShell(), fDialogStyle);
 
 			dialog.setFilterExtensions(fFileExtensions);
@@ -211,6 +209,47 @@ public class DialogObjectToolkit {
 
 			fTargetFileText.setText(filePath);
 		}
+	}
+
+	public FileSelectionComposite createFileSelectionComposite(
+			Composite parent, 
+			String labelText, 
+			String[] extensionsFilter, 
+			ModifyListener textModifyListener) {
+		return new FileSelectionComposite(parent, labelText, extensionsFilter, textModifyListener );
+	}
+
+	public class FileSelectionComposite {
+
+		private Composite fChildComposite;
+		private Text fTargetFileText;
+		SelectionListener fBrowseSelectionListener;
+
+		FileSelectionComposite(
+				Composite parent, 
+				String labelText, 
+				String[] extensionsFilter, 
+				ModifyListener textModifyListener) {
+
+			fChildComposite = createGridComposite(parent, 2);
+
+			createLabel(fChildComposite, labelText);
+			createSpacer(fChildComposite, 1);
+
+			fTargetFileText = createFileSelectionText(fChildComposite, textModifyListener);
+
+			fBrowseSelectionListener = 
+					new FileDialogSelectionAdapter(
+							SWT.SAVE, extensionsFilter, fTargetFileText);
+
+			createBrowseButton(fChildComposite, fBrowseSelectionListener);
+
+		}
+
+		public Text getTextField() {
+			return fTargetFileText;
+		}
+
 	}
 
 }

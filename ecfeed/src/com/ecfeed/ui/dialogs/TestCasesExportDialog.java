@@ -218,9 +218,11 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 	private void createTargetFileComposite(Composite parent) {
 		final String TARGET_FILE = "Target file";
 
-		fTargetFileTextField = 
+		DialogObjectToolkit.FileSelectionComposite fileSelectionComposite = 
 				fDialogObjectToolkit.createFileSelectionComposite(
 						parent, TARGET_FILE, getExportFileExtensions(), new FileTextModifyListener());
+
+		fTargetFileTextField = fileSelectionComposite.getTextField();
 
 		if (fTargetFile != null) {
 			fTargetFileTextField.setText(fTargetFile);
