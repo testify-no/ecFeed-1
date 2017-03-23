@@ -74,7 +74,7 @@ import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.dialogs.TestCasesExportDialog.FileCompositeVisibility;
 import com.ecfeed.ui.dialogs.basic.DialogObjectToolkit;
 
-public abstract class SetupDialogGenerator extends TitleAreaDialog {
+public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 	private Combo fTestSuiteCombo;
 	private Combo fGeneratorCombo;
 	private Button fOkButton;
@@ -105,7 +105,7 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 	public final static int GENERATOR_SELECTION_COMPOSITE = 1 << 3;
 	public final static int TEST_CASES_EXPORT_COMPOSITE = 1 << 4;
 
-	public SetupDialogGenerator(Shell parentShell, MethodNode method,
+	public GeneratorSetupDialog(Shell parentShell, MethodNode method,
 			boolean generateExecutables, IFileInfoProvider fileInfoProvider,
 			String targetFile) {
 

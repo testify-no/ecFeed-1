@@ -15,7 +15,7 @@ import org.eclipse.swt.widgets.Shell;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 
-public abstract class SetupDialogOnline extends SetupDialogGenerator {
+public abstract class SetupDialogOnline extends GeneratorSetupDialog {
 
 	public SetupDialogOnline(Shell parentShell, MethodNode method, boolean generateExecutables,
 			IFileInfoProvider fileInfoProvider, String targetFile) {
