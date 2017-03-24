@@ -235,11 +235,11 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 	private void createPreviewButtonsComposite(Composite parentComposite) {
 
 		Composite buttonComposite = 
-				fDialogObjectToolkit.createFillComposite(parentComposite);
+				fDialogObjectToolkit.createGridComposite(parentComposite, 3);
 
 		fDialogObjectToolkit.createLabel(buttonComposite, "Sample preview: ");
 
-		fDialogObjectToolkit.createSpacer(buttonComposite, 30);
+		fDialogObjectToolkit.createSpacer(buttonComposite, 150); // TODO ALIGN RIGHT
 
 		fDialogObjectToolkit.createButton(
 				buttonComposite, "Update preview", new UpdatePreviewButtonSelectionAdapter());
