@@ -45,14 +45,6 @@ public class DialogObjectToolkit {
 		return fInstance;
 	}
 
-	private static String[] createFileExtensionTab(String fileExtension) {
-
-		String[] fileExtensions = new String[1];
-		fileExtensions[0] = fileExtension;
-
-		return fileExtensions;
-	}
-
 	public Composite createGridComposite(Composite parent, int countOfColumns) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
@@ -153,28 +145,18 @@ public class DialogObjectToolkit {
 				parentComposite, valueApplier, ApplyValueMode.ON_SELECTION_AND_FOCUS_LOST);
 	}	
 
-	class FileDialogSelectionAdapter extends SelectionAdapter {
+	private class BrowseButtonClickListener extends SelectionAdapter {
 
 		int fDialogStyle;
 		String[] fFileExtensions;
 		Text fTargetFileText;
 
-		FileDialogSelectionAdapter(int dialogStyle, String[] fileExtensions, Text targetFileText) {
+		BrowseButtonClickListener(int dialogStyle, String[] fileExtensions, Text targetFileText) {
 
 			fDialogStyle = dialogStyle;
 			fFileExtensions = fileExtensions;
 			fTargetFileText = targetFileText;
 		}
-
-		FileDialogSelectionAdapter(int dialogStyle, String fileExtension, Text targetFileText) {
-
-			this(dialogStyle, createFileExtensionTab(fileExtension), targetFileText);
-		}
-
-		FileDialogSelectionAdapter(int dialogStyle, Text targetFileText) {
-
-			this(dialogStyle, new String(), targetFileText);
-		}		
 
 		@Override
 		public void widgetSelected(SelectionEvent e) {
@@ -189,6 +171,10 @@ public class DialogObjectToolkit {
 			}
 
 			fTargetFileText.setText(filePath);
+		}
+
+		public void setFileExtensionsFilter(String[] fileExtensions) {
+			fFileExtensions  = fileExtensions;
 		}
 	}
 
@@ -205,6 +191,7 @@ public class DialogObjectToolkit {
 		private Composite fChildComposite;
 		private Text fTargetFileText;
 		ButtonEx fButtonEx;
+		BrowseButtonClickListener fBrowseButtonClickListener;
 
 		FileSelectionComposite(
 				Composite parent, 
@@ -219,24 +206,20 @@ public class DialogObjectToolkit {
 
 			fTargetFileText = createFileSelectionText(fChildComposite, textModifyListener);
 
-			SelectionListener selectionListener = 
-					new FileDialogSelectionAdapter(
+			fBrowseButtonClickListener = 
+					new BrowseButtonClickListener(
 							SWT.SAVE, extensionsFilter, fTargetFileText);
 
-			fButtonEx = createBrowseButton(fChildComposite, selectionListener);
+			fButtonEx = createBrowseButton(fChildComposite, fBrowseButtonClickListener);
 		}
 
 		public Text getTextField() {
 			return fTargetFileText;
 		}
 
-		public void setExtensionFilter(String[] extensionsFilter) {
+		public void setFileExtensionsFilter(String[] extensionsFilter) {
 
-			SelectionListener fBrowseSelectionListener = 
-					new FileDialogSelectionAdapter(
-							SWT.SAVE, extensionsFilter, fTargetFileText);
-
-			fButtonEx.setSelectionListener(fBrowseSelectionListener);
+			fBrowseButtonClickListener.setFileExtensionsFilter(extensionsFilter);
 		}
 
 	}

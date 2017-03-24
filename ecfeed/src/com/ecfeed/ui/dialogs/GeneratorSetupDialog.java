@@ -101,6 +101,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 	private String fTargetFile;
 	private ExportTemplateHolderFactory fExportTemplateHolderFactory;
 	private IExportTemplateHolder fExportTemplateHolder;
+	DialogObjectToolkit.FileSelectionComposite fExportFileSelectionComposite;
 
 	public final static int CONSTRAINTS_COMPOSITE = 1;
 	public final static int CHOICES_COMPOSITE = 1 << 1;
@@ -582,14 +583,14 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 	private void createFileSelectionComposite(Composite parentComposite) {
 		final String TARGET_FILE = "Export target file";
 
-		DialogObjectToolkit.FileSelectionComposite fileSelectionComposite = 
+		fExportFileSelectionComposite = 
 				fDialogObjectToolkit.createFileSelectionComposite(
 						parentComposite, 
 						TARGET_FILE, 
-						TestCasesExportDialog.getExportFileExtensions(), 
+						getExportFileExtensions(), 
 						new ExportFileModifyListener());
 
-		fTargetFileText = fileSelectionComposite.getTextField();
+		fTargetFileText = fExportFileSelectionComposite.getTextField();
 
 
 		if (fTargetFile != null) {
@@ -837,6 +838,14 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		return p;
 	}
 
+	public String[] getExportFileExtensions() {
+
+		String fileExtension = fExportTemplateHolder.getFileExtension();
+		String[] extensionsFilter = { "*." + fileExtension, "*.*" };
+
+		return extensionsFilter;
+	}
+
 	private class ChoiceTreeCheckStateListener extends TreeCheckStateListener {
 
 		public ChoiceTreeCheckStateListener(CheckboxTreeViewer treeViewer) {
@@ -995,6 +1004,8 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 
 			String exportFormat = fExportFormatCombo.getText();
 			fExportTemplateHolder = fExportTemplateHolderFactory.createHolder(exportFormat);
+
+			fExportFileSelectionComposite.setFileExtensionsFilter(getExportFileExtensions());
 		}
 
 	}	
