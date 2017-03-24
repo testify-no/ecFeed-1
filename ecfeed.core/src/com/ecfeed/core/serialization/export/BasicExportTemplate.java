@@ -11,9 +11,9 @@ package com.ecfeed.core.serialization.export;
 
 import com.ecfeed.core.model.MethodNode;
 
-public class BasicExportTemplateHolder extends AbstractExportTemplateHolder {
+public class BasicExportTemplate extends AbstractExportTemplate {
 
-	public BasicExportTemplateHolder(MethodNode methodNode) {
+	public BasicExportTemplate(MethodNode methodNode) {
 		super(methodNode);
 	}
 

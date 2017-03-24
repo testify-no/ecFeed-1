@@ -12,13 +12,13 @@ package com.ecfeed.core.serialization.export;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.utils.StringHelper;
 
-public class XmlExportTemplateHolder extends AbstractExportTemplateHolder {
+public class CsvExportTemplate extends AbstractExportTemplate {
 
 	public static final String HEADER_MARKER = "[Header]";
 	public static final String TEST_CASE_MARKER = "[TestCase]";
 	public static final String FOOTER_MARKER = "[Footer]";
 
-	public XmlExportTemplateHolder(MethodNode methodNode) {
+	public CsvExportTemplate(MethodNode methodNode) {
 		super(methodNode);
 	}
 
@@ -27,61 +27,53 @@ public class XmlExportTemplateHolder extends AbstractExportTemplateHolder {
 
 		int methodParametersCount = getMethodNode().getParametersCount();
 
-		String defaultTemplateText =
+		String defaultTemplateText = 
 				StringHelper.appendNewline(HEADER_MARKER)
-				+ StringHelper.appendNewline(createDefaultHeaderTemplate())
+				+ StringHelper.appendNewline(createDefaultHeaderTemplate(methodParametersCount))
 				+ StringHelper.appendNewline(TEST_CASE_MARKER)
 				+ StringHelper.appendNewline(createDefaultTestCaseTemplate(methodParametersCount))
-				+ StringHelper.appendNewline(FOOTER_MARKER)
-				+ StringHelper.appendNewline(createDefaultFooterTemplate());
+				+ StringHelper.appendNewline(FOOTER_MARKER);
 
 		setDefaultTemplateText(defaultTemplateText);
 
-		return defaultTemplateText;		
+		return defaultTemplateText;
 	}
 
 	@Override
 	public String getFileExtension() {
-		return "xml";
+		return "csv";
 	}
 
 	@Override 
 	public String getTemplateFormat() {
-		return "XML";
+		return "CSV";
 	}
 
-	private static String createDefaultHeaderTemplate() {
-		return "<TestCases>";
-	}
+	private static String createDefaultHeaderTemplate(int methodParametersCount) {
 
-	private static String createDefaultFooterTemplate() {
-		return "</TestCases>";
+		final String NAME_TAG = "name";
+		return createParameterTemplate(NAME_TAG, methodParametersCount);
 	}
 
 	private static String createDefaultTestCaseTemplate(int methodParametersCount) {
 
-		StringBuilder template = new StringBuilder();
-		template.append("<TestCase ");
-		template.append("testSuite=\"%suite\" ");
-		template.append(createParametersTemplate(methodParametersCount));
-		template.append("/>");
-
-		return template.toString();
+		final String VALUE_TAG = "value";
+		return createParameterTemplate(VALUE_TAG, methodParametersCount);
 	}
 
-	private static String createParametersTemplate(int methodParametersCount) {
+	private static String createParameterTemplate( String parameterTag, int methodParametersCount) {
 
-		StringBuilder template = new StringBuilder();
+		String template = new String();
 
-		for (int paramIndex = 1; paramIndex <= methodParametersCount; ++paramIndex) {
-			template.append(createParameterString(paramIndex));
+		for (int cnt = 1; cnt <= methodParametersCount; ++cnt) {
+			if (cnt > 1) {
+				template = template + ",";
+			}
+			String paramDescription = "$" + cnt + "." + parameterTag;
+			template = template + paramDescription;
 		}
 
-		return template.toString();
-	}
-
-	private static String createParameterString(int cnt) {
-		return "arg" + cnt + "=" + "\"$" + cnt + "." + "value" + "\" ";
+		return template;
 	}
 
 }

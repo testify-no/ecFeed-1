@@ -18,7 +18,7 @@ import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.core.utils.StringHolder;
 
-public abstract class AbstractExportTemplateHolder implements IExportTemplateHolder {
+public abstract class AbstractExportTemplate implements IExportTemplate {
 
 	protected String fHeaderTemplate;
 	protected String fTestCaseTemplate;
@@ -33,7 +33,7 @@ public abstract class AbstractExportTemplateHolder implements IExportTemplateHol
 
 	private MethodNode fMethodNode;
 
-	public AbstractExportTemplateHolder(MethodNode methodNode) {
+	public AbstractExportTemplate(MethodNode methodNode) {
 		fMethodNode = methodNode;
 	}
 

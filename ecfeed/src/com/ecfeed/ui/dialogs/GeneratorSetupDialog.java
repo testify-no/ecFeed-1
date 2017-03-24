@@ -61,8 +61,8 @@ import com.ecfeed.core.model.ConstraintNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelHelper;
-import com.ecfeed.core.serialization.export.ExportTemplateHolderFactory;
-import com.ecfeed.core.serialization.export.IExportTemplateHolder;
+import com.ecfeed.core.serialization.export.ExportTemplateFactory;
+import com.ecfeed.core.serialization.export.IExportTemplate;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.StringHolder;
 import com.ecfeed.ui.common.ApplyValueMode;
@@ -99,8 +99,8 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 	private Text fTargetFileText;
 	private int fContent;
 	private String fTargetFile;
-	private ExportTemplateHolderFactory fExportTemplateHolderFactory;
-	private IExportTemplateHolder fExportTemplateHolder;
+	private ExportTemplateFactory fExportTemplateFactory;
+	private IExportTemplate fExportTemplate;
 	DialogObjectToolkit.FileSelectionComposite fExportFileSelectionComposite;
 
 	public final static int CONSTRAINTS_COMPOSITE = 1;
@@ -114,7 +114,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 			MethodNode method,
 			boolean generateExecutables, 
 			IFileInfoProvider fileInfoProvider,
-			ExportTemplateHolderFactory exportTemplateHolderFactory,
+			ExportTemplateFactory exportTemplateFactory,
 			String targetFile) {
 
 		super(parentShell);
@@ -131,10 +131,10 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 
 		fTargetFile = null;
 
-		fExportTemplateHolderFactory = exportTemplateHolderFactory;
+		fExportTemplateFactory = exportTemplateFactory;
 
-		if (fExportTemplateHolderFactory != null) {
-			fExportTemplateHolder = exportTemplateHolderFactory.createDefaultHolder();
+		if (fExportTemplateFactory != null) {
+			fExportTemplate = exportTemplateFactory.createDefaultHolder();
 		}
 
 		fTargetFile = targetFile;
@@ -165,7 +165,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 	}
 
 	public String getExportTemplate() {
-		return fExportTemplateHolder.getTemplateText();
+		return fExportTemplate.getTemplateText();
 	}
 
 	@Override
@@ -573,10 +573,10 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 				fDialogObjectToolkit.createReadOnlyGridCombo(
 						composite, new ExportFormatComboValueApplier(), ApplyValueMode.ON_SELECTION_ONLY);
 
-		String[] exportFormats = ExportTemplateHolderFactory.getAvailableExportFormats();
+		String[] exportFormats = ExportTemplateFactory.getAvailableExportFormats();
 		fExportFormatCombo.setItems(exportFormats);
 
-		String format = fExportTemplateHolder.getTemplateFormat();
+		String format = fExportTemplate.getTemplateFormat();
 		fExportFormatCombo.setText(format);
 	}
 
@@ -840,7 +840,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 
 	public String[] getExportFileExtensions() {
 
-		String fileExtension = fExportTemplateHolder.getFileExtension();
+		String fileExtension = fExportTemplate.getFileExtension();
 		String[] extensionsFilter = { "*." + fileExtension, "*.*" };
 
 		return extensionsFilter;
@@ -975,8 +975,8 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 			TestCasesExportDialog dialog = 
 					new TestCasesExportDialog(
 							FileCompositeVisibility.NOT_VISIBLE, 
-							fExportTemplateHolderFactory,
-							fExportTemplateHolder,
+							fExportTemplateFactory,
+							fExportTemplate,
 							fTargetFile, 
 							fMethod.getParametersCount());
 
@@ -985,8 +985,8 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 			}
 
 
-			fExportTemplateHolder = dialog.getExportTemplateHolder();
-			fExportFormatCombo.setText(fExportTemplateHolder.getTemplateFormat());
+			fExportTemplate = dialog.getExportTemplate();
+			fExportFormatCombo.setText(fExportTemplate.getTemplateFormat());
 		}
 	}
 
@@ -1003,7 +1003,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		public void applyValue() {
 
 			String exportFormat = fExportFormatCombo.getText();
-			fExportTemplateHolder = fExportTemplateHolderFactory.createHolder(exportFormat);
+			fExportTemplate = fExportTemplateFactory.createHolder(exportFormat);
 
 			fExportFileSelectionComposite.setFileExtensionsFilter(getExportFileExtensions());
 		}

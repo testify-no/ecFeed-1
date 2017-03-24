@@ -10,7 +10,7 @@
 package com.ecfeed.core.serialization.export;
 
 
-public interface IExportTemplateHolder {
+public interface IExportTemplate {
 
 	void initialize();
 
