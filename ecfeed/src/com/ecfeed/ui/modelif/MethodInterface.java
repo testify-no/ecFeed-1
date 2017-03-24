@@ -329,7 +329,7 @@ public class MethodInterface extends ParametersParentInterface {
 				new ExportTemplateFactory(getOwnNode());
 
 		IExportTemplate exportTemplate =
-				exportTemplateFactory.createDefaultHolder();
+				exportTemplateFactory.createDefaultTemplate();
 
 		TestCasesExportDialog dialog = 
 				new TestCasesExportDialog(

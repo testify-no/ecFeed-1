@@ -421,7 +421,7 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 				return;
 			}
 
-			fExportTemplate = fExportTemplateFactory.createHolder(exportFormat);
+			fExportTemplate = fExportTemplateFactory.createTemplate(exportFormat);
 			String templateDefaultText = fExportTemplate.createDefaultTemplateText();
 			fExportTemplate.setTemplateText(templateDefaultText);
 			fTemplateTextField.setText(templateDefaultText);

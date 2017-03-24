@@ -23,19 +23,19 @@ public class ExportTemplateFactory {
 		fMethodNode = methodNode;
 	}
 
-	public IExportTemplate createDefaultHolder() {
-		return createHolder(getDefaultFormat());
+	public IExportTemplate createDefaultTemplate() {
+		return createTemplate(getDefaultFormat());
 	}
 
-	public IExportTemplate createHolder(String formatName) {
+	public IExportTemplate createTemplate(String formatName) {
 
-		IExportTemplate exportTemplate = createHolderIntr(formatName);
+		IExportTemplate exportTemplate = createTemplateIntr(formatName);
 		exportTemplate.initialize();
 
 		return exportTemplate;
 	}
 
-	private IExportTemplate createHolderIntr(String formatName) {
+	private IExportTemplate createTemplateIntr(String formatName) {
 
 		if (formatName.equals(FORMAT_CSV)) {
 			return new CsvExportTemplate(fMethodNode);

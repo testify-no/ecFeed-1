@@ -134,7 +134,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		fExportTemplateFactory = exportTemplateFactory;
 
 		if (fExportTemplateFactory != null) {
-			fExportTemplate = exportTemplateFactory.createDefaultHolder();
+			fExportTemplate = exportTemplateFactory.createDefaultTemplate();
 		}
 
 		fTargetFile = targetFile;
@@ -1003,7 +1003,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		public void applyValue() {
 
 			String exportFormat = fExportFormatCombo.getText();
-			fExportTemplate = fExportTemplateFactory.createHolder(exportFormat);
+			fExportTemplate = fExportTemplateFactory.createTemplate(exportFormat);
 
 			fExportFileSelectionComposite.setFileExtensionsFilter(getExportFileExtensions());
 		}
