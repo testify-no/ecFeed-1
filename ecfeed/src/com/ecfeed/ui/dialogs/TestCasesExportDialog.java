@@ -46,6 +46,7 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 
 	IExportTemplate fExportTemplate;
 	private Text fTemplateTextField;
+	private Text fPreviewTextField;
 	private String fCurrentTemplateFormat;
 	DialogObjectToolkit.FileSelectionComposite fExportFileSelectionComposite;
 	private Text fTargetFileTextField;
@@ -110,6 +111,8 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 				fDialogObjectToolkit.createGridComposite(dialogAreaComposite, 1);
 
 		createTemplateTextComposite(childComposite);
+
+		createPreviewTextComposite(childComposite);
 
 		if (fFileCompositeVisibility == FileCompositeVisibility.VISIBLE) {
 			createTargetFileComposite(childComposite);
@@ -190,7 +193,7 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		Composite composite = fDialogObjectToolkit.createGridComposite(parentComposite, 4);
 
 		createExportTemplateCombo(composite);
-		createButtonsComposite(composite);
+		createTemplateButtonsComposite(composite);
 	}
 
 	private void createExportTemplateCombo(Composite composite) {
@@ -209,7 +212,40 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		fCurrentTemplateFormat = format;
 	}
 
-	private void createButtonsComposite(Composite parentComposite) {
+	private void createPreviewTextComposite(Composite parentComposite) {
+
+		Composite childComposite = 
+				fDialogObjectToolkit.createGridComposite(parentComposite, 1);
+
+		createPreviewLabelAndButtonsComposite(childComposite);
+		fPreviewTextField = 
+				fDialogObjectToolkit.createGridText(
+						childComposite, 150, 
+						fExportTemplate.createPreview());
+	}
+
+	private void createPreviewLabelAndButtonsComposite(
+			Composite parentComposite) {
+
+		Composite composite = fDialogObjectToolkit.createGridComposite(parentComposite, 2);
+
+		createPreviewButtonsComposite(composite);
+	}
+
+	private void createPreviewButtonsComposite(Composite parentComposite) {
+
+		Composite buttonComposite = 
+				fDialogObjectToolkit.createFillComposite(parentComposite);
+
+		fDialogObjectToolkit.createLabel(buttonComposite, "Sample preview: ");
+
+		fDialogObjectToolkit.createSpacer(buttonComposite, 30);
+
+		fDialogObjectToolkit.createButton(
+				buttonComposite, "Update preview", new UpdatePreviewButtonSelectionAdapter());
+	}
+
+	private void createTemplateButtonsComposite(Composite parentComposite) {
 		Composite buttonComposite = fDialogObjectToolkit
 				.createFillComposite(parentComposite);
 
@@ -315,6 +351,11 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		return true;
 	}
 
+	private void updatePreview() {
+		fExportTemplate.setTemplateText(fTemplateTextField.getText());
+		fPreviewTextField.setText(fExportTemplate.createPreview());
+	}
+
 	private class LoadButtonSelectionAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
@@ -348,6 +389,14 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		}
 	}
 
+	private class UpdatePreviewButtonSelectionAdapter extends SelectionAdapter {
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+
+			updatePreview();
+		}
+	}	
+
 	private class FileTextModifyListener implements ModifyListener {
 		@Override
 		public void modifyText(ModifyEvent e) {
@@ -378,6 +427,8 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 			fTemplateTextField.setText(templateDefaultText);
 
 			fExportFileSelectionComposite.setFileExtensionsFilter(getExportFileExtensions());
+
+			updatePreview();
 
 			fCurrentTemplateFormat = exportFormat;
 		}

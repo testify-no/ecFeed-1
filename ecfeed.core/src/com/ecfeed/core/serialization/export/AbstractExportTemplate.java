@@ -9,11 +9,17 @@
  *******************************************************************************/
 package com.ecfeed.core.serialization.export;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.StringTokenizer;
 
+import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.MethodNode;
+import com.ecfeed.core.model.MethodParameterNode;
+import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.core.utils.StringHolder;
@@ -91,6 +97,66 @@ public abstract class AbstractExportTemplate implements IExportTemplate {
 		}
 
 		return true;
+	}
+
+	@Override
+	public String createPreview() {
+
+		StringBuilder preview = new StringBuilder();
+
+		preview.append(TestCasesExportHelper.generateSection(fMethodNode, fHeaderTemplate));
+		preview.append("\n");
+
+		List<TestCaseNode> testCases = createPreviewTestCases();
+		int sequenceIndex = 0;
+
+		for (TestCaseNode testCase : testCases) {
+			preview.append(TestCasesExportHelper.generateTestCaseString(sequenceIndex++, testCase, fTestCaseTemplate));
+			preview.append("\n");
+		}
+
+		preview.append(TestCasesExportHelper.generateSection(fMethodNode, fFooterTemplate));
+		preview.append("\n");
+
+		return preview.toString();
+	}
+
+	private List<TestCaseNode> createPreviewTestCases() {
+
+		final int MAX_PREVIEW_TEST_CASES = 5;
+		List<TestCaseNode> testCases = new ArrayList<TestCaseNode>();
+
+		for (int cnt = 0; cnt < MAX_PREVIEW_TEST_CASES; cnt++) {
+			TestCaseNode testCaseNode = createRandomTestCaseNode(fMethodNode, cnt); 
+			testCases.add(testCaseNode);
+		}
+
+		return testCases;
+	}
+
+	private TestCaseNode createRandomTestCaseNode(MethodNode methodNode, int testCaseNumber) {
+
+		Random randomGenerator = new Random();
+		List<ChoiceNode> choiceNodes = new ArrayList<ChoiceNode>();
+		List<String> parameterNames = methodNode.getParametersNames();
+
+		for (String parameterName : parameterNames) {
+			choiceNodes.add(getRandomChoiceNode(methodNode, parameterName, randomGenerator));
+		}
+
+		TestCaseNode testCaseNode = new TestCaseNode("testCase" + testCaseNumber, choiceNodes);
+		testCaseNode.setParent(methodNode);
+
+		return testCaseNode;
+	}
+
+	ChoiceNode getRandomChoiceNode(MethodNode methodNode, String parameterName, Random randomGenerator) {
+
+		MethodParameterNode methodParameterNode = (MethodParameterNode)methodNode.getParameter(parameterName);
+		List<ChoiceNode> choices = methodParameterNode.getChoices();
+
+		ChoiceNode choiceNode = choices.get(randomGenerator.nextInt(choices.size()));
+		return choiceNode;
 	}
 
 	protected void setDefaultTemplateText(String defaultTemplateText) {

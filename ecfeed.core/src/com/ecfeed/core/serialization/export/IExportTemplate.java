@@ -28,4 +28,6 @@ public interface IExportTemplate {
 	String getFooterTemplate();
 	String getHeaderTemplate();
 	String getTestCaseTemplate();
+
+	String createPreview();
 }

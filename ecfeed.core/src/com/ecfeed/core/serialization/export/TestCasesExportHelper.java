@@ -21,7 +21,7 @@ import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.TestCaseNode;
 
-public class CsvTestCasesExportHelper {
+public class TestCasesExportHelper {
 
 	private static final String CLASS_NAME_SEQUENCE = "%class";
 	private static final String PACKAGE_NAME_SEQUENCE = "%package";
@@ -37,6 +37,11 @@ public class CsvTestCasesExportHelper {
 	private static final String ARITHMETIC_EXPRESSION_SEQUENCE_GENERIC_PATTERN = "\\$\\(.*\\)";
 
 	public static String generateSection(MethodNode method, String template) {
+
+		if (template == null) {
+			return new String();
+		}
+
 		String result = template.replace(CLASS_NAME_SEQUENCE, ClassNodeHelper.getLocalName(method.getClassNode()));
 		result = result.replace(PACKAGE_NAME_SEQUENCE, ClassNodeHelper.getPackageName(method.getClassNode()));
 		result = result.replace(METHOD_NAME_SEQUENCE, method.getName());
@@ -45,6 +50,19 @@ public class CsvTestCasesExportHelper {
 
 		return result;
 	}
+
+	public static String generateTestCaseString(int sequenceIndex, TestCaseNode testCase, String template) {
+
+		MethodNode method = testCase.getMethod();
+
+		String result = generateSection(method, template);
+		result = replaceTestParameterSequences(testCase, result);
+		result = result.replace(TEST_CASE_INDEX_NAME_SEQUENCE, String.valueOf(sequenceIndex));
+		result = result.replace(TEST_SUITE_NAME_SEQUENCE, testCase.getName());
+		result = evaluateExpressions(result);
+
+		return result;
+	}	
 
 	private static String replaceParameterSequences(MethodNode method, String template) {
 		String result = template;
@@ -80,19 +98,6 @@ public class CsvTestCasesExportHelper {
 	private static int getParameterNumber(String parameterSequence) {
 		String parameterNumberString = parameterSequence.substring(1, parameterSequence.indexOf("."));
 		return Integer.parseInt(parameterNumberString);
-	}
-
-	public static String generateTestCaseString(int sequenceIndex, TestCaseNode testCase, String template) {
-
-		MethodNode method = testCase.getMethod();
-
-		String result = generateSection(method, template);
-		result = replaceTestParameterSequences(testCase, result);
-		result = result.replace(TEST_CASE_INDEX_NAME_SEQUENCE, String.valueOf(sequenceIndex));
-		result = result.replace(TEST_SUITE_NAME_SEQUENCE, testCase.getName());
-		result = evaluateExpressions(result);
-
-		return result;
 	}
 
 	private static String evaluateExpressions(String template) {

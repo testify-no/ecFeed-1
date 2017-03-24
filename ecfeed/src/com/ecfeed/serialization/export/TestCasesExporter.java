@@ -22,7 +22,7 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.TestCaseNode;
-import com.ecfeed.core.serialization.export.CsvTestCasesExportHelper;
+import com.ecfeed.core.serialization.export.TestCasesExportHelper;
 import com.ecfeed.core.serialization.export.IExportTemplate;
 import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.StringHelper;
@@ -76,7 +76,7 @@ public class TestCasesExporter {
 
 		if (fexportTemplate.getHeaderTemplate() != null) {
 			String section = 
-					CsvTestCasesExportHelper.generateSection(
+					TestCasesExportHelper.generateSection(
 							method, fexportTemplate.getHeaderTemplate()) + StringHelper.newLine();
 
 			outputStream.write(section.getBytes());
@@ -89,7 +89,7 @@ public class TestCasesExporter {
 			throws IOException {
 
 		String testCaseText = 
-				CsvTestCasesExportHelper.generateTestCaseString(
+				TestCasesExportHelper.generateTestCaseString(
 						fExportedTestCases, testCase, fexportTemplate.getTestCaseTemplate())
 						+ StringHelper.newLine();
 
@@ -100,7 +100,7 @@ public class TestCasesExporter {
 	private void exportFooter(MethodNode method, OutputStream outputStream)
 			throws IOException {
 		if (fexportTemplate.getFooterTemplate() != null) {
-			String section = CsvTestCasesExportHelper.generateSection(
+			String section = TestCasesExportHelper.generateSection(
 					method, fexportTemplate.getFooterTemplate()) + StringHelper.newLine();
 
 			outputStream.write(section.getBytes());
