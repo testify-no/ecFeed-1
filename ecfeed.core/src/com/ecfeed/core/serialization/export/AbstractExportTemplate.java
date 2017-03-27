@@ -10,6 +10,7 @@
 package com.ecfeed.core.serialization.export;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,13 +27,13 @@ import com.ecfeed.core.utils.StringHolder;
 
 public abstract class AbstractExportTemplate implements IExportTemplate {
 
-	protected String fHeaderTemplate;
-	protected String fTestCaseTemplate;
-	protected String fFooterTemplate;
+	private static final String HEADER_MARKER = "[Header]";
+	private static final String TEST_CASE_MARKER = "[TestCase]";
+	private static final String FOOTER_MARKER = "[Footer]";
 
-	public static final String HEADER_MARKER = "[Header]";
-	public static final String TEST_CASE_MARKER = "[TestCase]";
-	public static final String FOOTER_MARKER = "[Footer]";
+	private String fHeaderTemplate;
+	private String fTestCaseTemplate;
+	private String fFooterTemplate;
 
 	private String fDefaultTemplateText;
 	private String fTemplateText;
@@ -100,35 +101,68 @@ public abstract class AbstractExportTemplate implements IExportTemplate {
 	}
 
 	@Override
-	public String createPreview() {
+	public String createPreview(Collection<TestCaseNode> selectedTestCases) {
 
-		StringBuilder preview = new StringBuilder();
+		StringBuilder stringBuilder = new StringBuilder();
 
-		preview.append(TestCasesExportHelper.generateSection(fMethodNode, fHeaderTemplate));
-		preview.append("\n");
+		stringBuilder.append(TestCasesExportHelper.generateSection(fMethodNode, fHeaderTemplate));
+		stringBuilder.append("\n");
 
-		List<TestCaseNode> testCases = createPreviewTestCases();
+		appendPreviewOfTestCases(selectedTestCases, stringBuilder);
+
+		stringBuilder.append(TestCasesExportHelper.generateSection(fMethodNode, fFooterTemplate));
+		stringBuilder.append("\n");
+
+		return stringBuilder.toString();
+	}
+
+	private void appendPreviewOfTestCases(
+			Collection<TestCaseNode> selectedTestCases, StringBuilder inOutStringBuilder) {
+
+		List<TestCaseNode> testCases = createPreviewTestCasesSample(selectedTestCases);
 		int sequenceIndex = 0;
 
 		for (TestCaseNode testCase : testCases) {
-			preview.append(TestCasesExportHelper.generateTestCaseString(sequenceIndex++, testCase, fTestCaseTemplate));
-			preview.append("\n");
+			inOutStringBuilder.append(TestCasesExportHelper.generateTestCaseString(sequenceIndex++, testCase, fTestCaseTemplate));
+			inOutStringBuilder.append("\n");
 		}
-
-		preview.append(TestCasesExportHelper.generateSection(fMethodNode, fFooterTemplate));
-		preview.append("\n");
-
-		return preview.toString();
 	}
 
-	private List<TestCaseNode> createPreviewTestCases() {
+	private List<TestCaseNode> createPreviewTestCasesSample(Collection<TestCaseNode> selectedTestCases) {
 
 		final int MAX_PREVIEW_TEST_CASES = 5;
+
+		if (selectedTestCases == null) {
+			return createRandomTestCasesSample(MAX_PREVIEW_TEST_CASES);
+		}
+
+		return createSampleFromSelectedTestCases(
+				selectedTestCases, MAX_PREVIEW_TEST_CASES);
+	}
+
+	private List<TestCaseNode> createSampleFromSelectedTestCases(
+			Collection<TestCaseNode> selectedTestCases,
+			final int maxPreviewTestCases) {
+
 		List<TestCaseNode> testCases = new ArrayList<TestCaseNode>();
 
-		for (int cnt = 0; cnt < MAX_PREVIEW_TEST_CASES; cnt++) {
-			TestCaseNode testCaseNode = createRandomTestCaseNode(fMethodNode, cnt); 
-			testCases.add(testCaseNode);
+		int cnt = Math.min(maxPreviewTestCases, selectedTestCases.size());
+		List<TestCaseNode> selectedTestCasesList = new ArrayList<TestCaseNode>(selectedTestCases);
+
+		for (int index = 0; index < cnt; index++) {
+			testCases.add(selectedTestCasesList.get(index));
+		}
+
+		return testCases;
+	}
+
+	private List<TestCaseNode> createRandomTestCasesSample(
+			final int maxPreviewTestCases) {
+
+		List<TestCaseNode> testCases = new ArrayList<TestCaseNode>();
+
+		for (int index = 0; index < maxPreviewTestCases; index++) {
+			testCases.add(createRandomTestCaseNode(fMethodNode, index));
 		}
 
 		return testCases;

@@ -978,7 +978,8 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 							fExportTemplateFactory,
 							fExportTemplate,
 							fTargetFile, 
-							fMethod.getParametersCount());
+							fMethod.getParametersCount(),
+							null);
 
 			if (dialog.open() != IDialogConstants.OK_ID) {
 				return;

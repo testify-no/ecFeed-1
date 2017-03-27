@@ -10,6 +10,8 @@
 
 package com.ecfeed.ui.dialogs;
 
+import java.util.Collection;
+
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.swt.events.HelpEvent;
@@ -24,6 +26,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 
+import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.resources.ResourceHelper;
 import com.ecfeed.core.serialization.export.ExportTemplateFactory;
 import com.ecfeed.core.serialization.export.IExportTemplate;
@@ -55,6 +58,7 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 	private FileCompositeVisibility fFileCompositeVisibility;
 	private Combo fExportFormatCombo;
 	private ExportTemplateFactory fExportTemplateFactory;
+	private Collection<TestCaseNode> fTestCaseNodes;
 
 	public enum FileCompositeVisibility {
 		VISIBLE, NOT_VISIBLE
@@ -65,8 +69,11 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 			ExportTemplateFactory exportTemplateFactory,
 			IExportTemplate exportTemplate,
 			String targetFile,
-			int methodParametersCount) {
+			int methodParametersCount,
+			Collection<TestCaseNode> testCaseNodes) {
+
 		super(EclipseHelper.getActiveShell());
+
 		setHelpAvailable(true);
 		setDialogHelpAvailable(false);
 
@@ -75,6 +82,7 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		fExportTemplate = exportTemplate;
 		fTargetFile = targetFile;
 		fDialogObjectToolkit = DialogObjectToolkit.getInstance();
+		fTestCaseNodes = testCaseNodes;
 	}
 
 	@Override
@@ -221,7 +229,7 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		fPreviewTextField = 
 				fDialogObjectToolkit.createGridText(
 						childComposite, 150, 
-						fExportTemplate.createPreview());
+						fExportTemplate.createPreview(fTestCaseNodes));
 	}
 
 	private void createPreviewLabelAndButtonsComposite(
@@ -353,7 +361,7 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 
 	private void updatePreview() {
 		fExportTemplate.setTemplateText(fTemplateTextField.getText());
-		fPreviewTextField.setText(fExportTemplate.createPreview());
+		fPreviewTextField.setText(fExportTemplate.createPreview(fTestCaseNodes));
 	}
 
 	private class LoadButtonSelectionAdapter extends SelectionAdapter {

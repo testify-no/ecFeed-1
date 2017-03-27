@@ -9,6 +9,10 @@
  *******************************************************************************/
 package com.ecfeed.core.serialization.export;
 
+import java.util.Collection;
+
+import com.ecfeed.core.model.TestCaseNode;
+
 
 public interface IExportTemplate {
 
@@ -29,5 +33,5 @@ public interface IExportTemplate {
 	String getHeaderTemplate();
 	String getTestCaseTemplate();
 
-	String createPreview();
+	String createPreview(Collection<TestCaseNode> testCases);
 }
