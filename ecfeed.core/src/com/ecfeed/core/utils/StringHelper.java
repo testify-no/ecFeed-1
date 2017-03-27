@@ -361,7 +361,7 @@ public class StringHelper {
 		return convertToLongViaDouble(str);
 	}
 
-	private static Long convertToLongDirectly(String str) {
+	public static Long convertToLongDirectly(String str) {
 
 		Long result = null;
 

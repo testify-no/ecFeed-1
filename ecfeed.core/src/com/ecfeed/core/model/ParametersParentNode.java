@@ -60,6 +60,19 @@ public abstract class ParametersParentNode extends AbstractNode {
 		return null;
 	}
 
+	public int getParameterIndex(String parameterName) {
+
+		int index = 0;
+
+		for (AbstractParameterNode parameter : fParameters) {
+			if (parameter.getName().equals(parameterName)) {
+				return index;
+			}
+			index++;
+		}
+		return -1;
+	}
+
 	public boolean parameterExists(String parameterName) {
 
 		if (getParameter(parameterName) == null) {
