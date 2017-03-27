@@ -209,7 +209,7 @@ public abstract class AbstractExportTemplate implements IExportTemplate {
 			return null;
 		}
 
-		return StringHelper.removeNewlineAtEnd(headerTemplate.trim());
+		return StringHelper.removeNewlineAtEnd(headerTemplate);
 	}
 
 	private static String createUserTestCaseTemplate(Map<String, String> template) {
@@ -219,7 +219,7 @@ public abstract class AbstractExportTemplate implements IExportTemplate {
 		if (testCaseTemplate == null) {
 			return null;
 		}
-		return StringHelper.removeNewlineAtEnd(testCaseTemplate.trim());
+		return StringHelper.removeNewlineAtEnd(testCaseTemplate);
 	}
 
 	private static String createUserFooterTemplate(Map<String, String> template) {
@@ -229,7 +229,7 @@ public abstract class AbstractExportTemplate implements IExportTemplate {
 		if (footerTemplate == null) {
 			return null;
 		}
-		return StringHelper.removeNewlineAtEnd(footerTemplate.trim());
+		return StringHelper.removeNewlineAtEnd(footerTemplate);
 	}
 
 	protected static Map<String, String> divideIntoSubtemplates(String templateText) {

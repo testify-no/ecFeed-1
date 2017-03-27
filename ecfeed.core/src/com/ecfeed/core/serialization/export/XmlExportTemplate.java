@@ -61,7 +61,7 @@ public class XmlExportTemplate extends AbstractExportTemplate {
 	private static String createDefaultTestCaseTemplate(int methodParametersCount) {
 
 		StringBuilder template = new StringBuilder();
-		template.append("<TestCase ");
+		template.append("\t<TestCase ");
 		template.append("testSuite=\"%suite\" ");
 		template.append(createParametersTemplate(methodParametersCount));
 		template.append("/>");

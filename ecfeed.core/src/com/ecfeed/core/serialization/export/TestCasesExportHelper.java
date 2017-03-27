@@ -80,7 +80,7 @@ public class TestCasesExportHelper {
 		return result;
 	}
 
-	private static String getParameterSubstitute(String parameterCommandSequence, MethodNode methodNode) { // XYX rename
+	private static String getParameterSubstitute(String parameterCommandSequence, MethodNode methodNode) {
 
 		String command = getParameterCommand(parameterCommandSequence);
 		int parameterNumber = getParameterNumber(parameterCommandSequence, methodNode) - 1;

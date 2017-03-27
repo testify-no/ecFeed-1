@@ -98,6 +98,11 @@ public class TestCasesExportHelperTest {
 	@Test
 	public void shouldParseThreeParamsTemplateByParamName() {
 		performTest("$par0.value, $par1.value, $par2.value", "0, 1, $par2.value");
+	}
+
+	@Test
+	public void shouldParseTwoParamsWithSpaces() {
+		performTest("   $par0.value, $par1.value", "   0, 1");
 	}	
 
 	@Test
