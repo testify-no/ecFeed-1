@@ -56,6 +56,10 @@ public abstract class AbstractExportTemplate implements IExportTemplate {
 			ExceptionHelper.reportRuntimeException("Template text must not be empty.");
 		}
 
+		fHeaderTemplate.reset();
+		fTestCaseTemplate.reset();
+		fFooterTemplate.reset();
+
 		fTemplateText = templateText;
 		divideIntoSubtemplates(templateText);
 	}

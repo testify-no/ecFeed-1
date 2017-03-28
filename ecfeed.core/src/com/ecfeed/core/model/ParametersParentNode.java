@@ -60,6 +60,11 @@ public abstract class ParametersParentNode extends AbstractNode {
 		return null;
 	}
 
+	public AbstractParameterNode getParameter(int parameterIndex) {
+
+		return fParameters.get(parameterIndex);
+	}	
+
 	public int getParameterIndex(String parameterName) {
 
 		int index = 0;

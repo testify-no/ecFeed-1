@@ -40,7 +40,7 @@ public class CsvExportTemplateTest {
 	}
 
 	@Test
-	public void ShouldParseForTwoParamsTemplate() {
+	public void ShouldParseForTwoParamsTemplateRepeatedly() {
 
 		String templateText = 
 				StringHelper.appendNewline(CsvExportTemplate.HEADER_MARKER)
@@ -52,6 +52,12 @@ public class CsvExportTemplateTest {
 		CsvExportTemplate csvExportTemplate = 
 				new CsvExportTemplate(createMethodNode());
 
+		setTemplateText(csvExportTemplate, templateText);
+		setTemplateText(csvExportTemplate, templateText);
+		setTemplateText(csvExportTemplate, templateText);
+	}
+
+	private void setTemplateText(CsvExportTemplate csvExportTemplate, String templateText) {
 		try {
 			csvExportTemplate.setTemplateText(templateText);
 		} catch (Exception e) {

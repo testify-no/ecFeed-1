@@ -29,6 +29,10 @@ public class ItemHolder<Type> {
 		fItem = str;
 	}
 
+	public void reset() {
+		fItem = null;
+	}
+
 	public boolean isNull() {
 		if (fItem == null) {
 			return true;

@@ -16,6 +16,7 @@ public class ExportTemplateFactory {
 
 	private static String FORMAT_CSV = "CSV";
 	private static String FORMAT_XML = "XML";
+	private static String FORMAT_GHERKIN = "Gherkin";
 
 	MethodNode fMethodNode;
 
@@ -43,11 +44,14 @@ public class ExportTemplateFactory {
 		if (formatName.equals(FORMAT_XML)) {
 			return new XmlExportTemplate(fMethodNode);
 		}
+		if (formatName.equals(FORMAT_GHERKIN)) {
+			return new GherkinExportTemplate(fMethodNode);
+		}		
 		return null;
 	}
 
 	public static String[] getAvailableExportFormats() {
-		String[] formats = { FORMAT_CSV, FORMAT_XML };
+		String[] formats = { FORMAT_CSV, FORMAT_XML, FORMAT_GHERKIN };
 		return formats;
 	}
 
