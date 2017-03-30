@@ -438,7 +438,9 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 			fExportTemplate.setTemplateText(templateDefaultText);
 			fTemplateTextField.setText(templateDefaultText);
 
-			fExportFileSelectionComposite.setFileExtensionsFilter(getExportFileExtensions());
+			if (fExportFileSelectionComposite != null) {
+				fExportFileSelectionComposite.setFileExtensionsFilter(getExportFileExtensions());
+			}
 
 			updatePreview();
 

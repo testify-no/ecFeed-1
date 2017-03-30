@@ -167,7 +167,7 @@ public class GherkinExportTemplate extends AbstractExportTemplate {
 
 		String parameterName = methodParameterNode.getName();
 
-		return embedInMinWidthOperator(parameterName, maxParamValueLength); 
+		return embedInMinWidthOperator("<" + parameterName + ">", maxParamValueLength); 
 	}
 
 	private static String embedInMinWidthOperator(String string, int minWidth) {
