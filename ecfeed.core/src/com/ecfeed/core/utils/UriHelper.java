@@ -18,7 +18,7 @@ public class UriHelper {
 	public static String convertUriToFilePath(URI uri) {
 		String pathWithFileName = uri.toString();
 
-		pathWithFileName = StringHelper.removePrefix("file:", pathWithFileName);
+		pathWithFileName = StringHelper.removeToPrefix("file:", pathWithFileName);
 		pathWithFileName = removePrefixForWindows(pathWithFileName);
 		pathWithFileName = convertUriSeparatorsToPathSeparators(pathWithFileName);
 		pathWithFileName = convertSpaces(pathWithFileName);
@@ -33,7 +33,7 @@ public class UriHelper {
 
 		if (pathWithFileName.charAt(0) == uriSeparator.charAt(0) &&
 				pathWithFileName.charAt(2) == windowsDiskLetterSeparator) {
-			pathWithFileName = StringHelper.removePrefix(uriSeparator, pathWithFileName);
+			pathWithFileName = StringHelper.removeToPrefix(uriSeparator, pathWithFileName);
 		}
 
 		return pathWithFileName;

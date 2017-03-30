@@ -186,7 +186,7 @@ public class TestCasesExportHelper {
 	}
 
 	private static String removeBrackets(String string) {
-		return StringHelper.removePrefixAndFromPostfix("(", ")", string);
+		return StringHelper.removeToPrefixAndFromPostfix("(", ")", string);
 	}
 
 	private static String getArgWithBrackets(String minWidthSequence, int index) {

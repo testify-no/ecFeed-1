@@ -51,7 +51,7 @@ public class StringHelper {
 		return str.trim().isEmpty();
 	}
 
-	public static String removePrefix(String prefix, String fromStr) {
+	public static String removeToPrefix(String prefix, String fromStr) {
 
 		int index = fromStr.indexOf(prefix);
 
@@ -424,9 +424,9 @@ public class StringHelper {
 		return null;
 	}
 
-	public static String removePrefixAndFromPostfix(String prefix, String postfix, String fromString) {
+	public static String removeToPrefixAndFromPostfix(String prefix, String postfix, String fromString) {
 
-		String s1 = StringHelper.removePrefix(prefix, fromString);
+		String s1 = StringHelper.removeToPrefix(prefix, fromString);
 		String s2 = StringHelper.removeFromPostfix(postfix, s1);
 
 		return s2;

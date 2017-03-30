@@ -258,7 +258,7 @@ public class ModelEditorHelper {
 				return 0;
 			}
 
-			String fileNumber = StringHelper.removePrefix(untitledFilePrefix, fileName);
+			String fileNumber = StringHelper.removeToPrefix(untitledFilePrefix, fileName);
 
 			int extractedNumber = 0;
 			try { 
