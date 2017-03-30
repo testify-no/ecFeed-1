@@ -9,6 +9,9 @@
  *******************************************************************************/
 package com.ecfeed.core.serialization.export;
 
+import java.util.Set;
+
+import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.utils.StringHelper;
@@ -74,8 +77,7 @@ public class GherkinExportTemplate extends AbstractExportTemplate {
 				parameterIndex < methodParametersCount; 
 				++parameterIndex) {
 
-			MethodParameterNode methodParameterNode = 
-					(MethodParameterNode) methodNode.getParameter(parameterIndex);
+			MethodParameterNode methodParameterNode = methodNode.getMethodParameter(parameterIndex);
 
 			if (methodParameterNode.isExpected()) {
 				continue;
@@ -124,6 +126,11 @@ public class GherkinExportTemplate extends AbstractExportTemplate {
 		return stringBuilder.toString();
 	}
 
+	private static int getChoiceLength(ChoiceNode choiceNode) {
+		return choiceNode.toString().length();
+	}
+
+
 	private static String getExpectedParameterPrefix(int counter) {
 		if (counter == 0) {
 			return "\tThen the value of ";
@@ -142,13 +149,41 @@ public class GherkinExportTemplate extends AbstractExportTemplate {
 
 		for (int parameterIndex = 0; parameterIndex < methodParametersCount; ++parameterIndex) {
 
-			String parameterName = methodNode.getParameter(parameterIndex).getName();
-			stringBuilder.append(parameterName + " | ");
+			MethodParameterNode methodParameterNode = 
+					(MethodParameterNode)methodNode.getParameter(parameterIndex);
+
+			String parameterDescription = createParameterDescription(methodParameterNode); 
+			stringBuilder.append(parameterDescription + " | ");
 		}
 
 		stringBuilder.append("\n");
 
 		return stringBuilder.toString();
+	}
+
+	private static String createParameterDescription(MethodParameterNode methodParameterNode) {
+
+		int maxParamValueLength = getMaxParamValueLength(methodParameterNode);
+
+		String parameterName = methodParameterNode.getName();
+
+		return embedInMinWidthOperator(parameterName, maxParamValueLength); 
+	}
+
+	private static String embedInMinWidthOperator(String string, int minWidth) {
+		return "(" + string + ").min_width(" + minWidth + ")";	
+	}
+
+	private static int getMaxParamValueLength(MethodParameterNode methodParameterNode) {
+
+		Set<ChoiceNode> choices = methodParameterNode.getAllChoices();
+
+		int maxLength = 0;
+		for (ChoiceNode choiceNode : choices) {
+			maxLength = Math.max(maxLength, getChoiceLength(choiceNode));
+		}
+
+		return maxLength;
 	}
 
 	private static String createExecuteSection(MethodNode methodNode) {
@@ -166,8 +201,12 @@ public class GherkinExportTemplate extends AbstractExportTemplate {
 
 		for (int index = 0; index < methodParametersCount; ++index) {
 
-			String parameterName = methodNode.getParameter(index).getName(); 
-			String paramDescription = "$" + parameterName + "." + "value";
+			MethodParameterNode methodParameterNode = methodNode.getMethodParameter(index);  
+			String parameterName = methodParameterNode.getName(); 
+
+			int maxParamValueLength = getMaxParamValueLength(methodParameterNode);
+
+			String paramDescription = embedInMinWidthOperator("$" + parameterName + "." + "value", maxParamValueLength);
 			stringBuilder.append(paramDescription);
 			stringBuilder.append(" | ");
 		}

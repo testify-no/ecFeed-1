@@ -424,4 +424,12 @@ public class StringHelper {
 		return null;
 	}
 
+	public static String removePrefixAndFromPostfix(String prefix, String postfix, String fromString) {
+
+		String s1 = StringHelper.removePrefix(prefix, fromString);
+		String s2 = StringHelper.removeFromPostfix(postfix, s1);
+
+		return s2;
+	}
+
 }

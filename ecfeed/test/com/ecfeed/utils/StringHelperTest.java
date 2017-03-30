@@ -237,5 +237,15 @@ public class StringHelperTest{
 		assertEquals(null, StringHelper.findNumericPostfix("a"));
 	}	
 
+	@Test
+	public void shouldRemovePrefixAndFromPostfix() {
+		assertEquals("abc", StringHelper.removePrefixAndFromPostfix("<", ">", "<abc>"));
+	}	
+
+	@Test
+	public void shouldRemovePrefixAndFromPostfix2() {
+		assertEquals("   ", StringHelper.removePrefixAndFromPostfix("<", ">", "<   >"));
+	}	
+
 
 }

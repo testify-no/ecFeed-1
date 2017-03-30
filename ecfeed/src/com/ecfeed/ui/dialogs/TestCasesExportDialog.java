@@ -193,6 +193,8 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 				fDialogObjectToolkit.createGridText(
 						childComposite, 150, 
 						fExportTemplate.getTemplateText());
+
+		DialogObjectToolkit.setMonospaceFont(fTemplateTextField);
 	}
 
 	private void createTemplateLabelAndButtonsComposite(
@@ -230,6 +232,8 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 				fDialogObjectToolkit.createGridText(
 						childComposite, 150, 
 						fExportTemplate.createPreview(fTestCaseNodes));
+
+		DialogObjectToolkit.setMonospaceFont(fPreviewTextField);
 	}
 
 	private void createPreviewLabelAndButtonsComposite(

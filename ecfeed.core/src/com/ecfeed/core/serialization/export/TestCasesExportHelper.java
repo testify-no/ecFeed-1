@@ -62,6 +62,7 @@ public class TestCasesExportHelper {
 		result = result.replace(TEST_CASE_INDEX_NAME_SEQUENCE, String.valueOf(sequenceIndex));
 		result = result.replace(TEST_SUITE_NAME_SEQUENCE, testCase.getName());
 		result = evaluateExpressions(result);
+		result = evaluateMinWidthOperator(result);
 
 		return result;
 	}	
@@ -141,7 +142,7 @@ public class TestCasesExportHelper {
 
 	private static String evaluateMinWidthOperator(String template) {
 
-		final String MIN_WIDTH_OPERATOR_PATTERN = "\\(.*\\)\\.min_width\\(\\d+\\)";
+		final String MIN_WIDTH_OPERATOR_PATTERN = "\\([^.]*\\)\\.min_width\\(\\d+\\)";
 
 		String result = template;
 		Matcher matcher = Pattern.compile(MIN_WIDTH_OPERATOR_PATTERN).matcher(template);
@@ -159,9 +160,9 @@ public class TestCasesExportHelper {
 	private static String getExpandedValue(String minWidthSequence) {
 
 		String valueStr = getValueString(minWidthSequence);
-		String repetitionsStr = getRepetitionsString(minWidthSequence);
+		String expandToLengthStr = getRepetitionsString(minWidthSequence);
 
-		return expandValue(valueStr, repetitionsStr);
+		return expandValue(valueStr, expandToLengthStr);
 	}
 
 	private static String getValueString(String string) {
@@ -171,8 +172,7 @@ public class TestCasesExportHelper {
 			return null;
 		}
 
-		final String ARGUMENT_PATTERN = "[^(^)]";
-		return StringHelper.getMatch(tag, ARGUMENT_PATTERN);
+		return removeBrackets(tag);
 	}
 
 	private static String getRepetitionsString(String minWidthSequence) {
@@ -182,13 +182,16 @@ public class TestCasesExportHelper {
 			return null;
 		}
 
-		final String NUMERIC_ARGUMENT_PATTERN = "\\d+";
-		return StringHelper.getMatch(tag, NUMERIC_ARGUMENT_PATTERN);
+		return removeBrackets(tag);
+	}
+
+	private static String removeBrackets(String string) {
+		return StringHelper.removePrefixAndFromPostfix("(", ")", string);
 	}
 
 	private static String getArgWithBrackets(String minWidthSequence, int index) {
 
-		final String ARG_WITH_BRACKETS_PATTERN = "\\(\\s*\\w*\\s*\\)";
+		final String ARG_WITH_BRACKETS_PATTERN = "\\(\\s*[^\\)]*\\s*\\)";
 
 		return StringHelper.getMatch(minWidthSequence, ARG_WITH_BRACKETS_PATTERN, index);
 	}

@@ -15,6 +15,8 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -22,6 +24,7 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
@@ -143,7 +146,13 @@ public class DialogObjectToolkit {
 
 		return CommonEditHelper.createReadWriteGridCombo(
 				parentComposite, valueApplier, ApplyValueMode.ON_SELECTION_AND_FOCUS_LOST);
-	}	
+	}
+
+	public static void setMonospaceFont(Control control) {
+		FontData oldFontData = control.getFont().getFontData()[0];
+		Font font = new Font(control.getDisplay(), new FontData("Mono", oldFontData.getHeight()-1, oldFontData.getStyle()));
+		control.setFont(font);
+	}
 
 	private class BrowseButtonClickListener extends SelectionAdapter {
 

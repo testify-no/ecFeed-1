@@ -155,5 +155,21 @@ public class TestCasesExportHelperTest {
 		performTest("(Q).min_width(C)", "(Q).min_width(C)");
 	}	
 
+	@Test
+	public void shouldConvertMultipleMinWidthOperators() {
+		performTest("| (arg).min_width(7) | (arg0).min_width(7) |", 
+				"| arg     | arg0    |");
+	}
+
+	@Test
+	public void shouldConvertMultipleMinWidthOperators2() {
+		performTest("| (arg).min_width(3) | (arg0).min_width(4) |", 
+				"| arg | arg0 |");
+	}	
+
+	@Test
+	public void shouldExpandSpaceNegativeInteger() {
+		performTest("(-5).min_width(3)", "-5 ");
+	}	
 
 }
