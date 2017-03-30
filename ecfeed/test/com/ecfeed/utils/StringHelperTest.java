@@ -193,6 +193,11 @@ public class StringHelperTest{
 	}
 
 	@Test
+	public void shouldGetMatch() {
+		assertEquals("(x)", StringHelper.getMatch("abc(x)ghi", "\\(\\w+\\)"));
+	}
+
+	@Test
 	public void shouldReturnNoOccurencesOfSpace(){
 		assertEquals(0, StringHelper.countOccurencesOfChar("12345", ' '));
 	}	

@@ -20,6 +20,7 @@ import com.ecfeed.core.model.ClassNodeHelper;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.TestCaseNode;
+import com.ecfeed.core.utils.StringHelper;
 
 public class TestCasesExportHelper {
 
@@ -47,6 +48,7 @@ public class TestCasesExportHelper {
 		result = result.replace(METHOD_NAME_SEQUENCE, method.getName());
 		result = replaceParameterNameSequences(method, result);
 		result = evaluateExpressions(result);
+		result = evaluateMinWidthOperator(result);
 
 		return result;
 	}
@@ -135,6 +137,66 @@ public class TestCasesExportHelper {
 			}catch(RuntimeException e){} //if evaluation failed, do not stop, keep the result as it is
 		}		
 		return result;
+	}
+
+	private static String evaluateMinWidthOperator(String template) {
+
+		final String MIN_WIDTH_OPERATOR_PATTERN = "\\(.*\\)\\.min_width\\(\\d+\\)";
+
+		String result = template;
+		Matcher matcher = Pattern.compile(MIN_WIDTH_OPERATOR_PATTERN).matcher(template);
+
+		while(matcher.find()) {
+
+			String expressionSequence = matcher.group();
+			String expandedValue = getExpandedValue(expressionSequence);
+			result = result.replace(expressionSequence, expandedValue);
+		}	
+
+		return result;
+	}	
+
+	private static String getExpandedValue(String minWidthSequence) {
+
+		String valueStr = getValueString(minWidthSequence);
+		String repetitionsStr = getRepetitionsString(minWidthSequence);
+
+		return expandValue(valueStr, repetitionsStr);
+	}
+
+	private static String getValueString(String string) {
+
+		String tag = getArgWithBrackets(string, 0);
+		if (tag == null) {
+			return null;
+		}
+
+		final String ARGUMENT_PATTERN = "[^(^)]";
+		return StringHelper.getMatch(tag, ARGUMENT_PATTERN);
+	}
+
+	private static String getRepetitionsString(String minWidthSequence) {
+
+		String tag = getArgWithBrackets(minWidthSequence, 1);
+		if (tag == null) {
+			return null;
+		}
+
+		final String NUMERIC_ARGUMENT_PATTERN = "\\d+";
+		return StringHelper.getMatch(tag, NUMERIC_ARGUMENT_PATTERN);
+	}
+
+	private static String getArgWithBrackets(String minWidthSequence, int index) {
+
+		final String ARG_WITH_BRACKETS_PATTERN = "\\(\\s*\\w*\\s*\\)";
+
+		return StringHelper.getMatch(minWidthSequence, ARG_WITH_BRACKETS_PATTERN, index);
+	}
+
+	private static String expandValue(String valueStr, String repetitionsStr) {
+
+		int repetitions = StringHelper.convertToInteger(repetitionsStr);
+		return StringHelper.appendSpacesToLength(valueStr, repetitions);
 	}
 
 	private static String replaceParameterSequences(TestCaseNode testCase, String template) {

@@ -11,6 +11,8 @@
 package com.ecfeed.core.utils;
 
 import java.util.Collection;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class StringHelper {
 
@@ -395,5 +397,31 @@ public class StringHelper {
 		}
 		return consolidated;
 	}	
+
+	public static String getMatch(String source, String regularExpression) {
+		return getMatch(source, regularExpression, 0);
+	}
+
+	public static String getMatch(String source, String regularExpression, int index) {
+
+		Matcher matcher = Pattern.compile(regularExpression).matcher(source);
+
+		String expressionSequence = null;
+
+		int indexCounter = 0;
+
+		while(matcher.find()) {
+
+			expressionSequence = matcher.group();
+
+			if (index == indexCounter) {
+				return expressionSequence;
+			}
+
+			indexCounter++;
+		}				
+
+		return null;
+	}
 
 }

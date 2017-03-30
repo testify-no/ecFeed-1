@@ -140,4 +140,20 @@ public class TestCasesExportHelperTest {
 		performTest("%suite", "default");
 	}
 
+	@Test
+	public void shouldExpandAlphanumericToMinWidth() {
+		performTest("(x).min_width(5)", "x    ");
+	}
+
+	@Test
+	public void shouldExpandSpaceToMinWidth() {
+		performTest("( ).min_width(2)", "  ");
+	}
+
+	@Test
+	public void shouldIgnoreInvalidWidthParameter() {
+		performTest("(Q).min_width(C)", "(Q).min_width(C)");
+	}	
+
+
 }
