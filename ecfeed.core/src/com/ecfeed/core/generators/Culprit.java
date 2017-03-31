@@ -14,6 +14,32 @@ import java.util.List;
 
 public class Culprit {
 
-	List<DimItem> fItems;
-	int fFailureCount;
+	private List<DimItem> fItems;
+	private int fFailureCount;
+	private int fOccurenceCount;
+	
+	public Culprit(List<DimItem> items, int failureCount, int occurenceCount){
+		fItems = items;
+		fFailureCount = failureCount;
+		fOccurenceCount = occurenceCount;	
+	}
+	
+	int getOccurenceCount(){
+		return fOccurenceCount;
+	}
+	int getFailureCount(){
+		return fFailureCount;
+	}
+	List<DimItem> getItem(){
+		return fItems;
+	}
+	public int incrementFailures(){
+		fFailureCount =+ 1;
+		return fFailureCount;
+	}
+	public int incrementOccurenceCount(){
+		fOccurenceCount =+ 1;
+		return fOccurenceCount;
+	}
 }
+
