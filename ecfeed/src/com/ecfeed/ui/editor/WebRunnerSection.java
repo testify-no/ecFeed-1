@@ -21,6 +21,7 @@ import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.NodePropertyDefs;
 import com.ecfeed.core.utils.BooleanHelper;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.SwtObjectHelper;
 import com.ecfeed.ui.dialogs.basic.FileOpenDialog;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.MethodInterface;
@@ -78,7 +79,7 @@ public class WebRunnerSection extends BasicSection  {
 		fMapBrowserCheckbox = 
 				fFormObjectToolkit.createGridCheckBox(
 						gridComposite, "Map browser to method parameter", new MapBrowserApplier());
-		fFormObjectToolkit.setHorizontalSpan(fMapBrowserCheckbox, 2);
+		SwtObjectHelper.setHorizontalSpan(fMapBrowserCheckbox, 2);
 	}
 
 	private void createBrowserCombo(Composite gridComposite) {
@@ -86,7 +87,7 @@ public class WebRunnerSection extends BasicSection  {
 		fFormObjectToolkit.createLabel(gridComposite, "Browser");
 		fBrowserCombo = fFormObjectToolkit.createReadOnlyGridCombo(gridComposite, new BrowserApplier());
 		fBrowserCombo.setItems(NodePropertyDefs.getValueSet(fBrowserPropertyId, null).getPossibleValues());
-		fFormObjectToolkit.setHorizontalSpan(fBrowserCombo, 2);
+		SwtObjectHelper.setHorizontalSpan(fBrowserCombo, 2);
 	}
 
 	private void createBrowserDriverPathText(Composite gridComposite) {
@@ -102,7 +103,7 @@ public class WebRunnerSection extends BasicSection  {
 		fMapStartUrlCheckbox = 
 				fFormObjectToolkit.createGridCheckBox(
 						gridComposite, "Map start URL to method parameter", new MapStartUrlApplier());
-		fFormObjectToolkit.setHorizontalSpan(fMapStartUrlCheckbox, 2);
+		SwtObjectHelper.setHorizontalSpan(fMapStartUrlCheckbox, 2);
 	}
 
 	private void createUrlText(Composite gridComposite) {
@@ -110,7 +111,7 @@ public class WebRunnerSection extends BasicSection  {
 		fFormObjectToolkit.createLabel(gridComposite, "Start URL");
 		fStartUrlText = fFormObjectToolkit.createGridText(gridComposite, new UrlApplier());
 
-		fFormObjectToolkit.setHorizontalSpan(fStartUrlText, 2);
+		SwtObjectHelper.setHorizontalSpan(fStartUrlText, 2);
 	}
 
 	public void refresh() {

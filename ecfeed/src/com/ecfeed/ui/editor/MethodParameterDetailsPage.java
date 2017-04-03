@@ -28,6 +28,7 @@ import com.ecfeed.core.model.GlobalParameterNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelHelper;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.SwtObjectHelper;
 import com.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.MethodParameterInterface;
@@ -122,7 +123,7 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 				formObjectToolkit.createGridCheckBox(
 						attributesComposite, "Expected", new ExpectedApplier());
 
-		formObjectToolkit.setHorizontalSpan(fExpectedCheckbox, 3);
+		SwtObjectHelper.setHorizontalSpan(fExpectedCheckbox, 3);
 
 
 		getToolkit().createLabel(attributesComposite, "Default value: ", SWT.NONE);
@@ -137,7 +138,7 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 				formObjectToolkit.createGridCheckBox(
 						attributesComposite, "Linked", new LinkedApplier());
 
-		formObjectToolkit.setHorizontalSpan(fLinkedCheckbox, 3);
+		SwtObjectHelper.setHorizontalSpan(fLinkedCheckbox, 3);
 
 
 		getToolkit().createLabel(attributesComposite, "Parameter link: ", SWT.NONE);

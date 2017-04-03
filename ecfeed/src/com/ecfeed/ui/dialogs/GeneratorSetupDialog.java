@@ -94,7 +94,6 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 	private boolean fGenerateExecutableContent;
 	private IImplementationStatusResolver fStatusResolver;
 	private IFileInfoProvider fFileInfoProvider;
-	private DialogObjectToolkit fDialogObjectToolkit;
 	private Combo fExportFormatCombo;
 	private Text fTargetFileText;
 	private int fContent;
@@ -127,8 +126,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 
 		fStatusResolver = new EclipseImplementationStatusResolver(fileInfoProvider);
 		fFileInfoProvider = fileInfoProvider;
-		fDialogObjectToolkit = DialogObjectToolkit.getInstance();
-
+		
 		fTargetFile = null;
 
 		fExportTemplateFactory = exportTemplateFactory;
@@ -553,11 +551,12 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 	}
 
 	private void createTestCasesExportComposite(Composite parentComposite) {
-		fDialogObjectToolkit.createRowComposite(parentComposite);
-		Composite advancedButtonComposite = fDialogObjectToolkit
+		
+		DialogObjectToolkit.createRowComposite(parentComposite);
+		Composite advancedButtonComposite = DialogObjectToolkit
 				.createRowComposite(parentComposite);
 
-		fDialogObjectToolkit.createButton(advancedButtonComposite,
+		DialogObjectToolkit.createButton(advancedButtonComposite,
 				"Advanced...", new ExportDefinitionSelectionAdapter());
 
 
@@ -567,10 +566,10 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 
 	private void createExportTemplateCombo(Composite composite) {
 		final String DEFINE_TEMPLATE = "Template: ";
-		fDialogObjectToolkit.createLabel(composite, DEFINE_TEMPLATE);
+		DialogObjectToolkit.createLabel(composite, DEFINE_TEMPLATE);
 
 		fExportFormatCombo = 
-				fDialogObjectToolkit.createReadOnlyGridCombo(
+				DialogObjectToolkit.createReadOnlyGridCombo(
 						composite, new ExportFormatComboValueApplier(), ApplyValueMode.ON_SELECTION_ONLY);
 
 		String[] exportFormats = ExportTemplateFactory.getAvailableExportFormats();
@@ -584,7 +583,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		final String TARGET_FILE = "Export target file";
 
 		fExportFileSelectionComposite = 
-				fDialogObjectToolkit.createFileSelectionComposite(
+				DialogObjectToolkit.createFileSelectionComposite(
 						parentComposite, 
 						TARGET_FILE, 
 						getExportFileExtensions(), 

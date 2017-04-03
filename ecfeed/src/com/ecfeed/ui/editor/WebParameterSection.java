@@ -23,6 +23,7 @@ import com.ecfeed.core.model.NodePropertyDefs;
 import com.ecfeed.core.model.NodePropertyValueSet;
 import com.ecfeed.core.utils.BooleanHelper;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.SwtObjectHelper;
 import com.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 
@@ -100,7 +101,7 @@ public class WebParameterSection extends BasicSection {
 	}
 
 	private void setParamsForTheFirstColumn(Control control) {
-		GridData gridData = fFormObjectToolkit.getGridData(control);
+		GridData gridData = SwtObjectHelper.getGridData(control);
 		gridData.grabExcessHorizontalSpace = false;
 		gridData.widthHint = 150;
 	}

@@ -36,19 +36,8 @@ import com.ecfeed.ui.editor.IValueApplier;
 import com.ecfeed.utils.EclipseHelper;
 
 public class DialogObjectToolkit {
-	private static DialogObjectToolkit fInstance = null;
 
-	protected DialogObjectToolkit() {
-	}
-
-	public static DialogObjectToolkit getInstance() {
-		if (fInstance == null) {
-			fInstance = new DialogObjectToolkit();
-		}
-		return fInstance;
-	}
-
-	public Composite createGridComposite(Composite parent, int countOfColumns) {
+	public static Composite createGridComposite(Composite parent, int countOfColumns) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
 
@@ -59,7 +48,7 @@ public class DialogObjectToolkit {
 		return composite;
 	}
 
-	public Composite createRowComposite(Composite parentComposite) {
+	public static Composite createRowComposite(Composite parentComposite) {
 
 		Composite composite = new Composite(parentComposite, SWT.NONE);
 
@@ -69,7 +58,7 @@ public class DialogObjectToolkit {
 		return composite;
 	}
 
-	public Composite createFillComposite(Composite parentComposite) {
+	public static Composite createFillComposite(Composite parentComposite) {
 
 		Composite composite = new Composite(parentComposite, SWT.NONE);
 
@@ -79,7 +68,7 @@ public class DialogObjectToolkit {
 		return composite;
 	}
 
-	public Text createGridText(
+	public static Text createGridText(
 			Composite parentGridComposite, int heightHint, String initialText) {
 
 		Text templateText = new Text(parentGridComposite, SWT.MULTI
@@ -96,7 +85,7 @@ public class DialogObjectToolkit {
 		return templateText;
 	}
 
-	public Label createLabel(Composite parent, String text) {
+	public static Label createLabel(Composite parent, String text) {
 
 		Label label = new Label(parent, SWT.NONE);
 		label.setText(text);
@@ -104,12 +93,12 @@ public class DialogObjectToolkit {
 		return label;
 	}
 
-	public Label createSpacer(Composite parent, int size) {
+	public static Label createSpacer(Composite parent, int size) {
 
 		return createLabel(parent, StringHelper.createString(" ", size));
 	}
 
-	public Text createFileSelectionText(
+	public static Text createFileSelectionText(
 			Composite targetFileContainer, ModifyListener modifyListener) {
 
 		Text targetFileText = new Text(targetFileContainer, SWT.BORDER);
@@ -122,27 +111,27 @@ public class DialogObjectToolkit {
 		return targetFileText;
 	}
 
-	public Combo createReadOnlyGridCombo(
+	public static Combo createReadOnlyGridCombo(
 			Composite parentComposite,	IValueApplier valueApplier, ApplyValueMode applyValueMode) {
 
 		return CommonEditHelper.createReadOnlyGridCombo(
 				parentComposite, valueApplier, applyValueMode);
 	}
 
-	public Combo createReadOnlyGridCombo(Composite parentComposite,	IValueApplier valueApplier) {
+	public static Combo createReadOnlyGridCombo(Composite parentComposite,	IValueApplier valueApplier) {
 
 		return CommonEditHelper.createReadOnlyGridCombo(
 				parentComposite, valueApplier, ApplyValueMode.ON_SELECTION_AND_FOCUS_LOST);
 	}
 
-	public Combo createReadWriteGridCombo(
+	public static Combo createReadWriteGridCombo(
 			Composite parentComposite, IValueApplier valueApplier, ApplyValueMode applyValueMode) {
 
 		return CommonEditHelper.createReadWriteGridCombo(
 				parentComposite, valueApplier, applyValueMode);
 	}	
 
-	public Combo createReadWriteGridCombo(Composite parentComposite, IValueApplier valueApplier) {
+	public static Combo createReadWriteGridCombo(Composite parentComposite, IValueApplier valueApplier) {
 
 		return CommonEditHelper.createReadWriteGridCombo(
 				parentComposite, valueApplier, ApplyValueMode.ON_SELECTION_AND_FOCUS_LOST);
@@ -154,7 +143,7 @@ public class DialogObjectToolkit {
 		control.setFont(font);
 	}
 
-	private class BrowseButtonClickListener extends SelectionAdapter {
+	private static class BrowseButtonClickListener extends SelectionAdapter {
 
 		int fDialogStyle;
 		String[] fFileExtensions;
@@ -187,7 +176,7 @@ public class DialogObjectToolkit {
 		}
 	}
 
-	public FileSelectionComposite createFileSelectionComposite(
+	public static FileSelectionComposite createFileSelectionComposite(
 			Composite parent, 
 			String labelText, 
 			String[] extensionsFilter, 
@@ -195,7 +184,7 @@ public class DialogObjectToolkit {
 		return new FileSelectionComposite(parent, labelText, extensionsFilter, textModifyListener );
 	}
 
-	public class FileSelectionComposite {
+	public static class FileSelectionComposite {
 
 		private Composite fChildComposite;
 		private Text fTargetFileText;
@@ -216,7 +205,7 @@ public class DialogObjectToolkit {
 			fTargetFileText = createFileSelectionText(fChildComposite, textModifyListener);
 
 			fBrowseButtonClickListener = 
-					new BrowseButtonClickListener(
+					new DialogObjectToolkit.BrowseButtonClickListener(
 							SWT.SAVE, extensionsFilter, fTargetFileText);
 
 			fButtonEx = createBrowseButton(fChildComposite, fBrowseButtonClickListener);
@@ -233,20 +222,20 @@ public class DialogObjectToolkit {
 
 	}
 
-	public ButtonEx createBrowseButton(
+	public static ButtonEx createBrowseButton(
 			Composite parent, SelectionListener selectionListener) {
 
 		final String BROWSE_LABEL = "Browse...";
 		return createButton(parent, BROWSE_LABEL, selectionListener);
 	}
 
-	public ButtonEx createButton(
+	public static ButtonEx createButton(
 			Composite parent, String buttonText, SelectionListener selectionListener) {
 
 		return new ButtonEx(parent, buttonText, selectionListener);
 	}
 
-	public class ButtonEx {
+	public static class ButtonEx {
 
 		Button fButton;
 		SelectionListener fSelectionListener;

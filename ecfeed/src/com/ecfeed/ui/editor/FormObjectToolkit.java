@@ -18,7 +18,6 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.TypedListener;
@@ -130,15 +129,6 @@ public class FormObjectToolkit {
 		return CommonEditHelper.createReadWriteGridCombo(
 				parentComposite, valueApplier, ApplyValueMode.ON_SELECTION_AND_FOCUS_LOST);
 	}	
-
-	public GridData getGridData(Control control) {
-		return (GridData)control.getLayoutData();
-	}
-
-	public void setHorizontalSpan(Control control, int span) {
-		GridData gridData = getGridData(control);
-		gridData.horizontalSpan = span;
-	}
 
 	private class OnSaveKeyListener implements KeyListener {
 
