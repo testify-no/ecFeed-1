@@ -12,8 +12,16 @@ You can use the following expressions:
     %method  - name of the method containing exported test cases
     $N.name  or $parameter_name.name - name of the Nth parameter 
             (counting from 1)  in the test method.
+    (some_expression).min_width(21) - sizing some_expression to 
+            minimum width (adding spaces) and adjusting to left
+    (some_expression).min_width(21, LEFT) - sizing some_expression to 
+            minimum width and adjusting to left            
+    (some_expression).min_width(21, RIGHT) - sizing some_expression to 
+            minimum width and adjusting to right
+    (some_expression).min_width(21, CENTER) - sizing some_expression to 
+            minimum width and centering
 
-
+            
 In [TestCase] section you can define fields to export in the test case
 You can use all the expressions used for [Header] section, and also:
     $N.choice or $parameter_name.choice - short name of the choice 
