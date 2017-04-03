@@ -21,6 +21,7 @@ import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.utils.StringHelper;
+import com.ecfeed.core.utils.JustifyType;
 
 public class TestCasesExportHelper {
 
@@ -36,6 +37,7 @@ public class TestCasesExportHelper {
 	private static final String TEST_PARAMETER_SEQUENCE_GENERIC_PATTERN = "\\$\\w+\\.(" + CHOICE_COMMAND_SHORT_NAME + "|" + CHOICE_COMMAND_FULL_NAME + "|" + CHOICE_COMMAND_VALUE + ")";
 	private static final String METHOD_PARAMETER_SEQUENCE_GENERIC_PATTERN = "\\$\\w+\\." + PARAMETER_COMMAND_NAME;
 	private static final String ARITHMETIC_EXPRESSION_SEQUENCE_GENERIC_PATTERN = "\\$\\(.*\\)";
+	private static final String PARAMETER_SEPARATOR = ",";
 
 	public static String generateSection(MethodNode method, String template) {
 
@@ -142,7 +144,7 @@ public class TestCasesExportHelper {
 
 	private static String evaluateMinWidthOperator(String template) {
 
-		final String MIN_WIDTH_OPERATOR_PATTERN = "\\([^.]*\\)\\.min_width\\(\\d+\\)";
+		final String MIN_WIDTH_OPERATOR_PATTERN = "\\([^.]*\\)\\.min_width\\([^\\)]+\\)";
 
 		String result = template;
 		Matcher matcher = Pattern.compile(MIN_WIDTH_OPERATOR_PATTERN).matcher(template);
@@ -160,9 +162,15 @@ public class TestCasesExportHelper {
 	private static String getExpandedValue(String minWidthSequence) {
 
 		String valueStr = getValueString(minWidthSequence);
-		String expandToLengthStr = getRepetitionsString(minWidthSequence);
+		String minWidthParameters = getMinWidthParameters(minWidthSequence);
 
-		return expandValue(valueStr, expandToLengthStr);
+		String expandedValue = expandValue(valueStr, minWidthParameters);
+
+		if (expandedValue == null) {
+			return minWidthSequence;
+		} else {
+			return expandedValue;
+		}
 	}
 
 	private static String getValueString(String string) {
@@ -175,7 +183,7 @@ public class TestCasesExportHelper {
 		return removeBrackets(tag);
 	}
 
-	private static String getRepetitionsString(String minWidthSequence) {
+	private static String getMinWidthParameters(String minWidthSequence) {
 
 		String tag = getArgWithBrackets(minWidthSequence, 1);
 		if (tag == null) {
@@ -196,10 +204,72 @@ public class TestCasesExportHelper {
 		return StringHelper.getMatch(minWidthSequence, ARG_WITH_BRACKETS_PATTERN, index);
 	}
 
-	private static String expandValue(String valueStr, String repetitionsStr) {
+	private static String expandValue(String valueStr, String parameters) {
 
-		int repetitions = StringHelper.convertToInteger(repetitionsStr);
-		return StringHelper.appendSpacesToLength(valueStr, repetitions);
+		Integer repetitions = getRepetitions(parameters);
+		if (repetitions == null) {
+			return null;
+		}
+
+		JustifyType justifyType = getJustifyType(parameters);
+
+		if (justifyType == JustifyType.ERROR) {
+			return null;
+		}
+
+		return expandValue(valueStr, repetitions, justifyType);
+	}
+
+	private static String expandValue(String valueStr, int repetitions, JustifyType justifyType) {
+
+		switch(justifyType) {
+		case LEFT:
+			return StringHelper.appendSpacesToLength(valueStr, repetitions);
+		case RIGHT:
+			return StringHelper.insertSpacesToLength(valueStr, repetitions);
+		case CENTER:
+			return StringHelper.centerStringToLength(valueStr, repetitions);
+		default:
+			return null;
+		}
+	}
+
+	private static Integer getRepetitions(String parameters) {
+
+		String repetitionsStr = getRepetitionsStr(parameters);
+
+		try {
+			return StringHelper.convertToInteger(repetitionsStr);
+		} catch (NumberFormatException e) {
+			return null;
+		}
+	}
+
+	private static String getRepetitionsStr(String parameters) {
+
+		if (parameters.contains(PARAMETER_SEPARATOR)) {
+			return StringHelper.getFirstToken(parameters, PARAMETER_SEPARATOR);
+		}
+
+		return parameters;
+	}
+
+	private static JustifyType getJustifyType(String parameters) {
+
+		String typeString = getJustifyTypeString(parameters);
+		if (typeString == null) {
+			return JustifyType.LEFT; 
+		}
+
+		return JustifyType.convertFromString(typeString);
+	}
+
+	private static String getJustifyTypeString(String parameters) {
+
+		if (parameters.contains(PARAMETER_SEPARATOR)) {
+			return StringHelper.getLastToken(parameters, PARAMETER_SEPARATOR);
+		}
+		return null;
 	}
 
 	private static String replaceParameterSequences(TestCaseNode testCase, String template) {

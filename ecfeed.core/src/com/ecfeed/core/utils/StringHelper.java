@@ -150,6 +150,18 @@ public class StringHelper {
 		return createString(" ", lengthAfterInsert - line.length()) + line;
 	}	
 
+	public static String centerStringToLength(String line, int lengthAfterInsert) {
+
+		if (line.length() >= lengthAfterInsert) {
+			return line;
+		}
+
+		int spacesBefore = (lengthAfterInsert - line.length()) / 2;
+		String leadingSpaces = createString(" ", spacesBefore);
+
+		return appendSpacesToLength(leadingSpaces + line, lengthAfterInsert);
+	}
+
 	public static String newLine() {
 
 		return System.lineSeparator();

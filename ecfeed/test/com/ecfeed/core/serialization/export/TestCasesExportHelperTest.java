@@ -172,4 +172,24 @@ public class TestCasesExportHelperTest {
 		performTest("(-5).min_width(3)", "-5 ");
 	}	
 
+	@Test
+	public void shouldExpandToLeft() {
+		performTest("(X).min_width(3,LEFT)", "X  ");
+	}	
+
+	@Test
+	public void shouldExpandToRight() {
+		performTest("(X).min_width(3,RIGHT)", "  X");
+	}	
+
+	@Test
+	public void shouldExpandToCenter() {
+		performTest("(X).min_width(3,CENTER)", " X ");
+	}	
+
+	@Test
+	public void shouldExpandToCenterOnTwo() {
+		performTest("(X).min_width(2,CENTER)", "X ");
+	}	
+
 }
