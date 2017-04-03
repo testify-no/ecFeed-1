@@ -267,7 +267,7 @@ public class TestCasesExportHelper {
 	private static String getJustifyTypeString(String parameters) {
 
 		if (parameters.contains(PARAMETER_SEPARATOR)) {
-			return StringHelper.getLastToken(parameters, PARAMETER_SEPARATOR);
+			return StringHelper.getLastToken(parameters, PARAMETER_SEPARATOR).trim();
 		}
 		return null;
 	}

@@ -82,8 +82,8 @@ public class DialogObjectToolkit {
 	public Text createGridText(
 			Composite parentGridComposite, int heightHint, String initialText) {
 
-		Text templateText = new Text(parentGridComposite, SWT.WRAP | SWT.MULTI
-				| SWT.BORDER | SWT.V_SCROLL);
+		Text templateText = new Text(parentGridComposite, SWT.MULTI
+				| SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
 
 		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gridData.heightHint = heightHint;

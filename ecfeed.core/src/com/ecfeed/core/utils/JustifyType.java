@@ -31,5 +31,21 @@ public enum JustifyType {
 		}		
 
 		return JustifyType.ERROR;
-	}		
+	}
+
+	public static String convertToString(JustifyType justifyType) {
+
+		switch(justifyType) {
+		case LEFT:
+			return "LEFT";
+		case RIGHT:
+			return "RIGHT";
+		case CENTER:
+			return "CENTER";
+		case ERROR:
+			return "ERROR";
+		default:
+			return null;
+		}
+	}
 }

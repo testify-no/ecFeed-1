@@ -14,7 +14,9 @@ import java.util.Set;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
+import com.ecfeed.core.utils.JustifyType;
 import com.ecfeed.core.utils.StringHelper;
+import com.ecfeed.core.utils.JavaTypeHelper;
 
 public class GherkinExportTemplate extends AbstractExportTemplate {
 
@@ -167,11 +169,11 @@ public class GherkinExportTemplate extends AbstractExportTemplate {
 
 		String parameterName = methodParameterNode.getName();
 
-		return embedInMinWidthOperator("<" + parameterName + ">", maxParamValueLength); 
+		return embedInMinWidthOperator("<" + parameterName + ">", maxParamValueLength, JustifyType.CENTER); 
 	}
 
-	private static String embedInMinWidthOperator(String string, int minWidth) {
-		return "(" + string + ").min_width(" + minWidth + ")";	
+	private static String embedInMinWidthOperator(String string, int minWidth, JustifyType justifyType) {
+		return "(" + string + ").min_width(" + minWidth + ", " + JustifyType.convertToString(justifyType) +  ")";	
 	}
 
 	private static int getMaxParamValueLength(MethodParameterNode methodParameterNode) {
@@ -206,7 +208,9 @@ public class GherkinExportTemplate extends AbstractExportTemplate {
 
 			int maxParamValueLength = getMaxParamValueLength(methodParameterNode);
 
-			String paramDescription = embedInMinWidthOperator("$" + parameterName + "." + "value", maxParamValueLength);
+			JustifyType justifyType = JavaTypeHelper.getJustifyType(methodParameterNode.getType());
+
+			String paramDescription = embedInMinWidthOperator("$" + parameterName + "." + "value", maxParamValueLength, justifyType);
 			stringBuilder.append(paramDescription);
 			stringBuilder.append(" | ");
 		}

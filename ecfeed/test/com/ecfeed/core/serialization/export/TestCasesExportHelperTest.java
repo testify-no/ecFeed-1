@@ -175,7 +175,13 @@ public class TestCasesExportHelperTest {
 	@Test
 	public void shouldExpandToLeft() {
 		performTest("(X).min_width(3,LEFT)", "X  ");
+	}
+
+	@Test
+	public void shouldExpandToLeftWithBlanks() {
+		performTest("(X).min_width(   3   ,   LEFT   )", "X  ");
 	}	
+
 
 	@Test
 	public void shouldExpandToRight() {
