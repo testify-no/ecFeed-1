@@ -159,6 +159,11 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 	protected void cancelPressed() {
 		super.cancelPressed();
 	}
+	
+	@Override
+	protected boolean isResizable() {
+	    return true;
+	}	
 
 	public void setDialogTitle(TitleAreaDialog dialog) {
 		final String EXPORT_TEST_DATA_TITLE = "Export template definition";
