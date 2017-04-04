@@ -10,31 +10,27 @@
 
 package com.ecfeed.core.generators;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class FinderAnalysis {
-	
-	private List<Culprit> fCulprits = new ArrayList<Culprit>();
-	
-	public void aggregateCulprit(Culprit culpritToAggregate){
-		Culprit culpritFromList = findCulpritByTuple(culpritToAggregate);
-		if (culpritFromList == null){
-			fCulprits.add(culpritToAggregate);
-		}else{
-			culpritFromList.aggregateOccurencesAndFailures(culpritToAggregate);
-		}
-	}
-		
-	private Culprit findCulpritByTuple(Culprit culpritWithTupleToFind){
-		for(Culprit culprit: fCulprits){
-			if(culprit.isTupleMatch(culpritWithTupleToFind)){
-				return culprit;
-			}
-		}
-		return null;
-	}
-		
-		 
-}
+import org.junit.Test;
 
+public class FinderAnalysisTest {
+	
+	
+	@Test
+	public void shouldReturnFailureCount() {
+		List<DimItem> item = new ArrayList<DimItem>();
+		Culprit culprit = new Culprit(item, 0, 0);
+		FinderAnalysis finderanalysis = new FinderAnalysis();
+		finderanalysis.aggregateCulprit(culprit);
+		assertEquals(culprit.getFailureCount(), 0);
+	}
+	@Test
+	public void shouldReturnOccuranceCout(){
+		List<DimItem> item = new ArrayList<DimItem>();
+		//Culprit culprit = new Culprit
+	}
+}

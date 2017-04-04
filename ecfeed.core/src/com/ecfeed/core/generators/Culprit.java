@@ -33,13 +33,18 @@ public class Culprit {
 	List<DimItem> getItem(){
 		return fItems;
 	}
-	public int incrementFailures(){
-		fFailureCount =+ 1;
-		return fFailureCount;
+	public void incrementFailures(int culpritFailureCount){
+		culpritFailureCount =+ 1;
 	}
-	public int incrementOccurenceCount(){
-		fOccurenceCount =+ 1;
-		return fOccurenceCount;
+	public void incrementOccurenceCount(int culpritOccurenceCount){
+		culpritOccurenceCount =+ 1;
+	}
+	public void aggregateOccurencesAndFailures(Culprit culpritToAggregate){
+		incrementOccurenceCount(culpritToAggregate.getOccurenceCount());
+		incrementFailures(culpritToAggregate.getFailureCount());
+	}
+	public boolean isTupleMatch(Culprit other){
+		return false;
 	}
 }
 
