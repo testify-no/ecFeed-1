@@ -495,5 +495,18 @@ public class JavaTypeHelper {
 		return typeName1;
 	}
 
+	public static JustifyType getJustifyType(String typeName) {
+
+		if (!isJavaType(typeName)) {
+			return JustifyType.LEFT;
+		}
+
+		if (isNumericTypeName(typeName)) {
+			return JustifyType.RIGHT;
+		}
+
+		return JustifyType.LEFT;
+	}
+
 
 }

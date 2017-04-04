@@ -49,7 +49,9 @@ import com.ecfeed.core.runner.ITestMethodInvoker;
 import com.ecfeed.core.runner.java.ExportTestMethodInvoker;
 import com.ecfeed.core.runner.java.JUnitTestMethodInvoker;
 import com.ecfeed.core.runner.java.SeleniumTestMethodInvoker;
-import com.ecfeed.core.serialization.export.ExportTemplateParser;
+import com.ecfeed.core.serialization.export.BasicExportTemplate;
+import com.ecfeed.core.serialization.export.ExportTemplateFactory;
+import com.ecfeed.core.serialization.export.IExportTemplate;
 import com.ecfeed.core.utils.EcException;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.StringHelper;
@@ -272,38 +274,37 @@ public class MethodInterface extends ParametersParentInterface {
 		if (!isValidClassConfiguration(classNode))
 			return;
 
-		ExportTestMethodInvoker methodInvoker = new ExportTestMethodInvoker(
-				getOwnNode());
+		ExportTestMethodInvoker methodInvoker = new ExportTestMethodInvoker(getOwnNode());
 
-		ExportTemplateParser exportParser = new ExportTemplateParser(
-				getOwnNode().getParametersCount());
-
-		OnlineExportSupport exportSupport = 
+		OnlineExportSupport onlineExportSupport = 
 				new OnlineExportSupport(
-						getOwnNode(), methodInvoker, 
-						fileInfoProvider, exportParser.createInitialTemplate(), 
+						getOwnNode(), 
+						methodInvoker, 
+						fileInfoProvider, 
 						ApplicationContext.getExportTargetFile());
 
-		AbstractOnlineSupport.Result result = exportSupport.proceed();
+		AbstractOnlineSupport.Result result = onlineExportSupport.proceed();
 
 		if (result == AbstractOnlineSupport.Result.CANCELED) {
 			return;
 		}
 
-		if (exportSupport.anyTestFailed()) {
+		if (onlineExportSupport.anyTestFailed()) {
 			ErrorDialog.open("Export preparation failed.");
 			return;
 		}
 
-		ApplicationContext.setExportTargetFile(exportSupport.getTargetFile());
-		String exportTemplate = exportSupport.getExportTemplate();
-		exportParser.createSubTemplates(exportTemplate);
+		String targetFile = onlineExportSupport.getTargetFile();
+		ApplicationContext.setExportTargetFile(targetFile);
 
-		runExport(methodInvoker.getTestCasesToExport(),
-				exportParser.getHeaderTemplate(),
-				exportParser.getTestCaseTemplate(),
-				exportParser.getFooterTemplate(), exportSupport.getTargetFile());
+		IExportTemplate basicTemplate = 
+				new BasicExportTemplate(null);
+
+		basicTemplate.setTemplateText(onlineExportSupport.getExportTemplate());
+
+		runExport(methodInvoker.getTestCasesToExport(), basicTemplate, targetFile);
 	}
+
 
 	public void executeStaticTests(Collection<TestCaseNode> testCases,
 			IFileInfoProvider fileInfoProvider) throws EcException {
@@ -324,34 +325,43 @@ public class MethodInterface extends ParametersParentInterface {
 
 	public void exportTestCases(Collection<TestCaseNode> checkedTestCases) {
 
-		ExportTemplateParser exportParser = new ExportTemplateParser(
-				getOwnNode().getParametersCount());
-		String initialTemplate = exportParser.createInitialTemplate();
+		ExportTemplateFactory exportTemplateFactory =
+				new ExportTemplateFactory(getOwnNode());
 
-		TestCasesExportDialog dialog = new TestCasesExportDialog(
-				FileCompositeVisibility.VISIBLE, initialTemplate, ApplicationContext.getExportTargetFile());
+		IExportTemplate exportTemplate =
+				exportTemplateFactory.createDefaultTemplate();
+
+		TestCasesExportDialog dialog = 
+				new TestCasesExportDialog(
+						FileCompositeVisibility.VISIBLE, 
+						exportTemplateFactory,
+						exportTemplate,
+						ApplicationContext.getExportTargetFile(),
+						getOwnNode().getParametersCount(),
+						checkedTestCases);
 
 		if (dialog.open() != IDialogConstants.OK_ID) {
 			return;
 		}
 
 		ApplicationContext.setExportTargetFile(dialog.getTargetFile());
-		exportParser.createSubTemplates(dialog.getTemplate());
+		IExportTemplate currentExportTemplate = dialog.getExportTemplate();
 
-		runExport(checkedTestCases, exportParser.getHeaderTemplate(),
-				exportParser.getTestCaseTemplate(),
-				exportParser.getFooterTemplate(), dialog.getTargetFile());
+		runExport(checkedTestCases, 
+				currentExportTemplate,
+				dialog.getTargetFile());
 	}
 
-	private void runExport(Collection<TestCaseNode> testCases,
-			String headerTemplate, String testCaseTemplate,
-			String footerTemplate, String targetFile) {
+	private void runExport(
+			Collection<TestCaseNode> testCases,
+			IExportTemplate exportTemplate,
+			String targetFile) {
 
 		try {
-			TestCasesExporter exporter = new TestCasesExporter(headerTemplate,
-					testCaseTemplate, footerTemplate);
+			TestCasesExporter exporter = new TestCasesExporter(exportTemplate);
 
 			exporter.runExport(getOwnNode(), testCases, targetFile);
+
 		} catch (Exception e) {
 			ErrorDialog.open(e.getMessage());
 			return;

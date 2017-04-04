@@ -13,13 +13,24 @@ package com.ecfeed.ui.dialogs;
 import org.eclipse.swt.widgets.Shell;
 
 import com.ecfeed.core.model.MethodNode;
+import com.ecfeed.core.serialization.export.ExportTemplateFactory;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 
-public abstract class SetupDialogOnline extends SetupDialogGenerator {
+public abstract class SetupDialogOnline extends GeneratorSetupDialog {
 
-	public SetupDialogOnline(Shell parentShell, MethodNode method, boolean generateExecutables,
-			IFileInfoProvider fileInfoProvider, String initialExportTemplate, String targetFile) {
-		super(parentShell, method, generateExecutables, fileInfoProvider,
-				initialExportTemplate, targetFile);
+	public SetupDialogOnline(
+			Shell parentShell, 
+			MethodNode method, 
+			boolean generateExecutables,
+			IFileInfoProvider fileInfoProvider,
+			ExportTemplateFactory exportTemplateFactory,
+			String targetFile) {
+
+		super(parentShell, 
+				method, 
+				generateExecutables, 
+				fileInfoProvider,
+				exportTemplateFactory,
+				targetFile);
 	}
 }

@@ -30,29 +30,27 @@ public class TestCasesExportHelperTest {
 		performTest("0", "1", template, expectedResult);
 	}
 
-	void performTest(String par0, String par1,  String template, String expectedResult) {
-		performTest(0, par0, par1, template, expectedResult);
+	void performTest(String par0Value, String par1Value,  String template, String expectedResult) {
+		performTest(0, par0Value, par1Value, template, expectedResult);
 	}
 
 	void performTest(int sequenceIndex, String template, String expectedResult) {
 		performTest(sequenceIndex, "", "",  template, expectedResult);
 	}
 
-	void performTest(int sequenceIndex, String par0, String par1,  String template, String expectedResult) {
+	void performTest(int sequenceIndex, String par0Value, String par1Value,  String template, String expectedResult) {
 		ClassNode theClass = new ClassNode("package.Test");
 
 		MethodNode method = new MethodNode("testMethod");
 		theClass.addMethod(method);
 
-		MethodParameterNode parameter0 = new MethodParameterNode("par0", "int",
-				"0", false);
-		ChoiceNode choiceNode00 = new ChoiceNode("p0", par0);
+		MethodParameterNode parameter0 = new MethodParameterNode("par0", "int", "0", false);
+		ChoiceNode choiceNode00 = new ChoiceNode("p0", par0Value);
 		parameter0.addChoice(choiceNode00);
 		method.addParameter(parameter0);
 
-		MethodParameterNode parameter1 = new MethodParameterNode("par1", "int",
-				"0", false);
-		ChoiceNode choiceNode11 = new ChoiceNode("p1", par1);
+		MethodParameterNode parameter1 = new MethodParameterNode("par1", "int", "0", false);
+		ChoiceNode choiceNode11 = new ChoiceNode("p1", par1Value);
 		parameter1.addChoice(choiceNode11);
 		method.addParameter(parameter1);
 
@@ -73,19 +71,39 @@ public class TestCasesExportHelperTest {
 	}
 
 	@Test
-	public void shouldParseOneParam() {
+	public void shouldParseOneParamByParamNumber() {
 		performTest("$1.value", "0");
 	}
 
 	@Test
-	public void shouldParseTwoParams() {
+	public void shouldParseOneParamByParamName() {
+		performTest("$par0.value", "0");
+	}	
+
+	@Test
+	public void shouldParseTwoParamsByParamNumber() {
 		performTest("$1.value, $2.value", "0, 1");
 	}
 
 	@Test
-	public void shouldParseThreeParamsTemplate() {
+	public void shouldParseTwoParamsByParamName() {
+		performTest("$par0.value, $par1.value", "0, 1");
+	}	
+
+	@Test
+	public void shouldParseThreeParamsTemplateByParamNumber() {
 		performTest("$1.value, $2.value, $3.value", "0, 1, $3.value");
 	}
+
+	@Test
+	public void shouldParseThreeParamsTemplateByParamName() {
+		performTest("$par0.value, $par1.value, $par2.value", "0, 1, $par2.value");
+	}
+
+	@Test
+	public void shouldParseTwoParamsWithSpaces() {
+		performTest("   $par0.value, $par1.value", "   0, 1");
+	}	
 
 	@Test
 	public void shouldParseIndex() {
@@ -98,9 +116,14 @@ public class TestCasesExportHelperTest {
 	}
 
 	@Test
-	public void shouldParseName() { 
+	public void shouldParseNameByParamNumber() { 
 		performTest("$1.name", "par0");
 	}
+
+	@Test
+	public void shouldParseNameByParamName() { 
+		performTest("$par0.name", "par0");
+	}	
 
 	@Test
 	public void shouldParsePackageClassMethod() { 
@@ -116,5 +139,63 @@ public class TestCasesExportHelperTest {
 	public void shouldParseTestSuite() { 
 		performTest("%suite", "default");
 	}
+
+	@Test
+	public void shouldExpandAlphanumericToMinWidth() {
+		performTest("(x).min_width(5)", "x    ");
+	}
+
+	@Test
+	public void shouldExpandSpaceToMinWidth() {
+		performTest("( ).min_width(2)", "  ");
+	}
+
+	@Test
+	public void shouldIgnoreInvalidWidthParameter() {
+		performTest("(Q).min_width(C)", "(Q).min_width(C)");
+	}	
+
+	@Test
+	public void shouldConvertMultipleMinWidthOperators() {
+		performTest("| (arg).min_width(7) | (arg0).min_width(7) |", 
+				"| arg     | arg0    |");
+	}
+
+	@Test
+	public void shouldConvertMultipleMinWidthOperators2() {
+		performTest("| (arg).min_width(3) | (arg0).min_width(4) |", 
+				"| arg | arg0 |");
+	}	
+
+	@Test
+	public void shouldExpandSpaceNegativeInteger() {
+		performTest("(-5).min_width(3)", "-5 ");
+	}	
+
+	@Test
+	public void shouldExpandToLeft() {
+		performTest("(X).min_width(3,LEFT)", "X  ");
+	}
+
+	@Test
+	public void shouldExpandToLeftWithBlanks() {
+		performTest("(X).min_width(   3   ,   LEFT   )", "X  ");
+	}	
+
+
+	@Test
+	public void shouldExpandToRight() {
+		performTest("(X).min_width(3,RIGHT)", "  X");
+	}	
+
+	@Test
+	public void shouldExpandToCenter() {
+		performTest("(X).min_width(3,CENTER)", " X ");
+	}	
+
+	@Test
+	public void shouldExpandToCenterOnTwo() {
+		performTest("(X).min_width(2,CENTER)", "X ");
+	}	
 
 }

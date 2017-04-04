@@ -11,6 +11,8 @@
 package com.ecfeed.core.utils;
 
 import java.util.Collection;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class StringHelper {
 
@@ -49,7 +51,7 @@ public class StringHelper {
 		return str.trim().isEmpty();
 	}
 
-	public static String removePrefix(String prefix, String fromStr) {
+	public static String removeToPrefix(String prefix, String fromStr) {
 
 		int index = fromStr.indexOf(prefix);
 
@@ -147,6 +149,18 @@ public class StringHelper {
 
 		return createString(" ", lengthAfterInsert - line.length()) + line;
 	}	
+
+	public static String centerStringToLength(String line, int lengthAfterInsert) {
+
+		if (line.length() >= lengthAfterInsert) {
+			return line;
+		}
+
+		int spacesBefore = (lengthAfterInsert - line.length()) / 2;
+		String leadingSpaces = createString(" ", spacesBefore);
+
+		return appendSpacesToLength(leadingSpaces + line, lengthAfterInsert);
+	}
 
 	public static String newLine() {
 
@@ -361,7 +375,7 @@ public class StringHelper {
 		return convertToLongViaDouble(str);
 	}
 
-	private static Long convertToLongDirectly(String str) {
+	public static Long convertToLongDirectly(String str) {
 
 		Long result = null;
 
@@ -395,5 +409,39 @@ public class StringHelper {
 		}
 		return consolidated;
 	}	
+
+	public static String getMatch(String source, String regularExpression) {
+		return getMatch(source, regularExpression, 0);
+	}
+
+	public static String getMatch(String source, String regularExpression, int index) {
+
+		Matcher matcher = Pattern.compile(regularExpression).matcher(source);
+
+		String expressionSequence = null;
+
+		int indexCounter = 0;
+
+		while(matcher.find()) {
+
+			expressionSequence = matcher.group();
+
+			if (index == indexCounter) {
+				return expressionSequence;
+			}
+
+			indexCounter++;
+		}				
+
+		return null;
+	}
+
+	public static String removeToPrefixAndFromPostfix(String prefix, String postfix, String fromString) {
+
+		String s1 = StringHelper.removeToPrefix(prefix, fromString);
+		String s2 = StringHelper.removeFromPostfix(postfix, s1);
+
+		return s2;
+	}
 
 }

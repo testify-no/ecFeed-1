@@ -20,6 +20,8 @@ import com.ecfeed.core.model.ClassNodeHelper;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.TestCaseNode;
+import com.ecfeed.core.utils.StringHelper;
+import com.ecfeed.core.utils.JustifyType;
 
 public class TestCasesExportHelper {
 
@@ -32,33 +34,70 @@ public class TestCasesExportHelper {
 	private static final String CHOICE_COMMAND_SHORT_NAME = "choice";
 	private static final String CHOICE_COMMAND_FULL_NAME = "full_choice";
 	private static final String CHOICE_COMMAND_VALUE = "value";
-	private static final String TEST_PARAMETER_SEQUENCE_GENERIC_PATTERN = "\\$\\d+\\.(" + CHOICE_COMMAND_SHORT_NAME + "|" + CHOICE_COMMAND_FULL_NAME + "|" + CHOICE_COMMAND_VALUE + ")";
-	private static final String METHOD_PARAMETER_SEQUENCE_GENERIC_PATTERN = "\\$\\d+\\." + PARAMETER_COMMAND_NAME;
+	private static final String TEST_PARAMETER_SEQUENCE_GENERIC_PATTERN = "\\$\\w+\\.(" + CHOICE_COMMAND_SHORT_NAME + "|" + CHOICE_COMMAND_FULL_NAME + "|" + CHOICE_COMMAND_VALUE + ")";
+	private static final String METHOD_PARAMETER_SEQUENCE_GENERIC_PATTERN = "\\$\\w+\\." + PARAMETER_COMMAND_NAME;
 	private static final String ARITHMETIC_EXPRESSION_SEQUENCE_GENERIC_PATTERN = "\\$\\(.*\\)";
+	private static final String PARAMETER_SEPARATOR = ",";
 
 	public static String generateSection(MethodNode method, String template) {
+
+		if (template == null) {
+			return new String();
+		}
+
 		String result = template.replace(CLASS_NAME_SEQUENCE, ClassNodeHelper.getLocalName(method.getClassNode()));
 		result = result.replace(PACKAGE_NAME_SEQUENCE, ClassNodeHelper.getPackageName(method.getClassNode()));
 		result = result.replace(METHOD_NAME_SEQUENCE, method.getName());
-		result = replaceParameterSequences(method, result);
+		result = replaceParameterNameSequences(method, result);
 		result = evaluateExpressions(result);
+		result = evaluateMinWidthOperator(result);
 
 		return result;
 	}
 
-	private static String replaceParameterSequences(MethodNode method, String template) {
+	public static String generateTestCaseString(int sequenceIndex, TestCaseNode testCase, String template) {
+
+		MethodNode method = testCase.getMethod();
+
+		String result = generateSection(method, template);
+		result = replaceParameterSequences(testCase, result);
+		result = result.replace(TEST_CASE_INDEX_NAME_SEQUENCE, String.valueOf(sequenceIndex));
+		result = result.replace(TEST_SUITE_NAME_SEQUENCE, testCase.getName());
+		result = evaluateExpressions(result);
+		result = evaluateMinWidthOperator(result);
+
+		return result;
+	}	
+
+	private static String replaceParameterNameSequences(MethodNode methodNode, String template) {
+
 		String result = template;
-		Matcher m = Pattern.compile(METHOD_PARAMETER_SEQUENCE_GENERIC_PATTERN).matcher(template);
-		while(m.find()){
-			String parameterCommandSequence = m.group();
-			String command = getParameterCommand(parameterCommandSequence);
-			int parameterNumber = getParameterNumber(parameterCommandSequence) - 1;
-			MethodParameterNode parameter = method.getMethodParameters().get(parameterNumber);
-			String substitute = resolveParameterCommand(command, parameter);
-			result = result.replace(parameterCommandSequence, substitute);
+		Matcher matcher = Pattern.compile(METHOD_PARAMETER_SEQUENCE_GENERIC_PATTERN).matcher(template);
+
+		while(matcher.find()){
+
+			String parameterCommandSequence = matcher.group();
+			String parameterSubstitute = getParameterSubstitute(parameterCommandSequence, methodNode);
+
+			result = result.replace(parameterCommandSequence, parameterSubstitute);
 		}		
 
 		return result;
+	}
+
+	private static String getParameterSubstitute(String parameterCommandSequence, MethodNode methodNode) {
+
+		String command = getParameterCommand(parameterCommandSequence);
+		int parameterNumber = getParameterNumber(parameterCommandSequence, methodNode) - 1;
+
+		if (parameterNumber == -1) {
+			return null;
+		}
+
+		MethodParameterNode parameter = methodNode.getMethodParameters().get(parameterNumber);
+		String substitute = resolveParameterCommand(command, parameter);
+
+		return substitute;
 	}
 
 	private static String resolveParameterCommand(String command, MethodParameterNode parameter) {
@@ -77,22 +116,15 @@ public class TestCasesExportHelper {
 		return parameterCommandSequence.substring(parameterCommandSequence.indexOf(".") + 1, parameterCommandSequence.length());
 	}
 
-	private static int getParameterNumber(String parameterSequence) {
-		String parameterNumberString = parameterSequence.substring(1, parameterSequence.indexOf("."));
-		return Integer.parseInt(parameterNumberString);
-	}
+	private static int getParameterNumber(String parameterSequence, MethodNode methodNode) {
 
-	public static String generateTestCaseString(int sequenceIndex, TestCaseNode testCase, String template) {
+		String parameterDescriptionString = parameterSequence.substring(1, parameterSequence.indexOf("."));
 
-		MethodNode method = testCase.getMethod();
-
-		String result = generateSection(method, template);
-		result = replaceTestParameterSequences(testCase, result);
-		result = result.replace(TEST_CASE_INDEX_NAME_SEQUENCE, String.valueOf(sequenceIndex));
-		result = result.replace(TEST_SUITE_NAME_SEQUENCE, testCase.getName());
-		result = evaluateExpressions(result);
-
-		return result;
+		try {
+			return Integer.parseInt(parameterDescriptionString);
+		} catch(NumberFormatException e) {
+			return methodNode.getParameterIndex(parameterDescriptionString) + 1;
+		}
 	}
 
 	private static String evaluateExpressions(String template) {
@@ -110,27 +142,172 @@ public class TestCasesExportHelper {
 		return result;
 	}
 
-	private static String replaceTestParameterSequences(TestCaseNode testCase, String template) {
+	private static String evaluateMinWidthOperator(String template) {
 
-		String result = replaceParameterSequences(testCase.getMethod(), template);
+		final String MIN_WIDTH_OPERATOR_PATTERN = "\\([^.]*\\)\\.min_width\\([^\\)]+\\)";
 
-		Matcher m = Pattern.compile(TEST_PARAMETER_SEQUENCE_GENERIC_PATTERN).matcher(template);
+		String result = template;
+		Matcher matcher = Pattern.compile(MIN_WIDTH_OPERATOR_PATTERN).matcher(template);
 
-		while(m.find()){
-			String parameterCommandSequence = m.group();
+		while(matcher.find()) {
 
-			String command = getParameterCommand(parameterCommandSequence);
+			String expressionSequence = matcher.group();
+			String expandedValue = getExpandedValue(expressionSequence);
+			result = result.replace(expressionSequence, expandedValue);
+		}	
 
-			int parameterNumber = getParameterNumber(parameterCommandSequence) - 1;
+		return result;
+	}	
 
-			if (parameterNumber < testCase.getTestData().size()) {
-				ChoiceNode choice = testCase.getTestData().get(parameterNumber);
-				String substitute = resolveChoiceCommand(command, choice);
-				result = result.replace(parameterCommandSequence, substitute);
+	private static String getExpandedValue(String minWidthSequence) {
+
+		String valueStr = getValueString(minWidthSequence);
+		String minWidthParameters = getMinWidthParameters(minWidthSequence);
+
+		String expandedValue = expandValue(valueStr, minWidthParameters);
+
+		if (expandedValue == null) {
+			return minWidthSequence;
+		} else {
+			return expandedValue;
+		}
+	}
+
+	private static String getValueString(String string) {
+
+		String tag = getArgWithBrackets(string, 0);
+		if (tag == null) {
+			return null;
+		}
+
+		return removeBrackets(tag);
+	}
+
+	private static String getMinWidthParameters(String minWidthSequence) {
+
+		String tag = getArgWithBrackets(minWidthSequence, 1);
+		if (tag == null) {
+			return null;
+		}
+
+		return removeBrackets(tag);
+	}
+
+	private static String removeBrackets(String string) {
+		return StringHelper.removeToPrefixAndFromPostfix("(", ")", string);
+	}
+
+	private static String getArgWithBrackets(String minWidthSequence, int index) {
+
+		final String ARG_WITH_BRACKETS_PATTERN = "\\(\\s*[^\\)]*\\s*\\)";
+
+		return StringHelper.getMatch(minWidthSequence, ARG_WITH_BRACKETS_PATTERN, index);
+	}
+
+	private static String expandValue(String valueStr, String parameters) {
+
+		Integer repetitions = getRepetitions(parameters);
+		if (repetitions == null) {
+			return null;
+		}
+
+		JustifyType justifyType = getJustifyType(parameters);
+
+		if (justifyType == JustifyType.ERROR) {
+			return null;
+		}
+
+		return expandValue(valueStr, repetitions, justifyType);
+	}
+
+	private static String expandValue(String valueStr, int repetitions, JustifyType justifyType) {
+
+		switch(justifyType) {
+		case LEFT:
+			return StringHelper.appendSpacesToLength(valueStr, repetitions);
+		case RIGHT:
+			return StringHelper.insertSpacesToLength(valueStr, repetitions);
+		case CENTER:
+			return StringHelper.centerStringToLength(valueStr, repetitions);
+		default:
+			return null;
+		}
+	}
+
+	private static Integer getRepetitions(String parameters) {
+
+		String repetitionsStr = getRepetitionsStr(parameters);
+
+		try {
+			return StringHelper.convertToInteger(repetitionsStr);
+		} catch (NumberFormatException e) {
+			return null;
+		}
+	}
+
+	private static String getRepetitionsStr(String parameters) {
+
+		if (parameters.contains(PARAMETER_SEPARATOR)) {
+			return StringHelper.getFirstToken(parameters, PARAMETER_SEPARATOR);
+		}
+
+		return parameters;
+	}
+
+	private static JustifyType getJustifyType(String parameters) {
+
+		String typeString = getJustifyTypeString(parameters);
+		if (typeString == null) {
+			return JustifyType.LEFT; 
+		}
+
+		return JustifyType.convertFromString(typeString);
+	}
+
+	private static String getJustifyTypeString(String parameters) {
+
+		if (parameters.contains(PARAMETER_SEPARATOR)) {
+			return StringHelper.getLastToken(parameters, PARAMETER_SEPARATOR).trim();
+		}
+		return null;
+	}
+
+	private static String replaceParameterSequences(TestCaseNode testCase, String template) {
+
+		String result = replaceParameterNameSequences(testCase.getMethod(), template);
+
+		Matcher matcher = Pattern.compile(TEST_PARAMETER_SEQUENCE_GENERIC_PATTERN).matcher(template);
+
+		while(matcher.find()){
+
+			String parameterCommandSequence = matcher.group();
+
+			String valueSubstitute = createValueSubstitute(parameterCommandSequence, testCase);
+			if (valueSubstitute != null) {
+				result = result.replace(parameterCommandSequence, valueSubstitute);
 			}
 		}
 
 		return result;
+	}
+
+	private static String createValueSubstitute(String parameterCommandSequence, TestCaseNode testCase) {
+
+		int parameterNumber = getParameterNumber(parameterCommandSequence, testCase.getMethod()) - 1;
+
+		if (parameterNumber == -1) {
+			return null;
+		}
+		if (parameterNumber >= testCase.getTestData().size()) {
+			return null;
+		}
+
+		ChoiceNode choice = testCase.getTestData().get(parameterNumber);
+
+		String command = getParameterCommand(parameterCommandSequence);
+		String substitute = resolveChoiceCommand(command, choice);
+
+		return substitute;
 	}
 
 	private static String resolveChoiceCommand(String command, ChoiceNode choice) {

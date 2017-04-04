@@ -134,7 +134,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 			return driverPath;
 		}
 
-		String env = StringHelper.removeStrgAtEnd("%", StringHelper.removePrefix("%", envWithBoundaries));
+		String env = StringHelper.removeStrgAtEnd("%", StringHelper.removeToPrefix("%", envWithBoundaries));
 
 		String path = System.getenv(env);
 		if (path == null) {

@@ -61,8 +61,11 @@ import com.ecfeed.core.model.ConstraintNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelHelper;
+import com.ecfeed.core.serialization.export.ExportTemplateFactory;
+import com.ecfeed.core.serialization.export.IExportTemplate;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.StringHolder;
+import com.ecfeed.ui.common.ApplyValueMode;
 import com.ecfeed.ui.common.CommonConstants;
 import com.ecfeed.ui.common.EclipseImplementationStatusResolver;
 import com.ecfeed.ui.common.Messages;
@@ -71,8 +74,9 @@ import com.ecfeed.ui.common.TreeCheckStateListener;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.dialogs.TestCasesExportDialog.FileCompositeVisibility;
 import com.ecfeed.ui.dialogs.basic.DialogObjectToolkit;
+import com.ecfeed.ui.editor.IValueApplier;
 
-public abstract class SetupDialogGenerator extends TitleAreaDialog {
+public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 	private Combo fTestSuiteCombo;
 	private Combo fGeneratorCombo;
 	private Button fOkButton;
@@ -90,12 +94,13 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 	private boolean fGenerateExecutableContent;
 	private IImplementationStatusResolver fStatusResolver;
 	private IFileInfoProvider fFileInfoProvider;
-	private DialogObjectToolkit fDialogObjectToolkit;
+	private Combo fExportFormatCombo;
 	private Text fTargetFileText;
 	private int fContent;
 	private String fTargetFile;
-
-	String fExportTemplate;
+	private ExportTemplateFactory fExportTemplateFactory;
+	private IExportTemplate fExportTemplate;
+	DialogObjectToolkit.FileSelectionComposite fExportFileSelectionComposite;
 
 	public final static int CONSTRAINTS_COMPOSITE = 1;
 	public final static int CHOICES_COMPOSITE = 1 << 1;
@@ -103,24 +108,33 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 	public final static int GENERATOR_SELECTION_COMPOSITE = 1 << 3;
 	public final static int TEST_CASES_EXPORT_COMPOSITE = 1 << 4;
 
-	public SetupDialogGenerator(Shell parentShell, MethodNode method,
-			boolean generateExecutables, IFileInfoProvider fileInfoProvider,
-			String initialExportTemplate,
+	public GeneratorSetupDialog(
+			Shell parentShell, 
+			MethodNode method,
+			boolean generateExecutables, 
+			IFileInfoProvider fileInfoProvider,
+			ExportTemplateFactory exportTemplateFactory,
 			String targetFile) {
+
 		super(parentShell);
 		setHelpAvailable(false);
-		setShellStyle(SWT.BORDER | SWT.RESIZE | SWT.TITLE
-				| SWT.APPLICATION_MODAL);
+		setShellStyle(SWT.BORDER | SWT.RESIZE | SWT.TITLE | SWT.APPLICATION_MODAL);
+
 		fMethod = method;
 		fGeneratorFactory = new GeneratorFactory<ChoiceNode>();
 		fGenerateExecutableContent = generateExecutables;
-		fStatusResolver = new EclipseImplementationStatusResolver(
-				fileInfoProvider);
+
+		fStatusResolver = new EclipseImplementationStatusResolver(fileInfoProvider);
 		fFileInfoProvider = fileInfoProvider;
-		fDialogObjectToolkit = DialogObjectToolkit.getInstance();
 
 		fTargetFile = null;
-		fExportTemplate = initialExportTemplate;
+
+		fExportTemplateFactory = exportTemplateFactory;
+
+		if (fExportTemplateFactory != null) {
+			fExportTemplate = exportTemplateFactory.createDefaultTemplate();
+		}
+
 		fTargetFile = targetFile;
 	}
 
@@ -146,6 +160,10 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 
 	public Map<String, Object> getGeneratorParameters() {
 		return fParameters;
+	}
+
+	public String getExportTemplate() {
+		return fExportTemplate.getTemplateText();
 	}
 
 	@Override
@@ -533,28 +551,50 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 	}
 
 	private void createTestCasesExportComposite(Composite parentComposite) {
-		fDialogObjectToolkit.createRowComposite(parentComposite);
-		Composite advancedButtonComposite = fDialogObjectToolkit
+
+		DialogObjectToolkit.createRowComposite(parentComposite);
+		Composite advancedButtonComposite = DialogObjectToolkit
 				.createRowComposite(parentComposite);
 
-		fDialogObjectToolkit.createButton(advancedButtonComposite,
+		DialogObjectToolkit.createGridButton(advancedButtonComposite,
 				"Advanced...", new ExportDefinitionSelectionAdapter());
 
+
+		createExportTemplateCombo(parentComposite);
+		createFileSelectionComposite(parentComposite);
+	}
+
+	private void createExportTemplateCombo(Composite composite) {
+		final String DEFINE_TEMPLATE = "Template: ";
+		DialogObjectToolkit.createLabel(composite, DEFINE_TEMPLATE);
+
+		fExportFormatCombo = 
+				DialogObjectToolkit.createReadOnlyGridCombo(
+						composite, new ExportFormatComboValueApplier(), ApplyValueMode.ON_SELECTION_ONLY);
+
+		String[] exportFormats = ExportTemplateFactory.getAvailableExportFormats();
+		fExportFormatCombo.setItems(exportFormats);
+
+		String format = fExportTemplate.getTemplateFormat();
+		fExportFormatCombo.setText(format);
+	}
+
+	private void createFileSelectionComposite(Composite parentComposite) {
 		final String TARGET_FILE = "Export target file";
-		fTargetFileText = 
-				fDialogObjectToolkit.createFileSelectionComposite(
+
+		fExportFileSelectionComposite = 
+				DialogObjectToolkit.createFileSelectionComposite(
 						parentComposite, 
 						TARGET_FILE, 
-						TestCasesExportDialog.getExportFileExtensions(), 
+						getExportFileExtensions(), 
 						new ExportFileModifyListener());
+
+		fTargetFileText = fExportFileSelectionComposite.getTextField();
+
 
 		if (fTargetFile != null) {
 			fTargetFileText.setText(fTargetFile);
 		}
-	}
-
-	public String getExportTemplate() {
-		return fExportTemplate;
 	}
 
 	public String getTargetFile() {
@@ -797,6 +837,14 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 		return p;
 	}
 
+	public String[] getExportFileExtensions() {
+
+		String fileExtension = fExportTemplate.getFileExtension();
+		String[] extensionsFilter = { "*." + fileExtension, "*.*" };
+
+		return extensionsFilter;
+	}
+
 	private class ChoiceTreeCheckStateListener extends TreeCheckStateListener {
 
 		public ChoiceTreeCheckStateListener(CheckboxTreeViewer treeViewer) {
@@ -923,14 +971,22 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 
-			TestCasesExportDialog dialog = new TestCasesExportDialog(
-					FileCompositeVisibility.NOT_VISIBLE, fExportTemplate, fTargetFile);
+			TestCasesExportDialog dialog = 
+					new TestCasesExportDialog(
+							FileCompositeVisibility.NOT_VISIBLE, 
+							fExportTemplateFactory,
+							fExportTemplate,
+							fTargetFile, 
+							fMethod.getParametersCount(),
+							null);
 
 			if (dialog.open() != IDialogConstants.OK_ID) {
 				return;
 			}
 
-			fExportTemplate = dialog.getTemplate();
+
+			fExportTemplate = dialog.getExportTemplate();
+			fExportFormatCombo.setText(fExportTemplate.getTemplateFormat());
 		}
 	}
 
@@ -940,5 +996,18 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 			updateOkButtonAndErrorMsg();
 		}
 	}
+
+	private class ExportFormatComboValueApplier implements IValueApplier {
+
+		@Override
+		public void applyValue() {
+
+			String exportFormat = fExportFormatCombo.getText();
+			fExportTemplate = fExportTemplateFactory.createTemplate(exportFormat);
+
+			fExportFileSelectionComposite.setFileExtensionsFilter(getExportFileExtensions());
+		}
+
+	}	
 
 }

@@ -7,36 +7,30 @@
  * http://www.eclipse.org/legal/epl-v10.html 
  *  
  *******************************************************************************/
+package com.ecfeed.core.serialization.export;
 
-package com.ecfeed.core.utils;
+import com.ecfeed.core.model.MethodNode;
 
-public class ItemHolder<Type> {
-	private Type fItem;
+public class BasicExportTemplate extends AbstractExportTemplate {
 
-	public ItemHolder(Type initialValue) {
-		set(initialValue);
+	public BasicExportTemplate(MethodNode methodNode) {
+		super(methodNode);
 	}
 
-	public ItemHolder() {
-		set(null);
+	@Override
+	public String createDefaultTemplateText() {
+
+		return null;
 	}
 
-	public Type get() {
-		return fItem;
+	@Override
+	public String getFileExtension() {
+		return null;
 	}
 
-	public void set(Type str) {
-		fItem = str;
+	@Override 
+	public String getTemplateFormat() {
+		return null;
 	}
 
-	public void reset() {
-		fItem = null;
-	}
-
-	public boolean isNull() {
-		if (fItem == null) {
-			return true;
-		}
-		return false;
-	}
 }

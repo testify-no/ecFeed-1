@@ -7,36 +7,12 @@
  * http://www.eclipse.org/legal/epl-v10.html 
  *  
  *******************************************************************************/
+package com.ecfeed.ui.common;
 
-package com.ecfeed.core.utils;
 
-public class ItemHolder<Type> {
-	private Type fItem;
+public enum ApplyValueMode {
+	
+	ON_SELECTION_ONLY,
+	ON_SELECTION_AND_FOCUS_LOST
 
-	public ItemHolder(Type initialValue) {
-		set(initialValue);
-	}
-
-	public ItemHolder() {
-		set(null);
-	}
-
-	public Type get() {
-		return fItem;
-	}
-
-	public void set(Type str) {
-		fItem = str;
-	}
-
-	public void reset() {
-		fItem = null;
-	}
-
-	public boolean isNull() {
-		if (fItem == null) {
-			return true;
-		}
-		return false;
-	}
 }

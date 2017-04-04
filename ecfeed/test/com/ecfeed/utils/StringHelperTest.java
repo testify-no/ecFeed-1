@@ -42,19 +42,19 @@ public class StringHelperTest{
 
 	@Test
 	public void shouldRemovePrefix(){
-		String result = StringHelper.removePrefix("123", "123abc");
+		String result = StringHelper.removeToPrefix("123", "123abc");
 		assertEquals("abc", result);
 	}
 
 	@Test
 	public void shouldReturnArgWhenNoPrefix(){
-		String result = StringHelper.removePrefix("123", "abc");
+		String result = StringHelper.removeToPrefix("123", "abc");
 		assertEquals("abc", result);
 	}	
 
 	@Test
 	public void shouldIgnoreEmptyPrefix(){
-		String result = StringHelper.removePrefix("", "abcd");
+		String result = StringHelper.removeToPrefix("", "abcd");
 		assertEquals("abcd", result);
 	}	
 
@@ -193,6 +193,11 @@ public class StringHelperTest{
 	}
 
 	@Test
+	public void shouldGetMatch() {
+		assertEquals("(x)", StringHelper.getMatch("abc(x)ghi", "\\(\\w+\\)"));
+	}
+
+	@Test
 	public void shouldReturnNoOccurencesOfSpace(){
 		assertEquals(0, StringHelper.countOccurencesOfChar("12345", ' '));
 	}	
@@ -230,6 +235,16 @@ public class StringHelperTest{
 	@Test
 	public void shouldFindNumericPostifxC() {
 		assertEquals(null, StringHelper.findNumericPostfix("a"));
+	}	
+
+	@Test
+	public void shouldRemovePrefixAndFromPostfix() {
+		assertEquals("abc", StringHelper.removeToPrefixAndFromPostfix("<", ">", "<abc>"));
+	}	
+
+	@Test
+	public void shouldRemovePrefixAndFromPostfix2() {
+		assertEquals("   ", StringHelper.removeToPrefixAndFromPostfix("<", ">", "<   >"));
 	}	
 
 

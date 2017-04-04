@@ -27,7 +27,7 @@ public class PackageClassHelper {
 	}
 
 	public static String removeDefaultPackagePrefix(String packageWithClass) {
-		return StringHelper.removePrefix(".", packageWithClass);
+		return StringHelper.removeToPrefix(".", packageWithClass);
 	}
 
 	public static boolean hasPackageName(String packageWithClass) {

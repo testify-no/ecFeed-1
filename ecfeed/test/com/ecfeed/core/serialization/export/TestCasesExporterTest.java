@@ -33,51 +33,53 @@ public class TestCasesExporterTest {
 
 	@Test
 	public void shouldExportAllSections() {
-		String headerTemplate = "$1.name, $2.name";
-		String testCaseTemplate = "$1.value, $2.value";
-		String footerTemplate = "end";
+		IExportTemplate exportTemplate = 
+				new CsvExportTemplate(createMethodNode());
+
+		exportTemplate.setHeaderTemplate("$1.name, $2.name");
+		exportTemplate.setTestCaseTemplate("$1.value, $2.value");
+		exportTemplate.setFooterTemplate("end");
 
 		String expectedResult = "par0, par1" + StringHelper.newLine() + "0, 1"
 				+ StringHelper.newLine() + "end" + StringHelper.newLine();
 
-		performTwoParamsTest(headerTemplate, testCaseTemplate, footerTemplate,
-				expectedResult);
+		performTwoParamsTest(exportTemplate, expectedResult);
 	}
 
 	public void shouldExportHeaderOnly() {
-		String headerTemplate = "$1.name, $2.name";
-		String testCaseTemplate = null;
-		String footerTemplate = null;
+		IExportTemplate exportTemplate = 
+				new CsvExportTemplate(createMethodNode());
+
+		exportTemplate.setHeaderTemplate("$1.name, $2.name");
 
 		String expectedResult = "par0, par1";
 
-		performTwoParamsTest(headerTemplate, testCaseTemplate, footerTemplate,
-				expectedResult);
+		performTwoParamsTest(exportTemplate, expectedResult);
 	}
 
 	public void shouldExportTestCasesOnly() {
-		String headerTemplate = null;
-		String testCaseTemplate = "$1.value, $2.value";
-		String footerTemplate = null;
+		IExportTemplate exportTemplate = 
+				new CsvExportTemplate(createMethodNode());
+
+		exportTemplate.setTestCaseTemplate("$1.value, $2.value");
 
 		String expectedResult = "0, 1";
-		performTwoParamsTest(headerTemplate, testCaseTemplate, footerTemplate,
-				expectedResult);
+		performTwoParamsTest(exportTemplate, expectedResult);
 	}
 
 	public void shouldExportFooterOnly() {
-		String headerTemplate = null;
-		String testCaseTemplate = null;
-		String footerTemplate = "end";
+		IExportTemplate exportTemplate = 
+				new CsvExportTemplate(createMethodNode());
+
+		exportTemplate.setFooterTemplate("end");
 
 		String expectedResult = "end";
 
-		performTwoParamsTest(headerTemplate, testCaseTemplate, footerTemplate,
-				expectedResult);
+		performTwoParamsTest(exportTemplate, expectedResult);
 	}
 
-	private void performTwoParamsTest(String headerTemplate,
-			String testCaseTemplate, String footerTemplate,
+	private void performTwoParamsTest(
+			IExportTemplate exportTemplate,
 			String expectedResult) {
 		ClassNode theClass = new ClassNode("Test");
 
@@ -106,8 +108,7 @@ public class TestCasesExporterTest {
 		Collection<TestCaseNode> testCases = new ArrayList<TestCaseNode>();
 		testCases.add(testCase);
 
-		TestCasesExporter exporter = new TestCasesExporter(headerTemplate,
-				testCaseTemplate, footerTemplate);
+		TestCasesExporter exporter = new TestCasesExporter(exportTemplate);
 
 		OutputStream stream = new ByteArrayOutputStream();
 
@@ -121,5 +122,10 @@ public class TestCasesExporterTest {
 
 		assertEquals(expectedResult, result);
 	}
+
+	private MethodNode createMethodNode() {
+		return new MethodNode("methodName");
+	}
+
 
 }

@@ -15,39 +15,28 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import com.ecfeed.core.utils.StringHelper;
+import com.ecfeed.ui.common.ApplyValueMode;
+import com.ecfeed.ui.common.CommonEditHelper;
+import com.ecfeed.ui.editor.IValueApplier;
 import com.ecfeed.utils.EclipseHelper;
 
 public class DialogObjectToolkit {
-	private static DialogObjectToolkit fInstance = null;
 
-	protected DialogObjectToolkit() {
-	}
-
-	public static DialogObjectToolkit getInstance() {
-		if (fInstance == null) {
-			fInstance = new DialogObjectToolkit();
-		}
-		return fInstance;
-	}
-
-	private static String[] createFileExtensionTab(String fileExtension) {
-		String[] fileExtensions = new String[1];
-		fileExtensions[0] = fileExtension;
-		return fileExtensions;
-	}
-
-	public Composite createGridComposite(Composite parent, int countOfColumns) {
+	public static Composite createGridComposite(Composite parent, int countOfColumns) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
 
@@ -58,7 +47,8 @@ public class DialogObjectToolkit {
 		return composite;
 	}
 
-	public Composite createRowComposite(Composite parentComposite) {
+	public static Composite createRowComposite(Composite parentComposite) {
+
 		Composite composite = new Composite(parentComposite, SWT.NONE);
 
 		RowLayout rowLayout = new RowLayout();
@@ -67,19 +57,11 @@ public class DialogObjectToolkit {
 		return composite;
 	}
 
-	public Composite createFillComposite(Composite parentComposite) {
-		Composite composite = new Composite(parentComposite, SWT.NONE);
+	public static Text createGridText(
+			Composite parentGridComposite, int heightHint, String initialText) {
 
-		FillLayout rowLayout = new FillLayout();
-		composite.setLayout(rowLayout);
-
-		return composite;
-	}
-
-	public Text createGridText(Composite parentGridComposite, int heightHint,
-			String initialText) {
-		Text templateText = new Text(parentGridComposite, SWT.WRAP | SWT.MULTI
-				| SWT.BORDER | SWT.V_SCROLL);
+		Text templateText = new Text(parentGridComposite, SWT.MULTI
+				| SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
 
 		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gridData.heightHint = heightHint;
@@ -92,21 +74,24 @@ public class DialogObjectToolkit {
 		return templateText;
 	}
 
-	public Label createLabel(Composite parent, String text) {
+	public static Label createLabel(Composite parent, String text) {
+
 		Label label = new Label(parent, SWT.NONE);
 		label.setText(text);
+
 		return label;
 	}
 
-	public Label createSpacer(Composite parent, int size) {
+	public static Label createSpacer(Composite parent, int size) {
+
 		return createLabel(parent, StringHelper.createString(" ", size));
 	}
 
-	public Text createFileSelectionText(Composite targetFileContainer,
-			ModifyListener modifyListener) {
+	public static Text createFileSelectionText(
+			Composite targetFileContainer, ModifyListener modifyListener) {
+
 		Text targetFileText = new Text(targetFileContainer, SWT.BORDER);
-		targetFileText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
-				false));
+		targetFileText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 
 		if (modifyListener != null) {
 			targetFileText.addModifyListener(modifyListener);
@@ -115,62 +100,54 @@ public class DialogObjectToolkit {
 		return targetFileText;
 	}
 
-	public Button createButton(Composite parent, String buttonText,
-			SelectionListener selectionListener) {
-		Button button = new Button(parent, SWT.NONE);
-		button.setText(buttonText);
+	public static Combo createReadOnlyGridCombo(
+			Composite parentComposite,	IValueApplier valueApplier, ApplyValueMode applyValueMode) {
 
-		if (selectionListener != null) {
-			button.addSelectionListener(selectionListener);
-		}
-
-		return button;
+		return CommonEditHelper.createReadOnlyGridCombo(
+				parentComposite, valueApplier, applyValueMode);
 	}
 
-	public Button createBrowseButton(Composite parent,
-			SelectionListener selectionListener) {
-		final String BROWSE_LABEL = "Browse...";
-		return createButton(parent, BROWSE_LABEL, selectionListener);
+	public static Combo createReadOnlyGridCombo(Composite parentComposite,	IValueApplier valueApplier) {
+
+		return CommonEditHelper.createReadOnlyGridCombo(
+				parentComposite, valueApplier, ApplyValueMode.ON_SELECTION_AND_FOCUS_LOST);
 	}
 
-	public Text createFileSelectionComposite(Composite parent,
-			String labelText, String[] extensionsFilter, ModifyListener textModifyListener) {
-		Composite childComposite = createGridComposite(parent, 2);
+	public static Combo createReadWriteGridCombo(
+			Composite parentComposite, IValueApplier valueApplier, ApplyValueMode applyValueMode) {
 
-		createLabel(childComposite, labelText);
+		return CommonEditHelper.createReadWriteGridCombo(
+				parentComposite, valueApplier, applyValueMode);
+	}	
 
-		createSpacer(childComposite, 1);
+	public static Combo createReadWriteGridCombo(Composite parentComposite, IValueApplier valueApplier) {
 
-		Text targetFileText = createFileSelectionText(childComposite,
-				textModifyListener);
-
-		SelectionListener browseSelectionListener = 
-				new FileDialogSelectionAdapter(SWT.SAVE, extensionsFilter, targetFileText);
-		createBrowseButton(childComposite, browseSelectionListener);
-		return targetFileText;
+		return CommonEditHelper.createReadWriteGridCombo(
+				parentComposite, valueApplier, ApplyValueMode.ON_SELECTION_AND_FOCUS_LOST);
 	}
 
-	class FileDialogSelectionAdapter extends SelectionAdapter {
+	public static void setMonospaceFont(Control control) {
+		FontData oldFontData = control.getFont().getFontData()[0];
+		Font font = new Font(control.getDisplay(), new FontData("Mono", oldFontData.getHeight()-1, oldFontData.getStyle()));
+		control.setFont(font);
+	}
+
+	private static class BrowseButtonClickListener extends SelectionAdapter {
+
 		int fDialogStyle;
 		String[] fFileExtensions;
 		Text fTargetFileText;
 
-		FileDialogSelectionAdapter(int dialogStyle, String[] fileExtensions, Text targetFileText) {
+		BrowseButtonClickListener(int dialogStyle, String[] fileExtensions, Text targetFileText) {
+
 			fDialogStyle = dialogStyle;
 			fFileExtensions = fileExtensions;
 			fTargetFileText = targetFileText;
 		}
 
-		FileDialogSelectionAdapter(int dialogStyle, String fileExtension, Text targetFileText) {
-			this(dialogStyle, createFileExtensionTab(fileExtension), targetFileText);
-		}
-
-		FileDialogSelectionAdapter(int dialogStyle, Text targetFileText) {
-			this(dialogStyle, new String(), targetFileText);
-		}		
-
 		@Override
 		public void widgetSelected(SelectionEvent e) {
+
 			FileDialog dialog = new FileDialog(EclipseHelper.getActiveShell(), fDialogStyle);
 
 			dialog.setFilterExtensions(fFileExtensions);
@@ -182,6 +159,107 @@ public class DialogObjectToolkit {
 
 			fTargetFileText.setText(filePath);
 		}
+
+		public void setFileExtensionsFilter(String[] fileExtensions) {
+			fFileExtensions  = fileExtensions;
+		}
 	}
+
+	public static FileSelectionComposite createFileSelectionComposite(
+			Composite parent, 
+			String labelText, 
+			String[] extensionsFilter, 
+			ModifyListener textModifyListener) {
+		return new FileSelectionComposite(parent, labelText, extensionsFilter, textModifyListener );
+	}
+
+	public static class FileSelectionComposite {
+
+		private Composite fChildComposite;
+		private Text fTargetFileText;
+		GridButton fGridButton;
+		BrowseButtonClickListener fBrowseButtonClickListener;
+
+		FileSelectionComposite(
+				Composite parent, 
+				String labelText, 
+				String[] extensionsFilter, 
+				ModifyListener textModifyListener) {
+
+			fChildComposite = createGridComposite(parent, 2);
+
+			createLabel(fChildComposite, labelText);
+			createSpacer(fChildComposite, 1);
+
+			fTargetFileText = createFileSelectionText(fChildComposite, textModifyListener);
+
+			fBrowseButtonClickListener = 
+					new DialogObjectToolkit.BrowseButtonClickListener(
+							SWT.SAVE, extensionsFilter, fTargetFileText);
+
+			fGridButton = createBrowseButton(fChildComposite, fBrowseButtonClickListener);
+		}
+
+		public Text getTextField() {
+			return fTargetFileText;
+		}
+
+		public void setFileExtensionsFilter(String[] extensionsFilter) {
+
+			fBrowseButtonClickListener.setFileExtensionsFilter(extensionsFilter);
+		}
+
+	}
+
+	public static GridButton createBrowseButton(
+			Composite parent, SelectionListener selectionListener) {
+
+		final String BROWSE_LABEL = "Browse...";
+		return createGridButton(parent, BROWSE_LABEL, selectionListener);
+	}
+
+	public static GridButton createGridButton(
+			Composite parent, String buttonText, SelectionListener selectionListener) {
+
+		return new GridButton(parent, buttonText, selectionListener);
+	}
+
+	public static class GridButton {
+
+		Button fButton;
+		SelectionListener fSelectionListener;
+
+		GridButton(Composite parent, String buttonText, SelectionListener selectionListener) {
+
+			fButton = new Button(parent, SWT.NONE);
+			fButton.setText(buttonText);
+			fButton.setLayoutData(new GridData());
+
+			fSelectionListener = selectionListener;
+
+			if (fSelectionListener != null) {
+				fButton.addSelectionListener(fSelectionListener);
+			}
+		}
+
+		public void setSelectionListener(SelectionListener selectionListener) {
+
+			if (selectionListener == null) {
+				return;
+			}
+
+			if (fSelectionListener != null) {
+				fButton.removeSelectionListener(fSelectionListener);
+			}
+
+			fButton.addSelectionListener(selectionListener);
+		}
+
+		public GridData getLayoutData() {
+			return (GridData) fButton.getLayoutData();
+		}
+
+	}
+
 
 }

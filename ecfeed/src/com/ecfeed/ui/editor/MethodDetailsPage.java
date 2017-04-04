@@ -175,7 +175,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 
 		@Override
 		public void applyValue() {
-			
+
 			fMethodInterface.setProperty(fRunnerPropertyId, fRunnerCombo.getText());
 		}
 	}	

@@ -61,8 +61,8 @@ public class OnlineTestRunningSupport extends AbstractOnlineSupport {
 
 	@Override
 	protected SetupDialogOnline createSetupDialog(Shell activeShell,
-			MethodNode methodNode, IFileInfoProvider fileInfoProvider,
-			String initialExportTemplate) {
+			MethodNode methodNode, IFileInfoProvider fileInfoProvider) {
+
 		return new SetupDialogExecuteOnline(activeShell, methodNode,
 				fileInfoProvider, null);
 	}

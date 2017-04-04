@@ -34,7 +34,7 @@ public class EclipseInstallationDirFileHelper implements IInstallationDirFileHel
 		final String androidToolsJarUrl = getAbsoluteDistributionFileUrl(relativePathToFile);
 
 		if (androidToolsJarUrl != null) {
-			return StringHelper.removePrefix(PREFIX_FILE, androidToolsJarUrl);
+			return StringHelper.removeToPrefix(PREFIX_FILE, androidToolsJarUrl);
 		}
 
 		final String ecfeedJarUrl = getAbsoluteDistributionFileUrl(DiskFileHelper.CURRENT_DIR);

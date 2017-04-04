@@ -8,35 +8,21 @@
  *  
  *******************************************************************************/
 
-package com.ecfeed.core.utils;
+package com.ecfeed.ui.common.utils;
 
-public class ItemHolder<Type> {
-	private Type fItem;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Control;
 
-	public ItemHolder(Type initialValue) {
-		set(initialValue);
+
+public class SwtObjectHelper {
+	
+	public static GridData getGridData(Control control) {
+		return (GridData)control.getLayoutData();
+	}
+	
+	public static void setHorizontalSpan(Control control, int span) {
+		GridData gridData = getGridData(control);
+		gridData.horizontalSpan = span;
 	}
 
-	public ItemHolder() {
-		set(null);
-	}
-
-	public Type get() {
-		return fItem;
-	}
-
-	public void set(Type str) {
-		fItem = str;
-	}
-
-	public void reset() {
-		fItem = null;
-	}
-
-	public boolean isNull() {
-		if (fItem == null) {
-			return true;
-		}
-		return false;
-	}
 }

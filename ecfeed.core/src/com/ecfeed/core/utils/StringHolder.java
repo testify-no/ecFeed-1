@@ -18,6 +18,11 @@ public class StringHolder extends ItemHolder<String> {
 
 	public StringHolder() {
 		super();
-	}	
+	}
+
+	public void append(String str) {
+		String oldValue = get();
+		set(oldValue + str);
+	}
 
 }
