@@ -10,6 +10,9 @@
 
 package com.ecfeed.core.utils;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 
 public class SystemHelper {
 
@@ -27,6 +30,16 @@ public class SystemHelper {
 		}
 
 		return fOs;
+	}	
+
+	public static String getOperatingSystemArchitecture() {
+
+		return System.getProperty("os.arch");
+	}	
+
+	public static String getUserName() {
+
+		return System.getProperty("user.name");
 	}	
 
 	public static boolean isOperatingSystemLinux() {
@@ -48,5 +61,19 @@ public class SystemHelper {
 		}
 		return false;
 	}	
+
+	public static String getNetAddress() {
+
+		try {
+			InetAddress address = InetAddress.getLocalHost();
+			return address.toString();
+		} catch (UnknownHostException e) {
+			return null;
+		}
+	}
+
+	public static String getMachineIdentifier() {
+		return getOperatingSystem() + "/" + getOperatingSystemArchitecture() + "/" + getUserName() + "/" + getNetAddress();
+	}
 
 }
