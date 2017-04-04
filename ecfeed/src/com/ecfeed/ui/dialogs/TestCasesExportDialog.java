@@ -14,12 +14,14 @@ import java.util.Collection;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.HelpEvent;
 import org.eclipse.swt.events.HelpListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -35,6 +37,7 @@ import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.ui.common.ApplyValueMode;
 import com.ecfeed.ui.dialogs.basic.AskIfOverwriteFileDialog;
 import com.ecfeed.ui.dialogs.basic.DialogObjectToolkit;
+import com.ecfeed.ui.dialogs.basic.DialogObjectToolkit.GridButton;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.dialogs.basic.FileOpenAndReadDialog;
 import com.ecfeed.ui.dialogs.basic.FileSaveDialog;
@@ -157,10 +160,10 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 	protected void cancelPressed() {
 		super.cancelPressed();
 	}
-	
+
 	@Override
 	protected boolean isResizable() {
-	    return true;
+		return true;
 	}	
 
 	public void setDialogTitle(TitleAreaDialog dialog) {
@@ -200,13 +203,22 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		DialogObjectToolkit.setMonospaceFont(fTemplateTextField);
 	}
 
-	private void createTemplateLabelAndButtonsComposite(
-			Composite parentComposite) {
+	private void createTemplateLabelAndButtonsComposite(Composite parentComposite) {
 
 		Composite composite = DialogObjectToolkit.createGridComposite(parentComposite, 4);
 
 		createExportTemplateCombo(composite);
-		createTemplateButtonsComposite(composite);
+
+		createTeplateRdWrButton(composite, "Load...", new LoadButtonSelectionAdapter());
+		createTeplateRdWrButton(composite, "Save As...", new SaveAsButtonSelectionAdapter());
+	}
+
+	private void createTeplateRdWrButton(Composite composite, String label, SelectionAdapter selectionAdapter) {
+
+		GridButton loadButton = DialogObjectToolkit.createGridButton(composite, label, selectionAdapter);
+
+		GridData gd1 = loadButton.getLayoutData();
+		gd1.widthHint = 80;
 	}
 
 	private void createExportTemplateCombo(Composite composite) {
@@ -250,25 +262,17 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 	private void createPreviewButtonsComposite(Composite parentComposite) {
 
 		Composite buttonComposite = 
-				DialogObjectToolkit.createGridComposite(parentComposite, 3);
+				DialogObjectToolkit.createGridComposite(parentComposite, 2);
 
 		DialogObjectToolkit.createLabel(buttonComposite, "Sample preview: ");
 
-		DialogObjectToolkit.createSpacer(buttonComposite, 150); // TODO ALIGN RIGHT
+		GridButton gridButton = 
+				DialogObjectToolkit.createGridButton(
+						buttonComposite, "Update preview", new UpdatePreviewButtonSelectionAdapter());
 
-		DialogObjectToolkit.createButton(
-				buttonComposite, "Update preview", new UpdatePreviewButtonSelectionAdapter());
-	}
-
-	private void createTemplateButtonsComposite(Composite parentComposite) {
-		Composite buttonComposite = 
-				DialogObjectToolkit.createFillComposite(parentComposite);
-
-		DialogObjectToolkit.createButton(
-				buttonComposite, "Load...", new LoadButtonSelectionAdapter());
-		
-		DialogObjectToolkit.createButton(
-				buttonComposite, "Save As...", new SaveAsButtonSelectionAdapter());
+		GridData gridData = gridButton.getLayoutData();
+		gridData.horizontalAlignment = SWT.RIGHT;
+		gridData.grabExcessHorizontalSpace = true;
 	}
 
 	private void createTargetFileComposite(Composite parent) {

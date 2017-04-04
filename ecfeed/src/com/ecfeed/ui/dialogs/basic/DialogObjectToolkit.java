@@ -17,7 +17,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
@@ -53,16 +52,6 @@ public class DialogObjectToolkit {
 		Composite composite = new Composite(parentComposite, SWT.NONE);
 
 		RowLayout rowLayout = new RowLayout();
-		composite.setLayout(rowLayout);
-
-		return composite;
-	}
-
-	public static Composite createFillComposite(Composite parentComposite) {
-
-		Composite composite = new Composite(parentComposite, SWT.NONE);
-
-		FillLayout rowLayout = new FillLayout();
 		composite.setLayout(rowLayout);
 
 		return composite;
@@ -188,7 +177,7 @@ public class DialogObjectToolkit {
 
 		private Composite fChildComposite;
 		private Text fTargetFileText;
-		ButtonEx fButtonEx;
+		GridButton fGridButton;
 		BrowseButtonClickListener fBrowseButtonClickListener;
 
 		FileSelectionComposite(
@@ -208,7 +197,7 @@ public class DialogObjectToolkit {
 					new DialogObjectToolkit.BrowseButtonClickListener(
 							SWT.SAVE, extensionsFilter, fTargetFileText);
 
-			fButtonEx = createBrowseButton(fChildComposite, fBrowseButtonClickListener);
+			fGridButton = createBrowseButton(fChildComposite, fBrowseButtonClickListener);
 		}
 
 		public Text getTextField() {
@@ -222,39 +211,35 @@ public class DialogObjectToolkit {
 
 	}
 
-	public static ButtonEx createBrowseButton(
+	public static GridButton createBrowseButton(
 			Composite parent, SelectionListener selectionListener) {
 
 		final String BROWSE_LABEL = "Browse...";
-		return createButton(parent, BROWSE_LABEL, selectionListener);
+		return createGridButton(parent, BROWSE_LABEL, selectionListener);
 	}
 
-	public static ButtonEx createButton(
+	public static GridButton createGridButton(
 			Composite parent, String buttonText, SelectionListener selectionListener) {
 
-		return new ButtonEx(parent, buttonText, selectionListener);
+		return new GridButton(parent, buttonText, selectionListener);
 	}
 
-	public static class ButtonEx {
+	public static class GridButton {
 
 		Button fButton;
 		SelectionListener fSelectionListener;
 
-		ButtonEx(Composite parent, String buttonText, SelectionListener selectionListener) {
+		GridButton(Composite parent, String buttonText, SelectionListener selectionListener) {
 
 			fButton = new Button(parent, SWT.NONE);
 			fButton.setText(buttonText);
+			fButton.setLayoutData(new GridData());
 
 			fSelectionListener = selectionListener;
 
 			if (fSelectionListener != null) {
 				fButton.addSelectionListener(fSelectionListener);
 			}
-
-		}
-
-		public Button getButton() {
-			return fButton;
 		}
 
 		public void setSelectionListener(SelectionListener selectionListener) {
@@ -269,6 +254,11 @@ public class DialogObjectToolkit {
 
 			fButton.addSelectionListener(selectionListener);
 		}
+
+		public GridData getLayoutData() {
+			return (GridData) fButton.getLayoutData();
+		}
+
 	}
 
 

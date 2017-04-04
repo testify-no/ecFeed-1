@@ -126,7 +126,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 
 		fStatusResolver = new EclipseImplementationStatusResolver(fileInfoProvider);
 		fFileInfoProvider = fileInfoProvider;
-		
+
 		fTargetFile = null;
 
 		fExportTemplateFactory = exportTemplateFactory;
@@ -551,12 +551,12 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 	}
 
 	private void createTestCasesExportComposite(Composite parentComposite) {
-		
+
 		DialogObjectToolkit.createRowComposite(parentComposite);
 		Composite advancedButtonComposite = DialogObjectToolkit
 				.createRowComposite(parentComposite);
 
-		DialogObjectToolkit.createButton(advancedButtonComposite,
+		DialogObjectToolkit.createGridButton(advancedButtonComposite,
 				"Advanced...", new ExportDefinitionSelectionAdapter());
 
 
