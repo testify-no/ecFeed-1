@@ -12,6 +12,7 @@ package com.ecfeed.ui.handlers;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.utils.EclipseHelper;
 
 
@@ -20,8 +21,10 @@ public class AboutHandler {
 	public static void execute() {
 		MessageDialog.openInformation(
 				EclipseHelper.getActiveShell(), 
-				"About ecFeed", 
-				"EcFeed is a tool that allows to design, model and execute tests for Java, Android and Web projects.\n"+
+				"About ecFeed",
+				"Version: " + ApplicationContext.getEcFeedVersion() + "\n" +
+						"\n" +
+						"EcFeed is a tool that allows to design, model and execute tests for Java, Android and Web projects.\n"+
 						"\n" +
 						"Copyright (c) 2016 ecFeed AS.\n" + 
 						"\n" +

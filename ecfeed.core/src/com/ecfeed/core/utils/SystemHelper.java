@@ -62,18 +62,25 @@ public class SystemHelper {
 		return false;
 	}	
 
-	public static String getNetAddress() {
+	public static String getLocalHostName() {
 
 		try {
 			InetAddress address = InetAddress.getLocalHost();
-			return address.toString();
+			return address.getHostName();
 		} catch (UnknownHostException e) {
 			return null;
 		}
 	}
 
-	public static String getMachineIdentifier() {
-		return getOperatingSystem() + "/" + getOperatingSystemArchitecture() + "/" + getUserName() + "/" + getNetAddress();
+	public static String getLocalHostIpAddress() {
+
+		try {
+			InetAddress address = InetAddress.getLocalHost();
+			return address.getHostAddress();
+		} catch (UnknownHostException e) {
+			return null;
+		}
+
 	}
 
 }

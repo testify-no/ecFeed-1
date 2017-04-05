@@ -10,6 +10,11 @@
 
 package com.ecfeed.application;
 
+import org.eclipse.core.runtime.Platform;
+import org.osgi.framework.Bundle;
+
+import com.ecfeed.core.utils.StringHelper;
+
 
 public class ApplicationContext {
 
@@ -17,19 +22,32 @@ public class ApplicationContext {
 	static String fExportFileName;
 
 	public static boolean isStandaloneApplication() {
+
 		return fIsStandaloneApplication;
 	}
 
 	public static void setStandaloneApplication() {
+
 		fIsStandaloneApplication = true;
 	}
 
 	public static void setExportTargetFile(String exportFileName) {
+
 		fExportFileName = exportFileName;
 	}
 
 	public static String getExportTargetFile() {
+
 		return fExportFileName;
-	}	
+	}
+
+	public static String getEcFeedVersion() {
+
+		Bundle bundle = Platform.getBundle("com.ecfeed");
+		String version = bundle.getVersion().toString();
+		version = StringHelper.removeFromPostfix(".qualifier", version);
+
+		return version;
+	}
 
 }
