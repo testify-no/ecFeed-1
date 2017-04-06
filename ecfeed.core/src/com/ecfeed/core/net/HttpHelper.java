@@ -15,18 +15,23 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 
 import com.ecfeed.core.utils.ExceptionHelper;
 
 
 public abstract class HttpHelper {
 
-	public static String sendGetRequest(String url) throws IOException {
+	public static String sendGetRequest(String url, List<HttpProperty> properties) throws IOException {
 
 		URL obj = new URL(url);
 		HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
 
 		connection.setRequestMethod("GET");
+
+		for (HttpProperty httpProperty : properties) {
+			connection.setRequestProperty(httpProperty.getKey(), httpProperty.getValue());
+		}
 
 		if (connection.getResponseCode() != 200) {
 			ExceptionHelper.reportRuntimeException("Http get request failed.");

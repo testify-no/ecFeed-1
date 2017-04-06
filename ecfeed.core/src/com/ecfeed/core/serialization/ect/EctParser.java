@@ -47,10 +47,10 @@ public class EctParser implements IModelParser {
 		try {
 			Document document = fBuilder.build(istream);
 			Element element = document.getRootElement();
-			
+
 			int modelVersion = XomModelVersionDetector.getVersion(element);
 			int softwareVersion = ModelVersionDistributor.getCurrentSoftwareVersion(); 
-			
+
 			if (modelVersion > softwareVersion) {
 				ExceptionHelper.reportRuntimeException(
 						"Can not read ect file. It has newer version: " + modelVersion +
