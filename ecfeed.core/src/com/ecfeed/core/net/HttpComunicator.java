@@ -20,9 +20,10 @@ import java.util.List;
 import com.ecfeed.core.utils.ExceptionHelper;
 
 
-public abstract class HttpHelper {
+public class HttpComunicator implements IHttpComunicator {
 
-	public static String sendGetRequest(String url, List<HttpProperty> properties) throws IOException {
+	@Override
+	public String sendGetRequest(String url, List<HttpProperty> properties) throws IOException {
 
 		URL obj = new URL(url);
 		HttpURLConnection connection = (HttpURLConnection) obj.openConnection();

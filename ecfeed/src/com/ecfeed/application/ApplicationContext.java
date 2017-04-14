@@ -44,6 +44,11 @@ public class ApplicationContext {
 	public static String getEcFeedVersion() {
 
 		Bundle bundle = Platform.getBundle("com.ecfeed");
+
+		if (bundle == null) {
+			return null;
+		}
+
 		String version = bundle.getVersion().toString();
 		version = StringHelper.removeFromPostfix(".qualifier", version);
 

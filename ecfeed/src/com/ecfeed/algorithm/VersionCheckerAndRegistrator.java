@@ -14,14 +14,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ecfeed.application.ApplicationContext;
-import com.ecfeed.core.net.HttpHelper;
 import com.ecfeed.core.net.HttpProperty;
+import com.ecfeed.core.net.IHttpComunicator;
 import com.ecfeed.core.utils.SystemHelper;
 
 
 public class VersionCheckerAndRegistrator {
 
-	public static CurrentReleases registerAndGetCurrentReleases() {
+	public static CurrentReleases registerAndGetCurrentReleases(IHttpComunicator httpComunicator) {
 
 		List<HttpProperty> properties = new ArrayList<HttpProperty>();
 
@@ -29,26 +29,31 @@ public class VersionCheckerAndRegistrator {
 		properties.add(createEcIdProperty());
 
 		try {
-			return sendAndParseRequest(properties);
+			return sendAndParseRequest(httpComunicator, properties);
 		} catch (Exception e) {
 			return null;
 		}
 	}
 
-	private static CurrentReleases sendAndParseRequest(List<HttpProperty> properties) throws Exception {
+	private static CurrentReleases sendAndParseRequest(IHttpComunicator httpComunicator, List<HttpProperty> properties) throws Exception {
 
 		String url = "http://localhost/ecfeed/get_releases.php";
 
-		String xmlResponse = HttpHelper.sendGetRequest(url, properties);
+		String xmlResponse = httpComunicator.sendGetRequest(url, properties);
 
 		return ReleasesXmlParser.parseXml(xmlResponse);		
 	}
 
 	private static HttpProperty createUserAgentProperty() {
 
+		String ecFeedVersion = ApplicationContext.getEcFeedVersion();
+		if (ecFeedVersion == null) {
+			ecFeedVersion = "unknownVersion";
+		}
+
 		return new HttpProperty(
 				"User-Agent", 
-				"ecFeed; " + ApplicationContext.getEcFeedVersion() + "; " + SystemHelper.getOperatingSystem() + ";");
+				"ecFeed; " + ecFeedVersion + "; " + SystemHelper.getOperatingSystem() + ";");
 	}
 
 	private static HttpProperty createEcIdProperty() {

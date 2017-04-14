@@ -31,11 +31,11 @@ public class ReleasesXmlParser {
 
 		Document document = fBuilder.build(stream);
 		Element rootElement = document.getRootElement();
-		
+
 		Elements releases = rootElement.getChildElements();
 
 		CurrentReleases currentReleases = new CurrentReleases();
-		
+
 		for (int i = 0; i < releases.size(); i++) {
 			Element release = releases.get(i);
 			setCurrentReleaseData(release, currentReleases);
@@ -47,50 +47,50 @@ public class ReleasesXmlParser {
 	private static void setCurrentReleaseData(Element release, CurrentReleases inOutCurrentReleases) {
 
 		Elements releaseChildren = release.getChildElements();
-		
+
 		String releaseType = getCurrentReleaseType(release);
 
 		for (int i = 0; i < releaseChildren.size(); i++) {
 			convertReleasePart(releaseChildren.get(i), releaseType, inOutCurrentReleases);
 		}
 	}
-	
+
 	private static String getCurrentReleaseType(Element release) {
-		
+
 		Elements releaseChildren = release.getChildElements();
 
 		for (int i = 0; i < releaseChildren.size(); i++) {
 			Element releaseChild = releaseChildren.get(i);
-			
+
 			if (StringHelper.isEqual(releaseChild.getLocalName(), "type")) {
 				return releaseChild.getValue();
 			}		
 		}
-		
+
 		return null;
 	}
 
 	private static void convertReleasePart(Element releaseChild, String releaseType, CurrentReleases currentReleases) {
 
 		if (StringHelper.isEqual(releaseChild.getLocalName(), "version")) {
-			String version = releaseChild.getValue();
-			
+			String version = releaseChild.getValue().trim();
+
 			if (StringHelper.isEqual(releaseType, "S")) {
 				currentReleases.versionStandard = version;
 			}
-			
+
 			if (StringHelper.isEqual(releaseType, "B")) {
 				currentReleases.versionBeta = version;
 			}			
 		}
-		
+
 		if (StringHelper.isEqual(releaseChild.getLocalName(), "link")) {
-			String link = releaseChild.getValue();
-			
+			String link = releaseChild.getValue().trim();
+
 			if (StringHelper.isEqual(releaseType, "S")) {
 				currentReleases.linkStandard = link;
 			}
-			
+
 			if (StringHelper.isEqual(releaseType, "B")) {
 				currentReleases.linkBeta = link;
 			}			

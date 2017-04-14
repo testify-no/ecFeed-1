@@ -15,6 +15,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import com.ecfeed.algorithm.CurrentReleases;
 import com.ecfeed.algorithm.VersionCheckerAndRegistrator;
 import com.ecfeed.application.ApplicationContext;
+import com.ecfeed.core.net.HttpComunicator;
 import com.ecfeed.utils.EclipseHelper;
 
 
@@ -22,11 +23,13 @@ public class AboutHandler {
 
 	public static void execute() {
 
+		HttpComunicator httpComunicator = new HttpComunicator();
+
 		CurrentReleases currentReleases = 
-				VersionCheckerAndRegistrator.registerAndGetCurrentReleases();
-		
+				VersionCheckerAndRegistrator.registerAndGetCurrentReleases(httpComunicator);
+
 		StringBuilder stringBuilder = new StringBuilder();
-		
+
 		stringBuilder.append("EcFeed is a tool that allows to design, model and execute tests for Java, Android and Web projects.\n");
 		stringBuilder.append("\n");
 		stringBuilder.append("Copyright (c) 2016 ecFeed AS.\n");
@@ -35,8 +38,8 @@ public class AboutHandler {
 		stringBuilder.append("\n");
 		stringBuilder.append("Your version: " + ApplicationContext.getEcFeedVersion() + "\n");
 		stringBuilder.append("\n");
-		
-		
+
+
 		stringBuilder.append("Latest distributed version: ");
 		if (currentReleases.versionStandard != null) {
 			stringBuilder.append(currentReleases.versionStandard);
@@ -45,7 +48,7 @@ public class AboutHandler {
 		}
 		stringBuilder.append("\n");
 
-		
+
 		stringBuilder.append("Latest beta version: ");
 		if (currentReleases.versionBeta != null) {
 			stringBuilder.append(currentReleases.versionBeta);
@@ -53,8 +56,8 @@ public class AboutHandler {
 			stringBuilder.append("unavailable");
 		}
 		stringBuilder.append("\n");		
-		
-		
+
+
 		MessageDialog.openInformation(
 				EclipseHelper.getActiveShell(), "About ecFeed", stringBuilder.toString());
 	}
