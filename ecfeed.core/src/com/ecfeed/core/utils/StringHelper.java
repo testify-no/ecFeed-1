@@ -11,6 +11,7 @@
 package com.ecfeed.core.utils;
 
 import java.util.Collection;
+import java.util.Formatter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -443,5 +444,19 @@ public class StringHelper {
 
 		return s2;
 	}
+
+	public static String bytesToHexString(final byte[] hash) {
+
+		Formatter formatter = new Formatter();
+
+		for (byte b : hash) {
+			formatter.format("%02x", b);
+		}
+
+		String result = formatter.toString();
+		formatter.close();
+
+		return result;
+	}	
 
 }

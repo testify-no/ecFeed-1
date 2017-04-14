@@ -77,4 +77,14 @@ public class SystemHelper {
 
 	}
 
+	public static String createEcId() {
+
+		String source = 
+				getLocalHostName() +
+				getUserName() + 
+				getOperatingSystem();
+
+		return CheckSumHelper.calculateSha1(source);
+	}
+
 }

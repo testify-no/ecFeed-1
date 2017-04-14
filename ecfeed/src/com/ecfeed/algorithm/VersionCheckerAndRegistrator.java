@@ -26,7 +26,7 @@ public class VersionCheckerAndRegistrator {
 		List<HttpProperty> properties = new ArrayList<HttpProperty>();
 
 		properties.add(createUserAgentProperty());
-		properties.add(createMachineIdProperty());
+		properties.add(createEcIdProperty());
 
 		try {
 			return sendAndParseRequest(properties);
@@ -36,24 +36,30 @@ public class VersionCheckerAndRegistrator {
 	}
 
 	private static CurrentReleases sendAndParseRequest(List<HttpProperty> properties) throws Exception {
-		
+
 		String url = "http://localhost/ecfeed/get_releases.php";
-		
+
 		String xmlResponse = HttpHelper.sendGetRequest(url, properties);
 
 		return ReleasesXmlParser.parseXml(xmlResponse);		
 	}
-	
+
 	private static HttpProperty createUserAgentProperty() {
-		
+
 		return new HttpProperty(
 				"User-Agent", 
 				"ecFeed; " + ApplicationContext.getEcFeedVersion() + "; " + SystemHelper.getOperatingSystem() + ";");
 	}
 
-	private static HttpProperty createMachineIdProperty() {
-		
-		return new HttpProperty("Machine-Id", "1234567ABC"); // TODO
+	private static HttpProperty createEcIdProperty() {
+
+		String ecId = SystemHelper.createEcId();
+
+		if (ecId == null) {
+			ecId = "Err";
+		}
+
+		return new HttpProperty("Ec-Id", ecId);
 	}
-	
+
 }
