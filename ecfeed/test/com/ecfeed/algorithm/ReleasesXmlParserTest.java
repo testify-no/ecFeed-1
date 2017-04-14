@@ -13,8 +13,6 @@ package com.ecfeed.algorithm;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import java.util.List;
-
 import org.junit.Test;
 
 
@@ -27,29 +25,30 @@ public class ReleasesXmlParserTest {
 				"<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
 						"<releases>" +
 						"    <release>" +
-						"        <os>linux</os>" +
+						"        <type>S</type>" +
 						"        <version>1.11.10</version>" +
+						"        <link>linkS</link>" +
 						"    </release>" +
 						"    <release>" +
-						"        <os>linux</os>" +
+						"        <type>B</type>" +
 						"        <version>1.11.11</version>" +
+						"        <link>linkB</link>" +
 						"    </release>" + 
 						"</releases>";
 
 
-		List<VersionData> listOfVersionData = null;
-
+		CurrentReleases currentReleases = null;;
+		
 		try {
-			listOfVersionData = ReleasesXmlParser.parseXml(xmlResponse);
+			currentReleases = ReleasesXmlParser.parseXml(xmlResponse);
 		} catch (Exception e) {
 			fail();
 		}
 
-		assertEquals(2, listOfVersionData.size());
-
-		VersionData result = listOfVersionData.get(0); 
-		assertEquals("linux", result.os);
-		assertEquals("1.11.10", result.version);
+		assertEquals("1.11.10", currentReleases.versionStandard);
+		assertEquals("linkS", currentReleases.linkStandard);
+		assertEquals("1.11.11", currentReleases.versionBeta);
+		assertEquals("linkB", currentReleases.linkBeta);		
 	}
 
 }

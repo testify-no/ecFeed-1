@@ -16,8 +16,6 @@ import java.net.UnknownHostException;
 
 public class SystemHelper {
 
-	static String fOs = null;
-
 	public static String getSystemTemporaryDir() {
 
 		return System.getProperty("java.io.tmpdir");
@@ -25,11 +23,7 @@ public class SystemHelper {
 
 	public static String getOperatingSystem() {
 
-		if (fOs == null) {
-			fOs = System.getProperty("os.name");
-		}
-
-		return fOs;
+		return System.getProperty("os.name");
 	}	
 
 	public static String getOperatingSystemArchitecture() {

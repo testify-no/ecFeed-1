@@ -10,102 +10,91 @@
 
 package com.ecfeed.algorithm;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
 
 import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Elements;
 
-import org.junit.Test;
-
 import com.ecfeed.core.utils.StringHelper;
 
 
 public class ReleasesXmlParser {
 
-	public static List<VersionData> parseXml(String xmlResponse) throws Exception {
+	public static CurrentReleases parseXml(String xmlResponse) throws Exception {
 
 		InputStream stream = new ByteArrayInputStream(xmlResponse.getBytes(StandardCharsets.UTF_8));
 		Builder fBuilder = new Builder();
 
 		Document document = fBuilder.build(stream);
 		Element rootElement = document.getRootElement();
-		System.out.println("RootElement: " + rootElement);
-
+		
 		Elements releases = rootElement.getChildElements();
 
-		List<VersionData> listOfVersionData = new ArrayList<VersionData>();
-
+		CurrentReleases currentReleases = new CurrentReleases();
+		
 		for (int i = 0; i < releases.size(); i++) {
 			Element release = releases.get(i);
-			VersionData versionData = getDataForRelease(release);
-			listOfVersionData.add(versionData);
+			setCurrentReleaseData(release, currentReleases);
 		}
 
-		return listOfVersionData;
+		return currentReleases;
 	}
 
-	private static VersionData getDataForRelease(Element release) {
+	private static void setCurrentReleaseData(Element release, CurrentReleases inOutCurrentReleases) {
 
-		VersionData versionData = new VersionData();
+		Elements releaseChildren = release.getChildElements();
+		
+		String releaseType = getCurrentReleaseType(release);
 
-		Elements children = release.getChildElements();
-
-		for (int i = 0; i < children.size(); i++) {
-			convertReleasePart(children.get(i), versionData);
+		for (int i = 0; i < releaseChildren.size(); i++) {
+			convertReleasePart(releaseChildren.get(i), releaseType, inOutCurrentReleases);
 		}
+	}
+	
+	private static String getCurrentReleaseType(Element release) {
+		
+		Elements releaseChildren = release.getChildElements();
 
-		return versionData;
+		for (int i = 0; i < releaseChildren.size(); i++) {
+			Element releaseChild = releaseChildren.get(i);
+			
+			if (StringHelper.isEqual(releaseChild.getLocalName(), "type")) {
+				return releaseChild.getValue();
+			}		
+		}
+		
+		return null;
 	}
 
-	private static void convertReleasePart(Element releaseChild, VersionData inOutVersionData) {
+	private static void convertReleasePart(Element releaseChild, String releaseType, CurrentReleases currentReleases) {
 
-		if (StringHelper.isEqual(releaseChild.getLocalName(), "os")) {
-			inOutVersionData.os = releaseChild.getValue();
-		}
 		if (StringHelper.isEqual(releaseChild.getLocalName(), "version")) {
-			inOutVersionData.version = releaseChild.getValue();
-		}		
-	}
-
-	@Test
-	public void testCreateVersionData() {
-
-		String xmlResponse = 
-				"<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
-						"<releases>" +
-						"    <release>" +
-						"        <os>linux</os>" +
-						"        <version>1.11.10</version>" +
-						"    </release>" +
-						"    <release>" +
-						"        <os>linux</os>" +
-						"        <version>1.11.11</version>" +
-						"    </release>" + 
-						"</releases>";
-
-
-		List<VersionData> listOfVersionData = null;
-
-		try {
-			listOfVersionData = parseXml(xmlResponse);
-		} catch (Exception e) {
-			fail();
+			String version = releaseChild.getValue();
+			
+			if (StringHelper.isEqual(releaseType, "S")) {
+				currentReleases.versionStandard = version;
+			}
+			
+			if (StringHelper.isEqual(releaseType, "B")) {
+				currentReleases.versionBeta = version;
+			}			
 		}
-
-		assertEquals(2, listOfVersionData.size());
-
-		VersionData result = listOfVersionData.get(0); 
-		assertEquals("linux", result.os);
-		assertEquals("1.11.10", result.version);
+		
+		if (StringHelper.isEqual(releaseChild.getLocalName(), "link")) {
+			String link = releaseChild.getValue();
+			
+			if (StringHelper.isEqual(releaseType, "S")) {
+				currentReleases.linkStandard = link;
+			}
+			
+			if (StringHelper.isEqual(releaseType, "B")) {
+				currentReleases.linkBeta = link;
+			}			
+		}		
 	}
 
 }

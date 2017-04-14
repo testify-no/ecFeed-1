@@ -11,9 +11,11 @@
 package com.ecfeed.algorithm;
 
 
-public class VersionData {
+public class CurrentReleases {
 
-	public String os;
-	public String version;
-
+	public String versionStandard = null;
+	public String linkStandard = null;
+	public String versionBeta = null;
+	public String linkBeta = null;
+	
 }

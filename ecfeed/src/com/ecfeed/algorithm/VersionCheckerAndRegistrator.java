@@ -10,42 +10,50 @@
 
 package com.ecfeed.algorithm;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.net.HttpHelper;
 import com.ecfeed.core.net.HttpProperty;
+import com.ecfeed.core.utils.SystemHelper;
 
 
 public class VersionCheckerAndRegistrator {
 
-	public static List<VersionData> registerAndGetCurrentReleases() throws IOException {
-
-		String url = "http://localhost/ecfeed/get_releases.php";
+	public static CurrentReleases registerAndGetCurrentReleases() {
 
 		List<HttpProperty> properties = new ArrayList<HttpProperty>();
 
 		properties.add(createUserAgentProperty());
-
-		String response = HttpHelper.sendGetRequest(url, properties);
-
-		return createVersionData(response);
-	}
-
-	private static HttpProperty createUserAgentProperty() {
-		return new HttpProperty("User-Agent", "ecFeed " + ApplicationContext.getEcFeedVersion());
-	}
-
-	private static List<VersionData> createVersionData(String xmlResponse) {
+		properties.add(createMachineIdProperty());
 
 		try {
-			return ReleasesXmlParser.parseXml(xmlResponse); 
+			return sendAndParseRequest(properties);
 		} catch (Exception e) {
-			System.out.println(e.toString());
 			return null;
 		}
 	}
 
+	private static CurrentReleases sendAndParseRequest(List<HttpProperty> properties) throws Exception {
+		
+		String url = "http://localhost/ecfeed/get_releases.php";
+		
+		String xmlResponse = HttpHelper.sendGetRequest(url, properties);
+
+		return ReleasesXmlParser.parseXml(xmlResponse);		
+	}
+	
+	private static HttpProperty createUserAgentProperty() {
+		
+		return new HttpProperty(
+				"User-Agent", 
+				"ecFeed; " + ApplicationContext.getEcFeedVersion() + "; " + SystemHelper.getOperatingSystem() + ";");
+	}
+
+	private static HttpProperty createMachineIdProperty() {
+		
+		return new HttpProperty("Machine-Id", "1234567ABC"); // TODO
+	}
+	
 }
