@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.core.commands.operations.IUndoContext;
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -41,6 +42,7 @@ import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.ui.common.EclipseModelImplementer;
 import com.ecfeed.ui.common.ImageManager;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.dialogs.AboutDialog;
 import com.ecfeed.ui.editor.actions.GoToImplementationAction;
 import com.ecfeed.ui.editor.actions.ImplementAction;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
@@ -75,6 +77,20 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 			return Arrays.asList(new AbstractNode[]{fSelectedNode});
 		}
 	}
+
+	protected class ShowInfoToolbarAction extends Action {
+
+		public ShowInfoToolbarAction() {
+			setToolTipText("About ecFeed");
+			setImageDescriptor(getIconDescription("aboutEcFeed.png"));
+		}
+
+		@Override
+		public void run() {
+			AboutDialog.open();
+		}
+
+	}	
 
 	private Section fMainSection;
 	private Composite fMainComposite;
@@ -154,13 +170,16 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 	}
 
 	protected void addToolbarActions(){
-		if (!fFileInfoProvider.isProjectAvailable()) {
-			return;
+
+		if (fFileInfoProvider.isProjectAvailable()) {
+			if(fImplementer.implementable(getNodeType())){
+				getToolBarManager().add(new GoToImplementationToolbarAction());
+				getToolBarManager().add(new ImplementToolbarAction());
+
+			}			
 		}
-		if(fImplementer.implementable(getNodeType())){
-			getToolBarManager().add(new GoToImplementationToolbarAction());
-			getToolBarManager().add(new ImplementToolbarAction());
-		}
+
+		getToolBarManager().add(new ShowInfoToolbarAction());
 	}
 
 	@Override
