@@ -23,7 +23,7 @@ public class FinderAnalysisTest {
 	@Test
 	public void shouldReturnFailureCount() {
 		List<DimItem> item = new ArrayList<DimItem>();
-		Culprit culprit = new Culprit(item, 0, 0);
+		Culprit culprit = new Culprit();
 		FinderAnalysis finderanalysis = new FinderAnalysis();
 		finderanalysis.aggregateCulprit(culprit);
 		assertEquals(culprit.getFailureCount(), 0);
