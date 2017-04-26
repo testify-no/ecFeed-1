@@ -14,8 +14,8 @@ import java.util.List;
 
 public class TestResult {
 
-	List<String> ftestcases;
-	boolean fresult;
+	private List<String> ftestcases;
+	private boolean fresult;
 
 	public TestResult(List<String> testcases, boolean result) {
 		ftestcases = testcases;

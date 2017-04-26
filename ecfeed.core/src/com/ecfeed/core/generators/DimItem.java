@@ -25,5 +25,14 @@ public class DimItem {
 	int getItem(){
 		return fItem;
 	}
+	
+	public boolean isMatch(DimItem dimItem) {
+		
+		if(fItem==dimItem.getItem() && fDimension==dimItem.getDim()){
+			return true;
+		}else{
+		return false;
+		}
+	}
 
 }
