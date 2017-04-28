@@ -210,6 +210,25 @@ public class DialogObjectToolkit {
 		}
 
 	}
+	
+	public static Button createGridCheckBox(
+			Composite parentComposite, 
+			String checkboxLabel,
+			IValueApplier valueApplier) {
+
+		Button checkbox = new Button(parentComposite, SWT.CHECK);
+		checkbox.setText(checkboxLabel);
+		GridData checkboxGridData = new GridData(SWT.FILL, SWT.CENTER, true, false);
+		checkbox.setLayoutData(checkboxGridData);
+
+		CommonEditHelper.ApplyValueWhenSelectionListener selectionListener = 
+				new CommonEditHelper.ApplyValueWhenSelectionListener(valueApplier);
+
+		checkbox.addSelectionListener(selectionListener);
+
+		return checkbox;
+	}
+	
 
 	public static GridButton createBrowseButton(
 			Composite parent, SelectionListener selectionListener) {
@@ -223,7 +242,7 @@ public class DialogObjectToolkit {
 
 		return new GridButton(parent, buttonText, selectionListener);
 	}
-
+	
 	public static class GridButton {
 
 		Button fButton;

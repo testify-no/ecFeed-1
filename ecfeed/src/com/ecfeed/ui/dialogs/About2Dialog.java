@@ -13,6 +13,11 @@ package com.ecfeed.ui.dialogs;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
+import com.ecfeed.algorithm.CurrentReleases;
+import com.ecfeed.algorithm.VersionCheckerAndRegistrator;
+import com.ecfeed.application.ApplicationContext;
+import com.ecfeed.core.net.HttpComunicator;
+
 public class About2Dialog {
 
 	public static void open() {
@@ -27,7 +32,16 @@ public class About2Dialog {
 						0);
 
 		int result = dialog.open();
-		System.out.println(result);		
+		
+		if (result == 1) {
+			HttpComunicator httpComunicator = new HttpComunicator();
+
+			CurrentReleases currentReleases = 
+					VersionCheckerAndRegistrator.registerAndGetCurrentReleases(httpComunicator);
+			
+			CheckForUpdatesDialog updatesDialog = new CheckForUpdatesDialog(currentReleases);
+			updatesDialog.open();
+		}
 	}
 
 
@@ -35,8 +49,7 @@ public class About2Dialog {
 
 		StringBuilder stringBuilder = new StringBuilder();
 
-		stringBuilder.append("     EcFeed is a tool that allows to design, model and execute tests for Java\n");
-		stringBuilder.append("     Android and Web projects.\n");
+		stringBuilder.append("     ecFeed for Eclipse, version " + ApplicationContext.getEcFeedVersion() + "\n");
 		stringBuilder.append("\n");
 		stringBuilder.append("     Copyright (c) 2017 ecFeed AS.\n");
 		stringBuilder.append("\n");
