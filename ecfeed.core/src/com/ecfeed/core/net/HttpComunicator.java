@@ -30,8 +30,10 @@ public class HttpComunicator implements IHttpComunicator {
 
 		connection.setRequestMethod("GET");
 
-		for (HttpProperty httpProperty : properties) {
-			connection.setRequestProperty(httpProperty.getKey(), httpProperty.getValue());
+		if (properties != null) {
+			for (HttpProperty httpProperty : properties) {
+				connection.setRequestProperty(httpProperty.getKey(), httpProperty.getValue());
+			}
 		}
 
 		if (connection.getResponseCode() != 200) {

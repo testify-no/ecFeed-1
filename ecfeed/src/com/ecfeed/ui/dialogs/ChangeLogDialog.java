@@ -10,6 +10,8 @@
 
 package com.ecfeed.ui.dialogs;
 
+import java.io.IOException;
+
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.swt.SWT;
@@ -21,15 +23,28 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 
+import com.ecfeed.core.net.HttpComunicator;
 import com.ecfeed.ui.dialogs.basic.DialogObjectToolkit;
+import com.ecfeed.ui.dialogs.basic.ErrorDialog;
 
 public class ChangeLogDialog extends TitleAreaDialog {
 
 	private Button fOkButton;
+	private String fChangeLogText;
 
 	public ChangeLogDialog() {
 		super(Display.getDefault().getActiveShell());
 		setHelpAvailable(false);
+
+		HttpComunicator httpComunicator = new HttpComunicator();
+		fChangeLogText = new String();
+
+		try {
+			fChangeLogText = httpComunicator.sendGetRequest("https://raw.githubusercontent.com/ecfeed/ecFeed/master/ecfeed/doc/changelog.txt", null);
+		} catch (IOException e) {
+			ErrorDialog.open("Can not read change log.");
+		}
+
 	}
 
 	@Override
@@ -46,7 +61,7 @@ public class ChangeLogDialog extends TitleAreaDialog {
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		container.setLayoutData(gridData);
 
-		DialogObjectToolkit.createGridText(container, 150, "This is change log text...");
+		DialogObjectToolkit.createGridText(container, 150, fChangeLogText);
 
 		return area;
 	}
