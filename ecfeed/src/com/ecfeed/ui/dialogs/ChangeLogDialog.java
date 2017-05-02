@@ -20,7 +20,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Text;
 
 import com.ecfeed.ui.dialogs.basic.DialogObjectToolkit;
 
@@ -37,24 +36,21 @@ public class ChangeLogDialog extends TitleAreaDialog {
 	protected Control createDialogArea(Composite parent) {
 		setTitle("Change log");
 		Composite area = (Composite) super.createDialogArea(parent);
-		
+
 		Composite container = new Composite(area, SWT.NONE);
 		GridLayout gridLayout = new GridLayout(1, false);
 		gridLayout.marginLeft = 20;
 		gridLayout.marginRight = 20;
 		container.setLayout(gridLayout);
-		
+
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		container.setLayoutData(gridData);
 
-		Text changesText = 
-				DialogObjectToolkit.createGridText(
-						container, 150, 
-						"This is change log text...");
-		
+		DialogObjectToolkit.createGridText(container, 150, "This is change log text...");
+
 		return area;
 	}
-	
+
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
 		fOkButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);

@@ -26,12 +26,17 @@ import org.eclipse.swt.widgets.Label;
 
 import com.ecfeed.algorithm.CurrentReleases;
 import com.ecfeed.application.ApplicationContext;
+import com.ecfeed.application.ApplicationPreferences;
 import com.ecfeed.ui.dialogs.basic.DialogObjectToolkit;
-import com.ecfeed.ui.dialogs.basic.DialogObjectToolkit.GridButton;
+import com.ecfeed.ui.editor.IValueApplier;
 
 public class CheckForUpdatesDialog extends TitleAreaDialog {
 
 	CurrentReleases fCurrentReleases;
+
+	Button fCheckBoxAutoCheck;
+	Button fCheckBoxCheckBeta;
+	Button fCheckBoxDoNotRemind;
 
 	private Button fOkButton;
 
@@ -46,127 +51,189 @@ public class CheckForUpdatesDialog extends TitleAreaDialog {
 	protected Control createDialogArea(Composite parent) {
 		setTitle(createTitle());
 		Composite area = (Composite) super.createDialogArea(parent);
-		
+
 		Composite container = new Composite(area, SWT.NONE);
+
 		GridLayout gridLayout = new GridLayout(1, false);
 		gridLayout.marginLeft = 20;
 		gridLayout.marginRight = 20;
 		container.setLayout(gridLayout);
-		
+
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		container.setLayoutData(gridData);
 
+
 		Label lblSelectTestSuite = new Label(container, SWT.NONE);
 		lblSelectTestSuite.setText(createMainMessage());
-		
-		Button checkBoxAutoCheck = DialogObjectToolkit.createGridCheckBox(container, "Automatically check for updates on ecFeed start", null);
-		Button checkBoxCheckBeta = DialogObjectToolkit.createGridCheckBox(container, "Check beta versions", null);
-		Button checkBoxDoNotRemind = DialogObjectToolkit.createGridCheckBox(container, "Do not remind me about this version", null);
-		
+
+		fCheckBoxAutoCheck = 
+				DialogObjectToolkit.createGridCheckBox(
+						container, "Automatically check for updates on ecFeed start", new AutoCheckValueApplier());
+
+		boolean autoChecked = ApplicationPreferences.getPreferenceAutomaticallyCheckForUpdates(); 
+		fCheckBoxAutoCheck.setSelection(autoChecked);
+
+		fCheckBoxCheckBeta = 
+				DialogObjectToolkit.createGridCheckBox(
+						container, "Check beta versions", new CheckBetaVersionsValueApplier());
+
+		boolean checkBeta = ApplicationPreferences.getPreferenceCheckBetaVersions();
+		fCheckBoxCheckBeta.setSelection(checkBeta);
+
+
+		fCheckBoxDoNotRemind = 
+				DialogObjectToolkit.createGridCheckBox(
+						container, "Do not remind me about this version", new DoNotRemindAboutThisVersionValueApplier());
+
 		DialogObjectToolkit.createLabel(parent, " ");
-		GridButton buttonChangelog = DialogObjectToolkit.createGridButton(container, "View changelog...", new ViewChangeLogSelectionListener());
+
+		DialogObjectToolkit.createGridButton(container, "View changelog...", new ViewChangeLogSelectionListener());
 
 		return area;
 	}
-	
+
 	private String createTitle() {
-		
+
 		if (fCurrentReleases == null) {
 			return "ecFeed server could not be contacted.";
 		}
-		
+
 		if (isNewVersionAvailable()) {
 			return "New version available";
 		}
-		
+
 		return "No new version found.";
 	}
 
 	private boolean isNewVersionAvailable() {
-		
+
 		if (fCurrentReleases == null) {
 			return false;
 		}
-		
+
 		String releaseVersion = fCurrentReleases.versionStandard;
 		String softwareVersion = ApplicationContext.getEcFeedVersion();
-		
+
 		int result = softwareVersion.compareTo(releaseVersion);
-		
+
 		if (result > 0) {
 			return false;
 		}
-		
+
 		return true;
 	}
-	
+
 	private String createMainMessage() {
+
 		if (fCurrentReleases == null) {
 			return "Check for updates failed.\nPlease try again later\n";
 		}
-		
+
 		return createMainMessageWhenCheckSucceeded(); 
 	}
-	
+
 	private String createMainMessageWhenCheckSucceeded() {
-		
+
 		StringBuilder sb = new StringBuilder();
-		
+
 		sb.append("You currently use ecFeed version " + ApplicationContext.getEcFeedVersion() + "\n");
 		sb.append("\n");
 		sb.append("The newest version available is " + fCurrentReleases.versionStandard + "\n");
 		sb.append("The newest beta available is " + fCurrentReleases.versionBeta + "\n");
 		sb.append("\n");
-		
+
 		if (isNewVersionAvailable()) {
 			sb.append(createDownloadInstructions());
 		} else {
 			sb.append("You use the latest ecFeed version. No need to update.");
 		}
-		
-		
+
+
 		return sb.toString();
 	}
-	
+
 	private String createDownloadInstructions() {
-		
+
 		if (ApplicationContext.isStandaloneApplication()) {
 			return "You can download the new version from:\nhttp://ecfeed.com/index.php/download/\n";
 		}
-		
+
 		StringBuilder sb = new StringBuilder();
-		
+
 		sb.append("Go to Help -> Check for updates to update the plugin.\n");
 		sb.append("\n");
 		sb.append("Use the following update sites:\n");
 		sb.append("http://ecfeed.com/repo/eclipse for full releases  and\n");
 		sb.append("http://ecfeed.com/repo/eclipse.beta for beta releases.\n");
-		
+
 		return sb.toString();
 	}
-	
+
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
+
 		fOkButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
 		fOkButton.setEnabled(true);
 	}
 
 	@Override
 	public void okPressed(){
+
 		super.okPressed();
 	}
 
 	@Override
 	protected Point getInitialSize() {
-		return new Point(600, 420);
+
+		return new Point(600, 450);
 	}
 
 	private class ViewChangeLogSelectionListener extends SelectionAdapter{
 
 		@Override
 		public void widgetSelected(SelectionEvent event){
+
 			ChangeLogDialog changeLogDialog = new ChangeLogDialog();
 			changeLogDialog.open();
 		}
+	}
+
+	private class AutoCheckValueApplier implements IValueApplier {
+
+		@Override
+		public void applyValue() {
+
+			boolean isChecked = fCheckBoxAutoCheck.getSelection();
+			ApplicationPreferences.setPreferenceAutomaticallyCheckForUpdates(isChecked);
+		}
+
+	}
+
+	private class CheckBetaVersionsValueApplier implements IValueApplier {
+
+		@Override
+		public void applyValue() {
+
+			boolean isChecked = fCheckBoxCheckBeta.getSelection();
+			ApplicationPreferences.setPreferenceCheckBetaVersions(isChecked);
+		}
+
 	}	
+
+	private class DoNotRemindAboutThisVersionValueApplier implements IValueApplier {
+
+		@Override
+		public void applyValue() {
+
+			boolean isChecked = fCheckBoxDoNotRemind.getSelection();
+
+			if (isChecked) {
+				ApplicationPreferences.setPreferenceIgnoreUpToVersion(ApplicationContext.getEcFeedVersion());
+			} else {
+				ApplicationPreferences.setPreferenceIgnoreUpToVersionInitial();
+			}
+		}
+
+	}	
+
 }
