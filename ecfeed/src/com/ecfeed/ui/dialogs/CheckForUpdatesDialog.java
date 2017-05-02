@@ -10,13 +10,11 @@
 
 package com.ecfeed.ui.dialogs;
 
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -28,11 +26,8 @@ import org.eclipse.swt.widgets.Label;
 
 import com.ecfeed.algorithm.CurrentReleases;
 import com.ecfeed.application.ApplicationContext;
-import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.ui.dialogs.basic.DialogObjectToolkit;
-import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.dialogs.basic.DialogObjectToolkit.GridButton;
-import com.ecfeed.ui.editor.IValueApplier;
 
 public class CheckForUpdatesDialog extends TitleAreaDialog {
 
@@ -51,23 +46,25 @@ public class CheckForUpdatesDialog extends TitleAreaDialog {
 	protected Control createDialogArea(Composite parent) {
 		setTitle(createTitle());
 		Composite area = (Composite) super.createDialogArea(parent);
+		
 		Composite container = new Composite(area, SWT.NONE);
-		container.setLayout(new GridLayout(1, false));
-		container.setLayoutData(new GridData(GridData.FILL_BOTH));
+		GridLayout gridLayout = new GridLayout(1, false);
+		gridLayout.marginLeft = 20;
+		gridLayout.marginRight = 20;
+		container.setLayout(gridLayout);
+		
+		GridData gridData = new GridData(GridData.FILL_BOTH);
+		container.setLayoutData(gridData);
 
+		Label lblSelectTestSuite = new Label(container, SWT.NONE);
+		lblSelectTestSuite.setText(createMainMessage());
 		
-//		Label lblSelectTestSuite = new Label(container, SWT.NONE);
-//		lblSelectTestSuite.setText(createMainMessage());
-		
-		Label lblSelectTestSuite = DialogObjectToolkit.createLabel(parent, createMainMessage());
-		
-		
-		Button checkBoxAutoCheck = DialogObjectToolkit.createGridCheckBox(parent, "Automatically check for updates on ecFeed start", null);
-		Button checkBoxCheckBeta = DialogObjectToolkit.createGridCheckBox(parent, "Check beta versions", null);
-		Button checkBoxDoNotRemind = DialogObjectToolkit.createGridCheckBox(parent, "Do not remind me about this version", null);
+		Button checkBoxAutoCheck = DialogObjectToolkit.createGridCheckBox(container, "Automatically check for updates on ecFeed start", null);
+		Button checkBoxCheckBeta = DialogObjectToolkit.createGridCheckBox(container, "Check beta versions", null);
+		Button checkBoxDoNotRemind = DialogObjectToolkit.createGridCheckBox(container, "Do not remind me about this version", null);
 		
 		DialogObjectToolkit.createLabel(parent, " ");
-		GridButton buttonChangelog = DialogObjectToolkit.createGridButton(parent, "View changelog...", new ViewChangeLogSelectionListener());
+		GridButton buttonChangelog = DialogObjectToolkit.createGridButton(container, "View changelog...", new ViewChangeLogSelectionListener());
 
 		return area;
 	}
@@ -161,13 +158,15 @@ public class CheckForUpdatesDialog extends TitleAreaDialog {
 
 	@Override
 	protected Point getInitialSize() {
-		return new Point(600, 400);
+		return new Point(600, 420);
 	}
 
 	private class ViewChangeLogSelectionListener extends SelectionAdapter{
 
 		@Override
 		public void widgetSelected(SelectionEvent event){
+			ChangeLogDialog changeLogDialog = new ChangeLogDialog();
+			changeLogDialog.open();
 		}
 	}	
 }
