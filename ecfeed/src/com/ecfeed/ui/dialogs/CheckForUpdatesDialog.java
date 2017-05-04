@@ -28,11 +28,14 @@ import com.ecfeed.algorithm.CurrentReleases;
 import com.ecfeed.algorithm.VersionCheckerAndRegistrator;
 import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.application.ApplicationPreferences;
+import com.ecfeed.application.ApplicationVersion;
 import com.ecfeed.ui.dialogs.basic.DialogObjectToolkit;
 import com.ecfeed.ui.editor.IValueApplier;
 
 public class CheckForUpdatesDialog extends TitleAreaDialog {
 
+	static boolean fDialogWasOpen = false;
+	
 	CurrentReleases fCurrentReleases;
 
 	Button fCheckBoxAutoCheck;
@@ -48,17 +51,27 @@ public class CheckForUpdatesDialog extends TitleAreaDialog {
 	}
 	
 	public static void openConditionally() {
+
+		if (fDialogWasOpen) {
+			return;
+		}
 		
 		if (!ApplicationPreferences.getPreferenceAutomaticallyCheckForUpdates()) {
 			return;
 		}
-
+		
 		CurrentReleases currentReleases = VersionCheckerAndRegistrator.registerAndGetCurrentReleases();
+		
+		if (!shouldDisplayDialog(currentReleases)) {
+			return;
+		}
+		
 		CheckForUpdatesDialog updatesDialog = new CheckForUpdatesDialog(currentReleases);
-		updatesDialog.open();		
+		updatesDialog.open();	
+		fDialogWasOpen = true;
 	}
 	
-	public CheckForUpdatesDialog(CurrentReleases currentReleases) {
+	private CheckForUpdatesDialog(CurrentReleases currentReleases) {
 		super(Display.getDefault().getActiveShell());
 		setHelpAvailable(false);
 
@@ -246,12 +259,41 @@ public class CheckForUpdatesDialog extends TitleAreaDialog {
 			boolean isChecked = fCheckBoxDoNotRemind.getSelection();
 
 			if (isChecked) {
-				ApplicationPreferences.setPreferenceIgnoreUpToVersion(ApplicationContext.getEcFeedVersion());
+				ApplicationPreferences.setPreferenceIgnoreUpToVersion(fCurrentReleases.versionStandard);
 			} else {
 				ApplicationPreferences.setPreferenceIgnoreUpToVersionInitial();
 			}
 		}
 
-	}	
+	}
+	
+	private static boolean shouldDisplayDialog(CurrentReleases currentReleases) {
 
+		if (currentReleases == null) {
+			return false;
+		}
+
+		if (!ApplicationPreferences.getPreferenceAutomaticallyCheckForUpdates()) {
+			return false;
+		}
+
+		String ignoreUpToVersion = ApplicationPreferences.getPreferenceIgnoreUpToVersion();
+
+		if (isThisNewerVersion(currentReleases.versionStandard, ApplicationContext.getEcFeedVersion()) &&
+				isThisNewerVersion(currentReleases.versionStandard, ignoreUpToVersion)) {
+			return true;
+		}
+
+		if (ApplicationPreferences.getPreferenceCheckBetaVersions() &&
+				isThisNewerVersion(currentReleases.versionBeta, ApplicationContext.getEcFeedVersion())	) {
+			return true;
+		}
+
+		return true;
+	}
+
+	private static boolean isThisNewerVersion(String version, String versionToCompare) {
+		
+		return ApplicationVersion.isThisNewerVersion(version, versionToCompare);
+	}
 }

@@ -144,11 +144,21 @@ public class StringHelper {
 
 	public static String insertSpacesToLength(String line, int lengthAfterInsert) {
 
+		return insertCharsToLength(line, " ", lengthAfterInsert);
+	}	
+	
+	public static String insertZerosToLength(String line, int lengthAfterInsert) {
+
+		return insertCharsToLength(line, "0", lengthAfterInsert);
+	}	
+	
+	public static String insertCharsToLength(String line, String paddingChar, int lengthAfterInsert) {
+
 		if (line.length() >= lengthAfterInsert) {
 			return line;
 		}
 
-		return createString(" ", lengthAfterInsert - line.length()) + line;
+		return createString(paddingChar, lengthAfterInsert - line.length()) + line;
 	}	
 
 	public static String centerStringToLength(String line, int lengthAfterInsert) {
@@ -186,7 +196,12 @@ public class StringHelper {
 			return null;
 		}
 		return tokenizedString.substring(0, separatorPosition);
-	}	
+	}
+	
+	public static String[] splitIntoTokens(String tokenizedString, String tokenSeparatorRegex) {
+
+		return tokenizedString.split(tokenSeparatorRegex);
+	}
 
 	public static String getAllBeforeLastToken(String packageWithClass, String tokenSeparator) {
 

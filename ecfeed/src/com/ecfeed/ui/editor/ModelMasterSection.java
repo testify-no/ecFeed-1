@@ -680,6 +680,8 @@ public class ModelMasterSection extends TreeViewerSection{
 		if(page != null){
 			page.refresh();
 		}
+		
+		
 	}
 
 	@Override
@@ -688,7 +690,17 @@ public class ModelMasterSection extends TreeViewerSection{
 		getSection().setText("Structure");
 		getTreeViewer().setAutoExpandLevel(AUTO_EXPAND_LEVEL);
 		
-		CheckForUpdatesDialog.openConditionally();
+		showCheckForUpdatesDialogWhenPossible();
+	}
+	
+	private void showCheckForUpdatesDialogWhenPossible() {
+		
+		Display.getCurrent().asyncExec
+	    (new Runnable() {
+	        public void run() {
+	        	CheckForUpdatesDialog.openConditionally();
+	        }
+	    });
 	}
 
 	@Override
