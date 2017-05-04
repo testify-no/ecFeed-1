@@ -13,10 +13,7 @@ package com.ecfeed.ui.dialogs;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
-import com.ecfeed.algorithm.CurrentReleases;
-import com.ecfeed.algorithm.VersionCheckerAndRegistrator;
 import com.ecfeed.application.ApplicationContext;
-import com.ecfeed.core.net.HttpComunicator;
 
 public class About2Dialog {
 
@@ -34,16 +31,9 @@ public class About2Dialog {
 		int result = dialog.open();
 		
 		if (result == 1) {
-			HttpComunicator httpComunicator = new HttpComunicator();
-
-			CurrentReleases currentReleases = 
-					VersionCheckerAndRegistrator.registerAndGetCurrentReleases(httpComunicator);
-			
-			CheckForUpdatesDialog updatesDialog = new CheckForUpdatesDialog(currentReleases);
-			updatesDialog.open();
+			CheckForUpdatesDialog.openUnconditionally();
 		}
 	}
-
 
 	private static String createAboutInformation() {
 

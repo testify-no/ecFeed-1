@@ -56,15 +56,16 @@ public class ApplicationPreferences {
 		setPreferenceValue(key, BooleanHelper.toString(value));
 	}	
 
-	public static boolean getBooleanPreferenceValue(String key) {
+	public static boolean getBooleanPreferenceValue(String key, boolean defaultValue) {
 
-		String value = getPreferenceNode().get(key, "false");
+		String value = getPreferenceNode().get(key, BooleanHelper.toString(defaultValue));
+		
 		return BooleanHelper.parseBoolean(value);
 	}
 
 	public static boolean getPreferenceAutomaticallyCheckForUpdates() {
 
-		return getBooleanPreferenceValue(AUTOMATICALLY_CHECK_FOR_UPDATES);
+		return getBooleanPreferenceValue(AUTOMATICALLY_CHECK_FOR_UPDATES, true);
 	}
 
 	public static void setPreferenceAutomaticallyCheckForUpdates(boolean value) {
@@ -74,7 +75,7 @@ public class ApplicationPreferences {
 
 	public static boolean getPreferenceCheckBetaVersions() {
 
-		return getBooleanPreferenceValue(CHECK_BETA_VERSIONS);
+		return getBooleanPreferenceValue(CHECK_BETA_VERSIONS, true);
 	}
 
 	public static void setPreferenceCheckBetaVersions(boolean value) {

@@ -59,6 +59,7 @@ import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.CommonConstants;
 import com.ecfeed.ui.common.ImageManager;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.dialogs.CheckForUpdatesDialog;
 import com.ecfeed.ui.editor.actions.AbstractAddChildAction;
 import com.ecfeed.ui.editor.actions.AddChildActionProvider;
 import com.ecfeed.ui.editor.actions.BasicActionRunnerProvider;
@@ -686,6 +687,8 @@ public class ModelMasterSection extends TreeViewerSection{
 		super.createContent();
 		getSection().setText("Structure");
 		getTreeViewer().setAutoExpandLevel(AUTO_EXPAND_LEVEL);
+		
+		CheckForUpdatesDialog.openConditionally();
 	}
 
 	@Override

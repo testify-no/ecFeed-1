@@ -25,6 +25,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 
 import com.ecfeed.algorithm.CurrentReleases;
+import com.ecfeed.algorithm.VersionCheckerAndRegistrator;
 import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.application.ApplicationPreferences;
 import com.ecfeed.ui.dialogs.basic.DialogObjectToolkit;
@@ -40,6 +41,23 @@ public class CheckForUpdatesDialog extends TitleAreaDialog {
 
 	private Button fOkButton;
 
+	public static void openUnconditionally() {
+		CurrentReleases currentReleases = VersionCheckerAndRegistrator.registerAndGetCurrentReleases();
+		CheckForUpdatesDialog updatesDialog = new CheckForUpdatesDialog(currentReleases);
+		updatesDialog.open();		
+	}
+	
+	public static void openConditionally() {
+		
+		if (!ApplicationPreferences.getPreferenceAutomaticallyCheckForUpdates()) {
+			return;
+		}
+
+		CurrentReleases currentReleases = VersionCheckerAndRegistrator.registerAndGetCurrentReleases();
+		CheckForUpdatesDialog updatesDialog = new CheckForUpdatesDialog(currentReleases);
+		updatesDialog.open();		
+	}
+	
 	public CheckForUpdatesDialog(CurrentReleases currentReleases) {
 		super(Display.getDefault().getActiveShell());
 		setHelpAvailable(false);
@@ -91,7 +109,7 @@ public class CheckForUpdatesDialog extends TitleAreaDialog {
 
 		return area;
 	}
-
+	
 	private String createTitle() {
 
 		if (fCurrentReleases == null) {
@@ -99,7 +117,7 @@ public class CheckForUpdatesDialog extends TitleAreaDialog {
 		}
 
 		if (isNewVersionAvailable()) {
-			return "New version available";
+			return "New version of ecFeed is available";
 		}
 
 		return "No new version found.";

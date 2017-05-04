@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ecfeed.application.ApplicationContext;
+import com.ecfeed.core.net.HttpComunicator;
 import com.ecfeed.core.net.HttpProperty;
 import com.ecfeed.core.net.IHttpComunicator;
 import com.ecfeed.core.utils.SystemHelper;
@@ -33,6 +34,11 @@ public class VersionCheckerAndRegistrator {
 		} catch (Exception e) {
 			return null;
 		}
+	}
+	
+	public static CurrentReleases registerAndGetCurrentReleases() {
+		
+		return registerAndGetCurrentReleases(new HttpComunicator());
 	}
 
 	private static CurrentReleases sendAndParseRequest(IHttpComunicator httpComunicator, List<HttpProperty> properties) throws Exception {
