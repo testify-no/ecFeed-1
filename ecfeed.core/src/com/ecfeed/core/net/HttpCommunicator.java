@@ -20,7 +20,7 @@ import java.util.List;
 import com.ecfeed.core.utils.ExceptionHelper;
 
 
-public class HttpComunicator implements IHttpComunicator {
+public class HttpCommunicator implements IHttpComunicator {
 
 	@Override
 	public String sendGetRequest(String url, List<HttpProperty> properties) throws IOException {

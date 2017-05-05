@@ -10,8 +10,6 @@
 
 package com.ecfeed.ui.dialogs;
 
-import java.io.IOException;
-
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.swt.SWT;
@@ -23,9 +21,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 
-import com.ecfeed.core.net.HttpComunicator;
+import com.ecfeed.net.HttpCommunicatorWithProgress;
 import com.ecfeed.ui.dialogs.basic.DialogObjectToolkit;
-import com.ecfeed.ui.dialogs.basic.ErrorDialog;
 
 public class ChangeLogDialog extends TitleAreaDialog {
 
@@ -36,15 +33,11 @@ public class ChangeLogDialog extends TitleAreaDialog {
 		super(Display.getDefault().getActiveShell());
 		setHelpAvailable(false);
 
-		HttpComunicator httpComunicator = new HttpComunicator();
-		fChangeLogText = new String();
+		HttpCommunicatorWithProgress httpComunicatorWithProgress = new HttpCommunicatorWithProgress();
 
-		try {
-			fChangeLogText = httpComunicator.sendGetRequest("https://raw.githubusercontent.com/ecfeed/ecFeed/master/ecfeed/doc/changelog.txt", null);
-		} catch (IOException e) {
-			ErrorDialog.open("Can not read change log.");
-		}
-
+		fChangeLogText = 
+				httpComunicatorWithProgress.sendGetRequest(
+						"https://raw.githubusercontent.com/ecfeed/ecFeed/master/ecfeed/doc/changelog.txt", null);
 	}
 
 	@Override

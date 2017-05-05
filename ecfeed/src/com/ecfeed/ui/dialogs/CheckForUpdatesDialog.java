@@ -29,13 +29,14 @@ import com.ecfeed.algorithm.VersionCheckerAndRegistrator;
 import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.application.ApplicationPreferences;
 import com.ecfeed.application.ApplicationVersion;
+import com.ecfeed.net.HttpCommunicatorWithProgress;
 import com.ecfeed.ui.dialogs.basic.DialogObjectToolkit;
 import com.ecfeed.ui.editor.IValueApplier;
 
 public class CheckForUpdatesDialog extends TitleAreaDialog {
 
 	static boolean fDialogWasOpen = false;
-	
+
 	CurrentReleases fCurrentReleases;
 
 	Button fCheckBoxAutoCheck;
@@ -45,32 +46,40 @@ public class CheckForUpdatesDialog extends TitleAreaDialog {
 	private Button fOkButton;
 
 	public static void openUnconditionally() {
-		CurrentReleases currentReleases = VersionCheckerAndRegistrator.registerAndGetCurrentReleases();
+
+		HttpCommunicatorWithProgress httpCommunicatorWithProgress = new HttpCommunicatorWithProgress();
+
+		CurrentReleases currentReleases = 
+				VersionCheckerAndRegistrator.registerAndGetCurrentReleases(httpCommunicatorWithProgress);
+
 		CheckForUpdatesDialog updatesDialog = new CheckForUpdatesDialog(currentReleases);
 		updatesDialog.open();		
 	}
-	
+
 	public static void openConditionally() {
 
 		if (fDialogWasOpen) {
 			return;
 		}
-		
+
 		if (!ApplicationPreferences.getPreferenceAutomaticallyCheckForUpdates()) {
 			return;
 		}
-		
-		CurrentReleases currentReleases = VersionCheckerAndRegistrator.registerAndGetCurrentReleases();
-		
+
+		HttpCommunicatorWithProgress httpCommunicatorWithProgress = new HttpCommunicatorWithProgress();
+
+		CurrentReleases currentReleases = 
+				VersionCheckerAndRegistrator.registerAndGetCurrentReleases(httpCommunicatorWithProgress);
+
 		if (!shouldDisplayDialog(currentReleases)) {
 			return;
 		}
-		
+
 		CheckForUpdatesDialog updatesDialog = new CheckForUpdatesDialog(currentReleases);
 		updatesDialog.open();	
 		fDialogWasOpen = true;
 	}
-	
+
 	private CheckForUpdatesDialog(CurrentReleases currentReleases) {
 		super(Display.getDefault().getActiveShell());
 		setHelpAvailable(false);
@@ -122,7 +131,7 @@ public class CheckForUpdatesDialog extends TitleAreaDialog {
 
 		return area;
 	}
-	
+
 	private String createTitle() {
 
 		if (fCurrentReleases == null) {
@@ -266,7 +275,7 @@ public class CheckForUpdatesDialog extends TitleAreaDialog {
 		}
 
 	}
-	
+
 	private static boolean shouldDisplayDialog(CurrentReleases currentReleases) {
 
 		if (currentReleases == null) {
@@ -293,7 +302,7 @@ public class CheckForUpdatesDialog extends TitleAreaDialog {
 	}
 
 	private static boolean isThisNewerVersion(String version, String versionToCompare) {
-		
+
 		return ApplicationVersion.isThisNewerVersion(version, versionToCompare);
 	}
 }
