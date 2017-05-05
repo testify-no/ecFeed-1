@@ -23,6 +23,13 @@ import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class ModelViewerActionProvider extends ActionProvider {
 
+	private static final String EDIT_GROUP = "edit";
+	private static final String IMPLEMENT_GROUP = "implement";
+	private static final String MOVE_GROUP = "move";
+	private static final String VIEWER_GROUP = "viewer";
+	private static final String INFO_GROUP = "info";
+
+	
 	BasicActionRunnerProvider fBasicActionRunnerProvider;
 
 	public ModelViewerActionProvider(
@@ -43,8 +50,7 @@ public class ModelViewerActionProvider extends ActionProvider {
 
 		addViewerActions(viewer, context, selectRoot);
 		addMoveActions(viewer, context);
-		
-		addAction("About ecFeed...", new AboutAction());
+		addInfoActions();
 	}
 
 	public ModelViewerActionProvider(
@@ -69,11 +75,11 @@ public class ModelViewerActionProvider extends ActionProvider {
 			IFileInfoProvider fileInfoProvider) {
 
 		DeleteAction deleteAction = new DeleteAction(selectionProvider, context);
-		addAction("edit", new CopyAction(selectionProvider));
-		addAction("edit", new CutAction(new CopyAction(selectionProvider), deleteAction));
-		addAction("edit", new PasteAction(selectionProvider, context, fileInfoProvider));
-		addAction("edit", new InsertAction(selectionProvider, structuredViewer, context, fileInfoProvider));
-		addAction("edit", deleteAction);
+		addAction(EDIT_GROUP, new CopyAction(selectionProvider));
+		addAction(EDIT_GROUP, new CutAction(new CopyAction(selectionProvider), deleteAction));
+		addAction(EDIT_GROUP, new PasteAction(selectionProvider, context, fileInfoProvider));
+		addAction(EDIT_GROUP, new InsertAction(selectionProvider, structuredViewer, context, fileInfoProvider));
+		addAction(EDIT_GROUP, deleteAction);
 
 		if (fBasicActionRunnerProvider != null) {
 			addBasicEditActions();
@@ -83,42 +89,53 @@ public class ModelViewerActionProvider extends ActionProvider {
 	private void addBasicEditActions() {
 
 		addAction(
-				"edit", 
+				EDIT_GROUP, 
 				new NamedActionWithRunner(
 						GlobalActions.SAVE.getId(), GlobalActions.SAVE.getDescription(), 
 						fBasicActionRunnerProvider.getSaveRunner()));
 
 		addAction(
-				"edit", 
+				EDIT_GROUP, 
 				new NamedActionWithRunner(
 						GlobalActions.UNDO.getId(), GlobalActions.UNDO.getDescription(), 
 						fBasicActionRunnerProvider.getUndoRunner()));
 
 		addAction(
-				"edit", 
+				EDIT_GROUP, 
 				new NamedActionWithRunner(
 						GlobalActions.REDO.getId(), GlobalActions.REDO.getDescription(), 
 						fBasicActionRunnerProvider.getRedoRunner()));
 	}
 
-	private void addImplementationActions(StructuredViewer viewer, IModelUpdateContext context, IFileInfoProvider fileInfoProvider) {
+	private void addImplementationActions(
+			StructuredViewer viewer, IModelUpdateContext context, IFileInfoProvider fileInfoProvider) {
+		
 		IModelImplementer implementer = new EclipseModelImplementer(fileInfoProvider);
-		addAction("implement", new ImplementAction(viewer, context, implementer));
-		addAction("implement", new GoToImplementationAction(viewer, fileInfoProvider));
+		addAction(IMPLEMENT_GROUP, new ImplementAction(viewer, context, implementer));
+		addAction(IMPLEMENT_GROUP, new GoToImplementationAction(viewer, fileInfoProvider));
 	}
 
 	private void addMoveActions(ISelectionProvider selectionProvider, IModelUpdateContext context){
-		addAction("move", new MoveUpDownAction(true, selectionProvider, context));
-		addAction("move", new MoveUpDownAction(false, selectionProvider, context));
+		
+		addAction(MOVE_GROUP, new MoveUpDownAction(true, selectionProvider, context));
+		addAction(MOVE_GROUP, new MoveUpDownAction(false, selectionProvider, context));
 	}
 
 	private void addViewerActions(TreeViewer viewer, IModelUpdateContext context, boolean selectRoot){
-		addAction("viewer", new SelectAllAction(viewer, selectRoot));
-		addAction("viewer", new ExpandCollapseAction(viewer));
+		
+		addAction(VIEWER_GROUP, new SelectAllAction(viewer, selectRoot));
+		addAction(VIEWER_GROUP, new ExpandCollapseAction(viewer));
 	}
 
 	private void addViewerActions(TableViewer viewer){
-		addAction("viewer", new SelectAllAction(viewer));
+		
+		addAction(VIEWER_GROUP, new SelectAllAction(viewer));
+	}
+
+	private void addInfoActions() {
+		
+		addAction(INFO_GROUP, new AboutAction());
+		addAction(INFO_GROUP, new CheckForUpdatesAction());
 	}
 
 }
