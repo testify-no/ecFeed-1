@@ -233,8 +233,7 @@ public class CheckForUpdatesDialog extends TitleAreaDialog {
 		@Override
 		public void widgetSelected(SelectionEvent event){
 
-			ChangeLogDialog changeLogDialog = new ChangeLogDialog();
-			changeLogDialog.open();
+			ChangeLogDialog.getLogAndOpen();
 		}
 	}
 

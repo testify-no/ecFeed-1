@@ -23,56 +23,77 @@ import org.eclipse.swt.widgets.Display;
 
 import com.ecfeed.net.HttpCommunicatorWithProgress;
 import com.ecfeed.ui.dialogs.basic.DialogObjectToolkit;
+import com.ecfeed.ui.dialogs.basic.ErrorDialog;
 
-public class ChangeLogDialog extends TitleAreaDialog {
+public class ChangeLogDialog {
 
-	private Button fOkButton;
-	private String fChangeLogText;
+	public static void getLogAndOpen() {
 
-	public ChangeLogDialog() {
-		super(Display.getDefault().getActiveShell());
-		setHelpAvailable(false);
+		String changeLogText = null;
 
-		HttpCommunicatorWithProgress httpComunicatorWithProgress = new HttpCommunicatorWithProgress();
+		try {
+			HttpCommunicatorWithProgress httpComunicatorWithProgress = new HttpCommunicatorWithProgress();
 
-		fChangeLogText = 
-				httpComunicatorWithProgress.sendGetRequest(
-						"https://raw.githubusercontent.com/ecfeed/ecFeed/master/ecfeed/doc/changelog.txt", null);
+			changeLogText = 
+					httpComunicatorWithProgress.sendGetRequest(
+							"https://raw.githubusercontent.com/ecfeed/ecFeed/master/ecfeed/doc/changelog.txt", null);
+
+		} catch(Exception e) {
+			ErrorDialog.open("HTTP request failed", "Can not download change log. (Check your internet connection)");
+			return;
+		}
+
+		ChangeLogDialogIntr changeLogDialogIntr = new ChangeLogDialogIntr(changeLogText);
+		changeLogDialogIntr.open();
 	}
 
-	@Override
-	protected Control createDialogArea(Composite parent) {
-		setTitle("Change log");
-		Composite area = (Composite) super.createDialogArea(parent);
+	private static class ChangeLogDialogIntr extends TitleAreaDialog {
 
-		Composite container = new Composite(area, SWT.NONE);
-		GridLayout gridLayout = new GridLayout(1, false);
-		gridLayout.marginLeft = 20;
-		gridLayout.marginRight = 20;
-		container.setLayout(gridLayout);
+		private Button fOkButton;
+		private String fChangeLogText;
 
-		GridData gridData = new GridData(GridData.FILL_BOTH);
-		container.setLayoutData(gridData);
+		private ChangeLogDialogIntr(String changeLogText) {
 
-		DialogObjectToolkit.createGridText(container, 150, fChangeLogText);
+			super(Display.getDefault().getActiveShell());
+			setHelpAvailable(false);
+			fChangeLogText = changeLogText;
+		}
 
-		return area;
-	}
+		@Override
+		protected Control createDialogArea(Composite parent) {
+			setTitle("Change log");
+			Composite area = (Composite) super.createDialogArea(parent);
 
-	@Override
-	protected void createButtonsForButtonBar(Composite parent) {
-		fOkButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
-		fOkButton.setEnabled(true);
-	}
+			Composite container = new Composite(area, SWT.NONE);
+			GridLayout gridLayout = new GridLayout(1, false);
+			gridLayout.marginLeft = 20;
+			gridLayout.marginRight = 20;
+			container.setLayout(gridLayout);
 
-	@Override
-	public void okPressed(){
-		super.okPressed();
-	}
+			GridData gridData = new GridData(GridData.FILL_BOTH);
+			container.setLayoutData(gridData);
 
-	@Override
-	protected Point getInitialSize() {
-		return new Point(1000, 700);
+			DialogObjectToolkit.createGridText(container, 150, fChangeLogText);
+
+			return area;
+		}
+
+		@Override
+		protected void createButtonsForButtonBar(Composite parent) {
+			fOkButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
+			fOkButton.setEnabled(true);
+		}
+
+		@Override
+		public void okPressed(){
+			super.okPressed();
+		}
+
+		@Override
+		protected Point getInitialSize() {
+			return new Point(1000, 700);
+		}
+
 	}
 
 }

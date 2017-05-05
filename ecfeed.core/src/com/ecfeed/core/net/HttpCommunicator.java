@@ -23,24 +23,31 @@ import com.ecfeed.core.utils.ExceptionHelper;
 public class HttpCommunicator implements IHttpComunicator {
 
 	@Override
-	public String sendGetRequest(String url, List<HttpProperty> properties) throws IOException {
+	public String sendGetRequest(String url, List<HttpProperty> properties) throws RuntimeException {
 
-		URL obj = new URL(url);
-		HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
+		URL obj;
+		try {
+			obj = new URL(url);
 
-		connection.setRequestMethod("GET");
+			HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
 
-		if (properties != null) {
-			for (HttpProperty httpProperty : properties) {
-				connection.setRequestProperty(httpProperty.getKey(), httpProperty.getValue());
+			connection.setRequestMethod("GET");
+
+			if (properties != null) {
+				for (HttpProperty httpProperty : properties) {
+					connection.setRequestProperty(httpProperty.getKey(), httpProperty.getValue());
+				}
 			}
-		}
 
-		if (connection.getResponseCode() != 200) {
-			ExceptionHelper.reportRuntimeException("Http get request failed.");
-		}
+			if (connection.getResponseCode() != 200) {
+				ExceptionHelper.reportRuntimeException("Http get request failed.");
+			}
 
-		return getResponse(connection);
+			return getResponse(connection);
+		} catch (Exception e) {
+			ExceptionHelper.reportRuntimeException(e.getMessage());
+			return null;
+		}
 	}
 
 	private static String getResponse(HttpURLConnection connection) throws IOException {

@@ -10,12 +10,11 @@
 
 package com.ecfeed.core.net;
 
-import java.io.IOException;
 import java.util.List;
 
 
 public interface IHttpComunicator {
 
-	public String sendGetRequest(String url, List<HttpProperty> properties) throws IOException;
+	public String sendGetRequest(String url, List<HttpProperty> properties) throws RuntimeException;
 
 }

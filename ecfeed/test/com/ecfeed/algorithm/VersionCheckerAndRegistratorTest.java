@@ -13,7 +13,6 @@ package com.ecfeed.algorithm;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
-import java.io.IOException;
 import java.util.List;
 
 import org.junit.Test;
@@ -31,7 +30,7 @@ public class VersionCheckerAndRegistratorTest {
 		class HttpCommunicatorStub implements IHttpComunicator {
 
 			@Override
-			public String sendGetRequest(String url, List<HttpProperty> properties) throws IOException {
+			public String sendGetRequest(String url, List<HttpProperty> properties) throws RuntimeException {
 
 				return null;
 			}
@@ -51,7 +50,7 @@ public class VersionCheckerAndRegistratorTest {
 		class HttpCommunicatorStub implements IHttpComunicator {
 
 			@Override
-			public String sendGetRequest(String url, List<HttpProperty> properties) throws IOException {
+			public String sendGetRequest(String url, List<HttpProperty> properties) throws RuntimeException {
 
 				if (!StringHelper.isEqual(url, "http://localhost/ecfeed/get_releases.php"))
 					return null;
@@ -85,7 +84,7 @@ public class VersionCheckerAndRegistratorTest {
 		class HttpCommunicatorStub implements IHttpComunicator {
 
 			@Override
-			public String sendGetRequest(String url, List<HttpProperty> properties) throws IOException {
+			public String sendGetRequest(String url, List<HttpProperty> properties) throws RuntimeException {
 				return createEmptyResponse();
 			}
 		}
@@ -104,7 +103,7 @@ public class VersionCheckerAndRegistratorTest {
 		class HttpCommunicatorStub implements IHttpComunicator {
 
 			@Override
-			public String sendGetRequest(String url, List<HttpProperty> properties) throws IOException {
+			public String sendGetRequest(String url, List<HttpProperty> properties) throws RuntimeException {
 				return createFullResponse();
 			}
 		}

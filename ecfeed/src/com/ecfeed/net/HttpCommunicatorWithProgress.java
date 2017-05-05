@@ -10,7 +10,6 @@
 
 package com.ecfeed.net;
 
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
@@ -21,12 +20,12 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import com.ecfeed.core.net.HttpCommunicator;
 import com.ecfeed.core.net.HttpProperty;
 import com.ecfeed.core.net.IHttpComunicator;
-import com.ecfeed.ui.dialogs.basic.ErrorDialog;
+import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.utils.EclipseHelper;
 
 public class HttpCommunicatorWithProgress implements IHttpComunicator {
 
-	public String sendGetRequest(String url, List<HttpProperty> properties) {
+	public String sendGetRequest(String url, List<HttpProperty> properties) throws RuntimeException {
 
 		CommunicatorRunnable communicatorRunnable = new CommunicatorRunnable(url, properties);
 
@@ -38,13 +37,13 @@ public class HttpCommunicatorWithProgress implements IHttpComunicator {
 		try {
 			progressMonitorDialog.run(true, true, communicatorRunnable);
 		} catch (InvocationTargetException | InterruptedException e) {
-			ErrorDialog.open(e.getMessage());
+			ExceptionHelper.reportRuntimeException(e.getMessage());;
 			return null;
 		}
 
 		String errorMessage = communicatorRunnable.getErrorMessage(); 
 		if (errorMessage != null) {
-			ErrorDialog.open(errorMessage);
+			ExceptionHelper.reportRuntimeException(errorMessage);
 			return null;			
 		}
 
@@ -74,7 +73,7 @@ public class HttpCommunicatorWithProgress implements IHttpComunicator {
 
 			try {
 				fResponse = httpComunicator.sendGetRequest(fUrl, fProperties);
-			} catch (IOException e) {
+			} catch (Exception e) {
 				fErrorMessage = e.getMessage();
 			}
 		}
