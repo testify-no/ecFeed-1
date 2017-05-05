@@ -33,6 +33,7 @@ class Names {
 	public static final String JAVADOC_EXPORT_TYPE_ACTION_ID = "javadoc.exportType";
 	public static final String JAVADOC_IMPORT_TYPE_ACTION_ID = "javadoc.importType";
 	public static final String SAVE_ACTION_ID = "save";
+	public static final String ABOUT_ACTION_ID = "about";
 
 	public static final String COPY_ACTION_NAME = "Copy";
 	public static final String COPY_ACTION_SHORTCUT = "Ctrl+C";
@@ -88,6 +89,8 @@ class Names {
 	public static final String SAVE_ACTION_NAME = "Save";
 	public static final String SAVE_ACTION_SHORTCUT = "Ctrl+S";
 	public static final String SAVE_ACTION_MAC_SHORTCUT = "Cmd+S";
+	
+	public static final String ABOUT_ACTION_NAME = "About ecFeed...";
 }
 
 public enum GlobalActions {
@@ -104,7 +107,8 @@ public enum GlobalActions {
 	EXPAND(Names.EXPAND_ACTION_ID, Names.EXPAND_ACTION_NAME, Names.EXPAND_ACTION_SHORTCUT, Names.EXPAND_ACTION_MAC_SHORTCUT),
 	COLLAPSE(Names.COLLAPSE_ACTION_ID, Names.COLLAPSE_ACTION_NAME, Names.COLLAPSE_ACTION_SHORTCUT, Names.COLLAPSE_ACTION_MAC_SHORTCUT),
 	EXPAND_COLLAPSE(Names.EXPAND_COLLAPSE_ACTION_ID, Names.EXPAND_COLLAPSE_ACTION_NAME, Names.EXPAND_COLLAPSE_ACTION_SHORTCUT, Names.EXPAND_COLLAPSE_ACTION_SHORTCUT),
-	SAVE(Names.SAVE_ACTION_ID, Names.SAVE_ACTION_NAME, Names.SAVE_ACTION_SHORTCUT, Names.SAVE_ACTION_MAC_SHORTCUT);
+	SAVE(Names.SAVE_ACTION_ID, Names.SAVE_ACTION_NAME, Names.SAVE_ACTION_SHORTCUT, Names.SAVE_ACTION_MAC_SHORTCUT),
+	ABOUT(Names.ABOUT_ACTION_ID, Names.ABOUT_ACTION_NAME, null, null);
 
 	private String fId;
 	private String fName;

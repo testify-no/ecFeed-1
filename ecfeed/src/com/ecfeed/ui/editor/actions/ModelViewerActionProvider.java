@@ -43,6 +43,8 @@ public class ModelViewerActionProvider extends ActionProvider {
 
 		addViewerActions(viewer, context, selectRoot);
 		addMoveActions(viewer, context);
+		
+		addAction("About ecFeed...", new AboutAction());
 	}
 
 	public ModelViewerActionProvider(
