@@ -29,6 +29,7 @@ import com.ecfeed.algorithm.VersionCheckerAndRegistrator;
 import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.application.ApplicationPreferences;
 import com.ecfeed.application.ApplicationVersion;
+import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.net.HttpCommunicatorWithProgress;
 import com.ecfeed.ui.dialogs.basic.DialogObjectToolkit;
 import com.ecfeed.ui.editor.IValueApplier;
@@ -71,7 +72,13 @@ public class CheckForUpdatesDialog extends TitleAreaDialog {
 		CurrentReleases currentReleases = 
 				VersionCheckerAndRegistrator.registerAndGetCurrentReleases(httpCommunicatorWithProgress);
 
-		if (!shouldDisplayDialog(currentReleases)) {
+		if (!shouldOpenConditionalDialog(
+				ApplicationContext.getEcFeedVersion(),
+				currentReleases,
+				ApplicationPreferences.getPreferenceAutomaticallyCheckForUpdates(),
+				ApplicationPreferences.getPreferenceCheckBetaVersions(),
+				ApplicationPreferences.getPreferenceIgnoreStandardVersionTo(),
+				ApplicationPreferences.getPreferenceIgnoreBetaVersionTo())) {
 			return;
 		}
 
@@ -121,9 +128,13 @@ public class CheckForUpdatesDialog extends TitleAreaDialog {
 		fCheckBoxCheckBeta.setSelection(checkBeta);
 
 
-		fCheckBoxDoNotRemind = 
-				DialogObjectToolkit.createGridCheckBox(
-						container, "Do not remind me about this version", new DoNotRemindAboutThisVersionValueApplier());
+		if ( !(StringHelper.isNullOrEmpty(fCurrentReleases.versionStandard) &&
+				StringHelper.isNullOrEmpty(fCurrentReleases.versionBeta))) {
+
+			fCheckBoxDoNotRemind = 
+					DialogObjectToolkit.createGridCheckBox(
+							container, "Do not remind me about these versions.", new DoNotRemindAboutThisVersionValueApplier());
+		}
 
 		DialogObjectToolkit.createLabel(parent, " ");
 
@@ -178,8 +189,19 @@ public class CheckForUpdatesDialog extends TitleAreaDialog {
 
 		sb.append("You currently use ecFeed version " + ApplicationContext.getEcFeedVersion() + "\n");
 		sb.append("\n");
-		sb.append("The newest version available is " + fCurrentReleases.versionStandard + "\n");
-		sb.append("The newest beta available is " + fCurrentReleases.versionBeta + "\n");
+
+		if (StringHelper.isNullOrEmpty(fCurrentReleases.versionStandard)) {
+			sb.append("The newest version is unavailable\n");
+		} else {
+			sb.append("The newest version available is " + fCurrentReleases.versionStandard + "\n");
+		}
+
+		if (StringHelper.isNullOrEmpty(fCurrentReleases.versionBeta)) {
+			sb.append("The newest beta version is unavailable\n");
+		} else {
+			sb.append("The newest beta available is " + fCurrentReleases.versionBeta + "\n");
+		}
+
 		sb.append("\n");
 
 		if (isNewVersionAvailable()) {
@@ -267,37 +289,49 @@ public class CheckForUpdatesDialog extends TitleAreaDialog {
 			boolean isChecked = fCheckBoxDoNotRemind.getSelection();
 
 			if (isChecked) {
-				ApplicationPreferences.setPreferenceIgnoreUpToVersion(fCurrentReleases.versionStandard);
+				ApplicationPreferences.setPreferenceIgnoreStandardVersionTo(fCurrentReleases.versionStandard);
+				ApplicationPreferences.setPreferenceIgnoreBetaVersionTo(fCurrentReleases.versionBeta);
 			} else {
-				ApplicationPreferences.setPreferenceIgnoreUpToVersionInitial();
+				ApplicationPreferences.setPreferenceIgnoreStandardVersionToInitial();
+				ApplicationPreferences.setPreferenceIgnoreBetaVersionToInitial();
 			}
 		}
 
 	}
 
-	private static boolean shouldDisplayDialog(CurrentReleases currentReleases) {
+	public static boolean shouldOpenConditionalDialog(
+			String currentEcFeedVersion,
+			CurrentReleases currentReleases,
+			boolean automaticallyCheckForUpdates,
+			boolean checkBetaVersions,
+			String ignoreStandardVersionTo,
+			String ignoreBetaVersionTo
+			) {
 
 		if (currentReleases == null) {
 			return false;
 		}
 
-		if (!ApplicationPreferences.getPreferenceAutomaticallyCheckForUpdates()) {
+		if (!automaticallyCheckForUpdates) {
 			return false;
 		}
 
-		String ignoreUpToVersion = ApplicationPreferences.getPreferenceIgnoreUpToVersion();
-
-		if (isThisNewerVersion(currentReleases.versionStandard, ApplicationContext.getEcFeedVersion()) &&
-				isThisNewerVersion(currentReleases.versionStandard, ignoreUpToVersion)) {
+		if (StringHelper.isNullOrEmpty(currentReleases.versionStandard) &&
+				StringHelper.isNullOrEmpty(currentReleases.versionBeta)) {
+			return false;
+		}
+		if (isThisNewerVersion(currentReleases.versionStandard, currentEcFeedVersion ) &&
+				isThisNewerVersion(currentReleases.versionStandard, ignoreStandardVersionTo)) {
 			return true;
 		}
 
-		if (ApplicationPreferences.getPreferenceCheckBetaVersions() &&
-				isThisNewerVersion(currentReleases.versionBeta, ApplicationContext.getEcFeedVersion())	) {
+		if (checkBetaVersions &&
+				isThisNewerVersion(currentReleases.versionBeta, currentEcFeedVersion) &&
+				isThisNewerVersion(currentReleases.versionBeta, ignoreBetaVersionTo)) {
 			return true;
 		}
 
-		return true;
+		return false;
 	}
 
 	private static boolean isThisNewerVersion(String version, String versionToCompare) {

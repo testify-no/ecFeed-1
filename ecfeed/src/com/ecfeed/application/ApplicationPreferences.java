@@ -22,7 +22,8 @@ public class ApplicationPreferences {
 
 	private static String AUTOMATICALLY_CHECK_FOR_UPDATES = "updates.automaticalCheck";
 	private static String CHECK_BETA_VERSIONS = "updates.checkBetaVersions";
-	private static String IGNORE_UP_TO_VERSION = "updates.ignoreUpToVersion";
+	private static String IGNORE_STANDARD_VERSION_TO = "updates.ignoreStandardVersionTo";
+	private static String IGNORE_BETA_VERSION_TO = "updates.ignoreBetaVersionTo";
 
 	private static String INITIAL_VERSION = "1.0.0";
 
@@ -59,7 +60,7 @@ public class ApplicationPreferences {
 	public static boolean getBooleanPreferenceValue(String key, boolean defaultValue) {
 
 		String value = getPreferenceNode().get(key, BooleanHelper.toString(defaultValue));
-		
+
 		return BooleanHelper.parseBoolean(value);
 	}
 
@@ -83,19 +84,34 @@ public class ApplicationPreferences {
 		setBooleanPreferenceValue(CHECK_BETA_VERSIONS, value);
 	}	
 
-	public static String getPreferenceIgnoreUpToVersion() {
+	public static String getPreferenceIgnoreStandardVersionTo() {
 
-		return getPreferenceValue(IGNORE_UP_TO_VERSION, INITIAL_VERSION);
+		return getPreferenceValue(IGNORE_STANDARD_VERSION_TO, INITIAL_VERSION);
 	}
 
-	public static void setPreferenceIgnoreUpToVersion(String value) {
+	public static void setPreferenceIgnoreStandardVersionTo(String value) {
 
-		setPreferenceValue(IGNORE_UP_TO_VERSION, value);
+		setPreferenceValue(IGNORE_STANDARD_VERSION_TO, value);
 	}	
 
-	public static void setPreferenceIgnoreUpToVersionInitial() {
+	public static void setPreferenceIgnoreStandardVersionToInitial() {
 
-		setPreferenceValue(IGNORE_UP_TO_VERSION, INITIAL_VERSION);
+		setPreferenceValue(IGNORE_STANDARD_VERSION_TO, INITIAL_VERSION);
 	}
+
+	public static String getPreferenceIgnoreBetaVersionTo() {
+
+		return getPreferenceValue(IGNORE_BETA_VERSION_TO, INITIAL_VERSION);
+	}
+
+	public static void setPreferenceIgnoreBetaVersionTo(String value) {
+
+		setPreferenceValue(IGNORE_BETA_VERSION_TO, value);
+	}	
+
+	public static void setPreferenceIgnoreBetaVersionToInitial() {
+
+		setPreferenceValue(IGNORE_BETA_VERSION_TO, INITIAL_VERSION);
+	}	
 
 }
