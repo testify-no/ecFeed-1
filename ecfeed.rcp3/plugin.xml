@@ -85,6 +85,11 @@
                   label="About"
                   style="push">
             </command>
+            <command
+                  commandId="ecfeed.rcp3.checkForUpdates"
+                  label="Check for updates"
+                  style="push">
+            </command>
          </menu>
       </menuContribution>
    </extension>
@@ -113,6 +118,10 @@
       <command
             id="ecfeed.rcp3.about"
             name="About">
+      </command>
+      <command
+            id="ecfeed.rcp3.checkForUpdates"
+            name="CheckForUpdates">
       </command>
       <command
             id="ecfeed.rcp3.cut"
@@ -188,6 +197,10 @@
       <handler
             class="com.ecfeed.rcp3.handlers.EmptyRcpHandler"
             commandId="ecfeed.rcp3.empty">
+      </handler>
+      <handler
+            class="com.ecfeed.rcp3.handlers.CheckForUpdatesRcpHandler"
+            commandId="ecfeed.rcp3.checkForUpdates">
       </handler>
    </extension>
    <extension
