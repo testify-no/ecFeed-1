@@ -12,6 +12,8 @@ package com.ecfeed.core.generators;
 
 import java.util.List;
 
+import com.ecfeed.core.generators.algorithms.Tuples;
+
 public class CulpritFinder {
 	
 	
@@ -26,7 +28,19 @@ public class CulpritFinder {
 	}
 	
 	private void processTestResult(TestResult testresult){
-		
+
+		for(int index = 0; index < testresult.getTestCases().size(); index++){
+			Tuples tuples = new Tuples(testresult.getTestCases(), index);
+			Culprit culprit = new Culprit();
+
+			if(!testresult.getResult()){
+				culprit.aggregateOccurencesAndFailures(culprit);
+			}
+			else{
+				culprit.incrementOccurenceCount(culprit.getOccurenceCount());
+			}
+			fFinderAnalysis.aggregateCulprit(culprit);
+		}
 	}
 	
 //	private void processTestResult(TestResult testresult){
