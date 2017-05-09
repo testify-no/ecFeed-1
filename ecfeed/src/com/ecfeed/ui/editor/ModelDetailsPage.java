@@ -42,7 +42,7 @@ public class ModelDetailsPage extends BasicDetailsPage {
 	@Override
 	public void createContents(Composite parent){
 		super.createContents(parent);
-		getMainSection().setText("Model details");
+		getMainSection().setText("Model details"); 
 
 		createModelNameEdit(getMainComposite());
 
@@ -101,7 +101,7 @@ public class ModelDetailsPage extends BasicDetailsPage {
 	protected Class<? extends AbstractNode> getNodeType() {
 		return RootNode.class;
 	}
-	
+
 	private class ModelNameApplier implements IValueApplier{
 
 		@Override

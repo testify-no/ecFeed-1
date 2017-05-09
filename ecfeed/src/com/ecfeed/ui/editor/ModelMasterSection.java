@@ -21,6 +21,8 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.IOperationHistory;
 import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.core.commands.operations.OperationHistoryFactory;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.viewers.DecoratingLabelProvider;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.IContentProvider;
@@ -32,13 +34,16 @@ import org.eclipse.jface.viewers.TreeNodeContentProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.ui.forms.AbstractFormPart;
 import org.eclipse.ui.forms.IDetailsPage;
+import org.eclipse.ui.forms.widgets.Section;
 
 import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.adapter.EImplementationStatus;
@@ -59,6 +64,7 @@ import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.CommonConstants;
 import com.ecfeed.ui.common.ImageManager;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.dialogs.About2Dialog;
 import com.ecfeed.ui.dialogs.CheckForUpdatesDialog;
 import com.ecfeed.ui.editor.actions.AbstractAddChildAction;
 import com.ecfeed.ui.editor.actions.AddChildActionProvider;
@@ -601,6 +607,20 @@ public class ModelMasterSection extends TreeViewerSection{
 
 	}
 
+	protected class ShowInfoToolbarAction extends Action {
+
+		public ShowInfoToolbarAction() {
+			setToolTipText("About ecFeed");
+			setImageDescriptor(getIconDescription("aboutEcFeed.png"));
+		}
+
+		@Override
+		public void run() {
+			About2Dialog.open();
+		}
+
+	}	
+
 	public ModelMasterSection(ModelMasterDetailsBlock parentBlock, IFileInfoProvider fileInfoProvider) {
 		super(parentBlock.getMasterSectionContext(), parentBlock.getModelUpdateContext(), fileInfoProvider, StyleDistributor.getSectionStyle());
 		fMasterDetailsBlock = parentBlock;
@@ -680,8 +700,7 @@ public class ModelMasterSection extends TreeViewerSection{
 		if(page != null){
 			page.refresh();
 		}
-		
-		
+
 	}
 
 	@Override
@@ -689,18 +708,38 @@ public class ModelMasterSection extends TreeViewerSection{
 		super.createContent();
 		getSection().setText("Structure");
 		getTreeViewer().setAutoExpandLevel(AUTO_EXPAND_LEVEL);
-		
+
+		createToolbarAndAddIcons();
 		showCheckForUpdatesDialogWhenPossible();
 	}
-	
+
+	private void createToolbarAndAddIcons() {
+		Section section = getSection();
+
+		ToolBarManager toolBarManager = new ToolBarManager(SWT.FLAT);
+		ToolBar toolbar = toolBarManager.createControl(section);
+
+		final Cursor handCursor = Display.getCurrent().getSystemCursor(SWT.CURSOR_HAND);
+		toolbar.setCursor(handCursor);
+
+		toolBarManager.add(new ShowInfoToolbarAction());
+		toolBarManager.update(true);
+
+		moveToolbarToTheRightSide(toolbar, section); 
+	}
+
+	private void moveToolbarToTheRightSide(ToolBar toolbar, Section section) {
+		section.setTextClient(toolbar);
+	}
+
 	private void showCheckForUpdatesDialogWhenPossible() {
-		
+
 		Display.getCurrent().asyncExec
-	    (new Runnable() {
-	        public void run() {
-	        	CheckForUpdatesDialog.openConditionally();
-	        }
-	    });
+		(new Runnable() {
+			public void run() {
+				CheckForUpdatesDialog.openConditionally();
+			}
+		});
 	}
 
 	@Override
