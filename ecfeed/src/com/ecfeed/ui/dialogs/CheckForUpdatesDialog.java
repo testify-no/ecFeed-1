@@ -122,7 +122,7 @@ public class CheckForUpdatesDialog extends TitleAreaDialog {
 
 		fCheckBoxCheckBeta = 
 				DialogObjectToolkit.createGridCheckBox(
-						container, "Check beta versions", new CheckBetaVersionsValueApplier());
+						container, "Check beta versions on ecFeed start", new CheckBetaVersionsValueApplier());
 
 		boolean checkBeta = ApplicationPreferences.getPreferenceCheckBetaVersions();
 		fCheckBoxCheckBeta.setSelection(checkBeta);
