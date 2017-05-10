@@ -30,26 +30,9 @@ public class CulpritFinder {
 	private void processTestResult(TestResult testresult){
 
 		for(int index = 0; index < testresult.getTestCases().size(); index++){
-			Tuples tuples = new Tuples(testresult.getTestCases(), index);
-			Culprit culprit = new Culprit();
-
-			if(!testresult.getResult()){
-				culprit.aggregateOccurencesAndFailures(culprit);
-			}
-			else{
-				culprit.incrementOccurenceCount(culprit.getOccurenceCount());
-			}
+			Tuples<String> tuples = new Tuples<String>(testresult.getTestCases(), index);
+			Culprit culprit = new Culprit(tuples, testresult.getResult());
 			fFinderAnalysis.aggregateCulprit(culprit);
 		}
 	}
-	
-//	private void processTestResult(TestResult testresult){
-//		for(.......) { // this is probably nested for or something similar - 
-//			//here we have to generate Culprits i.e. to find all pairs, 3-tuples, 4-tuples etc and pass it to finder analisys 
-//			Culprit culprit = new Culprit(........) // having n-tuple we have to generate a Culprit (add nulls)
-//			fFinderAnalisys.aggregateCulprit(culprit);
-//
-//		}
-//
-//	}
 }
