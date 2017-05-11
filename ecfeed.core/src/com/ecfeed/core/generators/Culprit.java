@@ -20,24 +20,15 @@ public class Culprit {
 	private List<DimItem> fItems;
 	private int fFailureCount;
 	private int fOccurenceCount;
-	private Tuples<String> tuple;
 
 	public Culprit(){
 		fItems = new ArrayList<DimItem>();
 		fFailureCount = 0;
 		fOccurenceCount = 0;	
 	}
-	public Culprit(Tuples<String> tuple, boolean result){
+	public Culprit(List<DimItem> tuple){
 		this();
-		this.tuple = tuple;
-		Culprit culprit = new Culprit(this.tuple, result);
-		if(!result){
-			aggregateOccurencesAndFailures(culprit);
-		}
-		else{
-			incrementOccurenceCount(getOccurenceCount());
-		}
-		
+		this.fItems = tuple;
 	}
 
 	int getOccurenceCount(){

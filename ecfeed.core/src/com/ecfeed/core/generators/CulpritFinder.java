@@ -10,29 +10,53 @@
 
 package com.ecfeed.core.generators;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import com.ecfeed.core.generators.algorithms.Tuples;
 
 public class CulpritFinder {
-	
-	
+
+
 	FinderAnalysis fFinderAnalysis = new FinderAnalysis();
 
-	FinderAnalysis generateAnalysis(List<TestResult> testresults){
+	FinderAnalysis generateAnalysis(List<TestResult> testresults, int n1, int n2){
 		for (TestResult testresult : testresults){
-			processTestResult(testresult);
-			
+			processTestResult(testresult, n1, n2);
 		}
 		return fFinderAnalysis;
 	}
 	
-	private void processTestResult(TestResult testresult){
-
-		for(int index = 0; index < testresult.getTestCases().size(); index++){
-			Tuples<String> tuples = new Tuples<String>(testresult.getTestCases(), index);
-			Culprit culprit = new Culprit(tuples, testresult.getResult());
-			fFinderAnalysis.aggregateCulprit(culprit);
+	private void processTestResult(TestResult testresult, int n1, int n2){
+		for(int index = n1; index <n2; index++){
+			Tuples<DimItem> tuples = new Tuples<DimItem>(
+					createListOfDimItems(testresult.getTestCases()), index);
+			Set<List<DimItem>> AllTuples = tuples.getAll();
+			for(List<DimItem> tuple: AllTuples){
+				aggregateTuple(tuple, testresult.getResult());
+			}
 		}
+	}
+	
+	private void aggregateTuple(List<DimItem> tuple, boolean result) {
+		Culprit culprit = new Culprit(tuple);
+		if(!result){
+			culprit.aggregateOccurencesAndFailures(culprit);	
+		}else{
+			culprit.incrementOccurenceCount(culprit.getOccurenceCount());
+		}
+		fFinderAnalysis.aggregateCulprit(culprit);
+	}
+
+	private List<DimItem> createListOfDimItems(List<String> items) {
+		List<DimItem> DimItems = new ArrayList<DimItem>();
+		int dim = 0;
+		for(String item: items){
+			DimItem dimitems = new DimItem(item, dim);
+			DimItems.add(dimitems);
+			dim += 1;
+		}
+		return DimItems;
 	}
 }

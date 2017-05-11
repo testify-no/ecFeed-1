@@ -14,9 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FinderAnalysis {
-	
+
 	private List<Culprit> fCulprits = new ArrayList<Culprit>();
-	
+
 	public void aggregateCulprit(Culprit culpritToAggregate){
 		Culprit culpritFromList = findCulpritByTuple(culpritToAggregate);
 		if (culpritFromList == null){
@@ -25,7 +25,7 @@ public class FinderAnalysis {
 			culpritFromList.aggregateOccurencesAndFailures(culpritToAggregate);
 		}
 	}
-		
+
 	private Culprit findCulpritByTuple(Culprit culpritWithTupleToFind){
 		for(Culprit culprit: fCulprits){
 			if(culprit.isTupleMatch(culpritWithTupleToFind)){
@@ -34,7 +34,7 @@ public class FinderAnalysis {
 		}
 		return null;
 	}
-		
-		 
+
+
 }
 
