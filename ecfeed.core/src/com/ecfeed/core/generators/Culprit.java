@@ -13,53 +13,59 @@ package com.ecfeed.core.generators;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ecfeed.core.generators.algorithms.Tuples;
-
 public class Culprit {
-
+	
 	private List<DimItem> fItems;
-	private int fFailureCount;
-	private int fOccurenceCount;
+	private int fFailureCount = 0;
+	private int fOccurenceCount = 0;
 
-	public Culprit(){
-		fItems = new ArrayList<DimItem>();
+	public Culprit() {
+		this(new ArrayList<DimItem>());
+	}
+	
+	public Culprit(List<DimItem> tuple) {
+		fItems = tuple;
 		fFailureCount = 0;
-		fOccurenceCount = 0;	
-	}
-	public Culprit(List<DimItem> tuple){
-		this();
-		this.fItems = tuple;
+		fOccurenceCount = 0;		
 	}
 
-	int getOccurenceCount(){
+	int getOccurenceCount() {
 		return fOccurenceCount;
 	}
-	int getFailureCount(){
+	
+	int getFailureCount() {
 		return fFailureCount;
 	}
-	List<DimItem> getItem(){
+	
+	List<DimItem> getItem() {
 		return fItems;
 	}
-	public void incrementFailures(int FailureCount){
+	
+	public void incrementFailures(int FailureCount) {
 		fFailureCount = FailureCount + 1;
 	}
-	public void incrementOccurenceCount(int OccurenceCount){
+	
+	public void incrementOccurenceCount(int OccurenceCount) {
 		fOccurenceCount = OccurenceCount + 1;
 	}
-	public void aggregateOccurencesAndFailures(Culprit culpritToAggregate){
+	
+	public void aggregateOccurencesAndFailures(Culprit culpritToAggregate) {
 		incrementOccurenceCount(culpritToAggregate.getOccurenceCount());
 		incrementFailures(culpritToAggregate.getFailureCount());
 	}
-	public boolean isTupleMatch(Culprit other){
-		if(fItems.size() != other.fItems.size()){
+	
+	public boolean isTupleMatch(Culprit other) {
+		if(fItems.size() != other.fItems.size()) {
 			return false;
 		}
-		for(int index = 0; index < fItems.size(); index++){
-			if(!fItems.get(index).isMatch(other.fItems.get(index))){
+		
+		for(int index = 0; index < fItems.size(); index++) {
+			if(!fItems.get(index).isMatch(other.fItems.get(index))) {
 				return false;
 			}
 		}
 		return true;
 	}
+	
 }
 
