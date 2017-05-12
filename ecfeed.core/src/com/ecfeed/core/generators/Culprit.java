@@ -10,7 +10,6 @@
 
 package com.ecfeed.core.generators;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Culprit {
