@@ -10,7 +10,8 @@
 
 package com.ecfeed.core.generators;
 
-public class DimItem {
+public class DimItem { // TODO - DimensionedItem<String> instead (add necessary methods) and delete DimItem, 
+					   // TODO - move tests to DimensionedItemTest   
 
 	String fDimension; // e.g. index of method parameter
 	int fItem;
@@ -19,19 +20,21 @@ public class DimItem {
 		fDimension = dimension;
 		fItem = item;
 	}
+	
 	String getDim(){
 		return fDimension;
 	}
+	
 	int getItem(){
 		return fItem;
 	}
 	
 	public boolean isMatch(DimItem dimItem) {
 		
-		if(fItem==dimItem.getItem() && fDimension==dimItem.getDim()){
+		if (fItem == dimItem.getItem() && fDimension == dimItem.getDim()) {
 			return true;
-		}else{
-		return false;
+		} else {
+			return false;
 		}
 	}
 
