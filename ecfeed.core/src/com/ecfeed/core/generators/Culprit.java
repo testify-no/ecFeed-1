@@ -19,10 +19,6 @@ public class Culprit {
 	private int fFailureCount = 0;
 	private int fOccurenceCount = 0;
 
-	public Culprit() {
-		this(new ArrayList<DimItem>());
-	}
-	
 	public Culprit(List<DimItem> tuple) {
 		fItems = tuple;
 		fFailureCount = 0;

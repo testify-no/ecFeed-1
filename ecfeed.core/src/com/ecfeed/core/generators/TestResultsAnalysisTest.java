@@ -22,7 +22,7 @@ public class TestResultsAnalysisTest {
 	@Test
 	public void shouldReturnFailureCount() {
 		List<DimItem> item = new ArrayList<DimItem>();
-		Culprit culprit = new Culprit();
+		Culprit culprit = new Culprit(new ArrayList<DimItem>());
 		
 		TestResultsAnalysis finderanalysis = new TestResultsAnalysis();
 		finderanalysis.aggregateCulprit(culprit);

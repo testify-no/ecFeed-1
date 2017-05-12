@@ -38,6 +38,5 @@ public class TestResultsAnalysis {
 		return null;
 	}
 
-
 }
 

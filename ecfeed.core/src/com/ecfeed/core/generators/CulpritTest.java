@@ -24,7 +24,7 @@ public class CulpritTest {
 	@Test
 	public void ShouldReturnOccurenceAndFailureCount(){
 		List<DimItem> Items = new ArrayList<DimItem>();
-		Culprit culprit = new Culprit();
+		Culprit culprit = new Culprit(new ArrayList<DimItem>());
 		assertEquals(0, culprit.getFailureCount());
 		assertEquals(0, culprit.getOccurenceCount());
 		assertEquals(Items, culprit.getItem());		
@@ -32,7 +32,7 @@ public class CulpritTest {
 	
 	@Test
 	public void ShouldIncrementOccurenceAndFailureCount(){
-		Culprit culprit = new Culprit();
+		Culprit culprit = new Culprit(new ArrayList<DimItem>());
 		culprit.incrementFailures(culprit.getFailureCount());
 		assertEquals(1, culprit.getFailureCount());
 		culprit.incrementOccurenceCount(culprit.getOccurenceCount());
@@ -43,13 +43,9 @@ public class CulpritTest {
 	
 	@Test
 	public void ShouldSayIfTheTupleMatchesAnyOther(){
-		Culprit candidate = new Culprit();
-		Culprit culprit = new Culprit();
+		Culprit candidate = new Culprit(new ArrayList<DimItem>());
+		Culprit culprit = new Culprit(new ArrayList<DimItem>());
 		assertTrue(culprit.isTupleMatch(candidate));
-		
-		
 	}
-	
-
 
 }

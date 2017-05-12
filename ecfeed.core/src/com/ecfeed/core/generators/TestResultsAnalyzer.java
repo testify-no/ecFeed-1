@@ -16,47 +16,63 @@ import java.util.Set;
 
 import com.ecfeed.core.generators.algorithms.Tuples;
 
-public class CulpritFinder {
+public class TestResultsAnalyzer {
 
+	TestResultsAnalysis fTestResultAnalysis = new TestResultsAnalysis();
 
-	TestResultsAnalysis fFinderAnalysis = new TestResultsAnalysis();
-
-	TestResultsAnalysis generateAnalysis(List<TestResultDescription> testresults, int n1, int n2){
-		for (TestResultDescription testresult : testresults){
+	public TestResultsAnalysis generateAnalysis(List<TestResultDescription> testresults, int n1, int n2) {
+		
+		for (TestResultDescription testresult : testresults) {
 			processTestResult(testresult, n1, n2);
 		}
-		return fFinderAnalysis;
+		
+		return fTestResultAnalysis;
 	}
 	
-	private void processTestResult(TestResultDescription testresult, int n1, int n2){
-		for(int index = n1; index <n2; index++){
-			Tuples<DimItem> tuples = new Tuples<DimItem>(
-					createListOfDimItems(testresult.getTestArguments()), index);
-			Set<List<DimItem>> AllTuples = tuples.getAll();
-			for(List<DimItem> tuple: AllTuples){
-				aggregateTuple(tuple, testresult.getResult());
-			}
+	private void processTestResult(TestResultDescription testresult, int n1, int n2) {
+		
+		for (int n = n1; n <n2; n++) {
+			processTestResultForN(testresult, n);
+		}
+	}
+
+	private void processTestResultForN(TestResultDescription testresult, int n) {
+		
+		Tuples<DimItem> tuples = new Tuples<DimItem>(
+				createListOfDimItems(testresult.getTestArguments()), n);
+		
+		Set<List<DimItem>> allTuples = tuples.getAll();
+		
+		for (List<DimItem> tuple: allTuples) {
+			aggregateTuple(tuple, testresult.getResult());
 		}
 	}
 	
 	private void aggregateTuple(List<DimItem> tuple, boolean result) {
+		
 		Culprit culprit = new Culprit(tuple);
-		if(!result){
+		
+		if (!result) {
 			culprit.aggregateOccurencesAndFailures(culprit);	
-		}else{
+		} else {
 			culprit.incrementOccurenceCount(culprit.getOccurenceCount());
 		}
-		fFinderAnalysis.aggregateCulprit(culprit);
+		
+		fTestResultAnalysis.aggregateCulprit(culprit);
 	}
 
 	private List<DimItem> createListOfDimItems(List<String> items) {
-		List<DimItem> DimItems = new ArrayList<DimItem>();
+		
+		List<DimItem> dimItems = new ArrayList<DimItem>();
 		int dim = 0;
-		for(String item: items){
-			DimItem dimitems = new DimItem(item, dim);
-			DimItems.add(dimitems);
+		
+		for (String item: items) {
+			DimItem dimitem = new DimItem(item, dim);
+			dimItems.add(dimitem);
 			dim += 1;
 		}
-		return DimItems;
+		
+		return dimItems;
 	}
+	
 }
