@@ -21,17 +21,17 @@ public class CulpritFinder {
 
 	FinderAnalysis fFinderAnalysis = new FinderAnalysis();
 
-	FinderAnalysis generateAnalysis(List<TestResult> testresults, int n1, int n2){
-		for (TestResult testresult : testresults){
+	FinderAnalysis generateAnalysis(List<TestResultDescription> testresults, int n1, int n2){
+		for (TestResultDescription testresult : testresults){
 			processTestResult(testresult, n1, n2);
 		}
 		return fFinderAnalysis;
 	}
 	
-	private void processTestResult(TestResult testresult, int n1, int n2){
+	private void processTestResult(TestResultDescription testresult, int n1, int n2){
 		for(int index = n1; index <n2; index++){
 			Tuples<DimItem> tuples = new Tuples<DimItem>(
-					createListOfDimItems(testresult.getTestCases()), index);
+					createListOfDimItems(testresult.getTestArguments()), index);
 			Set<List<DimItem>> AllTuples = tuples.getAll();
 			for(List<DimItem> tuple: AllTuples){
 				aggregateTuple(tuple, testresult.getResult());

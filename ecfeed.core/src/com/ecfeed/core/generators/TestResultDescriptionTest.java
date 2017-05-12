@@ -10,22 +10,25 @@
 
 package com.ecfeed.core.generators;
 
+import static org.junit.Assert.assertEquals;
+
+import java.util.ArrayList;
 import java.util.List;
 
-public class TestResult {
+import org.junit.Test;
 
-	private List<String> ftestcases;
-	private boolean fresult;
-
-	public TestResult(List<String> testcases, boolean result) {
-		ftestcases = testcases;
-		fresult = result;
+public class TestResultDescriptionTest {
+	
+	
+	@Test
+	public void shouldReturnTestResult() {
+		
+		List<String> testcases = new ArrayList<String>();
+		boolean result = false;
+		
+		TestResultDescription testresult = new TestResultDescription(testcases, result);
+		
+		assertEquals(testcases, testresult.getTestArguments());
+		assertEquals(result, testresult.getResult());
 	}
-	List<String> getTestCases(){
-		return ftestcases;
-	}
-	boolean getResult(){
-		return fresult;
-	}
-
 }
