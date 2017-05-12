@@ -13,22 +13,25 @@ package com.ecfeed.core.generators;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FinderAnalysis {
+public class TestResultsAnalysis {
 
 	private List<Culprit> fCulprits = new ArrayList<Culprit>();
 
-	public void aggregateCulprit(Culprit culpritToAggregate){
+	public void aggregateCulprit(Culprit culpritToAggregate) {
+		
 		Culprit culpritFromList = findCulpritByTuple(culpritToAggregate);
-		if (culpritFromList == null){
+		
+		if (culpritFromList == null) {
 			fCulprits.add(culpritToAggregate);
-		}else{
+		} else {
 			culpritFromList.aggregateOccurencesAndFailures(culpritToAggregate);
 		}
 	}
 
-	private Culprit findCulpritByTuple(Culprit culpritWithTupleToFind){
-		for(Culprit culprit: fCulprits){
-			if(culprit.isTupleMatch(culpritWithTupleToFind)){
+	private Culprit findCulpritByTuple(Culprit culpritWithTupleToFind) {
+		
+		for (Culprit culprit: fCulprits) {
+			if (culprit.isTupleMatch(culpritWithTupleToFind)) {
 				return culprit;
 			}
 		}

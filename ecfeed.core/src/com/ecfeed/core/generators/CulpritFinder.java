@@ -19,9 +19,9 @@ import com.ecfeed.core.generators.algorithms.Tuples;
 public class CulpritFinder {
 
 
-	FinderAnalysis fFinderAnalysis = new FinderAnalysis();
+	TestResultsAnalysis fFinderAnalysis = new TestResultsAnalysis();
 
-	FinderAnalysis generateAnalysis(List<TestResultDescription> testresults, int n1, int n2){
+	TestResultsAnalysis generateAnalysis(List<TestResultDescription> testresults, int n1, int n2){
 		for (TestResultDescription testresult : testresults){
 			processTestResult(testresult, n1, n2);
 		}

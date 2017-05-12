@@ -17,19 +17,21 @@ import java.util.List;
 
 import org.junit.Test;
 
-public class FinderAnalysisTest {
-	
+public class TestResultsAnalysisTest {
 	
 	@Test
 	public void shouldReturnFailureCount() {
 		List<DimItem> item = new ArrayList<DimItem>();
 		Culprit culprit = new Culprit();
-		FinderAnalysis finderanalysis = new FinderAnalysis();
+		
+		TestResultsAnalysis finderanalysis = new TestResultsAnalysis();
 		finderanalysis.aggregateCulprit(culprit);
+		
 		assertEquals(culprit.getFailureCount(), 0);
 	}
+	
 	@Test
-	public void shouldReturnOccuranceCout(){
+	public void shouldReturnOccuranceCout() {
 		List<DimItem> item = new ArrayList<DimItem>();
 		//Culprit culprit = new Culprit
 	}
