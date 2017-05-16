@@ -52,9 +52,23 @@ public class VersionCheckerAndRegistrator {
 			ecFeedVersion = "unknownVersion";
 		}
 
+		String operatingSystem;
+		if (ApplicationContext.isStandaloneApplication()) {
+			operatingSystem = SystemHelper.getOperatingSystem();
+		} else {
+			operatingSystem = "All";
+		}
+
+		String productType;
+		if (ApplicationContext.isStandaloneApplication()) {
+			productType = "ES";
+		} else {
+			productType = "EP";
+		}
+
 		return new HttpProperty(
 				"User-Agent", 
-				"ecFeed; " + ecFeedVersion + "; " + SystemHelper.getOperatingSystem() + ";");
+				"ecFeed; " + productType + "; " + ecFeedVersion + "; " + operatingSystem + ";");
 	}
 
 	private static HttpProperty createEcIdProperty() {

@@ -128,12 +128,13 @@ public class CheckForUpdatesDialog extends TitleAreaDialog {
 		fCheckBoxCheckBeta.setSelection(checkBeta);
 
 
-		if ( !(StringHelper.isNullOrEmpty(fCurrentReleases.versionStandard) &&
-				StringHelper.isNullOrEmpty(fCurrentReleases.versionBeta))) {
+		if ( fCurrentReleases != null &&
+				!( StringHelper.isNullOrEmpty(fCurrentReleases.versionStandard) &&
+						StringHelper.isNullOrEmpty(fCurrentReleases.versionBeta))) {
 
 			fCheckBoxDoNotRemind = 
 					DialogObjectToolkit.createGridCheckBox(
-							container, "Do not remind me about these versions.", new DoNotRemindAboutThisVersionValueApplier());
+							container, "Do not remind me about these versions on ecFeed start", new DoNotRemindAboutThisVersionValueApplier());
 		}
 
 		DialogObjectToolkit.createLabel(parent, " ");

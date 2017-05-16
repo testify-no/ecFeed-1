@@ -61,7 +61,7 @@ public class VersionCheckerAndRegistratorTest {
 
 				HttpProperty property0 = properties.get(0);
 				assertEquals("User-Agent", property0.getKey());
-				assertEquals("ecFeed; unknownVersion; Linux;", property0.getValue());
+				assertEquals("ecFeed; EP; unknownVersion; All;", property0.getValue());
 
 				HttpProperty property1 = properties.get(1);
 				assertEquals("Ec-Id", property1.getKey());
