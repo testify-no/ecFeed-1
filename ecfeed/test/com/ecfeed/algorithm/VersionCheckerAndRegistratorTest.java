@@ -52,7 +52,7 @@ public class VersionCheckerAndRegistratorTest {
 			@Override
 			public String sendGetRequest(String url, List<HttpProperty> properties) throws RuntimeException {
 
-				if (!StringHelper.isEqual(url, "http://localhost/ecfeed/get_releases.php"))
+				if (!StringHelper.isEqual(url, "http://www.ecfeed.com/get_releases.php"))
 					return null;
 
 				if (properties.size() != 2) {

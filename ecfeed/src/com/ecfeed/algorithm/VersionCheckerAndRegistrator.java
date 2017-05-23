@@ -38,7 +38,7 @@ public class VersionCheckerAndRegistrator {
 	private static CurrentReleases sendAndParseRequest(
 			IHttpComunicator httpComunicator, List<HttpProperty> properties) throws Exception {
 
-		String url = "http://localhost/ecfeed/get_releases.php";
+		String url = "http://www.ecfeed.com/get_releases.php";
 
 		String xmlResponse = httpComunicator.sendGetRequest(url, properties);
 
