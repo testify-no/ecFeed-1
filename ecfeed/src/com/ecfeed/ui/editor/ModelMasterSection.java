@@ -738,6 +738,7 @@ public class ModelMasterSection extends TreeViewerSection{
 		(new Runnable() {
 			public void run() {
 				CheckForUpdatesDialog.openConditionally();
+				refresh();
 			}
 		});
 	}
