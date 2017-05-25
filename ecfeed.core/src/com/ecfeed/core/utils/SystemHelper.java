@@ -21,9 +21,15 @@ public class SystemHelper {
 		return System.getProperty("java.io.tmpdir");
 	}
 
-	public static String getOperatingSystem() {
+	public static String getOperatingSystemType() {
 
-		return System.getProperty("os.name");
+		String systemName = System.getProperty("os.name");
+		
+		if (systemName.contains("Windows")) {
+			return "Windows";
+		}
+		
+		return systemName;
 	}	
 
 	public static String getOperatingSystemArchitecture() {
@@ -38,7 +44,7 @@ public class SystemHelper {
 
 	public static boolean isOperatingSystemLinux() {
 
-		String os = getOperatingSystem();
+		String os = getOperatingSystemType();
 
 		if (os.equals("Linux")) {
 			return true;
@@ -48,7 +54,7 @@ public class SystemHelper {
 
 	public static boolean isOperatingSystemMacOs() {
 
-		String os = getOperatingSystem();
+		String os = getOperatingSystemType();
 
 		if (os.equals("Mac OS X")) {
 			return true;
@@ -82,7 +88,7 @@ public class SystemHelper {
 		String source = 
 				getLocalHostName() + "+" +
 				getUserName() + "+ " +
-				getOperatingSystem();
+				getOperatingSystemType();
 
 		return CheckSumHelper.calculateSha1(source);
 	}

@@ -54,7 +54,7 @@ public class VersionCheckerAndRegistrator {
 
 		String operatingSystem;
 		if (ApplicationContext.isStandaloneApplication()) {
-			operatingSystem = SystemHelper.getOperatingSystem();
+			operatingSystem = SystemHelper.getOperatingSystemType();
 		} else {
 			operatingSystem = "All";
 		}
