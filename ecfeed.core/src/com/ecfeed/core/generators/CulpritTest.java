@@ -14,35 +14,54 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.Test;
 
 public class CulpritTest {
-	
-	
+
+
 	@Test
-	public void ShouldReturnOccurenceAndFailureCount(){
-		List<DimItem> Items = new ArrayList<DimItem>();
+	public void ShouldReturnZeroOccurenceAndFailureCount(){
 		Culprit culprit = new Culprit(new ArrayList<DimItem>());
 		assertEquals(0, culprit.getFailureCount());
 		assertEquals(0, culprit.getOccurenceCount());
-		assertEquals(Items, culprit.getItem());		
 	}
-	
+
 	@Test
 	public void ShouldIncrementOccurenceAndFailureCount(){
-		Culprit culprit = new Culprit(new ArrayList<DimItem>());
-		culprit.incrementFailures(culprit.getFailureCount());
-		assertEquals(1, culprit.getFailureCount());
-		culprit.incrementOccurenceCount(culprit.getOccurenceCount());
-		assertEquals(1, culprit.getOccurenceCount());
-		culprit.aggregateOccurencesAndFailures(culprit);
-		assertEquals(2, culprit.getFailureCount());
+		Culprit culpritSum = new Culprit(new ArrayList<DimItem>());
+
+		assertEquals(0, culpritSum.getFailureCount());
+
+		culpritSum.incrementFailures(1);
+		assertEquals(1, culpritSum.getFailureCount());
+		culpritSum.incrementFailures(1);
+		assertEquals(2, culpritSum.getFailureCount());
+
+		culpritSum.incrementOccurenceCount(1);
+		assertEquals(1, culpritSum.getOccurenceCount());
+		culpritSum.incrementOccurenceCount(1);
+		assertEquals(2, culpritSum.getOccurenceCount());
 	}
-	
+
 	@Test
-	public void ShouldSayIfTheTupleMatchesAnyOther(){
+	public void ShouldAggregateOccurencesAndFailures(){
+		Culprit culpritSum = new Culprit(new ArrayList<DimItem>());
+		Culprit culpritOne = new Culprit(new ArrayList<DimItem>(), 1, 1);
+
+		assertEquals(0, culpritSum.getFailureCount());
+
+		culpritSum.aggregateOccurencesAndFailures(culpritOne);
+		assertEquals(1, culpritSum.getFailureCount());
+		assertEquals(1, culpritSum.getOccurenceCount());
+
+		culpritSum.aggregateOccurencesAndFailures(culpritOne);
+		assertEquals(2, culpritSum.getFailureCount());
+		assertEquals(2, culpritSum.getOccurenceCount());
+	}	
+
+	@Test
+	public void ShouldMatchEmptyCulprits(){
 		Culprit candidate = new Culprit(new ArrayList<DimItem>());
 		Culprit culprit = new Culprit(new ArrayList<DimItem>());
 		assertTrue(culprit.isTupleMatch(candidate));

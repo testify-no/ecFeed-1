@@ -18,9 +18,9 @@ public class TestResultsAnalysis {
 	private List<Culprit> fCulprits = new ArrayList<Culprit>();
 
 	public void aggregateCulprit(Culprit culpritToAggregate) {
-		
+
 		Culprit culpritFromList = findCulpritByTuple(culpritToAggregate);
-		
+
 		if (culpritFromList == null) {
 			fCulprits.add(culpritToAggregate);
 		} else {
@@ -29,13 +29,36 @@ public class TestResultsAnalysis {
 	}
 
 	private Culprit findCulpritByTuple(Culprit culpritWithTupleToFind) {
-		
+
 		for (Culprit culprit: fCulprits) {
 			if (culprit.isTupleMatch(culpritWithTupleToFind)) {
 				return culprit;
 			}
 		}
 		return null;
+	}
+
+	public int getCulpritCount() {
+		return fCulprits.size();
+	}
+
+	public Culprit getCulprit(int index) {
+		return fCulprits.get(index).makeClone();
+	}
+
+	public boolean containsCulprit(Culprit culprit) {
+
+		int culpritCount = fCulprits.size();
+
+		for (int culpritIndex = 0; culpritIndex < culpritCount; culpritIndex++) {
+			Culprit culpritFromList = fCulprits.get(culpritIndex);
+
+			if (culprit.isMatch(culpritFromList)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 }
