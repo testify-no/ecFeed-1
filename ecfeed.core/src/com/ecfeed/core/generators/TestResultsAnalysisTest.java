@@ -141,7 +141,7 @@ public class TestResultsAnalysisTest {
 	private static Culprit createCulpritWith1Dimension(String testInputValue1, int occurences, int failures) {
 
 		List<DimItem> testInput = new ArrayList<DimItem>();
-		DimItem dimension1 = new DimItem(testInputValue1, 0);
+		DimItem dimension1 = new DimItem(0, testInputValue1);
 		testInput.add(dimension1);
 
 		Culprit culprit = new Culprit(testInput, occurences, failures);
@@ -152,10 +152,10 @@ public class TestResultsAnalysisTest {
 
 		List<DimItem> testInput = new ArrayList<DimItem>();
 
-		DimItem dimension1 = new DimItem(testInputValue1, 0);
+		DimItem dimension1 = new DimItem(0, testInputValue1);
 		testInput.add(dimension1);
 
-		DimItem dimension2 = new DimItem(testInputValue2, 0);
+		DimItem dimension2 = new DimItem(0, testInputValue2);
 		testInput.add(dimension2);
 
 		Culprit culprit = new Culprit(testInput, occurences, failures);

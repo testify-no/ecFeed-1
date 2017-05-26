@@ -20,8 +20,8 @@ public class DimItemTest {
 	@Test
 	public void shouldReturnDimensionItem() {
 
-		int item = 0;
-		String dim = new String();
+		String item = new String();
+		int dim = 0;
 
 		DimItem dimitem = new DimItem(dim, item);
 
@@ -30,15 +30,14 @@ public class DimItemTest {
 	}
 
 	@Test
-	public void shouldCompareTuples(){
-		int item = 0;
-		String dim = new String();
-		DimItem dimitem = new DimItem(dim, item);
+	public void shouldCompareItems(){
 
-		int item2 = 10;
-		String dim2 = "blabla";
-		DimItem candidate = new DimItem(dim2, item2);
-		assertFalse(dimitem.isMatch(candidate));
+		DimItem dimitem1 = new DimItem(0, new String());
 
+		DimItem dimitem2 = new DimItem(0, new String());
+		assertFalse(dimitem1.isMatch(dimitem2));
+
+		DimItem candidate3 = new DimItem(10, "blabla");
+		assertFalse(dimitem1.isMatch(candidate3));
 	}
 }

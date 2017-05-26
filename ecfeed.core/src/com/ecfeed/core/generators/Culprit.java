@@ -10,6 +10,7 @@
 
 package com.ecfeed.core.generators;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Culprit {
@@ -27,7 +28,52 @@ public class Culprit {
 		fTestInput = testInput;
 		fOccurenceCount = occurenceCount;
 		fFailureCount = failureCount;
+	}
+
+	public Culprit(DimItem[] testInput) {
+		this(testInput, 0, 0);		
+	}
+
+	public Culprit(DimItem[] testInput, int occurenceCount, int failureCount) {
+
+		List<DimItem> testInputList = new ArrayList<DimItem>();
+
+		for (DimItem dimItem : testInput) {
+			testInputList.add(dimItem);
+		}
+
+		fTestInput = testInputList;
+		fOccurenceCount = occurenceCount;
+		fFailureCount = failureCount;
 	}	
+
+	@Override
+	public String toString() {
+
+		StringBuilder sb = new StringBuilder();
+
+		sb.append("occurences:");
+		sb.append(fOccurenceCount);
+		sb.append(", fails:");
+		sb.append(fFailureCount);
+		sb.append(", items:[");
+
+		boolean firstTime = true;
+
+		for (DimItem dimItem : fTestInput) {
+
+			if (!firstTime) {
+				sb.append(", ");
+			}
+
+			sb.append(dimItem.toString());
+			firstTime = false;
+		}
+
+		sb.append("]");
+
+		return sb.toString();
+	}
 
 	int getOccurenceCount() {
 		return fOccurenceCount;

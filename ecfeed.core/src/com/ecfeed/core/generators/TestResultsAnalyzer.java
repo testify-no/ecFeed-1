@@ -20,59 +20,59 @@ public class TestResultsAnalyzer {
 
 	TestResultsAnalysis fTestResultAnalysis = new TestResultsAnalysis();
 
-	public TestResultsAnalysis generateAnalysis(List<TestResultDescription> testresults, int n1, int n2) {
-		
-		for (TestResultDescription testresult : testresults) {
-			processTestResult(testresult, n1, n2);
+	public TestResultsAnalysis generateAnalysis(List<TestResultDescription> testResults, int n1, int n2) {
+
+		for (TestResultDescription testResult : testResults) {
+			processTestResult(testResult, n1, n2);
 		}
-		
+
 		return fTestResultAnalysis;
 	}
-	
-	private void processTestResult(TestResultDescription testresult, int n1, int n2) {
-		
-		for (int n = n1; n <n2; n++) {
-			processTestResultForN(testresult, n);
+
+	private void processTestResult(TestResultDescription testResult, int n1, int n2) {
+
+		for (int n = n1; n <= n2; n++) {
+			processTestResultForN(testResult, n);
 		}
 	}
 
-	private void processTestResultForN(TestResultDescription testresult, int n) {
-		
+	private void processTestResultForN(TestResultDescription testResult, int n) {
+
 		Tuples<DimItem> tuples = new Tuples<DimItem>(
-				createListOfDimItems(testresult.getTestArguments()), n);
-		
+				createListOfDimItems(testResult.getTestArguments()), n);
+
 		Set<List<DimItem>> allTuples = tuples.getAll();
-		
+
 		for (List<DimItem> tuple: allTuples) {
-			aggregateTuple(tuple, testresult.getResult());
+			aggregateTuple(tuple, testResult.getResult());
 		}
 	}
-	
+
 	private void aggregateTuple(List<DimItem> tuple, boolean result) {
-		
-		Culprit culprit = new Culprit(tuple);
-		
-		if (!result) {
-			culprit.aggregateOccurencesAndFailures(culprit);	
-		} else {
-			culprit.incrementOccurenceCount(culprit.getOccurenceCount());
+
+		int culpritFailureCount = 0;
+
+		if (result == false) {
+			culpritFailureCount = 1;
 		}
-		
+
+		Culprit culprit = new Culprit(tuple, 1, culpritFailureCount);
+
 		fTestResultAnalysis.aggregateCulprit(culprit);
 	}
 
 	private List<DimItem> createListOfDimItems(List<String> items) {
-		
+
 		List<DimItem> dimItems = new ArrayList<DimItem>();
 		int dim = 0;
-		
+
 		for (String item: items) {
-			DimItem dimitem = new DimItem(item, dim);
+			DimItem dimitem = new DimItem(dim, item);
 			dimItems.add(dimitem);
 			dim += 1;
 		}
-		
+
 		return dimItems;
 	}
-	
+
 }

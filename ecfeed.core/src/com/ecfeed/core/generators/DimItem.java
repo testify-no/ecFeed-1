@@ -11,31 +11,44 @@
 package com.ecfeed.core.generators;
 
 public class DimItem { // TODO - DimensionedItem<String> instead (add necessary methods) and delete DimItem, 
-					   // TODO - move tests to DimensionedItemTest   
+	// TODO - move tests to DimensionedItemTest   
 
-	String fDimension; // e.g. index of method parameter
-	int fItem;
+	int fDimension; // e.g. index of method parameter
+	String fItem;
 
-	public DimItem(String dimension, int item) {
+	public DimItem(int dimension, String item) {
 		fDimension = dimension;
 		fItem = item;
 	}
-	
-	String getDim(){
+
+	int getDim(){
 		return fDimension;
 	}
-	
-	int getItem(){
+
+	String getItem(){
 		return fItem;
 	}
-	
+
 	public boolean isMatch(DimItem dimItem) {
-		
+
 		if (fItem == dimItem.getItem() && fDimension == dimItem.getDim()) {
 			return true;
 		} else {
 			return false;
 		}
 	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append("{");
+		sb.append(fDimension);
+		sb.append(", ");
+		sb.append(fItem);
+		sb.append("}");
+
+		return sb.toString();
+	}	
 
 }
