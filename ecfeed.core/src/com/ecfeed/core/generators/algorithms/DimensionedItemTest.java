@@ -7,37 +7,37 @@
  * http://www.eclipse.org/legal/epl-v10.html 
  *  
  *******************************************************************************/
+package com.ecfeed.core.generators.algorithms;
 
-package com.ecfeed.core.generators;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-public class DimItemTest {
 
+public class DimensionedItemTest {
+	
 	@Test
 	public void shouldReturnDimensionItem() {
 
 		String item = new String();
 		int dim = 0;
 
-		DimItem dimitem = new DimItem(dim, item);
+		DimensionedItem<String> item2 = new DimensionedItem<String>(dim, item);
 
-		assertEquals(item, dimitem.getItem());
-		assertEquals(dim, dimitem.getDim());
+		assertEquals(item, item2.getItem());
+		assertEquals(dim, item2.getDimension());
 	}
 
 	@Test
 	public void shouldCompareItems(){
 
-		DimItem dimitem1 = new DimItem(0, new String());
+		DimensionedItem<String> item1 = new DimensionedItem<String>(0, new String());
 
-		DimItem dimitem2 = new DimItem(0, new String());
-		assertFalse(dimitem1.isMatch(dimitem2));
+		DimensionedItem<String> item2 = new DimensionedItem<String>(0, new String());
+		assertTrue(item1.equals(item2));
 
-		DimItem candidate3 = new DimItem(10, "blabla");
-		assertFalse(dimitem1.isMatch(candidate3));
+		DimensionedItem<String> item3 = new DimensionedItem<String>(10, "blabla");
+		assertFalse(item1.equals(item3));
 	}
+	
 }

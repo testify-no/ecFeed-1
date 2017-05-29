@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import com.ecfeed.core.generators.algorithms.DimensionedString;
 import com.ecfeed.core.generators.algorithms.Tuples;
 
 public class TestResultsAnalyzer {
@@ -39,17 +40,17 @@ public class TestResultsAnalyzer {
 
 	private void processTestResultForN(TestResultDescription testResult, int n) {
 
-		Tuples<DimItem> tuples = new Tuples<DimItem>(
-				createListOfDimItems(testResult.getTestArguments()), n);
+		Tuples<DimensionedString> tuples = new Tuples<DimensionedString>(
+				createListOfDimensionedStrings(testResult.getTestArguments()), n);
 
-		Set<List<DimItem>> allTuples = tuples.getAll();
+		Set<List<DimensionedString>> allTuples = tuples.getAll();
 
-		for (List<DimItem> tuple: allTuples) {
+		for (List<DimensionedString> tuple: allTuples) {
 			aggregateTuple(tuple, testResult.getResult());
 		}
 	}
 
-	private void aggregateTuple(List<DimItem> tuple, boolean result) {
+	private void aggregateTuple(List<DimensionedString> tuple, boolean result) {
 
 		int culpritFailureCount = 0;
 
@@ -62,18 +63,18 @@ public class TestResultsAnalyzer {
 		fTestResultAnalysis.aggregateCulprit(culprit);
 	}
 
-	private List<DimItem> createListOfDimItems(List<String> items) {
+	private List<DimensionedString> createListOfDimensionedStrings(List<String> items) {
 
-		List<DimItem> dimItems = new ArrayList<DimItem>();
+		List<DimensionedString> DimensionedStrings = new ArrayList<DimensionedString>();
 		int dim = 0;
 
 		for (String item: items) {
-			DimItem dimitem = new DimItem(dim, item);
-			dimItems.add(dimitem);
+			DimensionedString DimensionedString = new DimensionedString(dim, item);
+			DimensionedStrings.add(DimensionedString);
 			dim += 1;
 		}
 
-		return dimItems;
+		return DimensionedStrings;
 	}
 
 }

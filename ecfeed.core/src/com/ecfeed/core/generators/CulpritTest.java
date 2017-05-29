@@ -17,19 +17,21 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
+import com.ecfeed.core.generators.algorithms.DimensionedString;
+
 public class CulpritTest {
 
 
 	@Test
 	public void ShouldReturnZeroOccurenceAndFailureCount(){
-		Culprit culprit = new Culprit(new ArrayList<DimItem>());
+		Culprit culprit = new Culprit();
 		assertEquals(0, culprit.getFailureCount());
 		assertEquals(0, culprit.getOccurenceCount());
 	}
 
 	@Test
 	public void ShouldIncrementOccurenceAndFailureCount(){
-		Culprit culpritSum = new Culprit(new ArrayList<DimItem>());
+		Culprit culpritSum = new Culprit();
 
 		assertEquals(0, culpritSum.getFailureCount());
 
@@ -46,8 +48,8 @@ public class CulpritTest {
 
 	@Test
 	public void ShouldAggregateOccurencesAndFailures(){
-		Culprit culpritSum = new Culprit(new ArrayList<DimItem>());
-		Culprit culpritOne = new Culprit(new ArrayList<DimItem>(), 1, 1);
+		Culprit culpritSum = new Culprit();
+		Culprit culpritOne = new Culprit(new ArrayList<DimensionedString>(), 1, 1);
 
 		assertEquals(0, culpritSum.getFailureCount());
 
@@ -62,8 +64,8 @@ public class CulpritTest {
 
 	@Test
 	public void ShouldMatchEmptyCulprits(){
-		Culprit candidate = new Culprit(new ArrayList<DimItem>());
-		Culprit culprit = new Culprit(new ArrayList<DimItem>());
+		Culprit candidate = new Culprit();
+		Culprit culprit = new Culprit();
 		assertTrue(culprit.isTupleMatch(candidate));
 	}
 

@@ -18,6 +18,8 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.ecfeed.core.generators.algorithms.DimensionedString;
+
 public class TestResultsAnalyzerTest {
 
 	@Test
@@ -57,7 +59,7 @@ public class TestResultsAnalyzerTest {
 		Culprit culprit = testResultsAnalysis.getCulprit(0);
 
 
-		Culprit expectedCulprit = new Culprit(new DimItem[]{new DimItem(0, "1")}, 1, expectedFailureCount);
+		Culprit expectedCulprit = new Culprit(new DimensionedString[]{new DimensionedString(0, "1")}, 1, expectedFailureCount);
 
 		assertTrue(expectedCulprit.isBasicMatch(culprit));		
 	}
@@ -139,31 +141,31 @@ public class TestResultsAnalyzerTest {
 
 	private void checkCulpritsForN1(TestResultsAnalysis testResultsAnalysis) {
 
-		Culprit culprit = new Culprit(new DimItem[]{ new DimItem(0, "1") }, 1, 0);
+		Culprit culprit = new Culprit(new DimensionedString[]{ new DimensionedString(0, "1") }, 1, 0);
 		assertTrue(testResultsAnalysis.containsCulprit(culprit));
 
-		culprit = new Culprit(new DimItem[]{ new DimItem(1, "2") }, 1, 0);
+		culprit = new Culprit(new DimensionedString[]{ new DimensionedString(1, "2") }, 1, 0);
 		assertTrue(testResultsAnalysis.containsCulprit(culprit));
 
-		culprit = new Culprit(new DimItem[]{ new DimItem(2, "3") }, 1, 0);
+		culprit = new Culprit(new DimensionedString[]{ new DimensionedString(2, "3") }, 1, 0);
 		assertTrue(testResultsAnalysis.containsCulprit(culprit));		
 	}
 
 	private void checkCulpritsForN2(TestResultsAnalysis testResultsAnalysis) {
 
-		Culprit culprit = new Culprit(new DimItem[]{ new DimItem(0, "1"), new DimItem(1, "2") }, 1, 0);
+		Culprit culprit = new Culprit(new DimensionedString[]{ new DimensionedString(0, "1"), new DimensionedString(1, "2") }, 1, 0);
 		assertTrue(testResultsAnalysis.containsCulprit(culprit));
 
-		culprit = new Culprit(new DimItem[]{ new DimItem(1, "2"), new DimItem(2, "3") }, 1, 0);
+		culprit = new Culprit(new DimensionedString[]{ new DimensionedString(1, "2"), new DimensionedString(2, "3") }, 1, 0);
 		assertTrue(testResultsAnalysis.containsCulprit(culprit));		
 
-		culprit = new Culprit(new DimItem[]{ new DimItem(0, "1"), new DimItem(2, "3") }, 1, 0);
+		culprit = new Culprit(new DimensionedString[]{ new DimensionedString(0, "1"), new DimensionedString(2, "3") }, 1, 0);
 		assertTrue(testResultsAnalysis.containsCulprit(culprit));		
 	}
 
 	private void checkCulpritsForN3(TestResultsAnalysis testResultsAnalysis) {
 
-		Culprit culprit = new Culprit(new DimItem[]{ new DimItem(0, "1"), new DimItem(1, "2"), new DimItem(2, "3") }, 1, 0);
+		Culprit culprit = new Culprit(new DimensionedString[]{ new DimensionedString(0, "1"), new DimensionedString(1, "2"), new DimensionedString(2, "3") }, 1, 0);
 		assertTrue(testResultsAnalysis.containsCulprit(culprit));
 	}
 
@@ -187,22 +189,22 @@ public class TestResultsAnalyzerTest {
 		assertEquals(5, testResultsAnalysis.getCulpritCount());
 
 
-		Culprit culprit = new Culprit(new DimItem[]{ new DimItem(0, "1") }, 2, 2);
+		Culprit culprit = new Culprit(new DimensionedString[]{ new DimensionedString(0, "1") }, 2, 2);
 		assertTrue(testResultsAnalysis.containsCulprit(culprit));
 
 		Culprit culpritZero = testResultsAnalysis.getCulprit(0);
 		assertTrue(culprit.isBasicMatch(culpritZero));
 
-		culprit = new Culprit(new DimItem[]{ new DimItem(1, "2") }, 1, 1);
+		culprit = new Culprit(new DimensionedString[]{ new DimensionedString(1, "2") }, 1, 1);
 		assertTrue(testResultsAnalysis.containsCulprit(culprit));
 
-		culprit = new Culprit(new DimItem[]{ new DimItem(1, "3") }, 1, 1);
+		culprit = new Culprit(new DimensionedString[]{ new DimensionedString(1, "3") }, 1, 1);
 		assertTrue(testResultsAnalysis.containsCulprit(culprit));		
 
-		culprit = new Culprit(new DimItem[]{ new DimItem(0, "2") }, 1, 0);
+		culprit = new Culprit(new DimensionedString[]{ new DimensionedString(0, "2") }, 1, 0);
 		assertTrue(testResultsAnalysis.containsCulprit(culprit));
 
-		culprit = new Culprit(new DimItem[]{ new DimItem(1, "1") }, 1, 0);
+		culprit = new Culprit(new DimensionedString[]{ new DimensionedString(1, "1") }, 1, 0);
 		assertTrue(testResultsAnalysis.containsCulprit(culprit));		
 	}
 
@@ -212,13 +214,13 @@ public class TestResultsAnalyzerTest {
 
 		assertEquals(3, testResultsAnalysis.getCulpritCount());
 
-		Culprit culprit = new Culprit(new DimItem[]{ new DimItem(0, "2"), new DimItem(1, "1") }, 1, 0);
+		Culprit culprit = new Culprit(new DimensionedString[]{ new DimensionedString(0, "2"), new DimensionedString(1, "1") }, 1, 0);
 		assertTrue(testResultsAnalysis.containsCulprit(culprit));
 
-		culprit = new Culprit(new DimItem[]{ new DimItem(0, "1"), new DimItem(1, "2") }, 1, 1);
+		culprit = new Culprit(new DimensionedString[]{ new DimensionedString(0, "1"), new DimensionedString(1, "2") }, 1, 1);
 		assertTrue(testResultsAnalysis.containsCulprit(culprit));
 
-		culprit = new Culprit(new DimItem[]{ new DimItem(0, "1"), new DimItem(1, "3") }, 1, 1);
+		culprit = new Culprit(new DimensionedString[]{ new DimensionedString(0, "1"), new DimensionedString(1, "3") }, 1, 1);
 		assertTrue(testResultsAnalysis.containsCulprit(culprit));		
 	}
 
@@ -245,13 +247,13 @@ public class TestResultsAnalyzerTest {
 		//		System.out.println(testResultsAnalysis.toString());
 
 		Culprit culprit9 = testResultsAnalysis.getCulprit(9);
-		assertTrue(culprit9.isBasicMatch(new Culprit(new DimItem[]{ new DimItem(2, "3") }, 4, 3)));
+		assertTrue(culprit9.isBasicMatch(new Culprit(new DimensionedString[]{ new DimensionedString(2, "3") }, 4, 3)));
 
 		Culprit culprit10 = testResultsAnalysis.getCulprit(10);
-		assertTrue(culprit10.isBasicMatch(new Culprit(new DimItem[]{ new DimItem(1, "2") }, 3, 2)));		
+		assertTrue(culprit10.isBasicMatch(new Culprit(new DimensionedString[]{ new DimensionedString(1, "2") }, 3, 2)));		
 
 		Culprit culprit11 = testResultsAnalysis.getCulprit(11);
-		assertTrue(culprit11.isBasicMatch(new Culprit(new DimItem[]{ new DimItem(4, "8") }, 3, 1)));		
+		assertTrue(culprit11.isBasicMatch(new Culprit(new DimensionedString[]{ new DimensionedString(4, "8") }, 3, 1)));		
 	}
 
 	private void checkGeneration5by5forN2(List<TestResultDescription> testResultDescrs) {
@@ -261,12 +263,16 @@ public class TestResultsAnalyzerTest {
 
 		//		System.out.println(testResultsAnalysis.toString());
 
-		Culprit culpritWithTupleToFind = new Culprit( new DimItem[]{ new DimItem(1, "2"), new DimItem(2, "3") }, 3, 2);
+		Culprit culpritWithTupleToFind = 
+				new Culprit( new DimensionedString[]{ 
+						new DimensionedString(1, "2"), new DimensionedString(2, "3") }, 3, 2);
 		Culprit foundCulprit = testResultsAnalysis.findCulpritByTuple(culpritWithTupleToFind);
 		assertTrue(culpritWithTupleToFind.isBasicMatch(foundCulprit));
 		assertTrue(foundCulprit.getFailureIndex() > 6600);
 
-		culpritWithTupleToFind = new Culprit( new DimItem[]{ new DimItem(2, "3"), new DimItem(4, "8") }, 2, 1);
+		culpritWithTupleToFind = 
+				new Culprit( new DimensionedString[]{ 
+						new DimensionedString(2, "3"), new DimensionedString(4, "8") }, 2, 1);
 		foundCulprit = testResultsAnalysis.findCulpritByTuple(culpritWithTupleToFind);
 		assertTrue(culpritWithTupleToFind.isBasicMatch(foundCulprit));
 		assertTrue(foundCulprit.getFailureIndex() > 5000);		

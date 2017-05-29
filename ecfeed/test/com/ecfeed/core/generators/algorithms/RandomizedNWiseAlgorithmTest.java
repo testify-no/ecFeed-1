@@ -269,7 +269,7 @@ public class RandomizedNWiseAlgorithmTest {
 		for (int i = 0; i < count; i++)
 			list.add(-1);
 		for (DimensionedItem<Integer> v : ntup)
-			list.set(v.fDimension, v.fItem);
+			list.set(v.getDimension(), v.getItem());
 
 		String str = "< ";
 		for (Integer v : list)
@@ -360,8 +360,8 @@ public class RandomizedNWiseAlgorithmTest {
 					@SuppressWarnings("unchecked")
 					List<Integer> test = (List<Integer>) method.invoke(alg, nTuple);
 					for (DimensionedItem<Integer> v : nTuple) {
-						assertEquals(v.fItem, test.get(v.fDimension));
-						test.set(v.fDimension, -1);
+						assertEquals(v.getItem(), test.get(v.getDimension()));
+						test.set(v.getDimension(), -1);
 					}
 
 					// assumption: each test represents a binary number

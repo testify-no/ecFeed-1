@@ -18,6 +18,8 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.ecfeed.core.generators.algorithms.DimensionedString;
+
 public class TestResultsAnalysisTest {
 
 	@Test
@@ -140,8 +142,8 @@ public class TestResultsAnalysisTest {
 
 	private static Culprit createCulpritWith1Dimension(String testInputValue1, int occurences, int failures) {
 
-		List<DimItem> testInput = new ArrayList<DimItem>();
-		DimItem dimension1 = new DimItem(0, testInputValue1);
+		List<DimensionedString> testInput = new ArrayList<DimensionedString>();
+		DimensionedString dimension1 = new DimensionedString(0, testInputValue1);
 		testInput.add(dimension1);
 
 		Culprit culprit = new Culprit(testInput, occurences, failures);
@@ -150,12 +152,12 @@ public class TestResultsAnalysisTest {
 
 	private static Culprit createCulpritWith2Dimensions(String testInputValue1, String testInputValue2, int occurences, int failures) {
 
-		List<DimItem> testInput = new ArrayList<DimItem>();
+		List<DimensionedString> testInput = new ArrayList<DimensionedString>();
 
-		DimItem dimension1 = new DimItem(0, testInputValue1);
+		DimensionedString dimension1 = new DimensionedString(0, testInputValue1);
 		testInput.add(dimension1);
 
-		DimItem dimension2 = new DimItem(0, testInputValue2);
+		DimensionedString dimension2 = new DimensionedString(0, testInputValue2);
 		testInput.add(dimension2);
 
 		Culprit culprit = new Culprit(testInput, occurences, failures);

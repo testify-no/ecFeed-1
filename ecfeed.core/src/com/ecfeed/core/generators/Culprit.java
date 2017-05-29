@@ -13,39 +13,45 @@ package com.ecfeed.core.generators;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ecfeed.core.generators.algorithms.DimensionedString;
+
 public class Culprit {
-	
+
 	private static class OtherData {
 		public int fFailureIndex = 0;
 	}
 
-	private List<DimItem> fTestInput;
+	private List<DimensionedString> fTestInput;
 	private int fOccurenceCount = 0;	
 	private int fFailureCount = 0;
 	private OtherData fOtherData;
 
 
-	public Culprit(List<DimItem> testInput) {
+	public Culprit() {
+		this(new ArrayList<DimensionedString>(), 0, 0);		
+	}
+
+	public Culprit(List<DimensionedString> testInput) {
 		this(testInput, 0, 0);		
 	}
 
-	public Culprit(List<DimItem> testInput, int occurenceCount, int failureCount) {
+	public Culprit(List<DimensionedString> testInput, int occurenceCount, int failureCount) {
 		fTestInput = testInput;
 		fOccurenceCount = occurenceCount;
 		fFailureCount = failureCount;
 		fOtherData = new OtherData();
 	}
 
-	public Culprit(DimItem[] testInput) {
+	public Culprit(DimensionedString[] testInput) {
 		this(testInput, 0, 0);		
 	}
 
-	public Culprit(DimItem[] testInput, int occurenceCount, int failureCount) {
+	public Culprit(DimensionedString[] testInput, int occurenceCount, int failureCount) {
 
-		List<DimItem> testInputList = new ArrayList<DimItem>();
+		List<DimensionedString> testInputList = new ArrayList<DimensionedString>();
 
-		for (DimItem dimItem : testInput) {
-			testInputList.add(dimItem);
+		for (DimensionedString DimensionedString : testInput) {
+			testInputList.add(DimensionedString);
 		}
 
 		fTestInput = testInputList;
@@ -68,13 +74,13 @@ public class Culprit {
 
 		boolean firstTime = true;
 
-		for (DimItem dimItem : fTestInput) {
+		for (DimensionedString DimensionedString : fTestInput) {
 
 			if (!firstTime) {
 				sb.append(", ");
 			}
 
-			sb.append(dimItem.toString());
+			sb.append(DimensionedString.toString());
 			firstTime = false;
 		}
 
@@ -86,14 +92,14 @@ public class Culprit {
 
 	public static int compareForSort(Culprit culprit1, Culprit culprit2) {
 
-        if (culprit1.fOtherData.fFailureIndex > culprit2.fOtherData.fFailureIndex) {
-        	return -1;
-        }
-        
-        if (culprit1.fOtherData.fFailureIndex < culprit2.fOtherData.fFailureIndex) {
-        	return 1;
-        }	        
-		
+		if (culprit1.fOtherData.fFailureIndex > culprit2.fOtherData.fFailureIndex) {
+			return -1;
+		}
+
+		if (culprit1.fOtherData.fFailureIndex < culprit2.fOtherData.fFailureIndex) {
+			return 1;
+		}	        
+
 		if (culprit1.fTestInput.size() > culprit2.fTestInput.size()) {
 			return -1;
 		}
@@ -107,10 +113,10 @@ public class Culprit {
 
 		for (int index = 0; index < size; index++) {
 
-			DimItem dimItem1 = culprit1.fTestInput.get(index);
-			DimItem dimItem2 = culprit2.fTestInput.get(index);
+			DimensionedString DimensionedString1 = culprit1.fTestInput.get(index);
+			DimensionedString DimensionedString2 = culprit2.fTestInput.get(index);
 
-			compareResult = DimItem.compareForSort(dimItem1, dimItem2);
+			compareResult = DimensionedString.compareForSort(DimensionedString1, DimensionedString2);
 
 			if (compareResult != 0) {
 				return compareResult;
@@ -127,16 +133,16 @@ public class Culprit {
 	public int getFailureCount() {
 		return fFailureCount;
 	}
-	
+
 	public int getFailureIndex() {
 		return fOtherData.fFailureIndex;
 	}
-	
+
 	public void setFailureIndex(int index) {
 		fOtherData.fFailureIndex = index;
 	}	
 
-	public List<DimItem> getItem() {
+	public List<DimensionedString> getItem() {
 		return fTestInput;
 	}
 
@@ -149,19 +155,19 @@ public class Culprit {
 	}
 
 	public void aggregateOccurencesAndFailures(Culprit culpritToAggregate) {
-		
+
 		incrementOccurenceCount(culpritToAggregate.getOccurenceCount());
 		incrementFailures(culpritToAggregate.getFailureCount());
 	}
 
 	public boolean isTupleMatch(Culprit other) {
-		
+
 		if(fTestInput.size() != other.fTestInput.size()) {
 			return false;
 		}
 
 		for(int index = 0; index < fTestInput.size(); index++) {
-			if(!fTestInput.get(index).isMatch(other.fTestInput.get(index))) {
+			if(!fTestInput.get(index).equals(other.fTestInput.get(index))) {
 				return false;
 			}
 		}
@@ -169,7 +175,7 @@ public class Culprit {
 	}
 
 	public boolean isBasicMatch(Culprit other) {
-		
+
 		if (other.fOccurenceCount != fOccurenceCount) {
 			return false;
 		}

@@ -196,7 +196,7 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 	private boolean tupleContainsIndex(List<DimensionedItem<E>> nTuple, int dimension) {
 
 		for (DimensionedItem<E> variable : nTuple) {
-			if (variable.fDimension == dimension) {
+			if (variable.getDimension() == dimension) {
 				return true;
 			}
 		}
@@ -219,7 +219,7 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 	private String toString(List<DimensionedItem<E>> nTuple) {
 		String str = "< ";
 		for (DimensionedItem<E> var : nTuple)
-			str += "(" + var.fDimension + ", " + var.fItem + ") ";
+			str += "(" + var.getDimension() + ", " + var.getItem() + ") ";
 		return str + ">";
 	}
 
@@ -247,7 +247,7 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 
 			boolean isCovered = true;
 			for (DimensionedItem<E> var : nTuple)
-				if (!test.get(var.fDimension).equals(var.fItem)) {
+				if (!test.get(var.getDimension()).equals(var.getItem())) {
 					isCovered = false;
 					break;
 				}
@@ -315,7 +315,7 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 			dims.put(i, i);
 
 		for (int i = 0; i < nTuple.size(); i++)
-			dims.remove(nTuple.get(i).fDimension);
+			dims.remove(nTuple.get(i).getDimension());
 		return dims;
 	}
 
@@ -415,7 +415,7 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 	private List<E> plugInTupleIntoList(List<DimensionedItem<E>> nTuple, List<E> listOfItems) {
 
 		for (DimensionedItem<E> var : nTuple) {
-			listOfItems.set(var.fDimension, var.fItem);
+			listOfItems.set(var.getDimension(), var.getItem());
 		}
 
 		return listOfItems;
@@ -462,7 +462,7 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 				for (int i = 0; i < getInput().size(); i++)
 					fullTuple.add(null);
 				for (DimensionedItem<E> var : tuple)
-					fullTuple.set(var.fDimension, var.fItem);
+					fullTuple.set(var.getDimension(), var.getItem());
 
 				Boolean check = checkConstraintsOnExtendedNTuple(fullTuple);
 				if (check == null)
