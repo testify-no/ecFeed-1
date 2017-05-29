@@ -7,6 +7,11 @@
 #                                                                                  
 #-------------------------------------------------------------------------------
 
+Version 1.12.0
+ - Extended constraints (<, <=, >, >= relations, comparing values of two parameters of the same type, compare a parameter to a value)
+ - Simplified export of test cases to cucumber's feature files (with a perspective to easily add more formats in the future)
+ - Check for updates on startup
+ 
 Version 1.11.0
  - Web runner
  - added node properties (implementation detail)
