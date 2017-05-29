@@ -38,7 +38,7 @@ public class TestResultsAnalysisTest {
 
 		Culprit aggregatedCulprit = testResultsAnalysis.getCulprit(0);
 
-		assertTrue(culprit.isMatch(aggregatedCulprit));
+		assertTrue(culprit.isBasicMatch(aggregatedCulprit));
 	}	
 
 	@Test

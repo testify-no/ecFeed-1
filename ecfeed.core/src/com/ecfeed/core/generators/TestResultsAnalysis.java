@@ -17,64 +17,22 @@ import java.util.List;
 
 public class TestResultsAnalysis {
 	
-	private static class ExtCulprit {
-		
-		private Culprit fCulprit;
-		private int fFailureIndex;
-		
-		public ExtCulprit(Culprit culprit) {
-			
-			fCulprit = culprit;
-			fFailureIndex = 0;
-		}
-		
-		public boolean isTupleMatch(ExtCulprit other) {
-			
-			if (fCulprit.isTupleMatch(other.fCulprit)) {
-				return true;
-			}
-			
-			return false;
-		}
-		
-		public void aggregateOccurencesAndFailures(ExtCulprit extCulpritToAggregate) {
-			
-			fCulprit.aggregateOccurencesAndFailures(extCulpritToAggregate.fCulprit);
-		}
-		
-		@Override
-		public String toString() {
-			
-			StringBuilder sb = new StringBuilder();
-			
-			sb.append("[failureIndex:");
-			sb.append(fFailureIndex);
-			sb.append(", culprit:");
-			sb.append(fCulprit.toString());
-			sb.append("]");
-			
-			return sb.toString();
-		}
-	}
-	
-	private List<ExtCulprit> fExtCulprits = new ArrayList<ExtCulprit>();
+	private List<Culprit> fCulprits = new ArrayList<Culprit>();
 
 	public void aggregateCulprit(Culprit culpritToAggregate) {
 		
-		ExtCulprit extCulpritToAggregate = new ExtCulprit(culpritToAggregate);
-		
-		ExtCulprit extCulpritFromList = findCulpritByTuple(extCulpritToAggregate);
+		Culprit extCulpritFromList = findCulpritByTuple(culpritToAggregate);
 
 		if (extCulpritFromList == null) {
-			fExtCulprits.add(extCulpritToAggregate);
+			fCulprits.add(culpritToAggregate);
 		} else {
-			extCulpritFromList.aggregateOccurencesAndFailures(extCulpritToAggregate);
+			extCulpritFromList.aggregateOccurencesAndFailures(culpritToAggregate);
 		}
 	}
+	
+	public Culprit findCulpritByTuple(Culprit culpritWithTupleToFind) {
 
-	private ExtCulprit findCulpritByTuple(ExtCulprit culpritWithTupleToFind) {
-
-		for (ExtCulprit extCulprit: fExtCulprits) {
+		for (Culprit extCulprit: fCulprits) {
 			if (extCulprit.isTupleMatch(culpritWithTupleToFind)) {
 				return extCulprit;
 			}
@@ -84,24 +42,24 @@ public class TestResultsAnalysis {
 
 	public int getCulpritCount() {
 		
-		return fExtCulprits.size();
+		return fCulprits.size();
 	}
 
 	public Culprit getCulprit(int index) {
 		
-		ExtCulprit extCulprit = fExtCulprits.get(index);
+		Culprit culprit = fCulprits.get(index);
 		
-		return extCulprit.fCulprit.makeClone();
+		return culprit.makeClone();
 	}
 
 	public boolean containsCulprit(Culprit culprit) {
 
-		int culpritCount = fExtCulprits.size();
+		int culpritCount = fCulprits.size();
 
 		for (int culpritIndex = 0; culpritIndex < culpritCount; culpritIndex++) {
-			ExtCulprit extCulpritFromList = fExtCulprits.get(culpritIndex);
+			Culprit culpritFromList = fCulprits.get(culpritIndex);
 
-			if (culprit.isMatch(extCulpritFromList.fCulprit)) {
+			if (culprit.isBasicMatch(culpritFromList)) {
 				return true;
 			}
 		}
@@ -116,7 +74,7 @@ public class TestResultsAnalysis {
 		
 		sb.append("Test results analysis:\n");
 		
-		for (ExtCulprit extCulprit : fExtCulprits) {
+		for (Culprit extCulprit : fCulprits) {
 			
 			sb.append("  ");
 			sb.append(extCulprit.toString());
@@ -130,36 +88,28 @@ public class TestResultsAnalysis {
 	
 	public void calculateFailureIndexes() {
 		
-		int total = fExtCulprits.size();
+		int total = fCulprits.size();
 		
-		for (ExtCulprit extCulprit : fExtCulprits) {
+		for (Culprit culprit : fCulprits) {
 			
-			int occurences = extCulprit.fCulprit.getOccurenceCount();
-			int failures = extCulprit.fCulprit.getFailureCount();
+			int occurences = culprit.getOccurenceCount();
+			int failures = culprit.getFailureCount();
 			
 			int failsByOccurs = 100 * failures / occurences;
 			int occurencesByTotal = 100 * occurences / total;
 			
-			extCulprit.fFailureIndex = 100 * failsByOccurs + occurencesByTotal; 
+			culprit.setFailureIndex(100 * failsByOccurs + occurencesByTotal); 
 		}
 
-		Collections.sort(fExtCulprits, new FailureIndexComparator());
+		Collections.sort(fCulprits, new FailureIndexComparator());
 	}
 	
-	class FailureIndexComparator implements Comparator<ExtCulprit> {
+	class FailureIndexComparator implements Comparator<Culprit> {
 		
 	    @Override
-	    public int compare(ExtCulprit extCulprit1, ExtCulprit extCulprit2) {
+	    public int compare(Culprit culprit1, Culprit culprit2) {
 
-	        if (extCulprit1.fFailureIndex > extCulprit2.fFailureIndex) {
-	        	return -1;
-	        }
-	        
-	        if (extCulprit1.fFailureIndex < extCulprit2.fFailureIndex) {
-	        	return 1;
-	        }	        
-	        
-	        return Culprit.compareForSort(extCulprit1.fCulprit, extCulprit2.fCulprit);
+	        return Culprit.compareForSort(culprit1, culprit2);
 	    }
 	}
 

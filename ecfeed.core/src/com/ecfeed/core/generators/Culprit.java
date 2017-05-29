@@ -14,10 +14,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Culprit {
+	
+	private static class OtherData {
+		public int fFailureIndex = 0;
+	}
 
 	private List<DimItem> fTestInput;
 	private int fOccurenceCount = 0;	
 	private int fFailureCount = 0;
+	private OtherData fOtherData;
 
 
 	public Culprit(List<DimItem> testInput) {
@@ -28,6 +33,7 @@ public class Culprit {
 		fTestInput = testInput;
 		fOccurenceCount = occurenceCount;
 		fFailureCount = failureCount;
+		fOtherData = new OtherData();
 	}
 
 	public Culprit(DimItem[] testInput) {
@@ -56,6 +62,8 @@ public class Culprit {
 		sb.append(fOccurenceCount);
 		sb.append(", fails:");
 		sb.append(fFailureCount);
+		sb.append(", failureIndex:");
+		sb.append(fOtherData.fFailureIndex);
 		sb.append(", items:[");
 
 		boolean firstTime = true;
@@ -78,6 +86,14 @@ public class Culprit {
 
 	public static int compareForSort(Culprit culprit1, Culprit culprit2) {
 
+        if (culprit1.fOtherData.fFailureIndex > culprit2.fOtherData.fFailureIndex) {
+        	return -1;
+        }
+        
+        if (culprit1.fOtherData.fFailureIndex < culprit2.fOtherData.fFailureIndex) {
+        	return 1;
+        }	        
+		
 		if (culprit1.fTestInput.size() > culprit2.fTestInput.size()) {
 			return -1;
 		}
@@ -104,15 +120,23 @@ public class Culprit {
 		return 0;
 	}
 
-	int getOccurenceCount() {
+	public int getOccurenceCount() {
 		return fOccurenceCount;
 	}
 
-	int getFailureCount() {
+	public int getFailureCount() {
 		return fFailureCount;
 	}
+	
+	public int getFailureIndex() {
+		return fOtherData.fFailureIndex;
+	}
+	
+	public void setFailureIndex(int index) {
+		fOtherData.fFailureIndex = index;
+	}	
 
-	List<DimItem> getItem() {
+	public List<DimItem> getItem() {
 		return fTestInput;
 	}
 
@@ -125,11 +149,13 @@ public class Culprit {
 	}
 
 	public void aggregateOccurencesAndFailures(Culprit culpritToAggregate) {
+		
 		incrementOccurenceCount(culpritToAggregate.getOccurenceCount());
 		incrementFailures(culpritToAggregate.getFailureCount());
 	}
 
 	public boolean isTupleMatch(Culprit other) {
+		
 		if(fTestInput.size() != other.fTestInput.size()) {
 			return false;
 		}
@@ -142,8 +168,8 @@ public class Culprit {
 		return true;
 	}
 
-	public boolean isMatch(Culprit other) {
-
+	public boolean isBasicMatch(Culprit other) {
+		
 		if (other.fOccurenceCount != fOccurenceCount) {
 			return false;
 		}
