@@ -51,4 +51,17 @@ public class DimItem { // TODO - DimensionedItem<String> instead (add necessary 
 		return sb.toString();
 	}	
 
+	public static int compareForSort(DimItem dimItem1, DimItem dimItem2) {
+
+		if (dimItem1.fDimension > dimItem2.fDimension) {
+			return 1;
+		}
+
+		if (dimItem1.fDimension < dimItem2.fDimension) {
+			return -1;
+		}
+
+		return dimItem1.fItem.compareTo(dimItem2.fItem);
+	}	
+
 }

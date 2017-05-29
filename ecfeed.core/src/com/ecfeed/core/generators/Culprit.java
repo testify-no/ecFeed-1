@@ -52,7 +52,7 @@ public class Culprit {
 
 		StringBuilder sb = new StringBuilder();
 
-		sb.append("occurences:");
+		sb.append("[occurences:");
 		sb.append(fOccurenceCount);
 		sb.append(", fails:");
 		sb.append(fFailureCount);
@@ -71,8 +71,37 @@ public class Culprit {
 		}
 
 		sb.append("]");
+		sb.append("]");
 
 		return sb.toString();
+	}
+
+	public static int compareForSort(Culprit culprit1, Culprit culprit2) {
+
+		if (culprit1.fTestInput.size() > culprit2.fTestInput.size()) {
+			return -1;
+		}
+
+		if (culprit1.fTestInput.size() < culprit2.fTestInput.size()) {
+			return 1;
+		}    	
+
+		int compareResult;
+		int size = culprit1.fTestInput.size();
+
+		for (int index = 0; index < size; index++) {
+
+			DimItem dimItem1 = culprit1.fTestInput.get(index);
+			DimItem dimItem2 = culprit2.fTestInput.get(index);
+
+			compareResult = DimItem.compareForSort(dimItem1, dimItem2);
+
+			if (compareResult != 0) {
+				return compareResult;
+			}
+		}
+
+		return 0;
 	}
 
 	int getOccurenceCount() {

@@ -16,6 +16,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hamcrest.collection.IsMapContaining;
 import org.junit.Test;
 
 public class TestResultsAnalyzerTest {
@@ -187,19 +188,23 @@ public class TestResultsAnalyzerTest {
 
 		assertEquals(5, testResultsAnalysis.getCulpritCount());
 
-		Culprit culprit = new Culprit(new DimItem[]{ new DimItem(0, "2") }, 1, 0);
+
+		Culprit culprit = new Culprit(new DimItem[]{ new DimItem(0, "1") }, 2, 2);
+		assertTrue(testResultsAnalysis.containsCulprit(culprit));
+
+		Culprit culpritZero = testResultsAnalysis.getCulprit(0);
+		assertTrue(culprit.isMatch(culpritZero));
+
+		culprit = new Culprit(new DimItem[]{ new DimItem(1, "2") }, 1, 1);
+		assertTrue(testResultsAnalysis.containsCulprit(culprit));
+
+		culprit = new Culprit(new DimItem[]{ new DimItem(1, "3") }, 1, 1);
+		assertTrue(testResultsAnalysis.containsCulprit(culprit));		
+
+		culprit = new Culprit(new DimItem[]{ new DimItem(0, "2") }, 1, 0);
 		assertTrue(testResultsAnalysis.containsCulprit(culprit));
 
 		culprit = new Culprit(new DimItem[]{ new DimItem(1, "1") }, 1, 0);
-		assertTrue(testResultsAnalysis.containsCulprit(culprit));		
-
-		culprit = new Culprit(new DimItem[]{ new DimItem(0, "1") }, 2, 2);
-		assertTrue(testResultsAnalysis.containsCulprit(culprit));
-
-		culprit = new Culprit(new DimItem[]{ new DimItem(1, "2") }, 1, 1);
-		assertTrue(testResultsAnalysis.containsCulprit(culprit));		
-
-		culprit = new Culprit(new DimItem[]{ new DimItem(1, "2") }, 1, 1);
 		assertTrue(testResultsAnalysis.containsCulprit(culprit));		
 	}
 
@@ -218,6 +223,48 @@ public class TestResultsAnalyzerTest {
 		culprit = new Culprit(new DimItem[]{ new DimItem(0, "1"), new DimItem(1, "3") }, 1, 1);
 		assertTrue(testResultsAnalysis.containsCulprit(culprit));		
 	}
+
+	@Test
+	public void shouldGenerateAnalysisForFiveResultsWithFiveArgs() {
+
+		List<TestResultDescription> testResultDescrs = new ArrayList<TestResultDescription>();
+
+		addTestResult(new String[]{ "1", "2", "3", "4", "5" }, false, testResultDescrs);
+		addTestResult(new String[]{ "0", "2", "3", "5", "4" }, false, testResultDescrs);
+		addTestResult(new String[]{ "5", "2", "3", "7", "8" }, true, testResultDescrs);
+		addTestResult(new String[]{ "7", "7", "3", "9", "8" }, false, testResultDescrs);
+		addTestResult(new String[]{ "2", "4", "5", "3", "8" }, true, testResultDescrs);
+
+		checkGeneration5by5forN1(testResultDescrs);
+		checkGeneration5by5forN2(testResultDescrs);
+	}
+
+	private void checkGeneration5by5forN1(List<TestResultDescription> testResultDescrs) {
+
+		TestResultsAnalysis testResultsAnalysis = 
+				new TestResultsAnalyzer().generateAnalysis(testResultDescrs, 1, 1);
+
+		//		System.out.println(testResultsAnalysis.toString());
+
+		Culprit culprit9 = testResultsAnalysis.getCulprit(9);
+		assertTrue(culprit9.isMatch(new Culprit(new DimItem[]{ new DimItem(2, "3") }, 4, 3)));
+
+		Culprit culprit10 = testResultsAnalysis.getCulprit(10);
+		assertTrue(culprit10.isMatch(new Culprit(new DimItem[]{ new DimItem(1, "2") }, 3, 2)));		
+
+		Culprit culprit11 = testResultsAnalysis.getCulprit(11);
+		assertTrue(culprit11.isMatch(new Culprit(new DimItem[]{ new DimItem(4, "8") }, 3, 1)));		
+	}
+
+	private void checkGeneration5by5forN2(List<TestResultDescription> testResultDescrs) {
+
+		TestResultsAnalysis testResultsAnalysis = 
+				new TestResultsAnalyzer().generateAnalysis(testResultDescrs, 2, 2);
+
+		//System.out.println(testResultsAnalysis.toString());
+
+		// TODO
+	}	
 
 	private void addTestResult(
 			String[] testArguments, boolean result, List<TestResultDescription> testResultDescrs) {
