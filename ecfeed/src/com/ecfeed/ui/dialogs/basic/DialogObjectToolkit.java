@@ -19,7 +19,6 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -43,16 +42,6 @@ public class DialogObjectToolkit {
 		composite.setLayout(new GridLayout(countOfColumns, false));
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		composite.setLayoutData(gridData);
-
-		return composite;
-	}
-
-	public static Composite createRowComposite(Composite parentComposite) {
-
-		Composite composite = new Composite(parentComposite, SWT.NONE);
-
-		RowLayout rowLayout = new RowLayout();
-		composite.setLayout(rowLayout);
 
 		return composite;
 	}
@@ -210,7 +199,7 @@ public class DialogObjectToolkit {
 		}
 
 	}
-	
+
 	public static Button createGridCheckBox(
 			Composite parentComposite, 
 			String checkboxLabel,
@@ -228,7 +217,7 @@ public class DialogObjectToolkit {
 
 		return checkbox;
 	}
-	
+
 
 	public static GridButton createBrowseButton(
 			Composite parent, SelectionListener selectionListener) {
@@ -242,7 +231,7 @@ public class DialogObjectToolkit {
 
 		return new GridButton(parent, buttonText, selectionListener);
 	}
-	
+
 	public static class GridButton {
 
 		Button fButton;

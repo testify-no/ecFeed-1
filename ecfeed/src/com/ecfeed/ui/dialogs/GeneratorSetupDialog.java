@@ -552,13 +552,11 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 
 	private void createTestCasesExportComposite(Composite parentComposite) {
 
-		DialogObjectToolkit.createRowComposite(parentComposite);
-		Composite advancedButtonComposite = DialogObjectToolkit
-				.createRowComposite(parentComposite);
+		Composite advancedButtonComposite = 
+				DialogObjectToolkit.createGridComposite(parentComposite, 1);
 
 		DialogObjectToolkit.createGridButton(advancedButtonComposite,
 				"Advanced...", new ExportDefinitionSelectionAdapter());
-
 
 		createExportTemplateCombo(parentComposite);
 		createFileSelectionComposite(parentComposite);
