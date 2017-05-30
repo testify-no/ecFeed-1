@@ -15,7 +15,6 @@ import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -243,12 +242,6 @@ public class CheckForUpdatesDialog extends TitleAreaDialog {
 	public void okPressed(){
 
 		super.okPressed();
-	}
-
-	@Override
-	protected Point getInitialSize() {
-
-		return new Point(600, 450);
 	}
 
 	private class ViewChangeLogSelectionListener extends SelectionAdapter{
