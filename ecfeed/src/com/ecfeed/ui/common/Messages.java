@@ -172,8 +172,8 @@ public class Messages {
 	public static final String DIALOG_LARGE_TEST_SUITE_GENERATED_TITLE = "Large size of generated data";
 	public static final String DIALOG_LARGE_TEST_SUITE_GENERATED_MESSAGE(int length) {
 		return "The algortithm generated " + length
-				+ " test cases. Adding this amount of data to the model may heavily affect tool's performance"
-				+ " and cause loss of data. Do you want to continue?";
+				+ " test cases. Adding this amount of data to the model may heavily affect tool's performance."
+				+ " Do you want to continue?";
 	}
 	public static final String DIALOG_MISSING_ANDROID_RUNNER_TITLE = "Missing Android base runner";
 	public static final String DIALOG_MISSING_ANDROID_RUNNER_INFO(String className) {
