@@ -150,7 +150,7 @@ public abstract class AbstractOnlineSupport {
 		displayRunSummary();
 
 		fTargetFile = dialog.getTargetFile();
-		fExportTemplate = dialog.getExportTemplate();
+		fExportTemplate = dialog.getExportTemplateText();
 
 		return Result.OK;
 	}

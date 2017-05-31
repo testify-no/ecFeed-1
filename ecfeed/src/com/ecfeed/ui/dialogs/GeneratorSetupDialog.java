@@ -162,7 +162,11 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		return fParameters;
 	}
 
-	public String getExportTemplate() {
+	public String getExportTemplateText() {
+
+		if (fExportTemplate == null) {
+			return null;
+		}
 		return fExportTemplate.getTemplateText();
 	}
 
