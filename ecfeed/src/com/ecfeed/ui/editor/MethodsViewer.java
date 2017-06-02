@@ -14,12 +14,15 @@ import java.util.List;
 
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.EditingSupport;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Button;
 
 import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.MethodNode;
@@ -42,8 +45,68 @@ public class MethodsViewer extends TableViewerSection {
 	private TableViewerColumn fMethodsColumn;
 	private ClassInterface fClassIf;
 	private MethodInterface fMethodIf;
+	private Button fRemoveSelectedButton;
 
-	public class MethodNameEditingSupport extends EditingSupport{
+
+	public MethodsViewer(
+			ISectionContext sectionContext, 
+			IModelUpdateContext updateContext, 
+			IFileInfoProvider fileInfoProvider) {
+		super(sectionContext, updateContext, fileInfoProvider, StyleDistributor.getSectionStyle());
+
+		fClassIf = new ClassInterface(this, fileInfoProvider);
+		fMethodIf = new MethodInterface(this, fileInfoProvider);
+
+		fMethodsColumn.setEditingSupport(new MethodNameEditingSupport());
+
+		setText("Methods");
+		addButton("Add new method", new AddNewMethodAdapter());
+		fRemoveSelectedButton = 
+				addButton("Remove selected", 
+						new ActionSelectionAdapter(
+								new DeleteAction(getViewer(), this), 
+								Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
+
+		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
+		addSelectionChangedListener(new SelectionChangedListener());
+		setActionProvider(new ModelViewerActionProvider(getTableViewer(), this, fileInfoProvider));
+		getViewer().addDragSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDragListener(getViewer()));
+	}
+
+	@Override
+	protected void createTableColumns() {
+		fMethodsColumn = addColumn("Name", 150, new NodeNameColumnLabelProvider());
+		addColumn("Parameters", 450, new MethodsArgsLabelProvider());
+	}
+
+	@Override
+	protected boolean tableLinesVisible() {
+		return true;
+	}
+
+	@Override
+	protected boolean tableHeaderVisible() {
+		return true;
+	}
+
+	@Override
+	public void refresh() {
+
+		Object selectedElement = getSelectedElement();
+
+		if (selectedElement == null) {
+			fRemoveSelectedButton.setEnabled(false);
+		} else {
+			fRemoveSelectedButton.setEnabled(true);
+		}
+	}
+
+	public void setInput(ClassNode classNode){
+		fClassIf.setOwnNode(classNode);
+		super.setInput(classNode.getMethods());
+	}
+
+	public class MethodNameEditingSupport extends EditingSupport {
 
 		private TextCellEditor fNameCellEditor;
 
@@ -109,47 +172,12 @@ public class MethodsViewer extends TableViewerSection {
 		}
 	}
 
-	public MethodsViewer(
-			ISectionContext sectionContext, 
-			IModelUpdateContext updateContext, 
-			IFileInfoProvider fileInfoProvider) {
-		super(sectionContext, updateContext, fileInfoProvider, StyleDistributor.getSectionStyle());
+	private class SelectionChangedListener implements ISelectionChangedListener {
 
-		fClassIf = new ClassInterface(this, fileInfoProvider);
-		fMethodIf = new MethodInterface(this, fileInfoProvider);
+		@Override
+		public void selectionChanged(SelectionChangedEvent event) {
+			refresh();
+		}
+	}	
 
-		fMethodsColumn.setEditingSupport(new MethodNameEditingSupport());
-
-		setText("Methods");
-		addButton("Add new method", new AddNewMethodAdapter());
-		addButton("Remove selected", 
-				new ActionSelectionAdapter(
-						new DeleteAction(getViewer(), this), 
-						Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
-
-		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
-		setActionProvider(new ModelViewerActionProvider(getTableViewer(), this, fileInfoProvider));
-		getViewer().addDragSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDragListener(getViewer()));
-	}
-
-	public void setInput(ClassNode classNode){
-		fClassIf.setOwnNode(classNode);
-		super.setInput(classNode.getMethods());
-	}
-
-	@Override
-	protected void createTableColumns() {
-		fMethodsColumn = addColumn("Name", 150, new NodeNameColumnLabelProvider());
-		addColumn("Parameters", 450, new MethodsArgsLabelProvider());
-	}
-
-	@Override
-	protected boolean tableLinesVisible() {
-		return true;
-	}
-
-	@Override
-	protected boolean tableHeaderVisible() {
-		return true;
-	}
 }
