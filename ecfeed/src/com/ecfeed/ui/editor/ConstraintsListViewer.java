@@ -12,6 +12,8 @@ package com.ecfeed.ui.editor;
 
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.EditingSupport;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
@@ -20,6 +22,7 @@ import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.ecfeed.core.model.ConstraintNode;
@@ -42,6 +45,66 @@ public class ConstraintsListViewer extends TableViewerSection {
 	private TableViewerColumn fNameColumn;
 	private MethodInterface fMethodInterface;
 	private ConstraintInterface fConstraintIf;
+	private Button fRemoveSelectedButton;
+
+
+	public ConstraintsListViewer(
+			ISectionContext sectionContext, 
+			IModelUpdateContext updateContext, 
+			IFileInfoProvider fileInfoProvider){
+		super(sectionContext, updateContext, fileInfoProvider, STYLE);
+		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
+		gd.minimumHeight = 250;
+		getSection().setLayoutData(gd);
+
+		getSection().setText("Constraints");
+
+		fMethodInterface = new MethodInterface(this, fileInfoProvider);
+		fConstraintIf = new ConstraintInterface(this, fileInfoProvider);
+
+		fNameColumn.setEditingSupport(new ConstraintNameEditingSupport());
+
+		addButton("Add constraint", new AddConstraintAdapter());
+		fRemoveSelectedButton = 
+				addButton(
+						"Remove selected", 
+						new ActionSelectionAdapter(
+								new DeleteAction(getViewer(), this), Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
+
+		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
+		setActionProvider(new ModelViewerActionProvider(getTableViewer(), updateContext, fileInfoProvider));
+		getViewer().addDragSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDragListener(getViewer()));
+		addSelectionChangedListener(new SelectionChangedListener());
+	}
+
+	public void setInput(MethodNode method){
+		super.setInput(method.getConstraintNodes());
+		fMethodInterface.setOwnNode(method);
+	}
+
+	@Override
+	protected void createTableColumns() {
+		fNameColumn = addColumn("Name", 150, new NodeNameColumnLabelProvider());
+
+		addColumn("Definition", 150, new NodeViewerColumnLabelProvider(){
+			@Override
+			public String getText(Object element){
+				return ((ConstraintNode)element).getConstraint().toString();
+			}
+		});
+	}
+
+	@Override
+	public void refresh() {
+
+		Object selectedElement = getSelectedElement();
+
+		if (selectedElement == null) {
+			fRemoveSelectedButton.setEnabled(false);
+		} else {
+			fRemoveSelectedButton.setEnabled(true);
+		}
+	}
 
 	public class ConstraintNameEditingSupport extends EditingSupport{
 
@@ -87,45 +150,12 @@ public class ConstraintsListViewer extends TableViewerSection {
 		}
 	}
 
-	public ConstraintsListViewer(
-			ISectionContext sectionContext, 
-			IModelUpdateContext updateContext, 
-			IFileInfoProvider fileInfoProvider){
-		super(sectionContext, updateContext, fileInfoProvider, STYLE);
-		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
-		gd.minimumHeight = 250;
-		getSection().setLayoutData(gd);
+	private class SelectionChangedListener implements ISelectionChangedListener {
 
-		getSection().setText("Constraints");
-
-		fMethodInterface = new MethodInterface(this, fileInfoProvider);
-		fConstraintIf = new ConstraintInterface(this, fileInfoProvider);
-
-		fNameColumn.setEditingSupport(new ConstraintNameEditingSupport());
-
-		addButton("Add constraint", new AddConstraintAdapter());
-		addButton("Remove selected", new ActionSelectionAdapter(new DeleteAction(getViewer(), this), Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
-
-		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
-		setActionProvider(new ModelViewerActionProvider(getTableViewer(), updateContext, fileInfoProvider));
-		getViewer().addDragSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDragListener(getViewer()));
-	}
-
-	public void setInput(MethodNode method){
-		super.setInput(method.getConstraintNodes());
-		fMethodInterface.setOwnNode(method);
-	}
-
-	@Override
-	protected void createTableColumns() {
-		fNameColumn = addColumn("Name", 150, new NodeNameColumnLabelProvider());
-
-		addColumn("Definition", 150, new NodeViewerColumnLabelProvider(){
-			@Override
-			public String getText(Object element){
-				return ((ConstraintNode)element).getConstraint().toString();
-			}
-		});
+		@Override
+		public void selectionChanged(SelectionChangedEvent event) {
+			refresh();
+		}
 	}
 
 }

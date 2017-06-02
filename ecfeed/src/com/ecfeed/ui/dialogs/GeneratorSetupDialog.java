@@ -29,7 +29,6 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -168,11 +167,6 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 			return null;
 		}
 		return fExportTemplate.getTemplateText();
-	}
-
-	@Override
-	public Point getInitialSize() {
-		return new Point(600, 800);
 	}
 
 	@Override

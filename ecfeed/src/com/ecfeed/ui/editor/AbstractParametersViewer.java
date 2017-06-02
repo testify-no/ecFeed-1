@@ -17,6 +17,8 @@ import java.util.List;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.EditingSupport;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
@@ -24,6 +26,7 @@ import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
 
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ParametersParentNode;
@@ -45,6 +48,76 @@ public abstract class AbstractParametersViewer extends TableViewerSection {
 	private TableViewerColumn fNameColumn;
 	private TableViewerColumn fTypeColumn;
 	private ParametersParentInterface fParentIf;
+	private Button fRemoveSelectedButton;
+
+	protected abstract ParametersParentInterface getParametersParentInterface();
+	protected abstract AbstractParameterInterface getParameterInterface();
+
+
+	public AbstractParametersViewer(
+			ISectionContext sectionContext, 
+			IModelUpdateContext updateContext,
+			IFileInfoProvider fileInfoProvider,
+			int STYLE) {
+		super(sectionContext, updateContext, fileInfoProvider, STYLE);
+		fParentIf = getParametersParentInterface();
+
+		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
+		gd.minimumHeight = 250;
+		getSection().setLayoutData(gd);
+
+		addButton("Add parameter", new AddNewParameterAdapter());
+		fRemoveSelectedButton = addButton("Remove selected", 
+				new ActionSelectionAdapter(
+						new DeleteAction(getViewer(), this), Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
+
+		fNameColumn.setEditingSupport(new ParameterNameEditingSupport());
+		fTypeColumn.setEditingSupport(getParameterTypeEditingSupport());
+
+		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
+		setActionProvider(new ModelViewerActionProvider(getTableViewer(), this, fileInfoProvider));
+		addSelectionChangedListener(new SelectionChangedListener());
+	}
+
+	@Override
+	protected void createTableColumns() {
+		fNameColumn = addColumn("Name", 100, new NodeNameColumnLabelProvider());
+		fTypeColumn = addColumn("Type", 150, new NodeViewerColumnLabelProvider(){
+			@Override
+			public String getText(Object element){
+				return ((AbstractParameterNode)element).getType();
+			}
+		});
+	}
+
+	@Override
+	public void refresh() {
+
+		Object selectedElement = getSelectedElement();
+
+		if (selectedElement == null) {
+			fRemoveSelectedButton.setEnabled(false);
+		} else {
+			fRemoveSelectedButton.setEnabled(true);
+		}
+	}	
+
+	public void setInput(ParametersParentNode parent){
+		fParentIf.setOwnNode(parent);
+		super.setInput(parent.getParameters());
+	}
+
+	protected EditingSupport getParameterTypeEditingSupport() {
+		return new ParameterTypeEditingSupport();
+	}
+
+	private class SelectionChangedListener implements ISelectionChangedListener {
+
+		@Override
+		public void selectionChanged(SelectionChangedEvent event) {
+			refresh();
+		}
+	}
 
 	protected class ParameterTypeEditingSupport extends EditingSupport {
 
@@ -112,7 +185,6 @@ public abstract class AbstractParametersViewer extends TableViewerSection {
 		}
 	}
 
-
 	private class ParameterNameEditingSupport extends EditingSupport {
 
 		private TextCellEditor fNameCellEditor;
@@ -159,50 +231,4 @@ public abstract class AbstractParametersViewer extends TableViewerSection {
 		}
 	}
 
-	public AbstractParametersViewer(
-			ISectionContext sectionContext, 
-			IModelUpdateContext updateContext,
-			IFileInfoProvider fileInfoProvider,
-			int STYLE) {
-		super(sectionContext, updateContext, fileInfoProvider, STYLE);
-		fParentIf = getParametersParentInterface();
-
-		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
-		gd.minimumHeight = 250;
-		getSection().setLayoutData(gd);
-
-		addButton("Add parameter", new AddNewParameterAdapter());
-		addButton("Remove selected", 
-				new ActionSelectionAdapter(
-						new DeleteAction(getViewer(), this), Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
-
-		fNameColumn.setEditingSupport(new ParameterNameEditingSupport());
-		fTypeColumn.setEditingSupport(getParameterTypeEditingSupport());
-
-		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
-		setActionProvider(new ModelViewerActionProvider(getTableViewer(), this, fileInfoProvider));
-	}
-
-	@Override
-	protected void createTableColumns() {
-		fNameColumn = addColumn("Name", 100, new NodeNameColumnLabelProvider());
-		fTypeColumn = addColumn("Type", 150, new NodeViewerColumnLabelProvider(){
-			@Override
-			public String getText(Object element){
-				return ((AbstractParameterNode)element).getType();
-			}
-		});
-	}
-
-	public void setInput(ParametersParentNode parent){
-		fParentIf.setOwnNode(parent);
-		super.setInput(parent.getParameters());
-	}
-
-	protected EditingSupport getParameterTypeEditingSupport() {
-		return new ParameterTypeEditingSupport();
-	}
-
-	protected abstract ParametersParentInterface getParametersParentInterface();
-	protected abstract AbstractParameterInterface getParameterInterface();
 }
