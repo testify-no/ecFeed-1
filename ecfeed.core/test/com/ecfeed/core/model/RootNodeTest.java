@@ -20,7 +20,7 @@ import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.GlobalParameterNode;
 import com.ecfeed.core.model.ModelVersionDistributor;
 import com.ecfeed.core.model.RootNode;
-import com.ecfeed.testutils.RandomModelGenerator;
+import com.ecfeed.core.testutils.RandomModelGenerator;
 
 public class RootNodeTest{
 

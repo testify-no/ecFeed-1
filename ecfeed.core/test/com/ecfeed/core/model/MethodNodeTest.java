@@ -28,7 +28,7 @@ import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.StaticStatement;
 import com.ecfeed.core.model.TestCaseNode;
-import com.ecfeed.testutils.RandomModelGenerator;
+import com.ecfeed.core.testutils.RandomModelGenerator;
 
 public class MethodNodeTest {
 	@Test

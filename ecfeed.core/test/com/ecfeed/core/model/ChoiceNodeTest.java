@@ -10,8 +10,8 @@
 
 package com.ecfeed.core.model;
 
-import static com.ecfeed.testutils.TestUtilConstants.SUPPORTED_TYPES;
-import static com.ecfeed.testutils.ModelTestUtils.assertElementsEqual;
+import static com.ecfeed.core.testutils.TestUtilConstants.SUPPORTED_TYPES;
+import static com.ecfeed.core.testutils.ModelTestUtils.assertElementsEqual;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -23,7 +23,7 @@ import org.junit.Test;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
-import com.ecfeed.testutils.RandomModelGenerator;
+import com.ecfeed.core.testutils.RandomModelGenerator;
 
 public class ChoiceNodeTest{
 	@Test

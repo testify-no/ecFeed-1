@@ -8,7 +8,7 @@
  *  
  *******************************************************************************/
 
-package com.ecfeed.testutils;
+package com.ecfeed.core.testutils;
 
 import static org.junit.Assert.fail;
 

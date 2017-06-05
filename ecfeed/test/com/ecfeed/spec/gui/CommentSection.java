@@ -9,7 +9,7 @@
  *******************************************************************************/
 package com.ecfeed.spec.gui;
 
-import com.ecfeed.testutils.ENodeType;
+import com.ecfeed.core.testutils.ENodeType;
 
 public class CommentSection{
 

@@ -37,11 +37,11 @@ import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.model.StaticStatement;
 import com.ecfeed.core.model.TestCaseNode;
+import com.ecfeed.core.testutils.ModelTestUtils;
 import com.ecfeed.junit.OnlineRunner;
 import com.ecfeed.junit.annotations.Constraints;
 import com.ecfeed.junit.annotations.EcModel;
 import com.ecfeed.junit.annotations.Generator;
-import com.ecfeed.testutils.ModelTestUtils;
 
 @RunWith(OnlineRunner.class)
 @Generator(CartesianProductGenerator.class)

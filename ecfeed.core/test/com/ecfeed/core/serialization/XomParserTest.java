@@ -10,7 +10,7 @@
 
 package com.ecfeed.core.serialization;
 
-import static com.ecfeed.testutils.TestUtilConstants.SUPPORTED_TYPES;
+import static com.ecfeed.core.testutils.TestUtilConstants.SUPPORTED_TYPES;
 import static org.junit.Assert.fail;
 
 import java.io.ByteArrayOutputStream;
@@ -46,8 +46,8 @@ import com.ecfeed.core.serialization.ect.XomAnalyserFactory;
 import com.ecfeed.core.serialization.ect.XomBuilder;
 import com.ecfeed.core.serialization.ect.XomBuilderFactory;
 import com.ecfeed.core.serialization.ect.XomStatementBuilder;
-import com.ecfeed.testutils.ModelStringifier;
-import com.ecfeed.testutils.RandomModelGenerator;
+import com.ecfeed.core.testutils.ModelStringifier;
+import com.ecfeed.core.testutils.RandomModelGenerator;
 
 public class XomParserTest {
 

@@ -21,7 +21,7 @@ import org.junit.Test;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.TestCaseNode;
-import com.ecfeed.testutils.RandomModelGenerator;
+import com.ecfeed.core.testutils.RandomModelGenerator;
 
 public class TestCaseNodeTest {
 

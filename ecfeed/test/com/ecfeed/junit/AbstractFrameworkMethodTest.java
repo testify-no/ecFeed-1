@@ -57,7 +57,7 @@ public class AbstractFrameworkMethodTest {
 		INT_ARGS.addAll(Arrays.asList(CommonConstants.INTEGER_SPECIAL_VALUES));
 		INT_ARGS.addAll(Arrays.asList(new String[]{"-1", "0", "1"}));
 		STRING_ARGS = new ArrayList<String>();
-		STRING_ARGS.addAll(Arrays.asList(CommonConstants.STRING_SPECIAL_VALUES));
+		STRING_ARGS.addAll(Arrays.asList(com.ecfeed.core.utils.CommonConstants.STRING_SPECIAL_VALUES));
 		STRING_ARGS.addAll(Arrays.asList(new String[]{"", "a", "Aa"}));
 		ENUM_ARGS = new ArrayList<String>();
 		for(Enum e : Enum.values()){

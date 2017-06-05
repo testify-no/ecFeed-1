@@ -18,6 +18,7 @@ Export-Package: com.ecfeed.core.adapter,
  com.ecfeed.core.serialization,
  com.ecfeed.core.serialization.ect,
  com.ecfeed.core.serialization.export,
+ com.ecfeed.core.testutils,
  com.ecfeed.core.utils,
  com.ecfeed.junit,
  com.ecfeed.junit.annotations

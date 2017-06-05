@@ -117,7 +117,7 @@ public class EclipseModelBuilder extends JavaModelAnalyser{
 			result.addAll(Arrays.asList(CommonConstants.FLOAT_SPECIAL_VALUES));
 			break;
 		case JavaTypeHelper.TYPE_NAME_STRING:
-			result.addAll(Arrays.asList(CommonConstants.STRING_SPECIAL_VALUES));
+			result.addAll(Arrays.asList(com.ecfeed.core.utils.CommonConstants.STRING_SPECIAL_VALUES));
 			break;
 		default:
 			result.addAll(enumValues(typeName));
@@ -246,7 +246,7 @@ public class EclipseModelBuilder extends JavaModelAnalyser{
 
 	protected HashMap<String, String> predefinedStringValues() {
 		HashMap<String, String> values = new HashMap<String, String>();
-		values.put("null", CommonConstants.NULL_VALUE_STRING_REPRESENTATION);
+		values.put("null", com.ecfeed.core.utils.CommonConstants.NULL_VALUE_STRING_REPRESENTATION);
 		return values;
 	}
 

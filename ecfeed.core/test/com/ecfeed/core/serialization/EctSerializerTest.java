@@ -10,7 +10,7 @@
 
 package com.ecfeed.core.serialization;
 
-import static com.ecfeed.testutils.ModelTestUtils.assertElementsEqual;
+import static com.ecfeed.core.testutils.ModelTestUtils.assertElementsEqual;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
@@ -36,7 +36,7 @@ import com.ecfeed.core.model.ModelVersionDistributor;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.serialization.ect.EctParser;
 import com.ecfeed.core.serialization.ect.EctSerializer;
-import com.ecfeed.testutils.RandomModelGenerator;
+import com.ecfeed.core.testutils.RandomModelGenerator;
 
 public class EctSerializerTest {
 

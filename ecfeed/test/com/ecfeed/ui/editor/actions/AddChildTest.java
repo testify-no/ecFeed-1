@@ -9,8 +9,8 @@
  *******************************************************************************/
 package com.ecfeed.ui.editor.actions;
 
+import com.ecfeed.core.testutils.ENodeType;
 import com.ecfeed.junit.annotations.expected;
-import com.ecfeed.testutils.ENodeType;
 
 //@RunWith(StaticRunner.class)
 //@EcModel("test/com.ecfeed.ui.editor.actions.ect")

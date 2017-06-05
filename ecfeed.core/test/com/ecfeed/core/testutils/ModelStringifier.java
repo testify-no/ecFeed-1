@@ -8,7 +8,7 @@
  *  
  *******************************************************************************/
 
-package com.ecfeed.testutils;
+package com.ecfeed.core.testutils;
 
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.AbstractStatement;

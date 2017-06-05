@@ -9,7 +9,7 @@
  *******************************************************************************/
 package com.ecfeed.spec.gui;
 
-import com.ecfeed.testutils.ETypeName;
+import com.ecfeed.core.testutils.ETypeName;
 
 public class ModelDetailsPage{
 

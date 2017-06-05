@@ -8,7 +8,7 @@
  *  
  *******************************************************************************/
 
-package com.ecfeed.testutils;
+package com.ecfeed.core.testutils;
 
 import static com.ecfeed.core.adapter.java.AdapterConstants.REGEX_CATEGORY_NODE_NAME;
 import static com.ecfeed.core.adapter.java.AdapterConstants.REGEX_CATEGORY_TYPE_NAME;
@@ -22,7 +22,7 @@ import static com.ecfeed.core.adapter.java.AdapterConstants.REGEX_ROOT_NODE_NAME
 import static com.ecfeed.core.adapter.java.AdapterConstants.REGEX_STRING_TYPE_VALUE;
 import static com.ecfeed.core.adapter.java.AdapterConstants.REGEX_TEST_CASE_NODE_NAME;
 import static com.ecfeed.core.adapter.java.AdapterConstants.REGEX_USER_TYPE_VALUE;
-import static com.ecfeed.testutils.TestUtilConstants.SUPPORTED_TYPES;
+import static com.ecfeed.core.testutils.TestUtilConstants.SUPPORTED_TYPES;
 
 import java.util.ArrayList;
 import java.util.List;

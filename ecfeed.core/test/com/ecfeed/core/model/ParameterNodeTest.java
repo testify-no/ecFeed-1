@@ -10,7 +10,7 @@
 
 package com.ecfeed.core.model;
 
-import static com.ecfeed.testutils.TestUtilConstants.SUPPORTED_TYPES;
+import static com.ecfeed.core.testutils.TestUtilConstants.SUPPORTED_TYPES;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -24,7 +24,7 @@ import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
-import com.ecfeed.testutils.RandomModelGenerator;
+import com.ecfeed.core.testutils.RandomModelGenerator;
 
 public class ParameterNodeTest{
 
