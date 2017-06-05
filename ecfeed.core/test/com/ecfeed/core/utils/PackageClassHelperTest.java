@@ -8,7 +8,7 @@
  *  
  *******************************************************************************/
 
-package com.ecfeed.utils;
+package com.ecfeed.core.utils;
 
 import static org.junit.Assert.assertEquals;
 

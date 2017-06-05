@@ -8,7 +8,7 @@
  *  
  *******************************************************************************/
 
-package com.ecfeed.utils;
+package com.ecfeed.core.utils;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;

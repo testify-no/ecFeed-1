@@ -8,7 +8,7 @@
  *  
  *******************************************************************************/
 
-package com.ecfeed.utils;
+package com.ecfeed.core.utils;
 
 import com.ecfeed.core.utils.StringHelper;
 
