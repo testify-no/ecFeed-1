@@ -29,11 +29,11 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 
 import com.ecfeed.core.model.TestCaseNode;
-import com.ecfeed.core.resources.ResourceHelper;
 import com.ecfeed.core.serialization.export.ExportTemplateFactory;
 import com.ecfeed.core.serialization.export.IExportTemplate;
 import com.ecfeed.core.utils.DiskFileHelper;
 import com.ecfeed.core.utils.StringHelper;
+import com.ecfeed.resources.ResourceHelper;
 import com.ecfeed.ui.common.ApplyValueMode;
 import com.ecfeed.ui.dialogs.basic.AskIfOverwriteFileDialog;
 import com.ecfeed.ui.dialogs.basic.DialogObjectToolkit;
