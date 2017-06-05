@@ -8,7 +8,7 @@
  *  
  *******************************************************************************/
 
-package com.ecfeed.core.resources;
+package com.ecfeed.resources;
 
 import java.io.IOException;
 import java.net.URL;
