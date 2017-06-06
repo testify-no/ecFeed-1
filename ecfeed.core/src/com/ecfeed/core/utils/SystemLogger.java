@@ -13,9 +13,6 @@ package com.ecfeed.core.utils;
 import java.io.IOException;
 import java.util.List;
 
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.widgets.Display;
-
 public class SystemLogger {
 
 	private static final String EC_FEED_ERROR = "ECFEEDERR"; 
@@ -106,9 +103,7 @@ public class SystemLogger {
 		} catch (IOException e) {
 			if (fFirstLogError) {
 				fFirstLogError = false;
-				final String DIALOG_TITLE = "Reported problem";
 				final String MSG = "Can not write to log file !";
-				MessageDialog.openError(Display.getDefault().getActiveShell(), DIALOG_TITLE, MSG);
 				System.out.println(MSG);
 			}
 		}

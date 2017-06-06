@@ -29,16 +29,16 @@ import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.model.ParametersParentNode;
+import com.ecfeed.core.testutils.ENodeType;
+import com.ecfeed.core.testutils.ModelTestUtils;
 import com.ecfeed.junit.OnlineRunner;
 import com.ecfeed.junit.annotations.Constraints;
 import com.ecfeed.junit.annotations.EcModel;
 import com.ecfeed.junit.annotations.Generator;
-import com.ecfeed.testutils.ENodeType;
-import com.ecfeed.testutils.ModelTestUtils;
 
 @RunWith(OnlineRunner.class)
 @Generator(CartesianProductGenerator.class)
-@EcModel("test/com.ecfeed.adapter.operations.ect")
+@EcModel("test/com/ecfeed/adapter/operations/GenericOperationRemoveParameterTest.ect")
 @Constraints(Constraints.ALL)
 public class GenericOperationRemoveParameterTest{
 
@@ -84,5 +84,6 @@ public class GenericOperationRemoveParameterTest{
 			fail("Unexpected exception: " + e.getMessage());
 		}
 	}
+
 }
 

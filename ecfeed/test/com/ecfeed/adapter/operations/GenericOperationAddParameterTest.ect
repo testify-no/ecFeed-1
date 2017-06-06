@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Model name="GenericOperationAddParameterTest" version="1">
+    <Class name="com.ecfeed.adapter.operations.GenericOperationAddParameterTest" runOnAndroid="false">
+        <Method name="executeTest">
+            <Parameter name="parentType" type="com.ecfeed.core.testutils.ENodeType" isExpected="false" expected="METHOD" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="method" value="METHOD"/>
+                <Choice name="class" value="CLASS"/>
+                <Choice name="project" value="PROJECT"/>
+            </Parameter>
+            <Parameter name="index" type="com.ecfeed.adapter.operations.EIndexValue" isExpected="false" expected="NO_VALUE" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="no\svalue" value="NO_VALUE"/>
+                <Choice name="negative" value="NEGATIVE"/>
+                <Choice name="-1" value="MINUS_ONE"/>
+                <Choice name="0" value="ZERO"/>
+                <Choice name="1" value="ONE"/>
+                <Choice name="valid\spositive" value="VALID_POSITIVE"/>
+                <Choice name="last\sexisting" value="SIZE"/>
+                <Choice name="one\safter\sthe\sarray" value="SIZE_PLUS_ONE"/>
+                <Choice name="beyond\slength" value="BEYOND_LENGTH"/>
+            </Parameter>
+            <Parameter name="nameExists" type="boolean" isExpected="false" expected="false" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="exists" value="true"/>
+                <Choice name="does\snot\sexist" value="false"/>
+            </Parameter>
+            <Parameter name="success" type="boolean" isExpected="true" expected="false" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="partition" value="false"/>
+            </Parameter>
+            <Constraint name="constraint">
+                <Premise>
+                    <StatementArray operator="or">
+                        <Statement choice="no\svalue" parameter="index" relation="="/>
+                        <Statement choice="0" parameter="index" relation="="/>
+                        <Statement choice="1" parameter="index" relation="="/>
+                        <Statement choice="valid\spositive" parameter="index" relation="="/>
+                        <Statement choice="last\sexisting" parameter="index" relation="="/>
+                        <Statement choice="one\safter\sthe\sarray" parameter="index" relation="="/>
+                        <Statement choice="-1" parameter="index" relation="="/>
+                    </StatementArray>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="success" value="true"/>
+                </Consequence>
+            </Constraint>
+        </Method>
+        <Method name="undoRedoTest">
+            <Parameter name="parentType" type="com.ecfeed.core.testutils.ENodeType" isExpected="false" expected="METHOD" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="method" value="METHOD"/>
+                <Choice name="class" value="CLASS"/>
+                <Choice name="project" value="PROJECT"/>
+            </Parameter>
+            <Parameter name="index" type="com.ecfeed.adapter.operations.EIndexValue" isExpected="false" expected="NO_VALUE" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="0" value="ZERO"/>
+                <Choice name="1" value="ONE"/>
+                <Choice name="valid\spositive" value="VALID_POSITIVE"/>
+                <Choice name="last\sexisting" value="SIZE"/>
+                <Choice name="one\safter\sthe\sarray" value="SIZE_PLUS_ONE"/>
+            </Parameter>
+        </Method>
+        <Method name="randomSeriesTest">
+            <Parameter name="parentType" type="com.ecfeed.core.testutils.ENodeType" isExpected="false" expected="METHOD" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="method" value="METHOD"/>
+                <Choice name="class" value="CLASS"/>
+                <Choice name="project" value="PROJECT"/>
+            </Parameter>
+        </Method>
+    </Class>
+</Model>

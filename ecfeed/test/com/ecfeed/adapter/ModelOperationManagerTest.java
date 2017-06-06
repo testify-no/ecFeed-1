@@ -28,7 +28,7 @@ import com.ecfeed.junit.StaticRunner;
 import com.ecfeed.junit.annotations.EcModel;
 
 @RunWith(StaticRunner.class)
-@EcModel("test/com.ecfeed.adapter.ect")
+@EcModel("test/com/ecfeed/adapter/ModelOperationManagerTest.ect")
 public class ModelOperationManagerTest {
 	
 	private static class Operation implements IModelOperation{

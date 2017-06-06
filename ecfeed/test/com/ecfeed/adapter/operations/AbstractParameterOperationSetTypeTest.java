@@ -43,7 +43,7 @@ import com.ecfeed.ui.common.EclipseTypeAdapterProvider;
 
 @RunWith(OnlineRunner.class)
 @Generator(CartesianProductGenerator.class)
-@EcModel("test/com.ecfeed.adapter.operations.ect")
+@EcModel("test/com/ecfeed/adapter/operations/AbstractParameterOperationSetTypeTest.ect")
 @Constraints(Constraints.ALL)
 public class AbstractParameterOperationSetTypeTest{
 

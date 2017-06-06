@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Model name="MethodOperationAddParameterTest" version="1">
+    <Class name="com.ecfeed.adapter.operations.MethodOperationAddParameterTest" runOnAndroid="false">
+        <Method name="testMethodWithTestCases"/>
+        <Method name="methodSignatureTest">
+            <Parameter name="sameArgNames" type="boolean" isExpected="false" expected="false" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="identical\sarg\snames" value="true"/>
+                <Choice name="different\sarg\snames" value="false"/>
+            </Parameter>
+            <Parameter name="sameArgTypes" type="boolean" isExpected="false" expected="false" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="identical\sarg\stypes" value="true"/>
+                <Choice name="different\sarg\stypes" value="false"/>
+            </Parameter>
+            <Parameter name="sameName" type="boolean" isExpected="false" expected="false" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="identical\smethod\sname" value="true"/>
+                <Choice name="different\smethod\sname" value="false"/>
+            </Parameter>
+            <Parameter name="duplicate" type="boolean" isExpected="true" expected="false" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="partition" value="false"/>
+            </Parameter>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <StatementArray operator="and">
+                        <Statement choice="identical\sarg\stypes" parameter="sameArgTypes" relation="="/>
+                        <Statement choice="identical\smethod\sname" parameter="sameName" relation="="/>
+                    </StatementArray>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="duplicate" value="true"/>
+                </Consequence>
+            </Constraint>
+        </Method>
+    </Class>
+</Model>

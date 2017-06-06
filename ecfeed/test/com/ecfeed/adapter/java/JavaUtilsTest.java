@@ -22,7 +22,7 @@ import com.ecfeed.junit.annotations.EcModel;
 import com.ecfeed.junit.annotations.Generator;
 
 @RunWith(OnlineRunner.class)
-@EcModel("test/com.ecfeed.adapter.java.ect")
+@EcModel("test/com/ecfeed/adapter/java/JavaUtilsTest.ect")
 @Generator(CartesianProductGenerator.class)
 @Constraints(Constraints.ALL)
 public class JavaUtilsTest {
