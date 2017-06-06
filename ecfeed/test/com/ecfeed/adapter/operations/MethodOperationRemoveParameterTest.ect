@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Model name="com.ecfeed.adapter.operations" version="1">
+    <Class name="com.ecfeed.adapter.operations.MethodOperationRemoveParameterTest" runOnAndroid="false">
+        <Method name="signatureCheckTest">
+            <Parameter name="sameParameterNames" type="boolean" isExpected="false" expected="false" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="identical\sarg\snames" value="true"/>
+                <Choice name="different\sarg\snames" value="false"/>
+            </Parameter>
+            <Parameter name="sameParameterTypes" type="boolean" isExpected="false" expected="false" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="identical\sarg\stypes" value="true"/>
+                <Choice name="different\sarg\stypes" value="false"/>
+            </Parameter>
+            <Parameter name="sameMethodName" type="boolean" isExpected="false" expected="false" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="identical\smethod\sname" value="true"/>
+                <Choice name="different\smethod\sname" value="false"/>
+            </Parameter>
+            <Parameter name="duplicate" type="boolean" isExpected="true" expected="false" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="partition" value="false"/>
+            </Parameter>
+            <Constraint name="expected\sresult">
+                <Premise>
+                    <StatementArray operator="and">
+                        <Statement choice="identical\sarg\stypes" parameter="sameParameterTypes" relation="="/>
+                        <Statement choice="identical\smethod\sname" parameter="sameMethodName" relation="="/>
+                    </StatementArray>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="duplicate" value="true"/>
+                </Consequence>
+            </Constraint>
+        </Method>
+        <Method name="consistenceCheckTest">
+            <Parameter name="removedParameterExpected" type="boolean" isExpected="false" expected="false" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="true" value="true"/>
+                <Choice name="false" value="false"/>
+            </Parameter>
+        </Method>
+    </Class>
+</Model>

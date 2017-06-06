@@ -45,7 +45,7 @@ import com.ecfeed.junit.annotations.Generator;
 
 @RunWith(OnlineRunner.class)
 @Generator(CartesianProductGenerator.class)
-@EcModel("test/com.ecfeed.adapter.operations.ect")
+@EcModel("test/com/ecfeed/adapter/operations/MethodOperationRemoveParameterTest.ect")
 @Constraints(Constraints.ALL)
 public class MethodOperationRemoveParameterTest{
 
