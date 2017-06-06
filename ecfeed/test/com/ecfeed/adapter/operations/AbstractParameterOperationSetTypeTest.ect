@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Model name="AbstractParameterOperationSetTypeTest" version="1">
+    <Class name="com.ecfeed.adapter.operations.AbstractParameterOperationSetTypeTest" runOnAndroid="false">
+        <Method name="typeNameTest">
+            <Parameter name="currentType" type="String" isExpected="false" expected="0" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="user\stype" value="">
+                    <Choice name="multi\ssegments" value="com.example.test.UserType"/>
+                </Choice>
+                <Choice name="primitive" value="">
+                    <Choice name="boolean" value="boolean"/>
+                    <Choice name="char" value="char"/>
+                    <Choice name="byte" value="byte"/>
+                    <Choice name="short" value="short"/>
+                    <Choice name="int" value="int"/>
+                    <Choice name="long" value="long"/>
+                    <Choice name="double" value="double"/>
+                    <Choice name="float" value="float"/>
+                    <Choice name="String" value="String"/>
+                </Choice>
+            </Parameter>
+            <Parameter name="newTypeName" type="String" isExpected="false" expected="0" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="valid" value="MIN_VALUE">
+                    <Choice name="multi\ssegments" value="com.example.test.UserType"/>
+                    <Choice name="primitive" value="">
+                        <Choice name="boolean" value="boolean"/>
+                        <Choice name="char" value="char"/>
+                        <Choice name="byte" value="byte"/>
+                        <Choice name="short" value="short"/>
+                        <Choice name="int" value="int"/>
+                        <Choice name="long" value="long"/>
+                        <Choice name="double" value="double"/>
+                        <Choice name="float" value="float"/>
+                        <Choice name="String" value="String"/>
+                    </Choice>
+                    <Choice name="one\ssegment" value="UserType"/>
+                </Choice>
+                <Choice name="invalid" value="MAX_VALUE">
+                    <Choice name="misformated" value="">
+                        <Choice name="space" value="com\sexample\stest"/>
+                        <Choice name="coma" value="com,example,test"/>
+                        <Choice name="colon" value="com:example:test"/>
+                        <Choice name="exclamation" value="com!example!test"/>
+                    </Choice>
+                    <Choice name="java\skeyword" value="">
+                        <Choice name="one\ssegment" value="for">
+                            <Choice name="for" value="for"/>
+                            <Choice name="if" value="if"/>
+                            <Choice name="class" value="class"/>
+                            <Choice name="abstract" value="abstract"/>
+                            <Choice name="package" value="package"/>
+                            <Choice name="interface" value="interface"/>
+                        </Choice>
+                        <Choice name="multi\ssegments" value="">
+                            <Choice name="for" value="com.for.test"/>
+                            <Choice name="if" value="com.if.test"/>
+                            <Choice name="while" value="while.com.test"/>
+                            <Choice name="abstract" value="test.com.abstract"/>
+                            <Choice name="package" value="package.abstract.test"/>
+                            <Choice name="interface" value="interface.com.example.UserType"/>
+                        </Choice>
+                    </Choice>
+                </Choice>
+            </Parameter>
+            <Parameter name="exceptionExpected" type="boolean" isExpected="true" expected="false" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="partition" value="false"/>
+            </Parameter>
+            <Constraint name="constraint">
+                <Premise>
+                    <Statement choice="invalid" parameter="newTypeName" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="exceptionExpected" value="true"/>
+                </Consequence>
+            </Constraint>
+        </Method>
+        <Method name="choicesConsistanceTest"/>
+    </Class>
+</Model>
