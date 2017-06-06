@@ -87,7 +87,7 @@ public class SystemHelper {
 
 		String source = 
 				getLocalHostName() + "+" +
-				getUserName() + "+ " +
+				getUserName() + "+" +
 				getOperatingSystemType();
 
 		return CheckSumHelper.calculateSha1(source);
