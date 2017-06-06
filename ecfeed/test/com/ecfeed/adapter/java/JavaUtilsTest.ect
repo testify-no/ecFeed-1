@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Model name="com.ecfeed.adapter.java" version="1">
+    <Class name="com.ecfeed.adapter.java.JavaUtilsTest" runOnAndroid="false">
+        <Method name="isValidTypeNameTest">
+            <Parameter name="packageName" type="String" isExpected="false" expected="false" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="empty" value="">
+                    <Label label="valid\spackage"/>
+                </Choice>
+                <Choice name="null" value="/null">
+                    <Label label="invalid\spackage"/>
+                </Choice>
+                <Choice name="one\ssegment" value="">
+                    <Choice name="valid" value="name">
+                        <Label label="valid\spackage"/>
+                        <Choice name="lower\scase" value="name"/>
+                        <Choice name="upper\scase" value="NAME"/>
+                        <Choice name="mixed" value="Name"/>
+                    </Choice>
+                    <Choice name="invalid" value="">
+                        <Label label="invalid\spackage"/>
+                        <Choice name="java\skeyword" value="">
+                            <Choice name="class" value="class"/>
+                            <Choice name="type\sname" value="int"/>
+                            <Choice name="for" value="for"/>
+                            <Choice name="while" value="while"/>
+                        </Choice>
+                        <Choice name="forbidden\skey" value="">
+                            <Choice name="space" value="name\sname"/>
+                            <Choice name="coma" value="name,name"/>
+                            <Choice name="exclamation" value="!"/>
+                        </Choice>
+                    </Choice>
+                </Choice>
+                <Choice name="many\ssegments" value="">
+                    <Choice name="valid" value="name">
+                        <Label label="valid\spackage"/>
+                        <Choice name="lower\scase" value="many.valid.segments"/>
+                        <Choice name="upper\scase" value="MANY.VALID.SEGMENTS">
+                            <Choice name="not\skeyword" value="NAME"/>
+                            <Choice name="keyword" value="INT"/>
+                        </Choice>
+                        <Choice name="mixed" value="Many.Valid.Segments">
+                            <Choice name="not\skeyword" value="Name"/>
+                            <Choice name="keyword" value="whilE"/>
+                        </Choice>
+                    </Choice>
+                    <Choice name="invalid" value="">
+                        <Label label="invalid\spackage"/>
+                        <Choice name="java\skeyword" value="">
+                            <Choice name="beginning" value="float.valid.segment"/>
+                            <Choice name="middle" value="valid.package.segment"/>
+                            <Choice name="end" value="valid.segment.do"/>
+                        </Choice>
+                        <Choice name="forbidden\skey" value="">
+                            <Choice name="space" value="name\sname.valid"/>
+                            <Choice name="coma" value="name,name.valid"/>
+                            <Choice name="exclamation" value="!invalid.valid"/>
+                        </Choice>
+                    </Choice>
+                </Choice>
+            </Parameter>
+            <Parameter name="className" type="String" isExpected="false" expected="false" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="valid" value="name">
+                    <Label label="valid\sclass"/>
+                    <Choice name="lower\scase" value="name"/>
+                    <Choice name="upper\scase" value="NAME"/>
+                    <Choice name="mixed" value="Name"/>
+                </Choice>
+                <Choice name="invalid" value="">
+                    <Label label="invalid\sclass"/>
+                    <Choice name="java\skeyword" value="">
+                        <Choice name="class" value="class"/>
+                        <Choice name="for" value="for"/>
+                        <Choice name="while" value="while"/>
+                    </Choice>
+                    <Choice name="forbidden\skey" value="">
+                        <Choice name="space" value="name\sname"/>
+                        <Choice name="coma" value="name,name"/>
+                        <Choice name="exclamation" value="!"/>
+                    </Choice>
+                </Choice>
+                <Choice name="primitive\stype" value="int">
+                    <Choice name="int" value="int"/>
+                    <Choice name="byte" value="byte"/>
+                    <Choice name="char" value="char"/>
+                    <Choice name="double" value="double"/>
+                    <Choice name="long" value="long"/>
+                </Choice>
+                <Choice name="empty" value="">
+                    <Label label="invalid\sclass"/>
+                </Choice>
+                <Choice name="null" value="/null">
+                    <Label label="invalid\sclass"/>
+                </Choice>
+                <Choice name="String" value="String">
+                    <Label label="valid\sclass"/>
+                </Choice>
+            </Parameter>
+            <Parameter name="valid" type="boolean" isExpected="true" expected="true" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="true" value="true"/>
+                <Choice name="false" value="false"/>
+            </Parameter>
+            <Constraint name="valid">
+                <Premise>
+                    <StatementArray operator="or">
+                        <LabelStatement label="invalid\spackage" parameter="packageName" relation="="/>
+                        <LabelStatement label="invalid\sclass" parameter="className" relation="="/>
+                        <StatementArray operator="and">
+                            <Statement choice="empty" parameter="packageName" relation="≠"/>
+                            <Statement choice="primitive\stype" parameter="className" relation="="/>
+                        </StatementArray>
+                    </StatementArray>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="valid" value="false"/>
+                </Consequence>
+            </Constraint>
+        </Method>
+    </Class>
+</Model>
