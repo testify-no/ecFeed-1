@@ -44,7 +44,7 @@ import com.ecfeed.ui.common.EclipseModelBuilder;
 
 
 @RunWith(OnlineRunner.class)
-@EcModel("test/com.ecfeed.adapter.java.ect")
+@EcModel("test/com/ecfeed/adapter/java/JavaImplementationStatusResolverTest.ect")
 @Constraints(Constraints.ALL)
 @Generator(CartesianProductGenerator.class)
 public class JavaImplementationStatusResolverTest {

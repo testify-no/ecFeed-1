@@ -1,0 +1,607 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Model name="com.ecfeed.adapter.java" version="1">
+    <Class name="com.ecfeed.adapter.java.ChoiceValueParserTest" runOnAndroid="false">
+        <Method name="parseBooleanTest">
+            <Parameter name="valueString" type="String" isExpected="false" expected="false" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="other" value="">
+                    <Choice name="digit" value="1"/>
+                    <Choice name="empty" value=""/>
+                    <Choice name="null" value="/null"/>
+                </Choice>
+                <Choice name="parseable" value="">
+                    <Choice name="false" value="false">
+                        <Choice name="lower\scase" value="false"/>
+                        <Choice name="upper\scase" value="FALSE"/>
+                        <Choice name="mixed\scases" value="False"/>
+                    </Choice>
+                    <Choice name="true" value="true">
+                        <Choice name="lower\scase" value="true"/>
+                        <Choice name="upper\scase" value="TRUE"/>
+                        <Choice name="mixed\scases" value="True"/>
+                    </Choice>
+                </Choice>
+            </Parameter>
+            <Parameter name="value" type="boolean" isExpected="true" expected="false" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="true" value="true"/>
+                <Choice name="false" value="false"/>
+            </Parameter>
+            <Parameter name="nullExpected" type="boolean" isExpected="true" expected="false" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="true" value="true"/>
+                <Choice name="false" value="false"/>
+            </Parameter>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="parseable:true" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="value" value="true"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="parseable:false" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="value" value="false"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\snull">
+                <Premise>
+                    <Statement choice="parseable" parameter="valueString" relation="≠"/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="nullExpected" value="true"/>
+                </Consequence>
+            </Constraint>
+        </Method>
+        <Method name="parseByteTest">
+            <Parameter name="valueString" type="String" isExpected="false" expected="false" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="min" value="MIN_VALUE"/>
+                <Choice name="negative" value="-1"/>
+                <Choice name="zero" value="0"/>
+                <Choice name="positive" value="1"/>
+                <Choice name="max" value="MAX_VALUE"/>
+                <Choice name="wrong" value="string"/>
+                <Choice name="null" value="/null"/>
+            </Parameter>
+            <Parameter name="parsedValue" type="byte" isExpected="true" expected="0" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+            </Parameter>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="min" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="MIN_VALUE"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="negative" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="-1"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="zero" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="0"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="positive" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="1"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="max" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="MAX_VALUE"/>
+                </Consequence>
+            </Constraint>
+        </Method>
+        <Method name="parseShortTest">
+            <Parameter name="valueString" type="String" isExpected="false" expected="false" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="min" value="MIN_VALUE"/>
+                <Choice name="negative" value="-1"/>
+                <Choice name="zero" value="0"/>
+                <Choice name="positive" value="1"/>
+                <Choice name="max" value="MAX_VALUE"/>
+                <Choice name="wrong" value="string"/>
+                <Choice name="null" value="/null"/>
+            </Parameter>
+            <Parameter name="parsedValue" type="short" isExpected="true" expected="0" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+            </Parameter>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="min" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="MIN_VALUE"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="negative" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="-1"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="zero" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="0"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="positive" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="1"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="max" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="MAX_VALUE"/>
+                </Consequence>
+            </Constraint>
+        </Method>
+        <Method name="parseIntegerTest">
+            <Parameter name="valueString" type="String" isExpected="false" expected="false" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="min" value="MIN_VALUE"/>
+                <Choice name="negative" value="-1"/>
+                <Choice name="zero" value="0"/>
+                <Choice name="positive" value="1"/>
+                <Choice name="max" value="MAX_VALUE"/>
+                <Choice name="wrong" value="string"/>
+                <Choice name="null" value="/null"/>
+            </Parameter>
+            <Parameter name="parsedValue" type="int" isExpected="true" expected="0" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+            </Parameter>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="min" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="MIN_VALUE"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="negative" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="-1"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="zero" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="0"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="positive" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="1"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="max" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="MAX_VALUE"/>
+                </Consequence>
+            </Constraint>
+        </Method>
+        <Method name="parseLongTest">
+            <Parameter name="valueString" type="String" isExpected="false" expected="false" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="min" value="MIN_VALUE"/>
+                <Choice name="negative" value="-1"/>
+                <Choice name="zero" value="0"/>
+                <Choice name="positive" value="1"/>
+                <Choice name="max" value="MAX_VALUE"/>
+                <Choice name="wrong" value="string"/>
+                <Choice name="null" value="/null"/>
+            </Parameter>
+            <Parameter name="parsedValue" type="long" isExpected="true" expected="0" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+            </Parameter>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="min" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="MIN_VALUE"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="negative" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="-1"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="zero" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="0"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="positive" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="1"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="max" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="MAX_VALUE"/>
+                </Consequence>
+            </Constraint>
+        </Method>
+        <Method name="parseCharTest">
+            <Parameter name="valueString" type="String" isExpected="false" expected="false" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="ascii" value="a"/>
+                <Choice name="non\sascii" value="か"/>
+                <Choice name="wrong" value="string"/>
+                <Choice name="null" value="/null"/>
+            </Parameter>
+            <Parameter name="parsedValue" type="char" isExpected="true" expected="0" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+            </Parameter>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="ascii" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="a"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="non\sascii" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="か"/>
+                </Consequence>
+            </Constraint>
+        </Method>
+        <Method name="parseFloatTest">
+            <Parameter name="valueString" type="String" isExpected="false" expected="false" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="negative\sinfinity" value="NEGATIVE_INFINITY"/>
+                <Choice name="negative" value="-3.14"/>
+                <Choice name="negative\sinteger" value="-1"/>
+                <Choice name="zero\sfloat" value="0.0"/>
+                <Choice name="zero\sinteger" value="0"/>
+                <Choice name="positive\sfloat" value="3.14"/>
+                <Choice name="positive\sinteger" value="1"/>
+                <Choice name="min\svalue" value="MIN_VALUE"/>
+                <Choice name="max" value="MAX_VALUE"/>
+                <Choice name="positive\sinfinity" value="POSITIVE_INFINITY"/>
+                <Choice name="wrong" value="string"/>
+                <Choice name="null" value="/null"/>
+            </Parameter>
+            <Parameter name="parsedValue" type="float" isExpected="true" expected="0.0" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+            </Parameter>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="negative\sinfinity" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="NEGATIVE_INFINITY"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="negative" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="-3.14"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="negative\sinteger" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="-1"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="zero\sfloat" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="0.0"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="zero\sinteger" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="0.0"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="positive\sfloat" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="3.14"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="positive\sinteger" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="1"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="min\svalue" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="MIN_VALUE"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="max" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="MAX_VALUE"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="positive\sinfinity" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="POSITIVE_INFINITY"/>
+                </Consequence>
+            </Constraint>
+        </Method>
+        <Method name="parseDoubleTest">
+            <Parameter name="valueString" type="String" isExpected="false" expected="false" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="negative\sinfinity" value="NEGATIVE_INFINITY"/>
+                <Choice name="negative" value="-3.14"/>
+                <Choice name="negative\sinteger" value="-1"/>
+                <Choice name="zero\sfloat" value="0.0"/>
+                <Choice name="zero\sinteger" value="0"/>
+                <Choice name="positive\sfloat" value="3.14"/>
+                <Choice name="positive\sinteger" value="1"/>
+                <Choice name="min\svalue" value="MIN_VALUE"/>
+                <Choice name="max" value="MAX_VALUE"/>
+                <Choice name="positive\sinfinity" value="POSITIVE_INFINITY"/>
+                <Choice name="wrong" value="string"/>
+                <Choice name="null" value="/null"/>
+            </Parameter>
+            <Parameter name="parsedValue" type="double" isExpected="true" expected="0.0" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+            </Parameter>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="negative\sinfinity" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="NEGATIVE_INFINITY"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="negative" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="-3.14"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="negative\sinteger" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="-1"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="zero\sfloat" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="0.0"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="zero\sinteger" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="0.0"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="positive\sfloat" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="3.14"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="positive\sinteger" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="1"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="min\svalue" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="MIN_VALUE"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="max" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="MAX_VALUE"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="positive\sinfinity" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="POSITIVE_INFINITY"/>
+                </Consequence>
+            </Constraint>
+        </Method>
+        <Method name="parseStringTest">
+            <Parameter name="valueString" type="String" isExpected="false" expected="false" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="normal\sstring" value="normal\sstring"/>
+                <Choice name="null" value="/null"/>
+            </Parameter>
+            <Parameter name="parsedValue" type="String" isExpected="true" expected="0" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+            </Parameter>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <Statement choice="normal\sstring" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="normal\sstring"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="constraint">
+                <Premise>
+                    <Statement choice="null" parameter="valueString" relation="="/>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedValue" value="/null"/>
+                </Consequence>
+            </Constraint>
+        </Method>
+        <Method name="parseUserTypeTest">
+            <Parameter name="valueString" type="String" isExpected="false" expected="false" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="implemented" value="IMPLEMENTED"/>
+                <Choice name="not\simplemented" value="NOT_IMPLEMENTED"/>
+                <Choice name="not\sparseable" value="NOT_PARSEABLE"/>
+                <Choice name="null" value="/null"/>
+            </Parameter>
+            <Parameter name="type" type="String" isExpected="false" expected="false" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="existing" value="com.ecfeed.adapter.java.ChoiceValueParserTest.ImplementedType"/>
+                <Choice name="not\sexisting" value="not.existing.type"/>
+            </Parameter>
+            <Parameter name="parsedCorrectly" type="boolean" isExpected="true" expected="false" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+            </Parameter>
+            <Constraint name="expected\svalue">
+                <Premise>
+                    <StatementArray operator="and">
+                        <Statement choice="existing" parameter="type" relation="="/>
+                        <Statement choice="implemented" parameter="valueString" relation="="/>
+                    </StatementArray>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="parsedCorrectly" value="true"/>
+                </Consequence>
+            </Constraint>
+        </Method>
+    </Class>
+</Model>
