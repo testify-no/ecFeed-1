@@ -49,8 +49,10 @@ public class CheckForUpdatesDialog extends TitleAreaDialog {
 
 		HttpCommunicatorWithProgress httpCommunicatorWithProgress = new HttpCommunicatorWithProgress();
 
+		final int timeoutInSeconds = 15;
+
 		CurrentReleases currentReleases = 
-				VersionCheckerAndRegistrator.registerAndGetCurrentReleases(httpCommunicatorWithProgress);
+				VersionCheckerAndRegistrator.registerAndGetCurrentReleases(httpCommunicatorWithProgress, timeoutInSeconds);
 
 		CheckForUpdatesDialog updatesDialog = new CheckForUpdatesDialog(currentReleases);
 		updatesDialog.open();		
@@ -68,8 +70,10 @@ public class CheckForUpdatesDialog extends TitleAreaDialog {
 
 		HttpCommunicatorWithProgress httpCommunicatorWithProgress = new HttpCommunicatorWithProgress();
 
+		final int timeoutInSeconds = 5;
+
 		CurrentReleases currentReleases = 
-				VersionCheckerAndRegistrator.registerAndGetCurrentReleases(httpCommunicatorWithProgress);
+				VersionCheckerAndRegistrator.registerAndGetCurrentReleases(httpCommunicatorWithProgress, timeoutInSeconds);
 
 		if (!shouldOpenConditionalDialog(
 				ApplicationContext.getEcFeedVersion(),

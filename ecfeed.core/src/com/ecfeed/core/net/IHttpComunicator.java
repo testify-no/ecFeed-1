@@ -15,6 +15,6 @@ import java.util.List;
 
 public interface IHttpComunicator {
 
-	public String sendGetRequest(String url, List<HttpProperty> properties) throws RuntimeException;
+	public String sendGetRequest(String url, List<HttpProperty> properties, int timeoutInSeconds) throws RuntimeException;
 
 }
