@@ -30,7 +30,7 @@ public class VersionCheckerAndRegistratorTest {
 		class HttpCommunicatorStub implements IHttpComunicator {
 
 			@Override
-			public String sendGetRequest(String url, List<HttpProperty> properties) throws RuntimeException {
+			public String sendGetRequest(String url, List<HttpProperty> properties, int timeoutInSeconds) throws RuntimeException {
 
 				return null;
 			}
@@ -39,7 +39,7 @@ public class VersionCheckerAndRegistratorTest {
 		HttpCommunicatorStub httpCommunicatorStub = new HttpCommunicatorStub();
 
 		CurrentReleases currentReleases = 
-				VersionCheckerAndRegistrator.registerAndGetCurrentReleases(httpCommunicatorStub);
+				VersionCheckerAndRegistrator.registerAndGetCurrentReleases(httpCommunicatorStub, 1);
 
 		assertEquals(null, currentReleases);
 	}	
@@ -50,7 +50,7 @@ public class VersionCheckerAndRegistratorTest {
 		class HttpCommunicatorStub implements IHttpComunicator {
 
 			@Override
-			public String sendGetRequest(String url, List<HttpProperty> properties) throws RuntimeException {
+			public String sendGetRequest(String url, List<HttpProperty> properties, int timeoutInSeconds) throws RuntimeException {
 
 				if (!StringHelper.isEqual(url, "http://www.ecfeed.com/get_releases.php"))
 					return null;
@@ -73,7 +73,7 @@ public class VersionCheckerAndRegistratorTest {
 		HttpCommunicatorStub httpCommunicatorStub = new HttpCommunicatorStub();
 
 		CurrentReleases currentReleases = 
-				VersionCheckerAndRegistrator.registerAndGetCurrentReleases(httpCommunicatorStub);
+				VersionCheckerAndRegistrator.registerAndGetCurrentReleases(httpCommunicatorStub, 1);
 
 		testEmptyResponse(currentReleases);
 	}
@@ -84,7 +84,7 @@ public class VersionCheckerAndRegistratorTest {
 		class HttpCommunicatorStub implements IHttpComunicator {
 
 			@Override
-			public String sendGetRequest(String url, List<HttpProperty> properties) throws RuntimeException {
+			public String sendGetRequest(String url, List<HttpProperty> properties, int timeoutInSeconds) throws RuntimeException {
 				return createEmptyResponse();
 			}
 		}
@@ -92,7 +92,7 @@ public class VersionCheckerAndRegistratorTest {
 		HttpCommunicatorStub httpCommunicatorStub = new HttpCommunicatorStub();
 
 		CurrentReleases currentReleases = 
-				VersionCheckerAndRegistrator.registerAndGetCurrentReleases(httpCommunicatorStub);
+				VersionCheckerAndRegistrator.registerAndGetCurrentReleases(httpCommunicatorStub, 1);
 
 		testEmptyResponse(currentReleases);
 	}
@@ -103,7 +103,7 @@ public class VersionCheckerAndRegistratorTest {
 		class HttpCommunicatorStub implements IHttpComunicator {
 
 			@Override
-			public String sendGetRequest(String url, List<HttpProperty> properties) throws RuntimeException {
+			public String sendGetRequest(String url, List<HttpProperty> properties, int timeoutInSeconds) throws RuntimeException {
 				return createFullResponse();
 			}
 		}
@@ -111,7 +111,7 @@ public class VersionCheckerAndRegistratorTest {
 		HttpCommunicatorStub httpCommunicatorStub = new HttpCommunicatorStub();
 
 		CurrentReleases currentReleases = 
-				VersionCheckerAndRegistrator.registerAndGetCurrentReleases(httpCommunicatorStub);
+				VersionCheckerAndRegistrator.registerAndGetCurrentReleases(httpCommunicatorStub, 1);
 
 		testFullResponse(currentReleases);
 	}	

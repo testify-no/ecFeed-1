@@ -21,7 +21,7 @@ import com.ecfeed.core.utils.SystemHelper;
 
 public class VersionCheckerAndRegistrator {
 
-	public static CurrentReleases registerAndGetCurrentReleases(IHttpComunicator httpComunicator) {
+	public static CurrentReleases registerAndGetCurrentReleases(IHttpComunicator httpComunicator, int timeoutInSeconds) {
 
 		List<HttpProperty> properties = new ArrayList<HttpProperty>();
 
@@ -29,18 +29,20 @@ public class VersionCheckerAndRegistrator {
 		properties.add(createEcIdProperty());
 
 		try {
-			return sendAndParseRequest(httpComunicator, properties);
+			return sendAndParseRequest(httpComunicator, properties, timeoutInSeconds);
 		} catch (Exception e) {
 			return null;
 		}
 	}
 
 	private static CurrentReleases sendAndParseRequest(
-			IHttpComunicator httpComunicator, List<HttpProperty> properties) throws Exception {
+			IHttpComunicator httpComunicator, 
+			List<HttpProperty> properties,
+			int timeoutInSeconds) throws Exception {
 
 		String url = "http://www.ecfeed.com/get_releases.php";
 
-		String xmlResponse = httpComunicator.sendGetRequest(url, properties);
+		String xmlResponse = httpComunicator.sendGetRequest(url, properties, timeoutInSeconds);
 
 		return ReleasesXmlParser.parseXml(xmlResponse);		
 	}

@@ -25,9 +25,9 @@ import com.ecfeed.utils.EclipseHelper;
 
 public class HttpCommunicatorWithProgress implements IHttpComunicator {
 
-	public String sendGetRequest(String url, List<HttpProperty> properties) throws RuntimeException {
+	public String sendGetRequest(String url, List<HttpProperty> properties, int timeoutInSeconds) throws RuntimeException {
 
-		CommunicatorRunnable communicatorRunnable = new CommunicatorRunnable(url, properties);
+		CommunicatorRunnable communicatorRunnable = new CommunicatorRunnable(url, properties, timeoutInSeconds);
 
 		ProgressMonitorDialog progressMonitorDialog = 
 				new ProgressMonitorDialog(EclipseHelper.getActiveShell());
@@ -54,13 +54,15 @@ public class HttpCommunicatorWithProgress implements IHttpComunicator {
 
 		private String fUrl;
 		private List<HttpProperty> fProperties;
+		private int fTimeoutInSeconds;
 		String fResponse = null;
 		String fErrorMessage = null;
 
 
-		public CommunicatorRunnable(String url, List<HttpProperty> properties) {
+		public CommunicatorRunnable(String url, List<HttpProperty> properties, int timeoutInSeconds) {
 			fUrl = url;
 			fProperties = properties;
+			fTimeoutInSeconds = timeoutInSeconds;
 		}
 
 		@Override
@@ -72,7 +74,7 @@ public class HttpCommunicatorWithProgress implements IHttpComunicator {
 			HttpCommunicator httpComunicator = new HttpCommunicator();
 
 			try {
-				fResponse = httpComunicator.sendGetRequest(fUrl, fProperties);
+				fResponse = httpComunicator.sendGetRequest(fUrl, fProperties, fTimeoutInSeconds);
 			} catch (Exception e) {
 				fErrorMessage = e.getMessage();
 			}

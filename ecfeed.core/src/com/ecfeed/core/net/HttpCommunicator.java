@@ -23,7 +23,7 @@ import com.ecfeed.core.utils.ExceptionHelper;
 public class HttpCommunicator implements IHttpComunicator {
 
 	@Override
-	public String sendGetRequest(String url, List<HttpProperty> properties) throws RuntimeException {
+	public String sendGetRequest(String url, List<HttpProperty> properties, int timeoutInSeconds) throws RuntimeException {
 
 		URL obj;
 		try {
@@ -32,6 +32,8 @@ public class HttpCommunicator implements IHttpComunicator {
 			HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
 
 			connection.setRequestMethod("GET");
+			connection.setConnectTimeout(1000*timeoutInSeconds);
+			connection.setReadTimeout(1000*timeoutInSeconds);
 
 			if (properties != null) {
 				for (HttpProperty httpProperty : properties) {

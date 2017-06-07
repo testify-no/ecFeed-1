@@ -34,9 +34,13 @@ public class ChangeLogDialog {
 		try {
 			HttpCommunicatorWithProgress httpComunicatorWithProgress = new HttpCommunicatorWithProgress();
 
+			final int timeoutInSeconds = 10;
+
 			changeLogText = 
 					httpComunicatorWithProgress.sendGetRequest(
-							"https://raw.githubusercontent.com/ecfeed/ecFeed/master/ecfeed/doc/changelog.txt", null);
+							"https://raw.githubusercontent.com/ecfeed/ecFeed/master/ecfeed/doc/changelog.txt", 
+							null,
+							timeoutInSeconds);
 
 		} catch(Exception e) {
 			ErrorDialog.open("HTTP request failed", "Can not download change log. (Check your internet connection)");
