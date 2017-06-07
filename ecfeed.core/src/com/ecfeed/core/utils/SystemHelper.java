@@ -24,11 +24,11 @@ public class SystemHelper {
 	public static String getOperatingSystemType() {
 
 		String systemName = System.getProperty("os.name");
-		
+
 		if (systemName.contains("Windows")) {
 			return "Windows";
 		}
-		
+
 		return systemName;
 	}	
 
@@ -72,6 +72,10 @@ public class SystemHelper {
 		}
 	}
 
+	public static String getFormattedLocalHostName() {
+		return StringHelper.removeFromPostfix(".", getLocalHostName());
+	}
+
 	public static String getLocalHostIpAddress() {
 
 		try {
@@ -86,9 +90,9 @@ public class SystemHelper {
 	public static String createEcId() {
 
 		String source = 
-				getLocalHostName() + "+" +
-				getUserName() + "+" +
-				getOperatingSystemType();
+				getFormattedLocalHostName() + "+" +
+						getUserName() + "+" +
+						getOperatingSystemType();
 
 		return CheckSumHelper.calculateSha1(source);
 	}
