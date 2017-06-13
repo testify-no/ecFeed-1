@@ -9,3 +9,8 @@
 - Double click the 'eclipse' executable file. After a while the main window of ecFeed will be displayed.
 - Enable MacOs Gatekeeper
 
+Known issues:
+- Just after application start the main menu is disabled. 
+	Workaround: Press Command+Tab to activate another application (there should be at least one). Press Command+Tab again to activate ecFeed. Main menu should be active now.
+
+
