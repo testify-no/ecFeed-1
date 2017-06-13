@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: ecFeed
 Bundle-SymbolicName: com.ecfeed; singleton:=true
-Bundle-Version: 1.12.1.qualifier
+Bundle-Version: 1.12.2.qualifier
 Bundle-Activator: com.ecfeed.ui.plugin.Activator
 Bundle-Vendor: ecFeed AS
 Require-Bundle: org.eclipse.ui,
