@@ -10,36 +10,27 @@
 
 package com.ecfeed.net;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.dialogs.ProgressMonitorDialog;
-import org.eclipse.jface.operation.IRunnableWithProgress;
 
 import com.ecfeed.core.net.HttpCommunicator;
 import com.ecfeed.core.net.HttpProperty;
 import com.ecfeed.core.net.IHttpCommunicator;
 import com.ecfeed.core.utils.ExceptionHelper;
-import com.ecfeed.utils.EclipseHelper;
 
-public class HttpCommunicatorWithProgress implements IHttpCommunicator {
+public class HttpCommunicatorWithoutProgress implements IHttpCommunicator {
 
 	public String sendGetRequest(String url, List<HttpProperty> properties, int timeoutInSeconds) throws RuntimeException {
 
 		CommunicatorRunnable communicatorRunnable = new CommunicatorRunnable(url, properties, timeoutInSeconds);
 
-		ProgressMonitorDialog progressMonitorDialog = 
-				new ProgressMonitorDialog(EclipseHelper.getActiveShell());
-
-		progressMonitorDialog.setCancelable(false);
-
+		Thread thread = new Thread(communicatorRunnable);
+		thread.start();
 		try {
-			progressMonitorDialog.run(true, true, communicatorRunnable);
-		} catch (InvocationTargetException | InterruptedException e) {
-			ExceptionHelper.reportRuntimeException(e.getMessage());;
+			thread.join();
+		} catch (InterruptedException e) {
+			ExceptionHelper.reportRuntimeException(e.getMessage());
 			return null;
-		}
+		}		
 
 		String errorMessage = communicatorRunnable.getErrorMessage(); 
 		if (errorMessage != null) {
@@ -50,7 +41,7 @@ public class HttpCommunicatorWithProgress implements IHttpCommunicator {
 		return communicatorRunnable.getResponse();
 	}
 
-	private static class CommunicatorRunnable implements IRunnableWithProgress {
+	private static class CommunicatorRunnable implements Runnable {
 
 		private String fUrl;
 		private List<HttpProperty> fProperties;
@@ -66,8 +57,7 @@ public class HttpCommunicatorWithProgress implements IHttpCommunicator {
 		}
 
 		@Override
-		public void run(IProgressMonitor monitor)
-				throws InvocationTargetException, InterruptedException {
+		public void run() {
 
 			fResponse = null;
 			fErrorMessage = null;

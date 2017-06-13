@@ -29,7 +29,9 @@ import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.application.ApplicationPreferences;
 import com.ecfeed.application.ApplicationVersion;
 import com.ecfeed.core.utils.StringHelper;
+import com.ecfeed.core.net.IHttpCommunicator;
 import com.ecfeed.net.HttpCommunicatorWithProgress;
+import com.ecfeed.net.HttpCommunicatorWithoutProgress;
 import com.ecfeed.ui.dialogs.basic.DialogObjectToolkit;
 import com.ecfeed.ui.editor.IValueApplier;
 
@@ -47,12 +49,12 @@ public class CheckForUpdatesDialog extends TitleAreaDialog {
 
 	public static void openUnconditionally() {
 
-		HttpCommunicatorWithProgress httpCommunicatorWithProgress = new HttpCommunicatorWithProgress();
+		IHttpCommunicator httpCommunicator = new HttpCommunicatorWithProgress();
 
 		final int timeoutInSeconds = 15;
 
 		CurrentReleases currentReleases = 
-				VersionCheckerAndRegistrator.registerAndGetCurrentReleases(httpCommunicatorWithProgress, timeoutInSeconds);
+				VersionCheckerAndRegistrator.registerAndGetCurrentReleases(httpCommunicator, timeoutInSeconds);
 
 		CheckForUpdatesDialog updatesDialog = new CheckForUpdatesDialog(currentReleases);
 		updatesDialog.open();		
@@ -68,12 +70,12 @@ public class CheckForUpdatesDialog extends TitleAreaDialog {
 			return;
 		}
 
-		HttpCommunicatorWithProgress httpCommunicatorWithProgress = new HttpCommunicatorWithProgress();
+		IHttpCommunicator httpCommunicator = new HttpCommunicatorWithoutProgress();
 
 		final int timeoutInSeconds = 5;
 
 		CurrentReleases currentReleases = 
-				VersionCheckerAndRegistrator.registerAndGetCurrentReleases(httpCommunicatorWithProgress, timeoutInSeconds);
+				VersionCheckerAndRegistrator.registerAndGetCurrentReleases(httpCommunicator, timeoutInSeconds);
 
 		if (!shouldOpenConditionalDialog(
 				ApplicationContext.getEcFeedVersion(),
@@ -303,8 +305,7 @@ public class CheckForUpdatesDialog extends TitleAreaDialog {
 			boolean automaticallyCheckForUpdates,
 			boolean checkBetaVersions,
 			String ignoreStandardVersionTo,
-			String ignoreBetaVersionTo
-			) {
+			String ignoreBetaVersionTo) {
 
 		if (currentReleases == null) {
 			return false;

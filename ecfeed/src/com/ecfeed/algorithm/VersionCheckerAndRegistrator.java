@@ -15,13 +15,13 @@ import java.util.List;
 
 import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.net.HttpProperty;
-import com.ecfeed.core.net.IHttpComunicator;
+import com.ecfeed.core.net.IHttpCommunicator;
 import com.ecfeed.core.utils.SystemHelper;
 
 
 public class VersionCheckerAndRegistrator {
 
-	public static CurrentReleases registerAndGetCurrentReleases(IHttpComunicator httpComunicator, int timeoutInSeconds) {
+	public static CurrentReleases registerAndGetCurrentReleases(IHttpCommunicator httpComunicator, int timeoutInSeconds) {
 
 		List<HttpProperty> properties = new ArrayList<HttpProperty>();
 
@@ -36,7 +36,7 @@ public class VersionCheckerAndRegistrator {
 	}
 
 	private static CurrentReleases sendAndParseRequest(
-			IHttpComunicator httpComunicator, 
+			IHttpCommunicator httpComunicator, 
 			List<HttpProperty> properties,
 			int timeoutInSeconds) throws Exception {
 

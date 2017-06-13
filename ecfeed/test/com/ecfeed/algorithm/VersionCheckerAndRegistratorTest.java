@@ -18,7 +18,7 @@ import java.util.List;
 import org.junit.Test;
 
 import com.ecfeed.core.net.HttpProperty;
-import com.ecfeed.core.net.IHttpComunicator;
+import com.ecfeed.core.net.IHttpCommunicator;
 import com.ecfeed.core.utils.StringHelper;
 
 
@@ -27,7 +27,7 @@ public class VersionCheckerAndRegistratorTest {
 	@Test
 	public void shouldReturnNullWhenHttpResponseIsNull() {
 
-		class HttpCommunicatorStub implements IHttpComunicator {
+		class HttpCommunicatorStub implements IHttpCommunicator {
 
 			@Override
 			public String sendGetRequest(String url, List<HttpProperty> properties, int timeoutInSeconds) throws RuntimeException {
@@ -47,7 +47,7 @@ public class VersionCheckerAndRegistratorTest {
 	@Test
 	public void shouldCheckRequestParameters() {
 
-		class HttpCommunicatorStub implements IHttpComunicator {
+		class HttpCommunicatorStub implements IHttpCommunicator {
 
 			@Override
 			public String sendGetRequest(String url, List<HttpProperty> properties, int timeoutInSeconds) throws RuntimeException {
@@ -81,7 +81,7 @@ public class VersionCheckerAndRegistratorTest {
 	@Test
 	public void shouldCreateEmptyResponse() {
 
-		class HttpCommunicatorStub implements IHttpComunicator {
+		class HttpCommunicatorStub implements IHttpCommunicator {
 
 			@Override
 			public String sendGetRequest(String url, List<HttpProperty> properties, int timeoutInSeconds) throws RuntimeException {
@@ -100,7 +100,7 @@ public class VersionCheckerAndRegistratorTest {
 	@Test
 	public void shouldCreateFullResponse() {
 
-		class HttpCommunicatorStub implements IHttpComunicator {
+		class HttpCommunicatorStub implements IHttpCommunicator {
 
 			@Override
 			public String sendGetRequest(String url, List<HttpProperty> properties, int timeoutInSeconds) throws RuntimeException {
