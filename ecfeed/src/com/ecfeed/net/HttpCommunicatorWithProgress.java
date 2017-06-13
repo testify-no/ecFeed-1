@@ -19,11 +19,11 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 
 import com.ecfeed.core.net.HttpCommunicator;
 import com.ecfeed.core.net.HttpProperty;
-import com.ecfeed.core.net.IHttpComunicator;
+import com.ecfeed.core.net.IHttpCommunicator;
 import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.utils.EclipseHelper;
 
-public class HttpCommunicatorWithProgress implements IHttpComunicator {
+public class HttpCommunicatorWithProgress implements IHttpCommunicator {
 
 	public String sendGetRequest(String url, List<HttpProperty> properties, int timeoutInSeconds) throws RuntimeException {
 

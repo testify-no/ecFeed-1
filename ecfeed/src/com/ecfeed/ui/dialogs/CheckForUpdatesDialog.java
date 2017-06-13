@@ -29,7 +29,7 @@ import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.application.ApplicationPreferences;
 import com.ecfeed.application.ApplicationVersion;
 import com.ecfeed.core.utils.StringHelper;
-import com.ecfeed.core.net.IHttpComunicator;
+import com.ecfeed.core.net.IHttpCommunicator;
 import com.ecfeed.net.HttpCommunicatorWithProgress;
 import com.ecfeed.net.HttpCommunicatorWithoutProgress;
 import com.ecfeed.ui.dialogs.basic.DialogObjectToolkit;
@@ -49,7 +49,7 @@ public class CheckForUpdatesDialog extends TitleAreaDialog {
 
 	public static void openUnconditionally() {
 
-		IHttpComunicator httpCommunicator = new HttpCommunicatorWithProgress();
+		IHttpCommunicator httpCommunicator = new HttpCommunicatorWithProgress();
 
 		final int timeoutInSeconds = 15;
 
@@ -70,7 +70,7 @@ public class CheckForUpdatesDialog extends TitleAreaDialog {
 			return;
 		}
 
-		IHttpComunicator httpCommunicator = new HttpCommunicatorWithoutProgress();
+		IHttpCommunicator httpCommunicator = new HttpCommunicatorWithoutProgress();
 
 		final int timeoutInSeconds = 5;
 

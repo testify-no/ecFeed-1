@@ -20,7 +20,7 @@ import java.util.List;
 import com.ecfeed.core.utils.ExceptionHelper;
 
 
-public class HttpCommunicator implements IHttpComunicator {
+public class HttpCommunicator implements IHttpCommunicator {
 
 	@Override
 	public String sendGetRequest(String url, List<HttpProperty> properties, int timeoutInSeconds) throws RuntimeException {

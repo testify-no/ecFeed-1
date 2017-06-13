@@ -13,7 +13,7 @@ package com.ecfeed.core.net;
 import java.util.List;
 
 
-public interface IHttpComunicator {
+public interface IHttpCommunicator {
 
 	public String sendGetRequest(String url, List<HttpProperty> properties, int timeoutInSeconds) throws RuntimeException;
 
