@@ -22,11 +22,13 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.GlobalParameterNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelHelper;
+import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.common.utils.SwtObjectHelper;
 import com.ecfeed.ui.modelif.AbstractParameterInterface;
@@ -198,7 +200,24 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 			return false;
 		}
 
-		if (fParameterIf.getImplementationStatus() != EImplementationStatus.IMPLEMENTED) {
+		String parameterType = fParameterIf.getParameter().getType();
+
+		if (JavaTypeHelper.isJavaType(parameterType)) {
+			return true;
+		} 
+
+		return isReplaceButtonEnabledForUserType();
+	}
+
+	private boolean isReplaceButtonEnabledForUserType() {
+
+		if (ApplicationContext.isStandaloneApplication()) {
+			return false;
+		} 
+
+		EImplementationStatus implementationStatus = fParameterIf.getImplementationStatus();
+
+		if (implementationStatus == EImplementationStatus.NOT_IMPLEMENTED) {
 			return false;
 		}
 

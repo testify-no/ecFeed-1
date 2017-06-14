@@ -226,7 +226,7 @@ public class ChoicesViewer extends TableViewerSection {
 					setRemoveSelectedStatus();
 				}
 			} catch (Exception e) {
-				ExceptionCatchDialog.open("Can not replace with default.", e.getMessage());
+				ExceptionCatchDialog.open("Can not reset with default.", e.getMessage());
 			}
 		}
 	}
@@ -255,7 +255,7 @@ public class ChoicesViewer extends TableViewerSection {
 						new ActionSelectionAdapter(
 								new DeleteAction(getViewer(), this), Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
 
-		fReplaceWithDefaultButton = addButton("Replace with default", new ReplaceWithDefaultAdapter());
+		fReplaceWithDefaultButton = addButton("Reset with default", new ReplaceWithDefaultAdapter());
 
 		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
 		fActionProvider = new ModelViewerActionProvider(getTableViewer(), this, fileInfoProvider);
