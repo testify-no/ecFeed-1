@@ -155,20 +155,54 @@ public class CheckForUpdatesDialog extends TitleAreaDialog {
 			return "ecFeed server could not be contacted.";
 		}
 
-		if (isNewVersionAvailable()) {
+		if (isNewStandardVersionAvailable()) {
 			return "New version of ecFeed is available";
 		}
+
+		if (isNewBetaVersionAvailable()) {
+			return "New beta version of ecFeed is available";
+		}		
 
 		return "No new version found.";
 	}
 
-	private boolean isNewVersionAvailable() {
+	private boolean isAnyNewVersionAvailable() {
+
+		if (isNewStandardVersionAvailable()) {
+			return true;
+		}
+
+		if (isNewBetaVersionAvailable()) {
+			return true;
+		}		
+
+		return false;
+	}
+
+	private boolean isNewStandardVersionAvailable() {
+
+		if (isNewVersionAvailable(fCurrentReleases.versionStandard)) {
+			return true;
+		}
+
+		return false;		
+	}
+
+	private boolean isNewBetaVersionAvailable() {
+
+		if (isNewVersionAvailable(fCurrentReleases.versionBeta)) {
+			return true;
+		}
+
+		return false;
+	}
+
+	private boolean isNewVersionAvailable(String releaseVersion) {
 
 		if (fCurrentReleases == null) {
 			return false;
 		}
 
-		String releaseVersion = fCurrentReleases.versionStandard;
 		String softwareVersion = ApplicationContext.getEcFeedVersion();
 
 		int result = softwareVersion.compareTo(releaseVersion);
@@ -178,7 +212,7 @@ public class CheckForUpdatesDialog extends TitleAreaDialog {
 		}
 
 		return true;
-	}
+	}	
 
 	private String createMainMessage() {
 
@@ -210,12 +244,11 @@ public class CheckForUpdatesDialog extends TitleAreaDialog {
 
 		sb.append("\n");
 
-		if (isNewVersionAvailable()) {
+		if (isAnyNewVersionAvailable()) {
 			sb.append(createDownloadInstructions());
 		} else {
 			sb.append("You use the latest ecFeed version. No need to update.");
 		}
-
 
 		return sb.toString();
 	}
