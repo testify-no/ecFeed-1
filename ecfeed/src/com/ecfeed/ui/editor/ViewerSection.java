@@ -119,6 +119,7 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 	protected class ViewerMenuListener implements MenuListener{
 
 		private Menu fMenu;
+		private final int LAST_MENU_POSITION = -1;
 
 		public ViewerMenuListener(Menu menu) {
 			fMenu = menu;
@@ -134,9 +135,11 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 
 		@Override
 		public void menuShown(MenuEvent e) {
-			for(MenuItem item : getMenu().getItems()){
+
+			for(MenuItem item : getMenu().getItems()) {
 				item.dispose();
 			}
+
 			populateMenu();
 		}
 
@@ -154,16 +157,30 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 
 			Iterator<String> groupIt = provider.getGroups().iterator();
 
-			while(groupIt.hasNext()){
-				for(NamedAction action : provider.getActions(groupIt.next())){
+			while(groupIt.hasNext()) {
+
+				for (NamedAction action : provider.getActions(groupIt.next())) {
+
 					String convertedName = convertActionName(action.getName(), firstSelectedNode);
-					addMenuItem(convertedName, action);
+					addMenuItem(convertedName, action, getMenuItemIndex(action));
 				}
+
 				if(groupIt.hasNext()){
 					new MenuItem(fMenu, SWT.SEPARATOR);
 				}
 			}
 		}
+
+		private int getMenuItemIndex(NamedAction action) {
+
+			String actionName = action.getName();
+
+			if (actionName.equals("INSERT")) {
+				return 1;
+			}
+
+			return LAST_MENU_POSITION;
+		}		
 
 		private String convertActionName(String oldName, AbstractNode selectedNode) {
 
@@ -253,12 +270,23 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 			}
 		}
 
-		protected void addMenuItem(String text, Action action){
-			MenuItem item = new MenuItem(getMenu(), SWT.NONE);
+		protected void addMenuItem(String text, Action action, int index) {
+
+			MenuItem item;
+
+			if (index == LAST_MENU_POSITION) {
+				item = new MenuItem(getMenu(), SWT.NONE);
+			} else {
+				item = new MenuItem(getMenu(), SWT.NONE, index);
+			}
 
 			item.setText(text);
 			item.setEnabled(action.isEnabled());
 			item.addSelectionListener(new MenuItemSelectionAdapter(action)); 
+		}
+
+		protected void addMenuItem(String text, Action action) {
+			addMenuItem(text, action, LAST_MENU_POSITION);
 		}
 
 	}
