@@ -156,18 +156,26 @@ public class AbstractNodeInterface extends OperationExecuter{
 	}	
 
 	public boolean editComments() {
-		TextAreaDialog dialog = new TextAreaDialog(Display.getCurrent().getActiveShell(),
-				Messages.DIALOG_EDIT_COMMENTS_TITLE, Messages.DIALOG_EDIT_COMMENTS_MESSAGE, getComments());
+
+		TextAreaDialog dialog = 
+				new TextAreaDialog(
+						Display.getCurrent().getActiveShell(),
+						Messages.DIALOG_EDIT_COMMENTS_TITLE, 
+						Messages.DIALOG_EDIT_COMMENTS_MESSAGE, 
+						getComments());
+
 		if(dialog.open() == IDialogConstants.OK_ID){
 			return setComments(dialog.getText());
 		}
 		return false;
 	}
 
-	public boolean setComments(String comments){
+	public boolean setComments(String comments) {
+
 		if(comments.equals(getComments())){
 			return false;
 		}
+
 		return execute(new GenericSetCommentsOperation(fNode, comments), Messages.DIALOG_SET_COMMENTS_PROBLEM_TITLE);
 	}
 

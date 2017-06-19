@@ -48,7 +48,12 @@ public class ModelDetailsPage extends BasicDetailsPage {
 
 		if (fFileInfoProvider.isProjectAvailable()) {
 			addForm(fComments = new ExportableSingleTextCommentsSection(this, this, fFileInfoProvider));
+		} else {
+			addForm(fComments = new SingleTextCommentsSection(this, this, fFileInfoProvider));
 		}
+
+		fComments.setTargetIf(fRootIf);
+
 		addViewerSection(fClassesSection = new ClassViewer(this, this, fFileInfoProvider));
 
 		fParametersSection = new GlobalParametersViewer(this, this, fFileInfoProvider);

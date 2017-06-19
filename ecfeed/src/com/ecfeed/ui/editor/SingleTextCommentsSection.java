@@ -35,6 +35,7 @@ public class SingleTextCommentsSection extends AbstractCommentsSection {
 	@Override
 	public Composite createMainControlComposite(Composite parent){
 		//overriding tab folder creation
+
 		fCommentsText = getToolkit().createText(parent, "", TEXT_STYLE);
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, false);
 		gd.heightHint = 150;

@@ -21,6 +21,7 @@ public class GenericSetCommentsOperation extends AbstractModelOperation {
 	private String fCurrentComments;
 
 	public GenericSetCommentsOperation(AbstractNode target, String comments) {
+
 		super(OperationNames.SET_COMMENTS);
 		fTarget = target;
 		fComments = comments;
@@ -28,6 +29,7 @@ public class GenericSetCommentsOperation extends AbstractModelOperation {
 
 	@Override
 	public void execute() throws ModelOperationException {
+
 		fCurrentComments = fTarget.getDescription() != null ? fTarget.getDescription() : "";
 		fTarget.setDescription(fComments);
 	}
