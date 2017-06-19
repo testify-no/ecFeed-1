@@ -34,7 +34,7 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 	private ChoicesViewer fChoicesViewer;
 	private Button fBrowseUserTypeButton;
 	private WebParameterSection fWebParameterSection;
-	private AbstractParameterCommentsSection fCommentsSection;
+	private AbstractCommentsSection fCommentsSection;
 
 	private class NameApplier implements IValueApplier {
 
@@ -76,9 +76,7 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 
 		createAttributesComposite();
 
-		if (fFileInfoProvider.isProjectAvailable()) {
-			addForm(fCommentsSection = getParameterCommentsSection(this, this));
-		}
+		addForm(fCommentsSection = getCommentsSection(this, this));
 
 		fWebParameterSection = createWebParameterSection();
 
@@ -184,7 +182,7 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 
 	protected abstract AbstractParameterInterface getParameterIf();
 
-	protected abstract AbstractParameterCommentsSection getParameterCommentsSection(ISectionContext sectionContext, IModelUpdateContext updateContext);
+	protected abstract AbstractCommentsSection getCommentsSection(ISectionContext sectionContext, IModelUpdateContext updateContext);
 
 	protected Button getBrowseUserTypeButton() {
 		if (!fFileInfoProvider.isProjectAvailable()) {

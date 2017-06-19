@@ -237,8 +237,19 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 	}
 
 	@Override
-	protected AbstractParameterCommentsSection getParameterCommentsSection(ISectionContext sectionContext, IModelUpdateContext updateContext) {
-		return new MethodParameterCommentsSection(sectionContext, updateContext, fFileInfoProvider);
+	protected AbstractCommentsSection getCommentsSection(ISectionContext sectionContext, IModelUpdateContext updateContext) {
+
+		AbstractCommentsSection commentsSection = null;
+
+		if (fFileInfoProvider.isProjectAvailable()) {
+			commentsSection = new MethodParameterCommentsSection(sectionContext, updateContext, fFileInfoProvider);
+		} else {
+			commentsSection = new SingleTextCommentsSection(this, this, fFileInfoProvider);
+		}
+
+		commentsSection.setTargetIf(fParameterIf);
+
+		return commentsSection;
 	}
 
 	private class SetDefaultValueListener extends ComboSelectionListener {
