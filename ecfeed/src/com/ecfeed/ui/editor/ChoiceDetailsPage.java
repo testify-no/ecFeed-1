@@ -59,7 +59,7 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 
 		createNameValueEditor(getMainComposite());
 
-		createCommentsSection();
+		addCommentsSection();
 
 		addViewerSection(fChildrenViewer = new ChoicesViewer(this, this, fFileInfoProvider));
 		addViewerSection(fLabelsViewer = new ChoiceLabelsViewer(this, this, fFileInfoProvider));
@@ -93,7 +93,8 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		}
 	}
 
-	private void createCommentsSection() {
+	private void addCommentsSection() {
+
 		if (fFileInfoProvider.isProjectAvailable()) {
 			addForm(fCommentsSection = new ChoiceCommentsSection(this, this, fFileInfoProvider));
 		} else {

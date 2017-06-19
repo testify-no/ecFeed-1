@@ -63,7 +63,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		createRunnerCombo();
 		createRunnerSection(fileInfoProvider);
 
-		createCommentsSection(fileInfoProvider);
+		addCommentsSection(fileInfoProvider);
 
 		addViewerSection(fParemetersSection = new MethodParametersViewer(this,
 				this, fileInfoProvider));
@@ -81,17 +81,17 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		return textClient;
 	}
 
-	private void createCommentsSection(IFileInfoProvider fileInfoProvider) {
-		
+	private void addCommentsSection(IFileInfoProvider fileInfoProvider) {
+
 		if (fileInfoProvider.isProjectAvailable()) {
 			addForm(fCommentsSection = new ExportableJavaDocCommentsSection(this, this, fileInfoProvider));
 		} else {
 			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fileInfoProvider));
 		}
-		
+
 		fCommentsSection.setTargetIf(fMethodInterface);
 	}
-	
+
 	private void createMethodNameWidgets(IFileInfoProvider fileInfoProvider) {
 		int gridColumns = 2;
 
