@@ -26,7 +26,7 @@ import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 
-public class JavaDocCommentsSection extends AbstractCommentsSection {
+public class ExportableJavaDocCommentsSection extends AbstractCommentsSection {
 
 	private TabItem fCommentsTab;
 	private TabItem fJavadocTab;
@@ -35,7 +35,7 @@ public class JavaDocCommentsSection extends AbstractCommentsSection {
 	private Menu fExportButtonMenu;
 	private Menu fImportButtonMenu;
 
-	public JavaDocCommentsSection(
+	public ExportableJavaDocCommentsSection(
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext, 
 			IFileInfoProvider fileInfoProvider) {

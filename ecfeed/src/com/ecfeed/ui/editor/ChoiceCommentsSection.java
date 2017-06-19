@@ -18,7 +18,7 @@ import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 
-public class ChoiceCommentsSection extends JavaDocCommentsSection {
+public class ChoiceCommentsSection extends ExportableJavaDocCommentsSection {
 
 	protected class ChoiceImportSelectionAdapter extends ButtonClickListener {
 		@Override

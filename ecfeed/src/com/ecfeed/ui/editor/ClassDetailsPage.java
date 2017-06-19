@@ -50,7 +50,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	private Combo fAndroidBaseRunnerCombo;	
 	private ClassInterface fClassIf;
 	private GlobalParametersViewer fGlobalParametersSection;
-	private JavaDocCommentsSection fCommentsSection;
+	private ExportableJavaDocCommentsSection fCommentsSection;
 
 
 	public ClassDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider) {
@@ -67,7 +67,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		createBasicParametersComposite(getMainComposite());
 
 		if (fFileInfoProvider.isProjectAvailable()) {
-			addForm(fCommentsSection = new JavaDocCommentsSection(this, this, fFileInfoProvider));
+			addForm(fCommentsSection = new ExportableJavaDocCommentsSection(this, this, fFileInfoProvider));
 		}
 		addViewerSection(fMethodsSection = new MethodsViewer(this, this, fFileInfoProvider));
 		addViewerSection(fGlobalParametersSection = new GlobalParametersViewer(this, this, fFileInfoProvider));

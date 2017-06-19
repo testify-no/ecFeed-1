@@ -40,7 +40,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	private TestCasesViewer fTestCasesSection;
 
 	private MethodInterface fMethodInterface;
-	private JavaDocCommentsSection fCommentsSection;
+	private ExportableJavaDocCommentsSection fCommentsSection;
 
 	private final NodePropertyDefs.PropertyId fRunnerPropertyId = NodePropertyDefs.PropertyId.PROPERTY_METHOD_RUNNER;
 
@@ -64,7 +64,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		createRunnerSection(fileInfoProvider);
 
 		if (fileInfoProvider.isProjectAvailable()) {
-			addForm(fCommentsSection = new JavaDocCommentsSection(this, this,
+			addForm(fCommentsSection = new ExportableJavaDocCommentsSection(this, this,
 					fileInfoProvider));
 		}
 		addViewerSection(fParemetersSection = new MethodParametersViewer(this,
