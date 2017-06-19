@@ -52,89 +52,6 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	private GlobalParametersViewer fGlobalParametersSection;
 	private JavaDocCommentsSection fCommentsSection;
 
-	private class BrowseClassesSelectionListener extends ButtonClickListener {
-		@Override
-		public void widgetSelected(SelectionEvent e){
-			fClassIf.reassignClass();
-		}
-	}
-
-	private class AndroidBaseRunnerComboSelectionListener extends ComboSelectionListener {
-		@Override
-		public void widgetSelected(SelectionEvent e){
-
-			if (baseRunnerFieldsActive()) {
-				fClassIf.setAndroidBaseRunner(fAndroidBaseRunnerCombo.getText());
-
-				String androidBaseRunner = fClassIf.getAndroidBaseRunner();
-				fAndroidBaseRunnerCombo.setText(androidBaseRunner);
-			}
-		}
-	}	
-
-	private class AndroidBaseRunnerComboFocusListener implements FocusListener {
-
-		@Override
-		public void focusGained(FocusEvent e) {
-			refreshAndroidBaseRunnerCombo();
-		}
-
-		@Override
-		public void focusLost(FocusEvent e) {
-		}
-	}	
-
-	private class ClassNameApplier implements IValueApplier {
-
-		@Override
-		public void applyValue() {
-			fClassIf.setLocalName(fClassNameText.getText());
-			fClassNameText.setText(fClassIf.getLocalName());
-		}
-	}	
-
-	private class PackageNameApplier implements IValueApplier {
-
-		@Override
-		public void applyValue() {
-			fClassIf.setPackageName(fPackageNameText.getText());
-			fPackageNameText.setText(fClassIf.getPackageName());
-		}
-	}	
-
-	private class RunOnAndroidApplier implements IValueApplier {
-
-		@Override
-		public void applyValue() {
-
-			boolean selection = fRunOnAndroidCheckbox.getSelection();
-			fClassIf.setRunOnAndroid(selection);
-
-			if (selection) {
-				adjustAndroidBaseRunner();
-			}
-			refresh();
-		}		
-
-		private void adjustAndroidBaseRunner() {
-
-			final String defaultBaseAndroidBaseRunner = 
-					AndroidBaseRunnerHelper.getDefaultAndroidBaseRunnerName();
-
-			if (!baseRunnerFieldsActive()) {
-				fClassIf.setAndroidBaseRunner(defaultBaseAndroidBaseRunner);
-				return;
-			}
-
-			String androidBaseRunner = fClassIf.getAndroidBaseRunner();
-			if (androidBaseRunner == null || androidBaseRunner.isEmpty()) {
-
-				fClassIf.setAndroidBaseRunner(defaultBaseAndroidBaseRunner);
-			}
-		}
-
-	}
-
 
 	public ClassDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider) {
 		super(masterSection, updateContext, fileInfoProvider);
@@ -337,4 +254,89 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	protected Class<? extends AbstractNode> getNodeType() {
 		return ClassNode.class;
 	}
+
+
+	private class BrowseClassesSelectionListener extends ButtonClickListener {
+		@Override
+		public void widgetSelected(SelectionEvent e){
+			fClassIf.reassignClass();
+		}
+	}
+
+	private class AndroidBaseRunnerComboSelectionListener extends ComboSelectionListener {
+		@Override
+		public void widgetSelected(SelectionEvent e){
+
+			if (baseRunnerFieldsActive()) {
+				fClassIf.setAndroidBaseRunner(fAndroidBaseRunnerCombo.getText());
+
+				String androidBaseRunner = fClassIf.getAndroidBaseRunner();
+				fAndroidBaseRunnerCombo.setText(androidBaseRunner);
+			}
+		}
+	}	
+
+	private class AndroidBaseRunnerComboFocusListener implements FocusListener {
+
+		@Override
+		public void focusGained(FocusEvent e) {
+			refreshAndroidBaseRunnerCombo();
+		}
+
+		@Override
+		public void focusLost(FocusEvent e) {
+		}
+	}	
+
+	private class ClassNameApplier implements IValueApplier {
+
+		@Override
+		public void applyValue() {
+			fClassIf.setLocalName(fClassNameText.getText());
+			fClassNameText.setText(fClassIf.getLocalName());
+		}
+	}	
+
+	private class PackageNameApplier implements IValueApplier {
+
+		@Override
+		public void applyValue() {
+			fClassIf.setPackageName(fPackageNameText.getText());
+			fPackageNameText.setText(fClassIf.getPackageName());
+		}
+	}	
+
+	private class RunOnAndroidApplier implements IValueApplier {
+
+		@Override
+		public void applyValue() {
+
+			boolean selection = fRunOnAndroidCheckbox.getSelection();
+			fClassIf.setRunOnAndroid(selection);
+
+			if (selection) {
+				adjustAndroidBaseRunner();
+			}
+			refresh();
+		}		
+
+		private void adjustAndroidBaseRunner() {
+
+			final String defaultBaseAndroidBaseRunner = 
+					AndroidBaseRunnerHelper.getDefaultAndroidBaseRunnerName();
+
+			if (!baseRunnerFieldsActive()) {
+				fClassIf.setAndroidBaseRunner(defaultBaseAndroidBaseRunner);
+				return;
+			}
+
+			String androidBaseRunner = fClassIf.getAndroidBaseRunner();
+			if (androidBaseRunner == null || androidBaseRunner.isEmpty()) {
+
+				fClassIf.setAndroidBaseRunner(defaultBaseAndroidBaseRunner);
+			}
+		}
+
+	}
+
 }

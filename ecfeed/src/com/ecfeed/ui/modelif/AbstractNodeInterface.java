@@ -51,56 +51,12 @@ import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.dialogs.TextAreaDialog;
 
-public class AbstractNodeInterface extends OperationExecuter{
+public class AbstractNodeInterface extends OperationExecuter {
 
 	private IFileInfoProvider fFileInfoProvider;
 	private AbstractNode fNode;
 	private EclipseImplementationStatusResolver fStatusResolver;
 	private ITypeAdapterProvider fAdapterProvider;
-
-	private class RenameParameterProblemTitleProvider implements IModelVisitor{
-
-		@Override
-		public Object visit(RootNode node) throws Exception {
-			return Messages.DIALOG_RENAME_MODEL_PROBLEM_TITLE;
-		}
-
-		@Override
-		public Object visit(ClassNode node) throws Exception {
-			return Messages.DIALOG_RENAME_CLASS_PROBLEM_TITLE;
-		}
-
-		@Override
-		public Object visit(MethodNode node) throws Exception {
-			return Messages.DIALOG_RENAME_METHOD_PROBLEM_TITLE;
-		}
-
-		@Override
-		public Object visit(MethodParameterNode node) throws Exception {
-			return Messages.DIALOG_RENAME_PAREMETER_PROBLEM_TITLE;
-		}
-
-		@Override
-		public Object visit(GlobalParameterNode node) throws Exception {
-			return Messages.DIALOG_RENAME_PAREMETER_PROBLEM_TITLE;
-		}
-
-		@Override
-		public Object visit(TestCaseNode node) throws Exception {
-			return Messages.DIALOG_TEST_SUITE_NAME_PROBLEM_MESSAGE;
-		}
-
-		@Override
-		public Object visit(ConstraintNode node) throws Exception {
-			return Messages.DIALOG_RENAME_CONSTRAINT_PROBLEM_TITLE;
-		}
-
-		@Override
-		public Object visit(ChoiceNode node) throws Exception {
-			return Messages.DIALOG_RENAME_CHOICE_PROBLEM_TITLE;
-		}
-
-	}
 
 	public AbstractNodeInterface(IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider) {
 		super(updateContext);
@@ -315,4 +271,49 @@ public class AbstractNodeInterface extends OperationExecuter{
 	public boolean nodeImplementedFullyOrPartially(){
 		return getImplementationStatus() != EImplementationStatus.NOT_IMPLEMENTED;
 	}
+
+	private class RenameParameterProblemTitleProvider implements IModelVisitor{
+
+		@Override
+		public Object visit(RootNode node) throws Exception {
+			return Messages.DIALOG_RENAME_MODEL_PROBLEM_TITLE;
+		}
+
+		@Override
+		public Object visit(ClassNode node) throws Exception {
+			return Messages.DIALOG_RENAME_CLASS_PROBLEM_TITLE;
+		}
+
+		@Override
+		public Object visit(MethodNode node) throws Exception {
+			return Messages.DIALOG_RENAME_METHOD_PROBLEM_TITLE;
+		}
+
+		@Override
+		public Object visit(MethodParameterNode node) throws Exception {
+			return Messages.DIALOG_RENAME_PAREMETER_PROBLEM_TITLE;
+		}
+
+		@Override
+		public Object visit(GlobalParameterNode node) throws Exception {
+			return Messages.DIALOG_RENAME_PAREMETER_PROBLEM_TITLE;
+		}
+
+		@Override
+		public Object visit(TestCaseNode node) throws Exception {
+			return Messages.DIALOG_TEST_SUITE_NAME_PROBLEM_MESSAGE;
+		}
+
+		@Override
+		public Object visit(ConstraintNode node) throws Exception {
+			return Messages.DIALOG_RENAME_CONSTRAINT_PROBLEM_TITLE;
+		}
+
+		@Override
+		public Object visit(ChoiceNode node) throws Exception {
+			return Messages.DIALOG_RENAME_CHOICE_PROBLEM_TITLE;
+		}
+
+	}
+
 }

@@ -40,13 +40,7 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 	private TestCaseInterface fTestCaseIf;
 	private SingleTextCommentsSection fCommentsSection;
 
-	private class RenameTestCaseAdapter extends ComboSelectionListener {
-		@Override
-		public void widgetSelected(SelectionEvent e){
-			fTestCaseIf.setName(fTestSuiteNameCombo.getText());
-			fTestSuiteNameCombo.setText(fTestCaseIf.getName());
-		}
-	}
+
 	public TestCaseDetailsPage(
 			ModelMasterSection masterSection, 
 			IModelUpdateContext updateContext, 
@@ -141,4 +135,13 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 	protected Class<? extends AbstractNode> getNodeType() {
 		return TestCaseNode.class;
 	}
+
+	private class RenameTestCaseAdapter extends ComboSelectionListener {
+		@Override
+		public void widgetSelected(SelectionEvent e){
+			fTestCaseIf.setName(fTestSuiteNameCombo.getText());
+			fTestSuiteNameCombo.setText(fTestCaseIf.getName());
+		}
+	}	
+
 }

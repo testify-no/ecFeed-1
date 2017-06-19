@@ -44,45 +44,6 @@ public class MethodDetailsPage extends BasicDetailsPage {
 
 	private final NodePropertyDefs.PropertyId fRunnerPropertyId = NodePropertyDefs.PropertyId.PROPERTY_METHOD_RUNNER;
 
-	private class OnlineTestAdapter extends ButtonClickListener {
-		@Override
-		public void widgetSelected(SelectionEvent ev) {
-			try {
-				fMethodInterface.executeOnlineTests(getFileInfoProvider());
-			} catch (Exception e) {
-				ExceptionCatchDialog.open("Can not execute online tests.",
-						e.getMessage());
-			}
-		}
-	}
-
-	private class OnlineExportAdapter extends ButtonClickListener {
-		@Override
-		public void widgetSelected(SelectionEvent ev) {
-			try {
-				fMethodInterface.executeOnlineExport(getFileInfoProvider());
-			} catch (Exception e) {
-				ExceptionCatchDialog.open("Can not execute online export.",
-						e.getMessage());
-			}
-		}
-	}
-
-	private class ReassignAdapter extends ButtonClickListener {
-		@Override
-		public void widgetSelected(SelectionEvent e) {
-			fMethodInterface.reassignTarget();
-		}
-	}
-
-	private class MethodNameApplier implements IValueApplier {
-
-		@Override
-		public void applyValue() {
-			fMethodInterface.setName(fMethodNameText.getText());
-			fMethodNameText.setText(fMethodInterface.getName());
-		}
-	}	
 
 	public MethodDetailsPage(ModelMasterSection masterSection,
 			IModelUpdateContext updateContext,
@@ -294,5 +255,45 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	protected Class<? extends AbstractNode> getNodeType() {
 		return MethodNode.class;
 	}
+
+	private class OnlineTestAdapter extends ButtonClickListener {
+		@Override
+		public void widgetSelected(SelectionEvent ev) {
+			try {
+				fMethodInterface.executeOnlineTests(getFileInfoProvider());
+			} catch (Exception e) {
+				ExceptionCatchDialog.open("Can not execute online tests.",
+						e.getMessage());
+			}
+		}
+	}
+
+	private class OnlineExportAdapter extends ButtonClickListener {
+		@Override
+		public void widgetSelected(SelectionEvent ev) {
+			try {
+				fMethodInterface.executeOnlineExport(getFileInfoProvider());
+			} catch (Exception e) {
+				ExceptionCatchDialog.open("Can not execute online export.",
+						e.getMessage());
+			}
+		}
+	}
+
+	private class ReassignAdapter extends ButtonClickListener {
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			fMethodInterface.reassignTarget();
+		}
+	}
+
+	private class MethodNameApplier implements IValueApplier {
+
+		@Override
+		public void applyValue() {
+			fMethodInterface.setName(fMethodNameText.getText());
+			fMethodNameText.setText(fMethodInterface.getName());
+		}
+	}	
 
 }
