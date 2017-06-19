@@ -11,7 +11,7 @@ package com.ecfeed.spec.gui;
 
 import com.ecfeed.testutils.ETypeName;
 
-public class ModelDetailsPage{
+public class ModelDetailsPageTest{
 
 	public void initialModelNameTest(String filename){
 		// TODO Auto-generated method stub
