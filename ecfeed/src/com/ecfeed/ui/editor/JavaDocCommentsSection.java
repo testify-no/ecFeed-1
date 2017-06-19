@@ -28,62 +28,6 @@ import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class JavaDocCommentsSection extends AbstractCommentsSection {
 
-	private class JavadocEditButtonListener extends ButtonClickListener {
-		@Override
-		public void widgetSelected(SelectionEvent ev) {
-			getTargetIf().editComments();
-			getTabFolder().setSelection(getTabFolder().indexOf(getCommentsItem()));
-		}
-	}
-
-	protected class JavadocExportSelectionAdapter extends MenuItemSelectionListener {
-		@Override
-		public void widgetSelected(SelectionEvent ev) {
-			try {
-				getTargetIf().exportCommentsToJavadoc(getTargetIf().getComments());
-				getTabFolder().setSelection(getTabFolder().indexOf(getJavaDocItem()));
-			} catch (Exception e) {
-				ExceptionCatchDialog.open(Messages.EXCEPTION_CAN_NOT_EXPORT, e.getMessage());
-			}
-		}
-	}
-
-	protected class JavadocImportSelectionAdapter extends MenuItemSelectionListener {
-		@Override
-		public void widgetSelected(SelectionEvent ev) {
-			try {
-				getTargetIf().importJavadocComments();
-				getTabFolder().setSelection(getTabFolder().indexOf(getCommentsItem()));
-			} catch (Exception e) {
-				ExceptionCatchDialog.open(Messages.EXCEPTION_CAN_NOT_IMPORT, e.getMessage());
-			}
-		}
-	}
-
-	protected class JavadocExportAllSelectionAdapter extends MenuItemSelectionListener {
-		@Override
-		public void widgetSelected(SelectionEvent ev) {
-			try {
-				getTargetIf().exportAllComments();
-				getTabFolder().setSelection(getTabFolder().indexOf(getJavaDocItem()));
-			} catch (Exception e) {
-				ExceptionCatchDialog.open(Messages.EXCEPTION_CAN_NOT_EXPORT, e.getMessage());
-			}
-		}
-	}
-
-	protected class JavadocImportAllSelectionAdapter extends MenuItemSelectionListener {
-		@Override
-		public void widgetSelected(SelectionEvent ev) {
-			try {
-				getTargetIf().importAllJavadocComments();
-				getTabFolder().setSelection(getTabFolder().indexOf(getCommentsItem()));
-			} catch (Exception e) {
-				ExceptionCatchDialog.open(Messages.EXCEPTION_CAN_NOT_IMPORT, e.getMessage());
-			}
-		}
-	}
-
 	private TabItem fCommentsTab;
 	private TabItem fJavadocTab;
 	private Button fExportButton;
@@ -125,6 +69,22 @@ public class JavaDocCommentsSection extends AbstractCommentsSection {
 		refresh();
 	}
 
+	@Override
+	protected SelectionAdapter createEditButtonSelectionAdapter(){
+		return new JavadocEditButtonListener();
+	}
+
+	@Override
+	protected void createCommentsButtons(){
+		super.createCommentsButtons();
+
+		fExportButton = addButton("Export...", null);
+		fImportButton = addButton("Import...", null);
+
+		fExportButton.addSelectionListener(createExportButtonSelectionListener());
+		fImportButton.addSelectionListener(createImportButtonSelectionListener());
+	}
+
 	protected TabItem getCommentsItem(){
 		return fCommentsTab;
 	}
@@ -139,17 +99,6 @@ public class JavaDocCommentsSection extends AbstractCommentsSection {
 
 	protected Text getJavaDocText(){
 		return getTextFromTabItem(fJavadocTab);
-	}
-
-	@Override
-	protected void createCommentsButtons(){
-		super.createCommentsButtons();
-
-		fExportButton = addButton("Export...", null);
-		fImportButton = addButton("Import...", null);
-
-		fExportButton.addSelectionListener(createExportButtonSelectionListener());
-		fImportButton.addSelectionListener(createImportButtonSelectionListener());
 	}
 
 	protected Button getExportButton(){
@@ -214,8 +163,65 @@ public class JavaDocCommentsSection extends AbstractCommentsSection {
 		return fImportButtonMenu;
 	}
 
-	@Override
-	protected SelectionAdapter createEditButtonSelectionAdapter(){
-		return new JavadocEditButtonListener();
+	private class JavadocEditButtonListener extends ButtonClickListener {
+
+		@Override
+		public void widgetSelected(SelectionEvent ev) {
+			getTargetIf().editComments();
+			getTabFolder().setSelection(getTabFolder().indexOf(getCommentsItem()));
+		}
 	}
+
+	protected class JavadocExportSelectionAdapter extends MenuItemSelectionListener {
+
+		@Override
+		public void widgetSelected(SelectionEvent ev) {
+			try {
+				getTargetIf().exportCommentsToJavadoc(getTargetIf().getComments());
+				getTabFolder().setSelection(getTabFolder().indexOf(getJavaDocItem()));
+			} catch (Exception e) {
+				ExceptionCatchDialog.open(Messages.EXCEPTION_CAN_NOT_EXPORT, e.getMessage());
+			}
+		}
+	}
+
+	protected class JavadocImportSelectionAdapter extends MenuItemSelectionListener {
+
+		@Override
+		public void widgetSelected(SelectionEvent ev) {
+			try {
+				getTargetIf().importJavadocComments();
+				getTabFolder().setSelection(getTabFolder().indexOf(getCommentsItem()));
+			} catch (Exception e) {
+				ExceptionCatchDialog.open(Messages.EXCEPTION_CAN_NOT_IMPORT, e.getMessage());
+			}
+		}
+	}
+
+	protected class JavadocExportAllSelectionAdapter extends MenuItemSelectionListener {
+
+		@Override
+		public void widgetSelected(SelectionEvent ev) {
+			try {
+				getTargetIf().exportAllComments();
+				getTabFolder().setSelection(getTabFolder().indexOf(getJavaDocItem()));
+			} catch (Exception e) {
+				ExceptionCatchDialog.open(Messages.EXCEPTION_CAN_NOT_EXPORT, e.getMessage());
+			}
+		}
+	}
+
+	protected class JavadocImportAllSelectionAdapter extends MenuItemSelectionListener {
+
+		@Override
+		public void widgetSelected(SelectionEvent ev) {
+			try {
+				getTargetIf().importAllJavadocComments();
+				getTabFolder().setSelection(getTabFolder().indexOf(getCommentsItem()));
+			} catch (Exception e) {
+				ExceptionCatchDialog.open(Messages.EXCEPTION_CAN_NOT_IMPORT, e.getMessage());
+			}
+		}
+	}
+
 }
