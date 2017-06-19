@@ -88,8 +88,6 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		} else {
 			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fileInfoProvider));
 		}
-
-		fCommentsSection.setTargetIf(fMethodInterface);
 	}
 
 	private void createMethodNameWidgets(IFileInfoProvider fileInfoProvider) {
@@ -223,10 +221,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		fParemetersSection.setInput(methodNode);
 		fConstraintsSection.setInput(methodNode);
 		fTestCasesSection.setInput(methodNode);
-
-		if (fileInfoProvider.isProjectAvailable()) {
-			fCommentsSection.setInput(methodNode);
-		}
+		fCommentsSection.setInput(methodNode);
 	}
 
 	private void refreshBrowseButton(IFileInfoProvider fileInfoProvider, MethodNode methodNode) {

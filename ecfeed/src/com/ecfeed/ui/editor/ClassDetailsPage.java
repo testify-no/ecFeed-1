@@ -91,8 +91,6 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		} else {
 			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fFileInfoProvider));
 		}
-
-		fCommentsSection.setTargetIf(fClassIf);
 	}
 
 	private void createBasicParametersComposite(Composite parent) {
@@ -216,9 +214,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 
 			refreshOtherMethodsSection(selectedClass);
 
-			if (fFileInfoProvider.isProjectAvailable()) {
-				fCommentsSection.setInput(selectedClass);
-			}
+			fCommentsSection.setInput(selectedClass);
 
 			getMainSection().layout();
 		}

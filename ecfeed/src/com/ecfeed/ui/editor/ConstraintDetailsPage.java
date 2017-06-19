@@ -56,13 +56,12 @@ public class ConstraintDetailsPage extends BasicDetailsPage {
 	}
 
 	private void addCommentsSection() {
+
 		if (fFileInfoProvider.isProjectAvailable()) {
 			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fFileInfoProvider));
 		} else {
 			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fFileInfoProvider));
 		}
-
-		fCommentsSection.setTargetIf(fConstraintIf);
 	}
 
 	private void createConstraintNameEdit(Composite parent) {
@@ -92,9 +91,7 @@ public class ConstraintDetailsPage extends BasicDetailsPage {
 		fNameCombo.setText(constraint.getName());
 		fConstraintViewer.setInput(constraint);
 
-		if (fFileInfoProvider.isProjectAvailable()) {
-			fCommentsSection.setInput(constraint);
-		}
+		fCommentsSection.setInput(constraint);
 		fConstraintIf.setOwnNode(constraint);
 	}
 

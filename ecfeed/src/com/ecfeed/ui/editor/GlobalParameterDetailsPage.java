@@ -71,16 +71,10 @@ public class GlobalParameterDetailsPage extends AbstractParameterDetailsPage {
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext) {
 
-		AbstractCommentsSection commentsSection = null;
-
 		if (fFileInfoProvider.isProjectAvailable()) {
-			commentsSection = new GlobalParameterCommentsSection(sectionContext, updateContext, fFileInfoProvider);
+			return new GlobalParameterCommentsSection(sectionContext, updateContext, fFileInfoProvider);
 		} else {
-			commentsSection = new SingleTextCommentsSection(this, this, fFileInfoProvider);
+			return new SingleTextCommentsSection(this, this, fFileInfoProvider);
 		}
-
-		commentsSection.setTargetIf(fParameterIf);
-
-		return commentsSection;		
 	}
 }

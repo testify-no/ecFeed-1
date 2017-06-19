@@ -73,9 +73,7 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 			TestCaseNode testCase = (TestCaseNode)getSelectedElement();
 			fTestCaseIf.setOwnNode(testCase);
 
-			if (fFileInfoProvider.isProjectAvailable()) {
-				fCommentsSection.setInput(testCase);
-			}
+			fCommentsSection.setInput(testCase);
 
 			getMainSection().setText(testCase.toString());
 			fTestSuiteNameCombo.setItems(testCase.getMethod().getTestSuites().toArray(new String[]{}));
@@ -93,8 +91,6 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 		} else {
 			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fFileInfoProvider));
 		}
-
-		fCommentsSection.setTargetIf(fTestCaseIf);
 	}
 
 	private boolean isExecuteButtonEnabled() {

@@ -83,9 +83,7 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 			String title = getSelectedChoice().toString();
 			getMainSection().setText(title);
 
-			if (fFileInfoProvider.isProjectAvailable()) {
-				fCommentsSection.setInput(selectedChoice);
-			}
+			fCommentsSection.setInput(selectedChoice);
 			fChildrenViewer.setInput(selectedChoice);
 			fLabelsViewer.setInput(selectedChoice);
 			fNameText.setText(selectedChoice.getName());
@@ -100,8 +98,6 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		} else {
 			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fFileInfoProvider));
 		}
-
-		fCommentsSection.setTargetIf(fChoiceIf);
 	}
 
 	private void refreshValueEditor(ChoiceNode choiceNode) {

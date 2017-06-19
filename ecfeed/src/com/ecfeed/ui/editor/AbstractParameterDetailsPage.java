@@ -109,9 +109,7 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 
 			refreshWebParameterSection();
 
-			if (fFileInfoProvider.isProjectAvailable()) {
-				fCommentsSection.setInput(parameter);
-			}
+			fCommentsSection.setInput(parameter);
 
 			fChoicesViewer.setInput(parameter);
 		}
