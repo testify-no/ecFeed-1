@@ -66,14 +66,8 @@ public class ClassDetailsPage extends BasicDetailsPage {
 
 		createBasicParametersComposite(getMainComposite());
 
-		if (fFileInfoProvider.isProjectAvailable()) {
-			addForm(fCommentsSection = new ExportableJavaDocCommentsSection(this, this, fFileInfoProvider));
-		} else {
-			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fFileInfoProvider));
-		}
-		
-		fCommentsSection.setTargetIf(fClassIf);
-		
+		addCommentsSection();
+
 		addViewerSection(fMethodsSection = new MethodsViewer(this, this, fFileInfoProvider));
 		addViewerSection(fGlobalParametersSection = new GlobalParametersViewer(this, this, fFileInfoProvider));
 
@@ -88,6 +82,17 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	protected Composite createTextClientComposite(){
 		Composite textClient = super.createTextClientComposite();
 		return textClient;
+	}
+
+	private void addCommentsSection() {
+
+		if (fFileInfoProvider.isProjectAvailable()) {
+			addForm(fCommentsSection = new ExportableJavaDocCommentsSection(this, this, fFileInfoProvider));
+		} else {
+			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fFileInfoProvider));
+		}
+
+		fCommentsSection.setTargetIf(fClassIf);
 	}
 
 	private void createBasicParametersComposite(Composite parent) {

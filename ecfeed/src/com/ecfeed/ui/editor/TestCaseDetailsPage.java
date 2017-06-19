@@ -55,9 +55,8 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 		super.createContents(parent);
 		createTestSuiteEdit(getMainComposite());
 
-		if (fFileInfoProvider.isProjectAvailable()) {
-			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fFileInfoProvider));
-		}
+		addCommentsSection();
+
 		addViewerSection(fTestDataViewer = new TestDataViewer(this, this, fFileInfoProvider));
 	}
 
@@ -85,6 +84,17 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 
 			fExecuteButton.setEnabled(isExecuteButtonEnabled());
 		}
+	}
+
+	private void addCommentsSection() {
+
+		if (fFileInfoProvider.isProjectAvailable()) {
+			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fFileInfoProvider));
+		} else {
+			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fFileInfoProvider));
+		}
+
+		fCommentsSection.setTargetIf(fTestCaseIf);
 	}
 
 	private boolean isExecuteButtonEnabled() {
