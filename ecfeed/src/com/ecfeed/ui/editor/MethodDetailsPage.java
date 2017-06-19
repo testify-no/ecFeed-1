@@ -40,7 +40,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	private TestCasesViewer fTestCasesSection;
 
 	private MethodInterface fMethodInterface;
-	private ExportableJavaDocCommentsSection fCommentsSection;
+	private AbstractCommentsSection fCommentsSection;
 
 	private final NodePropertyDefs.PropertyId fRunnerPropertyId = NodePropertyDefs.PropertyId.PROPERTY_METHOD_RUNNER;
 
@@ -63,10 +63,8 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		createRunnerCombo();
 		createRunnerSection(fileInfoProvider);
 
-		if (fileInfoProvider.isProjectAvailable()) {
-			addForm(fCommentsSection = new ExportableJavaDocCommentsSection(this, this,
-					fileInfoProvider));
-		}
+		createCommentsSection(fileInfoProvider);
+
 		addViewerSection(fParemetersSection = new MethodParametersViewer(this,
 				this, fileInfoProvider));
 		addViewerSection(fConstraintsSection = new ConstraintsListViewer(this,
@@ -83,6 +81,17 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		return textClient;
 	}
 
+	private void createCommentsSection(IFileInfoProvider fileInfoProvider) {
+		
+		if (fileInfoProvider.isProjectAvailable()) {
+			addForm(fCommentsSection = new ExportableJavaDocCommentsSection(this, this, fileInfoProvider));
+		} else {
+			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fileInfoProvider));
+		}
+		
+		fCommentsSection.setTargetIf(fMethodInterface);
+	}
+	
 	private void createMethodNameWidgets(IFileInfoProvider fileInfoProvider) {
 		int gridColumns = 2;
 
