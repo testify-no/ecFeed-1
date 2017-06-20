@@ -22,7 +22,7 @@ import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 
-public abstract class AbstractParameterCommentsSection extends JavaDocCommentsSection {
+public abstract class AbstractParameterCommentsSection extends ExportableJavaDocCommentsSection {
 
 	private TabItem fParameterCommentsTab;
 

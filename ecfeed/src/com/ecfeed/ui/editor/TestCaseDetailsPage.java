@@ -40,13 +40,7 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 	private TestCaseInterface fTestCaseIf;
 	private SingleTextCommentsSection fCommentsSection;
 
-	private class RenameTestCaseAdapter extends ComboSelectionListener {
-		@Override
-		public void widgetSelected(SelectionEvent e){
-			fTestCaseIf.setName(fTestSuiteNameCombo.getText());
-			fTestSuiteNameCombo.setText(fTestCaseIf.getName());
-		}
-	}
+
 	public TestCaseDetailsPage(
 			ModelMasterSection masterSection, 
 			IModelUpdateContext updateContext, 
@@ -61,9 +55,8 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 		super.createContents(parent);
 		createTestSuiteEdit(getMainComposite());
 
-		if (fFileInfoProvider.isProjectAvailable()) {
-			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fFileInfoProvider));
-		}
+		addCommentsSection();
+
 		addViewerSection(fTestDataViewer = new TestDataViewer(this, this, fFileInfoProvider));
 	}
 
@@ -80,9 +73,7 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 			TestCaseNode testCase = (TestCaseNode)getSelectedElement();
 			fTestCaseIf.setOwnNode(testCase);
 
-			if (fFileInfoProvider.isProjectAvailable()) {
-				fCommentsSection.setInput(testCase);
-			}
+			fCommentsSection.setInput(testCase);
 
 			getMainSection().setText(testCase.toString());
 			fTestSuiteNameCombo.setItems(testCase.getMethod().getTestSuites().toArray(new String[]{}));
@@ -90,6 +81,15 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 			fTestDataViewer.setInput(testCase);
 
 			fExecuteButton.setEnabled(isExecuteButtonEnabled());
+		}
+	}
+
+	private void addCommentsSection() {
+
+		if (fFileInfoProvider.isProjectAvailable()) {
+			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fFileInfoProvider));
+		} else {
+			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fFileInfoProvider));
 		}
 	}
 
@@ -141,4 +141,13 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 	protected Class<? extends AbstractNode> getNodeType() {
 		return TestCaseNode.class;
 	}
+
+	private class RenameTestCaseAdapter extends ComboSelectionListener {
+		@Override
+		public void widgetSelected(SelectionEvent e){
+			fTestCaseIf.setName(fTestSuiteNameCombo.getText());
+			fTestSuiteNameCombo.setText(fTestCaseIf.getName());
+		}
+	}	
+
 }

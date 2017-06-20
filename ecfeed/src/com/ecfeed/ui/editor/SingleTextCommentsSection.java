@@ -17,6 +17,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Text;
 
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.modelif.AbstractNodeInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class SingleTextCommentsSection extends AbstractCommentsSection {
@@ -35,6 +36,7 @@ public class SingleTextCommentsSection extends AbstractCommentsSection {
 	@Override
 	public Composite createMainControlComposite(Composite parent){
 		//overriding tab folder creation
+
 		fCommentsText = getToolkit().createText(parent, "", TEXT_STYLE);
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, false);
 		gd.heightHint = 150;
@@ -47,6 +49,19 @@ public class SingleTextCommentsSection extends AbstractCommentsSection {
 	@Override
 	public void refresh(){
 		super.refresh();
-		fCommentsText.setText(getTargetIf().getComments());
+		setCommentsText();
 	}
+
+	private void setCommentsText() {
+
+		AbstractNodeInterface abstractNodeInterface = getTargetIf();
+
+		if (abstractNodeInterface == null) {
+			return;
+		}
+
+		fCommentsText.setText(abstractNodeInterface.getComments());
+	}
+
+
 }

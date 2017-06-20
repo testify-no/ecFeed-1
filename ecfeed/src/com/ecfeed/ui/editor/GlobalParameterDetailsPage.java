@@ -67,9 +67,14 @@ public class GlobalParameterDetailsPage extends AbstractParameterDetailsPage {
 	}
 
 	@Override
-	protected AbstractParameterCommentsSection getParameterCommentsSection(
+	protected AbstractCommentsSection getCommentsSection(
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext) {
-		return new GlobalParameterCommentsSection(sectionContext, updateContext, fFileInfoProvider);
+
+		if (fFileInfoProvider.isProjectAvailable()) {
+			return new GlobalParameterCommentsSection(sectionContext, updateContext, fFileInfoProvider);
+		} else {
+			return new SingleTextCommentsSection(this, this, fFileInfoProvider);
+		}
 	}
 }

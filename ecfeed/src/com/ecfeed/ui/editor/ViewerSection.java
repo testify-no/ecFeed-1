@@ -73,195 +73,11 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 	private Menu fMenu;
 	private Set<KeyListener> fKeyListeners;
 
-	protected class ViewerKeyAdapter extends KeyAdapter{
-		private int fKeyCode;
-		private Action fAction;
-		private int fModifier;
+	protected abstract void createViewerColumns();
+	protected abstract StructuredViewer createViewer(Composite viewerComposite, int style);
+	protected abstract IContentProvider createViewerContentProvider();
+	protected abstract IBaseLabelProvider createViewerLabelProvider();
 
-		public ViewerKeyAdapter(int keyCode, int modifier, Action action){
-			fKeyCode = keyCode;
-			fModifier = modifier;
-			fAction = action;
-		}
-
-		@Override
-		public void keyReleased(KeyEvent e) {
-
-			if(e.keyCode != fKeyCode) {
-				return;
-			}
-			if (e.stateMask != fModifier) {
-				return;
-			}
-			fAction.run();
-		}
-	}
-
-	protected class ActionSelectionAdapter extends SelectionAdapter{
-		private Action fAction;
-		private String fDescriptionWhenError;
-
-		public ActionSelectionAdapter(Action action, String descriptionWhenError ){
-			fAction = action;
-			fDescriptionWhenError = descriptionWhenError;
-		}
-
-		@Override
-		public void widgetSelected(SelectionEvent ev){
-			try {
-				fAction.run();
-			} catch (Exception e) {
-				ExceptionCatchDialog.open(fDescriptionWhenError, e.getMessage());
-			}
-		}
-	}
-
-	protected class ViewerMenuListener implements MenuListener{
-
-		private Menu fMenu;
-
-		public ViewerMenuListener(Menu menu) {
-			fMenu = menu;
-		}
-
-		protected Menu getMenu(){
-			return fMenu;
-		}
-
-		@Override
-		public void menuHidden(MenuEvent e) {
-		}
-
-		@Override
-		public void menuShown(MenuEvent e) {
-			for(MenuItem item : getMenu().getItems()){
-				item.dispose();
-			}
-			populateMenu();
-		}
-
-		protected void populateMenu() {
-
-			IActionProvider provider = getActionProvider();
-			if(provider == null) {
-				return;
-			}
-
-			AbstractNode firstSelectedNode = getFirstSelectedNode();
-			if (firstSelectedNode == null) {
-				return;
-			}
-
-			Iterator<String> groupIt = provider.getGroups().iterator();
-
-			while(groupIt.hasNext()){
-				for(NamedAction action : provider.getActions(groupIt.next())){
-					String convertedName = convertActionName(action.getName(), firstSelectedNode);
-					addMenuItem(convertedName, action);
-				}
-				if(groupIt.hasNext()){
-					new MenuItem(fMenu, SWT.SEPARATOR);
-				}
-			}
-		}
-
-		private String convertActionName(String oldName, AbstractNode selectedNode) {
-
-			if (!oldName.equals(GlobalActions.INSERT.getDescription())) {
-				return oldName;
-			}
-
-			String newName = null;
-			ConvertInsertNameVisitor visitor = new ConvertInsertNameVisitor();
-			try {
-				newName = (String)selectedNode.accept(visitor);
-			} catch (Exception e) {
-				SystemLogger.logCatch(e.getMessage());
-			}
-
-			final String insertKey = "INS";
-
-			if (SystemHelper.isOperatingSystemMacOs()) {
-				return newName + "   (" + insertKey + ")";
-			}
-			return newName + "\t" + insertKey;
-		}
-
-		private class MenuItemSelectionAdapter extends SelectionAdapter{
-
-			private Action fAction;
-
-			public MenuItemSelectionAdapter(Action action){
-				fAction = action;
-			}
-
-			@Override
-			public void widgetSelected(SelectionEvent ev){
-				try {
-					fAction.run();
-				} catch (Exception e) {
-					ExceptionCatchDialog.open(null, e.getMessage());
-				}
-			}
-		}
-
-		private class ConvertInsertNameVisitor implements IModelVisitor{
-
-			private final static String insertClass = "Insert class";
-			private final static String insertMethod = "Insert method";
-			private final static String insertParameter = "Insert parameter";
-			private final static String insertChoice = "Insert choice";
-
-			@Override
-			public Object visit(RootNode node) throws Exception {
-				return insertClass;
-			}
-
-			@Override
-			public Object visit(ClassNode node) throws Exception {
-				return insertMethod;
-			}
-
-			@Override
-			public Object visit(MethodNode node) throws Exception {
-				return insertParameter;
-			}
-
-			@Override
-			public Object visit(MethodParameterNode node) throws Exception {
-				return insertChoice;
-			}
-
-			@Override
-			public Object visit(GlobalParameterNode node) throws Exception {
-				return insertChoice;
-			}
-
-			@Override
-			public Object visit(TestCaseNode node) throws Exception {
-				return null;
-			}
-
-			@Override
-			public Object visit(ConstraintNode node) throws Exception {
-				return null;
-			}
-
-			@Override
-			public Object visit(ChoiceNode node) throws Exception {
-				return insertChoice;
-			}
-		}
-
-		protected void addMenuItem(String text, Action action){
-			MenuItem item = new MenuItem(getMenu(), SWT.NONE);
-
-			item.setText(text);
-			item.setEnabled(action.isEnabled());
-			item.addSelectionListener(new MenuItemSelectionAdapter(action)); 
-		}
-
-	}
 
 	public ViewerSection(
 			ISectionContext sectionContext, 
@@ -281,8 +97,40 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 		}
 	}
 
-	public Object getSelectedElement(){
-		if(fSelectedElements.size() > 0){
+	@Override
+	public void addSelectionChangedListener(ISelectionChangedListener listener){
+		fViewer.addSelectionChangedListener(listener);
+	}
+
+	@Override
+	public IStructuredSelection getSelection(){
+		return (IStructuredSelection)fViewer.getSelection();
+	}
+
+	@Override
+	public void removeSelectionChangedListener(ISelectionChangedListener listener){
+		fViewer.removeSelectionChangedListener(listener);
+	}
+
+	@Override
+	public void setSelection(ISelection selection){
+		fViewer.setSelection(selection);
+	}
+
+	@Override
+	protected Composite createClientComposite() {
+		Composite client = super.createClientComposite();
+		createViewer();
+		return client;
+	}
+
+	@Override
+	protected void setActionProvider(IActionProvider provider){
+		setActionProvider(provider, true);
+	}
+
+	public Object getSelectedElement() {
+		if (fSelectedElements.size() > 0) {
 			return fSelectedElements.get(0);
 		}
 		return null;
@@ -305,16 +153,6 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 		return fViewer;
 	}
 
-	@Override
-	public void addSelectionChangedListener(ISelectionChangedListener listener){
-		fViewer.addSelectionChangedListener(listener);
-	}
-
-	@Override
-	public IStructuredSelection getSelection(){
-		return (IStructuredSelection)fViewer.getSelection();
-	}
-
 	public List<AbstractNode> getSelectedNodes(){
 		List<AbstractNode> result = new ArrayList<>();
 		for(Object o : getSelection().toList()){
@@ -333,23 +171,6 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 		}
 
 		return selectedNodes.get(0);
-	}
-
-	@Override
-	public void removeSelectionChangedListener(ISelectionChangedListener listener){
-		fViewer.removeSelectionChangedListener(listener);
-	}
-
-	@Override
-	public void setSelection(ISelection selection){
-		fViewer.setSelection(selection);
-	}
-
-	@Override
-	protected Composite createClientComposite() {
-		Composite client = super.createClientComposite();
-		createViewer();
-		return client;
 	}
 
 	protected void createViewer() {
@@ -390,11 +211,6 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 		ViewerKeyAdapter adapter = new ViewerKeyAdapter(keyCode, modifier, action);
 		fViewer.getControl().addKeyListener(adapter);
 		return adapter;
-	}
-
-	@Override
-	protected void setActionProvider(IActionProvider provider){
-		setActionProvider(provider, true);
 	}
 
 	protected void setActionProvider(IActionProvider provider, boolean addDeleteAction){
@@ -470,8 +286,223 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 		return fMenu;
 	}
 
-	protected abstract void createViewerColumns();
-	protected abstract StructuredViewer createViewer(Composite viewerComposite, int style);
-	protected abstract IContentProvider createViewerContentProvider();
-	protected abstract IBaseLabelProvider createViewerLabelProvider();
+
+	protected class ActionSelectionAdapter extends SelectionAdapter{
+		private Action fAction;
+		private String fDescriptionWhenError;
+
+		public ActionSelectionAdapter(Action action, String descriptionWhenError ){
+			fAction = action;
+			fDescriptionWhenError = descriptionWhenError;
+		}
+
+		@Override
+		public void widgetSelected(SelectionEvent ev){
+			try {
+				fAction.run();
+			} catch (Exception e) {
+				ExceptionCatchDialog.open(fDescriptionWhenError, e.getMessage());
+			}
+		}
+	}
+
+	protected class ViewerKeyAdapter extends KeyAdapter {
+		private int fKeyCode;
+		private Action fAction;
+		private int fModifier;
+
+		public ViewerKeyAdapter(int keyCode, int modifier, Action action){
+			fKeyCode = keyCode;
+			fModifier = modifier;
+			fAction = action;
+		}
+
+		@Override
+		public void keyReleased(KeyEvent e) {
+
+			if(e.keyCode != fKeyCode) {
+				return;
+			}
+			if (e.stateMask != fModifier) {
+				return;
+			}
+			fAction.run();
+		}
+	}
+
+	protected class ViewerMenuListener implements MenuListener {
+
+		private Menu fMenu;
+		private final int LAST_MENU_POSITION = -1;
+
+		public ViewerMenuListener(Menu menu) {
+			fMenu = menu;
+		}
+
+		protected Menu getMenu(){
+			return fMenu;
+		}
+
+		@Override
+		public void menuHidden(MenuEvent e) {
+		}
+
+		@Override
+		public void menuShown(MenuEvent e) {
+
+			for(MenuItem item : getMenu().getItems()) {
+				item.dispose();
+			}
+
+			populateMenu();
+		}
+
+		protected void populateMenu() {
+
+			IActionProvider provider = getActionProvider();
+			if(provider == null) {
+				return;
+			}
+
+			AbstractNode firstSelectedNode = getFirstSelectedNode();
+			if (firstSelectedNode == null) {
+				return;
+			}
+
+			Iterator<String> groupIt = provider.getGroups().iterator();
+
+			while(groupIt.hasNext()) {
+
+				for (NamedAction action : provider.getActions(groupIt.next())) {
+
+					String convertedName = convertActionName(action.getName(), firstSelectedNode);
+					addMenuItem(convertedName, action, getMenuItemIndex(action));
+				}
+
+				if(groupIt.hasNext()){
+					new MenuItem(fMenu, SWT.SEPARATOR);
+				}
+			}
+		}
+
+		protected void addMenuItem(String text, Action action, int index) {
+
+			MenuItem item;
+
+			if (index == LAST_MENU_POSITION) {
+				item = new MenuItem(getMenu(), SWT.NONE);
+			} else {
+				item = new MenuItem(getMenu(), SWT.NONE, index);
+			}
+
+			item.setText(text);
+			item.setEnabled(action.isEnabled());
+			item.addSelectionListener(new MenuItemSelectionAdapter(action)); 
+		}
+
+		protected void addMenuItem(String text, Action action) {
+			addMenuItem(text, action, LAST_MENU_POSITION);
+		}		
+
+		private int getMenuItemIndex(NamedAction action) {
+
+			String actionName = action.getName();
+
+			if (actionName.equals("INSERT")) {
+				return 1;
+			}
+
+			return LAST_MENU_POSITION;
+		}		
+
+		private String convertActionName(String oldName, AbstractNode selectedNode) {
+
+			if (!oldName.equals(GlobalActions.INSERT.getDescription())) {
+				return oldName;
+			}
+
+			String newName = null;
+			ConvertInsertNameVisitor visitor = new ConvertInsertNameVisitor();
+			try {
+				newName = (String)selectedNode.accept(visitor);
+			} catch (Exception e) {
+				SystemLogger.logCatch(e.getMessage());
+			}
+
+			final String insertKey = "INS";
+
+			if (SystemHelper.isOperatingSystemMacOs()) {
+				return newName + "   (" + insertKey + ")";
+			}
+			return newName + "\t" + insertKey;
+		}
+
+		private class MenuItemSelectionAdapter extends SelectionAdapter {
+
+			private Action fAction;
+
+			public MenuItemSelectionAdapter(Action action){
+				fAction = action;
+			}
+
+			@Override
+			public void widgetSelected(SelectionEvent ev){
+				try {
+					fAction.run();
+				} catch (Exception e) {
+					ExceptionCatchDialog.open(null, e.getMessage());
+				}
+			}
+		}
+
+		private class ConvertInsertNameVisitor implements IModelVisitor {
+
+			private final static String insertClass = "Insert class";
+			private final static String insertMethod = "Insert method";
+			private final static String insertParameter = "Insert parameter";
+			private final static String insertChoice = "Insert choice";
+
+			@Override
+			public Object visit(RootNode node) throws Exception {
+				return insertClass;
+			}
+
+			@Override
+			public Object visit(ClassNode node) throws Exception {
+				return insertMethod;
+			}
+
+			@Override
+			public Object visit(MethodNode node) throws Exception {
+				return insertParameter;
+			}
+
+			@Override
+			public Object visit(MethodParameterNode node) throws Exception {
+				return insertChoice;
+			}
+
+			@Override
+			public Object visit(GlobalParameterNode node) throws Exception {
+				return insertChoice;
+			}
+
+			@Override
+			public Object visit(TestCaseNode node) throws Exception {
+				return null;
+			}
+
+			@Override
+			public Object visit(ConstraintNode node) throws Exception {
+				return null;
+			}
+
+			@Override
+			public Object visit(ChoiceNode node) throws Exception {
+				return insertChoice;
+			}
+		}
+
+	}
+
 }

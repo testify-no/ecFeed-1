@@ -59,9 +59,8 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 
 		createNameValueEditor(getMainComposite());
 
-		if (fFileInfoProvider.isProjectAvailable()) {
-			addForm(fCommentsSection = new ChoiceCommentsSection(this, this, fFileInfoProvider));
-		}
+		addCommentsSection();
+
 		addViewerSection(fChildrenViewer = new ChoicesViewer(this, this, fFileInfoProvider));
 		addViewerSection(fLabelsViewer = new ChoiceLabelsViewer(this, this, fFileInfoProvider));
 
@@ -84,13 +83,20 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 			String title = getSelectedChoice().toString();
 			getMainSection().setText(title);
 
-			if (fFileInfoProvider.isProjectAvailable()) {
-				fCommentsSection.setInput(selectedChoice);
-			}
+			fCommentsSection.setInput(selectedChoice);
 			fChildrenViewer.setInput(selectedChoice);
 			fLabelsViewer.setInput(selectedChoice);
 			fNameText.setText(selectedChoice.getName());
 			refreshValueEditor(selectedChoice);
+		}
+	}
+
+	private void addCommentsSection() {
+
+		if (fFileInfoProvider.isProjectAvailable()) {
+			addForm(fCommentsSection = new ChoiceCommentsSection(this, this, fFileInfoProvider));
+		} else {
+			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fFileInfoProvider));
 		}
 	}
 

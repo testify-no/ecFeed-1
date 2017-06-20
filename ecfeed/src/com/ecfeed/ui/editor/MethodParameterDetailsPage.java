@@ -22,11 +22,13 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.GlobalParameterNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelHelper;
+import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.common.utils.SwtObjectHelper;
 import com.ecfeed.ui.modelif.AbstractParameterInterface;
@@ -43,52 +45,6 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 	private Button fLinkedCheckbox;
 	private Combo fLinkCombo;
 
-	private class SetDefaultValueListener extends ComboSelectionListener {
-		@Override
-		public void widgetSelected(SelectionEvent e) {
-			fParameterIf.setDefaultValue(fDefaultValueCombo.getText());
-			fDefaultValueCombo.setText(fParameterIf.getDefaultValue());
-		}
-	}
-
-	private class DefaultValueFocusLostListener extends FocusLostListener {
-
-		@Override
-		public void focusLost(FocusEvent e) {
-			fParameterIf.setDefaultValue(fDefaultValueCombo.getText());
-			fDefaultValueCombo.setText(fParameterIf.getDefaultValue());
-		}
-	}	
-
-	private class ExpectedApplier implements IValueApplier {
-
-		@Override
-		public void applyValue() {
-
-			fParameterIf.setExpected(fExpectedCheckbox.getSelection());
-			fExpectedCheckbox.setSelection(fParameterIf.isExpected());
-		}
-	}
-
-	private class LinkedApplier implements IValueApplier {
-
-		@Override
-		public void applyValue() {
-
-			fParameterIf.setLinked(fLinkedCheckbox.getSelection());
-			fLinkedCheckbox.setSelection(fParameterIf.isLinked());
-		}
-	}	
-
-	private class SetLinkListener extends ComboSelectionListener {
-		@Override
-		public void widgetSelected(SelectionEvent e) {
-			String linkPath = linkPath(fLinkCombo.getText());
-			GlobalParameterNode link = fParameterIf.getGlobalParameter(linkPath);
-			fParameterIf.setLink(link);
-			fLinkCombo.setText(linkName(fParameterIf.getLink()));
-		}
-	}
 
 	public MethodParameterDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext,
 			IFileInfoProvider fileInfoProvider) {
@@ -198,7 +154,24 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 			return false;
 		}
 
-		if (fParameterIf.getImplementationStatus() != EImplementationStatus.IMPLEMENTED) {
+		String parameterType = fParameterIf.getParameter().getType();
+
+		if (JavaTypeHelper.isJavaType(parameterType)) {
+			return true;
+		} 
+
+		return isReplaceButtonEnabledForUserType();
+	}
+
+	private boolean isReplaceButtonEnabledForUserType() {
+
+		if (ApplicationContext.isStandaloneApplication()) {
+			return false;
+		} 
+
+		EImplementationStatus implementationStatus = fParameterIf.getImplementationStatus();
+
+		if (implementationStatus == EImplementationStatus.NOT_IMPLEMENTED) {
 			return false;
 		}
 
@@ -264,8 +237,60 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 	}
 
 	@Override
-	protected AbstractParameterCommentsSection getParameterCommentsSection(ISectionContext sectionContext, IModelUpdateContext updateContext) {
-		return new MethodParameterCommentsSection(sectionContext, updateContext, fFileInfoProvider);
+	protected AbstractCommentsSection getCommentsSection(ISectionContext sectionContext, IModelUpdateContext updateContext) {
+
+		if (fFileInfoProvider.isProjectAvailable()) {
+			return new MethodParameterCommentsSection(sectionContext, updateContext, fFileInfoProvider);
+		} else {
+			return new SingleTextCommentsSection(this, this, fFileInfoProvider);
+		}
+	}
+
+	private class SetDefaultValueListener extends ComboSelectionListener {
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			fParameterIf.setDefaultValue(fDefaultValueCombo.getText());
+			fDefaultValueCombo.setText(fParameterIf.getDefaultValue());
+		}
+	}
+
+	private class DefaultValueFocusLostListener extends FocusLostListener {
+
+		@Override
+		public void focusLost(FocusEvent e) {
+			fParameterIf.setDefaultValue(fDefaultValueCombo.getText());
+			fDefaultValueCombo.setText(fParameterIf.getDefaultValue());
+		}
+	}	
+
+	private class ExpectedApplier implements IValueApplier {
+
+		@Override
+		public void applyValue() {
+
+			fParameterIf.setExpected(fExpectedCheckbox.getSelection());
+			fExpectedCheckbox.setSelection(fParameterIf.isExpected());
+		}
+	}
+
+	private class LinkedApplier implements IValueApplier {
+
+		@Override
+		public void applyValue() {
+
+			fParameterIf.setLinked(fLinkedCheckbox.getSelection());
+			fLinkedCheckbox.setSelection(fParameterIf.isLinked());
+		}
+	}	
+
+	private class SetLinkListener extends ComboSelectionListener {
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			String linkPath = linkPath(fLinkCombo.getText());
+			GlobalParameterNode link = fParameterIf.getGlobalParameter(linkPath);
+			fParameterIf.setLink(link);
+			fLinkCombo.setText(linkName(fParameterIf.getLink()));
+		}
 	}
 
 }

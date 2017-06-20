@@ -37,32 +37,12 @@ public abstract class AbstractCommentsSection extends TabFolderSection {
 	private final static int STYLE = Section.TITLE_BAR | Section.COMPACT | Section.TWISTIE;
 	private final static String SECTION_TITLE = "Comments";
 
-	private class TabFolderSelectionListsner extends SelectionAdapter {
-		@Override
-		public void widgetSelected(SelectionEvent e) {
-			refreshEditButton();
-		}
-	}
-
-	private class EditCommentsAdapter extends SelectionAdapter {
-		@Override
-		public void widgetSelected(SelectionEvent ev){
-			try {
-				getTargetIf().editComments();
-			} catch (Exception e) {
-				ExceptionCatchDialog.open("Can not edit comments", e.getMessage());
-			}
-		}
-	}
-
 	private IFileInfoProvider fFileInfoProvider;
-
 	private Button fEditButton;
-
 	private AbstractNode fTarget;
 	private AbstractNodeInterface fTargetIf;
-
 	private Map<TabItem, Text> fTextItems;
+
 
 	public AbstractCommentsSection(
 			ISectionContext sectionContext, 
@@ -135,6 +115,10 @@ public abstract class AbstractCommentsSection extends TabFolderSection {
 		return fTargetIf;
 	}
 
+	protected void setTargetIf(AbstractNodeInterface abstractNodeInterface) {
+		fTargetIf = abstractNodeInterface;
+	}
+
 	protected SelectionListener createEditButtonSelectionAdapter(){
 		return new EditCommentsAdapter();
 	}
@@ -154,4 +138,24 @@ public abstract class AbstractCommentsSection extends TabFolderSection {
 	protected Text getTextFromTabItem(TabItem item){
 		return fTextItems.get(item);
 	}
+
+	private class TabFolderSelectionListsner extends SelectionAdapter {
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			refreshEditButton();
+		}
+	}
+
+	private class EditCommentsAdapter extends SelectionAdapter {
+		@Override
+		public void widgetSelected(SelectionEvent ev){
+			try {
+				getTargetIf().editComments();
+				refresh();
+			} catch (Exception e) {
+				ExceptionCatchDialog.open("Can not edit comments", e.getMessage());
+			}
+		}
+	}
+
 }

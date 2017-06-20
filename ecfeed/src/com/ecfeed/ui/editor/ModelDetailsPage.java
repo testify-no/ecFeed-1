@@ -27,7 +27,7 @@ public class ModelDetailsPage extends BasicDetailsPage {
 	private GlobalParametersViewer fParametersSection;
 	private Text fModelNameText;
 	private RootInterface fRootIf;
-	private SingleTextCommentsSection fComments;
+	private SingleTextCommentsSection fCommentsSection;
 	private IFileInfoProvider fFileInfoProvider;
 
 	public ModelDetailsPage(
@@ -46,9 +46,8 @@ public class ModelDetailsPage extends BasicDetailsPage {
 
 		createModelNameEdit(getMainComposite());
 
-		if (fFileInfoProvider.isProjectAvailable()) {
-			addForm(fComments = new ExportableSingleTextCommentsSection(this, this, fFileInfoProvider));
-		}
+		addCommentsSection();
+
 		addViewerSection(fClassesSection = new ClassViewer(this, this, fFileInfoProvider));
 
 		fParametersSection = new GlobalParametersViewer(this, this, fFileInfoProvider);
@@ -62,6 +61,16 @@ public class ModelDetailsPage extends BasicDetailsPage {
 		Composite textClient = super.createTextClientComposite();
 		return textClient;
 	}
+
+	private void addCommentsSection() {
+
+		if (fFileInfoProvider.isProjectAvailable()) {
+			addForm(fCommentsSection = new ExportableSingleTextCommentsSection(this, this, fFileInfoProvider));
+		} else {
+			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fFileInfoProvider));
+		}
+	}
+
 
 	private void createModelNameEdit(Composite parent) {
 
@@ -82,10 +91,7 @@ public class ModelDetailsPage extends BasicDetailsPage {
 			fModelNameText.setText(selectedRoot.getName());
 			fClassesSection.setInput(selectedRoot);
 			fParametersSection.setInput(selectedRoot);
-
-			if (fFileInfoProvider.isProjectAvailable()) {
-				fComments.setInput(selectedRoot);
-			}
+			fCommentsSection.setInput(selectedRoot);
 		}
 	}
 

@@ -28,10 +28,13 @@ import static com.ecfeed.core.serialization.ect.SerializationConstants.ROOT_NODE
 import static com.ecfeed.core.serialization.ect.SerializationConstants.RUN_ON_ANDROID_ATTRIBUTE_NAME;
 import static com.ecfeed.core.serialization.ect.SerializationConstants.TEST_CASE_NODE_NAME;
 import static com.ecfeed.core.serialization.ect.SerializationConstants.TEST_SUITE_NAME_ATTRIBUTE;
+import static com.ecfeed.core.serialization.ect.SerializationConstants.TEST_PARAMETER_NODE_NAME;
+import static com.ecfeed.core.serialization.ect.SerializationConstants.EXPECTED_PARAMETER_NODE_NAME;
 import static com.ecfeed.core.serialization.ect.SerializationConstants.TYPE_NAME_ATTRIBUTE;
 import static com.ecfeed.core.serialization.ect.SerializationConstants.VALUE_ATTRIBUTE;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -350,7 +353,8 @@ public abstract class XomAnalyser {
 		assertNodeTag(element.getQualifiedName(), TEST_CASE_NODE_NAME);
 		String name = getAttributeValue(element, TEST_SUITE_NAME_ATTRIBUTE);
 
-		List<Element> parameterElements = getIterableChildren(element);
+		String[] elementTypes = new String[] { TEST_PARAMETER_NODE_NAME, EXPECTED_PARAMETER_NODE_NAME };
+		List<Element> parameterElements = getIterableChildren(element, elementTypes);
 		List<MethodParameterNode> parameters = method.getMethodParameters();
 
 		List<ChoiceNode> testData = new ArrayList<ChoiceNode>();
@@ -643,8 +647,10 @@ public abstract class XomAnalyser {
 	}
 
 	protected static List<Element> getIterableChildren(Element element, String name) {
+		
 		List<Element> elements = getIterableChildren(element);
 		Iterator<Element> it = elements.iterator();
+		
 		while (it.hasNext()) {
 			if (it.next().getLocalName().equals(name) == false) {
 				it.remove();
@@ -652,7 +658,23 @@ public abstract class XomAnalyser {
 		}
 		return elements;
 	}
-
+	
+	protected static List<Element> getIterableChildren(Element element, String[] names) {
+		
+		List<String> listOfNames = Arrays.asList(names);
+		
+		List<Element> elements = getIterableChildren(element);
+		Iterator<Element> it = elements.iterator();
+		
+		while (it.hasNext()) {
+			if (!listOfNames.contains(it.next().getLocalName())) {
+				it.remove();
+			}
+		}
+		
+		return elements;
+	}
+	
 	protected String getElementName(Element element) throws ParserException {
 		String name = element.getAttributeValue(SerializationConstants.NODE_NAME_ATTRIBUTE);
 		if (name == null) {

@@ -40,49 +40,10 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	private TestCasesViewer fTestCasesSection;
 
 	private MethodInterface fMethodInterface;
-	private JavaDocCommentsSection fCommentsSection;
+	private AbstractCommentsSection fCommentsSection;
 
 	private final NodePropertyDefs.PropertyId fRunnerPropertyId = NodePropertyDefs.PropertyId.PROPERTY_METHOD_RUNNER;
 
-	private class OnlineTestAdapter extends ButtonClickListener {
-		@Override
-		public void widgetSelected(SelectionEvent ev) {
-			try {
-				fMethodInterface.executeOnlineTests(getFileInfoProvider());
-			} catch (Exception e) {
-				ExceptionCatchDialog.open("Can not execute online tests.",
-						e.getMessage());
-			}
-		}
-	}
-
-	private class OnlineExportAdapter extends ButtonClickListener {
-		@Override
-		public void widgetSelected(SelectionEvent ev) {
-			try {
-				fMethodInterface.executeOnlineExport(getFileInfoProvider());
-			} catch (Exception e) {
-				ExceptionCatchDialog.open("Can not execute online export.",
-						e.getMessage());
-			}
-		}
-	}
-
-	private class ReassignAdapter extends ButtonClickListener {
-		@Override
-		public void widgetSelected(SelectionEvent e) {
-			fMethodInterface.reassignTarget();
-		}
-	}
-
-	private class MethodNameApplier implements IValueApplier {
-
-		@Override
-		public void applyValue() {
-			fMethodInterface.setName(fMethodNameText.getText());
-			fMethodNameText.setText(fMethodInterface.getName());
-		}
-	}	
 
 	public MethodDetailsPage(ModelMasterSection masterSection,
 			IModelUpdateContext updateContext,
@@ -102,10 +63,8 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		createRunnerCombo();
 		createRunnerSection(fileInfoProvider);
 
-		if (fileInfoProvider.isProjectAvailable()) {
-			addForm(fCommentsSection = new JavaDocCommentsSection(this, this,
-					fileInfoProvider));
-		}
+		addCommentsSection(fileInfoProvider);
+
 		addViewerSection(fParemetersSection = new MethodParametersViewer(this,
 				this, fileInfoProvider));
 		addViewerSection(fConstraintsSection = new ConstraintsListViewer(this,
@@ -120,6 +79,15 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	protected Composite createTextClientComposite() {
 		Composite textClient = super.createTextClientComposite();
 		return textClient;
+	}
+
+	private void addCommentsSection(IFileInfoProvider fileInfoProvider) {
+
+		if (fileInfoProvider.isProjectAvailable()) {
+			addForm(fCommentsSection = new ExportableJavaDocCommentsSection(this, this, fileInfoProvider));
+		} else {
+			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fileInfoProvider));
+		}
 	}
 
 	private void createMethodNameWidgets(IFileInfoProvider fileInfoProvider) {
@@ -253,10 +221,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		fParemetersSection.setInput(methodNode);
 		fConstraintsSection.setInput(methodNode);
 		fTestCasesSection.setInput(methodNode);
-
-		if (fileInfoProvider.isProjectAvailable()) {
-			fCommentsSection.setInput(methodNode);
-		}
+		fCommentsSection.setInput(methodNode);
 	}
 
 	private void refreshBrowseButton(IFileInfoProvider fileInfoProvider, MethodNode methodNode) {
@@ -294,5 +259,45 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	protected Class<? extends AbstractNode> getNodeType() {
 		return MethodNode.class;
 	}
+
+	private class OnlineTestAdapter extends ButtonClickListener {
+		@Override
+		public void widgetSelected(SelectionEvent ev) {
+			try {
+				fMethodInterface.executeOnlineTests(getFileInfoProvider());
+			} catch (Exception e) {
+				ExceptionCatchDialog.open("Can not execute online tests.",
+						e.getMessage());
+			}
+		}
+	}
+
+	private class OnlineExportAdapter extends ButtonClickListener {
+		@Override
+		public void widgetSelected(SelectionEvent ev) {
+			try {
+				fMethodInterface.executeOnlineExport(getFileInfoProvider());
+			} catch (Exception e) {
+				ExceptionCatchDialog.open("Can not execute online export.",
+						e.getMessage());
+			}
+		}
+	}
+
+	private class ReassignAdapter extends ButtonClickListener {
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			fMethodInterface.reassignTarget();
+		}
+	}
+
+	private class MethodNameApplier implements IValueApplier {
+
+		@Override
+		public void applyValue() {
+			fMethodInterface.setName(fMethodNameText.getText());
+			fMethodNameText.setText(fMethodInterface.getName());
+		}
+	}	
 
 }
