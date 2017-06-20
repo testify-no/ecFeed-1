@@ -33,7 +33,6 @@ import com.ecfeed.core.generators.api.GeneratorException;
 import com.ecfeed.core.generators.api.IConstraint;
 import com.ecfeed.core.model.AbstractStatement;
 import com.ecfeed.core.model.ChoiceNode;
-import com.ecfeed.core.model.RelationStatement;
 import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.Constraint;
 import com.ecfeed.core.model.ConstraintNode;
@@ -43,16 +42,14 @@ import com.ecfeed.core.model.ExpectedValueStatement;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelVersionDistributor;
+import com.ecfeed.core.model.RelationStatement;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.StatementArray;
 import com.ecfeed.core.model.StaticStatement;
 import com.ecfeed.core.model.TestCaseNode;
-import com.ecfeed.core.serialization.IModelParser;
-import com.ecfeed.core.serialization.IModelSerializer;
-import com.ecfeed.core.serialization.ParserException;
-import com.ecfeed.core.serialization.ect.SerializationConstants;
 import com.ecfeed.core.serialization.ect.EctParser;
 import com.ecfeed.core.serialization.ect.EctSerializer;
+import com.ecfeed.core.serialization.ect.SerializationConstants;
 import com.ecfeed.core.utils.JavaTypeHelper;
 
 public class XmlParserSerializerTest {
@@ -202,7 +199,7 @@ public class XmlParserSerializerTest {
 			method.addConstraint(labelConstraintNode);
 			method.addConstraint(choiceConstraintNode);
 			method.addConstraint(expectedConstraintNode);
-
+			
 			ByteArrayOutputStream ostream = new ByteArrayOutputStream();
 			IModelSerializer serializer = new EctSerializer(ostream, version);
 			serializer.serialize(root);
