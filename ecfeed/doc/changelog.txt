@@ -7,6 +7,12 @@
 #                                                                                  
 #-------------------------------------------------------------------------------
 
+Version 1.12.3
+ - remove default choices from parameters
+ - fixed comments section in RCP
+ - little improvements in menus
+ - fixed dependencies problems reported from eclipse marketplace
+
 Version 1.12.2
  - bugfixes
 
