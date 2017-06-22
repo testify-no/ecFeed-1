@@ -60,6 +60,7 @@ import com.ecfeed.core.model.ModelHelper;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.utils.ExceptionHelper;
+import com.ecfeed.core.utils.SystemHelper;
 import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.CommonConstants;
 import com.ecfeed.ui.common.ImageManager;
@@ -484,17 +485,42 @@ public class ModelMasterSection extends TreeViewerSection{
 		private void addChildAddingActions(AbstractNode abstractNode) {
 			AddChildActionProvider actionProvider = 
 					new AddChildActionProvider(getTreeViewer(), ModelMasterSection.this, fFileInfoProvider);
+
 			List<AbstractAddChildAction> actions = actionProvider.getPossibleActions(abstractNode);
 
 			boolean menuItemAdded = false;
+			boolean actionNameConverted = false;
+
 			for(AbstractAddChildAction action : actions) {
-				addMenuItem(action.getName(), action);
+
+				String actionName = action.getName();
+
+				if (!actionNameConverted) {
+					actionName = convertActionName(action.getName());
+					actionNameConverted = true;
+				}
+
+				addMenuItem(actionName, action);
 				menuItemAdded = true;
 			}
 
 			if (menuItemAdded) {
 				new MenuItem(getMenu(), SWT.SEPARATOR);
 			}
+		}
+
+		private String convertActionName(String actionName) {
+
+			if (!actionName.startsWith("Add")) {
+				return actionName;
+			}
+
+			final String insertKey = "INS";
+
+			if (SystemHelper.isOperatingSystemMacOs()) {
+				return actionName + "   (" + insertKey + ")";
+			}
+			return actionName + "\t" + insertKey;
 		}
 
 		private void addActionsForMethod(AbstractNode abstractNode) {
