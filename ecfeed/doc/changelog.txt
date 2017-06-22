@@ -7,7 +7,7 @@
 #                                                                                  
 #-------------------------------------------------------------------------------
 
-Version 1.12.3
+Version 1.12.4
  - remove default choices from parameters
  - fixed comments section in RCP
  - little improvements in menus
