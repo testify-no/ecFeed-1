@@ -18,7 +18,7 @@ import com.ecfeed.core.model.AbstractNode;
 
 public class ExpandAction extends ModelSelectionAction {
 
-	TreeViewer fViewer;
+	protected TreeViewer fViewer;
 
 	public ExpandAction(TreeViewer viewer) {
 		super(GlobalActions.EXPAND.getId(), GlobalActions.EXPAND.getDescription(), viewer);

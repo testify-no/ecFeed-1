@@ -35,7 +35,7 @@ class Names {
 	public static final String SAVE_ACTION_ID = "save";
 	public static final String ABOUT_ACTION_ID = "about";
 	public static final String CHECK_FOR_UPDATES_ACTION_ID = "checkForUpdates";
-	
+
 	public static final String COPY_ACTION_NAME = "Copy";
 	public static final String COPY_ACTION_SHORTCUT = "Ctrl+C";
 	public static final String COPY_ACTION_MAC_SHORTCUT = "Cmd+C";
@@ -48,7 +48,7 @@ class Names {
 	public static final String PASTE_ACTION_SHORTCUT = "Ctrl+V";
 	public static final String PASTE_ACTION_MAC_SHORTCUT = "Cmd+V";
 
-	public static final String INSERT_ACTION_NAME = "INSERT";
+	public static final String INSERT_ACTION_NAME = "Insert";
 
 	public static final String DELETE_ACTION_NAME = "Delete";
 	public static final String DELETE_ACTION_SHORTCUT = "DEL";
@@ -90,10 +90,10 @@ class Names {
 	public static final String SAVE_ACTION_NAME = "Save";
 	public static final String SAVE_ACTION_SHORTCUT = "Ctrl+S";
 	public static final String SAVE_ACTION_MAC_SHORTCUT = "Cmd+S";
-	
+
 	public static final String ABOUT_ACTION_NAME = "About ecFeed...";
 	public static final String CHECK_FOR_UPDATES_ACTION_NAME = "Check for updates...";
-	
+
 }
 
 public enum GlobalActions {

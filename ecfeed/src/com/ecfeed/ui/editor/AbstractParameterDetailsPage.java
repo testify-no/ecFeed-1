@@ -143,27 +143,16 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 
 
 		formObjectToolkit.createLabel(fAttributesComposite, "Parameter type: ");
-		createParameterTypeCombo(formObjectToolkit);
+
+		fTypeCombo = formObjectToolkit.createReadWriteGridCombo(fAttributesComposite, new TypeApplier());
 
 		if (fFileInfoProvider.isProjectAvailable()) {
-			fBrowseUserTypeButton = formObjectToolkit.createButton(fAttributesComposite, "Import...", new BrowseTypeSelectionListener());
+			fBrowseUserTypeButton = formObjectToolkit.createButton(
+					fAttributesComposite, "Import...", new BrowseTypeSelectionListener());
 		}
 
 		formObjectToolkit.paintBorders(fAttributesComposite);
 		return fAttributesComposite;
-	}
-
-	private void createParameterTypeCombo(FormObjectToolkit formObjectToolkit) {
-
-		TypeApplier typeApplier = new TypeApplier();
-
-		if (fFileInfoProvider.isProjectAvailable()) {
-			fTypeCombo = formObjectToolkit.createReadWriteGridCombo(
-					fAttributesComposite, typeApplier);
-		} else {
-			fTypeCombo = formObjectToolkit.createReadOnlyGridCombo(
-					fAttributesComposite, typeApplier);
-		}
 	}
 
 	protected Composite getAttributesComposite(){

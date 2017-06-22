@@ -8,18 +8,24 @@
  *  
  *******************************************************************************/
 
-package com.ecfeed.ui.editor;
+package com.ecfeed.ui.editor.actions;
 
-import org.eclipse.ui.forms.widgets.Section;
+import org.eclipse.jface.viewers.TreeViewer;
 
-public class StyleDistributor {
+import com.ecfeed.core.model.AbstractNode;
 
-	public static int getSectionStyle() {
-		return Section.EXPANDED | Section.TITLE_BAR;
+public class ExpandOneLevelAction extends ExpandAction {
+
+	public ExpandOneLevelAction(TreeViewer viewer) {
+		super(viewer);
 	}
 
-	public static int getCollapsibleSectionStyle() {
-		return Section.TITLE_BAR | Section.COMPACT | Section.TWISTIE;
-	}	
+	@Override
+	public void run() { 
+
+		for (AbstractNode node : getSelectedNodes()) {
+			fViewer.expandToLevel(node, 1);
+		}
+	}
 
 }

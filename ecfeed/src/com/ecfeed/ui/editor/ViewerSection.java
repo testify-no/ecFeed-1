@@ -41,17 +41,7 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
 import com.ecfeed.core.model.AbstractNode;
-import com.ecfeed.core.model.ChoiceNode;
-import com.ecfeed.core.model.ClassNode;
-import com.ecfeed.core.model.ConstraintNode;
-import com.ecfeed.core.model.GlobalParameterNode;
-import com.ecfeed.core.model.IModelVisitor;
-import com.ecfeed.core.model.MethodNode;
-import com.ecfeed.core.model.MethodParameterNode;
-import com.ecfeed.core.model.RootNode;
-import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.utils.SystemHelper;
-import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.editor.actions.GlobalActions;
@@ -369,19 +359,29 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 				return;
 			}
 
+			addActionsForAllGroups(provider);
+		}
+
+		private void addActionsForAllGroups(IActionProvider provider) {
+
 			Iterator<String> groupIt = provider.getGroups().iterator();
 
 			while(groupIt.hasNext()) {
 
-				for (NamedAction action : provider.getActions(groupIt.next())) {
-
-					String convertedName = convertActionName(action.getName(), firstSelectedNode);
-					addMenuItem(convertedName, action, getMenuItemIndex(action));
-				}
+				addActionsForGroup(groupIt, provider);
 
 				if(groupIt.hasNext()){
 					new MenuItem(fMenu, SWT.SEPARATOR);
 				}
+			}
+		}
+
+		private void addActionsForGroup(
+				Iterator<String> groupIt, IActionProvider actionProvider) {
+
+			for (NamedAction action : actionProvider.getActions(groupIt.next())) {
+
+				addMenuItem(action.getName(), action, getMenuItemIndex(action));
 			}
 		}
 
@@ -408,34 +408,12 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 
 			String actionName = action.getName();
 
-			if (actionName.equals("INSERT")) {
+			if (actionName.equals(GlobalActions.INSERT.getDescription())) {
 				return 1;
 			}
 
 			return LAST_MENU_POSITION;
 		}		
-
-		private String convertActionName(String oldName, AbstractNode selectedNode) {
-
-			if (!oldName.equals(GlobalActions.INSERT.getDescription())) {
-				return oldName;
-			}
-
-			String newName = null;
-			ConvertInsertNameVisitor visitor = new ConvertInsertNameVisitor();
-			try {
-				newName = (String)selectedNode.accept(visitor);
-			} catch (Exception e) {
-				SystemLogger.logCatch(e.getMessage());
-			}
-
-			final String insertKey = "INS";
-
-			if (SystemHelper.isOperatingSystemMacOs()) {
-				return newName + "   (" + insertKey + ")";
-			}
-			return newName + "\t" + insertKey;
-		}
 
 		private class MenuItemSelectionAdapter extends SelectionAdapter {
 
@@ -452,54 +430,6 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 				} catch (Exception e) {
 					ExceptionCatchDialog.open(null, e.getMessage());
 				}
-			}
-		}
-
-		private class ConvertInsertNameVisitor implements IModelVisitor {
-
-			private final static String insertClass = "Insert class";
-			private final static String insertMethod = "Insert method";
-			private final static String insertParameter = "Insert parameter";
-			private final static String insertChoice = "Insert choice";
-
-			@Override
-			public Object visit(RootNode node) throws Exception {
-				return insertClass;
-			}
-
-			@Override
-			public Object visit(ClassNode node) throws Exception {
-				return insertMethod;
-			}
-
-			@Override
-			public Object visit(MethodNode node) throws Exception {
-				return insertParameter;
-			}
-
-			@Override
-			public Object visit(MethodParameterNode node) throws Exception {
-				return insertChoice;
-			}
-
-			@Override
-			public Object visit(GlobalParameterNode node) throws Exception {
-				return insertChoice;
-			}
-
-			@Override
-			public Object visit(TestCaseNode node) throws Exception {
-				return null;
-			}
-
-			@Override
-			public Object visit(ConstraintNode node) throws Exception {
-				return null;
-			}
-
-			@Override
-			public Object visit(ChoiceNode node) throws Exception {
-				return insertChoice;
 			}
 		}
 

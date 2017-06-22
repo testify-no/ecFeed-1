@@ -78,8 +78,8 @@ public class AddChildActionProvider {
 		}
 
 		TreeViewer treeViewer = (TreeViewer)fViewer;
-		ExpandAction expandAction = new ExpandAction(treeViewer);
-		expandAction.run();
+		ExpandOneLevelAction expandOneLevelAction = new ExpandOneLevelAction(treeViewer);
+		expandOneLevelAction.run();
 	}
 
 	private class AddGlobalParameterAction extends AbstractAddChildAction{

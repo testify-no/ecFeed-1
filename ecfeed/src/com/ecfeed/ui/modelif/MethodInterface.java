@@ -105,10 +105,8 @@ public class MethodInterface extends ParametersParentInterface {
 		String name = generateNewParameterName();
 		String type = generateNewParameterType();
 		String defaultValue = modelBuilder.getDefaultExpectedValue(type);
-		MethodParameterNode parameter = new MethodParameterNode(name, type,
-				defaultValue, false);
-		List<ChoiceNode> defaultChoices = modelBuilder.defaultChoices(type);
-		parameter.addChoices(defaultChoices);
+		MethodParameterNode parameter = 
+				new MethodParameterNode(name, type, defaultValue, false);
 		if (addParameter(parameter, getOwnNode().getParameters().size())) {
 			return parameter;
 		}
