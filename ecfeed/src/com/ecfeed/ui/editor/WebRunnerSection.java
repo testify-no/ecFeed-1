@@ -48,7 +48,7 @@ public class WebRunnerSection extends BasicSection  {
 			IModelUpdateContext updateContext,
 			MethodInterface methodInterface,
 			IFileInfoProvider fileInfoProvider) {
-		super(sectionContext, updateContext, fileInfoProvider, StyleDistributor.getSectionStyle());
+		super(sectionContext, updateContext, fileInfoProvider, StyleDistributor.getCollapsibleSectionStyle());
 
 		fMethodInterface = methodInterface;
 		fFormObjectToolkit = new FormObjectToolkit(getToolkit());

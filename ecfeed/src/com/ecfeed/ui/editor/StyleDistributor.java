@@ -18,4 +18,8 @@ public class StyleDistributor {
 		return Section.EXPANDED | Section.TITLE_BAR;
 	}
 
+	public static int getCollapsibleSectionStyle() {
+		return Section.TITLE_BAR | Section.COMPACT | Section.TWISTIE;
+	}	
+
 }

@@ -23,7 +23,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.forms.widgets.Section;
 
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.ui.common.Messages;
@@ -34,7 +33,6 @@ import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 public abstract class AbstractCommentsSection extends TabFolderSection {
 
-	private final static int STYLE = Section.TITLE_BAR | Section.COMPACT | Section.TWISTIE;
 	private final static String SECTION_TITLE = "Comments";
 
 	private IFileInfoProvider fFileInfoProvider;
@@ -48,7 +46,7 @@ public abstract class AbstractCommentsSection extends TabFolderSection {
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext,
 			IFileInfoProvider fileInfoProvider) {
-		super(sectionContext, updateContext, fileInfoProvider, STYLE);
+		super(sectionContext, updateContext, fileInfoProvider, StyleDistributor.getCollapsibleSectionStyle());
 		fFileInfoProvider = fileInfoProvider;
 
 		if(getTabFolder() != null){
