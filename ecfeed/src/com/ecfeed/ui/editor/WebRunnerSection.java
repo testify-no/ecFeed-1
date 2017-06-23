@@ -33,8 +33,10 @@ public class WebRunnerSection extends BasicSection  {
 	private Button fMapBrowserCheckbox;
 	private Combo fBrowserCombo;
 	private Text fBrowserDriverText;
+	private Button fBrowseButton;
 	private Button fMapStartUrlCheckbox;
 	private Text fStartUrlText;
+	private Composite fClientComposite;
 
 	private boolean fSectionEnabled = false;
 
@@ -55,9 +57,9 @@ public class WebRunnerSection extends BasicSection  {
 
 		setText("Web runner properties");
 
-		Composite clientComposite = getClientComposite();
-		fFormObjectToolkit.paintBorders(clientComposite);
-		createWebDriverPropertiesComposite(clientComposite);
+		fClientComposite = getClientComposite();
+		fFormObjectToolkit.paintBorders(fClientComposite);
+		createWebDriverPropertiesComposite(fClientComposite);
 	}
 
 	private void createWebDriverPropertiesComposite(Composite parentComposite) {
@@ -94,7 +96,7 @@ public class WebRunnerSection extends BasicSection  {
 
 		fFormObjectToolkit.createLabel(gridComposite, "Web driver  ");
 		fBrowserDriverText = fFormObjectToolkit.createGridText(gridComposite, new BrowserDriverApplier());
-		fFormObjectToolkit.createButton(gridComposite, "Browse...", new BrowseButtonSelectionAdapter());
+		fBrowseButton = fFormObjectToolkit.createButton(gridComposite, "Browse...", new BrowseButtonSelectionAdapter());
 	}
 
 	private void createMapStartUrlCheckBox(Composite gridComposite) {
@@ -251,9 +253,9 @@ public class WebRunnerSection extends BasicSection  {
 	@Override
 	public void setEnabled(boolean enabled) {
 
-		super.setEnabled(enabled);
 		fMapBrowserCheckbox.setEnabled(enabled);
 		fMapStartUrlCheckbox.setEnabled(enabled);
+		fBrowseButton.setEnabled(enabled);
 		fSectionEnabled = enabled;
 
 		refresh();
