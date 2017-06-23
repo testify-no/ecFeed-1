@@ -150,6 +150,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 
 	private void createRunnerSection(IFileInfoProvider fileInfoProvider) {
 		fRunnerSection = new WebRunnerSection(this, this, fMethodInterface, fileInfoProvider);
+		fRunnerSection.initialize(getManagedForm());
 	}
 
 	@Override
