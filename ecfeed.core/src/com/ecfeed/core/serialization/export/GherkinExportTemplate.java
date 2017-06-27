@@ -45,12 +45,17 @@ public class GherkinExportTemplate extends AbstractExportTemplate {
 
 	@Override
 	public String getFileExtension() {
-		return "csv";
+		return "feature";
 	}
 
 	@Override 
 	public String getTemplateFormat() {
-		return "CSV";
+		return getTemplateFormatSt();
+	}
+
+	public static String getTemplateFormatSt() {
+		final String FORMAT_GHERKIN = "Gherkin";
+		return FORMAT_GHERKIN;
 	}
 
 	private String createDefaultHeaderTemplate() {

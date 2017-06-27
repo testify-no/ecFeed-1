@@ -14,10 +14,6 @@ import com.ecfeed.core.model.MethodNode;
 
 public class ExportTemplateFactory {
 
-	private static String FORMAT_CSV = "CSV";
-	private static String FORMAT_XML = "XML";
-	private static String FORMAT_GHERKIN = "Gherkin";
-
 	MethodNode fMethodNode;
 
 	public ExportTemplateFactory(MethodNode methodNode) {
@@ -38,25 +34,29 @@ public class ExportTemplateFactory {
 
 	private IExportTemplate createTemplateIntr(String formatName) {
 
-		if (formatName.equals(FORMAT_CSV)) {
+		if (formatName.equals(CsvExportTemplate.getTemplateFormatSt())) {
 			return new CsvExportTemplate(fMethodNode);
 		}
-		if (formatName.equals(FORMAT_XML)) {
+		if (formatName.equals(XmlExportTemplate.getTemplateFormatSt())) {
 			return new XmlExportTemplate(fMethodNode);
 		}
-		if (formatName.equals(FORMAT_GHERKIN)) {
+		if (formatName.equals(GherkinExportTemplate.getTemplateFormatSt())) {
 			return new GherkinExportTemplate(fMethodNode);
 		}		
 		return null;
 	}
 
 	public static String[] getAvailableExportFormats() {
-		String[] formats = { FORMAT_CSV, FORMAT_XML, FORMAT_GHERKIN };
+		String[] formats = 
+			{ 
+				CsvExportTemplate.getTemplateFormatSt(), 
+				XmlExportTemplate.getTemplateFormatSt(), 
+				GherkinExportTemplate.getTemplateFormatSt() };
 		return formats;
 	}
 
 	private static String getDefaultFormat() {
-		return FORMAT_CSV;
+		return CsvExportTemplate.getTemplateFormatSt();
 	}
 
 }

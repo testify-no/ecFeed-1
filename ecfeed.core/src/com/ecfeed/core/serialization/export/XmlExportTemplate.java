@@ -47,9 +47,13 @@ public class XmlExportTemplate extends AbstractExportTemplate {
 
 	@Override 
 	public String getTemplateFormat() {
-		return "XML";
+		return getTemplateFormatSt();
 	}
 
+	public static String getTemplateFormatSt() {
+		final String FORMAT_XML = "XML";
+		return FORMAT_XML;
+	}	
 	private static String createDefaultHeaderTemplate() {
 		return "<TestCases>";
 	}
