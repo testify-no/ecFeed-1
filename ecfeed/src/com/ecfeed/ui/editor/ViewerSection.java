@@ -323,7 +323,6 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 	protected class ViewerMenuListener implements MenuListener {
 
 		private Menu fMenu;
-		private final int LAST_MENU_POSITION = -1;
 
 		public ViewerMenuListener(Menu menu) {
 			fMenu = menu;
@@ -381,39 +380,21 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 
 			for (NamedAction action : actionProvider.getActions(groupIt.next())) {
 
-				addMenuItem(action.getName(), action, getMenuItemIndex(action));
+				addMenuItem(action.getName(), action);
 			}
 		}
 
-		protected void addMenuItem(String text, Action action, int index) {
+		protected void addMenuItem(String actionName, Action action) {
 
-			MenuItem item;
-
-			if (index == LAST_MENU_POSITION) {
-				item = new MenuItem(getMenu(), SWT.NONE);
-			} else {
-				item = new MenuItem(getMenu(), SWT.NONE, index);
+			if (actionName.equals(GlobalActions.INSERT.getDescription())) {
+				return;
 			}
 
-			item.setText(text);
+			MenuItem item = new MenuItem(getMenu(), SWT.NONE);
+			item.setText(actionName);
 			item.setEnabled(action.isEnabled());
 			item.addSelectionListener(new MenuItemSelectionAdapter(action)); 
 		}
-
-		protected void addMenuItem(String text, Action action) {
-			addMenuItem(text, action, LAST_MENU_POSITION);
-		}		
-
-		private int getMenuItemIndex(NamedAction action) {
-
-			String actionName = action.getName();
-
-			if (actionName.equals(GlobalActions.INSERT.getDescription())) {
-				return 1;
-			}
-
-			return LAST_MENU_POSITION;
-		}		
 
 		private class MenuItemSelectionAdapter extends SelectionAdapter {
 
