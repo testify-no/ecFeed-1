@@ -136,10 +136,7 @@ public enum GlobalActions {
 			return fName;
 		}
 
-		if (isMacOs) {
-			return fName + "  (" + shortcut + ")";	
-		}
-		return fName + "\t" + shortcut;
+		return ActionHelper.addShortcut(fName, shortcut);
 	}		
 
 	public String getId() {
