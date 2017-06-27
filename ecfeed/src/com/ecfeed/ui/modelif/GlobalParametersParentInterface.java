@@ -30,12 +30,13 @@ public class GlobalParametersParentInterface extends ParametersParentInterface {
 
 	@Override
 	public AbstractParameterNode addNewParameter() {
-		EclipseModelBuilder modelBuilder = new EclipseModelBuilder();
+
 		GlobalParameterNode parameter = new GlobalParameterNode(generateNewParameterName(), generateNewParameterType());
-		parameter.addChoices(modelBuilder.defaultChoices(parameter.getType()));
-		if(addParameter(parameter, getOwnNode().getParameters().size())){
+
+		if (addParameter(parameter, getOwnNode().getParameters().size())) {
 			return parameter;
 		}
+
 		return null;
 	}
 

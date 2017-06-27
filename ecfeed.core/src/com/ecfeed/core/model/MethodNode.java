@@ -376,10 +376,20 @@ public class MethodNode extends ParametersParentNode {
 	}
 
 	@Override
-	public int getMaxChildIndex(AbstractNode potentialChild){
-		if(potentialChild instanceof MethodParameterNode) return getParameters().size();
-		if(potentialChild instanceof ConstraintNode) return getConstraintNodes().size();
-		if(potentialChild instanceof TestCaseNode) return getTestCases().size();
+	public int getMaxChildIndex(AbstractNode potentialChild) {
+		
+		if (potentialChild instanceof AbstractParameterNode) { 
+			return getParameters().size();
+		}
+		
+		if (potentialChild instanceof ConstraintNode) {
+			return getConstraintNodes().size();
+		}
+		
+		if (potentialChild instanceof TestCaseNode) { 
+			return getTestCases().size();
+		}
+		
 		return super.getMaxChildIndex(potentialChild);
 	}
 

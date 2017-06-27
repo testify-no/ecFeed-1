@@ -57,7 +57,7 @@ public class GlobalParameterDetailsPage extends AbstractParameterDetailsPage {
 			fLinkingMethodsViewer.setVisible(fParameterIf.getLinkers().size() > 0);
 
 			getMainSection().layout();
-
+			getChoicesViewer().setEditEnabled(true);
 		}
 	}
 
