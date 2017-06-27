@@ -60,7 +60,6 @@ import com.ecfeed.core.model.ModelHelper;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.utils.ExceptionHelper;
-import com.ecfeed.core.utils.SystemHelper;
 import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.CommonConstants;
 import com.ecfeed.ui.common.ImageManager;
@@ -68,6 +67,7 @@ import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.dialogs.About2Dialog;
 import com.ecfeed.ui.dialogs.CheckForUpdatesDialog;
 import com.ecfeed.ui.editor.actions.AbstractAddChildAction;
+import com.ecfeed.ui.editor.actions.ActionHelper;
 import com.ecfeed.ui.editor.actions.AddChildActionProvider;
 import com.ecfeed.ui.editor.actions.BasicActionRunnerProvider;
 import com.ecfeed.ui.editor.actions.ExecuteTestCaseAction;
@@ -515,12 +515,9 @@ public class ModelMasterSection extends TreeViewerSection{
 				return actionName;
 			}
 
-			final String insertKey = "INS";
+			final String shortcut = "INS";
 
-			if (SystemHelper.isOperatingSystemMacOs()) {
-				return actionName + "   (" + insertKey + ")";
-			}
-			return actionName + "\t" + insertKey;
+			return ActionHelper.addShortcut(actionName, shortcut);
 		}
 
 		private void addActionsForMethod(AbstractNode abstractNode) {
