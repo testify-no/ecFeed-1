@@ -428,8 +428,7 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 		page.refresh();
 	}
 
-	@Override
-	public IFile getFile(){
+	private IFile getFile(){
 		IEditorInput input = getEditorInput();
 		if (input instanceof FileEditorInput){
 			return ((FileEditorInput)input).getFile();
