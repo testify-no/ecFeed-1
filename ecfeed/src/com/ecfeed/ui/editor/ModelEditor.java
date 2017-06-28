@@ -428,7 +428,7 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 		page.refresh();
 	}
 
-	private IFile getFile(){
+	private IFile getEditorFile(){
 		IEditorInput input = getEditorInput();
 		if (input instanceof FileEditorInput){
 			return ((FileEditorInput)input).getFile();
@@ -441,16 +441,16 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 		if (!ApplicationContext.isProjectAvailable()) {
 			return null;
 		}
-		IFile file = getFile();
+		IFile file = getEditorFile();
 		if (file != null){
 			return file.getProject();
 		}
 		return null;
 	}
 
-	@Override
-	public IPath getPath(){
-		IFile file = getFile();
+
+	private IPath getPath(){
+		IFile file = getEditorFile();
 		if (file != null){
 			IPath path = file.getFullPath();
 			return path;
