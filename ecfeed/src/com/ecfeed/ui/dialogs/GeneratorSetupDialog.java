@@ -42,6 +42,7 @@ import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.adapter.IImplementationStatusResolver;
 import com.ecfeed.core.generators.DoubleParameter;
@@ -92,7 +93,6 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 	private GeneratorFactory<ChoiceNode> fGeneratorFactory;
 	private boolean fGenerateExecutableContent;
 	private IImplementationStatusResolver fStatusResolver;
-	private IFileInfoProvider fFileInfoProvider;
 	private Combo fExportFormatCombo;
 	private Text fTargetFileText;
 	private int fContent;
@@ -124,7 +124,6 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		fGenerateExecutableContent = generateExecutables;
 
 		fStatusResolver = new EclipseImplementationStatusResolver(fileInfoProvider);
-		fFileInfoProvider = fileInfoProvider;
 
 		fTargetFile = null;
 
@@ -503,7 +502,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		if (!onlyExecutable) {
 			return true;
 		}
-		if (!fFileInfoProvider.isProjectAvailable()) {
+		if (!ApplicationContext.isProjectAvailable()) {
 			return true;
 		}
 		EImplementationStatus status = fStatusResolver.getImplementationStatus(choice);

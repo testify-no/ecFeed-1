@@ -132,7 +132,7 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 			}
 			fLinkCombo.setEnabled(fParameterIf.isLinked());
 
-			if (fFileInfoProvider.isProjectAvailable()) {
+			if (ApplicationContext.isProjectAvailable()) {
 				getBrowseUserTypeButton().setEnabled(!fParameterIf.isLinked());
 			}
 			getChoicesViewer().setReplaceButtonEnabled(isReplaceButtonEnabled());
@@ -239,7 +239,7 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 	@Override
 	protected AbstractCommentsSection getCommentsSection(ISectionContext sectionContext, IModelUpdateContext updateContext) {
 
-		if (fFileInfoProvider.isProjectAvailable()) {
+		if (ApplicationContext.isProjectAvailable()) {
 			return new MethodParameterCommentsSection(sectionContext, updateContext, fFileInfoProvider);
 		} else {
 			return new SingleTextCommentsSection(this, this, fFileInfoProvider);

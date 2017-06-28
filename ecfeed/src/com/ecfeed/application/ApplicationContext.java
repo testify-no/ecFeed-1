@@ -25,6 +25,15 @@ public class ApplicationContext {
 
 		return fIsStandaloneApplication;
 	}
+	
+	public static boolean isProjectAvailable() {
+		
+		if (fIsStandaloneApplication) {
+			return false;
+		}
+		
+		return true;
+	}
 
 	public static void setStandaloneApplication() {
 

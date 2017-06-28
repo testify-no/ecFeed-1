@@ -15,6 +15,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IFormPart;
 
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
@@ -64,7 +65,7 @@ public class ModelDetailsPage extends BasicDetailsPage {
 
 	private void addCommentsSection() {
 
-		if (fFileInfoProvider.isProjectAvailable()) {
+		if (ApplicationContext.isProjectAvailable()) {
 			addForm(fCommentsSection = new ExportableSingleTextCommentsSection(this, this, fFileInfoProvider));
 		} else {
 			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fFileInfoProvider));

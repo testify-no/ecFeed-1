@@ -26,6 +26,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Tree;
 
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.TestCaseNode;
@@ -220,7 +221,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 		tree.addListener(SWT.Selection, new Listener() {
 			@Override
 			public void handleEvent(Event event) {
-				if (event.detail == SWT.CHECK && getFileInfoProvider().isProjectAvailable()) {
+				if (event.detail == SWT.CHECK && ApplicationContext.isProjectAvailable()) {
 					fExecuteSelectedButton.setEnabled(executionEnabled());
 				}
 
@@ -277,7 +278,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 			return true;
 		}
 
-		if (!getFileInfoProvider().isProjectAvailable()) {
+		if (!ApplicationContext.isProjectAvailable()) {
 			return false;
 		}
 

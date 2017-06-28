@@ -23,6 +23,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.utils.JavaTypeHelper;
@@ -93,7 +94,7 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 
 	private void addCommentsSection() {
 
-		if (fFileInfoProvider.isProjectAvailable()) {
+		if (ApplicationContext.isProjectAvailable()) {
 			addForm(fCommentsSection = new ChoiceCommentsSection(this, this, fFileInfoProvider));
 		} else {
 			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fFileInfoProvider));

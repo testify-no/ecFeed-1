@@ -18,6 +18,7 @@ import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Color;
 
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.adapter.IImplementationStatusResolver;
 import com.ecfeed.core.model.ChoiceNode;
@@ -28,14 +29,13 @@ import com.ecfeed.ui.common.ColorManager;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 
 public class TestCasesViewerLabelProvider extends LabelProvider implements IColorProvider {
-	private IFileInfoProvider fFileInfoProvider;
+	
 	private Map<String, Integer> fExecutableTestSuites;
 	private Map<TestCaseNode, Boolean> fTestCasesStatusMap;
 	MethodNode fMethod;
 	private IImplementationStatusResolver fStatusResolver;
 
 	public TestCasesViewerLabelProvider(IFileInfoProvider fileInfoProvider){
-		fFileInfoProvider = fileInfoProvider;
 		fExecutableTestSuites = new HashMap<String, Integer>();
 		fTestCasesStatusMap = new HashMap<TestCaseNode, Boolean>();
 		fStatusResolver = new EclipseImplementationStatusResolver(fileInfoProvider);
@@ -99,7 +99,7 @@ public class TestCasesViewerLabelProvider extends LabelProvider implements IColo
 	}
 
 	public void refresh(){
-		if (fFileInfoProvider.isProjectAvailable()) {
+		if (ApplicationContext.isProjectAvailable()) {
 			updateExecutableTable();
 		}
 	}

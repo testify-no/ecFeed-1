@@ -21,6 +21,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ConstraintNode;
 import com.ecfeed.core.model.MethodNode;
@@ -57,7 +58,7 @@ public class ConstraintDetailsPage extends BasicDetailsPage {
 
 	private void addCommentsSection() {
 
-		if (fFileInfoProvider.isProjectAvailable()) {
+		if (ApplicationContext.isProjectAvailable()) {
 			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fFileInfoProvider));
 		} else {
 			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fFileInfoProvider));

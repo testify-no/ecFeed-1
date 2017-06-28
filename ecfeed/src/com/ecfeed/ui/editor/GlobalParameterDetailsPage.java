@@ -12,6 +12,7 @@ package com.ecfeed.ui.editor;
 
 import org.eclipse.swt.widgets.Composite;
 
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.GlobalParameterNode;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
@@ -71,7 +72,7 @@ public class GlobalParameterDetailsPage extends AbstractParameterDetailsPage {
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext) {
 
-		if (fFileInfoProvider.isProjectAvailable()) {
+		if (ApplicationContext.isProjectAvailable()) {
 			return new GlobalParameterCommentsSection(sectionContext, updateContext, fFileInfoProvider);
 		} else {
 			return new SingleTextCommentsSection(this, this, fFileInfoProvider);

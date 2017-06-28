@@ -17,6 +17,7 @@ import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ChoiceNode;
@@ -167,7 +168,7 @@ public class TestDataViewer extends TableViewerSection implements ITestDataEdito
 		if (!(element instanceof ChoiceNode)) {
 			return null;
 		}
-		if (!fFileInfoProvider.isProjectAvailable()) {
+		if (!ApplicationContext.isProjectAvailable()) {
 			return null;
 		}		
 		ChoiceNode choice = (ChoiceNode)element;

@@ -186,7 +186,7 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 	}
 
 	private InputStream getInitialInputStream(IEditorInput input) throws ModelOperationException {
-		if (isProjectAvailable()) {
+		if (ApplicationContext.isProjectAvailable()) {
 			return ModelEditorHelper.getInitialInputStreamForIDE(input);
 		} else {
 			return ModelEditorHelper.getInitialInputStreamForRCP(input);
@@ -260,7 +260,7 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 			return;
 		}
 
-		if (isProjectAvailable()) {
+		if (ApplicationContext.isProjectAvailable()) {
 			doSaveForIDE();
 		} else {
 			doSaveForRCP();
@@ -355,7 +355,7 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 	}
 
 	public void setEditorFile(String fileWithPath) {
-		if (isProjectAvailable()) {
+		if (ApplicationContext.isProjectAvailable()) {
 			setEditorFileForIde(fileWithPath);
 		} else {
 			setEditorFileForRcp(fileWithPath);
@@ -438,16 +438,8 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 	}
 
 	@Override
-	public boolean isProjectAvailable() {
-		if (ApplicationContext.isStandaloneApplication()) {
-			return false;
-		}
-		return true;
-	}
-
-	@Override
 	public IProject getProject() {
-		if (!isProjectAvailable()) {
+		if (!ApplicationContext.isProjectAvailable()) {
 			return null;
 		}
 		IFile file = getFile();
@@ -469,7 +461,7 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 
 	@Override
 	public IPackageFragmentRoot getPackageFragmentRoot() {
-		if (!isProjectAvailable()) {
+		if (!ApplicationContext.isProjectAvailable()) {
 			return null;
 		}		
 		try {

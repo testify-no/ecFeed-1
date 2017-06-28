@@ -17,6 +17,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.QualifiedName;
 
 import com.ecfeed.android.external.IProjectHelper;
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.utils.DiskFileHelper;
 import com.ecfeed.core.utils.EcException;
 import com.ecfeed.core.utils.ExceptionHelper;
@@ -46,7 +47,7 @@ public class EclipseProjectHelper implements IProjectHelper {
 
 	@Override
 	public String getProjectPath() {
-		if (!fFileInfoProvider.isProjectAvailable()) {
+		if (!ApplicationContext.isProjectAvailable()) {
 			return null;
 		}
 		return fFileInfoProvider.getProject().getLocation().toOSString();
@@ -54,7 +55,7 @@ public class EclipseProjectHelper implements IProjectHelper {
 
 	@Override
 	public String getReferencedProjectPath() {
-		if (!fFileInfoProvider.isProjectAvailable()) {
+		if (!ApplicationContext.isProjectAvailable()) {
 			return null;
 		}
 		IProject testingProject = fFileInfoProvider.getProject();
@@ -64,7 +65,7 @@ public class EclipseProjectHelper implements IProjectHelper {
 	}
 
 	public String getProjectPath(IProject project) {
-		if (!fFileInfoProvider.isProjectAvailable()) {
+		if (!ApplicationContext.isProjectAvailable()) {
 			return null;
 		}
 		return project.getLocation().toOSString();
@@ -103,7 +104,7 @@ public class EclipseProjectHelper implements IProjectHelper {
 	}
 
 	private boolean isDevelopmentHook(String hookName, IFileInfoProvider fileInfoProvider) {
-		if (!fFileInfoProvider.isProjectAvailable()) {
+		if (!ApplicationContext.isProjectAvailable()) {
 			return false;
 		}
 		String projectPath = null;
@@ -123,7 +124,7 @@ public class EclipseProjectHelper implements IProjectHelper {
 
 	@Override
 	public String getApkPathAndName() {
-		if (!fFileInfoProvider.isProjectAvailable()) {
+		if (!ApplicationContext.isProjectAvailable()) {
 			return null;
 		}
 		IProject project = fFileInfoProvider.getProject();
@@ -132,7 +133,7 @@ public class EclipseProjectHelper implements IProjectHelper {
 
 	@Override
 	public String getReferencedApkPathAndName() {
-		if (!fFileInfoProvider.isProjectAvailable()) {
+		if (!ApplicationContext.isProjectAvailable()) {
 			return null;
 		}
 		IProject testingProject = fFileInfoProvider.getProject();
@@ -170,7 +171,7 @@ public class EclipseProjectHelper implements IProjectHelper {
 	}
 
 	private boolean calculateFlagIsAndroidProject() throws EcException {
-		if (!fFileInfoProvider.isProjectAvailable()) {
+		if (!ApplicationContext.isProjectAvailable()) {
 			return false;
 		}
 		IProject project = fFileInfoProvider.getProject();

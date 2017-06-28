@@ -16,6 +16,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.MethodNode;
@@ -83,7 +84,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 
 	private void addCommentsSection(IFileInfoProvider fileInfoProvider) {
 
-		if (fileInfoProvider.isProjectAvailable()) {
+		if (ApplicationContext.isProjectAvailable()) {
 			addForm(fCommentsSection = new ExportableJavaDocCommentsSection(this, this, fileInfoProvider));
 		} else {
 			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fileInfoProvider));
@@ -93,7 +94,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	private void createMethodNameWidgets(IFileInfoProvider fileInfoProvider) {
 		int gridColumns = 2;
 
-		if (fileInfoProvider.isProjectAvailable()) {
+		if (ApplicationContext.isProjectAvailable()) {
 			++gridColumns;
 		}
 
@@ -104,7 +105,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		fMethodNameText = getFormObjectToolkit().createGridText(gridComposite,
 				new MethodNameApplier());
 
-		if (fileInfoProvider.isProjectAvailable()) {
+		if (ApplicationContext.isProjectAvailable()) {
 			fBrowseButton = getFormObjectToolkit().createButton(gridComposite,
 					"Browse...", new ReassignAdapter());
 		}
@@ -203,7 +204,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 
 	private void refrestTestOnlineButton(IFileInfoProvider fileInfoProvider) {
 		EImplementationStatus methodImplementationStatus = null;
-		if (fileInfoProvider.isProjectAvailable()) {
+		if (ApplicationContext.isProjectAvailable()) {
 			methodImplementationStatus = fMethodInterface.getImplementationStatus();
 		}
 
@@ -226,7 +227,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	}
 
 	private void refreshBrowseButton(IFileInfoProvider fileInfoProvider, MethodNode methodNode) {
-		if (!fileInfoProvider.isProjectAvailable()) {
+		if (!ApplicationContext.isProjectAvailable()) {
 			return;
 		}
 
@@ -249,7 +250,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 			return true;
 		}		
 
-		if (fileInfoProvider.isProjectAvailable()) {
+		if (ApplicationContext.isProjectAvailable()) {
 			return methodStatus != EImplementationStatus.NOT_IMPLEMENTED;
 		}
 

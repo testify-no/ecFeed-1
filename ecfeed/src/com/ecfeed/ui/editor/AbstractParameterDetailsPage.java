@@ -16,6 +16,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
@@ -146,7 +147,7 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 
 		fTypeCombo = formObjectToolkit.createReadWriteGridCombo(fAttributesComposite, new TypeApplier());
 
-		if (fFileInfoProvider.isProjectAvailable()) {
+		if (ApplicationContext.isProjectAvailable()) {
 			fBrowseUserTypeButton = formObjectToolkit.createButton(
 					fAttributesComposite, "Import...", new BrowseTypeSelectionListener());
 		}
@@ -172,7 +173,7 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 	protected abstract AbstractCommentsSection getCommentsSection(ISectionContext sectionContext, IModelUpdateContext updateContext);
 
 	protected Button getBrowseUserTypeButton() {
-		if (!fFileInfoProvider.isProjectAvailable()) {
+		if (!ApplicationContext.isProjectAvailable()) {
 			return null;
 		}
 		return fBrowseUserTypeButton;

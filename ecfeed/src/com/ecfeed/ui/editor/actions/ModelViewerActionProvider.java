@@ -15,6 +15,7 @@ import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.adapter.IModelImplementer;
 import com.ecfeed.ui.common.local.EclipseModelImplementer;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
@@ -44,7 +45,7 @@ public class ModelViewerActionProvider extends ActionProvider {
 
 		addEditActions(viewer, viewer, context, fileInfoProvider);
 
-		if(fileInfoProvider != null && fileInfoProvider.isProjectAvailable()){
+		if(fileInfoProvider != null && ApplicationContext.isProjectAvailable()){
 			addImplementationActions(viewer, context, fileInfoProvider);
 		}
 
@@ -60,7 +61,7 @@ public class ModelViewerActionProvider extends ActionProvider {
 
 		addEditActions(viewer, viewer, context, fileInfoProvider);
 
-		if(fileInfoProvider != null && fileInfoProvider.isProjectAvailable()){
+		if(fileInfoProvider != null && ApplicationContext.isProjectAvailable()){
 			addImplementationActions(viewer, context, fileInfoProvider);
 		}
 

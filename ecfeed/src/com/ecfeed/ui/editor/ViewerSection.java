@@ -40,6 +40,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.utils.SystemHelper;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
@@ -224,7 +225,7 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 		addKeyListener(GlobalActions.MOVE_UP.getId(), SWT.ARROW_UP, SWT.ALT, provider);
 		addKeyListener(GlobalActions.MOVE_DOWN.getId(), SWT.ARROW_DOWN, SWT.ALT, provider);
 
-		if (!getFileInfoProvider().isProjectAvailable()) {
+		if (!ApplicationContext.isProjectAvailable()) {
 			addActionsForStandaloneApp(provider);
 		}
 	}

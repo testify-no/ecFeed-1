@@ -394,7 +394,7 @@ public class ModelMasterSection extends TreeViewerSection{
 
 			try {
 				List<Image> decorations = (List<Image>)((AbstractNode)element).accept(
-						new DecorationProvider(fFileInfoProvider, fFileInfoProvider.isProjectAvailable()));
+						new DecorationProvider(fFileInfoProvider, ApplicationContext.isProjectAvailable()));
 				List<Image> all = new ArrayList<Image>(decorations);
 				all.add(0, image);
 				if(fFusedImages.containsKey(all) == false){

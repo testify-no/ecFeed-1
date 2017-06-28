@@ -35,6 +35,7 @@ import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.adapter.IModelImplementer;
 import com.ecfeed.core.adapter.ModelOperationManager;
 import com.ecfeed.core.model.AbstractNode;
@@ -155,7 +156,7 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 
 	protected void addToolbarActions(){
 
-		if (fFileInfoProvider.isProjectAvailable()) {
+		if (ApplicationContext.isProjectAvailable()) {
 			if(fImplementer.implementable(getNodeType())){
 				getToolBarManager().add(new GoToImplementationToolbarAction());
 				getToolBarManager().add(new ImplementToolbarAction());

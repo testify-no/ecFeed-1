@@ -20,6 +20,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.TestCaseNode;
@@ -86,7 +87,7 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 
 	private void addCommentsSection() {
 
-		if (fFileInfoProvider.isProjectAvailable()) {
+		if (ApplicationContext.isProjectAvailable()) {
 			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fFileInfoProvider));
 		} else {
 			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fFileInfoProvider));
@@ -101,7 +102,7 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 			return true;
 		}		
 
-		if (!fFileInfoProvider.isProjectAvailable()) {
+		if (!ApplicationContext.isProjectAvailable()) {
 			return false;
 		}
 
