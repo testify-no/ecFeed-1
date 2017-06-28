@@ -21,10 +21,14 @@ public class ActionHelper {
 		}
 
 		if (SystemHelper.isOperatingSystemMacOs()) {
-			return actionName + "  (" + shortcut + ")";	
+			addShortcutWithParentheses(actionName, shortcut);	
 		}
 		
 		return actionName + "\t" + shortcut;
-	}		
+	}
+	
+	public static String addShortcutWithParentheses(String actionName, String shortcut) {
+		return actionName + "  (" + shortcut + ")";
+	}
 
 }
