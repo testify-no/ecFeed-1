@@ -25,4 +25,11 @@
 		<nature>org.eclipse.pde.PluginNature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>srcCore</name>
+			<type>2</type>
+			<location>/home/marekq/git/ecFeed/ecfeed.core/src</location>
+		</link>
+	</linkedResources>
 </projectDescription>
