@@ -44,10 +44,10 @@ import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.core.utils.SystemLogger;
-import com.ecfeed.ui.common.EclipseImplementationStatusResolver;
-import com.ecfeed.ui.common.EclipseTypeAdapterProvider;
-import com.ecfeed.ui.common.JavaDocSupport;
 import com.ecfeed.ui.common.Messages;
+import com.ecfeed.ui.common.local.EclipseImplementationStatusResolver;
+import com.ecfeed.ui.common.local.EclipseTypeAdapterProvider;
+import com.ecfeed.ui.common.local.JavaDocSupport;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.dialogs.TextAreaDialog;
 

@@ -40,7 +40,7 @@ import com.ecfeed.junit.annotations.Constraints;
 import com.ecfeed.junit.annotations.EcModel;
 import com.ecfeed.junit.annotations.Generator;
 import com.ecfeed.junit.annotations.expected;
-import com.ecfeed.ui.common.EclipseModelBuilder;
+import com.ecfeed.ui.common.local.EclipseModelBuilder;
 
 
 @RunWith(OnlineRunner.class)

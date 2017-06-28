@@ -8,7 +8,7 @@
  *  
  *******************************************************************************/
 
-package com.ecfeed.ui.common;
+package com.ecfeed.ui.common.local;
 
 import java.util.Arrays;
 
@@ -17,6 +17,7 @@ import com.ecfeed.core.adapter.ITypeAdapterProvider;
 import com.ecfeed.core.utils.JavaLanguageHelper;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.StringHelper;
+import com.ecfeed.ui.common.CommonConstants;
 
 public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 

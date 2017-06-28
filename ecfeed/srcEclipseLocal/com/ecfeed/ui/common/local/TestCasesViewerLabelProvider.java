@@ -8,7 +8,7 @@
  *  
  *******************************************************************************/
 
-package com.ecfeed.ui.common;
+package com.ecfeed.ui.common.local;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -23,6 +23,8 @@ import com.ecfeed.core.adapter.IImplementationStatusResolver;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.TestCaseNode;
+import com.ecfeed.ui.common.ColorConstants;
+import com.ecfeed.ui.common.ColorManager;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 
 public class TestCasesViewerLabelProvider extends LabelProvider implements IColorProvider {

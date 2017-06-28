@@ -8,7 +8,7 @@
  *  
  *******************************************************************************/
 
-package com.ecfeed.ui.common;
+package com.ecfeed.ui.common.local;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -63,6 +63,7 @@ import com.ecfeed.core.utils.JavaLanguageHelper;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.PackageClassHelper;
 import com.ecfeed.core.utils.SystemLogger;
+import com.ecfeed.ui.common.EclipseInstallationDirFileHelper;
 import com.ecfeed.ui.common.utils.EclipsePackageFragmentGetter;
 import com.ecfeed.ui.common.utils.EclipseProjectHelper;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;

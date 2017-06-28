@@ -25,8 +25,8 @@ import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.RootNodeHelper;
 import com.ecfeed.ui.common.CommonConstants;
-import com.ecfeed.ui.common.EclipseModelBuilder;
 import com.ecfeed.ui.common.Messages;
+import com.ecfeed.ui.common.local.EclipseModelBuilder;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.dialogs.TestClassImportDialog;
 

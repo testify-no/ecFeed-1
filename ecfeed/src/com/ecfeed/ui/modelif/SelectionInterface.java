@@ -21,8 +21,8 @@ import com.ecfeed.core.adapter.operations.GenericShiftOperation;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.utils.SystemLogger;
-import com.ecfeed.ui.common.EclipseTypeAdapterProvider;
 import com.ecfeed.ui.common.Messages;
+import com.ecfeed.ui.common.local.EclipseTypeAdapterProvider;
 
 public class SelectionInterface extends OperationExecuter {
 

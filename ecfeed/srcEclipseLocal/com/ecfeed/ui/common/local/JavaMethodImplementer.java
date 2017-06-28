@@ -8,7 +8,7 @@
  *  
  *******************************************************************************/
 
-package com.ecfeed.ui.common;
+package com.ecfeed.ui.common.local;
 
 import com.ecfeed.android.external.IMethodImplementHelper;
 import com.ecfeed.core.model.MethodNode;

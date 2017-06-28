@@ -39,9 +39,9 @@ import com.ecfeed.core.utils.EcException;
 import com.ecfeed.core.utils.PackageClassHelper;
 import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.CommonConstants;
-import com.ecfeed.ui.common.EclipseModelBuilder;
-import com.ecfeed.ui.common.JavaModelAnalyser;
 import com.ecfeed.ui.common.Messages;
+import com.ecfeed.ui.common.local.EclipseModelBuilder;
+import com.ecfeed.ui.common.local.JavaModelAnalyser;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.dialogs.TestClassSelectionDialog;
 

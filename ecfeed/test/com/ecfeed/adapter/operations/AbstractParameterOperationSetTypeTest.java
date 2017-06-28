@@ -38,7 +38,7 @@ import com.ecfeed.junit.OnlineRunner;
 import com.ecfeed.junit.annotations.Constraints;
 import com.ecfeed.junit.annotations.EcModel;
 import com.ecfeed.junit.annotations.Generator;
-import com.ecfeed.ui.common.EclipseTypeAdapterProvider;
+import com.ecfeed.ui.common.local.EclipseTypeAdapterProvider;
 
 
 @RunWith(OnlineRunner.class)

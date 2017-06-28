@@ -31,5 +31,10 @@
 			<type>2</type>
 			<location>/home/marekq/git/ecFeed/ecfeed.core/src</location>
 		</link>
+		<link>
+			<name>srcLogic</name>
+			<type>2</type>
+			<location>/home/marekq/git/ecFeed/ecfeed/src</location>
+		</link>
 	</linkedResources>
 </projectDescription>

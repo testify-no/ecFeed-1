@@ -8,7 +8,7 @@
  *  
  *******************************************************************************/
 
-package com.ecfeed.ui.common;
+package com.ecfeed.ui.common.local;
 
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IType;
@@ -23,6 +23,8 @@ import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.utils.EcException;
 import com.ecfeed.core.utils.SystemLogger;
+import com.ecfeed.ui.common.AbstractJavaImplementationStatusResolver;
+import com.ecfeed.ui.common.EclipseInstallationDirFileHelper;
 import com.ecfeed.ui.common.utils.EclipseProjectHelper;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 
