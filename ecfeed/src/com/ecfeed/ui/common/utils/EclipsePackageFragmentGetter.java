@@ -25,9 +25,9 @@ public class EclipsePackageFragmentGetter {
 
 	public static IPackageFragment getPackageFragment(
 			String name, 
-			IFileInfoProvider fileInfoProvider) throws CoreException {
+			IJavaProjectProvider javaProjectProvider) throws CoreException {
 
-		IPackageFragmentRoot packageFragmentRoot = getPackageFragmentRoot(fileInfoProvider);
+		IPackageFragmentRoot packageFragmentRoot = getPackageFragmentRoot(javaProjectProvider);
 		IPackageFragment packageFragment = packageFragmentRoot.getPackageFragment(name);
 
 		if(packageFragment.exists() == false){
@@ -37,29 +37,29 @@ public class EclipsePackageFragmentGetter {
 	}
 
 	private static IPackageFragmentRoot getPackageFragmentRoot(
-			IFileInfoProvider fileInfoProvider) throws CoreException{
+			IJavaProjectProvider javaProjectProvider) throws CoreException{
 
-		if (fileInfoProvider == null) {
+		if (javaProjectProvider == null) {
 			ExceptionHelper.reportRuntimeException(Messages.EXCEPTION_FILE_INFO_PROVIDER_NOT_NULL);
 		}
 
-		IPackageFragmentRoot root = fileInfoProvider.getPackageFragmentRoot();
+		IPackageFragmentRoot root = javaProjectProvider.getPackageFragmentRoot();
 
 		if(root == null){
-			root = getAnySourceFolder(fileInfoProvider);
+			root = getAnySourceFolder(javaProjectProvider);
 		}
 		if(root == null){
-			root = createNewSourceFolder("src", fileInfoProvider);
+			root = createNewSourceFolder("src", javaProjectProvider);
 		}
 
 		return root;
 	}
 
 	private static IPackageFragmentRoot getAnySourceFolder(
-			IFileInfoProvider fFileInfoProvider) throws CoreException {
+			IJavaProjectProvider javaProjectProvider) throws CoreException {
 
-		if(fFileInfoProvider.getProject().hasNature(JavaCore.NATURE_ID)){
-			IJavaProject project = JavaCore.create(fFileInfoProvider.getProject());
+		if(javaProjectProvider.getProject().hasNature(JavaCore.NATURE_ID)){
+			IJavaProject project = JavaCore.create(javaProjectProvider.getProject());
 
 			for (IPackageFragmentRoot packageFragmentRoot: project.getPackageFragmentRoots()) {
 				if (packageFragmentRoot.getKind() == IPackageFragmentRoot.K_SOURCE) {
@@ -72,9 +72,9 @@ public class EclipsePackageFragmentGetter {
 
 	private static IPackageFragmentRoot createNewSourceFolder(
 			String name, 
-			IFileInfoProvider fFileInfoProvider) throws CoreException {
+			IJavaProjectProvider javaProjectProvider) throws CoreException {
 
-		IProject project = fFileInfoProvider.getProject();
+		IProject project = javaProjectProvider.getProject();
 		IJavaProject javaProject = JavaCore.create(project);
 		IFolder srcFolder = project.getFolder(name);
 

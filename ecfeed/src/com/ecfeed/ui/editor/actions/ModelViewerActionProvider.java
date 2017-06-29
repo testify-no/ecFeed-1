@@ -18,7 +18,7 @@ import org.eclipse.jface.viewers.TreeViewer;
 import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.adapter.IModelImplementer;
 import com.ecfeed.ui.common.local.EclipseModelImplementer;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 
@@ -37,16 +37,16 @@ public class ModelViewerActionProvider extends ActionProvider {
 			TreeViewer viewer, 
 			IModelUpdateContext 
 			context, 
-			IFileInfoProvider fileInfoProvider,
+			IJavaProjectProvider javaProjectProvider,
 			BasicActionRunnerProvider basicActionRunnerProvider,
 			boolean selectRoot) {
 
 		fBasicActionRunnerProvider = basicActionRunnerProvider;
 
-		addEditActions(viewer, viewer, context, fileInfoProvider);
+		addEditActions(viewer, viewer, context, javaProjectProvider);
 
-		if(fileInfoProvider != null && ApplicationContext.isProjectAvailable()){
-			addImplementationActions(viewer, context, fileInfoProvider);
+		if (javaProjectProvider != null && ApplicationContext.isProjectAvailable()){
+			addImplementationActions(viewer, context, javaProjectProvider);
 		}
 
 		addViewerActions(viewer, context, selectRoot);
@@ -57,12 +57,12 @@ public class ModelViewerActionProvider extends ActionProvider {
 	public ModelViewerActionProvider(
 			TableViewer viewer, 
 			IModelUpdateContext context, 
-			IFileInfoProvider fileInfoProvider) {
+			IJavaProjectProvider javaProjectProvider) {
 
-		addEditActions(viewer, viewer, context, fileInfoProvider);
+		addEditActions(viewer, viewer, context, javaProjectProvider);
 
-		if(fileInfoProvider != null && ApplicationContext.isProjectAvailable()){
-			addImplementationActions(viewer, context, fileInfoProvider);
+		if (javaProjectProvider != null && ApplicationContext.isProjectAvailable()) {
+			addImplementationActions(viewer, context, javaProjectProvider);
 		}
 
 		addViewerActions(viewer);
@@ -73,13 +73,13 @@ public class ModelViewerActionProvider extends ActionProvider {
 			ISelectionProvider selectionProvider,
 			StructuredViewer structuredViewer,
 			IModelUpdateContext context,
-			IFileInfoProvider fileInfoProvider) {
+			IJavaProjectProvider javaProjectProvider) {
 
 		DeleteAction deleteAction = new DeleteAction(selectionProvider, context);
 		addAction(EDIT_GROUP, new CopyAction(selectionProvider));
 		addAction(EDIT_GROUP, new CutAction(new CopyAction(selectionProvider), deleteAction));
-		addAction(EDIT_GROUP, new PasteAction(selectionProvider, context, fileInfoProvider));
-		addAction(EDIT_GROUP, new InsertAction(selectionProvider, structuredViewer, context, fileInfoProvider));
+		addAction(EDIT_GROUP, new PasteAction(selectionProvider, context, javaProjectProvider));
+		addAction(EDIT_GROUP, new InsertAction(selectionProvider, structuredViewer, context, javaProjectProvider));
 		addAction(EDIT_GROUP, deleteAction);
 
 		if (fBasicActionRunnerProvider != null) {
@@ -109,11 +109,11 @@ public class ModelViewerActionProvider extends ActionProvider {
 	}
 
 	private void addImplementationActions(
-			StructuredViewer viewer, IModelUpdateContext context, IFileInfoProvider fileInfoProvider) {
+			StructuredViewer viewer, IModelUpdateContext context, IJavaProjectProvider javaProjectProvider) {
 		
-		IModelImplementer implementer = new EclipseModelImplementer(fileInfoProvider);
+		IModelImplementer implementer = new EclipseModelImplementer(javaProjectProvider);
 		addAction(IMPLEMENT_GROUP, new ImplementAction(viewer, context, implementer));
-		addAction(IMPLEMENT_GROUP, new GoToImplementationAction(viewer, fileInfoProvider));
+		addAction(IMPLEMENT_GROUP, new GoToImplementationAction(viewer, javaProjectProvider));
 	}
 
 	private void addMoveActions(ISelectionProvider selectionProvider, IModelUpdateContext context){

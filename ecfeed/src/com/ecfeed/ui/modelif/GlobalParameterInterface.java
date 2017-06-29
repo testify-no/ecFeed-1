@@ -17,12 +17,12 @@ import com.ecfeed.core.adapter.operations.GlobalParameterOperationSetType;
 import com.ecfeed.core.model.GlobalParameterNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.utils.JavaTypeHelper;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 
 public class GlobalParameterInterface extends AbstractParameterInterface {
 
-	public GlobalParameterInterface(IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider) {
-		super(updateContext, fileInfoProvider);
+	public GlobalParameterInterface(IModelUpdateContext updateContext, IJavaProjectProvider javaProjectProvider) {
+		super(updateContext, javaProjectProvider);
 	}
 
 	public List<MethodParameterNode> getLinkers(){

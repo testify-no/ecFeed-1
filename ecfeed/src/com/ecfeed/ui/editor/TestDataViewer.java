@@ -21,9 +21,9 @@ import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ChoiceNode;
-import com.ecfeed.core.model.ModelConstants;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
+import com.ecfeed.core.model.ModelConstants;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.ui.common.ColorConstants;
@@ -31,7 +31,7 @@ import com.ecfeed.ui.common.ColorManager;
 import com.ecfeed.ui.common.ITestDataEditorListener;
 import com.ecfeed.ui.common.NodeViewerColumnLabelProvider;
 import com.ecfeed.ui.common.local.TestDataValueEditingSupport;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.TestCaseInterface;
 
@@ -39,16 +39,16 @@ public class TestDataViewer extends TableViewerSection implements ITestDataEdito
 
 	private final static int VIEWER_STYLE = SWT.BORDER;
 
-	private IFileInfoProvider fFileInfoProvider;
+	private IJavaProjectProvider fJavaProjectProvider;
 	private TestCaseInterface fTestCaseIf;
 	private TestDataValueEditingSupport fValueEditingSupport;
 
 	public TestDataViewer(
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext, 
-			IFileInfoProvider fileInfoProvider) {
-		super(sectionContext, updateContext, fileInfoProvider, StyleDistributor.getSectionStyle()	);
-		fFileInfoProvider = fileInfoProvider;
+			IJavaProjectProvider javaProjectProvider) {
+		super(sectionContext, updateContext, javaProjectProvider, StyleDistributor.getSectionStyle()	);
+		fJavaProjectProvider = javaProjectProvider;
 		getTestCaseInterface();
 		getSection().setText("Test data");
 	}
@@ -96,7 +96,7 @@ public class TestDataViewer extends TableViewerSection implements ITestDataEdito
 
 	protected TestCaseInterface getTestCaseInterface() {
 		if(fTestCaseIf == null){
-			fTestCaseIf = new TestCaseInterface(this, fFileInfoProvider);
+			fTestCaseIf = new TestCaseInterface(this, fJavaProjectProvider);
 		}
 		return fTestCaseIf;
 	}

@@ -16,12 +16,12 @@ import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.StructuredViewer;
 
 import com.ecfeed.core.model.AbstractNode;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class InsertAction extends ModelModifyingAction {
 
-	IFileInfoProvider fFileInfoProvider;
+	IJavaProjectProvider fJavaProjectProvider;
 	StructuredViewer fStructuredViewer;
 	IModelUpdateContext fUpdateContext;
 
@@ -29,10 +29,10 @@ public class InsertAction extends ModelModifyingAction {
 			ISelectionProvider selectionProvider,
 			StructuredViewer structuredViewer,
 			IModelUpdateContext updateContext,
-			IFileInfoProvider fileInfoProvider) {
+			IJavaProjectProvider javaProjectProvider) {
 		super(GlobalActions.INSERT.getId(), GlobalActions.INSERT.getDescription(), 
 				selectionProvider, updateContext);
-		fFileInfoProvider = fileInfoProvider;
+		fJavaProjectProvider = javaProjectProvider;
 		fStructuredViewer = structuredViewer;
 		fUpdateContext = updateContext;
 	}
@@ -53,7 +53,7 @@ public class InsertAction extends ModelModifyingAction {
 		AbstractNode abstractNode = selectedNodes.get(0);
 
 		AddChildActionProvider actionProvider = 
-				new AddChildActionProvider(fStructuredViewer, fUpdateContext, fFileInfoProvider);
+				new AddChildActionProvider(fStructuredViewer, fUpdateContext, fJavaProjectProvider);
 
 		AbstractAddChildAction insertAction = actionProvider.getMainInsertAction(abstractNode);
 		if (insertAction == null) {

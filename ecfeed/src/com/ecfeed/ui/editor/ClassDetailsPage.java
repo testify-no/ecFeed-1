@@ -33,7 +33,7 @@ import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.utils.EcException;
 import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.utils.EclipseProjectHelper;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.common.utils.SwtObjectHelper;
 import com.ecfeed.ui.modelif.ClassInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
@@ -41,7 +41,7 @@ import com.ecfeed.ui.modelif.IModelUpdateContext;
 public class ClassDetailsPage extends BasicDetailsPage {
 
 	private boolean fIsAndroidProject;
-	private IFileInfoProvider fFileInfoProvider;
+	private IJavaProjectProvider fJavaProjectProvider;
 	private MethodsViewer fMethodsSection;
 	private OtherMethodsViewer fOtherMethodsSection;
 	private Text fClassNameText;
@@ -54,11 +54,15 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	private AbstractCommentsSection fCommentsSection;
 
 
-	public ClassDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider) {
-		super(masterSection, updateContext, fileInfoProvider);
-		fFileInfoProvider = fileInfoProvider;
-		fIsAndroidProject = new EclipseProjectHelper(fFileInfoProvider).isAndroidProject();
-		fClassIf = new ClassInterface(this, fFileInfoProvider);
+	public ClassDetailsPage(
+			ModelMasterSection masterSection, 
+			IModelUpdateContext updateContext, 
+			IJavaProjectProvider javaProjectProvider) {
+		
+		super(masterSection, updateContext, javaProjectProvider);
+		fJavaProjectProvider = javaProjectProvider;
+		fIsAndroidProject = new EclipseProjectHelper(javaProjectProvider).isAndroidProject();
+		fClassIf = new ClassInterface(this, javaProjectProvider);
 	}
 
 	@Override
@@ -69,11 +73,11 @@ public class ClassDetailsPage extends BasicDetailsPage {
 
 		addCommentsSection();
 
-		addViewerSection(fMethodsSection = new MethodsViewer(this, this, fFileInfoProvider));
-		addViewerSection(fGlobalParametersSection = new GlobalParametersViewer(this, this, fFileInfoProvider));
+		addViewerSection(fMethodsSection = new MethodsViewer(this, this, fJavaProjectProvider));
+		addViewerSection(fGlobalParametersSection = new GlobalParametersViewer(this, this, fJavaProjectProvider));
 
 		if (ApplicationContext.isProjectAvailable()) {
-			addViewerSection(fOtherMethodsSection = new OtherMethodsViewer(this, this, fFileInfoProvider));
+			addViewerSection(fOtherMethodsSection = new OtherMethodsViewer(this, this, fJavaProjectProvider));
 		}
 
 		getToolkit().paintBordersFor(getMainComposite());
@@ -88,9 +92,9 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	private void addCommentsSection() {
 
 		if (ApplicationContext.isProjectAvailable()) {
-			addForm(fCommentsSection = new ExportableJavaDocCommentsSection(this, this, fFileInfoProvider));
+			addForm(fCommentsSection = new ExportableJavaDocCommentsSection(this, this, fJavaProjectProvider));
 		} else {
-			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fFileInfoProvider));
+			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fJavaProjectProvider));
 		}
 	}
 
@@ -181,7 +185,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	private void fillAndroidBaseRunnerCombo() {
 		String projectPath = null;
 		try {
-			projectPath = new EclipseProjectHelper(fFileInfoProvider).getProjectPath();
+			projectPath = new EclipseProjectHelper(fJavaProjectProvider).getProjectPath();
 
 			List<String> runners = fClassIf.createRunnerList(projectPath);
 

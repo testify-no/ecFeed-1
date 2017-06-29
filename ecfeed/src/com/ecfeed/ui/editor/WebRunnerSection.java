@@ -20,7 +20,7 @@ import org.eclipse.swt.widgets.Text;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.NodePropertyDefs;
 import com.ecfeed.core.utils.BooleanHelper;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.common.utils.SwtObjectHelper;
 import com.ecfeed.ui.dialogs.basic.FileOpenDialog;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
@@ -49,8 +49,8 @@ public class WebRunnerSection extends BasicSection  {
 	public WebRunnerSection(ISectionContext sectionContext, 
 			IModelUpdateContext updateContext,
 			MethodInterface methodInterface,
-			IFileInfoProvider fileInfoProvider) {
-		super(sectionContext, updateContext, fileInfoProvider, StyleDistributor.getCollapsibleSectionStyle());
+			IJavaProjectProvider javaProjectProvider) {
+		super(sectionContext, updateContext, javaProjectProvider, StyleDistributor.getCollapsibleSectionStyle());
 
 		fMethodInterface = methodInterface;
 		fFormObjectToolkit = new FormObjectToolkit(getToolkit());

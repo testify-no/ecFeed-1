@@ -32,7 +32,7 @@ import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.local.EclipseModelBuilder;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.modelif.AbstractNodeInterface;
 import com.ecfeed.ui.modelif.GlobalParametersParentInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
@@ -43,16 +43,16 @@ import com.ecfeed.ui.modelif.SelectionInterface;
 public class ModelNodeDropListener extends ViewerDropAdapter {
 
 	private final IModelUpdateContext fUpdateContext;
-	IFileInfoProvider fFileInfoProvider;
+	IJavaProjectProvider fJavaProjectProvider;
 	private boolean fEnabled;
 
 
 	protected ModelNodeDropListener(Viewer viewer, 
 			IModelUpdateContext updateContext, 
-			IFileInfoProvider fileInfoProvider) {
+			IJavaProjectProvider javaProjectProvider) {
 		super(viewer);
 		fUpdateContext = updateContext;
-		fFileInfoProvider = fileInfoProvider;
+		fJavaProjectProvider = javaProjectProvider;
 		fEnabled = true;
 	}
 
@@ -88,7 +88,7 @@ public class ModelNodeDropListener extends ViewerDropAdapter {
 			return selectionIf.move(newParent, index);
 		case DND.DROP_LINK:
 			try {
-				return (boolean)newParent.accept(new LinkHandler(index, fFileInfoProvider));
+				return (boolean)newParent.accept(new LinkHandler(index, fJavaProjectProvider));
 			}catch(Exception e) {
 				SystemLogger.logCatch(e.getMessage());
 				return false;
@@ -260,7 +260,9 @@ public class ModelNodeDropListener extends ViewerDropAdapter {
 		@Override
 		public Object visit(RootNode node) throws Exception {
 
-			AbstractNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(node, fUpdateContext, fFileInfoProvider);
+			AbstractNodeInterface nodeIf = 
+					NodeInterfaceFactory.getNodeInterface(node, fUpdateContext, fJavaProjectProvider);
+			
 			List<AbstractNode> children;
 
 			if (NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof MethodParameterNode) {
@@ -279,7 +281,9 @@ public class ModelNodeDropListener extends ViewerDropAdapter {
 		@Override
 		public Object visit(ClassNode node) throws Exception {
 
-			AbstractNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(node, fUpdateContext, fFileInfoProvider);
+			AbstractNodeInterface nodeIf = 
+					NodeInterfaceFactory.getNodeInterface(node, fUpdateContext, fJavaProjectProvider);
+			
 			List<AbstractNode> children;
 
 			if (NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof MethodParameterNode) {
@@ -299,7 +303,9 @@ public class ModelNodeDropListener extends ViewerDropAdapter {
 		@Override
 		public Object visit(MethodNode node) throws Exception {
 
-			AbstractNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(node, fUpdateContext, fFileInfoProvider);
+			AbstractNodeInterface nodeIf = 
+					NodeInterfaceFactory.getNodeInterface(node, fUpdateContext, fJavaProjectProvider);
+			
 			List<AbstractNode> children;
 
 			if (NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof GlobalParameterNode) {
@@ -321,7 +327,8 @@ public class ModelNodeDropListener extends ViewerDropAdapter {
 		@Override
 		public Object visit(MethodParameterNode node) throws Exception {
 
-			AbstractNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(node, fUpdateContext, fFileInfoProvider);
+			AbstractNodeInterface nodeIf = 
+					NodeInterfaceFactory.getNodeInterface(node, fUpdateContext, fJavaProjectProvider);
 
 			return nodeIf.addChildren(NodeDnDBuffer.getInstance().getDraggedNodesCopy(), fIndex);
 		}
@@ -329,7 +336,8 @@ public class ModelNodeDropListener extends ViewerDropAdapter {
 		@Override
 		public Object visit(GlobalParameterNode node) throws Exception {
 
-			AbstractNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(node, fUpdateContext, fFileInfoProvider);
+			AbstractNodeInterface nodeIf = 
+					NodeInterfaceFactory.getNodeInterface(node, fUpdateContext, fJavaProjectProvider);
 
 			return nodeIf.addChildren(NodeDnDBuffer.getInstance().getDraggedNodesCopy(), fIndex);
 		}
@@ -347,7 +355,8 @@ public class ModelNodeDropListener extends ViewerDropAdapter {
 		@Override
 		public Object visit(ChoiceNode node) throws Exception {
 
-			AbstractNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(node, fUpdateContext, fFileInfoProvider);
+			AbstractNodeInterface nodeIf = 
+					NodeInterfaceFactory.getNodeInterface(node, fUpdateContext, fJavaProjectProvider);
 
 			return nodeIf.addChildren(NodeDnDBuffer.getInstance().getDraggedNodesCopy(), fIndex);
 		}
@@ -356,12 +365,12 @@ public class ModelNodeDropListener extends ViewerDropAdapter {
 
 	private class LinkHandler implements IModelVisitor {
 
-		IFileInfoProvider fFileInfoProvider;
+		IJavaProjectProvider fJavaProjectProvider;
 		private int fIndex;
 
-		public LinkHandler(int index, IFileInfoProvider fileInfoProvider) {
+		public LinkHandler(int index, IJavaProjectProvider javaProjectProvider) {
 			fIndex = index;
-			fFileInfoProvider = fileInfoProvider;
+			fJavaProjectProvider = javaProjectProvider;
 		}
 
 		@Override
@@ -387,7 +396,9 @@ public class ModelNodeDropListener extends ViewerDropAdapter {
 		@Override
 		public Object visit(MethodNode node) throws Exception {
 
-			AbstractNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(node, fUpdateContext, fFileInfoProvider);
+			AbstractNodeInterface nodeIf = 
+					NodeInterfaceFactory.getNodeInterface(node, fUpdateContext, fJavaProjectProvider);
+			
 			List<AbstractNode> children;
 
 			if (NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof GlobalParameterNode) {
@@ -444,7 +455,7 @@ public class ModelNodeDropListener extends ViewerDropAdapter {
 
 			GlobalParametersParentInterface parentIf = 
 					(GlobalParametersParentInterface)NodeInterfaceFactory.getNodeInterface(
-							newParent, fUpdateContext, fFileInfoProvider);
+							newParent, fUpdateContext, ModelNodeDropListener.this.fJavaProjectProvider);
 
 			return parentIf.replaceMethodParametersWithGlobal(originalParameters);
 		}

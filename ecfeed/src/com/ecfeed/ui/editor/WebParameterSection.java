@@ -22,7 +22,7 @@ import com.ecfeed.core.model.NodePropertyDefFindByType;
 import com.ecfeed.core.model.NodePropertyDefs;
 import com.ecfeed.core.model.NodePropertyValueSet;
 import com.ecfeed.core.utils.BooleanHelper;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.common.utils.SwtObjectHelper;
 import com.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
@@ -55,8 +55,8 @@ public class WebParameterSection extends BasicSection {
 	public WebParameterSection(ISectionContext sectionContext, 
 			IModelUpdateContext updateContext,
 			AbstractParameterInterface abstractParameterInterface,
-			IFileInfoProvider fileInfoProvider) {
-		super(sectionContext, updateContext, fileInfoProvider, StyleDistributor.getSectionStyle());
+			IJavaProjectProvider javaProjectProvider) {
+		super(sectionContext, updateContext, javaProjectProvider, StyleDistributor.getSectionStyle());
 
 		fAbstractParameterInterface = abstractParameterInterface;
 

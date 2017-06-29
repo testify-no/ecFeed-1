@@ -38,7 +38,7 @@ import com.ecfeed.core.model.ChoicesParentNode;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.NodeNameColumnLabelProvider;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.editor.actions.DeleteAction;
 import com.ecfeed.ui.editor.actions.IActionProvider;
@@ -52,7 +52,7 @@ import com.ecfeed.ui.modelif.NodeInterfaceFactory;
 
 public class ChoicesViewer extends TableViewerSection {
 
-	private IFileInfoProvider fFileInfoProvider;
+	private IJavaProjectProvider fJavaProjectProvider;
 
 	private ChoicesParentInterface fParentIf;
 	private ChoiceInterface fTableItemIf;
@@ -220,7 +220,7 @@ public class ChoicesViewer extends TableViewerSection {
 				if(fSelectedParent == fSelectedParent.getParameter()){
 					AbstractParameterInterface parameterIf = 
 							(AbstractParameterInterface)NodeInterfaceFactory.getNodeInterface(
-									fSelectedParent, ChoicesViewer.this, fFileInfoProvider);
+									fSelectedParent, ChoicesViewer.this, fJavaProjectProvider);
 					parameterIf.resetChoicesToDefault();
 
 					setRemoveSelectedStatus();
@@ -234,13 +234,13 @@ public class ChoicesViewer extends TableViewerSection {
 	public ChoicesViewer(
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext, 
-			IFileInfoProvider fileInfoProvider) {
-		super(sectionContext, updateContext, fileInfoProvider, StyleDistributor.getSectionStyle());
+			IJavaProjectProvider javaProjectProvider) {
+		super(sectionContext, updateContext, javaProjectProvider, StyleDistributor.getSectionStyle());
 
-		fFileInfoProvider = fileInfoProvider;
+		fJavaProjectProvider = javaProjectProvider;
 
-		fParentIf = new ChoicesParentInterface(this, fileInfoProvider);
-		fTableItemIf = new ChoiceInterface(this, fFileInfoProvider);
+		fParentIf = new ChoicesParentInterface(this, fJavaProjectProvider);
+		fTableItemIf = new ChoiceInterface(this, fJavaProjectProvider);
 
 		fNameEditingSupport = new ChoiceNameEditingSupport();
 		fValueEditingSupport = new ChoiceValueEditingSupport(this);
@@ -258,10 +258,10 @@ public class ChoicesViewer extends TableViewerSection {
 		fReplaceWithDefaultButton = addButton("Reset with default", new ReplaceWithDefaultAdapter());
 
 		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
-		fActionProvider = new ModelViewerActionProvider(getTableViewer(), this, fileInfoProvider);
+		fActionProvider = new ModelViewerActionProvider(getTableViewer(), this, javaProjectProvider);
 		setActionProvider(fActionProvider);
 		fDragListener = new ModelNodeDragListener(getViewer());
-		fDropListener = new ModelNodeDropListener(getViewer(), this, fFileInfoProvider);
+		fDropListener = new ModelNodeDropListener(getViewer(), this, javaProjectProvider);
 		getViewer().addDragSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, fDragListener);
 		getViewer().addDropSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, fDropListener);
 

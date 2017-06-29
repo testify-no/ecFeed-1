@@ -13,25 +13,29 @@ package com.ecfeed.ui.editor.actions;
 import org.eclipse.jface.viewers.ISelectionProvider;
 
 import com.ecfeed.core.utils.EcException;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.modelif.MethodInterface;
 
 public class TestOnlineAction extends ModelSelectionAction {
 
-	private IFileInfoProvider fFileInfoProvider;
+	private IJavaProjectProvider fJavaProjectProvider;
 	private MethodInterface fMethodInterface;
 
-	public TestOnlineAction(IFileInfoProvider fileInfoProvider, ISelectionProvider selectionProvider, MethodInterface methodInterface) {
+	public TestOnlineAction(
+			IJavaProjectProvider javaProjectProvider, 
+			ISelectionProvider selectionProvider, 
+			MethodInterface methodInterface) {
+		
 		super("testOnline", "Test online", selectionProvider);
-		fFileInfoProvider = fileInfoProvider;
+		fJavaProjectProvider = javaProjectProvider;
 		fMethodInterface = methodInterface;
 	}
 
 	@Override
 	public void run() {
 		try {
-			fMethodInterface.executeOnlineTests(fFileInfoProvider);
+			fMethodInterface.executeOnlineTests(fJavaProjectProvider);
 		} catch (EcException e) {
 			final String MSG = "Can not execute online tests.";
 			ExceptionCatchDialog.open(MSG, e.getMessage());

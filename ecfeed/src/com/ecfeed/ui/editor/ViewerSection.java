@@ -43,7 +43,7 @@ import org.eclipse.swt.widgets.MenuItem;
 import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.utils.SystemHelper;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.editor.actions.GlobalActions;
 import com.ecfeed.ui.editor.actions.IActionProvider;
@@ -73,9 +73,9 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 	public ViewerSection(
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext, 
-			IFileInfoProvider fileInfoProvider, 
+			IJavaProjectProvider javaProjectProvider, 
 			int style) {
-		super(sectionContext, updateContext, fileInfoProvider, style);
+		super(sectionContext, updateContext, javaProjectProvider, style);
 		fSelectedElements = new ArrayList<>();
 		fKeyListeners = new HashSet<KeyListener>();
 	}

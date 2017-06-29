@@ -33,7 +33,7 @@ import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.SystemLogger;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.modelif.AbstractNodeInterface;
 import com.ecfeed.ui.modelif.ChoicesParentInterface;
 import com.ecfeed.ui.modelif.ClassInterface;
@@ -46,7 +46,7 @@ public class AddChildActionProvider {
 
 	private StructuredViewer fViewer;
 	private IModelUpdateContext fContext;
-	private IFileInfoProvider fFileInfoProvider;
+	private IJavaProjectProvider fJavaProjectProvider;
 	private static final boolean CHILD_SELECT_ON = true;
 	private static final boolean CHILD_SELECT_OFF = false;
 
@@ -88,7 +88,7 @@ public class AddChildActionProvider {
 
 		public AddGlobalParameterAction(boolean selectChild) {
 			super(ADD_GLOBAL_PARAMETER_ACTION_ID, ADD_GLOBAL_PARAMETER_ACTION_NAME, fViewer, fContext);
-			fParentIf = new GlobalParametersParentInterface(fContext, fFileInfoProvider);
+			fParentIf = new GlobalParametersParentInterface(fContext, fJavaProjectProvider);
 			fSelectChild = selectChild;
 		}
 
@@ -123,7 +123,7 @@ public class AddChildActionProvider {
 
 		public AddClassAction(boolean selectChild){
 			super(ADD_CLASS_ACTION_ID, ADD_CLASS_ACTION_NAME, fViewer, fContext);
-			fParentIf = new RootInterface(fContext, fFileInfoProvider);
+			fParentIf = new RootInterface(fContext, fJavaProjectProvider);
 			fSelectChild = selectChild;
 		}
 
@@ -157,7 +157,7 @@ public class AddChildActionProvider {
 
 		public AddMethodAction(boolean selectChild) {
 			super(ADD_METHOD_ACTION_ID, ADD_METHOD_ACTION_NAME, fViewer, fContext);
-			fParentIf = new ClassInterface(fContext, fFileInfoProvider);
+			fParentIf = new ClassInterface(fContext, fJavaProjectProvider);
 			fSelectChild = selectChild;
 		}
 
@@ -190,7 +190,7 @@ public class AddChildActionProvider {
 
 		public AddMethodChildAction(String id, String name) {
 			super(id, name, fViewer, fContext);
-			fParentIf = new MethodInterface(fContext, fFileInfoProvider);
+			fParentIf = new MethodInterface(fContext, fJavaProjectProvider);
 		}
 
 		@Override
@@ -301,9 +301,9 @@ public class AddChildActionProvider {
 
 		}
 
-		public AddChoiceAction(IFileInfoProvider fileInfoProvider, boolean selectChild){
+		public AddChoiceAction(IJavaProjectProvider javaProjectProvider, boolean selectChild){
 			super(ADD_PARTITION_ACTION_ID, ADD_PARTITION_ACTION_NAME, fViewer, fContext);
-			fParentIf = new ChoicesParentInterface(fContext, fileInfoProvider);
+			fParentIf = new ChoicesParentInterface(fContext, javaProjectProvider);
 			fSelectChild = selectChild;
 		}
 
@@ -378,14 +378,14 @@ public class AddChildActionProvider {
 		@Override
 		public Object visit(MethodParameterNode node) throws Exception {
 			return Arrays.asList(new AbstractAddChildAction[]{
-					new AddChoiceAction(fFileInfoProvider, CHILD_SELECT_ON)
+					new AddChoiceAction(fJavaProjectProvider, CHILD_SELECT_ON)
 			});
 		}
 
 		@Override
 		public Object visit(GlobalParameterNode node) throws Exception {
 			return Arrays.asList(new AbstractAddChildAction[]{
-					new AddChoiceAction(fFileInfoProvider, CHILD_SELECT_ON)
+					new AddChoiceAction(fJavaProjectProvider, CHILD_SELECT_ON)
 			});
 		}
 
@@ -401,8 +401,8 @@ public class AddChildActionProvider {
 
 		@Override
 		public Object visit(ChoiceNode node) throws Exception {
-			return Arrays.asList(new AbstractAddChildAction[]{
-					new AddChoiceAction(fFileInfoProvider, CHILD_SELECT_ON)
+			return Arrays.asList(new AbstractAddChildAction[] {
+					new AddChoiceAction(fJavaProjectProvider, CHILD_SELECT_ON)
 			});
 		}
 	}
@@ -410,8 +410,8 @@ public class AddChildActionProvider {
 	public AddChildActionProvider(
 			StructuredViewer viewer, 
 			IModelUpdateContext context, 
-			IFileInfoProvider fileInfoProvider) {
-		fFileInfoProvider = fileInfoProvider;
+			IJavaProjectProvider javaProjectProvider) {
+		fJavaProjectProvider = javaProjectProvider;
 		fContext = context;
 		fViewer = viewer;
 	}
@@ -446,12 +446,12 @@ public class AddChildActionProvider {
 
 		@Override
 		public Object visit(MethodParameterNode node) throws Exception {
-			return new AddChoiceAction(fFileInfoProvider, CHILD_SELECT_OFF);
+			return new AddChoiceAction(fJavaProjectProvider, CHILD_SELECT_OFF);
 		}
 
 		@Override
 		public Object visit(GlobalParameterNode node) throws Exception {
-			return new AddChoiceAction(fFileInfoProvider, CHILD_SELECT_OFF); 
+			return new AddChoiceAction(fJavaProjectProvider, CHILD_SELECT_OFF); 
 		}
 
 		@Override
@@ -466,7 +466,7 @@ public class AddChildActionProvider {
 
 		@Override
 		public Object visit(ChoiceNode node) throws Exception {
-			return new AddChoiceAction(fFileInfoProvider, CHILD_SELECT_OFF);
+			return new AddChoiceAction(fJavaProjectProvider, CHILD_SELECT_OFF);
 		}
 	}
 

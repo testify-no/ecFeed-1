@@ -63,7 +63,7 @@ import com.ecfeed.ui.common.local.EclipseModelBuilder;
 import com.ecfeed.ui.common.local.EclipseTypeAdapterProvider;
 import com.ecfeed.ui.common.local.JavaModelAnalyser;
 import com.ecfeed.ui.common.utils.EclipseProjectHelper;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.AddTestCaseDialog;
 import com.ecfeed.ui.dialogs.CalculateCoverageDialog;
 import com.ecfeed.ui.dialogs.RenameTestSuiteDialog;
@@ -76,13 +76,12 @@ import com.ecfeed.utils.SeleniumHelper;
 
 public class MethodInterface extends ParametersParentInterface {
 
-	private IFileInfoProvider fFileInfoProvider;
+	private IJavaProjectProvider fJavaProjectProvider;
 	private ITypeAdapterProvider fAdapterProvider;
 
-	public MethodInterface(IModelUpdateContext updateContext,
-			IFileInfoProvider fileInfoProvider) {
-		super(updateContext, fileInfoProvider);
-		fFileInfoProvider = fileInfoProvider;
+	public MethodInterface(IModelUpdateContext updateContext, IJavaProjectProvider javaProjectProvider) {
+		super(updateContext, javaProjectProvider);
+		fJavaProjectProvider = javaProjectProvider;
 		fAdapterProvider = new EclipseTypeAdapterProvider();
 	}
 
@@ -215,7 +214,7 @@ public class MethodInterface extends ParametersParentInterface {
 
 	public boolean generateTestSuite() {
 		TestSuiteGenerationSupport testGenerationSupport = 
-				new TestSuiteGenerationSupport(getOwnNode(), fFileInfoProvider);
+				new TestSuiteGenerationSupport(getOwnNode(), fJavaProjectProvider);
 
 		testGenerationSupport.proceed();
 		if (testGenerationSupport.hasData() == false)
@@ -246,7 +245,8 @@ public class MethodInterface extends ParametersParentInterface {
 		return execute(operation, Messages.DIALOG_ADD_TEST_SUITE_PROBLEM_TITLE);
 	}
 
-	public void executeOnlineTests(IFileInfoProvider fileInfoProvider)
+	public void executeOnlineTests(IJavaProjectProvider javaProjectProvider
+)
 			throws EcException {
 		ClassNode classNode = getOwnNode().getClassNode();
 
@@ -255,13 +255,12 @@ public class MethodInterface extends ParametersParentInterface {
 
 		OnlineTestRunningSupport testSupport = 
 				new OnlineTestRunningSupport(
-						getOwnNode(), createTestMethodInvoker(fileInfoProvider), fileInfoProvider);
+						getOwnNode(), createTestMethodInvoker(javaProjectProvider), javaProjectProvider);
 
 		testSupport.proceed();
 	}
 
-	public void executeOnlineExport(IFileInfoProvider fileInfoProvider)
-			throws EcException {
+	public void executeOnlineExport(IJavaProjectProvider javaProjectProvider) throws EcException {
 
 		if (getOwnNode().getParametersCount() == 0) {
 			return;
@@ -278,7 +277,7 @@ public class MethodInterface extends ParametersParentInterface {
 				new OnlineExportSupport(
 						getOwnNode(), 
 						methodInvoker, 
-						fileInfoProvider, 
+						javaProjectProvider, 
 						ApplicationContext.getExportTargetFile());
 
 		AbstractOnlineSupport.Result result = onlineExportSupport.proceed();
@@ -305,7 +304,7 @@ public class MethodInterface extends ParametersParentInterface {
 
 
 	public void executeStaticTests(Collection<TestCaseNode> testCases,
-			IFileInfoProvider fileInfoProvider) throws EcException {
+			IJavaProjectProvider javaProjectProvider) throws EcException {
 		MethodNode methodNode = getOwnNode();
 		ClassNode classNode = methodNode.getClassNode();
 
@@ -313,10 +312,12 @@ public class MethodInterface extends ParametersParentInterface {
 			return;
 
 
-		StaticTestExecutionSupport support = new StaticTestExecutionSupport(
-				testCases, createTestMethodInvoker(fileInfoProvider),
-				fileInfoProvider, 
-				TestRunModeHelper.getTestRunMode(methodNode));
+		StaticTestExecutionSupport support = 
+				new StaticTestExecutionSupport(
+						testCases, 
+						createTestMethodInvoker(javaProjectProvider),
+						javaProjectProvider, 
+						TestRunModeHelper.getTestRunMode(methodNode));
 
 		support.proceed();
 	}
@@ -382,12 +383,13 @@ public class MethodInterface extends ParametersParentInterface {
 	}
 
 	private ITestMethodInvoker createTestMethodInvoker(
-			IFileInfoProvider fileInfoProvider) throws EcException {
+			IJavaProjectProvider javaProjectProvider) throws EcException {
+		
 		MethodNode methodNode = getOwnNode();
 		ClassNode classNode = methodNode.getClassNode();
 
 		if (classNode.getRunOnAndroid()) {
-			return createAndroidTestMethodInvoker(fileInfoProvider);
+			return createAndroidTestMethodInvoker(javaProjectProvider);
 		}
 
 		if (SeleniumHelper.isSeleniumRunnerMethod(methodNode)) {
@@ -397,8 +399,9 @@ public class MethodInterface extends ParametersParentInterface {
 		return new JUnitTestMethodInvoker();
 	}
 
-	ITestMethodInvoker createAndroidTestMethodInvoker(IFileInfoProvider fileInfoProvider) throws EcException {
-		String projectPath = new EclipseProjectHelper(fileInfoProvider).getProjectPath();
+	ITestMethodInvoker createAndroidTestMethodInvoker(IJavaProjectProvider javaProjectProvider) throws EcException {
+		
+		String projectPath = new EclipseProjectHelper(javaProjectProvider).getProjectPath();
 		String androidRunner = AndroidBaseRunnerHelper.createFullAndroidRunnerName(projectPath);
 		return TestMethodInvokerExt.createInvoker(androidRunner);
 	}
@@ -440,11 +443,14 @@ public class MethodInterface extends ParametersParentInterface {
 		return compatibleMethods;
 	}
 
-	public void openCoverageDialog(Object[] checkedElements,
-			Object[] grayedElements, IFileInfoProvider fileInfoProvider) {
+	public void openCoverageDialog(
+			Object[] checkedElements, 
+			Object[] grayedElements, 
+			IJavaProjectProvider javaProjectProvider) {
+		
 		Shell activeShell = Display.getDefault().getActiveShell();
 		new CalculateCoverageDialog(activeShell, getOwnNode(), checkedElements,
-				grayedElements, fileInfoProvider).open();
+				grayedElements, javaProjectProvider).open();
 	}
 
 	public List<GlobalParameterNode> getAvailableGlobalParameters() {

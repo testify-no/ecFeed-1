@@ -29,7 +29,7 @@ import com.ecfeed.core.model.GlobalParameterNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelHelper;
 import com.ecfeed.core.utils.JavaTypeHelper;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.common.utils.SwtObjectHelper;
 import com.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
@@ -37,7 +37,7 @@ import com.ecfeed.ui.modelif.MethodParameterInterface;
 
 public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 
-	private IFileInfoProvider fFileInfoProvider;
+	private IJavaProjectProvider fJavaProjectProvider;
 	private MethodParameterInterface fParameterIf;
 	private Button fExpectedCheckbox;
 	private Combo fDefaultValueCombo;
@@ -46,24 +46,27 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 	private Combo fLinkCombo;
 
 
-	public MethodParameterDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext,
-			IFileInfoProvider fileInfoProvider) {
-		super(masterSection, updateContext, fileInfoProvider);
-		fFileInfoProvider = fileInfoProvider;
+	public MethodParameterDetailsPage(
+			ModelMasterSection masterSection, 
+			IModelUpdateContext updateContext,
+			IJavaProjectProvider javaProjectProvider) {
+		
+		super(masterSection, updateContext, javaProjectProvider);
+		fJavaProjectProvider = javaProjectProvider;
 		getParameterIf();
 	}
 
 	@Override
 	protected AbstractParameterInterface getParameterIf() {
 		if(fParameterIf == null){
-			fParameterIf = new MethodParameterInterface(this, fFileInfoProvider);
+			fParameterIf = new MethodParameterInterface(this, fJavaProjectProvider);
 		}
 		return fParameterIf;
 	}
 
 	@Override
 	protected WebParameterSection createWebParameterSection() {
-		return new WebParameterSection(this, this, getParameterIf(), fFileInfoProvider);
+		return new WebParameterSection(this, this, getParameterIf(), fJavaProjectProvider);
 	}
 
 	@Override
@@ -237,12 +240,13 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 	}
 
 	@Override
-	protected AbstractCommentsSection getCommentsSection(ISectionContext sectionContext, IModelUpdateContext updateContext) {
+	protected AbstractCommentsSection getCommentsSection(
+			ISectionContext sectionContext, IModelUpdateContext updateContext) {
 
 		if (ApplicationContext.isProjectAvailable()) {
-			return new MethodParameterCommentsSection(sectionContext, updateContext, fFileInfoProvider);
+			return new MethodParameterCommentsSection(sectionContext, updateContext, fJavaProjectProvider);
 		} else {
-			return new SingleTextCommentsSection(this, this, fFileInfoProvider);
+			return new SingleTextCommentsSection(this, this, fJavaProjectProvider);
 		}
 	}
 

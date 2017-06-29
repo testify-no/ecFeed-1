@@ -22,7 +22,7 @@ import org.eclipse.swt.widgets.Text;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.local.JavaDocSupport;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 
@@ -38,8 +38,8 @@ public class ExportableJavaDocCommentsSection extends AbstractCommentsSection {
 	public ExportableJavaDocCommentsSection(
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext, 
-			IFileInfoProvider fileInfoProvider) {
-		super(sectionContext, updateContext, fileInfoProvider);
+			IJavaProjectProvider javaProjectProvider) {
+		super(sectionContext, updateContext, javaProjectProvider);
 
 		fCommentsTab = addTextTab("Comments");
 		fJavadocTab = addTextTab("JavaDoc");

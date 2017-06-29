@@ -25,7 +25,7 @@ import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ConstraintNode;
 import com.ecfeed.core.model.MethodNode;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.modelif.ConstraintInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 
@@ -35,15 +35,15 @@ public class ConstraintDetailsPage extends BasicDetailsPage {
 	private ConstraintInterface fConstraintIf;
 	private ConstraintViewer fConstraintViewer;
 	private SingleTextCommentsSection fCommentsSection;
-	private IFileInfoProvider fFileInfoProvider;
+	private IJavaProjectProvider fJavaProjectProvider;
 
 	public ConstraintDetailsPage(
 			ModelMasterSection masterSection, 
 			IModelUpdateContext updateContext, 
-			IFileInfoProvider fileInfoProvider){
-		super(masterSection, updateContext, fileInfoProvider);
-		fFileInfoProvider = fileInfoProvider;
-		fConstraintIf = new ConstraintInterface(this, fileInfoProvider);
+			IJavaProjectProvider javaProjectProvider) {
+		super(masterSection, updateContext, javaProjectProvider);
+		fJavaProjectProvider = javaProjectProvider;
+		fConstraintIf = new ConstraintInterface(this, javaProjectProvider);
 	}
 
 	@Override
@@ -53,15 +53,15 @@ public class ConstraintDetailsPage extends BasicDetailsPage {
 
 		addCommentsSection();
 
-		addViewerSection(fConstraintViewer = new ConstraintViewer(this, this, fFileInfoProvider));
+		addViewerSection(fConstraintViewer = new ConstraintViewer(this, this, fJavaProjectProvider));
 	}
 
 	private void addCommentsSection() {
 
 		if (ApplicationContext.isProjectAvailable()) {
-			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fFileInfoProvider));
+			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fJavaProjectProvider));
 		} else {
-			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fFileInfoProvider));
+			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fJavaProjectProvider));
 		}
 	}
 

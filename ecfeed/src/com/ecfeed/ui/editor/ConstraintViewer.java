@@ -32,7 +32,7 @@ import com.ecfeed.core.model.ConstraintNode;
 import com.ecfeed.core.model.StatementArray;
 import com.ecfeed.ui.common.ImageManager;
 import com.ecfeed.ui.common.Messages;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.editor.actions.GlobalActions;
 import com.ecfeed.ui.editor.actions.ModelModifyingAction;
@@ -53,9 +53,11 @@ public class ConstraintViewer extends TreeViewerSection {
 
 
 	public ConstraintViewer(
-			ISectionContext sectionContext, IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider) {
+			ISectionContext sectionContext, 
+			IModelUpdateContext updateContext, 
+			IJavaProjectProvider javaProjectProvider) {
 
-		super(sectionContext, updateContext, fileInfoProvider, STYLE);
+		super(sectionContext, updateContext, javaProjectProvider, STYLE);
 		getSection().setText("Constraint editor");
 
 		fAddStatementButton = addButton("Add statement", new AddStatementAdapter());
@@ -68,7 +70,7 @@ public class ConstraintViewer extends TreeViewerSection {
 
 		getViewer().addSelectionChangedListener(new StatementSelectionListener());
 
-		fStatementEditor = new StatementEditor(getClientComposite(), fileInfoProvider, getViewer(), updateContext);
+		fStatementEditor = new StatementEditor(getClientComposite(), javaProjectProvider, getViewer(), updateContext);
 		createKeyListener(SWT.DEL, SWT.NONE, new DeleteStatementAction(updateContext));
 	}
 

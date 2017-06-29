@@ -32,21 +32,20 @@ import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.utils.EclipseProjectHelper;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.SetupDialogExecuteOnline;
 import com.ecfeed.ui.dialogs.SetupDialogOnline;
 
 public class OnlineTestRunningSupport extends AbstractOnlineSupport {
 
-	private IFileInfoProvider fFileInfoProvider;
-
+	private IJavaProjectProvider fJavaProjectProvider;
 
 	public OnlineTestRunningSupport(
 			MethodNode methodNode,
 			ITestMethodInvoker testMethodInvoker,
-			IFileInfoProvider fileInfoProvider) {
-		super(methodNode, testMethodInvoker, fileInfoProvider);
-		fFileInfoProvider = fileInfoProvider;
+			IJavaProjectProvider javaProjectProvider) {
+		super(methodNode, testMethodInvoker, javaProjectProvider);
+		fJavaProjectProvider = javaProjectProvider;
 	}
 
 	@Override
@@ -61,10 +60,10 @@ public class OnlineTestRunningSupport extends AbstractOnlineSupport {
 
 	@Override
 	protected SetupDialogOnline createSetupDialog(Shell activeShell,
-			MethodNode methodNode, IFileInfoProvider fileInfoProvider) {
+			MethodNode methodNode, IJavaProjectProvider javaProjectProvider) {
 
-		return new SetupDialogExecuteOnline(activeShell, methodNode,
-				fileInfoProvider, null);
+		return new SetupDialogExecuteOnline(
+				activeShell, methodNode, javaProjectProvider, null);
 	}
 
 	@Override
@@ -73,7 +72,7 @@ public class OnlineTestRunningSupport extends AbstractOnlineSupport {
 			return;
 		}
 		DeviceCheckerExt.checkIfOneDeviceAttached();
-		EclipseProjectHelper projectHelper = new EclipseProjectHelper(fFileInfoProvider);
+		EclipseProjectHelper projectHelper = new EclipseProjectHelper(fJavaProjectProvider);
 		new ApkInstallerExt(projectHelper).installApplicationsIfModified();
 	}
 
@@ -147,8 +146,8 @@ public class OnlineTestRunningSupport extends AbstractOnlineSupport {
 				return;
 			}
 
-			EclipseProjectHelper projectHelper = new EclipseProjectHelper(
-					fFileInfoProvider);
+			EclipseProjectHelper projectHelper = 
+					new EclipseProjectHelper(fJavaProjectProvider);
 			new ApkInstallerExt(projectHelper).installApplicationsIfModified();
 			monitor.worked(3);
 			if (monitor.isCanceled()) {

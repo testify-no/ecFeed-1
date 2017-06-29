@@ -66,16 +66,16 @@ import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.EclipseInstallationDirFileHelper;
 import com.ecfeed.ui.common.utils.EclipsePackageFragmentGetter;
 import com.ecfeed.ui.common.utils.EclipseProjectHelper;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.common.utils.JavaUserClassImplementer;
 
 public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 
-	private final IFileInfoProvider fFileInfoProvider;
+	private final IJavaProjectProvider fJavaProjectProvider;
 
-	public EclipseModelImplementer(IFileInfoProvider fileInfoProvider) {
-		super(new EclipseImplementationStatusResolver(fileInfoProvider));
-		fFileInfoProvider = fileInfoProvider;
+	public EclipseModelImplementer(IJavaProjectProvider javaProjectProvider) {
+		super(new EclipseImplementationStatusResolver(javaProjectProvider));
+		fJavaProjectProvider = javaProjectProvider;
 	}
 
 	@Override
@@ -163,8 +163,8 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 
 	@Override
 	protected void implementClassDefinition(ClassNode classNode) throws CoreException, EcException {
-		String projectPath = new EclipseProjectHelper(fFileInfoProvider).getProjectPath();
-		IClassImplementHelper implementHelper = new EclipseClassImplementHelper(fFileInfoProvider);
+		String projectPath = new EclipseProjectHelper(fJavaProjectProvider).getProjectPath();
+		IClassImplementHelper implementHelper = new EclipseClassImplementHelper(fJavaProjectProvider);
 
 		String thePackage = ModelHelper.getPackageName(classNode.getName());
 		String classNameWithoutExtension = ModelHelper.convertToLocalName(classNode.getName());
@@ -207,7 +207,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 		String unitName = localName + ".java";
 		//		IPackageFragment packageFragment = getPackageFragment(packageName);
 		IPackageFragment packageFragment = 
-				EclipsePackageFragmentGetter.getPackageFragment(packageName, fFileInfoProvider);
+				EclipsePackageFragmentGetter.getPackageFragment(packageName, fJavaProjectProvider);
 		ICompilationUnit unit = packageFragment.getCompilationUnit(unitName);
 		unit.createType(enumDefinitionContent(node, fields), null, false, null);
 		unit.becomeWorkingCopy(null);
@@ -355,7 +355,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 		if (!classNode.getRunOnAndroid()) {
 			return true;
 		}
-		if (!new EclipseProjectHelper(fFileInfoProvider).isAndroidProject()) {
+		if (!new EclipseProjectHelper(fJavaProjectProvider).isAndroidProject()) {
 			return true;
 		}
 		ImplementerExt implementer = createImplementer(classNode);
@@ -390,7 +390,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 		final String className = ClassNodeHelper.getQualifiedName(methodNode.getClassNode());
 
 		IMethodImplementHelper fMethodImplementHelper = 
-				new EclipseMethodImplementHelper(fFileInfoProvider, className, methodNode);
+				new EclipseMethodImplementHelper(fJavaProjectProvider, className, methodNode);
 
 		if (methodNode.getRunOnAndroid()) {
 			return AndroidMethodImplementerExt.createImplementer(methodNode, fMethodImplementHelper);
@@ -552,8 +552,8 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 	}
 
 	private IJavaProject getJavaProject() throws CoreException{
-		if(fFileInfoProvider.getProject().hasNature(JavaCore.NATURE_ID)){
-			return JavaCore.create(fFileInfoProvider.getProject());
+		if(fJavaProjectProvider.getProject().hasNature(JavaCore.NATURE_ID)){
+			return JavaCore.create(fJavaProjectProvider.getProject());
 		}
 		return null;
 	}
@@ -592,8 +592,8 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 	private ImplementerExt createImplementer(ClassNode classNode) {
 		String baseRunner = classNode.getAndroidRunner(); 
 
-		IProjectHelper projectHelper = new EclipseProjectHelper(fFileInfoProvider);
-		IClassImplementHelper classImplementHelper = new EclipseClassImplementHelper(fFileInfoProvider);
+		IProjectHelper projectHelper = new EclipseProjectHelper(fJavaProjectProvider);
+		IClassImplementHelper classImplementHelper = new EclipseClassImplementHelper(fJavaProjectProvider);
 		IInstallationDirFileHelper installationDirFileHelper = new EclipseInstallationDirFileHelper(); 
 
 		return new ImplementerExt(baseRunner, projectHelper, classImplementHelper, installationDirFileHelper); 

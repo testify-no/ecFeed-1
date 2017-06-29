@@ -48,20 +48,20 @@ import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.local.EclipseImplementationStatusResolver;
 import com.ecfeed.ui.common.local.EclipseTypeAdapterProvider;
 import com.ecfeed.ui.common.local.JavaDocSupport;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.TextAreaDialog;
 
 public class AbstractNodeInterface extends OperationExecuter {
 
-	private IFileInfoProvider fFileInfoProvider;
+	private IJavaProjectProvider fJavaProjectProvider;
 	private AbstractNode fNode;
 	private EclipseImplementationStatusResolver fStatusResolver;
 	private ITypeAdapterProvider fAdapterProvider;
 
-	public AbstractNodeInterface(IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider) {
+	public AbstractNodeInterface(IModelUpdateContext updateContext, IJavaProjectProvider javaProjectProvider) {
 		super(updateContext);
-		fFileInfoProvider = fileInfoProvider;
-		fStatusResolver = new EclipseImplementationStatusResolver(fileInfoProvider);
+		fJavaProjectProvider = javaProjectProvider;
+		fStatusResolver = new EclipseImplementationStatusResolver(javaProjectProvider);
 		fAdapterProvider = new EclipseTypeAdapterProvider();
 	}
 
@@ -85,8 +85,8 @@ public class AbstractNodeInterface extends OperationExecuter {
 		return fNode.getName();
 	}
 
-	protected IFileInfoProvider getFileInfoProvider() {
-		return fFileInfoProvider;
+	protected IJavaProjectProvider getJavaProjectProvider() {
+		return fJavaProjectProvider;
 	}
 
 	public boolean setName(String newName){
@@ -248,7 +248,7 @@ public class AbstractNodeInterface extends OperationExecuter {
 		exportCommentsToJavadoc(getComments());
 		for(AbstractNode child : getOwnNode().getChildren()){
 			AbstractNodeInterface nodeIf = 
-					NodeInterfaceFactory.getNodeInterface(child, getUpdateContext(), fFileInfoProvider);
+					NodeInterfaceFactory.getNodeInterface(child, getUpdateContext(), fJavaProjectProvider);
 			nodeIf.exportAllComments();
 		}
 		return true;
@@ -262,7 +262,7 @@ public class AbstractNodeInterface extends OperationExecuter {
 		}
 		for(AbstractNode child : getOwnNode().getChildren()){
 			AbstractNodeInterface childIf = 
-					NodeInterfaceFactory.getNodeInterface(child, getUpdateContext(), fFileInfoProvider);
+					NodeInterfaceFactory.getNodeInterface(child, getUpdateContext(), fJavaProjectProvider);
 			result.addAll(childIf.getImportAllJavadocCommentsOperations());
 		}
 		return result;

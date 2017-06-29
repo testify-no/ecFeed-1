@@ -40,7 +40,7 @@ import com.ecfeed.core.utils.SystemHelper;
 import com.ecfeed.ui.common.ColorConstants;
 import com.ecfeed.ui.common.ColorManager;
 import com.ecfeed.ui.common.Messages;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.basic.ErrorDialog;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.editor.actions.ActionProvider;
@@ -287,10 +287,10 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 	public ChoiceLabelsViewer(
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext, 
-			IFileInfoProvider fileInfoProvider) {
-		super(sectionContext, updateContext, fileInfoProvider, STYLE);
+			IJavaProjectProvider javaProjectProvider) {
+		super(sectionContext, updateContext, javaProjectProvider, STYLE);
 
-		fChoiceIf = new ChoiceInterface(this, fileInfoProvider);
+		fChoiceIf = new ChoiceInterface(this, javaProjectProvider);
 		getSection().setText("Labels");
 
 		addButton("Add label", new AddLabelAdapter());
@@ -299,7 +299,7 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 						new LabelDeleteAction(updateContext), 
 						Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
 
-		if (isLabelEditionInTextField(fileInfoProvider)) {
+		if (isLabelEditionInTextField()) {
 			AbstractSelectionAdapter adapter = new LabelTextSelectionAdapter();
 			fSelectedLabelText = addText("", adapter);
 			fSelectedLabelText.setEnabled(false);
@@ -310,7 +310,7 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 		setActionProvider(new LabelsViewerActionProvider());
 	}
 
-	private boolean isLabelEditionInTextField(IFileInfoProvider fileInfoProvider) {
+	private boolean isLabelEditionInTextField() {
 		if (SystemHelper.isOperatingSystemLinux()) {
 			if (ApplicationContext.isProjectAvailable()) {
 				return false;

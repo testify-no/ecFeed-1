@@ -30,7 +30,7 @@ import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.ecfeed.ui.common.NodeViewerColumnLabelProvider;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.editor.actions.DeleteAction;
 import com.ecfeed.ui.editor.actions.ModelViewerActionProvider;
 import com.ecfeed.ui.modelif.ConstraintInterface;
@@ -51,16 +51,16 @@ public class ConstraintsListViewer extends TableViewerSection {
 	public ConstraintsListViewer(
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext, 
-			IFileInfoProvider fileInfoProvider){
-		super(sectionContext, updateContext, fileInfoProvider, STYLE);
+			IJavaProjectProvider javaProjectProvider){
+		super(sectionContext, updateContext, javaProjectProvider, STYLE);
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gd.minimumHeight = 250;
 		getSection().setLayoutData(gd);
 
 		getSection().setText("Constraints");
 
-		fMethodInterface = new MethodInterface(this, fileInfoProvider);
-		fConstraintIf = new ConstraintInterface(this, fileInfoProvider);
+		fMethodInterface = new MethodInterface(this, javaProjectProvider);
+		fConstraintIf = new ConstraintInterface(this, javaProjectProvider);
 
 		fNameColumn.setEditingSupport(new ConstraintNameEditingSupport());
 
@@ -72,8 +72,13 @@ public class ConstraintsListViewer extends TableViewerSection {
 								new DeleteAction(getViewer(), this), Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
 
 		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
-		setActionProvider(new ModelViewerActionProvider(getTableViewer(), updateContext, fileInfoProvider));
-		getViewer().addDragSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDragListener(getViewer()));
+		setActionProvider(new ModelViewerActionProvider(getTableViewer(), updateContext, javaProjectProvider));
+		
+		getViewer().addDragSupport(
+				DND.DROP_COPY|DND.DROP_MOVE, 
+				new Transfer[]{ModelNodesTransfer.getInstance()}, 
+				new ModelNodeDragListener(getViewer()));
+		
 		addSelectionChangedListener(new SelectionChangedListener());
 	}
 

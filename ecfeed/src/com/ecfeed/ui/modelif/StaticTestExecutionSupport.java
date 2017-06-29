@@ -34,14 +34,14 @@ import com.ecfeed.core.runner.RunnerException;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.local.EclipseLoaderProvider;
 import com.ecfeed.ui.common.utils.EclipseProjectHelper;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 
 public class StaticTestExecutionSupport {
 
 	private Collection<TestCaseNode> fTestCases;
 	private JavaTestRunner fRunner;
 	private List<TestCaseNode> fFailedTests;
-	private IFileInfoProvider fFileInfoProvider;
+	private IJavaProjectProvider fJavaProjectProvider;
 	private TestRunMode fTestRunMode;
 	private AbstractTestInformer fTestInformer;
 
@@ -52,7 +52,7 @@ public class StaticTestExecutionSupport {
 				throws InvocationTargetException, InterruptedException {
 			if (fTestRunMode == TestRunMode.ANDROID) {
 				DeviceCheckerExt.checkIfOneDeviceAttached();
-				EclipseProjectHelper projectHelper = new EclipseProjectHelper(fFileInfoProvider); 
+				EclipseProjectHelper projectHelper = new EclipseProjectHelper(fJavaProjectProvider); 
 				new ApkInstallerExt(projectHelper).installApplicationsIfModified();
 			}			
 
@@ -88,7 +88,7 @@ public class StaticTestExecutionSupport {
 	public StaticTestExecutionSupport(
 			Collection<TestCaseNode> testCases, 
 			ITestMethodInvoker testMethodInvoker, 
-			IFileInfoProvider fileInfoProvider,
+			IJavaProjectProvider javaProjectProvider,
 			TestRunMode testRunMode){
 		super();
 		ILoaderProvider loaderProvider = new EclipseLoaderProvider();
@@ -96,7 +96,7 @@ public class StaticTestExecutionSupport {
 		fRunner = new JavaTestRunner(loader, false, testMethodInvoker);
 		fTestCases = testCases;
 		fFailedTests = new ArrayList<>();
-		fFileInfoProvider = fileInfoProvider;
+		fJavaProjectProvider = javaProjectProvider;
 		fTestRunMode = testRunMode;
 		fTestInformer = new ExecutionTestInformer();
 	}

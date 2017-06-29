@@ -27,14 +27,14 @@ import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.utils.JavaTypeHelper;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.ecfeed.ui.modelif.ChoiceInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class ChoiceDetailsPage extends BasicDetailsPage {
 
-	private IFileInfoProvider fFileInfoProvider;	
+	private IJavaProjectProvider fJavaProjectProvider;	
 	private ChoicesViewer fChildrenViewer;
 	private ChoiceLabelsViewer fLabelsViewer;
 	private Composite fAttributesComposite;
@@ -48,10 +48,10 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 	public ChoiceDetailsPage(
 			ModelMasterSection masterSection, 
 			IModelUpdateContext updateContext, 
-			IFileInfoProvider fileInfoProvider) {
-		super(masterSection, updateContext, fileInfoProvider);
-		fFileInfoProvider = fileInfoProvider;
-		fChoiceIf = new ChoiceInterface(this, fFileInfoProvider);
+			IJavaProjectProvider javaProjectProvider) {
+		super(masterSection, updateContext, javaProjectProvider);
+		fJavaProjectProvider = javaProjectProvider;
+		fChoiceIf = new ChoiceInterface(this, fJavaProjectProvider);
 	}
 
 	@Override
@@ -62,8 +62,8 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 
 		addCommentsSection();
 
-		addViewerSection(fChildrenViewer = new ChoicesViewer(this, this, fFileInfoProvider));
-		addViewerSection(fLabelsViewer = new ChoiceLabelsViewer(this, this, fFileInfoProvider));
+		addViewerSection(fChildrenViewer = new ChoicesViewer(this, this, fJavaProjectProvider));
+		addViewerSection(fLabelsViewer = new ChoiceLabelsViewer(this, this, fJavaProjectProvider));
 
 		getToolkit().paintBordersFor(getMainComposite());
 	}
@@ -95,9 +95,9 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 	private void addCommentsSection() {
 
 		if (ApplicationContext.isProjectAvailable()) {
-			addForm(fCommentsSection = new ChoiceCommentsSection(this, this, fFileInfoProvider));
+			addForm(fCommentsSection = new ChoiceCommentsSection(this, this, fJavaProjectProvider));
 		} else {
-			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fFileInfoProvider));
+			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fJavaProjectProvider));
 		}
 	}
 

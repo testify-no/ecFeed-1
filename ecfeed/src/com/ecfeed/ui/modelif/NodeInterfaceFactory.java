@@ -21,72 +21,72 @@ import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.utils.SystemLogger;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 
 public class NodeInterfaceFactory{
 
 	private static class InterfaceProvider  implements IModelVisitor {
 
-		private IFileInfoProvider fFileInfoProvider;
+		private IJavaProjectProvider fJavaProjectProvider;
 		private IModelUpdateContext fContext;
 
-		public InterfaceProvider(IModelUpdateContext context, IFileInfoProvider fileInfoProvider) {
+		public InterfaceProvider(IModelUpdateContext context, IJavaProjectProvider javaProjectProvider) {
 			fContext = context;
-			fFileInfoProvider = fileInfoProvider;
+			fJavaProjectProvider = javaProjectProvider;
 		}
 
 		@Override
 		public Object visit(RootNode node) throws Exception {
-			RootInterface nodeIf = new RootInterface(fContext, fFileInfoProvider);
+			RootInterface nodeIf = new RootInterface(fContext, fJavaProjectProvider);
 			nodeIf.setOwnNode(node);
 			return nodeIf;
 		}
 
 		@Override
 		public Object visit(ClassNode node) throws Exception {
-			ClassInterface nodeIf = new ClassInterface(fContext, fFileInfoProvider);
+			ClassInterface nodeIf = new ClassInterface(fContext, fJavaProjectProvider);
 			nodeIf.setOwnNode(node);
 			return nodeIf;
 		}
 
 		@Override
 		public Object visit(MethodNode node) throws Exception {
-			MethodInterface nodeIf = new MethodInterface(fContext, fFileInfoProvider);
+			MethodInterface nodeIf = new MethodInterface(fContext, fJavaProjectProvider);
 			nodeIf.setOwnNode(node);
 			return nodeIf;
 		}
 
 		@Override
 		public Object visit(MethodParameterNode node) throws Exception {
-			AbstractParameterInterface nodeIf = new MethodParameterInterface(fContext, fFileInfoProvider);
+			AbstractParameterInterface nodeIf = new MethodParameterInterface(fContext, fJavaProjectProvider);
 			nodeIf.setOwnNode(node);
 			return nodeIf;
 		}
 
 		@Override
 		public Object visit(GlobalParameterNode node) throws Exception {
-			AbstractParameterInterface nodeIf = new GlobalParameterInterface(fContext, fFileInfoProvider);
+			AbstractParameterInterface nodeIf = new GlobalParameterInterface(fContext, fJavaProjectProvider);
 			nodeIf.setOwnNode(node);
 			return nodeIf;
 		}
 
 		@Override
 		public Object visit(TestCaseNode node) throws Exception {
-			TestCaseInterface nodeIf = new TestCaseInterface(fContext, fFileInfoProvider);
+			TestCaseInterface nodeIf = new TestCaseInterface(fContext, fJavaProjectProvider);
 			nodeIf.setOwnNode(node);
 			return nodeIf;
 		}
 
 		@Override
 		public Object visit(ConstraintNode node) throws Exception {
-			ConstraintInterface nodeIf = new ConstraintInterface(fContext, fFileInfoProvider);
+			ConstraintInterface nodeIf = new ConstraintInterface(fContext, fJavaProjectProvider);
 			nodeIf.setOwnNode(node);
 			return nodeIf;
 		}
 
 		@Override
 		public Object visit(ChoiceNode node) throws Exception {
-			ChoiceInterface nodeIf = new ChoiceInterface(fContext, fFileInfoProvider);
+			ChoiceInterface nodeIf = new ChoiceInterface(fContext, fJavaProjectProvider);
 			nodeIf.setOwnNode(node);
 			return nodeIf;
 		}
@@ -95,12 +95,12 @@ public class NodeInterfaceFactory{
 	public static AbstractNodeInterface getNodeInterface(
 			AbstractNode node, 
 			IModelUpdateContext context, 
-			IFileInfoProvider fileInfoProvider){
+			IJavaProjectProvider javaProjectProvider){
 		try{
-			return (AbstractNodeInterface)node.accept(new InterfaceProvider(context, fileInfoProvider));
+			return (AbstractNodeInterface)node.accept(new InterfaceProvider(context, javaProjectProvider));
 		}
 		catch(Exception e){SystemLogger.logCatch(e.getMessage());}
-		AbstractNodeInterface nodeIf = new AbstractNodeInterface(context, fileInfoProvider);
+		AbstractNodeInterface nodeIf = new AbstractNodeInterface(context, javaProjectProvider);
 		nodeIf.setOwnNode(node);
 		return nodeIf;
 	}

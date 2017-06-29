@@ -31,7 +31,7 @@ import com.ecfeed.core.model.ModelHelper;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.ecfeed.ui.common.NodeViewerColumnLabelProvider;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.editor.actions.DeleteAction;
 import com.ecfeed.ui.editor.actions.ModelViewerActionProvider;
@@ -51,11 +51,11 @@ public class MethodsViewer extends TableViewerSection {
 	public MethodsViewer(
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext, 
-			IFileInfoProvider fileInfoProvider) {
-		super(sectionContext, updateContext, fileInfoProvider, StyleDistributor.getSectionStyle());
+			IJavaProjectProvider javaProjectProvider) {
+		super(sectionContext, updateContext, javaProjectProvider, StyleDistributor.getSectionStyle());
 
-		fClassIf = new ClassInterface(this, fileInfoProvider);
-		fMethodIf = new MethodInterface(this, fileInfoProvider);
+		fClassIf = new ClassInterface(this, javaProjectProvider);
+		fMethodIf = new MethodInterface(this, javaProjectProvider);
 
 		fMethodsColumn.setEditingSupport(new MethodNameEditingSupport());
 
@@ -69,8 +69,12 @@ public class MethodsViewer extends TableViewerSection {
 
 		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
 		addSelectionChangedListener(new SelectionChangedListener());
-		setActionProvider(new ModelViewerActionProvider(getTableViewer(), this, fileInfoProvider));
-		getViewer().addDragSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDragListener(getViewer()));
+		setActionProvider(new ModelViewerActionProvider(getTableViewer(), this, javaProjectProvider));
+		
+		getViewer().addDragSupport(
+				DND.DROP_COPY|DND.DROP_MOVE, 
+				new Transfer[]{ModelNodesTransfer.getInstance()}, 
+				new ModelNodeDragListener(getViewer()));
 	}
 
 	@Override

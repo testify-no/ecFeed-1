@@ -28,12 +28,12 @@ import com.ecfeed.ui.common.CommonConstants;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.local.EclipseModelBuilder;
 import com.ecfeed.ui.common.local.EclipseTypeAdapterProvider;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 
 public class ChoicesParentInterface extends AbstractNodeInterface {
 
-	public ChoicesParentInterface(IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider){
-		super(updateContext, fileInfoProvider);
+	public ChoicesParentInterface(IModelUpdateContext updateContext, IJavaProjectProvider javaProjectProvider){
+		super(updateContext, javaProjectProvider);
 	}
 
 	public AbstractParameterNode getParameter() {

@@ -34,7 +34,7 @@ import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.TestCasesViewerContentProvider;
 import com.ecfeed.ui.common.TreeCheckStateListener;
 import com.ecfeed.ui.common.local.TestCasesViewerLabelProvider;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.MethodInterface;
@@ -88,7 +88,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 		@Override
 		public void widgetSelected(SelectionEvent event) {
 			try {
-				fMethodIf.executeStaticTests(getCheckedTestCases(), getFileInfoProvider());
+				fMethodIf.executeStaticTests(getCheckedTestCases(), getJavaProjectProvider());
 			}
 			catch (Exception e){
 				ExceptionCatchDialog.open("Can not execute static tests.", e.getMessage());
@@ -127,15 +127,16 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 
 	private class CalculateCoverageAdapter extends SelectionAdapter {
 
-		private IFileInfoProvider fFileInfoProvider;
+		private IJavaProjectProvider fJavaProjectProvider;
 
-		CalculateCoverageAdapter(IFileInfoProvider fileInfoProvider) {
-			fFileInfoProvider = fileInfoProvider;
+		CalculateCoverageAdapter(IJavaProjectProvider javaProjectProvider) {
+			fJavaProjectProvider = javaProjectProvider;
 		}
+		
 		@Override
 		public void widgetSelected(SelectionEvent ev) {
 			try {
-				fMethodIf.openCoverageDialog(getCheckedElements(), getGrayedElements(), fFileInfoProvider);
+				fMethodIf.openCoverageDialog(getCheckedElements(), getGrayedElements(), fJavaProjectProvider);
 			} catch (Exception e) {
 				ExceptionCatchDialog.open("Can not calculate coverage.", e.getMessage());
 			}
@@ -145,26 +146,37 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	public TestCasesViewer(
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext,
-			IFileInfoProvider fileInfoProvider) {
-		super(sectionContext, updateContext, fileInfoProvider, StyleDistributor.getSectionStyle());
+			IJavaProjectProvider javaProjectProvider) {
+		super(sectionContext, updateContext, javaProjectProvider, StyleDistributor.getSectionStyle());
 
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gd.minimumHeight = 250;
 		getSection().setLayoutData(gd);
 
-		fMethodIf = new MethodInterface(this, fileInfoProvider);
+		fMethodIf = new MethodInterface(this, javaProjectProvider);
 
 		getCheckboxViewer().addCheckStateListener(new TreeCheckStateListener(getCheckboxViewer()));
 
 		getSection().setText("Test cases");
 
 		addButton("Add test case", new AddTestCaseAdapter());
+		
 		fGenerateSuiteButton = addButton("Generate test suite", new GenerateTestSuiteAdapter());
 		fRenameSuiteButton = addButton("Rename suite", new RenameSuiteAdapter());
-		fCalculateCoverageButton = addButton("Calculate coverage", new CalculateCoverageAdapter(fileInfoProvider));
-		fRemoveSelectedButton = addButton("Remove selected", new RemoveSelectedAdapter(Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
-		fExecuteSelectedButton = addButton("Execute selected", new ExecuteStaticTestAdapter());
-		fExportTestCasesButton = addButton("Export selected", new ExportTestCasesAdapter());
+		
+		fCalculateCoverageButton = 
+				addButton("Calculate coverage", new CalculateCoverageAdapter(javaProjectProvider));
+		
+		fRemoveSelectedButton = 
+				addButton(
+						"Remove selected", 
+						new RemoveSelectedAdapter(Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
+		
+		fExecuteSelectedButton = 
+				addButton("Execute selected", new ExecuteStaticTestAdapter());
+		
+		fExportTestCasesButton = 
+				addButton("Export selected", new ExportTestCasesAdapter());
 
 		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
 	}
@@ -251,8 +263,8 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	@Override
 	protected IBaseLabelProvider createViewerLabelProvider() {
 		if(fLabelProvider == null){
-			IFileInfoProvider fileInfoProvider = getFileInfoProvider();
-			fLabelProvider = new TestCasesViewerLabelProvider(fileInfoProvider);
+			IJavaProjectProvider javaProjectProvider = getJavaProjectProvider();
+			fLabelProvider = new TestCasesViewerLabelProvider(javaProjectProvider);
 		}
 		return fLabelProvider;
 	}

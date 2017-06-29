@@ -35,13 +35,13 @@ import com.ecfeed.ui.common.CommonConstants;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.local.EclipseTypeAdapterProvider;
 import com.ecfeed.ui.common.local.JavaModelAnalyser;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 
 public class ChoiceInterface extends ChoicesParentInterface {
 
-	public ChoiceInterface(IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider) {
+	public ChoiceInterface(IModelUpdateContext updateContext, IJavaProjectProvider javaProjectProvider) {
 		
-		super(updateContext, fileInfoProvider);
+		super(updateContext, javaProjectProvider);
 	}
 
 	public void setValue(String newValue) {

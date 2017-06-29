@@ -37,7 +37,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import com.ecfeed.core.adapter.ModelOperationManager;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.ui.common.ImageManager;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.editor.actions.IActionProvider;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.IModelUpdateListener;
@@ -47,7 +47,7 @@ public abstract class BasicSection extends SectionPart implements IModelUpdateCo
 	private Control fTextClient;
 	private IActionProvider fActionProvider;
 	private IModelUpdateContext fUpdateContext;
-	private IFileInfoProvider fFileInfoProvider;
+	private IJavaProjectProvider fJavaProjectProvider;
 	private ISectionContext fSectionContext;
 	private ToolBarManager fToolBarManager;
 
@@ -73,12 +73,12 @@ public abstract class BasicSection extends SectionPart implements IModelUpdateCo
 	public BasicSection(
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext,
-			IFileInfoProvider fileInfoProvider,
+			IJavaProjectProvider javaProjectProvider,
 			int style){
 		super(sectionContext.getSectionComposite(), sectionContext.getToolkit(), style);
 		fSectionContext = sectionContext;
 		fUpdateContext = updateContext;
-		fFileInfoProvider = fileInfoProvider;
+		fJavaProjectProvider = javaProjectProvider;
 
 		createContent();
 	}
@@ -230,7 +230,7 @@ public abstract class BasicSection extends SectionPart implements IModelUpdateCo
 		return this;
 	}
 
-	protected IFileInfoProvider getFileInfoProvider() {
-		return fFileInfoProvider;
+	protected IJavaProjectProvider getJavaProjectProvider() {
+		return fJavaProjectProvider;
 	}
 }

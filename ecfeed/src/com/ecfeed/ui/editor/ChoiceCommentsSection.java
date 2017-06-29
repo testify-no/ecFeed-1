@@ -15,7 +15,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.ui.common.Messages;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class ChoiceCommentsSection extends ExportableJavaDocCommentsSection {
@@ -47,8 +47,8 @@ public class ChoiceCommentsSection extends ExportableJavaDocCommentsSection {
 	public ChoiceCommentsSection(
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext,
-			IFileInfoProvider fileInfoProvider) {
-		super(sectionContext, updateContext, fileInfoProvider);
+			IJavaProjectProvider javaProjectProvider) {
+		super(sectionContext, updateContext, javaProjectProvider);
 	}
 
 	@Override

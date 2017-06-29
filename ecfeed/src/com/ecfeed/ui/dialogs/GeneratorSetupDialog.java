@@ -71,7 +71,7 @@ import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.ecfeed.ui.common.TreeCheckStateListener;
 import com.ecfeed.ui.common.local.EclipseImplementationStatusResolver;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.TestCasesExportDialog.FileCompositeVisibility;
 import com.ecfeed.ui.dialogs.basic.DialogObjectToolkit;
 import com.ecfeed.ui.editor.IValueApplier;
@@ -111,7 +111,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 			Shell parentShell, 
 			MethodNode method,
 			boolean generateExecutables, 
-			IFileInfoProvider fileInfoProvider,
+			IJavaProjectProvider javaProjectProvider,
 			ExportTemplateFactory exportTemplateFactory,
 			String targetFile) {
 
@@ -123,7 +123,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		fGeneratorFactory = new GeneratorFactory<ChoiceNode>();
 		fGenerateExecutableContent = generateExecutables;
 
-		fStatusResolver = new EclipseImplementationStatusResolver(fileInfoProvider);
+		fStatusResolver = new EclipseImplementationStatusResolver(javaProjectProvider);
 
 		fTargetFile = null;
 

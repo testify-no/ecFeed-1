@@ -22,7 +22,7 @@ import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodNodeHelper;
 import com.ecfeed.core.model.NodePropertyDefs;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.MethodInterface;
@@ -48,30 +48,32 @@ public class MethodDetailsPage extends BasicDetailsPage {
 
 	public MethodDetailsPage(ModelMasterSection masterSection,
 			IModelUpdateContext updateContext,
-			IFileInfoProvider fileInfoProvider) {
-		super(masterSection, updateContext, fileInfoProvider);
-		fMethodInterface = new MethodInterface(this, fileInfoProvider);
+			IJavaProjectProvider javaProjectProvider) {
+		super(masterSection, updateContext, javaProjectProvider);
+		fMethodInterface = new MethodInterface(this, javaProjectProvider);
 	}
 
 	@Override
 	public void createContents(Composite parent) {
 		super.createContents(parent);
 
-		IFileInfoProvider fileInfoProvider = getFileInfoProvider();
+		IJavaProjectProvider javaProjectProvider = getJavaProjectProvider();
 
-		createMethodNameWidgets(fileInfoProvider);
-		createTestAndExportButtons(fileInfoProvider);
+		createMethodNameWidgets();
+		createTestAndExportButtons();
 		createRunnerCombo();
-		createRunnerSection(fileInfoProvider);
+		createRunnerSection(javaProjectProvider);
 
-		addCommentsSection(fileInfoProvider);
+		addCommentsSection(javaProjectProvider);
 
-		addViewerSection(fParemetersSection = new MethodParametersViewer(this,
-				this, fileInfoProvider));
-		addViewerSection(fConstraintsSection = new ConstraintsListViewer(this,
-				this, fileInfoProvider));
-		addViewerSection(fTestCasesSection = new TestCasesViewer(this, this,
-				fileInfoProvider));
+		addViewerSection(fParemetersSection = 
+				new MethodParametersViewer(this, this, javaProjectProvider));
+		
+		addViewerSection(fConstraintsSection = 
+				new ConstraintsListViewer(this, this, javaProjectProvider));
+		
+		addViewerSection(fTestCasesSection = 
+				new TestCasesViewer(this, this, javaProjectProvider));
 
 		getToolkit().paintBordersFor(getMainComposite());
 	}
@@ -82,16 +84,16 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		return textClient;
 	}
 
-	private void addCommentsSection(IFileInfoProvider fileInfoProvider) {
+	private void addCommentsSection(IJavaProjectProvider javaProjectProvider) {
 
 		if (ApplicationContext.isProjectAvailable()) {
-			addForm(fCommentsSection = new ExportableJavaDocCommentsSection(this, this, fileInfoProvider));
+			addForm(fCommentsSection = new ExportableJavaDocCommentsSection(this, this, javaProjectProvider));
 		} else {
-			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fileInfoProvider));
+			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, javaProjectProvider));
 		}
 	}
 
-	private void createMethodNameWidgets(IFileInfoProvider fileInfoProvider) {
+	private void createMethodNameWidgets() {
 		int gridColumns = 2;
 
 		if (ApplicationContext.isProjectAvailable()) {
@@ -113,7 +115,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		getFormObjectToolkit().paintBorders(gridComposite);
 	}
 
-	private void createTestAndExportButtons(IFileInfoProvider fileInfoProvider) {
+	private void createTestAndExportButtons() {
 
 		Composite childComposite = getFormObjectToolkit().createRowComposite(
 				getMainComposite());
@@ -149,8 +151,8 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		}
 	}	
 
-	private void createRunnerSection(IFileInfoProvider fileInfoProvider) {
-		fRunnerSection = new WebRunnerSection(this, this, fMethodInterface, fileInfoProvider);
+	private void createRunnerSection(IJavaProjectProvider javaProjectProvider) {
+		fRunnerSection = new WebRunnerSection(this, this, fMethodInterface, javaProjectProvider);
 		fRunnerSection.initialize(getManagedForm());
 	}
 
@@ -162,7 +164,6 @@ public class MethodDetailsPage extends BasicDetailsPage {
 			return;
 		}
 
-		IFileInfoProvider fileInfoProvider = getFileInfoProvider();
 		MethodNode methodNode = (MethodNode)getSelectedElement();
 		fMethodInterface.setOwnNode(methodNode);
 
@@ -171,12 +172,12 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		refreshRunnerCombo(methodNode);		
 		refreshRunnerSection(methodNode);
 
-		refrestTestOnlineButton(fileInfoProvider);
+		refrestTestOnlineButton();
 		refreshExportOnlineButton(methodNode);
 
-		setInputForOtherSections(fileInfoProvider, methodNode);
+		setInputForOtherSections(methodNode);
 
-		refreshBrowseButton(fileInfoProvider, methodNode);
+		refreshBrowseButton(methodNode);
 	}
 
 	private void refreshMethodNameAndSignature(MethodNode methodNode) {
@@ -202,13 +203,13 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		}		
 	}
 
-	private void refrestTestOnlineButton(IFileInfoProvider fileInfoProvider) {
+	private void refrestTestOnlineButton() {
 		EImplementationStatus methodImplementationStatus = null;
 		if (ApplicationContext.isProjectAvailable()) {
 			methodImplementationStatus = fMethodInterface.getImplementationStatus();
 		}
 
-		fTestOnlineButton.setEnabled(isTestOnlineButtonEnabled(fileInfoProvider, methodImplementationStatus));
+		fTestOnlineButton.setEnabled(isTestOnlineButtonEnabled(methodImplementationStatus));
 	}
 
 	private void refreshExportOnlineButton(MethodNode methodNode) {
@@ -219,14 +220,14 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		}
 	}
 
-	private void setInputForOtherSections(IFileInfoProvider fileInfoProvider, MethodNode methodNode) {
+	private void setInputForOtherSections(MethodNode methodNode) {
 		fParemetersSection.setInput(methodNode);
 		fConstraintsSection.setInput(methodNode);
 		fTestCasesSection.setInput(methodNode);
 		fCommentsSection.setInput(methodNode);
 	}
 
-	private void refreshBrowseButton(IFileInfoProvider fileInfoProvider, MethodNode methodNode) {
+	private void refreshBrowseButton(MethodNode methodNode) {
 		if (!ApplicationContext.isProjectAvailable()) {
 			return;
 		}
@@ -242,7 +243,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		fBrowseButton.setEnabled(isEnabled);
 	}
 
-	private boolean isTestOnlineButtonEnabled(IFileInfoProvider fileInfoProvider, EImplementationStatus methodStatus) {
+	private boolean isTestOnlineButtonEnabled(EImplementationStatus methodStatus) {
 
 		MethodNode methodNode = fMethodInterface.getOwnNode();
 
@@ -266,7 +267,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		@Override
 		public void widgetSelected(SelectionEvent ev) {
 			try {
-				fMethodInterface.executeOnlineTests(getFileInfoProvider());
+				fMethodInterface.executeOnlineTests(getJavaProjectProvider());
 			} catch (Exception e) {
 				ExceptionCatchDialog.open("Can not execute online tests.",
 						e.getMessage());
@@ -278,7 +279,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		@Override
 		public void widgetSelected(SelectionEvent ev) {
 			try {
-				fMethodInterface.executeOnlineExport(getFileInfoProvider());
+				fMethodInterface.executeOnlineExport(getJavaProjectProvider());
 			} catch (Exception e) {
 				ExceptionCatchDialog.open("Can not execute online export.",
 						e.getMessage());

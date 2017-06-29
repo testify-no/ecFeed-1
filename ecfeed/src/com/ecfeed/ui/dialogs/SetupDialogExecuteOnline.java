@@ -13,13 +13,16 @@ package com.ecfeed.ui.dialogs;
 import org.eclipse.swt.widgets.Shell;
 
 import com.ecfeed.core.model.MethodNode;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 
 public class SetupDialogExecuteOnline extends SetupDialogOnline {
 
-	public SetupDialogExecuteOnline(Shell parentShell, MethodNode method,
-			IFileInfoProvider fileInfoProvider, String targetFile) {
-		super(parentShell, method, true, fileInfoProvider, null, targetFile);
+	public SetupDialogExecuteOnline(
+			Shell parentShell, 
+			MethodNode method,
+			IJavaProjectProvider javaProjectProvider, 
+			String targetFile) {
+		super(parentShell, method, true, javaProjectProvider, null, targetFile);
 	}
 
 	@Override

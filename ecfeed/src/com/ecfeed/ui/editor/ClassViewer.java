@@ -29,7 +29,7 @@ import com.ecfeed.core.model.RootNode;
 import com.ecfeed.ui.common.ColorConstants;
 import com.ecfeed.ui.common.ColorManager;
 import com.ecfeed.ui.common.Messages;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.editor.actions.DeleteAction;
 import com.ecfeed.ui.editor.actions.ModelViewerActionProvider;
@@ -45,7 +45,7 @@ public class ClassViewer extends TableViewerSection {
 	private ClassInterface fClassIf;
 
 	private TableViewerColumn fPackageNameColumn;
-	private IFileInfoProvider fFileInfoProvider;
+	private IJavaProjectProvider fJavaProjectProvider;
 
 
 	private abstract class ClassNameEditingSupport extends EditingSupport{
@@ -156,15 +156,15 @@ public class ClassViewer extends TableViewerSection {
 	public ClassViewer(
 			ISectionContext parent, 
 			IModelUpdateContext updateContext, 
-			IFileInfoProvider fileInfoProvider) {
-		super(parent, updateContext, fileInfoProvider, StyleDistributor.getSectionStyle());
+			IJavaProjectProvider javaProjectProvider) {
+		super(parent, updateContext, javaProjectProvider, StyleDistributor.getSectionStyle());
 
-		fFileInfoProvider = fileInfoProvider; 
+		fJavaProjectProvider = javaProjectProvider; 
 		fNameColumn.setEditingSupport(new LocalNameEditingSupport());
 		fPackageNameColumn.setEditingSupport(new PackageNameEditingSupport());
 
-		fRootIf = new RootInterface(this, fileInfoProvider);
-		fClassIf = new ClassInterface(this, fileInfoProvider);
+		fRootIf = new RootInterface(this, javaProjectProvider);
+		fClassIf = new ClassInterface(this, javaProjectProvider);
 
 		setText("Classes");
 
@@ -178,8 +178,12 @@ public class ClassViewer extends TableViewerSection {
 						new DeleteAction(getViewer(), this), Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
 
 		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
-		setActionProvider(new ModelViewerActionProvider(getTableViewer(), this, fileInfoProvider));
-		getViewer().addDragSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDragListener(getViewer()));
+		setActionProvider(new ModelViewerActionProvider(getTableViewer(), this, javaProjectProvider));
+		
+		getViewer().addDragSupport(
+				DND.DROP_COPY|DND.DROP_MOVE, 
+				new Transfer[]{ModelNodesTransfer.getInstance()}, 
+				new ModelNodeDragListener(getViewer()));
 	}
 
 	@Override
@@ -206,7 +210,7 @@ public class ClassViewer extends TableViewerSection {
 
 	private ClassInterface classIf(){
 		if(fClassIf == null){
-			fClassIf = new ClassInterface(this, fFileInfoProvider);
+			fClassIf = new ClassInterface(this, fJavaProjectProvider);
 		}
 		return fClassIf;
 	}

@@ -13,35 +13,43 @@ package com.ecfeed.ui.editor.actions;
 import org.eclipse.jface.viewers.ISelectionProvider;
 
 import com.ecfeed.core.model.AbstractNode;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.modelif.AbstractNodeInterface;
 import com.ecfeed.ui.modelif.NodeInterfaceFactory;
 
 public class GoToImplementationAction extends ModelSelectionAction {
 
-	private IFileInfoProvider fFileInfoProvider;
+	private IJavaProjectProvider fJavaProjectProvider;
 
-	public GoToImplementationAction(ISelectionProvider selectionProvider, IFileInfoProvider fileInfoProvider) {
+	public GoToImplementationAction(ISelectionProvider selectionProvider, IJavaProjectProvider javaProjectProvider) {
 		super("goToImpl", "Go to implementation", selectionProvider);
-		fFileInfoProvider = fileInfoProvider;
+		fJavaProjectProvider = javaProjectProvider;
 	}
 
 	@Override
-	public void run(){
-		if(getSelectedNodes().size() != 1){
+	public void run() {
+		
+		if (getSelectedNodes().size() != 1) {
 			return;
 		}
+		
 		AbstractNode node = getSelectedNodes().get(0);
-		AbstractNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(node, null, fFileInfoProvider);
+		AbstractNodeInterface nodeIf = 
+				NodeInterfaceFactory.getNodeInterface(node, null, fJavaProjectProvider);
+		
 		nodeIf.goToImplementation();
 	}
 
 	@Override
-	public boolean isEnabled(){
-		if(getSelectedNodes().size() != 1){
+	public boolean isEnabled() {
+		
+		if (getSelectedNodes().size() != 1) {
 			return false;
 		}
-		AbstractNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(getSelectedNodes().get(0), null, fFileInfoProvider);
+		
+		AbstractNodeInterface nodeIf = 
+				NodeInterfaceFactory.getNodeInterface(getSelectedNodes().get(0), null, fJavaProjectProvider);
+		
 		return nodeIf.goToImplementationEnabled();
 	}
 

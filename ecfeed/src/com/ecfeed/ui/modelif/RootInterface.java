@@ -27,14 +27,13 @@ import com.ecfeed.core.model.RootNodeHelper;
 import com.ecfeed.ui.common.CommonConstants;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.local.EclipseModelBuilder;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.TestClassImportDialog;
 
 public class RootInterface extends GlobalParametersParentInterface {
 
-	public RootInterface(IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider) {
-
-		super(updateContext, fileInfoProvider);
+	public RootInterface(IModelUpdateContext updateContext, IJavaProjectProvider javaProjectProvider) {
+		super(updateContext, javaProjectProvider);
 	}
 
 	@Override

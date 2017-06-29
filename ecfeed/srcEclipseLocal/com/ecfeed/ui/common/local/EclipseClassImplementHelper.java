@@ -24,24 +24,26 @@ import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.PackageClassHelper;
 import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.utils.EclipsePackageFragmentGetter;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 
 public class EclipseClassImplementHelper implements IClassImplementHelper {
 
 	public static final String EXCEPTION_FILE_INFO_PROVIDER_NOT_NULL = "File info provider must not be null.";
 
-	final IFileInfoProvider fFileInfoProvider;
+	final IJavaProjectProvider fJavaProjectProvider;
 
-	public EclipseClassImplementHelper(IFileInfoProvider fileInfoProvider) {
-		if (fileInfoProvider == null) { 
+	public EclipseClassImplementHelper(IJavaProjectProvider javaProjectProvider) {
+		
+		if (javaProjectProvider == null) { 
 			ExceptionHelper.reportRuntimeException(EXCEPTION_FILE_INFO_PROVIDER_NOT_NULL);
 		}
-		fFileInfoProvider = fileInfoProvider;
+		fJavaProjectProvider = javaProjectProvider;
 	}
 
 	@Override
 	public boolean classImplemented(
 			final String thePackage, final String classNameWithoutExtension, final String superclassName) {
+		
 		final IType type = getTestingClassType(thePackage, classNameWithoutExtension);
 
 		if (type == null) {
@@ -111,7 +113,7 @@ public class EclipseClassImplementHelper implements IClassImplementHelper {
 		try {
 			final IPackageFragment packageFragment = 
 					EclipsePackageFragmentGetter.getPackageFragment(
-							thePackage, fFileInfoProvider);
+							thePackage, fJavaProjectProvider);
 
 			final String unitName = classNameWithoutExtension + ".java";
 			final boolean FORCE_CREATION = true;

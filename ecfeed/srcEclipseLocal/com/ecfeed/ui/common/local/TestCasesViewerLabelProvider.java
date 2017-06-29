@@ -26,7 +26,7 @@ import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.ui.common.ColorConstants;
 import com.ecfeed.ui.common.ColorManager;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 
 public class TestCasesViewerLabelProvider extends LabelProvider implements IColorProvider {
 	
@@ -35,7 +35,7 @@ public class TestCasesViewerLabelProvider extends LabelProvider implements IColo
 	MethodNode fMethod;
 	private IImplementationStatusResolver fStatusResolver;
 
-	public TestCasesViewerLabelProvider(IFileInfoProvider fileInfoProvider){
+	public TestCasesViewerLabelProvider(IJavaProjectProvider fileInfoProvider){
 		fExecutableTestSuites = new HashMap<String, Integer>();
 		fTestCasesStatusMap = new HashMap<TestCaseNode, Boolean>();
 		fStatusResolver = new EclipseImplementationStatusResolver(fileInfoProvider);
@@ -44,8 +44,8 @@ public class TestCasesViewerLabelProvider extends LabelProvider implements IColo
 	public TestCasesViewerLabelProvider(
 			IImplementationStatusResolver statusResolver, 
 			MethodNode method, 
-			IFileInfoProvider fileInfoProvider){
-		this(fileInfoProvider);
+			IJavaProjectProvider javaProjectProvider){
+		this(javaProjectProvider);
 		fMethod = method;
 	}
 

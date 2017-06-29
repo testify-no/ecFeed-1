@@ -32,18 +32,18 @@ import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.local.EclipseModelBuilder;
 import com.ecfeed.ui.common.local.JavaDocSupport;
 import com.ecfeed.ui.common.local.JavaModelAnalyser;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.TestClassSelectionDialog;
 import com.ecfeed.ui.dialogs.TextAreaDialog;
 import com.ecfeed.ui.dialogs.UserTypeSelectionDialog;
 
 public abstract class AbstractParameterInterface extends ChoicesParentInterface {
 
-	IFileInfoProvider fFileInfoProvider;
+	IJavaProjectProvider fJavaProjectProvider;
 
-	public AbstractParameterInterface(IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider) {
-		super(updateContext, fileInfoProvider);
-		fFileInfoProvider = fileInfoProvider;
+	public AbstractParameterInterface(IModelUpdateContext updateContext, IJavaProjectProvider javaProjectProvider) {
+		super(updateContext, javaProjectProvider);
+		fJavaProjectProvider = javaProjectProvider;
 	}
 
 	public String getType() {
@@ -168,7 +168,7 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 		result.add(new ParameterSetTypeCommentsOperation(getOwnNode(), typeJavadoc));
 		for(ChoiceNode choice : getOwnNode().getChoices()){
 			AbstractNodeInterface nodeIf = 
-					NodeInterfaceFactory.getNodeInterface(choice, getUpdateContext(), fFileInfoProvider);
+					NodeInterfaceFactory.getNodeInterface(choice, getUpdateContext(), fJavaProjectProvider);
 			result.addAll(nodeIf.getImportAllJavadocCommentsOperations());
 		}
 		return result;
@@ -183,7 +183,7 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 		for(ChoiceNode choice : getOwnNode().getChoices()){
 			ChoiceInterface choiceIf = 
 					(ChoiceInterface)NodeInterfaceFactory.getNodeInterface(
-							choice, getUpdateContext(), fFileInfoProvider);
+							choice, getUpdateContext(), fJavaProjectProvider);
 			choiceIf.exportAllComments();
 		}
 	}

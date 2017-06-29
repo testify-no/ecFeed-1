@@ -33,7 +33,7 @@ import com.ecfeed.core.model.ParametersParentNode;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.ecfeed.ui.common.NodeViewerColumnLabelProvider;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.editor.actions.DeleteAction;
 import com.ecfeed.ui.editor.actions.ModelViewerActionProvider;
@@ -57,9 +57,9 @@ public abstract class AbstractParametersViewer extends TableViewerSection {
 	public AbstractParametersViewer(
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext,
-			IFileInfoProvider fileInfoProvider,
+			IJavaProjectProvider javaProjectProvider,
 			int STYLE) {
-		super(sectionContext, updateContext, fileInfoProvider, STYLE);
+		super(sectionContext, updateContext, javaProjectProvider, STYLE);
 		fParentIf = getParametersParentInterface();
 
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
@@ -75,7 +75,7 @@ public abstract class AbstractParametersViewer extends TableViewerSection {
 		fTypeColumn.setEditingSupport(getParameterTypeEditingSupport());
 
 		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
-		setActionProvider(new ModelViewerActionProvider(getTableViewer(), this, fileInfoProvider));
+		setActionProvider(new ModelViewerActionProvider(getTableViewer(), this, javaProjectProvider));
 		addSelectionChangedListener(new SelectionChangedListener());
 	}
 

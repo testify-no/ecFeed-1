@@ -15,34 +15,38 @@ import org.eclipse.swt.widgets.Composite;
 import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.GlobalParameterNode;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.ecfeed.ui.modelif.GlobalParameterInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class GlobalParameterDetailsPage extends AbstractParameterDetailsPage {
 
-	private IFileInfoProvider fFileInfoProvider;
+	private IJavaProjectProvider fJavaProjectProvider;
 	private GlobalParameterInterface fParameterIf;
 	private LinkingMethodsViewer fLinkingMethodsViewer;
 
-	public GlobalParameterDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider) {
-		super(masterSection, updateContext, fileInfoProvider);
-		fFileInfoProvider = fileInfoProvider;
+	public GlobalParameterDetailsPage(
+			ModelMasterSection masterSection, 
+			IModelUpdateContext updateContext, 
+			IJavaProjectProvider javaProjectProvider) {
+		
+		super(masterSection, updateContext, javaProjectProvider);
+		fJavaProjectProvider = javaProjectProvider;
 		getParameterIf();
 	}
 
 	@Override
 	public void createContents(Composite parent){
 		super.createContents(parent);
-		addForm(fLinkingMethodsViewer = new LinkingMethodsViewer(this, this, fFileInfoProvider));
+		addForm(fLinkingMethodsViewer = new LinkingMethodsViewer(this, this, fJavaProjectProvider));
 	}
 
 
 	@Override
 	protected AbstractParameterInterface getParameterIf() {
 		if(fParameterIf == null){
-			fParameterIf = new GlobalParameterInterface(this, fFileInfoProvider);
+			fParameterIf = new GlobalParameterInterface(this, fJavaProjectProvider);
 		}
 		return fParameterIf;
 	}
@@ -73,9 +77,9 @@ public class GlobalParameterDetailsPage extends AbstractParameterDetailsPage {
 			IModelUpdateContext updateContext) {
 
 		if (ApplicationContext.isProjectAvailable()) {
-			return new GlobalParameterCommentsSection(sectionContext, updateContext, fFileInfoProvider);
+			return new GlobalParameterCommentsSection(sectionContext, updateContext, fJavaProjectProvider);
 		} else {
-			return new SingleTextCommentsSection(this, this, fFileInfoProvider);
+			return new SingleTextCommentsSection(this, this, fJavaProjectProvider);
 		}
 	}
 }

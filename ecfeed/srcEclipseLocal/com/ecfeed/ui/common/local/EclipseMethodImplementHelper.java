@@ -22,7 +22,7 @@ import com.ecfeed.android.external.IMethodImplementHelper;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.SystemLogger;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 
 public class EclipseMethodImplementHelper implements IMethodImplementHelper {
 
@@ -31,19 +31,19 @@ public class EclipseMethodImplementHelper implements IMethodImplementHelper {
 	public static final String EXCEPTION_CLASS_DOES_NOT_EXIST = "Class: %s does not exist.";
 
 
-	final IFileInfoProvider fFileInfoProvider;
+	final IJavaProjectProvider fJavaProjectProvider;
 	final String fClassQualifiedName;
 	final MethodNode fMethodNode;
 
 	public EclipseMethodImplementHelper(
-			final IFileInfoProvider fileInfoProvider, 
+			final IJavaProjectProvider javaProjectProvider, 
 			final String classQualifiedName,
 			final MethodNode methodNode) {
-		if (fileInfoProvider == null) { 
+		if (javaProjectProvider == null) { 
 			ExceptionHelper.reportRuntimeException(EXCEPTION_FILE_INFO_PROVIDER_NOT_NULL);
 		}
 
-		fFileInfoProvider = fileInfoProvider;
+		fJavaProjectProvider = javaProjectProvider;
 		fClassQualifiedName = classQualifiedName;
 		fMethodNode = methodNode;
 	}
@@ -92,7 +92,7 @@ public class EclipseMethodImplementHelper implements IMethodImplementHelper {
 	IType getClassType() {
 		IType classType = null;
 		try {
-			classType = getJavaProject(fFileInfoProvider).findType(fClassQualifiedName);
+			classType = getJavaProject(fJavaProjectProvider).findType(fClassQualifiedName);
 		} catch (CoreException e) {
 			ExceptionHelper.reportRuntimeException(e.getMessage());
 		}
@@ -101,7 +101,7 @@ public class EclipseMethodImplementHelper implements IMethodImplementHelper {
 
 	public boolean methodDefinitionImplemented() {
 		try{
-			final IType type = getJavaProject(fFileInfoProvider).findType(fClassQualifiedName);
+			final IType type = getJavaProject(fJavaProjectProvider).findType(fClassQualifiedName);
 			if(type == null){
 				return false;
 			}
@@ -122,7 +122,7 @@ public class EclipseMethodImplementHelper implements IMethodImplementHelper {
 		return false;
 	}
 
-	private IJavaProject getJavaProject(final IFileInfoProvider fileInfoProvider) throws CoreException{
+	private IJavaProject getJavaProject(final IJavaProjectProvider fileInfoProvider) throws CoreException{
 		if(fileInfoProvider.getProject().hasNature(JavaCore.NATURE_ID)){
 			return JavaCore.create(fileInfoProvider.getProject());
 		}

@@ -22,18 +22,16 @@ import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.local.JavaDocSupport;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.MethodParameterInterface;
 
 public class MethodParameterCommentsSection extends AbstractParameterCommentsSection {
 
-	private IFileInfoProvider fFileInfoProvider;
+	private IJavaProjectProvider fJavaProjectProvider;
 	private MethodParameterInterface fTargetIf;
-
 	private TabItem fParameterJavadocTab;
-
 	private MenuItem fExportAllItem;
 	private MenuItem fExportParameterCommentsItem;
 	private MenuItem fExportTypeCommentsItem;
@@ -89,9 +87,9 @@ public class MethodParameterCommentsSection extends AbstractParameterCommentsSec
 	public MethodParameterCommentsSection(
 			ISectionContext sectionContext,
 			IModelUpdateContext updateContext,
-			IFileInfoProvider fileInfoProvider) {
-		super(sectionContext, updateContext, fileInfoProvider);
-		fFileInfoProvider = fileInfoProvider;
+			IJavaProjectProvider javaProjectProvider) {
+		super(sectionContext, updateContext, javaProjectProvider);
+		fJavaProjectProvider = javaProjectProvider;
 
 		int typeJavadocTabIndex = Arrays.asList(getTabFolder().getItems()).indexOf(getTypeJavadocTab());
 		fParameterJavadocTab = addTextTab("Parameter javadoc", typeJavadocTabIndex);
@@ -121,7 +119,7 @@ public class MethodParameterCommentsSection extends AbstractParameterCommentsSec
 	@Override
 	protected MethodParameterInterface getTargetIf() {
 		if(fTargetIf == null){
-			fTargetIf = new MethodParameterInterface(getUpdateContext(), fFileInfoProvider);
+			fTargetIf = new MethodParameterInterface(getUpdateContext(), fJavaProjectProvider);
 		}
 		return fTargetIf;
 	}

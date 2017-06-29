@@ -14,21 +14,21 @@ import org.eclipse.swt.widgets.Shell;
 
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.serialization.export.ExportTemplateFactory;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 
 public class SetupDialogExportOnline extends SetupDialogOnline {
 
 	public SetupDialogExportOnline(
 			Shell parentShell, 
 			MethodNode method,
-			IFileInfoProvider fileInfoProvider,
+			IJavaProjectProvider javaProjectProvider,
 			ExportTemplateFactory exportTemplateFactory,
 			String targetFile) {
 
 		super(parentShell, 
 				method, 
 				false, 
-				fileInfoProvider,
+				javaProjectProvider,
 				exportTemplateFactory,
 				targetFile);
 	}

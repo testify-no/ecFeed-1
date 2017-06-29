@@ -42,7 +42,7 @@ import com.ecfeed.ui.common.TestCasesViewerContentProvider;
 import com.ecfeed.ui.common.TreeCheckStateListener;
 import com.ecfeed.ui.common.local.EclipseImplementationStatusResolver;
 import com.ecfeed.ui.common.local.TestCasesViewerLabelProvider;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 
 public class CalculateCoverageDialog extends TitleAreaDialog {
 
@@ -51,7 +51,7 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 
 	private CoverageCalculator fCalculator;
 	private MethodNode fMethod;
-	IFileInfoProvider fFileInfoProvider;
+	IJavaProjectProvider fJavaProjectProvider;
 
 	//Initial state of the tree viewer
 	private final Object[] fInitChecked;
@@ -155,17 +155,17 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 			MethodNode method, 
 			Object[] checked, 
 			Object[] grayed,
-			IFileInfoProvider fileInfoProvider) {
+			IJavaProjectProvider javaProjectProvider) {
 
 		super(parentShell);
 		setHelpAvailable(false);
 		setShellStyle(SWT.BORDER | SWT.RESIZE | SWT.TITLE | SWT.APPLICATION_MODAL);
 
-		fFileInfoProvider = fileInfoProvider;
+		//fFileInfoProvider = javaProjectProvider;
 		fMethod = method;
 		fCalculator = new CoverageCalculator(fMethod.getMethodParameters());
 
-		fStatusResolver = new EclipseImplementationStatusResolver(fileInfoProvider);
+		fStatusResolver = new EclipseImplementationStatusResolver(javaProjectProvider);
 		fInitChecked = checked;
 		fInitGrayed = grayed;
 	}
@@ -253,7 +253,7 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 		fTestCasesViewer = new CheckboxTreeViewer(tree);
 		fTestCasesViewer.setContentProvider(new TestCasesViewerContentProvider(fMethod));
 		fTestCasesViewer.setLabelProvider(
-				new TestCasesViewerLabelProvider(fStatusResolver, fMethod, fFileInfoProvider));
+				new TestCasesViewerLabelProvider(fStatusResolver, fMethod, fJavaProjectProvider));
 		fTestCasesViewer.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		fTestCasesViewer.setInput(fMethod);
 

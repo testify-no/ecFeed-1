@@ -26,23 +26,23 @@ import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.AbstractJavaImplementationStatusResolver;
 import com.ecfeed.ui.common.EclipseInstallationDirFileHelper;
 import com.ecfeed.ui.common.utils.EclipseProjectHelper;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 
 public class EclipseImplementationStatusResolver extends AbstractJavaImplementationStatusResolver{
 
-	IFileInfoProvider fFileInfoProvider;
+	IJavaProjectProvider fJavaProjectProvider;
 
-	public EclipseImplementationStatusResolver(IFileInfoProvider fileInfoProvider){
-		super(new JavaPrimitiveTypePredicate(), new EclipseProjectHelper(fileInfoProvider).isAndroidProject());
-		fFileInfoProvider = fileInfoProvider;
+	public EclipseImplementationStatusResolver(IJavaProjectProvider javaProjectProvider){
+		super(new JavaPrimitiveTypePredicate(), new EclipseProjectHelper(javaProjectProvider).isAndroidProject());
+		fJavaProjectProvider = javaProjectProvider;
 	}
 
 	@Override
 	protected boolean androidCodeImplemented(ClassNode classNode) throws EcException {
 		String baseRunner = classNode.getAndroidRunner();
 
-		IProjectHelper projectHelper = new EclipseProjectHelper(fFileInfoProvider);
-		IClassImplementHelper classImplementHelper = new EclipseClassImplementHelper(fFileInfoProvider);
+		IProjectHelper projectHelper = new EclipseProjectHelper(fJavaProjectProvider);
+		IClassImplementHelper classImplementHelper = new EclipseClassImplementHelper(fJavaProjectProvider);
 		IInstallationDirFileHelper installationDirFileHelper = new EclipseInstallationDirFileHelper();
 
 		ImplementerExt implementer = 

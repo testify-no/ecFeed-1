@@ -64,7 +64,7 @@ import com.ecfeed.core.utils.SystemHelper;
 import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.CommonConstants;
 import com.ecfeed.ui.common.ImageManager;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.About2Dialog;
 import com.ecfeed.ui.dialogs.CheckForUpdatesDialog;
 import com.ecfeed.ui.editor.actions.AbstractAddChildAction;
@@ -84,13 +84,13 @@ import com.ecfeed.ui.modelif.NodeInterfaceFactory;
 import com.ecfeed.ui.modelif.TestCaseInterface;
 import com.ecfeed.utils.SeleniumHelper;
 
-public class ModelMasterSection extends TreeViewerSection{
+public class ModelMasterSection extends TreeViewerSection {
 
 	private static final int AUTO_EXPAND_LEVEL = 3;
 
 	private final ModelMasterDetailsBlock fMasterDetailsBlock;
 	private IModelUpdateListener fUpdateListener;
-	private IFileInfoProvider fFileInfoProvider;
+	private IJavaProjectProvider fJavaProjectProvider;
 
 	private class ModelWrapper{
 		private final RootNode fModel;
@@ -301,8 +301,9 @@ public class ModelMasterSection extends TreeViewerSection{
 			AbstractNodeInterface fNodeInterface;
 			boolean fIsProjectAvailable;
 
-			public DecorationProvider(IFileInfoProvider fileInfoProvider, boolean isProjectAvailable){
-				fNodeInterface = new AbstractNodeInterface(ModelMasterSection.this, fileInfoProvider);
+			public DecorationProvider(IJavaProjectProvider javaProjectProvider, boolean isProjectAvailable) {
+				
+				fNodeInterface = new AbstractNodeInterface(ModelMasterSection.this, javaProjectProvider);
 				fIsProjectAvailable = isProjectAvailable;
 			}
 
@@ -394,7 +395,7 @@ public class ModelMasterSection extends TreeViewerSection{
 
 			try {
 				List<Image> decorations = (List<Image>)((AbstractNode)element).accept(
-						new DecorationProvider(fFileInfoProvider, ApplicationContext.isProjectAvailable()));
+						new DecorationProvider(fJavaProjectProvider, ApplicationContext.isProjectAvailable()));
 				List<Image> all = new ArrayList<Image>(decorations);
 				all.add(0, image);
 				if(fFusedImages.containsKey(all) == false){
@@ -484,7 +485,7 @@ public class ModelMasterSection extends TreeViewerSection{
 
 		private void addChildAddingActions(AbstractNode abstractNode) {
 			AddChildActionProvider actionProvider = 
-					new AddChildActionProvider(getTreeViewer(), ModelMasterSection.this, fFileInfoProvider);
+					new AddChildActionProvider(getTreeViewer(), ModelMasterSection.this, fJavaProjectProvider);
 
 			List<AbstractAddChildAction> actions = actionProvider.getPossibleActions(abstractNode);
 
@@ -554,7 +555,7 @@ public class ModelMasterSection extends TreeViewerSection{
 			TestCaseInterface testCaseInterface = getTestCaseInterface();
 
 			AbstractNodeInterface nodeIf = 
-					NodeInterfaceFactory.getNodeInterface(testCaseInterface.getMethod(), null, fFileInfoProvider);
+					NodeInterfaceFactory.getNodeInterface(testCaseInterface.getMethod(), null, fJavaProjectProvider);
 
 			MethodInterface methodInterface = (MethodInterface)nodeIf; 
 
@@ -569,7 +570,8 @@ public class ModelMasterSection extends TreeViewerSection{
 		}
 
 		private MethodInterface getMethodInterface() {
-			AbstractNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(getSelectedNodes().get(0), null, fFileInfoProvider);
+			AbstractNodeInterface nodeIf = 
+					NodeInterfaceFactory.getNodeInterface(getSelectedNodes().get(0), null, fJavaProjectProvider);
 
 			if (!(nodeIf instanceof MethodInterface)) {
 				final String MSG = "Invalid type of node interface. Method node interface expected"; 
@@ -580,7 +582,8 @@ public class ModelMasterSection extends TreeViewerSection{
 		}
 
 		private TestCaseInterface getTestCaseInterface() {
-			AbstractNodeInterface nodeInterface = NodeInterfaceFactory.getNodeInterface(getSelectedNodes().get(0), null, fFileInfoProvider);
+			AbstractNodeInterface nodeInterface = 
+					NodeInterfaceFactory.getNodeInterface(getSelectedNodes().get(0), null, fJavaProjectProvider);
 
 			if (!(nodeInterface instanceof TestCaseInterface)) {
 				final String MSG = "Invalid type of node interface. Test case interface expected"; 
@@ -596,7 +599,9 @@ public class ModelMasterSection extends TreeViewerSection{
 				return false;
 			}
 
-			TestOnlineAction testOnlineAction = new TestOnlineAction(fFileInfoProvider, ModelMasterSection.this, methodInterface);
+			TestOnlineAction testOnlineAction = 
+					new TestOnlineAction(fJavaProjectProvider, ModelMasterSection.this, methodInterface);
+			
 			addMenuItem(testOnlineAction.getName(), testOnlineAction);
 			return true;
 		}
@@ -626,7 +631,9 @@ public class ModelMasterSection extends TreeViewerSection{
 				return false;
 			}
 
-			ExportOnlineAction exportOnlineAction = new ExportOnlineAction(fFileInfoProvider, ModelMasterSection.this, methodInterface);
+			ExportOnlineAction exportOnlineAction = 
+					new ExportOnlineAction(fJavaProjectProvider, ModelMasterSection.this, methodInterface);
+			
 			addMenuItem(exportOnlineAction.getName(), exportOnlineAction);
 			return true;
 		}
@@ -647,10 +654,10 @@ public class ModelMasterSection extends TreeViewerSection{
 
 	}	
 
-	public ModelMasterSection(ModelMasterDetailsBlock parentBlock, IFileInfoProvider fileInfoProvider) {
-		super(parentBlock.getMasterSectionContext(), parentBlock.getModelUpdateContext(), fileInfoProvider, StyleDistributor.getSectionStyle());
+	public ModelMasterSection(ModelMasterDetailsBlock parentBlock, IJavaProjectProvider javaProjectProvider) {
+		super(parentBlock.getMasterSectionContext(), parentBlock.getModelUpdateContext(), javaProjectProvider, StyleDistributor.getSectionStyle());
 		fMasterDetailsBlock = parentBlock;
-		fFileInfoProvider = fileInfoProvider;
+		fJavaProjectProvider = javaProjectProvider;
 
 		boolean includeDeleteAction = false;
 		if (ApplicationContext.isStandaloneApplication()) {
@@ -669,8 +676,15 @@ public class ModelMasterSection extends TreeViewerSection{
 
 		setActionProvider(modelViewerActionProvider, includeDeleteAction);		
 
-		getTreeViewer().addDragSupport(DND.DROP_COPY|DND.DROP_MOVE|DND.DROP_LINK, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDragListener(getTreeViewer()));
-		getTreeViewer().addDropSupport(DND.DROP_COPY|DND.DROP_MOVE|DND.DROP_LINK, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDropListener(getTreeViewer(), this, fFileInfoProvider));
+		getTreeViewer().addDragSupport(
+				DND.DROP_COPY|DND.DROP_MOVE|DND.DROP_LINK,
+				new Transfer[]{ModelNodesTransfer.getInstance()}, 
+				new ModelNodeDragListener(getTreeViewer()));
+		
+		getTreeViewer().addDropSupport(
+				DND.DROP_COPY|DND.DROP_MOVE|DND.DROP_LINK, 
+				new Transfer[]{ModelNodesTransfer.getInstance()}, 
+				new ModelNodeDropListener(getTreeViewer(), this, fJavaProjectProvider));
 	}
 
 	private class SaveActionRunner implements IActionRunner {

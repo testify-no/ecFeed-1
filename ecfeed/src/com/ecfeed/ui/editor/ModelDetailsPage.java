@@ -18,7 +18,7 @@ import org.eclipse.ui.forms.IFormPart;
 import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.RootNode;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.RootInterface;
 
@@ -29,15 +29,15 @@ public class ModelDetailsPage extends BasicDetailsPage {
 	private Text fModelNameText;
 	private RootInterface fRootIf;
 	private SingleTextCommentsSection fCommentsSection;
-	private IFileInfoProvider fFileInfoProvider;
+	private IJavaProjectProvider fJavaProjectProvider;
 
 	public ModelDetailsPage(
 			ModelMasterSection masterSection, 
 			IModelUpdateContext updateContext, 
-			IFileInfoProvider fileInforProvider) {
-		super(masterSection, updateContext, fileInforProvider);
-		fFileInfoProvider = fileInforProvider;
-		fRootIf = new RootInterface(this, fFileInfoProvider);
+			IJavaProjectProvider javaProjectProvider) {
+		super(masterSection, updateContext, javaProjectProvider);
+		fJavaProjectProvider = javaProjectProvider;
+		fRootIf = new RootInterface(this, javaProjectProvider);
 	}
 
 	@Override
@@ -49,9 +49,9 @@ public class ModelDetailsPage extends BasicDetailsPage {
 
 		addCommentsSection();
 
-		addViewerSection(fClassesSection = new ClassViewer(this, this, fFileInfoProvider));
+		addViewerSection(fClassesSection = new ClassViewer(this, this, fJavaProjectProvider));
 
-		fParametersSection = new GlobalParametersViewer(this, this, fFileInfoProvider);
+		fParametersSection = new GlobalParametersViewer(this, this, fJavaProjectProvider);
 		addViewerSection(fParametersSection);
 
 		getToolkit().paintBordersFor(getMainComposite());
@@ -66,9 +66,9 @@ public class ModelDetailsPage extends BasicDetailsPage {
 	private void addCommentsSection() {
 
 		if (ApplicationContext.isProjectAvailable()) {
-			addForm(fCommentsSection = new ExportableSingleTextCommentsSection(this, this, fFileInfoProvider));
+			addForm(fCommentsSection = new ExportableSingleTextCommentsSection(this, this, fJavaProjectProvider));
 		} else {
-			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fFileInfoProvider));
+			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fJavaProjectProvider));
 		}
 	}
 

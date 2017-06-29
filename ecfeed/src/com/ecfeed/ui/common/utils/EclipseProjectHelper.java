@@ -35,14 +35,14 @@ public class EclipseProjectHelper implements IProjectHelper {
 
 	private static boolean fWasCalculated = false;
 	private static boolean fIsAndroidProject = false;
-	private IFileInfoProvider fFileInfoProvider;
+	private IJavaProjectProvider fJavaProjectProvider;
 
-	public EclipseProjectHelper(IFileInfoProvider fileInfoProvider) {
-		if (fileInfoProvider == null) {
+	public EclipseProjectHelper(IJavaProjectProvider javaProjectProvider) {
+		if (javaProjectProvider == null) {
 			SystemLogger.logInfoWithStack(Messages.EXCEPTION_FILE_INFO_PROVIDER_NOT_NULL);
 		}
 
-		fFileInfoProvider = fileInfoProvider;
+		fJavaProjectProvider = javaProjectProvider;
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class EclipseProjectHelper implements IProjectHelper {
 		if (!ApplicationContext.isProjectAvailable()) {
 			return null;
 		}
-		return fFileInfoProvider.getProject().getLocation().toOSString();
+		return fJavaProjectProvider.getProject().getLocation().toOSString();
 	}
 
 	@Override
@@ -58,7 +58,7 @@ public class EclipseProjectHelper implements IProjectHelper {
 		if (!ApplicationContext.isProjectAvailable()) {
 			return null;
 		}
-		IProject testingProject = fFileInfoProvider.getProject();
+		IProject testingProject = fJavaProjectProvider.getProject();
 		IProject testedProject = getReferencedProject(testingProject);
 		String projectPath = getProjectPath(testedProject);
 		return projectPath;
@@ -90,20 +90,21 @@ public class EclipseProjectHelper implements IProjectHelper {
 
 	@Override
 	public boolean isAndroidProjectDevelopmentHook() {
-		return isDevelopmentHook(DEV_HOOK_ANDROID, fFileInfoProvider);
+		return isDevelopmentHook(DEV_HOOK_ANDROID);
 	}
 
 	@Override
 	public boolean isNoInstallDevelopmentHook() {
-		return isDevelopmentHook(DEV_HOOK_NO_INSTALL, fFileInfoProvider);
+		return isDevelopmentHook(DEV_HOOK_NO_INSTALL);
 	}
 
 	@Override
 	public boolean isMainActivityDevelopmentHook() {
-		return isDevelopmentHook(DEV_HOOK_MAIN_ACTIVITY, fFileInfoProvider);
+		return isDevelopmentHook(DEV_HOOK_MAIN_ACTIVITY);
 	}
 
-	private boolean isDevelopmentHook(String hookName, IFileInfoProvider fileInfoProvider) {
+	private boolean isDevelopmentHook(String hookName) {
+		
 		if (!ApplicationContext.isProjectAvailable()) {
 			return false;
 		}
@@ -127,7 +128,7 @@ public class EclipseProjectHelper implements IProjectHelper {
 		if (!ApplicationContext.isProjectAvailable()) {
 			return null;
 		}
-		IProject project = fFileInfoProvider.getProject();
+		IProject project = fJavaProjectProvider.getProject();
 		return getApkName(project);
 	}
 
@@ -136,7 +137,7 @@ public class EclipseProjectHelper implements IProjectHelper {
 		if (!ApplicationContext.isProjectAvailable()) {
 			return null;
 		}
-		IProject testingProject = fFileInfoProvider.getProject();
+		IProject testingProject = fJavaProjectProvider.getProject();
 		IProject testedProject = getReferencedProject(testingProject);
 		return getApkName(testedProject);
 	}
@@ -174,7 +175,7 @@ public class EclipseProjectHelper implements IProjectHelper {
 		if (!ApplicationContext.isProjectAvailable()) {
 			return false;
 		}
-		IProject project = fFileInfoProvider.getProject();
+		IProject project = fJavaProjectProvider.getProject();
 
 		Map<QualifiedName, String> properties = null;
 		try {

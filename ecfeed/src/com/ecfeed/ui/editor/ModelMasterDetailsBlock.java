@@ -41,7 +41,7 @@ import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.TestCaseNode;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.IModelUpdateListener;
@@ -53,7 +53,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 	private ModelPage fPage;
 	private FormToolkit fToolkit;
 	private ModelUpdateContext fUpdateContext;
-	private IFileInfoProvider fFileInfoProvider;
+	private IJavaProjectProvider fJavaProjectProvider;
 	private UndoActionHandler fUndoActionHandler;
 	private RedoActionHandler fRedoActionHandler;
 	private RootNode fModel; 
@@ -135,10 +135,10 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 		}
 	}
 
-	public ModelMasterDetailsBlock(ModelPage modelPage, IFileInfoProvider fileInfoProvider) {
+	public ModelMasterDetailsBlock(ModelPage modelPage, IJavaProjectProvider javaProjectProvider) {
 		fPage = modelPage;
 		fUpdateContext = new ModelUpdateContext();
-		fFileInfoProvider = fileInfoProvider;
+		fJavaProjectProvider = javaProjectProvider;
 		fModel = null;
 	}
 
@@ -190,21 +190,22 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 
 		fToolkit = managedForm.getToolkit();
 
-		fMasterSection = new ModelMasterSection(this, fFileInfoProvider);
+		fMasterSection = new ModelMasterSection(this, fJavaProjectProvider);
 		fMasterSection.initialize(managedForm);
 		fMasterSection.addSelectionChangedListener(this);
 		fMasterSection.setInput(fModel);
 
-		if (isInMemFile(fFileInfoProvider)) {
+		if (isInMemFile(fJavaProjectProvider)) {
 			fMasterSection.markDirty();
 		}
 	}
 
-	private boolean isInMemFile(IFileInfoProvider fileInfoProvider) {
-		if (!(fileInfoProvider instanceof ModelEditor)) {
+	private boolean isInMemFile(IJavaProjectProvider javaProjectProvider) { // XYX TODO
+		
+		if (!(javaProjectProvider instanceof ModelEditor)) {
 			return false;
 		}
-		ModelEditor modelEditor = (ModelEditor)fileInfoProvider;
+		ModelEditor modelEditor = (ModelEditor)javaProjectProvider;
 		IEditorInput input = modelEditor.getEditorInput();
 
 		return ModelEditorHelper.isInMemFileInput(input);

@@ -41,13 +41,14 @@ import com.ecfeed.core.adapter.ModelOperationManager;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.ui.common.ImageManager;
 import com.ecfeed.ui.common.local.EclipseModelImplementer;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.editor.actions.GoToImplementationAction;
 import com.ecfeed.ui.editor.actions.ImplementAction;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.IModelUpdateListener;
 
-public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateListener, ISectionContext, IModelUpdateContext{
+public abstract class BasicDetailsPage 
+	implements IDetailsPage, IModelUpdateListener, ISectionContext, IModelUpdateContext {
 
 	protected class ImplementToolbarAction extends ImplementAction{
 
@@ -63,10 +64,10 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 		}
 	}
 
-	protected class GoToImplementationToolbarAction extends GoToImplementationAction{
+	protected class GoToImplementationToolbarAction extends GoToImplementationAction {
 
 		public GoToImplementationToolbarAction() {
-			super(null, fFileInfoProvider);
+			super(null, fJavaProjectProvider);
 			setToolTipText("Go to node's implementation");
 			setImageDescriptor(getIconDescription("goto_impl.png"));
 		}
@@ -88,21 +89,21 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 	private IModelUpdateContext fModelUpdateContext;
 	private AbstractNode fSelectedNode;
 	private IModelImplementer fImplementer;
-	private IFileInfoProvider fFileInfoProvider;
+	private IJavaProjectProvider fJavaProjectProvider;
 	private Button fImplementButton;
 	private ToolBarManager fToolBarManager;
 
 	public BasicDetailsPage(
 			ModelMasterSection masterSection, 
 			IModelUpdateContext updateContext, 
-			IFileInfoProvider fileInfoProvider){
+			IJavaProjectProvider javaProjectProvider){
 
 		fMasterSection = masterSection;
 		fForms = new ArrayList<IFormPart>();
 		fViewerSections = new ArrayList<ViewerSection>();
 		fModelUpdateContext = updateContext;
-		fImplementer = new EclipseModelImplementer(fileInfoProvider);
-		fFileInfoProvider = fileInfoProvider;
+		fImplementer = new EclipseModelImplementer(javaProjectProvider);
+		fJavaProjectProvider = javaProjectProvider;
 	}
 
 	@Override
@@ -131,8 +132,8 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 		getMainSection().setClient(fMainComposite);
 	}
 
-	protected IFileInfoProvider getFileInfoProvider() {
-		return fFileInfoProvider;
+	protected IJavaProjectProvider getJavaProjectProvider() {
+		return fJavaProjectProvider;
 	}
 
 	protected ToolBar createToolBar(Section section) {

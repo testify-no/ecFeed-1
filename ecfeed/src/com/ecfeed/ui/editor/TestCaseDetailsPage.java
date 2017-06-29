@@ -25,7 +25,7 @@ import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.utils.EcException;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.TestCaseInterface;
@@ -33,7 +33,7 @@ import com.ecfeed.utils.SeleniumHelper;
 
 public class TestCaseDetailsPage extends BasicDetailsPage {
 
-	private IFileInfoProvider fFileInfoProvider;
+	private IJavaProjectProvider fJavaProjectProvider;
 	private Combo fTestSuiteNameCombo;
 	private TestDataViewer fTestDataViewer;
 	private Button fExecuteButton;
@@ -45,10 +45,10 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 	public TestCaseDetailsPage(
 			ModelMasterSection masterSection, 
 			IModelUpdateContext updateContext, 
-			IFileInfoProvider fileInfoProvider) {
-		super(masterSection, updateContext, fileInfoProvider);
-		fFileInfoProvider = fileInfoProvider;
-		fTestCaseIf = new TestCaseInterface(this, fileInfoProvider);
+			IJavaProjectProvider javaProjectProvider) {
+		super(masterSection, updateContext, javaProjectProvider);
+		fJavaProjectProvider = javaProjectProvider;
+		fTestCaseIf = new TestCaseInterface(this, javaProjectProvider);
 	}
 
 	@Override
@@ -58,7 +58,7 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 
 		addCommentsSection();
 
-		addViewerSection(fTestDataViewer = new TestDataViewer(this, this, fFileInfoProvider));
+		addViewerSection(fTestDataViewer = new TestDataViewer(this, this, fJavaProjectProvider));
 	}
 
 	@Override
@@ -88,9 +88,9 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 	private void addCommentsSection() {
 
 		if (ApplicationContext.isProjectAvailable()) {
-			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fFileInfoProvider));
+			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fJavaProjectProvider));
 		} else {
-			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fFileInfoProvider));
+			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fJavaProjectProvider));
 		}
 	}
 
