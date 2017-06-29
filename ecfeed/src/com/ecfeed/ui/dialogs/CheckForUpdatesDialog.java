@@ -273,7 +273,7 @@ public class CheckForUpdatesDialog extends TitleAreaDialog {
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
 
-		fOkButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
+		fOkButton = createButton(parent, IDialogConstants.OK_ID, DialogHelper.getOkLabel(), true);
 		fOkButton.setEnabled(true);
 	}
 

@@ -188,8 +188,8 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
-		fOkButton = createButton(parent, IDialogConstants.OK_ID,
-				IDialogConstants.OK_LABEL, true);
+		fOkButton = 
+				createButton(parent, IDialogConstants.OK_ID, DialogHelper.getOkLabel(), true);
 		if (fGenerateExecutableContent) {
 			for (MethodParameterNode parameter : fMethod.getMethodParameters()) {
 				EImplementationStatus parameterStatus = fStatusResolver
@@ -211,8 +211,8 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 			}
 		}
 
-		createButton(parent, IDialogConstants.CANCEL_ID,
-				IDialogConstants.CANCEL_LABEL, false);
+		createButton(
+				parent, IDialogConstants.CANCEL_ID, DialogHelper.getCancelLabel(), false);
 
 		updateOkButtonAndErrorMsg();
 	}

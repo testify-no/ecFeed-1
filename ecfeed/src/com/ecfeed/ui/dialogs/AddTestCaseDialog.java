@@ -200,10 +200,11 @@ public class AddTestCaseDialog extends TitleAreaDialog implements ITestDataEdito
 	 */
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
-		fOkButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
-				true);
-		createButton(parent, IDialogConstants.CANCEL_ID,
-				IDialogConstants.CANCEL_LABEL, false);
+		fOkButton = 
+				createButton(parent, IDialogConstants.OK_ID, DialogHelper.getOkLabel(), true);
+
+		createButton(
+				parent, IDialogConstants.CANCEL_ID, DialogHelper.getCancelLabel(), false);
 	}
 
 	@Override

@@ -35,6 +35,7 @@ import com.ecfeed.core.utils.DiskFileHelper;
 import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.ui.common.CommonConstants;
 import com.ecfeed.ui.common.Messages;
+import com.ecfeed.ui.dialogs.DialogHelper;
 
 class NewEctFileCreationPage extends WizardNewFileCreationPage {
 
@@ -88,7 +89,7 @@ public class NewEcFileWizard extends Wizard implements INewWizard {
 						Display.getDefault().getSystemImage(SWT.ICON_QUESTION), 
 						Messages.WIZARD_FILE_EXISTS_MESSAGE,
 						MessageDialog.QUESTION_WITH_CANCEL, 
-						new String[] {IDialogConstants.OK_LABEL, IDialogConstants.CANCEL_LABEL}, 
+						new String[] {DialogHelper.getOkLabel(), DialogHelper.getCancelLabel()}, 
 						IDialogConstants.OK_ID);
 				if(dialog.open() != IDialogConstants.OK_ID){
 					return false;

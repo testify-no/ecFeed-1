@@ -179,7 +179,7 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
 
-		Button okButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, false);
+		Button okButton = createButton(parent, IDialogConstants.OK_ID, DialogHelper.getOkLabel(), false);
 		okButton.setEnabled(true);
 	}
 
