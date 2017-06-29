@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html 
  *  
  *******************************************************************************/
-package com.ecfeed.ui.common.utils;
+package com.ecfeed.ui.common.utils.local;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -20,6 +20,7 @@ import org.eclipse.jdt.core.JavaCore;
 
 import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.ui.common.Messages;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 
 public class EclipsePackageFragmentGetter {
 

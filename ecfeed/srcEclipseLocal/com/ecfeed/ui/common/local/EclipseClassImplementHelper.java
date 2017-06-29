@@ -23,8 +23,8 @@ import com.ecfeed.android.external.IClassImplementHelper;
 import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.PackageClassHelper;
 import com.ecfeed.core.utils.SystemLogger;
-import com.ecfeed.ui.common.utils.EclipsePackageFragmentGetter;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
+import com.ecfeed.ui.common.utils.local.EclipsePackageFragmentGetter;
 
 public class EclipseClassImplementHelper implements IClassImplementHelper {
 

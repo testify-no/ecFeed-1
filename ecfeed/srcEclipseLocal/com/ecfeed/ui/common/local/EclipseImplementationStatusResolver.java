@@ -25,8 +25,8 @@ import com.ecfeed.core.utils.EcException;
 import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.AbstractJavaImplementationStatusResolver;
 import com.ecfeed.ui.common.EclipseInstallationDirFileHelper;
-import com.ecfeed.ui.common.utils.EclipseProjectHelper;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
+import com.ecfeed.ui.common.utils.local.EclipseProjectHelper;
 
 public class EclipseImplementationStatusResolver extends AbstractJavaImplementationStatusResolver{
 

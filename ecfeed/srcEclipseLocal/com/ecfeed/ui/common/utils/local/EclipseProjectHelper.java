@@ -8,7 +8,7 @@
  *  
  *******************************************************************************/
 
-package com.ecfeed.ui.common.utils;
+package com.ecfeed.ui.common.utils.local;
 
 import java.util.Map;
 
@@ -23,6 +23,7 @@ import com.ecfeed.core.utils.EcException;
 import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.Messages;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 
 public class EclipseProjectHelper implements IProjectHelper {
 
