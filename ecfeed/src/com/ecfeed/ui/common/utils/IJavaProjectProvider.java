@@ -11,9 +11,8 @@
 package com.ecfeed.ui.common.utils;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.jdt.core.IPackageFragmentRoot;
 
 public interface IJavaProjectProvider {
 	public IProject getProject();
-	public IPackageFragmentRoot getPackageFragmentRoot();
+	public Object getPackageFragmentRoot();
 }

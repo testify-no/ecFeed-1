@@ -43,7 +43,13 @@ public class EclipsePackageFragmentGetter {
 			ExceptionHelper.reportRuntimeException(Messages.EXCEPTION_FILE_INFO_PROVIDER_NOT_NULL);
 		}
 
-		IPackageFragmentRoot root = javaProjectProvider.getPackageFragmentRoot();
+		Object rootObject = javaProjectProvider.getPackageFragmentRoot();
+
+		IPackageFragmentRoot root = null;
+
+		if (rootObject instanceof IPackageFragmentRoot) {
+			root = (IPackageFragmentRoot)rootObject;
+		}
 
 		if(root == null){
 			root = getAnySourceFolder(javaProjectProvider);
