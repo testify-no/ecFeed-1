@@ -10,6 +10,7 @@
 
 package com.ecfeed.ui.common.local;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaProject;
@@ -122,10 +123,14 @@ public class EclipseMethodImplementHelper implements IMethodImplementHelper {
 		return false;
 	}
 
-	private IJavaProject getJavaProject(final IJavaProjectProvider fileInfoProvider) throws CoreException{
-		if(fileInfoProvider.getProject().hasNature(JavaCore.NATURE_ID)){
-			return JavaCore.create(fileInfoProvider.getProject());
+	private IJavaProject getJavaProject(final IJavaProjectProvider javaProjectProvider) throws CoreException {
+
+		IProject project = (IProject)javaProjectProvider.getProject();
+
+		if (project.hasNature(JavaCore.NATURE_ID)) {
+			return JavaCore.create(project);
 		}
+
 		return null;
 	}	
 }

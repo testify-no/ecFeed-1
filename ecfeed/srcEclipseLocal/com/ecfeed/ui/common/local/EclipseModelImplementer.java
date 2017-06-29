@@ -20,6 +20,7 @@ import org.eclipse.core.filebuffers.FileBuffers;
 import org.eclipse.core.filebuffers.ITextFileBuffer;
 import org.eclipse.core.filebuffers.ITextFileBufferManager;
 import org.eclipse.core.filebuffers.LocationKind;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -551,10 +552,14 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 		}
 	}
 
-	private IJavaProject getJavaProject() throws CoreException{
-		if(fJavaProjectProvider.getProject().hasNature(JavaCore.NATURE_ID)){
-			return JavaCore.create(fJavaProjectProvider.getProject());
+	private IJavaProject getJavaProject() throws CoreException {
+
+		IProject project = (IProject)fJavaProjectProvider.getProject();
+
+		if (project.hasNature(JavaCore.NATURE_ID)) {
+			return JavaCore.create(project);
 		}
+
 		return null;
 	}
 

@@ -50,7 +50,10 @@ public class EclipseProjectHelper implements IProjectHelper {
 		if (!ApplicationContext.isProjectAvailable()) {
 			return null;
 		}
-		return fJavaProjectProvider.getProject().getLocation().toOSString();
+
+		IProject project = (IProject)fJavaProjectProvider.getProject();
+
+		return project.getLocation().toOSString();
 	}
 
 	@Override
@@ -58,7 +61,7 @@ public class EclipseProjectHelper implements IProjectHelper {
 		if (!ApplicationContext.isProjectAvailable()) {
 			return null;
 		}
-		IProject testingProject = fJavaProjectProvider.getProject();
+		IProject testingProject = (IProject)fJavaProjectProvider.getProject();
 		IProject testedProject = getReferencedProject(testingProject);
 		String projectPath = getProjectPath(testedProject);
 		return projectPath;
@@ -104,7 +107,7 @@ public class EclipseProjectHelper implements IProjectHelper {
 	}
 
 	private boolean isDevelopmentHook(String hookName) {
-		
+
 		if (!ApplicationContext.isProjectAvailable()) {
 			return false;
 		}
@@ -128,7 +131,7 @@ public class EclipseProjectHelper implements IProjectHelper {
 		if (!ApplicationContext.isProjectAvailable()) {
 			return null;
 		}
-		IProject project = fJavaProjectProvider.getProject();
+		IProject project = (IProject)fJavaProjectProvider.getProject();
 		return getApkName(project);
 	}
 
@@ -137,7 +140,7 @@ public class EclipseProjectHelper implements IProjectHelper {
 		if (!ApplicationContext.isProjectAvailable()) {
 			return null;
 		}
-		IProject testingProject = fJavaProjectProvider.getProject();
+		IProject testingProject = (IProject)fJavaProjectProvider.getProject();
 		IProject testedProject = getReferencedProject(testingProject);
 		return getApkName(testedProject);
 	}
@@ -175,7 +178,7 @@ public class EclipseProjectHelper implements IProjectHelper {
 		if (!ApplicationContext.isProjectAvailable()) {
 			return false;
 		}
-		IProject project = fJavaProjectProvider.getProject();
+		IProject project = (IProject)fJavaProjectProvider.getProject();
 
 		Map<QualifiedName, String> properties = null;
 		try {

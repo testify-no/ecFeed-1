@@ -64,15 +64,19 @@ public class EclipsePackageFragmentGetter {
 	private static IPackageFragmentRoot getAnySourceFolder(
 			IJavaProjectProvider javaProjectProvider) throws CoreException {
 
-		if(javaProjectProvider.getProject().hasNature(JavaCore.NATURE_ID)){
-			IJavaProject project = JavaCore.create(javaProjectProvider.getProject());
+		IProject projectCurrent = (IProject)javaProjectProvider.getProject();
 
-			for (IPackageFragmentRoot packageFragmentRoot: project.getPackageFragmentRoots()) {
+		if (projectCurrent.hasNature(JavaCore.NATURE_ID)) {
+
+			IJavaProject projectNew = JavaCore.create(projectCurrent);
+
+			for (IPackageFragmentRoot packageFragmentRoot: projectNew.getPackageFragmentRoots()) {
 				if (packageFragmentRoot.getKind() == IPackageFragmentRoot.K_SOURCE) {
 					return packageFragmentRoot;
 				}
 			}
 		}
+
 		return null;
 	}
 
@@ -80,7 +84,8 @@ public class EclipsePackageFragmentGetter {
 			String name, 
 			IJavaProjectProvider javaProjectProvider) throws CoreException {
 
-		IProject project = javaProjectProvider.getProject();
+		IProject project = (IProject)javaProjectProvider.getProject();
+
 		IJavaProject javaProject = JavaCore.create(project);
 		IFolder srcFolder = project.getFolder(name);
 
