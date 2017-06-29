@@ -15,12 +15,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.ILocalVariable;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jdt.core.Signature;
 
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.ClassNode;
@@ -100,7 +98,9 @@ public class EclipseModelBuilder extends JavaModelAnalyser{
 	}
 
 	public List<String> getSpecialValues(String typeName) {
+		
 		List<String> result = new ArrayList<String>();
+		
 		switch(typeName){
 		case JavaTypeHelper.TYPE_NAME_BOOLEAN:
 			result.addAll(Arrays.asList(CommonConstants.BOOLEAN_SPECIAL_VALUES));
@@ -122,7 +122,7 @@ public class EclipseModelBuilder extends JavaModelAnalyser{
 			result.addAll(Arrays.asList(com.ecfeed.core.utils.CommonConstants.STRING_SPECIAL_VALUES));
 			break;
 		default:
-			result.addAll(enumValues(typeName));
+			result.addAll(JavaCodeEnumHelper.enumValues(typeName));
 			break;
 		}
 		return result;
@@ -150,42 +150,9 @@ public class EclipseModelBuilder extends JavaModelAnalyser{
 		case JavaTypeHelper.TYPE_NAME_STRING:
 			return CommonConstants.DEFAULT_EXPECTED_STRING_VALUE;
 		default:
-			return defaultEnumExpectedValue(type);
+			return JavaCodeEnumHelper.defaultEnumExpectedValue(type);
 		}
 	}
-
-	protected List<String> enumValues(String typeName) {
-		IType type = getIType(typeName);
-		List<String> result = new ArrayList<String>();
-		try {
-			if(type != null && type.isEnum()){
-				String typeSignature = Signature.createTypeSignature(type.getElementName(), false);
-				try {
-					if(type.isEnum()){
-						for(IField field : type.getFields()){
-							if(field.getTypeSignature().equals(typeSignature)){
-								result.add(field.getElementName());
-							}
-						}
-					}
-				} catch (JavaModelException e) {SystemLogger.logCatch(e.getMessage());}
-				return result;
-			}
-		} catch (JavaModelException e) {SystemLogger.logCatch(e.getMessage());}
-		return new ArrayList<String>();
-	}
-
-
-	protected String defaultEnumExpectedValue(String type) {
-		String value = CommonConstants.DEFAULT_EXPECTED_ENUM_VALUE;
-
-		List<String> enumValues = enumValues(type);
-		if(enumValues.size() > 0){
-			value = enumValues.get(0);
-		}
-		return value;
-	}
-
 
 	protected ArrayList<ChoiceNode> defaultBooleanChoices() {
 		ArrayList<ChoiceNode> choices = new ArrayList<ChoiceNode>();

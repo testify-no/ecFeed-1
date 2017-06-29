@@ -44,7 +44,7 @@ import com.ecfeed.ui.common.ColorManager;
 import com.ecfeed.ui.common.CommonConstants;
 import com.ecfeed.ui.common.ITestDataEditorListener;
 import com.ecfeed.ui.common.Messages;
-import com.ecfeed.ui.common.local.TestDataValueEditingSupport;
+import com.ecfeed.ui.common.TestDataValueEditingSupport;
 
 public class AddTestCaseDialog extends TitleAreaDialog implements ITestDataEditorListener {
 

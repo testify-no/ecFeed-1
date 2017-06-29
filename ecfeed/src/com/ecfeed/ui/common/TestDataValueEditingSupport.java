@@ -8,7 +8,7 @@
  *  
  *******************************************************************************/
 
-package com.ecfeed.ui.common.local;
+package com.ecfeed.ui.common;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -32,8 +32,7 @@ import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.utils.JavaTypeHelper;
-import com.ecfeed.ui.common.ITestDataEditorListener;
-import com.ecfeed.ui.common.Messages;
+import com.ecfeed.ui.common.local.EclipseModelBuilder;
 
 public class TestDataValueEditingSupport extends EditingSupport {
 	private final TableViewer fViewer;

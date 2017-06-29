@@ -30,7 +30,7 @@ import com.ecfeed.ui.common.ColorConstants;
 import com.ecfeed.ui.common.ColorManager;
 import com.ecfeed.ui.common.ITestDataEditorListener;
 import com.ecfeed.ui.common.NodeViewerColumnLabelProvider;
-import com.ecfeed.ui.common.local.TestDataValueEditingSupport;
+import com.ecfeed.ui.common.TestDataValueEditingSupport;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.TestCaseInterface;
