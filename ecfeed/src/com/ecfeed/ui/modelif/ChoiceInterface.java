@@ -33,8 +33,8 @@ import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.CommonConstants;
 import com.ecfeed.ui.common.EclipseTypeAdapterProvider;
+import com.ecfeed.ui.common.JavaModelAnalyser;
 import com.ecfeed.ui.common.Messages;
-import com.ecfeed.ui.common.local.JavaModelAnalyser;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 
 public class ChoiceInterface extends ChoicesParentInterface {
