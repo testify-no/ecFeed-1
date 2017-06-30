@@ -8,7 +8,7 @@
  *  
  *******************************************************************************/
 
-package com.ecfeed.ui.common.local;
+package com.ecfeed.ui.common;
 
 import java.io.BufferedReader;
 import java.io.IOException;

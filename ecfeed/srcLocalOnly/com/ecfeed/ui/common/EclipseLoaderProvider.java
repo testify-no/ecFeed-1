@@ -8,7 +8,7 @@
  *  
  *******************************************************************************/
 
-package com.ecfeed.ui.common.local;
+package com.ecfeed.ui.common;
 
 import java.net.URL;
 import java.util.ArrayList;

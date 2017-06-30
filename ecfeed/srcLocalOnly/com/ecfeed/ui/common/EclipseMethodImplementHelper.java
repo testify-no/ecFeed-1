@@ -8,7 +8,7 @@
  *  
  *******************************************************************************/
 
-package com.ecfeed.ui.common.local;
+package com.ecfeed.ui.common;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;

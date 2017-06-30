@@ -24,10 +24,10 @@ import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.utils.EcException;
 import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.AbstractJavaImplementationStatusResolver;
+import com.ecfeed.ui.common.EclipseClassImplementHelper;
 import com.ecfeed.ui.common.EclipseInstallationDirFileHelper;
 import com.ecfeed.ui.common.IEclipseImplementationStatusResolver;
-import com.ecfeed.ui.common.local.EclipseClassImplementHelper;
-import com.ecfeed.ui.common.local.JavaModelAnalyser;
+import com.ecfeed.ui.common.JavaModelAnalyser;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.common.utils.local.EclipseProjectHelper;
 
