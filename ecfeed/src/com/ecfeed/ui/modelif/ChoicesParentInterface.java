@@ -26,8 +26,8 @@ import com.ecfeed.core.model.ChoicesParentNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.ui.common.CommonConstants;
 import com.ecfeed.ui.common.EclipseTypeAdapterProvider;
+import com.ecfeed.ui.common.EclipseTypeHelper;
 import com.ecfeed.ui.common.Messages;
-import com.ecfeed.ui.common.local.EclipseModelBuilder;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 
 public class ChoicesParentInterface extends AbstractNodeInterface {
@@ -88,7 +88,7 @@ public class ChoicesParentInterface extends AbstractNodeInterface {
 	}
 
 	public List<String> getSpecialValues() {
-		return new EclipseModelBuilder().getSpecialValues(getOwnNode().getParameter().getType());
+		return EclipseTypeHelper.getSpecialValues(getOwnNode().getParameter().getType());
 	}
 
 	public boolean hasLimitedValuesSet() {
@@ -105,13 +105,12 @@ public class ChoicesParentInterface extends AbstractNodeInterface {
 	}
 
 	protected String generateNewChoiceValue() {
-		EclipseModelBuilder builder = new EclipseModelBuilder();
 		String type = getOwnNode().getParameter().getType();
-		String value = builder.getDefaultExpectedValue(type);
-		if(isPrimitive() == false && builder.getSpecialValues(type).size() == 0){
+		String value = EclipseTypeHelper.getDefaultExpectedValue(type);
+		if(isPrimitive() == false && EclipseTypeHelper.getSpecialValues(type).size() == 0){
 			int i = 0;
 			while(getOwnNode().getLeafChoiceValues().contains(value)){
-				value = builder.getDefaultExpectedValue(type) + i++;
+				value = EclipseTypeHelper.getDefaultExpectedValue(type) + i++;
 			}
 		}
 		return value;

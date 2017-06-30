@@ -17,7 +17,6 @@ import com.ecfeed.core.adapter.ITypeAdapterProvider;
 import com.ecfeed.core.utils.JavaLanguageHelper;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.StringHelper;
-import com.ecfeed.ui.common.local.EclipseModelBuilder;
 
 public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 
@@ -124,7 +123,7 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 
 		@Override
 		public String defaultValue() {
-			return new EclipseModelBuilder().getDefaultExpectedValue(fType);
+			return EclipseTypeHelper.getDefaultExpectedValue(fType);
 		}
 
 		@Override

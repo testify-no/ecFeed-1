@@ -31,7 +31,7 @@ import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.utils.SystemLogger;
-import com.ecfeed.ui.common.local.EclipseModelBuilder;
+import com.ecfeed.ui.common.EclipseTypeHelper;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.modelif.AbstractNodeInterface;
 import com.ecfeed.ui.modelif.GlobalParametersParentInterface;
@@ -314,7 +314,7 @@ public class ModelNodeDropListener extends ViewerDropAdapter {
 
 				for (AbstractNode dragged : NodeDnDBuffer.getInstance().getDraggedNodes()) {
 					GlobalParameterNode source = (GlobalParameterNode)dragged;
-					String defaultValue = new EclipseModelBuilder().getDefaultExpectedValue(source.getType());
+					String defaultValue = EclipseTypeHelper.getDefaultExpectedValue(source.getType());
 					children.add(new MethodParameterNode((AbstractParameterNode)dragged, defaultValue, false));
 				}
 			}else {
@@ -406,7 +406,7 @@ public class ModelNodeDropListener extends ViewerDropAdapter {
 
 				for (AbstractNode dragged : NodeDnDBuffer.getInstance().getDraggedNodes()) {
 					GlobalParameterNode source = (GlobalParameterNode)dragged;
-					String defaultValue = new EclipseModelBuilder().getDefaultExpectedValue(source.getType());
+					String defaultValue = EclipseTypeHelper.getDefaultExpectedValue(source.getType());
 					children.add(new MethodParameterNode((AbstractParameterNode)dragged, defaultValue, false, true, source));
 				}
 			}else {

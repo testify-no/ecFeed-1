@@ -59,8 +59,8 @@ import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.serialization.export.TestCasesExporter;
 import com.ecfeed.ui.common.CommonConstants;
 import com.ecfeed.ui.common.EclipseTypeAdapterProvider;
+import com.ecfeed.ui.common.EclipseTypeHelper;
 import com.ecfeed.ui.common.Messages;
-import com.ecfeed.ui.common.local.EclipseModelBuilder;
 import com.ecfeed.ui.common.local.JavaModelAnalyser;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.common.utils.local.EclipseProjectHelper;
@@ -100,10 +100,9 @@ public class MethodInterface extends ParametersParentInterface {
 
 	@Override
 	public MethodParameterNode addNewParameter() {
-		EclipseModelBuilder modelBuilder = new EclipseModelBuilder();
 		String name = generateNewParameterName();
 		String type = generateNewParameterType();
-		String defaultValue = modelBuilder.getDefaultExpectedValue(type);
+		String defaultValue = EclipseTypeHelper.getDefaultExpectedValue(type);
 		MethodParameterNode parameter = 
 				new MethodParameterNode(name, type, defaultValue, false);
 		if (addParameter(parameter, getOwnNode().getParameters().size())) {

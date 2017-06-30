@@ -32,7 +32,6 @@ import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.utils.JavaTypeHelper;
-import com.ecfeed.ui.common.local.EclipseModelBuilder;
 
 public class TestDataValueEditingSupport extends EditingSupport {
 	private final TableViewer fViewer;
@@ -58,7 +57,7 @@ public class TestDataValueEditingSupport extends EditingSupport {
 		fComboCellEditor = getCellEditorForChoice(choice, parameter);
 		return fComboCellEditor;
 	}
-	
+
 	private ComboBoxViewerCellEditor getCellEditorForChoice(ChoiceNode choice, MethodParameterNode parameter) {
 		if (parameter.isExpected()) {
 			return getEditorForExpectedParameter(choice, parameter);
@@ -67,11 +66,12 @@ public class TestDataValueEditingSupport extends EditingSupport {
 	}
 
 	private ComboBoxViewerCellEditor getEditorForExpectedParameter(ChoiceNode choice, MethodParameterNode parameter) {
+
 		ComboBoxViewerCellEditor editor = createBasicCellEditor();
 
 		String type = choice.getParameter().getType();
-		EclipseModelBuilder builder = new EclipseModelBuilder();
-		Set<String> expectedValues = new HashSet<String>(builder.getSpecialValues(type));
+		Set<String> expectedValues = new HashSet<String>(EclipseTypeHelper.getSpecialValues(type));
+
 		if (expectedValues.contains(choice.getValueString()) == false) {
 			expectedValues.add(choice.getValueString());
 		}

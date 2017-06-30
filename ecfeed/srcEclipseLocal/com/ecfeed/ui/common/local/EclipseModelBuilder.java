@@ -11,7 +11,6 @@
 package com.ecfeed.ui.common.local;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -28,6 +27,7 @@ import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.CommonConstants;
+import com.ecfeed.ui.common.EclipseTypeHelper;
 import com.ecfeed.ui.common.Messages;
 
 public class EclipseModelBuilder extends JavaModelAnalyser{
@@ -76,9 +76,11 @@ public class EclipseModelBuilder extends JavaModelAnalyser{
 		return methodNode;
 	}
 
-	public MethodParameterNode buildParameterModel(String name, String type, boolean expected){
-		MethodParameterNode parameter = new MethodParameterNode(name, type, getDefaultExpectedValue(type), expected);
-		if(!expected){
+	public MethodParameterNode buildParameterModel(String name, String type, boolean expected) {
+		MethodParameterNode parameter = 
+				new MethodParameterNode(name, type, EclipseTypeHelper.getDefaultExpectedValue(type), expected);
+		
+		if (!expected) {
 			List<ChoiceNode> defaultChoices = defaultChoices(type);
 			for(ChoiceNode choice : defaultChoices){
 				parameter.addChoice(choice);
@@ -89,69 +91,12 @@ public class EclipseModelBuilder extends JavaModelAnalyser{
 
 	public List<ChoiceNode> defaultChoices(String typeName) {
 		List<ChoiceNode> choices = new ArrayList<ChoiceNode>();
-		for(String value : getSpecialValues(typeName)){
+		for(String value : EclipseTypeHelper.getSpecialValues(typeName)){
 			String name = value.toLowerCase();
 			name = name.replace("_", " ");
 			choices.add(new ChoiceNode(name, value));
 		}
 		return choices;
-	}
-
-	public List<String> getSpecialValues(String typeName) {
-		
-		List<String> result = new ArrayList<String>();
-		
-		switch(typeName){
-		case JavaTypeHelper.TYPE_NAME_BOOLEAN:
-			result.addAll(Arrays.asList(CommonConstants.BOOLEAN_SPECIAL_VALUES));
-			break;
-		case JavaTypeHelper.TYPE_NAME_CHAR:
-			result.addAll(Arrays.asList(CommonConstants.DEFAULT_EXPECTED_CHAR_VALUE));
-			break;
-		case JavaTypeHelper.TYPE_NAME_BYTE:
-		case JavaTypeHelper.TYPE_NAME_INT:
-		case JavaTypeHelper.TYPE_NAME_LONG:
-		case JavaTypeHelper.TYPE_NAME_SHORT:
-			result.addAll(Arrays.asList(CommonConstants.INTEGER_SPECIAL_VALUES));
-			break;
-		case JavaTypeHelper.TYPE_NAME_DOUBLE:
-		case JavaTypeHelper.TYPE_NAME_FLOAT:
-			result.addAll(Arrays.asList(CommonConstants.FLOAT_SPECIAL_VALUES));
-			break;
-		case JavaTypeHelper.TYPE_NAME_STRING:
-			result.addAll(Arrays.asList(com.ecfeed.core.utils.CommonConstants.STRING_SPECIAL_VALUES));
-			break;
-		default:
-			result.addAll(JavaCodeEnumHelper.enumValues(typeName));
-			break;
-		}
-		return result;
-	}
-
-
-	public String getDefaultExpectedValue(String type) {
-		switch(type){
-		case JavaTypeHelper.TYPE_NAME_BYTE:
-			return CommonConstants.DEFAULT_EXPECTED_BYTE_VALUE;
-		case JavaTypeHelper.TYPE_NAME_BOOLEAN:
-			return CommonConstants.DEFAULT_EXPECTED_BOOLEAN_VALUE;
-		case JavaTypeHelper.TYPE_NAME_CHAR:
-			return CommonConstants.DEFAULT_EXPECTED_CHAR_VALUE;
-		case JavaTypeHelper.TYPE_NAME_DOUBLE:
-			return CommonConstants.DEFAULT_EXPECTED_DOUBLE_VALUE;
-		case JavaTypeHelper.TYPE_NAME_FLOAT:
-			return CommonConstants.DEFAULT_EXPECTED_FLOAT_VALUE;
-		case JavaTypeHelper.TYPE_NAME_INT:
-			return CommonConstants.DEFAULT_EXPECTED_INT_VALUE;
-		case JavaTypeHelper.TYPE_NAME_LONG:
-			return CommonConstants.DEFAULT_EXPECTED_LONG_VALUE;
-		case JavaTypeHelper.TYPE_NAME_SHORT:
-			return CommonConstants.DEFAULT_EXPECTED_SHORT_VALUE;
-		case JavaTypeHelper.TYPE_NAME_STRING:
-			return CommonConstants.DEFAULT_EXPECTED_STRING_VALUE;
-		default:
-			return JavaCodeEnumHelper.defaultEnumExpectedValue(type);
-		}
 	}
 
 	protected ArrayList<ChoiceNode> defaultBooleanChoices() {

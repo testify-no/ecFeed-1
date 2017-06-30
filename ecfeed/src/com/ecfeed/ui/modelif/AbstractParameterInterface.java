@@ -28,6 +28,7 @@ import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.SystemLogger;
+import com.ecfeed.ui.common.EclipseTypeHelper;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.local.EclipseModelBuilder;
 import com.ecfeed.ui.common.local.JavaDocSupport;
@@ -110,7 +111,7 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 	}
 
 	public static List<String> getSpecialValues(String type) {
-		return new EclipseModelBuilder().getSpecialValues(type);
+		return EclipseTypeHelper.getSpecialValues(type);
 	}
 
 	public static String[] supportedPrimitiveTypes() {
