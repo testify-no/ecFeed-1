@@ -134,7 +134,7 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 	}
 
 	protected Composite createAttributesComposite(){
-		FormObjectToolkit formObjectToolkit = getFormObjectToolkit();
+		EcFormToolkit formObjectToolkit = getFormObjectToolkit();
 		fAttributesComposite = formObjectToolkit.createGridComposite(getMainComposite(), 3);
 
 

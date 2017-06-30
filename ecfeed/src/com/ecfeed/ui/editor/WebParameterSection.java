@@ -32,7 +32,7 @@ public class WebParameterSection extends BasicSection {
 	AbstractParameterInterface fAbstractParameterInterface;
 	MethodParameterNode fMethodParameterNode;
 
-	private FormObjectToolkit fFormObjectToolkit;
+	private EcFormToolkit fFormObjectToolkit;
 	private Composite fClientComposite;
 	private Composite fGridComposite;
 
@@ -60,7 +60,7 @@ public class WebParameterSection extends BasicSection {
 
 		fAbstractParameterInterface = abstractParameterInterface;
 
-		fFormObjectToolkit = new FormObjectToolkit(getToolkit());
+		fFormObjectToolkit = new EcFormToolkit(getToolkit());
 
 		setText("Web runner properties");
 		fClientComposite = getClientComposite();

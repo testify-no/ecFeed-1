@@ -27,11 +27,11 @@ import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.ui.common.ApplyValueMode;
 import com.ecfeed.ui.common.CommonEditHelper;
 
-public class FormObjectToolkit {
+public class EcFormToolkit {
 
 	private FormToolkit fFormToolkit = null;
 
-	protected FormObjectToolkit(FormToolkit formToolkit) {
+	protected EcFormToolkit(FormToolkit formToolkit) {
 		fFormToolkit = formToolkit;
 	}
 

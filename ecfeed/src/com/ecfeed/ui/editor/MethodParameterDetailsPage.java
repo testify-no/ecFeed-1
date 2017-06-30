@@ -73,7 +73,7 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 	protected Composite createAttributesComposite(){
 		Composite attributesComposite = super.createAttributesComposite();
 
-		FormObjectToolkit formObjectToolkit = getFormObjectToolkit(); 
+		EcFormToolkit formObjectToolkit = getFormObjectToolkit(); 
 
 		GridData comboGridData = new GridData(SWT.FILL,  SWT.CENTER, true, false);
 		comboGridData.horizontalSpan = 2;

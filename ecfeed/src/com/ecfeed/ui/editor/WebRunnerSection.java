@@ -29,7 +29,7 @@ import com.ecfeed.ui.modelif.MethodInterface;
 public class WebRunnerSection extends BasicSection  {
 
 	MethodInterface fMethodInterface;
-	private FormObjectToolkit fFormObjectToolkit;
+	private EcFormToolkit fFormObjectToolkit;
 	private Button fMapBrowserCheckbox;
 	private Combo fBrowserCombo;
 	private Text fBrowserDriverText;
@@ -53,7 +53,7 @@ public class WebRunnerSection extends BasicSection  {
 		super(sectionContext, updateContext, javaProjectProvider, StyleDistributor.getCollapsibleSectionStyle());
 
 		fMethodInterface = methodInterface;
-		fFormObjectToolkit = new FormObjectToolkit(getToolkit());
+		fFormObjectToolkit = new EcFormToolkit(getToolkit());
 
 		setText("Web runner properties");
 

@@ -120,7 +120,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		Composite childComposite = getFormObjectToolkit().createRowComposite(
 				getMainComposite());
 
-		FormObjectToolkit formObjectToolkit = getFormObjectToolkit();
+		EcFormToolkit formObjectToolkit = getFormObjectToolkit();
 
 		fTestOnlineButton = formObjectToolkit.createButton(
 				childComposite, "Test online...", new OnlineTestAdapter());
@@ -132,7 +132,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	}
 
 	private void createRunnerCombo() {
-		FormObjectToolkit formObjectToolkit = getFormObjectToolkit();
+		EcFormToolkit formObjectToolkit = getFormObjectToolkit();
 		Composite gridComposite = formObjectToolkit.createGridComposite(getMainComposite(), 2);
 
 		formObjectToolkit.createLabel(gridComposite, "Runner");

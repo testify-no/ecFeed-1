@@ -75,7 +75,7 @@ public class ModelDetailsPage extends BasicDetailsPage {
 
 	private void createModelNameEdit(Composite parent) {
 
-		FormObjectToolkit formObjectToolkit = getFormObjectToolkit();
+		EcFormToolkit formObjectToolkit = getFormObjectToolkit();
 		Composite composite = formObjectToolkit.createGridComposite(parent, 2);		
 
 		formObjectToolkit.createLabel(composite, "Model name");
