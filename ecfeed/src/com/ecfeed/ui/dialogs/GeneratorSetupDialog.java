@@ -29,6 +29,7 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -36,6 +37,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Spinner;
@@ -335,38 +337,57 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 	}
 
 	private void createChoicesComposite(Composite parent) {
-		Composite composite = new Composite(parent, SWT.NONE);
+		
+		final Composite composite = new Composite(parent, SWT.NONE);
+		
+//		composite.addListener(SWT.Resize, new org.eclipse.swt.widgets.Listener()
+//	    {
+//	        @Override
+//	        public void handleEvent(Event arg0)
+//	        {
+//	            Point size = composite.getSize();
+//
+//	            if (size.y > 400) {
+//	                composite.setSize(size.x, 400);
+//	            }
+//	        }
+//	    });
+		
 		composite.setLayout(new GridLayout(1, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		Label selectChoicesLabel = new Label(composite, SWT.WRAP);
-		selectChoicesLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER,
-				true, false, 1, 1));
-		selectChoicesLabel
-		.setText(Messages.DIALOG_GENERATE_TEST_SUITES_SELECT_CHOICES_LABEL);
+		
+		selectChoicesLabel.setLayoutData(
+				new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		
+		selectChoicesLabel.setText(Messages.DIALOG_GENERATE_TEST_SUITES_SELECT_CHOICES_LABEL);
 
 		createChoicesViewer(composite);
 	}
 
-	private void createChoicesViewer(Composite parent) {
+	private void createChoicesViewer(final Composite parent) {
+
 		final Tree tree = new Tree(parent, SWT.CHECK | SWT.BORDER);
 		tree.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, true, 1, 1));
+		
 		fParametersViewer = new CheckboxTreeViewer(tree);
 		fParametersViewer.setContentProvider(new ParametersContentProvider());
 		fParametersViewer.setLabelProvider(new NodeNameColumnLabelProvider());
 		fParametersViewer.getTree().setLayoutData(
 				new GridData(SWT.FILL, SWT.FILL, true, true));
+		
 		fParametersViewer.setInput(fMethod);
-		fParametersViewer
-		.addCheckStateListener(new ChoiceTreeCheckStateListener(
-				fParametersViewer));
+		fParametersViewer.addCheckStateListener(new ChoiceTreeCheckStateListener(fParametersViewer));
+		
 		for (MethodParameterNode parameter : fMethod.getMethodParameters()) {
 			fParametersViewer.expandAll();
 			fParametersViewer.setSubtreeChecked(parameter, true);
 			fParametersViewer.collapseAll();
 		}
+		
 	}
-
+	
 	private void createTestSuiteComposite(Composite container) {
 		Composite composite = new Composite(container, SWT.NONE);
 		composite.setLayout(new GridLayout(2, false));
