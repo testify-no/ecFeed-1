@@ -24,7 +24,7 @@ import com.ecfeed.core.adapter.IImplementationStatusResolver;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.TestCaseNode;
-import com.ecfeed.ui.common.local.EclipseImplementationStatusResolver;
+import com.ecfeed.ui.common.EclipseImplementationStatusResolver;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 
 public class TestCasesViewerLabelProvider extends LabelProvider implements IColorProvider {

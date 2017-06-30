@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.ecfeed.core.utils.JavaTypeHelper;
-import com.ecfeed.ui.common.local.JavaCodeEnumHelper;
+import com.ecfeed.ui.common.JavaCodeEnumHelper;
 
 public class EclipseTypeHelper {
 

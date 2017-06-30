@@ -8,7 +8,7 @@
  *  
  *******************************************************************************/
 
-package com.ecfeed.ui.common.local;
+package com.ecfeed.ui.common;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +20,7 @@ import org.eclipse.jdt.core.Signature;
 
 import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.CommonConstants;
+import com.ecfeed.ui.common.local.JavaModelAnalyser;
 
 public class JavaCodeEnumHelper {
 

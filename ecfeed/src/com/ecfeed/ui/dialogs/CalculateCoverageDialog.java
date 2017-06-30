@@ -38,10 +38,10 @@ import org.eclipse.swt.widgets.Tree;
 import com.ecfeed.core.adapter.IImplementationStatusResolver;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.TestCaseNode;
+import com.ecfeed.ui.common.EclipseImplementationStatusResolver;
 import com.ecfeed.ui.common.TestCasesViewerContentProvider;
 import com.ecfeed.ui.common.TestCasesViewerLabelProvider;
 import com.ecfeed.ui.common.TreeCheckStateListener;
-import com.ecfeed.ui.common.local.EclipseImplementationStatusResolver;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 
 public class CalculateCoverageDialog extends TitleAreaDialog {
