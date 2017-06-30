@@ -32,8 +32,8 @@ import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.TestCasesViewerContentProvider;
+import com.ecfeed.ui.common.TestCasesViewerLabelProvider;
 import com.ecfeed.ui.common.TreeCheckStateListener;
-import com.ecfeed.ui.common.local.TestCasesViewerLabelProvider;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
@@ -132,7 +132,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 		CalculateCoverageAdapter(IJavaProjectProvider javaProjectProvider) {
 			fJavaProjectProvider = javaProjectProvider;
 		}
-		
+
 		@Override
 		public void widgetSelected(SelectionEvent ev) {
 			try {
@@ -160,21 +160,21 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 		getSection().setText("Test cases");
 
 		addButton("Add test case", new AddTestCaseAdapter());
-		
+
 		fGenerateSuiteButton = addButton("Generate test suite", new GenerateTestSuiteAdapter());
 		fRenameSuiteButton = addButton("Rename suite", new RenameSuiteAdapter());
-		
+
 		fCalculateCoverageButton = 
 				addButton("Calculate coverage", new CalculateCoverageAdapter(javaProjectProvider));
-		
+
 		fRemoveSelectedButton = 
 				addButton(
 						"Remove selected", 
 						new RemoveSelectedAdapter(Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
-		
+
 		fExecuteSelectedButton = 
 				addButton("Execute selected", new ExecuteStaticTestAdapter());
-		
+
 		fExportTestCasesButton = 
 				addButton("Export selected", new ExportTestCasesAdapter());
 

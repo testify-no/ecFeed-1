@@ -24,10 +24,10 @@ import com.ecfeed.ui.common.CommonConstants;
 public class JavaCodeEnumHelper {
 
 	public static List<String> enumValues(String typeName) {
-		
+
 		IType type = JavaModelAnalyser.getIType(typeName);
 		List<String> result = new ArrayList<String>();
-		
+
 		try {
 			if(type != null && type.isEnum()){
 				String typeSignature = Signature.createTypeSignature(type.getElementName(), false);
@@ -47,7 +47,7 @@ public class JavaCodeEnumHelper {
 	}
 
 	public static String defaultEnumExpectedValue(String type) {
-		
+
 		String value = CommonConstants.DEFAULT_EXPECTED_ENUM_VALUE;
 
 		List<String> enumValues = enumValues(type);

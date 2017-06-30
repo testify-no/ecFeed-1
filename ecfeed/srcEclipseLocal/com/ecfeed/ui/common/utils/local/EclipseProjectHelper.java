@@ -39,6 +39,7 @@ public class EclipseProjectHelper implements IProjectHelper {
 	private IJavaProjectProvider fJavaProjectProvider;
 
 	public EclipseProjectHelper(IJavaProjectProvider javaProjectProvider) {
+
 		if (javaProjectProvider == null) {
 			SystemLogger.logInfoWithStack(Messages.EXCEPTION_FILE_INFO_PROVIDER_NOT_NULL);
 		}

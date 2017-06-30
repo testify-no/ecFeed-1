@@ -8,7 +8,7 @@
  *  
  *******************************************************************************/
 
-package com.ecfeed.ui.common.local;
+package com.ecfeed.ui.common;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -24,21 +24,20 @@ import com.ecfeed.core.adapter.IImplementationStatusResolver;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.TestCaseNode;
-import com.ecfeed.ui.common.ColorConstants;
-import com.ecfeed.ui.common.ColorManager;
+import com.ecfeed.ui.common.local.EclipseImplementationStatusResolver;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 
 public class TestCasesViewerLabelProvider extends LabelProvider implements IColorProvider {
-	
+
 	private Map<String, Integer> fExecutableTestSuites;
 	private Map<TestCaseNode, Boolean> fTestCasesStatusMap;
 	MethodNode fMethod;
 	private IImplementationStatusResolver fStatusResolver;
 
-	public TestCasesViewerLabelProvider(IJavaProjectProvider fileInfoProvider){
+	public TestCasesViewerLabelProvider(IJavaProjectProvider javaProjectProvider) {
 		fExecutableTestSuites = new HashMap<String, Integer>();
 		fTestCasesStatusMap = new HashMap<TestCaseNode, Boolean>();
-		fStatusResolver = new EclipseImplementationStatusResolver(fileInfoProvider);
+		fStatusResolver = new EclipseImplementationStatusResolver(javaProjectProvider);
 	}
 
 	public TestCasesViewerLabelProvider(

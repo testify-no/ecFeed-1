@@ -25,10 +25,13 @@ import com.ecfeed.core.utils.EcException;
 import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.AbstractJavaImplementationStatusResolver;
 import com.ecfeed.ui.common.EclipseInstallationDirFileHelper;
+import com.ecfeed.ui.common.IEclipseImplementationStatusResolver;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.common.utils.local.EclipseProjectHelper;
 
-public class EclipseImplementationStatusResolver extends AbstractJavaImplementationStatusResolver{
+public class EclipseImplementationStatusResolver 
+extends AbstractJavaImplementationStatusResolver 
+implements IEclipseImplementationStatusResolver {
 
 	IJavaProjectProvider fJavaProjectProvider;
 
@@ -38,7 +41,7 @@ public class EclipseImplementationStatusResolver extends AbstractJavaImplementat
 	}
 
 	@Override
-	protected boolean androidCodeImplemented(ClassNode classNode) throws EcException {
+	public boolean androidCodeImplemented(ClassNode classNode) throws EcException {
 		String baseRunner = classNode.getAndroidRunner();
 
 		IProjectHelper projectHelper = new EclipseProjectHelper(fJavaProjectProvider);
@@ -53,7 +56,7 @@ public class EclipseImplementationStatusResolver extends AbstractJavaImplementat
 	}
 
 	@Override
-	protected boolean classDefinitionImplemented(String qualifiedName) {
+	public boolean classDefinitionImplemented(String qualifiedName) {
 		IType type = JavaModelAnalyser.getIType(qualifiedName);
 		try {
 			return type != null && type.isClass();
@@ -62,12 +65,12 @@ public class EclipseImplementationStatusResolver extends AbstractJavaImplementat
 	}
 
 	@Override
-	protected boolean methodDefinitionImplemented(MethodNode method) {
+	public boolean methodDefinitionImplemented(MethodNode method) {
 		return JavaModelAnalyser.getIMethod(method) != null;
 	}
 
 	@Override
-	protected boolean enumDefinitionImplemented(String qualifiedName) {
+	public boolean enumDefinitionImplemented(String qualifiedName) {
 		IType type = JavaModelAnalyser.getIType(qualifiedName);
 		try {
 			return  type != null && type.isEnum();
@@ -76,7 +79,7 @@ public class EclipseImplementationStatusResolver extends AbstractJavaImplementat
 	}
 
 	@Override
-	protected boolean enumValueImplemented(String qualifiedName, String value) {
+	public boolean enumValueImplemented(String qualifiedName, String value) {
 		IType type = JavaModelAnalyser.getIType(qualifiedName);
 		try {
 			if(type == null || type.isEnum() == false){
