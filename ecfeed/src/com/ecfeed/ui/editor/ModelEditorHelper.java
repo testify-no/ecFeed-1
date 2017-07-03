@@ -41,6 +41,7 @@ import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.core.utils.UriHelper;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.dialogs.basic.SaveAsEctDialogWithConfirm;
+import com.ecfeed.utils.EclipseEditorHelper;
 import com.ecfeed.utils.EclipseHelper;
 
 public class ModelEditorHelper {
@@ -54,7 +55,7 @@ public class ModelEditorHelper {
 	}
 
 	public static ModelEditor getActiveModelEditor() {
-		IEditorPart editorPart = EclipseHelper.getActiveEditor();		
+		IEditorPart editorPart = EclipseEditorHelper.getActiveEditor();		
 		if (editorPart == null) {
 			return null;
 		}
@@ -112,7 +113,7 @@ public class ModelEditorHelper {
 			return null;
 		}
 
-		FileEditorInput fileInput = EclipseHelper.getFileEditorInput(input);
+		FileEditorInput fileInput = (FileEditorInput)EclipseEditorHelper.getFileEditorInput(input);
 		if (fileInput == null) {
 			reportInvalidInputTypeException();
 		}
