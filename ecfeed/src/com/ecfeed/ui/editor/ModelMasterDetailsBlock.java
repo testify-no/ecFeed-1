@@ -26,7 +26,6 @@ import org.eclipse.ui.forms.AbstractFormPart;
 import org.eclipse.ui.forms.DetailsPart;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.MasterDetailsBlock;
-import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.operations.RedoActionHandler;
 import org.eclipse.ui.operations.UndoActionHandler;
 
@@ -51,7 +50,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 	private ModelMasterSection fMasterSection;
 	private ISectionContext fMasterSectionContext;
 	private ModelPage fPage;
-	private FormToolkit fToolkit;
+	private FormToolkitAdapter fToolkit;
 	private ModelUpdateContext fUpdateContext;
 	private IJavaProjectProvider fJavaProjectProvider;
 	private UndoActionHandler fUndoActionHandler;
@@ -94,7 +93,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 		}
 
 		@Override
-		public FormToolkit getToolkit() {
+		public FormToolkitAdapter getToolkit() {
 			return fToolkit;
 		}
 
@@ -188,7 +187,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 			return;
 		}
 
-		fToolkit = managedForm.getToolkit();
+		fToolkit = new FormToolkitAdapter(managedForm.getToolkit());
 
 		fMasterSection = new ModelMasterSection(this, fJavaProjectProvider);
 		fMasterSection.initialize(managedForm);
@@ -281,7 +280,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 	}
 
 	@Override
-	public FormToolkit getToolkit() {
+	public FormToolkitAdapter getToolkit() {
 		return fToolkit;
 	}
 

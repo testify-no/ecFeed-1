@@ -32,7 +32,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.ui.forms.AbstractFormPart;
 import org.eclipse.ui.forms.SectionPart;
-import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.ecfeed.core.adapter.ModelOperationManager;
 import com.ecfeed.core.model.AbstractNode;
@@ -75,7 +74,7 @@ public abstract class BasicSection extends SectionPart implements IModelUpdateCo
 			IModelUpdateContext updateContext,
 			IJavaProjectProvider javaProjectProvider,
 			int style){
-		super(sectionContext.getSectionComposite(), sectionContext.getToolkit(), style);
+		super(sectionContext.getSectionComposite(), sectionContext.getToolkit().getEclipseToolkit(), style);
 		fSectionContext = sectionContext;
 		fUpdateContext = updateContext;
 		fJavaProjectProvider = javaProjectProvider;
@@ -90,7 +89,7 @@ public abstract class BasicSection extends SectionPart implements IModelUpdateCo
 		}
 	}
 
-	protected FormToolkit getToolkit(){
+	protected FormToolkitAdapter getToolkit(){
 		return fSectionContext.getToolkit();
 	}
 

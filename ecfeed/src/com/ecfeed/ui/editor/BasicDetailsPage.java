@@ -32,7 +32,6 @@ import org.eclipse.ui.forms.AbstractFormPart;
 import org.eclipse.ui.forms.IDetailsPage;
 import org.eclipse.ui.forms.IFormPart;
 import org.eclipse.ui.forms.IManagedForm;
-import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.ecfeed.application.ApplicationContext;
@@ -228,8 +227,8 @@ public abstract class BasicDetailsPage
 	}
 
 	@Override
-	public FormToolkit getToolkit(){
-		return fManagedForm.getToolkit();
+	public FormToolkitAdapter getToolkit(){
+		return fFormObjectToolkit.getFormToolkitAdapter();
 	}
 
 	protected EcFormToolkit getFormObjectToolkit() {

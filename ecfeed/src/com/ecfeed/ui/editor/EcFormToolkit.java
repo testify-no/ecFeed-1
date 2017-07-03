@@ -29,10 +29,18 @@ import com.ecfeed.ui.common.CommonEditHelper;
 
 public class EcFormToolkit {
 
-	private FormToolkit fFormToolkit = null;
+	private FormToolkitAdapter fFormToolkit = null;
 
-	protected EcFormToolkit(FormToolkit formToolkit) {
+	public EcFormToolkit(FormToolkitAdapter formToolkit) {
 		fFormToolkit = formToolkit;
+	}
+	
+	public EcFormToolkit(FormToolkit formToolkit) {
+		fFormToolkit = new FormToolkitAdapter(formToolkit);
+	}
+	
+	public FormToolkitAdapter getFormToolkitAdapter() {
+		return fFormToolkit;
 	}
 
 	public void paintBorders(Composite composite) {
