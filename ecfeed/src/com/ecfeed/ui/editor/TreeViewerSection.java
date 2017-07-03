@@ -20,6 +20,7 @@ import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.editor.actions.GlobalActions;
 import com.ecfeed.ui.editor.actions.IActionProvider;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
+import com.ecfeed.utils.SwtHelper;
 
 public abstract class TreeViewerSection extends ViewerSection {
 
@@ -59,7 +60,7 @@ public abstract class TreeViewerSection extends ViewerSection {
 	protected void setActionProvider(IActionProvider provider){
 		super.setActionProvider(provider);
 		if(provider.getAction(GlobalActions.EXPAND_COLLAPSE.getId()) != null){
-			createKeyListener(SWT.SPACE, SWT.NONE, provider.getAction(GlobalActions.EXPAND_COLLAPSE.getId()));
+			createKeyListener(SwtHelper.getSpaceCode(), SWT.NONE, provider.getAction(GlobalActions.EXPAND_COLLAPSE.getId()));
 		}
 	}
 }
