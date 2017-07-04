@@ -479,7 +479,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 		}
 		try{
 			IType type = getJavaProject().findType(node.getClassNode().getName());
-			EclipseModelBuilder builder = new EclipseModelBuilder();
+			JavaModelBuilder builder = new JavaModelBuilder();
 			if(type != null){
 				for(IMethod method : type.getMethods()){
 					MethodNode model = builder.buildMethodModel(method);

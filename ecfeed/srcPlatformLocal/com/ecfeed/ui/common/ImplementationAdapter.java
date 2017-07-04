@@ -56,7 +56,7 @@ public class ImplementationAdapter {
 			if (selectedClass != null) {
 				ClassNode classModel;
 				try {
-					classModel = new EclipseModelBuilder().buildClassModel(selectedClass, testOnly);
+					classModel = new JavaModelBuilder().buildClassModel(selectedClass, testOnly);
 					if (operationExecuter.execute(
 							new RootOperationAddNewClass(
 									rootNode, 

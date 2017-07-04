@@ -30,7 +30,7 @@ import com.ecfeed.ui.common.CommonConstants;
 import com.ecfeed.ui.common.EclipseTypeHelper;
 import com.ecfeed.ui.common.Messages;
 
-public class EclipseModelBuilder extends JavaModelAnalyser{
+public class JavaModelBuilder extends JavaModelAnalyser{
 
 	public ClassNode buildClassModel(String qualifiedName, boolean testOnly) throws ModelOperationException{
 		IType type = getIType(qualifiedName);

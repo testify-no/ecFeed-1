@@ -28,7 +28,7 @@ import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.SystemLogger;
-import com.ecfeed.ui.common.EclipseModelBuilder;
+import com.ecfeed.ui.common.JavaModelBuilder;
 import com.ecfeed.ui.common.EclipseTypeHelper;
 import com.ecfeed.ui.common.JavaDocSupport;
 import com.ecfeed.ui.common.JavaModelAnalyser;
@@ -85,7 +85,7 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 
 	public boolean resetChoicesToDefault(){
 		String type = getOwnNode().getType();
-		List<ChoiceNode> defaultChoices = new EclipseModelBuilder().defaultChoices(type);
+		List<ChoiceNode> defaultChoices = new JavaModelBuilder().defaultChoices(type);
 		IModelOperation operation = new ReplaceChoicesOperation(getOwnNode(), defaultChoices, getAdapterProvider());
 		return getOperationExecuter().execute(operation, Messages.DIALOG_RESET_CHOICES_PROBLEM_TITLE);
 	}
