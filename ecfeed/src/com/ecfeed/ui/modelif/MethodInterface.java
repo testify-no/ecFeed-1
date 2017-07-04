@@ -15,8 +15,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.jdt.core.IMethod;
-import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
@@ -55,12 +53,11 @@ import com.ecfeed.core.serialization.export.IExportTemplate;
 import com.ecfeed.core.utils.EcException;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.StringHelper;
-import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.serialization.export.TestCasesExporter;
 import com.ecfeed.ui.common.CommonConstants;
 import com.ecfeed.ui.common.EclipseTypeAdapterProvider;
 import com.ecfeed.ui.common.EclipseTypeHelper;
-import com.ecfeed.ui.common.JavaModelAnalyser;
+import com.ecfeed.ui.common.ImplementationAdapter;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.common.utils.local.EclipseProjectHelper;
@@ -458,14 +455,7 @@ public class MethodInterface extends ParametersParentInterface {
 
 	@Override
 	public void goToImplementation() {
-		IMethod method = JavaModelAnalyser.getIMethod(getOwnNode());
-		if (method != null) {
-			try {
-				JavaUI.openInEditor(method);
-			} catch (Exception e) {
-				SystemLogger.logCatch(e.getMessage());
-			}
-		}
+		ImplementationAdapter.goToMethodImplementation(getOwnNode());
 	}
 
 	@Override
