@@ -45,7 +45,7 @@ public class OperationExecuter {
 		}
 	}
 
-	protected boolean execute(IModelOperation operation, String errorMessageTitle){
+	public boolean execute(IModelOperation operation, String errorMessageTitle){
 		try{
 			UndoableOperation action = new UndoableOperation(operation, getUpdateContext().getUndoContext(), errorMessageTitle);
 			fOperationHistory.execute(action, null, null);
