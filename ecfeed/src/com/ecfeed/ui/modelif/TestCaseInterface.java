@@ -52,7 +52,7 @@ public class TestCaseInterface extends AbstractNodeInterface {
 	}
 
 	public boolean isExecutable(TestCaseNode tc){
-		MethodInterface mIf = new MethodInterface(getUpdateContext(), fJavaProjectProvider);
+		MethodInterface mIf = new MethodInterface(getOperationExecuter().getUpdateContext(), fJavaProjectProvider);
 		if(tc.getMethod() == null) return false;
 		mIf.setOwnNode(tc.getMethod());
 		EImplementationStatus tcStatus = getImplementationStatus(tc);
@@ -65,7 +65,7 @@ public class TestCaseInterface extends AbstractNodeInterface {
 	}
 
 	public void executeStaticTest() throws EcException {
-		MethodInterface methodIf = new MethodInterface(getUpdateContext(), fJavaProjectProvider);
+		MethodInterface methodIf = new MethodInterface(getOperationExecuter().getUpdateContext(), fJavaProjectProvider);
 
 		TestCaseNode testCaseNode = getOwnNode();
 		MethodNode methodNode = (MethodNode)testCaseNode.getParent();
@@ -77,7 +77,7 @@ public class TestCaseInterface extends AbstractNodeInterface {
 
 	public boolean updateTestData(int index, ChoiceNode value) {
 		IModelOperation operation = new TestCaseOperationUpdateTestData(getOwnNode(), index, value);
-		return execute(operation, Messages.DIALOG_UPDATE_TEST_DATA_PROBLEM_TITLE);
+		return getOperationExecuter().execute(operation, Messages.DIALOG_UPDATE_TEST_DATA_PROBLEM_TITLE);
 	}
 
 	@Override

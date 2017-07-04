@@ -49,6 +49,6 @@ public class GlobalParametersParentInterface extends ParametersParentInterface {
 	}
 
 	public boolean replaceMethodParametersWithGlobal(List<MethodParameterNode> originalParameters) {
-		return execute(new ReplaceMethodParametersWithGlobalOperation(getOwnNode(), originalParameters, getAdapterProvider()), Messages.DIALOG_REPLACE_PARAMETERS_WITH_LINKS_TITLE);
+		return getOperationExecuter().execute(new ReplaceMethodParametersWithGlobalOperation(getOwnNode(), originalParameters, getAdapterProvider()), Messages.DIALOG_REPLACE_PARAMETERS_WITH_LINKS_TITLE);
 	}
 }

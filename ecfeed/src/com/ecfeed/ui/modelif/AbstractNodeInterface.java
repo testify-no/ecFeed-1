@@ -51,18 +51,19 @@ import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.TextAreaDialog;
 
-public class AbstractNodeInterface extends OperationExecuter {
+public class AbstractNodeInterface {
 
 	private IJavaProjectProvider fJavaProjectProvider;
 	private AbstractNode fNode;
 	private EclipseImplementationStatusResolver fStatusResolver;
 	private ITypeAdapterProvider fAdapterProvider;
+	private OperationExecuter fOperationExecuter;
 
 	public AbstractNodeInterface(IModelUpdateContext updateContext, IJavaProjectProvider javaProjectProvider) {
-		super(updateContext);
 		fJavaProjectProvider = javaProjectProvider;
 		fStatusResolver = new EclipseImplementationStatusResolver(javaProjectProvider);
 		fAdapterProvider = new EclipseTypeAdapterProvider();
+		fOperationExecuter = new OperationExecuter(updateContext);
 	}
 
 	public void setOwnNode(AbstractNode node){
@@ -85,10 +86,6 @@ public class AbstractNodeInterface extends OperationExecuter {
 		return fNode.getName();
 	}
 
-	protected IJavaProjectProvider getJavaProjectProvider() {
-		return fJavaProjectProvider;
-	}
-
 	public boolean setName(String newName){
 		if(newName.equals(getName())){
 			return false;
@@ -97,7 +94,7 @@ public class AbstractNodeInterface extends OperationExecuter {
 		try{
 			problemTitle = (String)fNode.accept(new RenameParameterProblemTitleProvider());
 		}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
-		return execute(FactoryRenameOperation.getRenameOperation(fNode, newName), problemTitle);
+		return getOperationExecuter().execute(FactoryRenameOperation.getRenameOperation(fNode, newName), problemTitle);
 	}
 
 	public boolean setProperty(NodePropertyDefs.PropertyId propertyId, String value) {
@@ -108,7 +105,7 @@ public class AbstractNodeInterface extends OperationExecuter {
 		}
 
 		IModelOperation operation = new AbstractNodeOperationSetProperty(propertyId, value, fNode); 
-		return execute(operation, Messages.DIALOG_SET_PROPERTY_PROBLEM_TITLE);
+		return getOperationExecuter().execute(operation, Messages.DIALOG_SET_PROPERTY_PROBLEM_TITLE);
 	}	
 
 	public boolean editComments() {
@@ -132,7 +129,9 @@ public class AbstractNodeInterface extends OperationExecuter {
 			return false;
 		}
 
-		return execute(new GenericSetCommentsOperation(fNode, comments), Messages.DIALOG_SET_COMMENTS_PROBLEM_TITLE);
+		return getOperationExecuter().execute(
+				new GenericSetCommentsOperation(fNode, comments), 
+				Messages.DIALOG_SET_COMMENTS_PROBLEM_TITLE);
 	}
 
 	public String getComments() {
@@ -143,7 +142,7 @@ public class AbstractNodeInterface extends OperationExecuter {
 	}
 
 	public boolean remove(){
-		return execute(FactoryRemoveOperation.getRemoveOperation(fNode, fAdapterProvider, true), Messages.DIALOG_REMOVE_NODE_PROBLEM_TITLE);
+		return getOperationExecuter().execute(FactoryRemoveOperation.getRemoveOperation(fNode, fAdapterProvider, true), Messages.DIALOG_REMOVE_NODE_PROBLEM_TITLE);
 	}
 
 	public boolean removeChildren(Collection<? extends AbstractNode> children, String message){
@@ -156,7 +155,7 @@ public class AbstractNodeInterface extends OperationExecuter {
 				return false;
 			}
 		}
-		return execute(new GenericRemoveNodesOperation(children, fAdapterProvider, true), message);
+		return getOperationExecuter().execute(new GenericRemoveNodesOperation(children, fAdapterProvider, true), message);
 	}
 
 	public String canAddChildren(Collection<? extends AbstractNode> children) {
@@ -165,7 +164,7 @@ public class AbstractNodeInterface extends OperationExecuter {
 
 	public boolean addChildren(Collection<? extends AbstractNode> children){
 		IModelOperation operation = new GenericAddChildrenOperation(fNode, children, fAdapterProvider, true);
-		return execute(operation, Messages.DIALOG_ADD_CHILDREN_PROBLEM_TITLE);
+		return getOperationExecuter().execute(operation, Messages.DIALOG_ADD_CHILDREN_PROBLEM_TITLE);
 	}
 
 	public boolean addChildren(Collection<? extends AbstractNode> children, int index){
@@ -176,7 +175,7 @@ public class AbstractNodeInterface extends OperationExecuter {
 		else{
 			operation = new GenericAddChildrenOperation(fNode, children, index, fAdapterProvider, true);
 		}
-		return execute(operation, Messages.DIALOG_ADD_CHILDREN_PROBLEM_TITLE);
+		return getOperationExecuter().execute(operation, Messages.DIALOG_ADD_CHILDREN_PROBLEM_TITLE);
 	}
 
 	public boolean pasteEnabled(Collection<? extends AbstractNode> pasted){
@@ -203,8 +202,16 @@ public class AbstractNodeInterface extends OperationExecuter {
 		return false;
 	}
 
+	protected IJavaProjectProvider getJavaProjectProvider() {
+		return fJavaProjectProvider;
+	}
+	
+	protected OperationExecuter getOperationExecuter() {
+		return fOperationExecuter;
+	}
+	
 	protected boolean executeMoveOperation(IModelOperation moveOperation) {
-		return execute(moveOperation, Messages.DIALOG_MOVE_NODE_PROBLEM_TITLE);
+		return getOperationExecuter().execute(moveOperation, Messages.DIALOG_MOVE_NODE_PROBLEM_TITLE);
 	}
 
 	protected ITypeAdapterProvider getAdapterProvider(){
@@ -239,7 +246,7 @@ public class AbstractNodeInterface extends OperationExecuter {
 		List<IModelOperation> operations = getImportAllJavadocCommentsOperations();
 		if(operations.size() > 0){
 			IModelOperation operation = new BulkOperation(OperationNames.SET_COMMENTS, operations, false);
-			return execute(operation, Messages.DIALOG_SET_COMMENTS_PROBLEM_TITLE);
+			return getOperationExecuter().execute(operation, Messages.DIALOG_SET_COMMENTS_PROBLEM_TITLE);
 		}
 		return false;
 	}
@@ -248,21 +255,27 @@ public class AbstractNodeInterface extends OperationExecuter {
 		exportCommentsToJavadoc(getComments());
 		for(AbstractNode child : getOwnNode().getChildren()){
 			AbstractNodeInterface nodeIf = 
-					NodeInterfaceFactory.getNodeInterface(child, getUpdateContext(), fJavaProjectProvider);
+					NodeInterfaceFactory.getNodeInterface(
+							child, getOperationExecuter().getUpdateContext(), fJavaProjectProvider);
 			nodeIf.exportAllComments();
 		}
 		return true;
 	}
 
-	protected List<IModelOperation> getImportAllJavadocCommentsOperations(){
+	protected List<IModelOperation> getImportAllJavadocCommentsOperations() {
+		
 		List<IModelOperation> result = new ArrayList<IModelOperation>();
 		String javadoc = JavaDocSupport.importJavadoc(getOwnNode());
+		
 		if(javadoc != null && getComments() != javadoc){
 			result.add(new GenericSetCommentsOperation(fNode, javadoc));
 		}
+		
 		for(AbstractNode child : getOwnNode().getChildren()){
 			AbstractNodeInterface childIf = 
-					NodeInterfaceFactory.getNodeInterface(child, getUpdateContext(), fJavaProjectProvider);
+					NodeInterfaceFactory.getNodeInterface(
+							child, getOperationExecuter().getUpdateContext(), fJavaProjectProvider);
+			
 			result.addAll(childIf.getImportAllJavadocCommentsOperations());
 		}
 		return result;

@@ -91,7 +91,8 @@ public class MethodInterface extends ParametersParentInterface {
 	}
 
 	public boolean convertTo(MethodNode method) {
-		return execute(new MethodOperationConvertTo(getOwnNode(), method),
+		return getOperationExecuter().execute(
+				new MethodOperationConvertTo(getOwnNode(), method),
 				Messages.DIALOG_CONVERT_METHOD_PROBLEM_TITLE);
 	}
 
@@ -109,7 +110,7 @@ public class MethodInterface extends ParametersParentInterface {
 	}
 
 	public boolean addParameter(MethodParameterNode parameter, int index) {
-		return execute(new MethodOperationAddParameter(getOwnNode(), parameter,
+		return getOperationExecuter().execute(new MethodOperationAddParameter(getOwnNode(), parameter,
 				index), Messages.DIALOG_CONVERT_METHOD_PROBLEM_TITLE);
 	}
 
@@ -143,7 +144,7 @@ public class MethodInterface extends ParametersParentInterface {
 		IModelOperation operation = new MethodOperationAddConstraint(
 				getOwnNode(), constraint, getOwnNode().getConstraintNodes()
 				.size());
-		return execute(operation, Messages.DIALOG_ADD_CONSTRAINT_PROBLEM_TITLE);
+		return getOperationExecuter().execute(operation, Messages.DIALOG_ADD_CONSTRAINT_PROBLEM_TITLE);
 	}
 
 	public boolean removeConstraints(Collection<ConstraintNode> constraints) {
@@ -176,7 +177,7 @@ public class MethodInterface extends ParametersParentInterface {
 	}
 
 	public boolean addTestCase(TestCaseNode testCase) {
-		return execute(new MethodOperationAddTestCase(getOwnNode(), testCase,
+		return getOperationExecuter().execute(new MethodOperationAddTestCase(getOwnNode(), testCase,
 				fAdapterProvider, getOwnNode().getTestCases().size()),
 				Messages.DIALOG_ADD_TEST_CASE_PROBLEM_TITLE);
 	}
@@ -199,7 +200,7 @@ public class MethodInterface extends ParametersParentInterface {
 
 	public void renameSuite(String oldName, String newName) {
 		try {
-			execute(new MethodOperationRenameTestCases(getOwnNode()
+			getOperationExecuter().execute(new MethodOperationRenameTestCases(getOwnNode()
 					.getTestCases(oldName), newName),
 					Messages.DIALOG_RENAME_TEST_SUITE_PROBLEM);
 		} catch (ModelOperationException e) {
@@ -238,7 +239,7 @@ public class MethodInterface extends ParametersParentInterface {
 		}
 		IModelOperation operation = new MethodOperationAddTestSuite(
 				getOwnNode(), testSuiteName, testData, fAdapterProvider);
-		return execute(operation, Messages.DIALOG_ADD_TEST_SUITE_PROBLEM_TITLE);
+		return getOperationExecuter().execute(operation, Messages.DIALOG_ADD_TEST_SUITE_PROBLEM_TITLE);
 	}
 
 	public void executeOnlineTests(IJavaProjectProvider javaProjectProvider

@@ -31,7 +31,7 @@ public class ConstraintInterface extends AbstractNodeInterface {
 	public boolean replaceStatement(AbstractStatement current, AbstractStatement newStatement) {
 		if(current != newStatement){
 			IModelOperation operation = new ConstraintOperationReplaceStatement(getOwnNode(), current, newStatement);
-			return execute(operation, Messages.DIALOG_REMOVE_TEST_CASES_PROBLEM_TITLE);
+			return getOperationExecuter().execute(operation, Messages.DIALOG_REMOVE_TEST_CASES_PROBLEM_TITLE);
 		}
 		return false;
 	}

@@ -47,7 +47,7 @@ public class ChoiceInterface extends ChoicesParentInterface {
 	public void setValue(String newValue) {
 		
 		IModelOperation operation = new ChoiceOperationSetValue(getOwnNode(), newValue, new EclipseTypeAdapterProvider());
-		execute(operation, Messages.DIALOG_SET_CHOICE_VALUE_PROBLEM_TITLE);
+		getOperationExecuter().execute(operation, Messages.DIALOG_SET_CHOICE_VALUE_PROBLEM_TITLE);
 	}
 
 	public String getValue() {
@@ -80,7 +80,7 @@ public class ChoiceInterface extends ChoicesParentInterface {
 			}
 		}
 		
-		return execute(new ChoiceOperationRemoveLabels(getOwnNode(), labels), Messages.DIALOG_REMOVE_LABEL_PROBLEM_TITLE);
+		return getOperationExecuter().execute(new ChoiceOperationRemoveLabels(getOwnNode(), labels), Messages.DIALOG_REMOVE_LABEL_PROBLEM_TITLE);
 	}
 
 	public String addNewLabel() {
@@ -100,13 +100,13 @@ public class ChoiceInterface extends ChoicesParentInterface {
 	public boolean addLabels(List<String> labels) {
 		
 		IModelOperation operation = new ChoiceOperationAddLabels(getOwnNode(), labels);
-		return execute(operation, Messages.DIALOG_ADD_LABEL_PROBLEM_TITLE);
+		return getOperationExecuter().execute(operation, Messages.DIALOG_ADD_LABEL_PROBLEM_TITLE);
 	}
 
 	public boolean addLabel(String newLabel) {
 		
 		IModelOperation operation = new ChoiceOperationAddLabel(getOwnNode(), newLabel);
-		return execute(operation, Messages.DIALOG_ADD_LABEL_PROBLEM_TITLE);
+		return getOperationExecuter().execute(operation, Messages.DIALOG_ADD_LABEL_PROBLEM_TITLE);
 	}
 
 	public boolean isLabelInherited(String label) {
@@ -135,7 +135,7 @@ public class ChoiceInterface extends ChoicesParentInterface {
 		}
 
 		IModelOperation operation = new ChoiceOperationRenameLabel(getOwnNode(), label, newValue);
-		return execute(operation, Messages.DIALOG_CHANGE_LABEL_PROBLEM_TITLE);
+		return getOperationExecuter().execute(operation, Messages.DIALOG_CHANGE_LABEL_PROBLEM_TITLE);
 	}
 
 	@Override

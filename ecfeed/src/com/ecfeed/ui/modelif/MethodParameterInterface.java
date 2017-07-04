@@ -74,7 +74,9 @@ public class MethodParameterInterface extends AbstractParameterInterface {
 					}
 				}
 			}
-			return execute(new ParameterOperationSetExpected(getOwnNode(), expected), Messages.DIALOG_SET_CATEGORY_EXPECTED_PROBLEM_TITLE);
+			return getOperationExecuter().execute(
+					new ParameterOperationSetExpected(
+							getOwnNode(), expected), Messages.DIALOG_SET_CATEGORY_EXPECTED_PROBLEM_TITLE);
 		}
 		return false;
 	}
@@ -82,7 +84,8 @@ public class MethodParameterInterface extends AbstractParameterInterface {
 	public boolean setDefaultValue(String valueString) {
 		if(getOwnNode().getDefaultValue().equals(valueString) == false){
 			IModelOperation operation = new ParameterOperationSetDefaultValue(getOwnNode(), valueString, getAdapterProvider().getAdapter(getOwnNode().getType()));
-			return execute(operation, Messages.DIALOG_SET_DEFAULT_VALUE_PROBLEM_TITLE);
+			return getOperationExecuter().execute(
+					operation, Messages.DIALOG_SET_DEFAULT_VALUE_PROBLEM_TITLE);
 		}
 		return false;
 	}
@@ -119,7 +122,7 @@ public class MethodParameterInterface extends AbstractParameterInterface {
 			}
 		}
 
-		return execute(operation, Messages.DIALOG_SET_PARAMETER_LINKED_PROBLEM_TITLE);
+		return getOperationExecuter().execute(operation, Messages.DIALOG_SET_PARAMETER_LINKED_PROBLEM_TITLE);
 	}
 
 	public boolean isLinked() {
@@ -128,7 +131,7 @@ public class MethodParameterInterface extends AbstractParameterInterface {
 
 	public boolean setLink(GlobalParameterNode link) {
 		IModelOperation operation = new MethodParameterOperationSetLink(getOwnNode(), link);
-		return execute(operation, Messages.DIALOG_SET_PARAMETER_LINK_PROBLEM_TITLE);
+		return getOperationExecuter().execute(operation, Messages.DIALOG_SET_PARAMETER_LINK_PROBLEM_TITLE);
 	}
 
 

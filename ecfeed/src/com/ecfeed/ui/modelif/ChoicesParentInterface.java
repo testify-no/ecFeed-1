@@ -52,12 +52,12 @@ public class ChoicesParentInterface extends AbstractNodeInterface {
 
 	public boolean addChoice(ChoiceNode newChoice) {
 		IModelOperation operation = new GenericOperationAddChoice(getOwnNode(), newChoice, new EclipseTypeAdapterProvider(), getOwnNode().getChoices().size(), true);
-		return execute(operation, Messages.DIALOG_ADD_CHOICE_PROBLEM_TITLE);
+		return getOperationExecuter().execute(operation, Messages.DIALOG_ADD_CHOICE_PROBLEM_TITLE);
 	}
 
 	public boolean removeChoice(ChoiceNode choice) {
 		IModelOperation operation = new GenericOperationRemoveChoice(getOwnNode(), choice, getAdapterProvider(), true);
-		return execute(operation, Messages.DIALOG_REMOVE_CHOICE_TITLE);
+		return getOperationExecuter().execute(operation, Messages.DIALOG_REMOVE_CHOICE_TITLE);
 	}
 
 	public boolean removeChoices(Collection<ChoiceNode> choices) {

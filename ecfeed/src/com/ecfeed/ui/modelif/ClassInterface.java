@@ -113,7 +113,7 @@ public class ClassInterface extends GlobalParametersParentInterface {
 				return false;
 			}
 		}
-		return execute(FactoryRenameOperation.getRenameOperation(getOwnNode(), newName), Messages.DIALOG_RENAME_CLASS_PROBLEM_TITLE);
+		return getOperationExecuter().execute(FactoryRenameOperation.getRenameOperation(getOwnNode(), newName), Messages.DIALOG_RENAME_CLASS_PROBLEM_TITLE);
 	}
 
 	public boolean setLocalName(String newLocalName){
@@ -135,12 +135,12 @@ public class ClassInterface extends GlobalParametersParentInterface {
 			}
 		}
 		IModelOperation operation = new ClassOperationSetRunOnAndroid(getOwnNode(), runOnAndroid);
-		return execute(operation, Messages.DIALOG_ANDROID_RUNNER_SET_PROBLEM_TITLE);
+		return getOperationExecuter().execute(operation, Messages.DIALOG_ANDROID_RUNNER_SET_PROBLEM_TITLE);
 	}
 
 	public boolean setAndroidBaseRunner(String androidBaseRunner) {
 		IModelOperation operation = new ClassOperationSetAndroidBaseRunner(getOwnNode(), androidBaseRunner);
-		return execute(operation, Messages.DIALOG_ANDROID_RUNNER_SET_PROBLEM_TITLE);
+		return getOperationExecuter().execute(operation, Messages.DIALOG_ANDROID_RUNNER_SET_PROBLEM_TITLE);
 	}
 
 	public MethodNode addNewMethod(){
@@ -157,12 +157,12 @@ public class ClassInterface extends GlobalParametersParentInterface {
 
 	public boolean addMethods(Collection<MethodNode> methods){
 		IModelOperation operation = new ClassOperationAddMethods(getOwnNode(), methods, getOwnNode().getMethods().size());
-		return execute(operation, Messages.DIALOG_ADD_METHODS_PROBLEM_TITLE);
+		return getOperationExecuter().execute(operation, Messages.DIALOG_ADD_METHODS_PROBLEM_TITLE);
 	}
 
 	public boolean addMethod(MethodNode method){
 		IModelOperation operation = new ClassOperationAddMethod(getOwnNode(), method, getOwnNode().getMethods().size());
-		return execute(operation, Messages.DIALOG_ADD_METHOD_PROBLEM_TITLE);
+		return getOperationExecuter().execute(operation, Messages.DIALOG_ADD_METHOD_PROBLEM_TITLE);
 	}
 
 	public boolean removeMethod(MethodNode method){
@@ -170,7 +170,7 @@ public class ClassInterface extends GlobalParametersParentInterface {
 				Messages.DIALOG_REMOVE_METHOD_TITLE,
 				Messages.DIALOG_REMOVE_METHOD_MESSAGE)){
 			IModelOperation operation = new ClassOperationRemoveMethod(getOwnNode(), method);
-			return execute(operation, Messages.DIALOG_REMOVE_METHOD_PROBLEM_TITLE);
+			return getOperationExecuter().execute(operation, Messages.DIALOG_REMOVE_METHOD_PROBLEM_TITLE);
 		}
 		return false;
 	}

@@ -50,7 +50,7 @@ public class RootInterface extends GlobalParametersParentInterface {
 	public ClassNode addNewClass(String className) {
 
 		ClassNode addedClass = new ClassNode(className);
-		if (execute(
+		if (getOperationExecuter().execute(
 				new RootOperationAddNewClass(
 						getOwnNode(), 
 						addedClass, 
@@ -73,7 +73,7 @@ public class RootInterface extends GlobalParametersParentInterface {
 				ClassNode classModel;
 				try {
 					classModel = new EclipseModelBuilder().buildClassModel(selectedClass, testOnly);
-					if (execute(
+					if (getOperationExecuter().execute(
 							new RootOperationAddNewClass(
 									getOwnNode(), 
 									classModel, 
@@ -105,7 +105,7 @@ public class RootInterface extends GlobalParametersParentInterface {
 	public boolean addClasses(Collection<ClassNode> classes) {
 
 		IModelOperation operation = new RootOperationAddClasses(getOwnNode(), classes, getOwnNode().getClasses().size());
-		return execute(operation, Messages.DIALOG_ADD_METHODS_PROBLEM_TITLE);
+		return getOperationExecuter().execute(operation, Messages.DIALOG_ADD_METHODS_PROBLEM_TITLE);
 	}
 
 	private String generateNewClassName() {
