@@ -18,10 +18,12 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
 import com.ecfeed.core.adapter.operations.RootOperationAddNewClass;
+import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.model.RootNode;
+import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.dialogs.TestClassImportDialog;
 import com.ecfeed.ui.dialogs.TestClassSelectionDialog;
@@ -42,6 +44,21 @@ public class ImplementationAdapter {
 			JavaUI.openInEditor(method);
 		} catch (Exception e) {
 			SystemLogger.logCatch(e.getMessage());
+		}
+	}
+
+	public static void goToParameterImplementation(AbstractParameterNode abstractParameterNode, String typeName) {
+
+		if (JavaTypeHelper.isUserType(abstractParameterNode.getType())) {
+
+			IType type = JavaModelAnalyser.getIType(typeName);
+			if(type != null){
+				try {
+					JavaUI.openInEditor(type);
+				} catch (Exception e) {
+					SystemLogger.logCatch(e.getMessage());
+				}
+			}
 		}
 	}
 

@@ -15,7 +15,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.jdt.core.IType;
-import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.widgets.Display;
 
@@ -27,11 +26,10 @@ import com.ecfeed.core.adapter.operations.ReplaceChoicesOperation;
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.utils.JavaTypeHelper;
-import com.ecfeed.core.utils.SystemLogger;
-import com.ecfeed.ui.common.JavaModelBuilder;
 import com.ecfeed.ui.common.EclipseTypeHelper;
+import com.ecfeed.ui.common.ImplementationAdapter;
 import com.ecfeed.ui.common.JavaDocSupport;
-import com.ecfeed.ui.common.JavaModelAnalyser;
+import com.ecfeed.ui.common.JavaModelBuilder;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.TestClassSelectionDialog;
@@ -128,14 +126,12 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 
 	@Override
 	public void goToImplementation(){
-		if(JavaTypeHelper.isUserType(getOwnNode().getType())){
-			IType type = JavaModelAnalyser.getIType(getType());
-			if(type != null){
-				try {
-					JavaUI.openInEditor(type);
-				} catch (Exception e) {SystemLogger.logCatch(e.getMessage());}
-			}
-		}
+		ImplementationAdapter.goToParameterImplementation(getOwnNode(), getType());
+	}
+
+	@Override
+	public AbstractParameterNode getOwnNode(){
+		return (AbstractParameterNode)super.getOwnNode();
 	}
 
 	public boolean setType(String newType) {
@@ -143,11 +139,6 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 			return false;
 		}
 		return getOperationExecuter().execute(setTypeOperation(newType), Messages.DIALOG_SET_PARAMETER_TYPE_PROBLEM_TITLE);
-	}
-
-	@Override
-	public AbstractParameterNode getOwnNode(){
-		return (AbstractParameterNode)super.getOwnNode();
 	}
 
 	protected IModelOperation setTypeOperation(String type) {
@@ -164,20 +155,20 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 	}
 
 	protected List<IModelOperation> getFullTypeImportOperations() {
-		
+
 		List<IModelOperation> result = new ArrayList<IModelOperation>();
 		String typeJavadoc = JavaDocSupport.importTypeJavadoc(getOwnNode());
-		
+
 		result.add(new ParameterSetTypeCommentsOperation(getOwnNode(), typeJavadoc));
-		
+
 		for (ChoiceNode choice : getOwnNode().getChoices()) {
 			AbstractNodeInterface nodeIf = 
 					NodeInterfaceFactory.getNodeInterface(
 							choice, getOperationExecuter().getUpdateContext(), fJavaProjectProvider);
-			
+
 			result.addAll(nodeIf.getImportAllJavadocCommentsOperations());
 		}
-		
+
 		return result;
 	}
 
