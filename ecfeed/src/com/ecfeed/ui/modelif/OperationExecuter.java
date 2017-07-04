@@ -36,6 +36,32 @@ public class OperationExecuter {
 	private List<IModelUpdateListener> fUpdateListeners;
 	private IOperationHistory fOperationHistory;
 
+	
+	public OperationExecuter(IModelUpdateContext updateContext){
+		fOperationHistory = OperationHistoryFactory.getOperationHistory();
+		if(updateContext != null){
+			fUpdateContext = updateContext;
+			fUpdateListeners = updateContext.getUpdateListeners();
+		}
+	}
+
+	protected boolean execute(IModelOperation operation, String errorMessageTitle){
+		try{
+			UndoableOperation action = new UndoableOperation(operation, getUpdateContext().getUndoContext(), errorMessageTitle);
+			fOperationHistory.execute(action, null, null);
+			return true;
+		} catch (ExecutionException e) {SystemLogger.logCatch(e.getMessage());}
+		return false;
+	}
+
+	protected IModelUpdateContext getUpdateContext(){
+		return fUpdateContext;
+	}
+
+	private AbstractFormPart getSourceForm(){
+		return getUpdateContext().getSourceForm();
+	}
+	
 	private class UndoableOperation extends AbstractOperation{
 
 		private IModelOperation fOperation;
@@ -103,30 +129,6 @@ public class OperationExecuter {
 			}
 		}
 	}
-
-	public OperationExecuter(IModelUpdateContext updateContext){
-		fOperationHistory = OperationHistoryFactory.getOperationHistory();
-		if(updateContext != null){
-			fUpdateContext = updateContext;
-			fUpdateListeners = updateContext.getUpdateListeners();
-		}
-	}
-
-	protected boolean execute(IModelOperation operation, String errorMessageTitle){
-		try{
-			UndoableOperation action = new UndoableOperation(operation, getUpdateContext().getUndoContext(), errorMessageTitle);
-			fOperationHistory.execute(action, null, null);
-			return true;
-		} catch (ExecutionException e) {SystemLogger.logCatch(e.getMessage());}
-		return false;
-	}
-
-	protected IModelUpdateContext getUpdateContext(){
-		return fUpdateContext;
-	}
-
-	private AbstractFormPart getSourceForm(){
-		return getUpdateContext().getSourceForm();
-	}
+	
 }
 
