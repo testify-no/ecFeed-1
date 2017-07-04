@@ -14,9 +14,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.jdt.core.IType;
-import org.eclipse.jdt.ui.JavaUI;
-import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
@@ -41,10 +38,9 @@ import com.ecfeed.core.utils.PackageClassHelper;
 import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.CommonConstants;
 import com.ecfeed.ui.common.EclipseModelBuilder;
-import com.ecfeed.ui.common.JavaModelAnalyser;
+import com.ecfeed.ui.common.ImplementationAdapter;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
-import com.ecfeed.ui.dialogs.TestClassSelectionDialog;
 
 public class ClassInterface extends GlobalParametersParentInterface {
 
@@ -209,14 +205,15 @@ public class ClassInterface extends GlobalParametersParentInterface {
 		return getOtherMethods(getOwnNode());
 	}
 
-	public void reassignClass() {
-		TestClassSelectionDialog dialog = new TestClassSelectionDialog(Display.getDefault().getActiveShell());
+	public void reassignImplementedClass() {
 
-		if (dialog.open() == IDialogConstants.OK_ID) {
-			IType selectedClass = (IType)dialog.getFirstResult();
-			String qualifiedName = selectedClass.getFullyQualifiedName();
-			setQualifiedName(qualifiedName);
+		String qualifiedName = ImplementationAdapter.reassignImplementedClass();
+
+		if (qualifiedName == null) {
+			return;
 		}
+
+		setQualifiedName(qualifiedName);
 	}
 
 	public List<String> createRunnerList(String projectPath) throws EcException {
@@ -229,13 +226,9 @@ public class ClassInterface extends GlobalParametersParentInterface {
 
 	@Override
 	public void goToImplementation(){
-		IType type = JavaModelAnalyser.getIType(getQualifiedName());
-		if(type != null){
-			try{
-				JavaUI.openInEditor(type);
-			}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
-		}
+		ImplementationAdapter.goToClassImplementation(getQualifiedName());
 	}
+
 
 	@Override
 	public ClassNode getOwnNode(){

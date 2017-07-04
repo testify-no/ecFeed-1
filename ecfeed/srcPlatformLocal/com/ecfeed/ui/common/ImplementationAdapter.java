@@ -24,6 +24,7 @@ import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.dialogs.TestClassImportDialog;
+import com.ecfeed.ui.dialogs.TestClassSelectionDialog;
 import com.ecfeed.ui.modelif.OperationExecuter;
 
 
@@ -36,14 +37,14 @@ public class ImplementationAdapter {
 		if (method == null) {
 			return;
 		}
-		
+
 		try {
 			JavaUI.openInEditor(method);
 		} catch (Exception e) {
 			SystemLogger.logCatch(e.getMessage());
 		}
 	}
-	
+
 	public static ClassNode addImplementedClass(RootNode rootNode, OperationExecuter operationExecuter) {
 
 		TestClassImportDialog dialog = new TestClassImportDialog(Display.getCurrent().getActiveShell());
@@ -74,5 +75,26 @@ public class ImplementationAdapter {
 		}
 		return null;
 	}
-	
+
+	public static void goToClassImplementation(String qualifiedName){
+		IType type = JavaModelAnalyser.getIType(qualifiedName);
+		if(type != null){
+			try{
+				JavaUI.openInEditor(type);
+			}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
+		}
+	}
+
+	public static String reassignImplementedClass() {
+
+		TestClassSelectionDialog dialog = 
+				new TestClassSelectionDialog(Display.getDefault().getActiveShell());
+
+		if (dialog.open() != IDialogConstants.OK_ID) {
+			return null;
+		}
+
+		IType selectedClass = (IType)dialog.getFirstResult();
+		return selectedClass.getFullyQualifiedName();
+	}	
 }

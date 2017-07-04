@@ -270,7 +270,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	private class BrowseClassesSelectionListener extends ButtonClickListener {
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			fClassIf.reassignClass();
+			fClassIf.reassignImplementedClass();
 		}
 	}
 
