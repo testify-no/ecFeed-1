@@ -50,238 +50,6 @@ public class JavaDocSupport {
 	private final static String LAST_COMMENT_LINE = "*/";
 	private final static String COMMENT_LINE_PREXIF = "* ";
 
-	private static class JavadocReader implements IModelVisitor{
-
-		@Override
-		public Object visit(MethodParameterNode node) throws Exception {
-			String methodDoc = getJavadoc(JavaModelAnalyser.getIMethod(node.getMethod()));
-			if (methodDoc == null) {
-				return null;
-			}
-
-			String searchedTag = "@param " + node.getName();
-			int startIndex = methodDoc.indexOf(searchedTag);
-			int endIndex = methodDoc.indexOf("@", startIndex + 1);
-			if(endIndex == -1){
-				endIndex = methodDoc.length() - 1;
-			}
-
-			while(methodDoc.charAt(startIndex) != '\n' && methodDoc.charAt(startIndex) != '*'){
-				--startIndex;
-			}
-			while(methodDoc.charAt(endIndex) != '\n'){
-				--endIndex;
-			}
-			methodDoc = methodDoc.substring(startIndex, endIndex);
-
-			return methodDoc;
-		}
-
-		@Override
-		public Object visit(GlobalParameterNode node) throws Exception {
-			return null;
-		}
-
-		@Override
-		public Object visit(RootNode node) throws Exception {
-			return null;
-		}
-
-		@Override
-		public Object visit(ClassNode node) throws Exception {
-			return getJavadoc(JavaModelAnalyser.getIType(node.getName()));
-		}
-
-		@Override
-		public Object visit(MethodNode node) throws Exception {
-			IMethod method = JavaModelAnalyser.getIMethod(node);
-			if (method == null) {
-				return null;
-			}
-
-			return getJavadoc(method);
-		}
-
-		@Override
-		public Object visit(TestCaseNode node) throws Exception {
-			return null;
-		}
-
-		@Override
-		public Object visit(ConstraintNode node) throws Exception {
-			return null;
-		}
-
-		@Override
-		public Object visit(ChoiceNode node) throws Exception {
-			try{
-				if(node.isAbstract() == false && JavaTypeHelper.isUserType(node.getParameter().getType())) {
-					IType type = JavaModelAnalyser.getIType(node.getParameter().getType());
-					if (type == null) {
-						return EMPTY_STRING;
-					}
-					
-					for(IField field : type.getFields()){
-						if(field.isEnumConstant() && field.getElementName().equals(node.getValueString())){
-							return getJavadoc(field);
-						}
-					}
-				}
-			}catch(JavaModelException e){SystemLogger.logCatch(e.getMessage());}
-			return EMPTY_STRING;
-		}
-
-	}
-
-	private static class JavadocImporter implements IModelVisitor{
-
-		@Override
-		public Object visit(MethodParameterNode node) throws Exception {
-			String javadoc = getJavadoc(node);
-			String tag = "@param "  + node.getName();
-			int beginning = javadoc.indexOf(tag);
-			String imported = javadoc.substring(beginning + tag.length(), javadoc.length());
-			return imported;
-		}
-
-		@Override
-		public Object visit(GlobalParameterNode node) throws Exception {
-			return null;
-		}
-
-		@Override
-		public Object visit(RootNode node) throws Exception {
-			return null;
-		}
-
-		@Override
-		public Object visit(ClassNode node) throws Exception {
-			return removeTrailingWhitespaces(removeJavadocFormating(getJavadoc(node)));
-		}
-
-		@Override
-		public Object visit(MethodNode node) throws Exception {
-			String javadoc = getJavadoc(JavaModelAnalyser.getIMethod(node));
-			javadoc = removeJavadocFormating(javadoc);
-			javadoc = getDescriptionBlock(javadoc);
-			javadoc = removeTrailingWhitespaces(javadoc);
-			return javadoc;
-		}
-
-		@Override
-		public Object visit(TestCaseNode node) throws Exception {
-			return null;
-		}
-
-		@Override
-		public Object visit(ConstraintNode node) throws Exception {
-			return null;
-		}
-
-		@Override
-		public Object visit(ChoiceNode node) throws Exception {
-			String javadoc = getJavadoc(node);
-			if(javadoc != null){
-				javadoc = removeJavadocFormating(javadoc);
-				javadoc = removeTrailingWhitespaces(javadoc);
-				return javadoc;
-			}
-			return null;
-		}
-
-	}
-
-	private static class JavadocExporter implements IModelVisitor{
-
-		@Override
-		public Object visit(MethodParameterNode node) throws Exception {
-			exportJavadoc(node.getMethod());
-			//			IMethod method = JavaModelAnalyser.getIMethod(node.getMethod());
-			//			ICompilationUnit unit = method.getCompilationUnit();
-			//			String currentJavadoc = getJavadoc(node);
-			//			String newComments = node.getDescription() != null ? node.getDescription() : "";
-			//			String newJavadoc = "* @param " + node.getName() + " " + newComments;
-			//			String source = unit.getSource();
-			//
-			//			TextEdit edit = null;
-			//			if(currentJavadoc != null){
-			//				int offset = source.indexOf("* @param " + node.getName());
-			//				int length = currentJavadoc.length();
-			//				edit = new ReplaceEdit(offset, length, newJavadoc);
-			//			}else {
-			//				String methodJavadoc = getJavadoc(node.getMethod());
-			//				if(methodJavadoc == null){
-			//					exportJavadoc(node.getMethod());
-			//				}
-			//				int offset = source.indexOf(methodJavadoc) + methodJavadoc.length();
-			//				edit = new InsertEdit(offset, newJavadoc);
-			//			}
-			//			unit.becomeWorkingCopy(null);
-			//			unit.applyTextEdit(edit, null);
-			//			unit.commitWorkingCopy(false, null);
-			return null;
-		}
-
-		@Override
-		public Object visit(GlobalParameterNode node) throws Exception {
-			return null;
-		}
-
-		@Override
-		public Object visit(RootNode node) throws Exception {
-			return null;
-		}
-
-		@Override
-		public Object visit(ClassNode node) throws Exception {
-			IType type = JavaModelAnalyser.getIType(node.getName());
-			exportJavadoc(type, node.getDescription());
-			return null;
-		}
-
-		@Override
-		public Object visit(MethodNode node) throws Exception {
-			IMethod method = JavaModelAnalyser.getIMethod(node);
-			String javadoc = node.getDescription() != null ? node.getDescription() : "";
-			if(node.getParameters().size() > 0){
-				if(javadoc.equals("") == false){
-					javadoc +="\n\n";
-				}
-				for(MethodParameterNode parameter : node.getMethodParameters()){
-					String parameterComments = parameter.getDescription() != null ? parameter.getDescription() : "";
-					javadoc += "@param " + parameter.getName() + " " + parameterComments + "\n";
-				}
-			}
-			exportJavadoc(method, javadoc);
-			return null;
-		}
-
-		@Override
-		public Object visit(TestCaseNode node) throws Exception {
-			return null;
-		}
-
-		@Override
-		public Object visit(ConstraintNode node) throws Exception {
-			return null;
-		}
-
-		@Override
-		public Object visit(ChoiceNode node) throws Exception {
-			if(node.isAbstract() == false){
-				IType type = JavaModelAnalyser.getIType(node.getParameter().getType());
-				if(type != null && type.isEnum()){
-					for(IField field : type.getFields()){
-						if(field.isEnumConstant() && field.getElementName().equals(node.getValueString())){
-							exportJavadoc(field, node.getDescription());
-							return null;
-						}
-					}
-				}
-			}
-			return null;
-		}
-	}
 
 	public static String getTypeJavadoc(AbstractParameterNode node){
 		if(JavaTypeHelper.isUserType(node.getType())){
@@ -477,4 +245,238 @@ public class JavaDocSupport {
 		indent = indent.substring(0, end > 0 ? end - 1 : 0);
 		return indent;
 	}
+	
+	private static class JavadocReader implements IModelVisitor{
+
+		@Override
+		public Object visit(MethodParameterNode node) throws Exception {
+			String methodDoc = getJavadoc(JavaModelAnalyser.getIMethod(node.getMethod()));
+			if (methodDoc == null) {
+				return null;
+			}
+
+			String searchedTag = "@param " + node.getName();
+			int startIndex = methodDoc.indexOf(searchedTag);
+			int endIndex = methodDoc.indexOf("@", startIndex + 1);
+			if(endIndex == -1){
+				endIndex = methodDoc.length() - 1;
+			}
+
+			while(methodDoc.charAt(startIndex) != '\n' && methodDoc.charAt(startIndex) != '*'){
+				--startIndex;
+			}
+			while(methodDoc.charAt(endIndex) != '\n'){
+				--endIndex;
+			}
+			methodDoc = methodDoc.substring(startIndex, endIndex);
+
+			return methodDoc;
+		}
+
+		@Override
+		public Object visit(GlobalParameterNode node) throws Exception {
+			return null;
+		}
+
+		@Override
+		public Object visit(RootNode node) throws Exception {
+			return null;
+		}
+
+		@Override
+		public Object visit(ClassNode node) throws Exception {
+			return getJavadoc(JavaModelAnalyser.getIType(node.getName()));
+		}
+
+		@Override
+		public Object visit(MethodNode node) throws Exception {
+			IMethod method = JavaModelAnalyser.getIMethod(node);
+			if (method == null) {
+				return null;
+			}
+
+			return getJavadoc(method);
+		}
+
+		@Override
+		public Object visit(TestCaseNode node) throws Exception {
+			return null;
+		}
+
+		@Override
+		public Object visit(ConstraintNode node) throws Exception {
+			return null;
+		}
+
+		@Override
+		public Object visit(ChoiceNode node) throws Exception {
+			try{
+				if(node.isAbstract() == false && JavaTypeHelper.isUserType(node.getParameter().getType())) {
+					IType type = JavaModelAnalyser.getIType(node.getParameter().getType());
+					if (type == null) {
+						return EMPTY_STRING;
+					}
+					
+					for(IField field : type.getFields()){
+						if(field.isEnumConstant() && field.getElementName().equals(node.getValueString())){
+							return getJavadoc(field);
+						}
+					}
+				}
+			}catch(JavaModelException e){SystemLogger.logCatch(e.getMessage());}
+			return EMPTY_STRING;
+		}
+
+	}
+	
+	private static class JavadocImporter implements IModelVisitor{
+
+		@Override
+		public Object visit(MethodParameterNode node) throws Exception {
+			String javadoc = getJavadoc(node);
+			String tag = "@param "  + node.getName();
+			int beginning = javadoc.indexOf(tag);
+			String imported = javadoc.substring(beginning + tag.length(), javadoc.length());
+			return imported;
+		}
+
+		@Override
+		public Object visit(GlobalParameterNode node) throws Exception {
+			return null;
+		}
+
+		@Override
+		public Object visit(RootNode node) throws Exception {
+			return null;
+		}
+
+		@Override
+		public Object visit(ClassNode node) throws Exception {
+			return removeTrailingWhitespaces(removeJavadocFormating(getJavadoc(node)));
+		}
+
+		@Override
+		public Object visit(MethodNode node) throws Exception {
+			String javadoc = getJavadoc(JavaModelAnalyser.getIMethod(node));
+			javadoc = removeJavadocFormating(javadoc);
+			javadoc = getDescriptionBlock(javadoc);
+			javadoc = removeTrailingWhitespaces(javadoc);
+			return javadoc;
+		}
+
+		@Override
+		public Object visit(TestCaseNode node) throws Exception {
+			return null;
+		}
+
+		@Override
+		public Object visit(ConstraintNode node) throws Exception {
+			return null;
+		}
+
+		@Override
+		public Object visit(ChoiceNode node) throws Exception {
+			String javadoc = getJavadoc(node);
+			if(javadoc != null){
+				javadoc = removeJavadocFormating(javadoc);
+				javadoc = removeTrailingWhitespaces(javadoc);
+				return javadoc;
+			}
+			return null;
+		}
+
+	}
+	
+	private static class JavadocExporter implements IModelVisitor{
+
+		@Override
+		public Object visit(MethodParameterNode node) throws Exception {
+			exportJavadoc(node.getMethod());
+			//			IMethod method = JavaModelAnalyser.getIMethod(node.getMethod());
+			//			ICompilationUnit unit = method.getCompilationUnit();
+			//			String currentJavadoc = getJavadoc(node);
+			//			String newComments = node.getDescription() != null ? node.getDescription() : "";
+			//			String newJavadoc = "* @param " + node.getName() + " " + newComments;
+			//			String source = unit.getSource();
+			//
+			//			TextEdit edit = null;
+			//			if(currentJavadoc != null){
+			//				int offset = source.indexOf("* @param " + node.getName());
+			//				int length = currentJavadoc.length();
+			//				edit = new ReplaceEdit(offset, length, newJavadoc);
+			//			}else {
+			//				String methodJavadoc = getJavadoc(node.getMethod());
+			//				if(methodJavadoc == null){
+			//					exportJavadoc(node.getMethod());
+			//				}
+			//				int offset = source.indexOf(methodJavadoc) + methodJavadoc.length();
+			//				edit = new InsertEdit(offset, newJavadoc);
+			//			}
+			//			unit.becomeWorkingCopy(null);
+			//			unit.applyTextEdit(edit, null);
+			//			unit.commitWorkingCopy(false, null);
+			return null;
+		}
+
+		@Override
+		public Object visit(GlobalParameterNode node) throws Exception {
+			return null;
+		}
+
+		@Override
+		public Object visit(RootNode node) throws Exception {
+			return null;
+		}
+
+		@Override
+		public Object visit(ClassNode node) throws Exception {
+			IType type = JavaModelAnalyser.getIType(node.getName());
+			exportJavadoc(type, node.getDescription());
+			return null;
+		}
+
+		@Override
+		public Object visit(MethodNode node) throws Exception {
+			IMethod method = JavaModelAnalyser.getIMethod(node);
+			String javadoc = node.getDescription() != null ? node.getDescription() : "";
+			if(node.getParameters().size() > 0){
+				if(javadoc.equals("") == false){
+					javadoc +="\n\n";
+				}
+				for(MethodParameterNode parameter : node.getMethodParameters()){
+					String parameterComments = parameter.getDescription() != null ? parameter.getDescription() : "";
+					javadoc += "@param " + parameter.getName() + " " + parameterComments + "\n";
+				}
+			}
+			exportJavadoc(method, javadoc);
+			return null;
+		}
+
+		@Override
+		public Object visit(TestCaseNode node) throws Exception {
+			return null;
+		}
+
+		@Override
+		public Object visit(ConstraintNode node) throws Exception {
+			return null;
+		}
+
+		@Override
+		public Object visit(ChoiceNode node) throws Exception {
+			if(node.isAbstract() == false){
+				IType type = JavaModelAnalyser.getIType(node.getParameter().getType());
+				if(type != null && type.isEnum()){
+					for(IField field : type.getFields()){
+						if(field.isEnumConstant() && field.getElementName().equals(node.getValueString())){
+							exportJavadoc(field, node.getDescription());
+							return null;
+						}
+					}
+				}
+			}
+			return null;
+		}
+	}
+	
 }
