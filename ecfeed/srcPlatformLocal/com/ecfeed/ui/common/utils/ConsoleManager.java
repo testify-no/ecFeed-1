@@ -8,7 +8,7 @@
  *  
  *******************************************************************************/
 
-package com.ecfeed.ui.modelif;
+package com.ecfeed.ui.common.utils;
 
 import java.io.PrintStream;
 

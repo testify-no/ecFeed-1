@@ -33,6 +33,7 @@ import com.ecfeed.core.runner.JavaTestRunner;
 import com.ecfeed.core.runner.RunnerException;
 import com.ecfeed.ui.common.EclipseLoaderProvider;
 import com.ecfeed.ui.common.Messages;
+import com.ecfeed.ui.common.utils.ConsoleManager;
 import com.ecfeed.ui.common.utils.EclipseProjectHelper;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 
