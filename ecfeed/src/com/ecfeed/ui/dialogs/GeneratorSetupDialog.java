@@ -267,7 +267,10 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 	private void createConstraintsComposite(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(1, false));
-		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+
+		GridData gridData = new GridData(SWT.FILL, SWT.FILL, false, false);
+		gridData.heightHint = 150;
+		composite.setLayoutData(gridData);
 
 		Label selectConstraintsLabel = new Label(composite, SWT.NONE);
 		selectConstraintsLabel
@@ -335,36 +338,45 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 	}
 
 	private void createChoicesComposite(Composite parent) {
-		Composite composite = new Composite(parent, SWT.NONE);
+
+		final Composite composite = new Composite(parent, SWT.NONE);
+
 		composite.setLayout(new GridLayout(1, false));
-		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+
+		GridData gridData = new GridData(SWT.FILL, SWT.FILL, false, false);
+		gridData.heightHint = 180;
+		composite.setLayoutData(gridData);
 
 		Label selectChoicesLabel = new Label(composite, SWT.WRAP);
-		selectChoicesLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER,
-				true, false, 1, 1));
-		selectChoicesLabel
-		.setText(Messages.DIALOG_GENERATE_TEST_SUITES_SELECT_CHOICES_LABEL);
+
+		selectChoicesLabel.setLayoutData(
+				new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+
+		selectChoicesLabel.setText(Messages.DIALOG_GENERATE_TEST_SUITES_SELECT_CHOICES_LABEL);
 
 		createChoicesViewer(composite);
 	}
 
-	private void createChoicesViewer(Composite parent) {
+	private void createChoicesViewer(final Composite parent) {
+
 		final Tree tree = new Tree(parent, SWT.CHECK | SWT.BORDER);
 		tree.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, true, 1, 1));
+
 		fParametersViewer = new CheckboxTreeViewer(tree);
 		fParametersViewer.setContentProvider(new ParametersContentProvider());
 		fParametersViewer.setLabelProvider(new NodeNameColumnLabelProvider());
 		fParametersViewer.getTree().setLayoutData(
 				new GridData(SWT.FILL, SWT.FILL, true, true));
+
 		fParametersViewer.setInput(fMethod);
-		fParametersViewer
-		.addCheckStateListener(new ChoiceTreeCheckStateListener(
-				fParametersViewer));
+		fParametersViewer.addCheckStateListener(new ChoiceTreeCheckStateListener(fParametersViewer));
+
 		for (MethodParameterNode parameter : fMethod.getMethodParameters()) {
 			fParametersViewer.expandAll();
 			fParametersViewer.setSubtreeChecked(parameter, true);
 			fParametersViewer.collapseAll();
 		}
+
 	}
 
 	private void createTestSuiteComposite(Composite container) {

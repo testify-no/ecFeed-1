@@ -518,14 +518,10 @@ public class ModelMasterSection extends TreeViewerSection{
 			final String shortcut = "Insert";
 
 			if (ApplicationContext.isStandaloneApplication()) {
-				return addShortcutForStandaloneEclipseBug(actionName, shortcut);
+				return actionName;
 			}
 			
 			return ActionHelper.addShortcut(actionName, shortcut);
-		}
-		
-		private String addShortcutForStandaloneEclipseBug(String actionName, String shortcut) {
-			return ActionHelper.addShortcutWithParentheses(actionName, shortcut);
 		}
 
 		private void addActionsForMethod(AbstractNode abstractNode) {
