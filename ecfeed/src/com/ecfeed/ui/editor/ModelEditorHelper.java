@@ -25,7 +25,6 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.dialogs.SaveAsDialog;
 import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.part.FileEditorInput;
 
@@ -39,6 +38,7 @@ import com.ecfeed.core.utils.DiskFileHelper;
 import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.core.utils.UriHelper;
+import com.ecfeed.ui.dialogs.basic.EcSaveAsDialog;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.dialogs.basic.SaveAsEctDialogWithConfirm;
 import com.ecfeed.utils.EclipseEditorHelper;
@@ -186,7 +186,7 @@ public class ModelEditorHelper {
 	}
 
 	private static String selectFileForFileEditorInput(FileEditorInput fileEditorInput) {
-		SaveAsDialog dialog = new SaveAsDialog(Display.getDefault().getActiveShell());
+		EcSaveAsDialog dialog = new EcSaveAsDialog(Display.getDefault().getActiveShell());
 		IFile original = fileEditorInput.getFile();
 		dialog.setOriginalFile(original);
 
@@ -195,7 +195,7 @@ public class ModelEditorHelper {
 			return null;
 		}
 
-		IPath path = dialog.getResult();
+		IPath path = (IPath)dialog.getResultPath();
 		return path.toOSString();
 	}	
 
