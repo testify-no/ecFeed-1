@@ -10,6 +10,7 @@
 
 package com.ecfeed.ui.common.utils;
 
+import java.io.OutputStream;
 import java.io.PrintStream;
 
 import org.eclipse.ui.IWorkbenchPage;
@@ -28,6 +29,11 @@ public class ConsoleManager {
 	private static MessageConsole outputConsole;
 	private static MessageConsoleStream outputStream;
 
+	public static void prepareOutput() {
+		ConsoleManager.displayConsole();
+		ConsoleManager.redirectSystemOutputToStream(ConsoleManager.getOutputStream());
+	}
+
 	private static MessageConsole getOutputConsole() {
 		if (outputConsole == null) {
 			ConsolePlugin consolePlugin = ConsolePlugin.getDefault();
@@ -38,7 +44,7 @@ public class ConsoleManager {
 		return outputConsole;
 	}
 
-	public static void displayConsole() {
+	private static void displayConsole() {
 		try {
 			IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 			IConsoleView consoleView = (IConsoleView)activePage.showView(IConsoleConstants.ID_CONSOLE_VIEW);
@@ -48,15 +54,16 @@ public class ConsoleManager {
 		}
 	}
 
-	public static MessageConsoleStream getOutputStream() {
+	private static MessageConsoleStream getOutputStream() {
 		if (outputStream == null) {
 			outputStream = getOutputConsole().newMessageStream();
 		}
 		return outputStream;
 	}
 
-	public static void redirectSystemOutputToStream(MessageConsoleStream outputStream) {
+	private static void redirectSystemOutputToStream(OutputStream outputStream) {
 		PrintStream printStream = new PrintStream(outputStream);
 		System.setOut(printStream);
 	}
+
 }

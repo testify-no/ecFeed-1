@@ -79,9 +79,7 @@ public class OnlineTestRunningSupport extends AbstractOnlineSupport {
 
 	@Override
 	protected Result run() {
-		PrintStream currentOut = System.out;
-		ConsoleManager.displayConsole();
-		ConsoleManager.redirectSystemOutputToStream(ConsoleManager.getOutputStream());
+		ConsoleManager.prepareOutput();
 
 		Result result = Result.CANCELED;
 
@@ -92,6 +90,7 @@ public class OnlineTestRunningSupport extends AbstractOnlineSupport {
 			result = Result.OK;
 		}
 
+		PrintStream currentOut = System.out;
 		System.setOut(currentOut);
 		return result;
 	}	

@@ -104,8 +104,7 @@ public class StaticTestExecutionSupport {
 
 	public void proceed(){
 		PrintStream currentOut = System.out;
-		ConsoleManager.displayConsole();
-		ConsoleManager.redirectSystemOutputToStream(ConsoleManager.getOutputStream());
+		ConsoleManager.prepareOutput();
 
 		try{
 			fFailedTests.clear();
