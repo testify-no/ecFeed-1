@@ -10,6 +10,7 @@
 
 package com.ecfeed.ui.common;
 
+import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.ui.JavaUI;
@@ -19,6 +20,7 @@ import org.eclipse.swt.widgets.Display;
 
 import com.ecfeed.core.adapter.operations.RootOperationAddNewClass;
 import com.ecfeed.core.model.AbstractParameterNode;
+import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.ModelOperationException;
@@ -61,6 +63,25 @@ public class ImplementationAdapter {
 			}
 		}
 	}
+
+	public static void goToChoiceImplementation(ChoiceNode choiceNode, AbstractParameterNode parameter) {
+
+		try {
+			IType type = JavaModelAnalyser.getIType(parameter.getType());
+
+			if (type != null && choiceNode.isAbstract() == false) {
+				for (IField field : type.getFields()) {
+					if (field.getElementName().equals(choiceNode.getValueString())) {
+						JavaUI.openInEditor(field);
+						break;
+					}
+				}
+			}
+		} catch(Exception e) { 
+			SystemLogger.logCatch(e.getMessage());
+		}
+	}
+
 
 	public static ClassNode addImplementedClass(RootNode rootNode, OperationExecuter operationExecuter) {
 
