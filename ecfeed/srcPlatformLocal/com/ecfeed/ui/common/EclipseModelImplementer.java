@@ -66,10 +66,10 @@ import com.ecfeed.core.utils.PackageClassHelper;
 import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.EclipseImplementationStatusResolver;
 import com.ecfeed.ui.common.EclipseInstallationDirFileHelper;
+import com.ecfeed.ui.common.utils.EclipseProjectHelper;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.common.utils.JavaUserClassImplementer;
 import com.ecfeed.ui.common.utils.local.EclipsePackageFragmentGetter;
-import com.ecfeed.ui.common.utils.local.EclipseProjectHelper;
 
 public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 

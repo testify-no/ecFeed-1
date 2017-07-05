@@ -8,7 +8,7 @@
  *  
  *******************************************************************************/
 
-package com.ecfeed.ui.common.utils.local;
+package com.ecfeed.ui.common.utils;
 
 import java.util.Map;
 
