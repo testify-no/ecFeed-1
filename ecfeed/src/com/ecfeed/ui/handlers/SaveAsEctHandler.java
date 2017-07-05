@@ -9,11 +9,13 @@
  *******************************************************************************/
 package com.ecfeed.ui.handlers;
 
+import java.net.URI;
+
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.ui.ide.FileStoreEditorInput;
 
 import com.ecfeed.core.utils.DiskFileHelper;
 import com.ecfeed.core.utils.UriHelper;
+import com.ecfeed.ui.common.utils.FileStoreEditorHelper;
 import com.ecfeed.ui.dialogs.basic.SaveAsEctDialogWithConfirm;
 import com.ecfeed.ui.editor.CanAddDocumentChecker;
 import com.ecfeed.ui.editor.ModelEditor;
@@ -23,17 +25,12 @@ import com.ecfeed.utils.EclipseHelper;
 public class SaveAsEctHandler {
 
 	public static void execute() throws ExecutionException {
+		
 		ModelEditor modelEditor = ModelEditorHelper.getActiveModelEditor();
-		if (modelEditor == null) {
-			return;
-		}
 
-		FileStoreEditorInput editorInput = ModelEditorHelper.getFileStoreEditorInput(modelEditor);
-		if (editorInput == null) {
-			return;
-		}
+		URI uri = FileStoreEditorHelper.getUriFromFileStoreEditor(modelEditor);
 
-		String pathWithFileName = UriHelper.convertUriToFilePath(editorInput.getURI());
+		String pathWithFileName = UriHelper.convertUriToFilePath(uri);
 		if (pathWithFileName == null) {
 			return;
 		}
