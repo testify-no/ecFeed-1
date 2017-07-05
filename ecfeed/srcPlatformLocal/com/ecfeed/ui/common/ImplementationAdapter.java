@@ -18,6 +18,9 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
+import com.ecfeed.core.adapter.IModelOperation;
+import com.ecfeed.core.adapter.ITypeAdapterProvider;
+import com.ecfeed.core.adapter.operations.AbstractParameterOperationSetType;
 import com.ecfeed.core.adapter.operations.RootOperationAddNewClass;
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ChoiceNode;
@@ -29,6 +32,7 @@ import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.dialogs.TestClassImportDialog;
 import com.ecfeed.ui.dialogs.TestClassSelectionDialog;
+import com.ecfeed.ui.dialogs.UserTypeSelectionDialog;
 import com.ecfeed.ui.modelif.OperationExecuter;
 
 
@@ -94,7 +98,7 @@ public class ImplementationAdapter {
 			if (selectedClass != null) {
 				ClassNode classModel;
 				try {
-					classModel = new JavaModelBuilder().buildClassModel(selectedClass, testOnly);
+					classModel = new JavaCodeModelBuilder().buildClassModel(selectedClass, testOnly);
 					if (operationExecuter.execute(
 							new RootOperationAddNewClass(
 									rootNode, 
@@ -134,5 +138,26 @@ public class ImplementationAdapter {
 
 		IType selectedClass = (IType)dialog.getFirstResult();
 		return selectedClass.getFullyQualifiedName();
-	}	
+	}
+
+	public static boolean importType(
+			AbstractParameterNode abstractParameterNode, 
+			OperationExecuter operationExecuter,
+			ITypeAdapterProvider typeAdapterProvider) {
+
+		TestClassSelectionDialog dialog = new UserTypeSelectionDialog(Display.getDefault().getActiveShell());
+
+		if (dialog.open() != IDialogConstants.OK_ID) {
+			return false;
+		}
+
+		IType selectedEnum = (IType)dialog.getFirstResult();
+
+		String newType = selectedEnum.getFullyQualifiedName().replace('$', '.');
+		IModelOperation operation = 
+				new AbstractParameterOperationSetType(abstractParameterNode, newType, typeAdapterProvider);
+
+		return operationExecuter.execute(operation, Messages.DIALOG_SET_PARAMETER_TYPE_PROBLEM_TITLE);
+	}
+
 }

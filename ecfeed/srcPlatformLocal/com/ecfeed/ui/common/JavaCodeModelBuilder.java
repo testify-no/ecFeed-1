@@ -30,7 +30,7 @@ import com.ecfeed.ui.common.CommonConstants;
 import com.ecfeed.ui.common.EclipseTypeHelper;
 import com.ecfeed.ui.common.Messages;
 
-public class JavaModelBuilder extends JavaModelAnalyser{
+public class JavaCodeModelBuilder extends JavaModelAnalyser{
 
 	public ClassNode buildClassModel(String qualifiedName, boolean testOnly) throws ModelOperationException{
 		IType type = getIType(qualifiedName);
@@ -81,7 +81,7 @@ public class JavaModelBuilder extends JavaModelAnalyser{
 				new MethodParameterNode(name, type, EclipseTypeHelper.getDefaultExpectedValue(type), expected);
 		
 		if (!expected) {
-			List<ChoiceNode> defaultChoices = defaultChoices(type);
+			List<ChoiceNode> defaultChoices = getDefaultChoices(type);
 			for(ChoiceNode choice : defaultChoices){
 				parameter.addChoice(choice);
 			}
@@ -89,7 +89,7 @@ public class JavaModelBuilder extends JavaModelAnalyser{
 		return parameter;
 	}
 
-	public List<ChoiceNode> defaultChoices(String typeName) {
+	public List<ChoiceNode> getDefaultChoices(String typeName) {
 		List<ChoiceNode> choices = new ArrayList<ChoiceNode>();
 		for(String value : EclipseTypeHelper.getSpecialValues(typeName)){
 			String name = value.toLowerCase();

@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.eclipse.jdt.core.IType;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.widgets.Display;
 
@@ -28,13 +27,11 @@ import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.ui.common.EclipseTypeHelper;
 import com.ecfeed.ui.common.ImplementationAdapter;
+import com.ecfeed.ui.common.JavaCodeModelBuilder;
 import com.ecfeed.ui.common.JavaDocSupport;
-import com.ecfeed.ui.common.JavaModelBuilder;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
-import com.ecfeed.ui.dialogs.TestClassSelectionDialog;
 import com.ecfeed.ui.dialogs.TextAreaDialog;
-import com.ecfeed.ui.dialogs.UserTypeSelectionDialog;
 
 public abstract class AbstractParameterInterface extends ChoicesParentInterface {
 
@@ -69,21 +66,14 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 		return false;
 	}
 
-	public boolean importType(){
-		TestClassSelectionDialog dialog = new UserTypeSelectionDialog(Display.getDefault().getActiveShell());
-
-		if (dialog.open() == IDialogConstants.OK_ID) {
-			IType selectedEnum = (IType)dialog.getFirstResult();
-			String newType = selectedEnum.getFullyQualifiedName().replace('$', '.');
-			IModelOperation operation = setTypeOperation(newType);
-			return getOperationExecuter().execute(operation, Messages.DIALOG_SET_PARAMETER_TYPE_PROBLEM_TITLE);
-		}
-		return false;
+	public boolean importType() {
+		return ImplementationAdapter.importType(getOwnNode(), getOperationExecuter(), getAdapterProvider());
 	}
+
 
 	public boolean resetChoicesToDefault(){
 		String type = getOwnNode().getType();
-		List<ChoiceNode> defaultChoices = new JavaModelBuilder().defaultChoices(type);
+		List<ChoiceNode> defaultChoices = new JavaCodeModelBuilder().getDefaultChoices(type);
 		IModelOperation operation = new ReplaceChoicesOperation(getOwnNode(), defaultChoices, getAdapterProvider());
 		return getOperationExecuter().execute(operation, Messages.DIALOG_RESET_CHOICES_PROBLEM_TITLE);
 	}

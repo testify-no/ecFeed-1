@@ -106,7 +106,7 @@ public class EclipseMethodImplementHelper implements IMethodImplementHelper {
 			if(type == null){
 				return false;
 			}
-			final JavaModelBuilder builder = new JavaModelBuilder();
+			final JavaCodeModelBuilder builder = new JavaCodeModelBuilder();
 			for(IMethod method : type.getMethods()){
 
 				final MethodNode model = builder.buildMethodModel(method);

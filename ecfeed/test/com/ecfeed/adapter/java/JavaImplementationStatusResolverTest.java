@@ -40,7 +40,7 @@ import com.ecfeed.junit.annotations.Constraints;
 import com.ecfeed.junit.annotations.EcModel;
 import com.ecfeed.junit.annotations.Generator;
 import com.ecfeed.junit.annotations.expected;
-import com.ecfeed.ui.common.JavaModelBuilder;
+import com.ecfeed.ui.common.JavaCodeModelBuilder;
 
 
 @RunWith(OnlineRunner.class)
@@ -122,8 +122,8 @@ public class JavaImplementationStatusResolverTest {
 	@Test
 	public void primitiveChoiceStatusTest(ETypeName type){
 		MethodParameterNode parameter = new MethodParameterNode("parameter", type.getTypeName(), "0", false);
-		JavaModelBuilder builder = new JavaModelBuilder();
-		for(ChoiceNode choice : builder.defaultChoices(type.getTypeName())){
+		JavaCodeModelBuilder builder = new JavaCodeModelBuilder();
+		for(ChoiceNode choice : builder.getDefaultChoices(type.getTypeName())){
 			parameter.addChoice(choice);
 			assertEquals(EImplementationStatus.IMPLEMENTED, fResolver.getImplementationStatus(choice));
 		}

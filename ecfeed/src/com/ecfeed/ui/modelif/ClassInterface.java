@@ -37,7 +37,7 @@ import com.ecfeed.core.utils.EcException;
 import com.ecfeed.core.utils.PackageClassHelper;
 import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.CommonConstants;
-import com.ecfeed.ui.common.JavaModelBuilder;
+import com.ecfeed.ui.common.JavaCodeModelBuilder;
 import com.ecfeed.ui.common.ImplementationAdapter;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
@@ -188,7 +188,7 @@ public class ClassInterface extends GlobalParametersParentInterface {
 
 	public static List<MethodNode> getOtherMethods(ClassNode target){
 		List<MethodNode> otherMethods = new ArrayList<MethodNode>();
-		JavaModelBuilder builder = new JavaModelBuilder();
+		JavaCodeModelBuilder builder = new JavaCodeModelBuilder();
 		try{
 			ClassNode completeModel = builder.buildClassModel(ClassNodeHelper.getQualifiedName(target), false);
 			for(MethodNode method : completeModel.getMethods()){
