@@ -17,10 +17,6 @@ import java.io.InputStream;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.jface.window.Window;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
@@ -38,9 +34,7 @@ import com.ecfeed.core.utils.DiskFileHelper;
 import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.core.utils.UriHelper;
-import com.ecfeed.ui.dialogs.basic.EcSaveAsDialog;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
-import com.ecfeed.ui.dialogs.basic.SaveAsEctDialogWithConfirm;
 import com.ecfeed.utils.EclipseEditorHelper;
 import com.ecfeed.utils.EclipseHelper;
 
@@ -175,39 +169,6 @@ public class ModelEditorHelper {
 		return convertedModel;
 	}	
 
-	public static String selectFileForSaveAs(IEditorInput editorInput, Shell shell) {
-		if (editorInput instanceof FileEditorInput) {
-			return selectFileForFileEditorInput((FileEditorInput)editorInput);
-		}
-		if (editorInput instanceof FileStoreEditorInput) { 
-			return selectFileForFileStoreEditorInput((FileStoreEditorInput)editorInput, shell);
-		}
-		return null;
-	}
-
-	private static String selectFileForFileEditorInput(FileEditorInput fileEditorInput) {
-		EcSaveAsDialog dialog = new EcSaveAsDialog(Display.getDefault().getActiveShell());
-		IFile original = fileEditorInput.getFile();
-		dialog.setOriginalFile(original);
-
-		dialog.create();
-		if (dialog.open() == Window.CANCEL) {
-			return null;
-		}
-
-		IPath path = (IPath)dialog.getResultPath();
-		return path.toOSString();
-	}	
-
-	private static String selectFileForFileStoreEditorInput(FileStoreEditorInput fileStoreEditorInput, Shell shell) {
-
-		String pathWithFileName = UriHelper.convertUriToFilePath(fileStoreEditorInput.getURI());
-		String fileName = DiskFileHelper.extractFileName(pathWithFileName);
-		String path = DiskFileHelper.extractPathWithSeparator(pathWithFileName);
-
-		CanAddDocumentChecker checker = new CanAddDocumentChecker();
-		return SaveAsEctDialogWithConfirm.open(path, fileName, checker, shell);
-	}
 
 	private interface IModelEditorWorker {
 		public enum WorkStatus {

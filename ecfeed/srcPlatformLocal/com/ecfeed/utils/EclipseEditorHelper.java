@@ -15,8 +15,11 @@ import java.net.URI;
 
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IActionBars;
@@ -26,10 +29,16 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.FileEditorInput;
 
+import com.ecfeed.core.utils.DiskFileHelper;
 import com.ecfeed.core.utils.ExceptionHelper;
+import com.ecfeed.core.utils.UriHelper;
+import com.ecfeed.ui.dialogs.basic.EcSaveAsDialog;
+import com.ecfeed.ui.dialogs.basic.SaveAsEctDialogWithConfirm;
+import com.ecfeed.ui.editor.CanAddDocumentChecker;
 
 public class EclipseEditorHelper {
 	
@@ -123,5 +132,39 @@ public class EclipseEditorHelper {
 		return editorPart.getEditorSite().getActionBars();
 	}
 
+	public static String selectFileForSaveAs(IEditorInput editorInput, Shell shell) {
+		if (editorInput instanceof FileEditorInput) {
+			return selectFileForFileEditorInput((FileEditorInput)editorInput);
+		}
+		if (editorInput instanceof FileStoreEditorInput) { 
+			return selectFileForFileStoreEditorInput((FileStoreEditorInput)editorInput, shell);
+		}
+		return null;
+	}
+
+	private static String selectFileForFileEditorInput(FileEditorInput fileEditorInput) {
+		EcSaveAsDialog dialog = new EcSaveAsDialog(Display.getDefault().getActiveShell());
+		IFile original = fileEditorInput.getFile();
+		dialog.setOriginalFile(original);
+
+		dialog.create();
+		if (dialog.open() == Window.CANCEL) {
+			return null;
+		}
+
+		IPath path = (IPath)dialog.getResultPath();
+		return path.toOSString();
+	}	
+
+	private static String selectFileForFileStoreEditorInput(FileStoreEditorInput fileStoreEditorInput, Shell shell) {
+
+		String pathWithFileName = UriHelper.convertUriToFilePath(fileStoreEditorInput.getURI());
+		String fileName = DiskFileHelper.extractFileName(pathWithFileName);
+		String path = DiskFileHelper.extractPathWithSeparator(pathWithFileName);
+
+		CanAddDocumentChecker checker = new CanAddDocumentChecker();
+		return SaveAsEctDialogWithConfirm.open(path, fileName, checker, shell);
+	}
+	
 
 }
