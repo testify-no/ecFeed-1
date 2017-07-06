@@ -64,7 +64,7 @@ import com.ecfeed.ui.common.CommonConstants;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
-import com.ecfeed.utils.EclipseEditorHelper;
+import com.ecfeed.utils.ModelEditorPlatformAdapter;
 import com.ecfeed.utils.EclipseHelper;
 
 public class ModelEditor extends FormEditor implements IJavaProjectProvider {
@@ -188,7 +188,7 @@ public class ModelEditor extends FormEditor implements IJavaProjectProvider {
 
 	private InputStream getInitialInputStream(IEditorInput input) throws ModelOperationException {
 		if (ApplicationContext.isProjectAvailable()) {
-			return ModelEditorHelper.getInitialInputStreamForIDE(input);
+			return ModelEditorPlatformAdapter.getInitialInputStreamForIDE(input);
 		} else {
 			return ModelEditorHelper.getInitialInputStreamForRCP(input);
 		}		
@@ -322,7 +322,7 @@ public class ModelEditor extends FormEditor implements IJavaProjectProvider {
 			ExceptionHelper.reportRuntimeException("Invalid model editor shell.");
 		}
 
-		String fileWithPath = EclipseEditorHelper.selectFileForSaveAs(getEditorInput(), fGlobalShellForDialogs);
+		String fileWithPath = ModelEditorPlatformAdapter.selectFileForSaveAs(getEditorInput(), fGlobalShellForDialogs);
 		if (fileWithPath == null) {
 			return;
 		}

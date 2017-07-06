@@ -39,7 +39,7 @@ public class EclipseHelper {
 	}
 
 	public static IActionBars getActionBarsForActiveEditor() {
-		IEditorPart editorPart = EclipseEditorHelper.getActiveEditor();
+		IEditorPart editorPart = ModelEditorPlatformAdapter.getActiveEditor();
 
 		if (editorPart == null) {
 			return null;

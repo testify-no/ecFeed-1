@@ -15,7 +15,6 @@ import org.eclipse.core.commands.ExecutionException;
 
 import com.ecfeed.core.utils.DiskFileHelper;
 import com.ecfeed.core.utils.UriHelper;
-import com.ecfeed.ui.common.utils.FileStoreEditorHelper;
 import com.ecfeed.ui.dialogs.basic.SaveAsEctDialogWithConfirm;
 import com.ecfeed.ui.editor.CanAddDocumentChecker;
 import com.ecfeed.ui.editor.ModelEditor;
@@ -28,7 +27,7 @@ public class SaveAsEctHandler {
 		
 		ModelEditor modelEditor = ModelEditorHelper.getActiveModelEditor();
 
-		URI uri = FileStoreEditorHelper.getUriFromFileStoreEditor(modelEditor);
+		URI uri = ModelEditorHelper.getUriFromFileStoreEditor(modelEditor);
 
 		String pathWithFileName = UriHelper.convertUriToFilePath(uri);
 		if (pathWithFileName == null) {

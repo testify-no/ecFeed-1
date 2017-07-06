@@ -11,14 +11,14 @@
 package com.ecfeed.ui.handlers;
 
 import com.ecfeed.ui.editor.EditorInMemFileHelper;
-import com.ecfeed.utils.EclipseEditorHelper;
+import com.ecfeed.utils.ModelEditorPlatformAdapter;
 
 
 public class NewInMemEctHandler {
 
 	public static void execute() {
 		String tmpFileName = EditorInMemFileHelper.createNewTmpFileName();
-		EclipseEditorHelper.openEditorOnFileInMemory(tmpFileName);
+		ModelEditorPlatformAdapter.openEditorOnFileInMemory(tmpFileName);
 	}
 
 }

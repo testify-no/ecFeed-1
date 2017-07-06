@@ -14,15 +14,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.net.URI;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.ide.FileStoreEditorInput;
-import org.eclipse.ui.part.FileEditorInput;
 
 import com.ecfeed.core.model.ModelConverter;
 import com.ecfeed.core.model.ModelOperationException;
@@ -31,12 +29,11 @@ import com.ecfeed.core.serialization.IModelParser;
 import com.ecfeed.core.serialization.ParserException;
 import com.ecfeed.core.serialization.ect.EctParser;
 import com.ecfeed.core.utils.DiskFileHelper;
-import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.core.utils.UriHelper;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
-import com.ecfeed.utils.EclipseEditorHelper;
 import com.ecfeed.utils.EclipseHelper;
+import com.ecfeed.utils.ModelEditorPlatformAdapter;
 
 public class ModelEditorHelper {
 
@@ -49,7 +46,7 @@ public class ModelEditorHelper {
 	}
 
 	public static ModelEditor getActiveModelEditor() {
-		IEditorPart editorPart = EclipseEditorHelper.getActiveEditor();		
+		IEditorPart editorPart = ModelEditorPlatformAdapter.getActiveEditor();		
 		if (editorPart == null) {
 			return null;
 		}
@@ -60,13 +57,28 @@ public class ModelEditorHelper {
 
 		return (ModelEditor)editorPart;
 	}	
+	
+	public static URI getUriFromFileStoreEditor(ModelEditor modelEditor) {
+		
+		if (modelEditor == null) {
+			return null;
+		}
 
-	public static FileStoreEditorInput getFileStoreEditorInput(ModelEditor modelEditor) {
+		FileStoreEditorInput editorInput = ModelEditorHelper.getFileStoreEditorInput(modelEditor);
+		
+		if (editorInput == null) {
+			return null;
+		}
+		
+		return editorInput.getURI();
+	}
+
+	private static FileStoreEditorInput getFileStoreEditorInput(ModelEditor modelEditor) {
 		IEditorInput editorInput = modelEditor.getEditorInput();
 		return castToFileStoreEditorInput(editorInput);
 	}	
 
-	public static FileStoreEditorInput castToFileStoreEditorInput(IEditorInput editorInput) {
+	private static FileStoreEditorInput castToFileStoreEditorInput(IEditorInput editorInput) {
 		if (!(editorInput instanceof FileStoreEditorInput)) {
 			return null;
 		}
@@ -96,31 +108,6 @@ public class ModelEditorHelper {
 		return UriHelper.convertUriToFilePath(fileStoreInput.getURI());
 	}
 
-	public static InputStream getInitialInputStreamForIDE(IEditorInput input) throws ModelOperationException {
-		if (input instanceof FileStoreEditorInput) {
-			final String CAN_NOT_OPEN_FILE = "Can not open file: ";
-			final String ERR_MSG_1 = "It is not allowed to open standalone ect files created outside of Java project structure.";
-			final String ERR_MSG_2 = "Please add ect file to the Java project first."; 
-
-			ModelOperationException.report(
-					CAN_NOT_OPEN_FILE + input.getName() + ". "+ ERR_MSG_1 + " " + ERR_MSG_2);
-			return null;
-		}
-
-		FileEditorInput fileInput = (FileEditorInput)EclipseEditorHelper.getFileEditorInput(input);
-		if (fileInput == null) {
-			reportInvalidInputTypeException();
-		}
-
-		IFile file = fileInput.getFile();
-		try {
-			return file.getContents();
-		} catch (CoreException e) {
-			displayDialogErrInputStream(e);
-			return null;
-		}
-	}
-
 	public static InputStream getInitialInputStreamForRCP(IEditorInput input) {
 		String fileName = ModelEditorHelper.getFileNameFromEditorInput(input);
 
@@ -143,10 +130,6 @@ public class ModelEditorHelper {
 
 	private static void displayDialogErrInputStream(Exception e) {
 		ExceptionCatchDialog.open("Can not get input stream for file.", e.getMessage());
-	}
-
-	private static void reportInvalidInputTypeException() {
-		ExceptionHelper.reportRuntimeException("Invalid input type.");
 	}
 
 	public static RootNode parseModel(InputStream iStream) {

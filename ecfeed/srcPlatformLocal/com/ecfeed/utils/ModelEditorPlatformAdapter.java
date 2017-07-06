@@ -11,6 +11,7 @@
 package com.ecfeed.utils;
 
 import java.io.File;
+import java.io.InputStream;
 import java.net.URI;
 
 import org.eclipse.core.filesystem.EFS;
@@ -33,14 +34,16 @@ import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.FileEditorInput;
 
+import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.utils.DiskFileHelper;
 import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.UriHelper;
 import com.ecfeed.ui.dialogs.basic.EcSaveAsDialog;
+import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.dialogs.basic.SaveAsEctDialogWithConfirm;
 import com.ecfeed.ui.editor.CanAddDocumentChecker;
 
-public class EclipseEditorHelper {
+public class ModelEditorPlatformAdapter {
 	
 	public static IEditorPart getActiveEditor() {
 		return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
@@ -67,7 +70,7 @@ public class EclipseEditorHelper {
 
 	public static void openEditorOnExistingExtFile(String pathWithFileName) {
 		IWorkbenchPage page = getActiveWorkBenchPage();
-		IFileStore fileStore = EclipseEditorHelper.getFileStoreForExistingFile(pathWithFileName);
+		IFileStore fileStore = ModelEditorPlatformAdapter.getFileStoreForExistingFile(pathWithFileName);
 		if (fileStore == null) {
 			ExceptionHelper.reportRuntimeException("Can not open editor on file: " + pathWithFileName + " .");
 		}
@@ -119,12 +122,12 @@ public class EclipseEditorHelper {
 	}
 
 	public static IAction getGlobalAction(String actionId) {
-		IActionBars actionBars = EclipseEditorHelper.getActionBarsForActiveEditor();
+		IActionBars actionBars = ModelEditorPlatformAdapter.getActionBarsForActiveEditor();
 		return actionBars.getGlobalActionHandler(actionId);
 	}
 
 	public static IActionBars getActionBarsForActiveEditor() {
-		IEditorPart editorPart = EclipseEditorHelper.getActiveEditor();
+		IEditorPart editorPart = ModelEditorPlatformAdapter.getActiveEditor();
 
 		if (editorPart == null) {
 			return null;
@@ -166,5 +169,37 @@ public class EclipseEditorHelper {
 		return SaveAsEctDialogWithConfirm.open(path, fileName, checker, shell);
 	}
 	
+	public static InputStream getInitialInputStreamForIDE(IEditorInput input) throws ModelOperationException {
+		if (input instanceof FileStoreEditorInput) {
+			final String CAN_NOT_OPEN_FILE = "Can not open file: ";
+			final String ERR_MSG_1 = "It is not allowed to open standalone ect files created outside of Java project structure.";
+			final String ERR_MSG_2 = "Please add ect file to the Java project first."; 
+
+			ModelOperationException.report(
+					CAN_NOT_OPEN_FILE + input.getName() + ". "+ ERR_MSG_1 + " " + ERR_MSG_2);
+			return null;
+		}
+
+		FileEditorInput fileInput = (FileEditorInput)ModelEditorPlatformAdapter.getFileEditorInput(input);
+		if (fileInput == null) {
+			reportInvalidInputTypeException();
+		}
+
+		IFile file = fileInput.getFile();
+		try {
+			return file.getContents();
+		} catch (CoreException e) {
+			displayDialogErrInputStream(e);
+			return null;
+		}
+	}
+	
+	private static void reportInvalidInputTypeException() {
+		ExceptionHelper.reportRuntimeException("Invalid input type.");
+	}
+	
+	private static void displayDialogErrInputStream(Exception e) {
+		ExceptionCatchDialog.open("Can not get input stream for file.", e.getMessage());
+	}
 
 }
