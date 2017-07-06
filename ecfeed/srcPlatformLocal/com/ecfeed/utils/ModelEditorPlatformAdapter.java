@@ -11,10 +11,7 @@
 package com.ecfeed.utils;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.URI;
 
 import org.eclipse.core.filesystem.EFS;
@@ -46,7 +43,6 @@ import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.dialogs.basic.SaveAsEctDialogWithConfirm;
 import com.ecfeed.ui.editor.CanAddDocumentChecker;
 import com.ecfeed.ui.editor.ModelEditor;
-import com.ecfeed.ui.editor.ModelEditorHelper;
 
 public class ModelEditorPlatformAdapter {
 
@@ -244,16 +240,4 @@ public class ModelEditorPlatformAdapter {
 		return castToFileStoreEditorInput(editorInput);
 	}	
 
-	public static OutputStream getGetEditorOutputStreamForIDE(IEditorInput editorInput) {
-
-		IFile file = ((FileEditorInput)editorInput).getFile();
-		try {
-			return new FileOutputStream(file.getLocation().toOSString());
-		} catch (FileNotFoundException e) {
-			ModelEditorHelper.reportOpenForWriteException(e);
-		}
-
-		return null;
-	}
-	
 }

@@ -16,7 +16,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 
 import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.core.commands.operations.ObjectUndoContext;
@@ -222,10 +221,13 @@ public class ModelEditor extends FormEditor implements IJavaProjectProvider {
 	}
 
 	public void doSaveForIDE() {
-		
-		OutputStream outputStream = 
-				ModelEditorPlatformAdapter.getGetEditorOutputStreamForIDE(getEditorInput());
-		
+		IFile file = ((FileEditorInput)getEditorInput()).getFile();
+		FileOutputStream outputStream = null;
+		try {
+			outputStream = new FileOutputStream(file.getLocation().toOSString());
+		} catch (FileNotFoundException e) {
+			reportOpenForWriteException(e);
+		}
 		saveModelToStream(outputStream);
 	}
 
@@ -255,7 +257,7 @@ public class ModelEditor extends FormEditor implements IJavaProjectProvider {
 		try {
 			outputStream = new FileOutputStream(file);
 		} catch (FileNotFoundException e) {
-			ModelEditorHelper.reportOpenForWriteException(e);
+			reportOpenForWriteException(e);
 		}
 
 		saveModelToStream(outputStream);
@@ -287,12 +289,12 @@ public class ModelEditor extends FormEditor implements IJavaProjectProvider {
 		try {
 			outputStream = new FileOutputStream(fileWithPath);
 		} catch (FileNotFoundException e) {
-			ModelEditorHelper.reportOpenForWriteException(e);
+			reportOpenForWriteException(e);
 		}
 		saveModelToStream(outputStream);
 	}
 
-	private void saveModelToStream(OutputStream outputStream){
+	private void saveModelToStream(FileOutputStream outputStream){
 		try{
 			IModelSerializer serializer = 
 					new EctSerializer(outputStream, ModelVersionDistributor.getCurrentSoftwareVersion());
@@ -335,6 +337,10 @@ public class ModelEditor extends FormEditor implements IJavaProjectProvider {
 		setInput(new FileStoreEditorInput(fileStore));
 		setPartName(file.getName());
 	}	
+
+	private void reportOpenForWriteException(Exception e) {
+		ExceptionCatchDialog.open("Can not open file for writing", e.getMessage());
+	}
 
 	private void refreshWorkspace(IProgressMonitor monitor) throws CoreException {
 		for(IResource resource : ResourcesPlugin.getWorkspace().getRoot().getProjects()){
