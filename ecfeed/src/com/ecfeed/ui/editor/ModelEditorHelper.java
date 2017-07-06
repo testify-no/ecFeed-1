@@ -34,6 +34,10 @@ import com.ecfeed.utils.ModelEditorPlatformAdapter;
 
 public class ModelEditorHelper {
 
+	public static void reportOpenForWriteException(Exception e) {
+		ExceptionCatchDialog.open("Can not open file for writing", e.getMessage());
+	}
+	
 	public static void saveActiveEditor() {
 		ModelEditor modelEditor = ModelEditorHelper.getActiveModelEditor(); 
 		if (modelEditor == null) {
