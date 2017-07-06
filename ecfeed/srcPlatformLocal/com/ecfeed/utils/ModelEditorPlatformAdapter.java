@@ -42,9 +42,10 @@ import com.ecfeed.ui.dialogs.basic.EcSaveAsDialog;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.dialogs.basic.SaveAsEctDialogWithConfirm;
 import com.ecfeed.ui.editor.CanAddDocumentChecker;
+import com.ecfeed.ui.editor.ModelEditor;
 
 public class ModelEditorPlatformAdapter {
-	
+
 	public static IEditorPart getActiveEditor() {
 		return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 	}
@@ -168,7 +169,7 @@ public class ModelEditorPlatformAdapter {
 		CanAddDocumentChecker checker = new CanAddDocumentChecker();
 		return SaveAsEctDialogWithConfirm.open(path, fileName, checker, shell);
 	}
-	
+
 	public static InputStream getInitialInputStreamForIDE(IEditorInput input) throws ModelOperationException {
 		if (input instanceof FileStoreEditorInput) {
 			final String CAN_NOT_OPEN_FILE = "Can not open file: ";
@@ -193,13 +194,50 @@ public class ModelEditorPlatformAdapter {
 			return null;
 		}
 	}
-	
+
 	private static void reportInvalidInputTypeException() {
 		ExceptionHelper.reportRuntimeException("Invalid input type.");
 	}
-	
+
 	private static void displayDialogErrInputStream(Exception e) {
 		ExceptionCatchDialog.open("Can not get input stream for file.", e.getMessage());
 	}
+
+	public static String getFileNameFromEditorInput(IEditorInput editorInput) {
+		FileStoreEditorInput fileStoreInput = castToFileStoreEditorInput(editorInput);
+		if (fileStoreInput == null) {
+			return null;
+		}
+
+		return UriHelper.convertUriToFilePath(fileStoreInput.getURI());
+	}
+
+	private static FileStoreEditorInput castToFileStoreEditorInput(IEditorInput editorInput) {
+		if (!(editorInput instanceof FileStoreEditorInput)) {
+			return null;
+		}
+		return  (FileStoreEditorInput)editorInput;
+	}	
+
+
+	public static URI getUriFromFileStoreEditor(ModelEditor modelEditor) {
+
+		if (modelEditor == null) {
+			return null;
+		}
+
+		FileStoreEditorInput editorInput = getFileStoreEditorInput(modelEditor);
+
+		if (editorInput == null) {
+			return null;
+		}
+
+		return editorInput.getURI();
+	}
+
+	private static FileStoreEditorInput getFileStoreEditorInput(ModelEditor modelEditor) {
+		IEditorInput editorInput = modelEditor.getEditorInput();
+		return castToFileStoreEditorInput(editorInput);
+	}	
 
 }

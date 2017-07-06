@@ -14,13 +14,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.net.URI;
 
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.ide.FileStoreEditorInput;
 
 import com.ecfeed.core.model.ModelConverter;
 import com.ecfeed.core.model.ModelOperationException;
@@ -30,7 +28,6 @@ import com.ecfeed.core.serialization.ParserException;
 import com.ecfeed.core.serialization.ect.EctParser;
 import com.ecfeed.core.utils.DiskFileHelper;
 import com.ecfeed.core.utils.StringHelper;
-import com.ecfeed.core.utils.UriHelper;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.utils.EclipseHelper;
 import com.ecfeed.utils.ModelEditorPlatformAdapter;
@@ -57,36 +54,9 @@ public class ModelEditorHelper {
 
 		return (ModelEditor)editorPart;
 	}	
-	
-	public static URI getUriFromFileStoreEditor(ModelEditor modelEditor) {
-		
-		if (modelEditor == null) {
-			return null;
-		}
-
-		FileStoreEditorInput editorInput = ModelEditorHelper.getFileStoreEditorInput(modelEditor);
-		
-		if (editorInput == null) {
-			return null;
-		}
-		
-		return editorInput.getURI();
-	}
-
-	private static FileStoreEditorInput getFileStoreEditorInput(ModelEditor modelEditor) {
-		IEditorInput editorInput = modelEditor.getEditorInput();
-		return castToFileStoreEditorInput(editorInput);
-	}	
-
-	private static FileStoreEditorInput castToFileStoreEditorInput(IEditorInput editorInput) {
-		if (!(editorInput instanceof FileStoreEditorInput)) {
-			return null;
-		}
-		return  (FileStoreEditorInput)editorInput;
-	}	
 
 	public static boolean isInMemFileInput(IEditorInput editorInput) {
-		String fileName = getFileNameFromEditorInput(editorInput);
+		String fileName = ModelEditorPlatformAdapter.getFileNameFromEditorInput(editorInput);
 
 		if (fileName == null) {
 			return false;
@@ -99,17 +69,8 @@ public class ModelEditorHelper {
 		return false;		
 	}
 
-	public static String getFileNameFromEditorInput(IEditorInput editorInput) {
-		FileStoreEditorInput fileStoreInput = ModelEditorHelper.castToFileStoreEditorInput(editorInput);
-		if (fileStoreInput == null) {
-			return null;
-		}
-
-		return UriHelper.convertUriToFilePath(fileStoreInput.getURI());
-	}
-
 	public static InputStream getInitialInputStreamForRCP(IEditorInput input) {
-		String fileName = ModelEditorHelper.getFileNameFromEditorInput(input);
+		String fileName = ModelEditorPlatformAdapter.getFileNameFromEditorInput(input);
 
 		if (fileName == null) {
 			return null;

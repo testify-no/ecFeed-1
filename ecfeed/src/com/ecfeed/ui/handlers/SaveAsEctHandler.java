@@ -20,6 +20,7 @@ import com.ecfeed.ui.editor.CanAddDocumentChecker;
 import com.ecfeed.ui.editor.ModelEditor;
 import com.ecfeed.ui.editor.ModelEditorHelper;
 import com.ecfeed.utils.EclipseHelper;
+import com.ecfeed.utils.ModelEditorPlatformAdapter;
 
 public class SaveAsEctHandler {
 
@@ -27,7 +28,7 @@ public class SaveAsEctHandler {
 		
 		ModelEditor modelEditor = ModelEditorHelper.getActiveModelEditor();
 
-		URI uri = ModelEditorHelper.getUriFromFileStoreEditor(modelEditor);
+		URI uri = ModelEditorPlatformAdapter.getUriFromFileStoreEditor(modelEditor);
 
 		String pathWithFileName = UriHelper.convertUriToFilePath(uri);
 		if (pathWithFileName == null) {

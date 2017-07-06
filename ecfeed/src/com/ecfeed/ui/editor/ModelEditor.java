@@ -280,7 +280,8 @@ public class ModelEditor extends FormEditor implements IJavaProjectProvider {
 	}
 
 	public void doSaveForRCP() {
-		String fileName = ModelEditorHelper.getFileNameFromEditorInput(getEditorInput());
+		String fileName = 
+				ModelEditorPlatformAdapter.getFileNameFromEditorInput(getEditorInput());
 
 		if (fileName == null) {
 			final String MSG = "Empty file name from editor input.";
