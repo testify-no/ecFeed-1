@@ -15,17 +15,17 @@ import org.eclipse.swt.widgets.Shell;
 
 public class EcFileDialog {
 
-	FileDialog dialog;
+	FileDialog fDialog;
 	
 	public EcFileDialog(Shell parent, int style) {
-		
+		fDialog = new FileDialog(parent, style);
 	}
 	
 	public void setFilterExtensions (String [] extensions) {
-		dialog.setFilterExtensions(extensions);
+		fDialog.setFilterExtensions(extensions);
 	}
 
 	public String open () {
-		return dialog.open();
+		return fDialog.open();
 	}
 }
