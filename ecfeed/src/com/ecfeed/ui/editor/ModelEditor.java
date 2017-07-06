@@ -25,6 +25,10 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.IResourceChangeListener;
+import org.eclipse.core.resources.IResourceDelta;
+import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -47,6 +51,7 @@ import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.FileEditorInput;
 
 import com.ecfeed.application.ApplicationContext;
+import com.ecfeed.core.adapter.CachedImplementationStatusResolver;
 import com.ecfeed.core.adapter.ModelOperationManager;
 import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.model.ModelVersionDistributor;
@@ -59,8 +64,8 @@ import com.ecfeed.ui.common.CommonConstants;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
-import com.ecfeed.utils.EclipseHelper;
 import com.ecfeed.utils.ModelEditorPlatformAdapter;
+import com.ecfeed.utils.EclipseHelper;
 
 public class ModelEditor extends FormEditor implements IJavaProjectProvider {
 
@@ -68,7 +73,6 @@ public class ModelEditor extends FormEditor implements IJavaProjectProvider {
 
 	private RootNode fModel;
 	private ModelPage fModelPage;
-	private ResourceChangeReporter fResourceChangeReporter;
 	private ModelOperationManager fModelManager;
 	private ObjectUndoContext fUndoContext;
 	private ModelSourceEditor fSourcePageEditor;
@@ -108,11 +112,58 @@ public class ModelEditor extends FormEditor implements IJavaProjectProvider {
 		}
 	}
 
-	public ModelEditor() {
+	private class ResourceChangeReporter implements IResourceChangeListener {
+		@Override
+		public void resourceChanged(IResourceChangeEvent event) {
+			switch (event.getType()) {
+			case IResourceChangeEvent.POST_CHANGE:
+			case IResourceChangeEvent.POST_BUILD:
+				try {
+					event.getDelta().accept(new ResourceDeltaVisitor());
+				} catch (CoreException e) {
+					SystemLogger.logCatch(e.getMessage());
+				}
+				break;
+			default:
+				break;
+			}
+		}
+	}
 
+	private class ResourceDeltaVisitor implements IResourceDeltaVisitor {
+		@Override
+		public boolean visit(IResourceDelta delta) throws CoreException {
+			switch (delta.getKind()) {
+			case IResourceDelta.ADDED:
+			case IResourceDelta.REMOVED:
+			case IResourceDelta.CHANGED:
+				if (!Display.getDefault().isDisposed()) {
+					Display.getDefault().asyncExec(new Runnable() {
+						@Override
+						public void run() {
+							CachedImplementationStatusResolver.clearCache();
+							if(fModelPage.getMasterBlock().getMasterSection() != null){
+								fModelPage.getMasterBlock().getMasterSection().refresh();
+							}
+							if(fModelPage.getMasterBlock().getCurrentPage() != null){
+								fModelPage.getMasterBlock().getCurrentPage().refresh();
+							}
+						}
+					});
+				}
+				break;
+			default:
+				break;
+			}
+			return false;
+		}
+	}
+
+	public ModelEditor() {
 		super();
 
-		fResourceChangeReporter = new ResourceChangeReporter(); 
+		ResourceChangeReporter listener = new ResourceChangeReporter();
+		ResourcesPlugin.getWorkspace().addResourceChangeListener(listener, IResourceChangeEvent.POST_CHANGE);
 		fModelManager = new ModelOperationManager();
 		fUndoContext = new ObjectUndoContext(fModelManager);
 	}
@@ -147,11 +198,8 @@ public class ModelEditor extends FormEditor implements IJavaProjectProvider {
 	protected void addPages() {
 		try {
 			setPartName(getEditorInput().getName());
+			addPage(fModelPage = new ModelPage(this, this));
 
-			fModelPage = new ModelPage(this, this);
-
-			addPage(fModelPage);
-			fResourceChangeReporter.setModelPage(fModelPage);
 			addSourcePage();
 
 		} catch (PartInitException e) {
