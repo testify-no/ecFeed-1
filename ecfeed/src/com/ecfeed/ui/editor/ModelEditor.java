@@ -24,10 +24,6 @@ import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IResourceChangeEvent;
-import org.eclipse.core.resources.IResourceChangeListener;
-import org.eclipse.core.resources.IResourceDelta;
-import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -47,7 +43,6 @@ import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.FileEditorInput;
 
 import com.ecfeed.application.ApplicationContext;
-import com.ecfeed.core.adapter.CachedImplementationStatusResolver;
 import com.ecfeed.core.adapter.ModelOperationManager;
 import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.model.ModelVersionDistributor;
@@ -55,7 +50,6 @@ import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.serialization.IModelSerializer;
 import com.ecfeed.core.serialization.ect.EctSerializer;
 import com.ecfeed.core.utils.ExceptionHelper;
-import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.CommonConstants;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
@@ -77,8 +71,16 @@ public class ModelEditor extends FormEditor
 	public ModelEditor() {
 
 		super();
-		ResourceChangeReporter listener = new ResourceChangeReporter();
-		ResourcesPlugin.getWorkspace().addResourceChangeListener(listener, IResourceChangeEvent.POST_CHANGE);
+		
+		IModelPageProvider modelPageProvider = new IModelPageProvider() {
+
+			@Override
+			public ModelPage getModelPage() {
+				return fModelPage;
+			}
+		};
+		
+		ResourceChangeReporter.registerResourceChangeListener(modelPageProvider);
 
 		fModelManager = new ModelOperationManager();
 		fUndoContext = new ObjectUndoContext(fModelManager);
@@ -93,7 +95,7 @@ public class ModelEditor extends FormEditor
 
 		fJavaProjectProvider = new JavaProjectProvider(editorInputProvider);
 	}
-
+	
 	public RootNode getModel() throws ModelOperationException{
 		if (fModel == null){
 			fModel = createModel();
@@ -396,53 +398,6 @@ public class ModelEditor extends FormEditor
 		@Override
 		public String getToolTipText() {
 			return "XML view of model";
-		}
-	}
-
-	private class ResourceChangeReporter implements IResourceChangeListener {
-		@Override
-		public void resourceChanged(IResourceChangeEvent event) {
-			switch (event.getType()) {
-			case IResourceChangeEvent.POST_CHANGE:
-			case IResourceChangeEvent.POST_BUILD:
-				try {
-					event.getDelta().accept(new ResourceDeltaVisitor());
-				} catch (CoreException e) {
-					SystemLogger.logCatch(e.getMessage());
-				}
-				break;
-			default:
-				break;
-			}
-		}
-	}
-
-	private class ResourceDeltaVisitor implements IResourceDeltaVisitor {
-		@Override
-		public boolean visit(IResourceDelta delta) throws CoreException {
-			switch (delta.getKind()) {
-			case IResourceDelta.ADDED:
-			case IResourceDelta.REMOVED:
-			case IResourceDelta.CHANGED:
-				if (!Display.getDefault().isDisposed()) {
-					Display.getDefault().asyncExec(new Runnable() {
-						@Override
-						public void run() {
-							CachedImplementationStatusResolver.clearCache();
-							if(fModelPage.getMasterBlock().getMasterSection() != null){
-								fModelPage.getMasterBlock().getMasterSection().refresh();
-							}
-							if(fModelPage.getMasterBlock().getCurrentPage() != null){
-								fModelPage.getMasterBlock().getCurrentPage().refresh();
-							}
-						}
-					});
-				}
-				break;
-			default:
-				break;
-			}
-			return false;
 		}
 	}
 
