@@ -200,7 +200,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 	}
 
 	private boolean isInMemFile(IJavaProjectProvider javaProjectProvider) { // XYX TODO
-		
+
 		if (!(javaProjectProvider instanceof ModelEditor)) {
 			return false;
 		}
@@ -215,14 +215,37 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 		if (fModel == null) {
 			return;
 		}
-		detailsPart.registerPage(RootNode.class, new ModelDetailsPage(fMasterSection, fUpdateContext, fPage.getEditor()));
-		detailsPart.registerPage(ClassNode.class, new ClassDetailsPage(fMasterSection, fUpdateContext, fPage.getEditor()));
-		detailsPart.registerPage(MethodNode.class, new MethodDetailsPage(fMasterSection, fUpdateContext, fPage.getEditor()));
-		detailsPart.registerPage(MethodParameterNode.class, new MethodParameterDetailsPage(fMasterSection, fUpdateContext, fPage.getEditor()));
-		detailsPart.registerPage(GlobalParameterNode.class, new GlobalParameterDetailsPage(fMasterSection, fUpdateContext, fPage.getEditor()));
-		detailsPart.registerPage(TestCaseNode.class, new TestCaseDetailsPage(fMasterSection, fUpdateContext, fPage.getEditor()));
-		detailsPart.registerPage(ConstraintNode.class, new ConstraintDetailsPage(fMasterSection, fUpdateContext, fPage.getEditor()));
-		detailsPart.registerPage(ChoiceNode.class, new ChoiceDetailsPage(fMasterSection, fUpdateContext, fPage.getEditor()));
+		detailsPart.registerPage(
+				RootNode.class, 
+				new ModelDetailsPage(fMasterSection, fUpdateContext, fJavaProjectProvider));
+
+		detailsPart.registerPage(
+				ClassNode.class, 
+				new ClassDetailsPage(fMasterSection, fUpdateContext, fJavaProjectProvider));
+
+		detailsPart.registerPage(
+				MethodNode.class, 
+				new MethodDetailsPage(fMasterSection, fUpdateContext, fJavaProjectProvider));
+
+		detailsPart.registerPage(
+				MethodParameterNode.class, 
+				new MethodParameterDetailsPage(fMasterSection, fUpdateContext, fJavaProjectProvider));
+
+		detailsPart.registerPage(
+				GlobalParameterNode.class, 
+				new GlobalParameterDetailsPage(fMasterSection, fUpdateContext, fJavaProjectProvider));
+
+		detailsPart.registerPage(
+				TestCaseNode.class, 
+				new TestCaseDetailsPage(fMasterSection, fUpdateContext, fJavaProjectProvider));
+
+		detailsPart.registerPage(
+				ConstraintNode.class, 
+				new ConstraintDetailsPage(fMasterSection, fUpdateContext, fJavaProjectProvider));
+
+		detailsPart.registerPage(
+				ChoiceNode.class, 
+				new ChoiceDetailsPage(fMasterSection, fUpdateContext, fJavaProjectProvider));
 
 		selectNode(fModel);
 	}

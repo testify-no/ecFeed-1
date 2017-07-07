@@ -302,7 +302,7 @@ public class ModelMasterSection extends TreeViewerSection {
 			boolean fIsProjectAvailable;
 
 			public DecorationProvider(IJavaProjectProvider javaProjectProvider, boolean isProjectAvailable) {
-				
+
 				fNodeInterface = new AbstractNodeInterface(ModelMasterSection.this, javaProjectProvider);
 				fIsProjectAvailable = isProjectAvailable;
 			}
@@ -601,7 +601,7 @@ public class ModelMasterSection extends TreeViewerSection {
 
 			TestOnlineAction testOnlineAction = 
 					new TestOnlineAction(fJavaProjectProvider, ModelMasterSection.this, methodInterface);
-			
+
 			addMenuItem(testOnlineAction.getName(), testOnlineAction);
 			return true;
 		}
@@ -633,7 +633,7 @@ public class ModelMasterSection extends TreeViewerSection {
 
 			ExportOnlineAction exportOnlineAction = 
 					new ExportOnlineAction(fJavaProjectProvider, ModelMasterSection.this, methodInterface);
-			
+
 			addMenuItem(exportOnlineAction.getName(), exportOnlineAction);
 			return true;
 		}
@@ -672,7 +672,7 @@ public class ModelMasterSection extends TreeViewerSection {
 
 		ModelViewerActionProvider modelViewerActionProvider = 
 				new ModelViewerActionProvider(
-						getTreeViewer(), this, parentBlock.getPage().getEditor(), basicActionRunnerProvider, false);
+						getTreeViewer(), this, fJavaProjectProvider, basicActionRunnerProvider, false);
 
 		setActionProvider(modelViewerActionProvider, includeDeleteAction);		
 
@@ -680,7 +680,7 @@ public class ModelMasterSection extends TreeViewerSection {
 				DND.DROP_COPY|DND.DROP_MOVE|DND.DROP_LINK,
 				new Transfer[]{ModelNodesTransfer.getInstance()}, 
 				new ModelNodeDragListener(getTreeViewer()));
-		
+
 		getTreeViewer().addDropSupport(
 				DND.DROP_COPY|DND.DROP_MOVE|DND.DROP_LINK, 
 				new Transfer[]{ModelNodesTransfer.getInstance()}, 

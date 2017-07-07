@@ -23,7 +23,6 @@ import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
@@ -35,9 +34,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jdt.core.IPackageFragmentRoot;
-import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Display;
@@ -62,13 +58,12 @@ import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.CommonConstants;
 import com.ecfeed.ui.common.Messages;
-import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
-import com.ecfeed.utils.ModelEditorPlatformAdapter;
 import com.ecfeed.utils.EclipseHelper;
+import com.ecfeed.utils.ModelEditorPlatformAdapter;
 
-public class ModelEditor extends FormEditor implements IJavaProjectProvider {
-
+public class ModelEditor extends FormEditor 
+{
 	private static Shell fGlobalShellForDialogs = null;
 
 	private RootNode fModel;
@@ -76,6 +71,7 @@ public class ModelEditor extends FormEditor implements IJavaProjectProvider {
 	private ModelOperationManager fModelManager;
 	private ObjectUndoContext fUndoContext;
 	private ModelSourceEditor fSourcePageEditor;
+	private JavaProjectProvider fJavaProjectProvider;
 	private int fSourcePageIndex = -1;
 
 	public class SourceEditorInput implements IEditorInput{
@@ -160,12 +156,23 @@ public class ModelEditor extends FormEditor implements IJavaProjectProvider {
 	}
 
 	public ModelEditor() {
-		super();
 
+		super();
 		ResourceChangeReporter listener = new ResourceChangeReporter();
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(listener, IResourceChangeEvent.POST_CHANGE);
+
 		fModelManager = new ModelOperationManager();
 		fUndoContext = new ObjectUndoContext(fModelManager);
+
+		IEditorInputProvider editorInputProvider = new IEditorInputProvider() {
+
+			@Override
+			public Object getEditorInputObject() {
+				return getEditorInput();
+			}
+		};
+
+		fJavaProjectProvider = new JavaProjectProvider(editorInputProvider);
 	}
 
 	public RootNode getModel() throws ModelOperationException{
@@ -198,7 +205,7 @@ public class ModelEditor extends FormEditor implements IJavaProjectProvider {
 	protected void addPages() {
 		try {
 			setPartName(getEditorInput().getName());
-			addPage(fModelPage = new ModelPage(this, this));
+			addPage(fModelPage = new ModelPage(this, fJavaProjectProvider));
 
 			addSourcePage();
 
@@ -382,6 +389,7 @@ public class ModelEditor extends FormEditor implements IJavaProjectProvider {
 			final String CAN_NOT_GET_STORE = "Can not get store for file: %s. Message: %s";
 			ExceptionHelper.reportRuntimeException(String.format(CAN_NOT_GET_STORE, fileWithPath, e.getMessage()));
 		}
+
 		setInput(new FileStoreEditorInput(fileStore));
 		setPartName(file.getName());
 	}	
@@ -428,59 +436,6 @@ public class ModelEditor extends FormEditor implements IJavaProjectProvider {
 		}
 
 		page.refresh();
-	}
-
-	private IFile getEditorFile(){
-		IEditorInput input = getEditorInput();
-		if (input instanceof FileEditorInput){
-			return ((FileEditorInput)input).getFile();
-		}
-		return null;
-	}
-
-	@Override
-	public IProject getProject() {
-		if (!ApplicationContext.isProjectAvailable()) {
-			return null;
-		}
-		IFile file = getEditorFile();
-		if (file != null){
-			return file.getProject();
-		}
-		return null;
-	}
-
-
-	private IPath getPath(){
-		IFile file = getEditorFile();
-		if (file != null){
-			IPath path = file.getFullPath();
-			return path;
-		}
-		return null;
-	}
-
-	@Override
-	public IPackageFragmentRoot getPackageFragmentRoot() {
-		if (!ApplicationContext.isProjectAvailable()) {
-			return null;
-		}		
-		try {
-			if(getProject().hasNature(JavaCore.NATURE_ID)){
-				IJavaProject javaProject = JavaCore.create(getProject());
-				IPath path = getPath();
-				if(javaProject != null){
-					for(IPackageFragmentRoot root : javaProject.getPackageFragmentRoots()){
-						if(root.getPath().isPrefixOf(path)){
-							return root;
-						}
-					}
-				}
-			}
-		} catch (CoreException e) {
-			SystemLogger.logCatch(e.getMessage());
-		}
-		return null;
 	}
 
 	public ModelOperationManager getModelOperationManager(){
