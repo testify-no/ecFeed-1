@@ -92,19 +92,144 @@ public class ModelMasterSection extends TreeViewerSection {
 	private IModelUpdateListener fUpdateListener;
 	private IJavaProjectProvider fJavaProjectProvider;
 
-	private class ModelWrapper{
+
+	public ModelMasterSection(ModelMasterDetailsBlock parentBlock, IJavaProjectProvider javaProjectProvider) {
+		super(parentBlock.getMasterSectionContext(), 
+				parentBlock.getModelUpdateContext(), 
+				javaProjectProvider, 
+				StyleDistributor.getSectionStyle());
+
+		fMasterDetailsBlock = parentBlock;
+		fJavaProjectProvider = javaProjectProvider;
+
+		boolean includeDeleteAction = false;
+		if (ApplicationContext.isStandaloneApplication()) {
+			includeDeleteAction = true;
+		}
+
+		BasicActionRunnerProvider basicActionRunnerProvider = 
+				new BasicActionRunnerProvider(
+						new SaveActionRunner(),
+						new UndoActionRunner(),
+						new RedoActionRunner()); 
+
+		ModelViewerActionProvider modelViewerActionProvider = 
+				new ModelViewerActionProvider(
+						getTreeViewer(), this, fJavaProjectProvider, basicActionRunnerProvider, false);
+
+		setActionProvider(modelViewerActionProvider, includeDeleteAction);		
+
+		getTreeViewer().addDragSupport(
+				DND.DROP_COPY|DND.DROP_MOVE|DND.DROP_LINK,
+				new Transfer[]{ModelNodesTransfer.getInstance()}, 
+				new ModelNodeDragListener(getTreeViewer()));
+
+		getTreeViewer().addDropSupport(
+				DND.DROP_COPY|DND.DROP_MOVE|DND.DROP_LINK, 
+				new Transfer[]{ModelNodesTransfer.getInstance()}, 
+				new ModelNodeDropListener(getTreeViewer(), this, fJavaProjectProvider));
+	}
+
+	@Override
+	public void refresh() {
+		super.refresh();
+		IDetailsPage page = fMasterDetailsBlock.getCurrentPage();
+		if(page != null){
+			page.refresh();
+		}
+	}
+
+	@Override
+	protected void createContent(){
+		super.createContent();
+		getSection().setText("Structure");
+		getTreeViewer().setAutoExpandLevel(AUTO_EXPAND_LEVEL);
+
+		createToolbarAndAddIcons();
+		showCheckForUpdatesDialogWhenPossible();
+	}
+
+	@Override
+	protected IContentProvider createViewerContentProvider() {
+		return new ModelContentProvider();
+	}
+
+	@Override
+	protected IBaseLabelProvider createViewerLabelProvider() {
+		return new DecoratingLabelProvider(new ModelLabelProvider(), new ModelLabelDecorator());
+	}
+
+	@Override
+	protected ViewerMenuListener getMenuListener() {
+		return new MasterViewerMenuListener(getMenu());
+	}
+
+	@Override
+	public List<IModelUpdateListener> getUpdateListeners(){
+		if (fUpdateListener == null) {
+			fUpdateListener = new UpdateListener();
+		}
+		return Arrays.asList(new IModelUpdateListener[]{fUpdateListener});
+	}
+
+	public void setInput(RootNode model) {
+		setInput(new ModelWrapper(model));
+		collapseGlobalParameters();
+	}
+
+	private void createToolbarAndAddIcons() {
+		Section section = getSection();
+
+		ToolBarManager toolBarManager = new ToolBarManager(SWT.FLAT);
+		ToolBar toolbar = toolBarManager.createControl(section);
+
+		final Cursor handCursor = Display.getCurrent().getSystemCursor(SWT.CURSOR_HAND);
+		toolbar.setCursor(handCursor);
+
+		toolBarManager.add(new ShowInfoToolbarAction());
+		toolBarManager.update(true);
+
+		moveToolbarToTheRightSide(toolbar, section); 
+	}
+
+	private void moveToolbarToTheRightSide(ToolBar toolbar, Section section) {
+		section.setTextClient(toolbar);
+	}
+
+	private void showCheckForUpdatesDialogWhenPossible() {
+
+		Display.getCurrent().asyncExec
+		(new Runnable() {
+			public void run() {
+				CheckForUpdatesDialog.openConditionally();
+				refresh();
+			}
+		});
+	}
+
+	private void collapseGlobalParameters() {
+		for(GlobalParameterNode parameter : ((ModelWrapper)getViewer().getInput()).getModel().getGlobalParameters()){
+			getTreeViewer().collapseToLevel(parameter, 1);
+		}
+	}
+
+	private Image getImageFromFile(String file) {
+		return ImageManager.getInstance().getImage(file);
+	}
+
+	private class ModelWrapper {
 		private final RootNode fModel;
 
-		public ModelWrapper(RootNode model){
+		public ModelWrapper(RootNode model) {
 			fModel = model;
 		}
 
-		public RootNode getModel(){
+		public RootNode getModel() {
 			return fModel;
 		}
 	}
 
-	private class UpdateListener implements IModelUpdateListener{
+	private class UpdateListener implements IModelUpdateListener {
 		@Override
 		public void modelUpdated(AbstractFormPart source) {
 			source.markDirty();
@@ -118,7 +243,7 @@ public class ModelMasterSection extends TreeViewerSection {
 
 		@Override
 		public Object[] getElements(Object inputElement) {
-			if(inputElement instanceof ModelWrapper){
+			if(inputElement instanceof ModelWrapper) {
 				RootNode root = ((ModelWrapper)inputElement).getModel();
 				return new Object[]{root};
 			}
@@ -143,7 +268,7 @@ public class ModelMasterSection extends TreeViewerSection {
 				return children.toArray();
 			}
 
-			if(parentElement instanceof MethodParameterNode){
+			if(parentElement instanceof MethodParameterNode) {
 				MethodParameterNode parameter = (MethodParameterNode)parentElement;
 				if(parameter.isExpected() && AbstractParameterInterface.isPrimitive(parameter.getType())){
 					return EMPTY_ARRAY;
@@ -152,7 +277,7 @@ public class ModelMasterSection extends TreeViewerSection {
 					return EMPTY_ARRAY;
 				}
 			}
-			if(parentElement instanceof AbstractNode){
+			if(parentElement instanceof AbstractNode) {
 				AbstractNode node = (AbstractNode)parentElement;
 				if(node.getChildren().size() < CommonConstants.MAX_DISPLAYED_CHILDREN_PER_NODE){
 					return node.getChildren().toArray();
@@ -163,7 +288,7 @@ public class ModelMasterSection extends TreeViewerSection {
 
 		@Override
 		public Object getParent(Object element) {
-			if(element instanceof AbstractNode){
+			if (element instanceof AbstractNode) {
 				return ((AbstractNode)element).getParent();
 			}
 			return null;
@@ -654,39 +779,6 @@ public class ModelMasterSection extends TreeViewerSection {
 
 	}	
 
-	public ModelMasterSection(ModelMasterDetailsBlock parentBlock, IJavaProjectProvider javaProjectProvider) {
-		super(parentBlock.getMasterSectionContext(), parentBlock.getModelUpdateContext(), javaProjectProvider, StyleDistributor.getSectionStyle());
-		fMasterDetailsBlock = parentBlock;
-		fJavaProjectProvider = javaProjectProvider;
-
-		boolean includeDeleteAction = false;
-		if (ApplicationContext.isStandaloneApplication()) {
-			includeDeleteAction = true;
-		}
-
-		BasicActionRunnerProvider basicActionRunnerProvider = 
-				new BasicActionRunnerProvider(
-						new SaveActionRunner(),
-						new UndoActionRunner(),
-						new RedoActionRunner()); 
-
-		ModelViewerActionProvider modelViewerActionProvider = 
-				new ModelViewerActionProvider(
-						getTreeViewer(), this, fJavaProjectProvider, basicActionRunnerProvider, false);
-
-		setActionProvider(modelViewerActionProvider, includeDeleteAction);		
-
-		getTreeViewer().addDragSupport(
-				DND.DROP_COPY|DND.DROP_MOVE|DND.DROP_LINK,
-				new Transfer[]{ModelNodesTransfer.getInstance()}, 
-				new ModelNodeDragListener(getTreeViewer()));
-
-		getTreeViewer().addDropSupport(
-				DND.DROP_COPY|DND.DROP_MOVE|DND.DROP_LINK, 
-				new Transfer[]{ModelNodesTransfer.getInstance()}, 
-				new ModelNodeDropListener(getTreeViewer(), this, fJavaProjectProvider));
-	}
-
 	private class SaveActionRunner implements IActionRunner {
 
 		@Override
@@ -728,91 +820,4 @@ public class ModelMasterSection extends TreeViewerSection {
 
 	}
 
-	public void setInput(RootNode model){
-		setInput(new ModelWrapper(model));
-		collapseGlobalParameters();
-	}
-
-	@Override
-	public void refresh(){
-		super.refresh();
-		IDetailsPage page = fMasterDetailsBlock.getCurrentPage();
-		if(page != null){
-			page.refresh();
-		}
-
-	}
-
-	@Override
-	protected void createContent(){
-		super.createContent();
-		getSection().setText("Structure");
-		getTreeViewer().setAutoExpandLevel(AUTO_EXPAND_LEVEL);
-
-		createToolbarAndAddIcons();
-		showCheckForUpdatesDialogWhenPossible();
-	}
-
-	private void createToolbarAndAddIcons() {
-		Section section = getSection();
-
-		ToolBarManager toolBarManager = new ToolBarManager(SWT.FLAT);
-		ToolBar toolbar = toolBarManager.createControl(section);
-
-		final Cursor handCursor = Display.getCurrent().getSystemCursor(SWT.CURSOR_HAND);
-		toolbar.setCursor(handCursor);
-
-		toolBarManager.add(new ShowInfoToolbarAction());
-		toolBarManager.update(true);
-
-		moveToolbarToTheRightSide(toolbar, section); 
-	}
-
-	private void moveToolbarToTheRightSide(ToolBar toolbar, Section section) {
-		section.setTextClient(toolbar);
-	}
-
-	private void showCheckForUpdatesDialogWhenPossible() {
-
-		Display.getCurrent().asyncExec
-		(new Runnable() {
-			public void run() {
-				CheckForUpdatesDialog.openConditionally();
-				refresh();
-			}
-		});
-	}
-
-	@Override
-	protected IContentProvider createViewerContentProvider() {
-		return new ModelContentProvider();
-	}
-
-	@Override
-	protected IBaseLabelProvider createViewerLabelProvider() {
-		return new DecoratingLabelProvider(new ModelLabelProvider(), new ModelLabelDecorator());
-	}
-
-	@Override
-	protected ViewerMenuListener getMenuListener() {
-		return new MasterViewerMenuListener(getMenu());
-	}
-
-	@Override
-	public List<IModelUpdateListener> getUpdateListeners(){
-		if(fUpdateListener == null){
-			fUpdateListener = new UpdateListener();
-		}
-		return Arrays.asList(new IModelUpdateListener[]{fUpdateListener});
-	}
-
-	private void collapseGlobalParameters() {
-		for(GlobalParameterNode parameter : ((ModelWrapper)getViewer().getInput()).getModel().getGlobalParameters()){
-			getTreeViewer().collapseToLevel(parameter, 1);
-		}
-	}
-
-	private Image getImageFromFile(String file) {
-		return ImageManager.getInstance().getImage(file);
-	}
 }
