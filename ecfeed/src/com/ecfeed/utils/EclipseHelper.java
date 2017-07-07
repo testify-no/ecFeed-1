@@ -19,8 +19,6 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
-import com.ecfeed.ui.editor.ModelEditorHelper;
-
 public class EclipseHelper {
 	
 	public static Shell getActiveShell() {
@@ -30,24 +28,27 @@ public class EclipseHelper {
 	public static IWorkbenchPage getActiveWorkBenchPage() {
 		return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 	}
-
+	
 	public static IWorkbenchWindow getActiveWorkbenchWindow() {
 		return PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 	}
-
+	
 	public static IAction getGlobalAction(String actionId) {
 		IActionBars actionBars = EclipseHelper.getActionBarsForActiveEditor();
 		return actionBars.getGlobalActionHandler(actionId);
 	}
 
 	public static IActionBars getActionBarsForActiveEditor() {
-		IEditorPart editorPart = ModelEditorHelper.getActiveEditor();
+		IEditorPart editorPart = getActiveEditor();
 
 		if (editorPart == null) {
 			return null;
 		}
 		return editorPart.getEditorSite().getActionBars();
 	}
-
+	
+	public static IEditorPart getActiveEditor() {
+		return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+	}
 
 }

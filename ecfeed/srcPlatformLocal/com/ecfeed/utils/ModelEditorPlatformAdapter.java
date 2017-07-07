@@ -41,11 +41,10 @@ import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.dialogs.basic.SaveAsEctDialogWithConfirm;
 import com.ecfeed.ui.editor.CanAddDocumentChecker;
 import com.ecfeed.ui.editor.ModelEditor;
-import com.ecfeed.ui.editor.ModelEditorHelper;
 
 public class ModelEditorPlatformAdapter {
 
-	public static Object getFileEditorInput(IEditorInput editorInput) { // returns FileEditorInput type
+	public static Object getFileEditorInput(IEditorInput editorInput) {
 		if (!(editorInput instanceof FileEditorInput)) {
 			return null;
 		}
@@ -53,7 +52,7 @@ public class ModelEditorPlatformAdapter {
 	}
 
 	public static void openEditorOnExistingExtFile(String pathWithFileName) {
-		IWorkbenchPage page = ModelEditorHelper.getActiveWorkBenchPage();
+		IWorkbenchPage page = EclipseHelper.getActiveWorkBenchPage();
 		IFileStore fileStore = ModelEditorPlatformAdapter.getFileStoreForExistingFile(pathWithFileName);
 		if (fileStore == null) {
 			ExceptionHelper.reportRuntimeException("Can not open editor on file: " + pathWithFileName + " .");
@@ -81,7 +80,7 @@ public class ModelEditorPlatformAdapter {
 	}
 
 	public static void openEditorOnFileInMemory(String tmpPathWithFileName) {
-		IWorkbenchPage page = ModelEditorHelper.getActiveWorkBenchPage();
+		IWorkbenchPage page = EclipseHelper.getActiveWorkBenchPage();
 		File file = new File(tmpPathWithFileName);
 		IFileStore fileStore = null;
 		try {
