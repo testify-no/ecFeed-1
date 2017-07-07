@@ -19,6 +19,8 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
+import com.ecfeed.ui.editor.ModelEditorHelper;
+
 public class EclipseHelper {
 	
 	public static Shell getActiveShell() {
@@ -39,7 +41,7 @@ public class EclipseHelper {
 	}
 
 	public static IActionBars getActionBarsForActiveEditor() {
-		IEditorPart editorPart = ModelEditorPlatformAdapter.getActiveEditor();
+		IEditorPart editorPart = ModelEditorHelper.getActiveEditor();
 
 		if (editorPart == null) {
 			return null;
