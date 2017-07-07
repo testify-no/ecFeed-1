@@ -74,87 +74,6 @@ public class ModelEditor extends FormEditor
 	private JavaProjectProvider fJavaProjectProvider;
 	private int fSourcePageIndex = -1;
 
-	public class SourceEditorInput implements IEditorInput{
-
-		@Override
-		@SuppressWarnings({ "rawtypes" })
-		public Object getAdapter(Class adapter) {
-			return null;
-		}
-
-		@Override
-		public boolean exists() {
-			return true;
-		}
-
-		@Override
-		public ImageDescriptor getImageDescriptor() {
-			return null;
-		}
-
-		@Override
-		public String getName() {
-			return "source";
-		}
-
-		@Override
-		public IPersistableElement getPersistable() {
-			return null;
-		}
-
-		@Override
-		public String getToolTipText() {
-			return "XML view of model";
-		}
-	}
-
-	private class ResourceChangeReporter implements IResourceChangeListener {
-		@Override
-		public void resourceChanged(IResourceChangeEvent event) {
-			switch (event.getType()) {
-			case IResourceChangeEvent.POST_CHANGE:
-			case IResourceChangeEvent.POST_BUILD:
-				try {
-					event.getDelta().accept(new ResourceDeltaVisitor());
-				} catch (CoreException e) {
-					SystemLogger.logCatch(e.getMessage());
-				}
-				break;
-			default:
-				break;
-			}
-		}
-	}
-
-	private class ResourceDeltaVisitor implements IResourceDeltaVisitor {
-		@Override
-		public boolean visit(IResourceDelta delta) throws CoreException {
-			switch (delta.getKind()) {
-			case IResourceDelta.ADDED:
-			case IResourceDelta.REMOVED:
-			case IResourceDelta.CHANGED:
-				if (!Display.getDefault().isDisposed()) {
-					Display.getDefault().asyncExec(new Runnable() {
-						@Override
-						public void run() {
-							CachedImplementationStatusResolver.clearCache();
-							if(fModelPage.getMasterBlock().getMasterSection() != null){
-								fModelPage.getMasterBlock().getMasterSection().refresh();
-							}
-							if(fModelPage.getMasterBlock().getCurrentPage() != null){
-								fModelPage.getMasterBlock().getCurrentPage().refresh();
-							}
-						}
-					});
-				}
-				break;
-			default:
-				break;
-			}
-			return false;
-		}
-	}
-
 	public ModelEditor() {
 
 		super();
@@ -181,6 +100,21 @@ public class ModelEditor extends FormEditor
 		}
 		return fModel;
 	}
+	
+	@Override
+	protected void addPages() {
+		try {
+			setPartName(getEditorInput().getName());
+			addPage(fModelPage = new ModelPage(this, fJavaProjectProvider));
+
+			addSourcePage();
+
+		} catch (PartInitException e) {
+			ExceptionCatchDialog.open("Can not add page.", e.getMessage());
+		}
+
+		setGlobalShellForDialogsIfNull();
+	}
 
 	private RootNode createModel() throws ModelOperationException {
 		IEditorInput input = getEditorInput();
@@ -199,21 +133,6 @@ public class ModelEditor extends FormEditor
 		} else {
 			return ModelEditorHelper.getInitialInputStreamForRCP(input);
 		}		
-	}
-
-	@Override
-	protected void addPages() {
-		try {
-			setPartName(getEditorInput().getName());
-			addPage(fModelPage = new ModelPage(this, fJavaProjectProvider));
-
-			addSourcePage();
-
-		} catch (PartInitException e) {
-			ExceptionCatchDialog.open("Can not add page.", e.getMessage());
-		}
-
-		setGlobalShellForDialogsIfNull();
 	}
 
 	private void setGlobalShellForDialogsIfNull() {
@@ -445,4 +364,86 @@ public class ModelEditor extends FormEditor
 	public IUndoContext getUndoContext() {
 		return fUndoContext;
 	}
+
+	public class SourceEditorInput implements IEditorInput{
+
+		@Override
+		@SuppressWarnings({ "rawtypes" })
+		public Object getAdapter(Class adapter) {
+			return null;
+		}
+
+		@Override
+		public boolean exists() {
+			return true;
+		}
+
+		@Override
+		public ImageDescriptor getImageDescriptor() {
+			return null;
+		}
+
+		@Override
+		public String getName() {
+			return "source";
+		}
+
+		@Override
+		public IPersistableElement getPersistable() {
+			return null;
+		}
+
+		@Override
+		public String getToolTipText() {
+			return "XML view of model";
+		}
+	}
+
+	private class ResourceChangeReporter implements IResourceChangeListener {
+		@Override
+		public void resourceChanged(IResourceChangeEvent event) {
+			switch (event.getType()) {
+			case IResourceChangeEvent.POST_CHANGE:
+			case IResourceChangeEvent.POST_BUILD:
+				try {
+					event.getDelta().accept(new ResourceDeltaVisitor());
+				} catch (CoreException e) {
+					SystemLogger.logCatch(e.getMessage());
+				}
+				break;
+			default:
+				break;
+			}
+		}
+	}
+
+	private class ResourceDeltaVisitor implements IResourceDeltaVisitor {
+		@Override
+		public boolean visit(IResourceDelta delta) throws CoreException {
+			switch (delta.getKind()) {
+			case IResourceDelta.ADDED:
+			case IResourceDelta.REMOVED:
+			case IResourceDelta.CHANGED:
+				if (!Display.getDefault().isDisposed()) {
+					Display.getDefault().asyncExec(new Runnable() {
+						@Override
+						public void run() {
+							CachedImplementationStatusResolver.clearCache();
+							if(fModelPage.getMasterBlock().getMasterSection() != null){
+								fModelPage.getMasterBlock().getMasterSection().refresh();
+							}
+							if(fModelPage.getMasterBlock().getCurrentPage() != null){
+								fModelPage.getMasterBlock().getCurrentPage().refresh();
+							}
+						}
+					});
+				}
+				break;
+			default:
+				break;
+			}
+			return false;
+		}
+	}
+
 }
