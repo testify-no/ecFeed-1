@@ -15,10 +15,16 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
+import org.eclipse.jface.action.IAction;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 
 import com.ecfeed.core.model.ModelConverter;
 import com.ecfeed.core.model.ModelOperationException;
@@ -43,7 +49,7 @@ public class ModelEditorHelper {
 	}
 
 	public static ModelEditor getActiveModelEditor() {
-		IEditorPart editorPart = ModelEditorPlatformAdapter.getActiveEditor();		
+		IEditorPart editorPart = getActiveEditor();		
 		if (editorPart == null) {
 			return null;
 		}
@@ -223,5 +229,36 @@ public class ModelEditorHelper {
 		iterateOverModelEditors(fileFinder);
 		return fileFinder.isFileFound();
 	}
+
+	public static IEditorPart getActiveEditor() {
+		return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+	}
+
+	public static IActionBars getActionBarsForActiveEditor() {
+		IEditorPart editorPart = getActiveEditor();
+
+		if (editorPart == null) {
+			return null;
+		}
+		return editorPart.getEditorSite().getActionBars();
+	}
+
+	public static IAction getGlobalAction(String actionId) {
+		IActionBars actionBars = getActionBarsForActiveEditor();
+		return actionBars.getGlobalActionHandler(actionId);
+	}
+
+	public static Shell getActiveShell() {
+		return Display.getDefault().getActiveShell();
+	}
+
+	public static IWorkbenchPage getActiveWorkBenchPage() {
+		return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+	}
+
+	public static IWorkbenchWindow getActiveWorkbenchWindow() {
+		return PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+	}
+
 
 }

@@ -22,17 +22,12 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.FileEditorInput;
@@ -46,12 +41,9 @@ import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.dialogs.basic.SaveAsEctDialogWithConfirm;
 import com.ecfeed.ui.editor.CanAddDocumentChecker;
 import com.ecfeed.ui.editor.ModelEditor;
+import com.ecfeed.ui.editor.ModelEditorHelper;
 
 public class ModelEditorPlatformAdapter {
-
-	public static IEditorPart getActiveEditor() {
-		return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-	}
 
 	public static Object getFileEditorInput(IEditorInput editorInput) { // returns FileEditorInput type
 		if (!(editorInput instanceof FileEditorInput)) {
@@ -60,20 +52,8 @@ public class ModelEditorPlatformAdapter {
 		return  (FileEditorInput)editorInput;
 	}
 
-	public static Shell getActiveShell() {
-		return Display.getDefault().getActiveShell();
-	}
-
-	public static IWorkbenchPage getActiveWorkBenchPage() {
-		return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-	}
-
-	public static IWorkbenchWindow getActiveWorkbenchWindow() {
-		return PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-	}
-
 	public static void openEditorOnExistingExtFile(String pathWithFileName) {
-		IWorkbenchPage page = getActiveWorkBenchPage();
+		IWorkbenchPage page = ModelEditorHelper.getActiveWorkBenchPage();
 		IFileStore fileStore = ModelEditorPlatformAdapter.getFileStoreForExistingFile(pathWithFileName);
 		if (fileStore == null) {
 			ExceptionHelper.reportRuntimeException("Can not open editor on file: " + pathWithFileName + " .");
@@ -101,7 +81,7 @@ public class ModelEditorPlatformAdapter {
 	}
 
 	public static void openEditorOnFileInMemory(String tmpPathWithFileName) {
-		IWorkbenchPage page = getActiveWorkBenchPage();
+		IWorkbenchPage page = ModelEditorHelper.getActiveWorkBenchPage();
 		File file = new File(tmpPathWithFileName);
 		IFileStore fileStore = null;
 		try {
@@ -123,20 +103,6 @@ public class ModelEditorPlatformAdapter {
 		} catch (PartInitException e) {
 			ExceptionHelper.reportRuntimeException(e.getMessage());
 		}
-	}
-
-	public static IAction getGlobalAction(String actionId) {
-		IActionBars actionBars = ModelEditorPlatformAdapter.getActionBarsForActiveEditor();
-		return actionBars.getGlobalActionHandler(actionId);
-	}
-
-	public static IActionBars getActionBarsForActiveEditor() {
-		IEditorPart editorPart = ModelEditorPlatformAdapter.getActiveEditor();
-
-		if (editorPart == null) {
-			return null;
-		}
-		return editorPart.getEditorSite().getActionBars();
 	}
 
 	public static String selectFileForSaveAs(IEditorInput editorInput, Shell shell) {
@@ -242,7 +208,7 @@ public class ModelEditorPlatformAdapter {
 		IEditorInput editorInput = modelEditor.getEditorInput();
 		return castToFileStoreEditorInput(editorInput);
 	}
-	
+
 	public static void refreshWorkspace(IProgressMonitor monitor) throws CoreException {
 		for(IResource resource : ResourcesPlugin.getWorkspace().getRoot().getProjects()){
 			resource.refreshLocal(IResource.DEPTH_INFINITE, monitor);
