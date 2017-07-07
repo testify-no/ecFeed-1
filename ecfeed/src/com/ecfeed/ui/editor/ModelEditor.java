@@ -22,8 +22,6 @@ import org.eclipse.core.commands.operations.ObjectUndoContext;
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -39,7 +37,6 @@ import org.eclipse.ui.IPersistableElement;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.ide.FileStoreEditorInput;
-import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.FileEditorInput;
 
 import com.ecfeed.application.ApplicationContext;
@@ -275,7 +272,7 @@ public class ModelEditor extends FormEditor
 			IModelSerializer serializer = 
 					new EctSerializer(outputStream, ModelVersionDistributor.getCurrentSoftwareVersion());
 			serializer.serialize(fModel);
-			refreshWorkspace(null);
+			ModelEditorPlatformAdapter.refreshWorkspace(null);
 			commitPages(true);
 			firePropertyChange(PROP_DIRTY);
 		}
@@ -317,17 +314,6 @@ public class ModelEditor extends FormEditor
 
 	private void reportOpenForWriteException(Exception e) {
 		ExceptionCatchDialog.open("Can not open file for writing", e.getMessage());
-	}
-
-	private void refreshWorkspace(IProgressMonitor monitor) throws CoreException {
-		for(IResource resource : ResourcesPlugin.getWorkspace().getRoot().getProjects()){
-			resource.refreshLocal(IResource.DEPTH_INFINITE, monitor);
-		}
-	}
-
-	public void gotoMarker(IMarker marker) {
-		setActivePage(0);
-		IDE.gotoMarker(getEditor(0), marker);
 	}
 
 	@Override

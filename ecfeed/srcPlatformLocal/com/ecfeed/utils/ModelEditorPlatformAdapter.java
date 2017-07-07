@@ -17,8 +17,11 @@ import java.net.URI;
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
@@ -238,6 +241,12 @@ public class ModelEditorPlatformAdapter {
 	private static FileStoreEditorInput getFileStoreEditorInput(ModelEditor modelEditor) {
 		IEditorInput editorInput = modelEditor.getEditorInput();
 		return castToFileStoreEditorInput(editorInput);
-	}	
+	}
+	
+	public static void refreshWorkspace(IProgressMonitor monitor) throws CoreException {
+		for(IResource resource : ResourcesPlugin.getWorkspace().getRoot().getProjects()){
+			resource.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+		}
+	}
 
 }
