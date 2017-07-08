@@ -224,4 +224,8 @@ public class ModelEditorHelper {
 		return fileFinder.isFileFound();
 	}
 
+	public static void reportOpenForWriteException(Exception e) {
+		ExceptionCatchDialog.open("Can not open file for writing", e.getMessage());
+	}
+	
 }

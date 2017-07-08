@@ -16,10 +16,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.core.commands.operations.ObjectUndoContext;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -29,7 +29,6 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.editor.FormEditor;
-import org.eclipse.ui.part.FileEditorInput;
 
 import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.adapter.ModelOperationManager;
@@ -187,16 +186,13 @@ public class ModelEditor extends FormEditor
 	}
 
 	public void doSaveForIDE() {
-		IFile file = ((FileEditorInput)getEditorInput()).getFile();
-		FileOutputStream outputStream = null;
-		try {
-			outputStream = new FileOutputStream(file.getLocation().toOSString());
-		} catch (FileNotFoundException e) {
-			reportOpenForWriteException(e);
-		}
+		
+		OutputStream outputStream = 
+				ModelEditorPlatformAdapter.createOutputStreamForIdeFileSave(getEditorInput());
+		
 		saveModelToStream(outputStream);
 	}
-
+	
 	public void doSaveForRCP() {
 		String fileName = 
 				ModelEditorPlatformAdapter.getFileNameFromEditorInput(getEditorInput());
@@ -223,7 +219,7 @@ public class ModelEditor extends FormEditor
 		try {
 			outputStream = new FileOutputStream(file);
 		} catch (FileNotFoundException e) {
-			reportOpenForWriteException(e);
+			ModelEditorHelper.reportOpenForWriteException(e);
 		}
 
 		saveModelToStream(outputStream);
@@ -255,12 +251,12 @@ public class ModelEditor extends FormEditor
 		try {
 			outputStream = new FileOutputStream(fileWithPath);
 		} catch (FileNotFoundException e) {
-			reportOpenForWriteException(e);
+			ModelEditorHelper.reportOpenForWriteException(e);
 		}
 		saveModelToStream(outputStream);
 	}
 
-	private void saveModelToStream(FileOutputStream outputStream){
+	private void saveModelToStream(OutputStream outputStream) {
 		try{
 			IModelSerializer serializer = 
 					new EctSerializer(outputStream, ModelVersionDistributor.getCurrentSoftwareVersion());
@@ -287,10 +283,6 @@ public class ModelEditor extends FormEditor
 
 		setInput(editorInput);
 		setPartName(editorPartName.get());
-	}
-
-	private void reportOpenForWriteException(Exception e) {
-		ExceptionCatchDialog.open("Can not open file for writing", e.getMessage());
 	}
 
 	@Override
