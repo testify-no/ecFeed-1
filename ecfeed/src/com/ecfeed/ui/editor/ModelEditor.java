@@ -19,15 +19,8 @@ import java.io.InputStream;
 
 import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.core.commands.operations.ObjectUndoContext;
-import org.eclipse.core.filesystem.EFS;
-import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Display;
@@ -36,7 +29,6 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.editor.FormEditor;
-import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.part.FileEditorInput;
 
 import com.ecfeed.application.ApplicationContext;
@@ -47,6 +39,7 @@ import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.serialization.IModelSerializer;
 import com.ecfeed.core.serialization.ect.EctSerializer;
 import com.ecfeed.core.utils.ExceptionHelper;
+import com.ecfeed.core.utils.StringHolder;
 import com.ecfeed.ui.common.CommonConstants;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
@@ -68,7 +61,7 @@ public class ModelEditor extends FormEditor
 	public ModelEditor() {
 
 		super();
-		
+
 		IModelPageProvider modelPageProvider = new IModelPageProvider() {
 
 			@Override
@@ -76,7 +69,7 @@ public class ModelEditor extends FormEditor
 				return fModelPage;
 			}
 		};
-		
+
 		ResourceChangeReporter.registerResourceChangeListener(modelPageProvider);
 
 		fModelManager = new ModelOperationManager();
@@ -92,14 +85,14 @@ public class ModelEditor extends FormEditor
 
 		fJavaProjectProvider = new JavaProjectProvider(editorInputProvider);
 	}
-	
+
 	public RootNode getModel() throws ModelOperationException{
 		if (fModel == null){
 			fModel = createModel();
 		}
 		return fModel;
 	}
-	
+
 	@Override
 	protected void addPages() {
 		try {
@@ -282,35 +275,19 @@ public class ModelEditor extends FormEditor
 	}
 
 	public void setEditorFile(String fileWithPath) {
+
+		IEditorInput editorInput = null;
+		StringHolder editorPartName = new StringHolder();
+
 		if (ApplicationContext.isProjectAvailable()) {
-			setEditorFileForIde(fileWithPath);
+			ModelEditorPlatformAdapter.getEditorFilePropertiesForIde(fileWithPath, editorInput, editorPartName);
 		} else {
-			setEditorFileForRcp(fileWithPath);
-		}
-	}
-
-	public void setEditorFileForIde(String fileWithPath) {
-		IWorkspace workspace = ResourcesPlugin.getWorkspace();
-		IPath path = new Path(fileWithPath);
-		IFile file = workspace.getRoot().getFile(path);
-
-		setInput(new FileEditorInput(file));
-		setPartName(file.getName());
-	}
-
-	public void setEditorFileForRcp(String fileWithPath) {
-		File file = new File(fileWithPath);
-		IFileStore fileStore = null;
-		try {
-			fileStore = EFS.getStore(file.toURI());
-		} catch (CoreException e) {
-			final String CAN_NOT_GET_STORE = "Can not get store for file: %s. Message: %s";
-			ExceptionHelper.reportRuntimeException(String.format(CAN_NOT_GET_STORE, fileWithPath, e.getMessage()));
+			ModelEditorPlatformAdapter.getEditorFilePropertiesForRcp(fileWithPath, editorInput, editorPartName);
 		}
 
-		setInput(new FileStoreEditorInput(fileStore));
-		setPartName(file.getName());
-	}	
+		setInput(editorInput);
+		setPartName(editorPartName.get());
+	}
 
 	private void reportOpenForWriteException(Exception e) {
 		ExceptionCatchDialog.open("Can not open file for writing", e.getMessage());

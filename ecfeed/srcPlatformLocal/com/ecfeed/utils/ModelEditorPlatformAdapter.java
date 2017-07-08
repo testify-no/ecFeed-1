@@ -18,10 +18,12 @@ import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -35,6 +37,7 @@ import org.eclipse.ui.part.FileEditorInput;
 import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.utils.DiskFileHelper;
 import com.ecfeed.core.utils.ExceptionHelper;
+import com.ecfeed.core.utils.StringHolder;
 import com.ecfeed.core.utils.UriHelper;
 import com.ecfeed.ui.dialogs.basic.EcSaveAsDialog;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
@@ -214,4 +217,31 @@ public class ModelEditorPlatformAdapter {
 		}
 	}
 
+	public static void getEditorFilePropertiesForIde(
+			String fileWithPath, IEditorInput outInput, StringHolder editorPartName) {
+
+		IWorkspace workspace = ResourcesPlugin.getWorkspace();
+		IPath path = new Path(fileWithPath);
+		IFile file = workspace.getRoot().getFile(path);
+
+		editorPartName.set(file.getName());
+
+		outInput = new FileEditorInput(file);
+	}
+
+	public static void getEditorFilePropertiesForRcp(
+			String fileWithPath, IEditorInput outInput, StringHolder editorPartName) {
+
+		File file = new File(fileWithPath);
+		IFileStore fileStore = null;
+		try {
+			fileStore = EFS.getStore(file.toURI());
+		} catch (CoreException e) {
+			final String CAN_NOT_GET_STORE = "Can not get store for file: %s. Message: %s";
+			ExceptionHelper.reportRuntimeException(String.format(CAN_NOT_GET_STORE, fileWithPath, e.getMessage()));
+		}
+
+		outInput = new FileStoreEditorInput(fileStore);
+		editorPartName.set(file.getName());
+	}
 }
