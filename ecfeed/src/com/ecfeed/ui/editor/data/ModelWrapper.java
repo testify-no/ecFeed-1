@@ -13,7 +13,7 @@ package com.ecfeed.ui.editor.data;
 import com.ecfeed.core.model.RootNode;
 
 public class ModelWrapper {
-	
+
 	private final RootNode fModel;
 
 	public ModelWrapper(RootNode model) {

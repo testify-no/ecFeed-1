@@ -32,33 +32,38 @@ import com.ecfeed.ui.common.ImageManager;
 public class ModelTreeLabelProvider extends LabelProvider {
 
 	@Override
-	public String getText(Object element){
-		if(element instanceof AbstractNode){
+	public String getText(Object element) {
+
+		if (element instanceof AbstractNode) {
 			try {
 				return (String)((AbstractNode)element).accept(new TextProvider());
 			} catch(Exception e) { 
 				SystemLogger.logCatch(e.getMessage());
 			}
 		}
+
 		return null;
 	}
 
 	@Override
-	public Image getImage(Object element){
-		if(element instanceof AbstractNode){
+	public Image getImage(Object element) {
+
+		if (element instanceof AbstractNode) {
 			try {
 				return (Image)((AbstractNode)element).accept(new ImageProvider());
 			} catch(Exception e) {
 				SystemLogger.logCatch(e.getMessage());
 			}
 		}
+
 		return getImageFromFile("sample.png");
 	}
 
 	private Image getImageFromFile(String file) {
+
 		return ImageManager.getInstance().getImage(file);
 	}
-	
+
 	private class TextProvider implements IModelVisitor {
 
 		@Override
@@ -78,8 +83,10 @@ public class ModelTreeLabelProvider extends LabelProvider {
 
 		@Override
 		public Object visit(MethodParameterNode node) throws Exception {
+
 			String result = ModelHelper.convertParameterToSimplifiedString(node);
-			if(node.isLinked()){
+
+			if (node.isLinked()) {
 				result += "[LINKED]->" + node.getLink().getQualifiedName();
 			}
 			return result;
@@ -105,7 +112,7 @@ public class ModelTreeLabelProvider extends LabelProvider {
 			return node.toString();
 		}
 	}
-	
+
 	private class ImageProvider implements IModelVisitor {
 
 		@Override

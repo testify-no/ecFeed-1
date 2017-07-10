@@ -20,54 +20,69 @@ public class ModelTreeContentProvider extends TreeNodeContentProvider implements
 
 	@Override
 	public Object[] getElements(Object inputElement) {
-		if(inputElement instanceof ModelWrapper) {
+
+		if (inputElement instanceof ModelWrapper) {
 			RootNode root = ((ModelWrapper)inputElement).getModel();
 			return new Object[]{root};
 		}
+
 		return getChildren(inputElement);
 	}
 
 	@Override
 	public Object[] getChildren(Object parentElement) {
+
 		//Because of potentially large amount of children, MethodNode is special case
 		//We filter out test suites with too many test cases
-		if(parentElement instanceof MethodNode){
+		if (parentElement instanceof MethodNode) {
+
 			MethodNode method = (MethodNode)parentElement;
 			ArrayList<Object> children = new ArrayList<Object>();
+
 			children.addAll(method.getParameters());
 			children.addAll(method.getConstraintNodes());
-			for(String testSuite : method.getTestSuites()){
+
+			for (String testSuite : method.getTestSuites()) {
 				Collection<TestCaseNode> testCases = method.getTestCases(testSuite);
+
 				if(testCases.size() <= CommonConstants.MAX_DISPLAYED_TEST_CASES_PER_SUITE){
 					children.addAll(testCases);
 				}
 			}
+
 			return children.toArray();
 		}
 
-		if(parentElement instanceof MethodParameterNode) {
+		if (parentElement instanceof MethodParameterNode) {
+
 			MethodParameterNode parameter = (MethodParameterNode)parentElement;
-			if(parameter.isExpected() && AbstractParameterInterface.isPrimitive(parameter.getType())){
+			if (parameter.isExpected() && AbstractParameterInterface.isPrimitive(parameter.getType())) {
 				return EMPTY_ARRAY;
 			}
-			if(parameter.isLinked()){
+
+			if (parameter.isLinked()) {
 				return EMPTY_ARRAY;
 			}
 		}
-		if(parentElement instanceof AbstractNode) {
+
+		if (parentElement instanceof AbstractNode) {
 			AbstractNode node = (AbstractNode)parentElement;
-			if(node.getChildren().size() < CommonConstants.MAX_DISPLAYED_CHILDREN_PER_NODE){
+
+			if (node.getChildren().size() < CommonConstants.MAX_DISPLAYED_CHILDREN_PER_NODE) {
 				return node.getChildren().toArray();
 			}
 		}
+
 		return EMPTY_ARRAY;
 	}
 
 	@Override
 	public Object getParent(Object element) {
+
 		if (element instanceof AbstractNode) {
 			return ((AbstractNode)element).getParent();
 		}
+
 		return null;
 	}
 
