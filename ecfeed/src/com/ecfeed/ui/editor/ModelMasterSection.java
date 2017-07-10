@@ -224,6 +224,88 @@ public class ModelMasterSection extends TreeViewerSection {
 
 		Map<List<Image>, Image> fFusedImages;
 
+		public ModelLabelDecorator() {
+			fFusedImages = new HashMap<List<Image>, Image>();
+		}
+
+		@SuppressWarnings("unchecked")
+		@Override
+		public Image decorateImage(Image image, Object element) {
+			if(!(element instanceof AbstractNode)){
+				return image;
+			}
+
+			try {
+				List<Image> decorations = (List<Image>)((AbstractNode)element).accept(
+						new DecorationProvider(fJavaProjectProvider, ApplicationContext.isProjectAvailable()));
+				List<Image> all = new ArrayList<Image>(decorations);
+				all.add(0, image);
+				if(fFusedImages.containsKey(all) == false){
+					Image decorated = new Image(Display.getCurrent(), image.getImageData());
+					for(Image decoration : decorations){
+						if(decoration != null){
+							decorated = fuseImages(decorated, decoration, 0, 0);
+						}
+					}
+					fFusedImages.put(decorations, decorated);
+				}
+				return fFusedImages.get(decorations);
+			} catch(Exception e) {
+				SystemLogger.logCatch(e.getMessage());
+			}
+			return image;
+		}
+
+		@Override
+		public String decorateText(String text, Object element) {
+			return text;
+		}
+
+		@Override
+		public void addListener(ILabelProviderListener listener) {
+		}
+
+		@Override
+		public void dispose() {
+		}
+
+		@Override
+		public boolean isLabelProperty(Object element, String property) {
+			return false;
+		}
+
+		@Override
+		public void removeListener(ILabelProviderListener listener) {
+		}
+
+		private Image fuseImages(Image icon, Image decorator, int x, int y){
+			ImageData idIcon = (ImageData)icon.getImageData().clone();
+			ImageData idDecorator = decorator.getImageData();
+			if(idIcon.width <= x || idIcon.height <= y){
+				return icon;
+			}
+			int rbw = (idDecorator.width + x > idIcon.width) ? (idDecorator.width + x - idIcon.width) : idDecorator.width;
+			int rbh = (idDecorator.height + y > idIcon.height) ? (idDecorator.height + y - idIcon.height) : idDecorator.height;
+
+			int indexa = y*idIcon.scanlinePad + x;
+			int indexb = 0;
+
+			for(int row = 0; row < rbh; row ++){
+				for(int col = 0; col < rbw; col++){
+					if(idDecorator.alphaData[indexb] < 0){
+						idIcon.alphaData[indexa] = (byte)-1;
+						idIcon.data[4*indexa]=idDecorator.data[4*indexb];
+						idIcon.data[4*indexa+1]=idDecorator.data[4*indexb+1];
+						idIcon.data[4*indexa+2]=idDecorator.data[4*indexb+2];
+					}
+					indexa += 1;
+					indexb += 1;
+				}
+				indexa += x;
+			}
+			return new Image(Display.getDefault(), idIcon);
+		}
+
 		private class DecorationProvider implements IModelVisitor{
 			AbstractNodeInterface fNodeInterface;
 			boolean fIsProjectAvailable;
@@ -309,87 +391,6 @@ public class ModelMasterSection extends TreeViewerSection {
 			}
 		}
 
-		public ModelLabelDecorator() {
-			fFusedImages = new HashMap<List<Image>, Image>();
-		}
-
-		@SuppressWarnings("unchecked")
-		@Override
-		public Image decorateImage(Image image, Object element) {
-			if(!(element instanceof AbstractNode)){
-				return image;
-			}
-
-			try {
-				List<Image> decorations = (List<Image>)((AbstractNode)element).accept(
-						new DecorationProvider(fJavaProjectProvider, ApplicationContext.isProjectAvailable()));
-				List<Image> all = new ArrayList<Image>(decorations);
-				all.add(0, image);
-				if(fFusedImages.containsKey(all) == false){
-					Image decorated = new Image(Display.getCurrent(), image.getImageData());
-					for(Image decoration : decorations){
-						if(decoration != null){
-							decorated = fuseImages(decorated, decoration, 0, 0);
-						}
-					}
-					fFusedImages.put(decorations, decorated);
-				}
-				return fFusedImages.get(decorations);
-			} catch(Exception e) {
-				SystemLogger.logCatch(e.getMessage());
-			}
-			return image;
-		}
-
-		@Override
-		public String decorateText(String text, Object element) {
-			return text;
-		}
-
-		@Override
-		public void addListener(ILabelProviderListener listener) {
-		}
-
-		@Override
-		public void dispose() {
-		}
-
-		@Override
-		public boolean isLabelProperty(Object element, String property) {
-			return false;
-		}
-
-		@Override
-		public void removeListener(ILabelProviderListener listener) {
-		}
-
-		private Image fuseImages(Image icon, Image decorator, int x, int y){
-			ImageData idIcon = (ImageData)icon.getImageData().clone();
-			ImageData idDecorator = decorator.getImageData();
-			if(idIcon.width <= x || idIcon.height <= y){
-				return icon;
-			}
-			int rbw = (idDecorator.width + x > idIcon.width) ? (idDecorator.width + x - idIcon.width) : idDecorator.width;
-			int rbh = (idDecorator.height + y > idIcon.height) ? (idDecorator.height + y - idIcon.height) : idDecorator.height;
-
-			int indexa = y*idIcon.scanlinePad + x;
-			int indexb = 0;
-
-			for(int row = 0; row < rbh; row ++){
-				for(int col = 0; col < rbw; col++){
-					if(idDecorator.alphaData[indexb] < 0){
-						idIcon.alphaData[indexa] = (byte)-1;
-						idIcon.data[4*indexa]=idDecorator.data[4*indexb];
-						idIcon.data[4*indexa+1]=idDecorator.data[4*indexb+1];
-						idIcon.data[4*indexa+2]=idDecorator.data[4*indexb+2];
-					}
-					indexa += 1;
-					indexb += 1;
-				}
-				indexa += x;
-			}
-			return new Image(Display.getDefault(), idIcon);
-		}
 	}
 
 	protected class MasterViewerMenuListener extends ViewerMenuListener{
