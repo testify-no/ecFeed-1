@@ -38,7 +38,7 @@ import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.serialization.IModelSerializer;
 import com.ecfeed.core.serialization.ect.EctSerializer;
 import com.ecfeed.core.utils.ExceptionHelper;
-import com.ecfeed.core.utils.StringHolder;
+import com.ecfeed.core.utils.Pair;
 import com.ecfeed.ui.common.CommonConstants;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
@@ -272,17 +272,16 @@ public class ModelEditor extends FormEditor
 
 	public void setEditorFile(String fileWithPath) {
 
-		IEditorInput editorInput = null;
-		StringHolder editorPartName = new StringHolder();
-
+		Pair<IEditorInput, String> editorProperties = null;
+		
 		if (ApplicationContext.isProjectAvailable()) {
-			ModelEditorPlatformAdapter.getEditorFilePropertiesForIde(fileWithPath, editorInput, editorPartName);
+			editorProperties = ModelEditorPlatformAdapter.getEditorFilePropertiesForIde(fileWithPath);
 		} else {
-			ModelEditorPlatformAdapter.getEditorFilePropertiesForRcp(fileWithPath, editorInput, editorPartName);
+			editorProperties = ModelEditorPlatformAdapter.getEditorFilePropertiesForRcp(fileWithPath);
 		}
 
-		setInput(editorInput);
-		setPartName(editorPartName.get());
+		setInput(editorProperties.getFirst());
+		setPartName(editorProperties.getSecond());
 	}
 
 	@Override

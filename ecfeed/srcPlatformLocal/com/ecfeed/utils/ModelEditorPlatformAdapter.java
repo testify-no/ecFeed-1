@@ -40,7 +40,7 @@ import org.eclipse.ui.part.FileEditorInput;
 import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.utils.DiskFileHelper;
 import com.ecfeed.core.utils.ExceptionHelper;
-import com.ecfeed.core.utils.StringHolder;
+import com.ecfeed.core.utils.Pair;
 import com.ecfeed.core.utils.UriHelper;
 import com.ecfeed.ui.dialogs.basic.EcSaveAsDialog;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
@@ -221,23 +221,20 @@ public class ModelEditorPlatformAdapter {
 		}
 	}
 
-	public static void getEditorFilePropertiesForIde(
-			String fileWithPath, IEditorInput outInput, StringHolder editorPartName) {
+	public static Pair<IEditorInput, String> getEditorFilePropertiesForIde(String fileWithPath) {
 
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 		IPath path = new Path(fileWithPath);
 		IFile file = workspace.getRoot().getFile(path);
 
-		editorPartName.set(file.getName());
-
-		outInput = new FileEditorInput(file);
+		return new Pair<IEditorInput, String>(new FileEditorInput(file), file.getName());
 	}
 
-	public static void getEditorFilePropertiesForRcp(
-			String fileWithPath, IEditorInput outInput, StringHolder editorPartName) {
+	public static Pair<IEditorInput, String>  getEditorFilePropertiesForRcp(String fileWithPath) {
 
 		File file = new File(fileWithPath);
 		IFileStore fileStore = null;
+
 		try {
 			fileStore = EFS.getStore(file.toURI());
 		} catch (CoreException e) {
@@ -245,22 +242,21 @@ public class ModelEditorPlatformAdapter {
 			ExceptionHelper.reportRuntimeException(String.format(CAN_NOT_GET_STORE, fileWithPath, e.getMessage()));
 		}
 
-		outInput = new FileStoreEditorInput(fileStore);
-		editorPartName.set(file.getName());
+		return new Pair<IEditorInput, String>(new FileStoreEditorInput(fileStore), file.getName());
 	}
-	
+
 	public static OutputStream createOutputStreamForIdeFileSave(IEditorInput editorInput) {
-		
+
 		IFile file = ((FileEditorInput)editorInput).getFile();
 		FileOutputStream outputStream = null;
-		
+
 		try {
 			outputStream = new FileOutputStream(file.getLocation().toOSString());
 		} catch (FileNotFoundException e) {
 			ModelEditorHelper.reportOpenForWriteException(e);
 		}
-		
+
 		return outputStream;
 	}
-	
+
 }
