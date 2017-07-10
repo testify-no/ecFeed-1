@@ -12,7 +12,6 @@ package com.ecfeed.ui.editor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,9 +27,6 @@ import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.ILabelDecorator;
 import org.eclipse.jface.viewers.ILabelProviderListener;
-import org.eclipse.jface.viewers.ITreeContentProvider;
-import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.TreeNodeContentProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.Transfer;
@@ -54,15 +50,12 @@ import com.ecfeed.core.model.ConstraintNode;
 import com.ecfeed.core.model.GlobalParameterNode;
 import com.ecfeed.core.model.IModelVisitor;
 import com.ecfeed.core.model.MethodNode;
-import com.ecfeed.core.model.MethodNodeHelper;
 import com.ecfeed.core.model.MethodParameterNode;
-import com.ecfeed.core.model.ModelHelper;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.SystemHelper;
 import com.ecfeed.core.utils.SystemLogger;
-import com.ecfeed.ui.common.CommonConstants;
 import com.ecfeed.ui.common.ImageManager;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.About2Dialog;
@@ -75,8 +68,10 @@ import com.ecfeed.ui.editor.actions.ExportOnlineAction;
 import com.ecfeed.ui.editor.actions.IActionRunner;
 import com.ecfeed.ui.editor.actions.ModelViewerActionProvider;
 import com.ecfeed.ui.editor.actions.TestOnlineAction;
+import com.ecfeed.ui.editor.data.ModelTreeContentProvider;
+import com.ecfeed.ui.editor.data.ModelTreeLabelProvider;
+import com.ecfeed.ui.editor.data.ModelWrapper;
 import com.ecfeed.ui.modelif.AbstractNodeInterface;
-import com.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.ecfeed.ui.modelif.IModelUpdateListener;
 import com.ecfeed.ui.modelif.MethodInterface;
 import com.ecfeed.ui.modelif.ModelNodesTransfer;
@@ -151,12 +146,12 @@ public class ModelMasterSection extends TreeViewerSection {
 
 	@Override
 	protected IContentProvider createViewerContentProvider() {
-		return new ModelContentProvider();
+		return new ModelTreeContentProvider();
 	}
 
 	@Override
 	protected IBaseLabelProvider createViewerLabelProvider() {
-		return new DecoratingLabelProvider(new ModelLabelProvider(), new ModelLabelDecorator());
+		return new DecoratingLabelProvider(new ModelTreeLabelProvider(), new ModelLabelDecorator());
 	}
 
 	@Override
@@ -217,204 +212,11 @@ public class ModelMasterSection extends TreeViewerSection {
 		return ImageManager.getInstance().getImage(file);
 	}
 
-	private class ModelWrapper {
-		private final RootNode fModel;
-
-		public ModelWrapper(RootNode model) {
-			fModel = model;
-		}
-
-		public RootNode getModel() {
-			return fModel;
-		}
-	}
-
 	private class UpdateListener implements IModelUpdateListener {
 		@Override
 		public void modelUpdated(AbstractFormPart source) {
 			source.markDirty();
 			refresh();
-		}
-	}
-
-	private class ModelContentProvider extends TreeNodeContentProvider implements ITreeContentProvider {
-
-		public final Object[] EMPTY_ARRAY = {};
-
-		@Override
-		public Object[] getElements(Object inputElement) {
-			if(inputElement instanceof ModelWrapper) {
-				RootNode root = ((ModelWrapper)inputElement).getModel();
-				return new Object[]{root};
-			}
-			return getChildren(inputElement);
-		}
-
-		@Override
-		public Object[] getChildren(Object parentElement) {
-			//Because of potentially large amount of children, MethodNode is special case
-			//We filter out test suites with too many test cases
-			if(parentElement instanceof MethodNode){
-				MethodNode method = (MethodNode)parentElement;
-				ArrayList<Object> children = new ArrayList<Object>();
-				children.addAll(method.getParameters());
-				children.addAll(method.getConstraintNodes());
-				for(String testSuite : method.getTestSuites()){
-					Collection<TestCaseNode> testCases = method.getTestCases(testSuite);
-					if(testCases.size() <= CommonConstants.MAX_DISPLAYED_TEST_CASES_PER_SUITE){
-						children.addAll(testCases);
-					}
-				}
-				return children.toArray();
-			}
-
-			if(parentElement instanceof MethodParameterNode) {
-				MethodParameterNode parameter = (MethodParameterNode)parentElement;
-				if(parameter.isExpected() && AbstractParameterInterface.isPrimitive(parameter.getType())){
-					return EMPTY_ARRAY;
-				}
-				if(parameter.isLinked()){
-					return EMPTY_ARRAY;
-				}
-			}
-			if(parentElement instanceof AbstractNode) {
-				AbstractNode node = (AbstractNode)parentElement;
-				if(node.getChildren().size() < CommonConstants.MAX_DISPLAYED_CHILDREN_PER_NODE){
-					return node.getChildren().toArray();
-				}
-			}
-			return EMPTY_ARRAY;
-		}
-
-		@Override
-		public Object getParent(Object element) {
-			if (element instanceof AbstractNode) {
-				return ((AbstractNode)element).getParent();
-			}
-			return null;
-		}
-
-		@Override
-		public boolean hasChildren(Object element) {
-			return getChildren(element).length > 0;
-		}
-	}
-
-	private class ModelLabelProvider extends LabelProvider {
-
-		private class TextProvider implements IModelVisitor{
-
-			@Override
-			public Object visit(RootNode node) throws Exception {
-				return node.toString();
-			}
-
-			@Override
-			public Object visit(ClassNode node) throws Exception {
-				return node.toString();
-			}
-
-			@Override
-			public Object visit(MethodNode node) throws Exception {
-				return MethodNodeHelper.simplifiedToString(node);
-			}
-
-			@Override
-			public Object visit(MethodParameterNode node) throws Exception {
-				String result = ModelHelper.convertParameterToSimplifiedString(node);
-				if(node.isLinked()){
-					result += "[LINKED]->" + node.getLink().getQualifiedName();
-				}
-				return result;
-			}
-
-			@Override
-			public Object visit(GlobalParameterNode node) throws Exception {
-				return ModelHelper.convertParameterToSimplifiedString(node);
-			}
-
-			@Override
-			public Object visit(TestCaseNode node) throws Exception {
-				return node.toString();
-			}
-
-			@Override
-			public Object visit(ConstraintNode node) throws Exception {
-				return node.toString();
-			}
-
-			@Override
-			public Object visit(ChoiceNode node) throws Exception {
-				return node.toString();
-			}
-		}
-
-		private class ImageProvider implements IModelVisitor{
-
-			@Override
-			public Object visit(RootNode node) throws Exception {
-				return getImageFromFile("root_node.png");
-			}
-
-			@Override
-			public Object visit(ClassNode node) throws Exception {
-				return getImageFromFile("class_node.png");
-			}
-
-			@Override
-			public Object visit(MethodNode node) throws Exception {
-				return getImageFromFile("method_node.png");
-			}
-
-			@Override
-			public Object visit(MethodParameterNode node) throws Exception {
-				return getImageFromFile("parameter_node.png");
-			}
-
-			@Override
-			public Object visit(GlobalParameterNode node) throws Exception {
-				return getImageFromFile("parameter_node.png");
-			}
-
-			@Override
-			public Object visit(TestCaseNode node) throws Exception {
-				return getImageFromFile("test_case_node.png");
-			}
-
-			@Override
-			public Object visit(ConstraintNode node) throws Exception {
-				return getImageFromFile("constraint_node.png");
-			}
-
-			@Override
-			public Object visit(ChoiceNode node) throws Exception {
-				return getImageFromFile("choice_node.png");
-			}
-
-		}
-
-		@Override
-		public String getText(Object element){
-			if(element instanceof AbstractNode){
-				try {
-					return (String)((AbstractNode)element).accept(new TextProvider());
-				} catch(Exception e) { 
-					SystemLogger.logCatch(e.getMessage());
-				}
-			}
-			return null;
-		}
-
-		@Override
-		public Image getImage(Object element){
-			if(element instanceof AbstractNode){
-				try {
-					return (Image)((AbstractNode)element).accept(new ImageProvider());
-				} catch(Exception e) {
-					SystemLogger.logCatch(e.getMessage());
-				}
-			}
-			return getImageFromFile("sample.png");
 		}
 	}
 
