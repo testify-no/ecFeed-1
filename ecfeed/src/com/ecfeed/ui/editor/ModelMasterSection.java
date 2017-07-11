@@ -58,7 +58,7 @@ import com.ecfeed.ui.editor.actions.TestOnlineAction;
 import com.ecfeed.ui.editor.data.ModelTreeContentProvider;
 import com.ecfeed.ui.editor.data.ModelTreeLabelDecorator;
 import com.ecfeed.ui.editor.data.ModelTreeLabelProvider;
-import com.ecfeed.ui.editor.data.ModelWrapper;
+import com.ecfeed.ui.editor.data.TreeRootNodeWrapper;
 import com.ecfeed.ui.modelif.AbstractNodeInterface;
 import com.ecfeed.ui.modelif.IModelUpdateListener;
 import com.ecfeed.ui.modelif.MethodInterface;
@@ -159,7 +159,7 @@ public class ModelMasterSection extends TreeViewerSection {
 	}
 
 	public void setInput(RootNode model) {
-		setInput(new ModelWrapper(model));
+		setInput(new TreeRootNodeWrapper(model));
 		collapseGlobalParameters();
 	}
 
@@ -194,7 +194,7 @@ public class ModelMasterSection extends TreeViewerSection {
 	}
 
 	private void collapseGlobalParameters() {
-		for(GlobalParameterNode parameter : ((ModelWrapper)getViewer().getInput()).getModel().getGlobalParameters()){
+		for(GlobalParameterNode parameter : ((TreeRootNodeWrapper)getViewer().getInput()).getModel().getGlobalParameters()){
 			getTreeViewer().collapseToLevel(parameter, 1);
 		}
 	}

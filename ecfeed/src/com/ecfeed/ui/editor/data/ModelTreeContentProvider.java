@@ -21,8 +21,8 @@ public class ModelTreeContentProvider extends TreeNodeContentProvider implements
 	@Override
 	public Object[] getElements(Object inputElement) {
 
-		if (inputElement instanceof ModelWrapper) {
-			RootNode root = ((ModelWrapper)inputElement).getModel();
+		if (inputElement instanceof TreeRootNodeWrapper) {
+			RootNode root = ((TreeRootNodeWrapper)inputElement).getModel();
 			return new Object[]{root};
 		}
 

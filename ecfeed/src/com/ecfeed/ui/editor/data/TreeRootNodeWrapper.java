@@ -12,11 +12,11 @@ package com.ecfeed.ui.editor.data;
 
 import com.ecfeed.core.model.RootNode;
 
-public class ModelWrapper {
+public class TreeRootNodeWrapper {
 
 	private final RootNode fModel;
 
-	public ModelWrapper(RootNode model) {
+	public TreeRootNodeWrapper(RootNode model) {
 		fModel = model;
 	}
 
