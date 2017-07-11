@@ -56,12 +56,7 @@ public class ModelTreeLabelProvider extends LabelProvider {
 			}
 		}
 
-		return getImageFromFile("sample.png");
-	}
-
-	private Image getImageFromFile(String file) {
-
-		return ImageManager.getInstance().getImage(file);
+		return ImageManager.getImageFromFile("sample.png");
 	}
 
 	private class TextProvider implements IModelVisitor {
@@ -117,42 +112,42 @@ public class ModelTreeLabelProvider extends LabelProvider {
 
 		@Override
 		public Object visit(RootNode node) throws Exception {
-			return getImageFromFile("root_node.png");
+			return ImageManager.getImageFromFile("root_node.png");
 		}
 
 		@Override
 		public Object visit(ClassNode node) throws Exception {
-			return getImageFromFile("class_node.png");
+			return ImageManager.getImageFromFile("class_node.png");
 		}
 
 		@Override
 		public Object visit(MethodNode node) throws Exception {
-			return getImageFromFile("method_node.png");
+			return ImageManager.getImageFromFile("method_node.png");
 		}
 
 		@Override
 		public Object visit(MethodParameterNode node) throws Exception {
-			return getImageFromFile("parameter_node.png");
+			return ImageManager.getImageFromFile("parameter_node.png");
 		}
 
 		@Override
 		public Object visit(GlobalParameterNode node) throws Exception {
-			return getImageFromFile("parameter_node.png");
+			return ImageManager.getImageFromFile("parameter_node.png");
 		}
 
 		@Override
 		public Object visit(TestCaseNode node) throws Exception {
-			return getImageFromFile("test_case_node.png");
+			return ImageManager.getImageFromFile("test_case_node.png");
 		}
 
 		@Override
 		public Object visit(ConstraintNode node) throws Exception {
-			return getImageFromFile("constraint_node.png");
+			return ImageManager.getImageFromFile("constraint_node.png");
 		}
 
 		@Override
 		public Object visit(ChoiceNode node) throws Exception {
-			return getImageFromFile("choice_node.png");
+			return ImageManager.getImageFromFile("choice_node.png");
 		}
 
 	}

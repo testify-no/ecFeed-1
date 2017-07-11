@@ -10,11 +10,8 @@
 
 package com.ecfeed.ui.editor;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.IOperationHistory;
@@ -25,14 +22,10 @@ import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.viewers.DecoratingLabelProvider;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.IContentProvider;
-import org.eclipse.jface.viewers.ILabelDecorator;
-import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.graphics.Cursor;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
@@ -44,19 +37,13 @@ import org.eclipse.ui.forms.widgets.Section;
 import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.model.AbstractNode;
-import com.ecfeed.core.model.ChoiceNode;
-import com.ecfeed.core.model.ClassNode;
-import com.ecfeed.core.model.ConstraintNode;
 import com.ecfeed.core.model.GlobalParameterNode;
-import com.ecfeed.core.model.IModelVisitor;
 import com.ecfeed.core.model.MethodNode;
-import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.SystemHelper;
 import com.ecfeed.core.utils.SystemLogger;
-import com.ecfeed.ui.common.ImageManager;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.About2Dialog;
 import com.ecfeed.ui.dialogs.CheckForUpdatesDialog;
@@ -69,6 +56,7 @@ import com.ecfeed.ui.editor.actions.IActionRunner;
 import com.ecfeed.ui.editor.actions.ModelViewerActionProvider;
 import com.ecfeed.ui.editor.actions.TestOnlineAction;
 import com.ecfeed.ui.editor.data.ModelTreeContentProvider;
+import com.ecfeed.ui.editor.data.ModelTreeLabelDecorator;
 import com.ecfeed.ui.editor.data.ModelTreeLabelProvider;
 import com.ecfeed.ui.editor.data.ModelWrapper;
 import com.ecfeed.ui.modelif.AbstractNodeInterface;
@@ -85,7 +73,6 @@ public class ModelMasterSection extends TreeViewerSection {
 
 	private final ModelMasterDetailsBlock fMasterDetailsBlock;
 	private IModelUpdateListener fUpdateListener;
-	private IJavaProjectProvider fJavaProjectProvider;
 
 
 	public ModelMasterSection(ModelMasterDetailsBlock parentBlock, IJavaProjectProvider javaProjectProvider) {
@@ -95,7 +82,6 @@ public class ModelMasterSection extends TreeViewerSection {
 				StyleDistributor.getSectionStyle());
 
 		fMasterDetailsBlock = parentBlock;
-		fJavaProjectProvider = javaProjectProvider;
 
 		boolean includeDeleteAction = false;
 		if (ApplicationContext.isStandaloneApplication()) {
@@ -110,7 +96,7 @@ public class ModelMasterSection extends TreeViewerSection {
 
 		ModelViewerActionProvider modelViewerActionProvider = 
 				new ModelViewerActionProvider(
-						getTreeViewer(), this, fJavaProjectProvider, basicActionRunnerProvider, false);
+						getTreeViewer(), this, javaProjectProvider, basicActionRunnerProvider, false);
 
 		setActionProvider(modelViewerActionProvider, includeDeleteAction);		
 
@@ -122,7 +108,7 @@ public class ModelMasterSection extends TreeViewerSection {
 		getTreeViewer().addDropSupport(
 				DND.DROP_COPY|DND.DROP_MOVE|DND.DROP_LINK, 
 				new Transfer[]{ModelNodesTransfer.getInstance()}, 
-				new ModelNodeDropListener(getTreeViewer(), this, fJavaProjectProvider));
+				new ModelNodeDropListener(getTreeViewer(), this, javaProjectProvider));
 	}
 
 	@Override
@@ -151,7 +137,12 @@ public class ModelMasterSection extends TreeViewerSection {
 
 	@Override
 	protected IBaseLabelProvider createViewerLabelProvider() {
-		return new DecoratingLabelProvider(new ModelTreeLabelProvider(), new ModelLabelDecorator());
+		IJavaProjectProvider javaProjectProvider = getJavaProjectProvider();
+
+		return new DecoratingLabelProvider(
+				new ModelTreeLabelProvider(), 
+				new ModelTreeLabelDecorator(
+						ModelMasterSection.this, javaProjectProvider));
 	}
 
 	@Override
@@ -208,189 +199,12 @@ public class ModelMasterSection extends TreeViewerSection {
 		}
 	}
 
-	private Image getImageFromFile(String file) {
-		return ImageManager.getInstance().getImage(file);
-	}
-
 	private class UpdateListener implements IModelUpdateListener {
 		@Override
 		public void modelUpdated(AbstractFormPart source) {
 			source.markDirty();
 			refresh();
 		}
-	}
-
-	private class ModelLabelDecorator implements ILabelDecorator {
-
-		Map<List<Image>, Image> fFusedImages;
-
-		public ModelLabelDecorator() {
-			fFusedImages = new HashMap<List<Image>, Image>();
-		}
-
-		@SuppressWarnings("unchecked")
-		@Override
-		public Image decorateImage(Image image, Object element) {
-			if(!(element instanceof AbstractNode)){
-				return image;
-			}
-
-			try {
-				List<Image> decorations = (List<Image>)((AbstractNode)element).accept(
-						new DecorationProvider(fJavaProjectProvider, ApplicationContext.isProjectAvailable()));
-				List<Image> all = new ArrayList<Image>(decorations);
-				all.add(0, image);
-				if(fFusedImages.containsKey(all) == false){
-					Image decorated = new Image(Display.getCurrent(), image.getImageData());
-					for(Image decoration : decorations){
-						if(decoration != null){
-							decorated = fuseImages(decorated, decoration, 0, 0);
-						}
-					}
-					fFusedImages.put(decorations, decorated);
-				}
-				return fFusedImages.get(decorations);
-			} catch(Exception e) {
-				SystemLogger.logCatch(e.getMessage());
-			}
-			return image;
-		}
-
-		@Override
-		public String decorateText(String text, Object element) {
-			return text;
-		}
-
-		@Override
-		public void addListener(ILabelProviderListener listener) {
-		}
-
-		@Override
-		public void dispose() {
-		}
-
-		@Override
-		public boolean isLabelProperty(Object element, String property) {
-			return false;
-		}
-
-		@Override
-		public void removeListener(ILabelProviderListener listener) {
-		}
-
-		private Image fuseImages(Image icon, Image decorator, int x, int y){
-			ImageData idIcon = (ImageData)icon.getImageData().clone();
-			ImageData idDecorator = decorator.getImageData();
-			if(idIcon.width <= x || idIcon.height <= y){
-				return icon;
-			}
-			int rbw = (idDecorator.width + x > idIcon.width) ? (idDecorator.width + x - idIcon.width) : idDecorator.width;
-			int rbh = (idDecorator.height + y > idIcon.height) ? (idDecorator.height + y - idIcon.height) : idDecorator.height;
-
-			int indexa = y*idIcon.scanlinePad + x;
-			int indexb = 0;
-
-			for(int row = 0; row < rbh; row ++){
-				for(int col = 0; col < rbw; col++){
-					if(idDecorator.alphaData[indexb] < 0){
-						idIcon.alphaData[indexa] = (byte)-1;
-						idIcon.data[4*indexa]=idDecorator.data[4*indexb];
-						idIcon.data[4*indexa+1]=idDecorator.data[4*indexb+1];
-						idIcon.data[4*indexa+2]=idDecorator.data[4*indexb+2];
-					}
-					indexa += 1;
-					indexb += 1;
-				}
-				indexa += x;
-			}
-			return new Image(Display.getDefault(), idIcon);
-		}
-
-		private class DecorationProvider implements IModelVisitor{
-			AbstractNodeInterface fNodeInterface;
-			boolean fIsProjectAvailable;
-
-			public DecorationProvider(IJavaProjectProvider javaProjectProvider, boolean isProjectAvailable) {
-
-				fNodeInterface = new AbstractNodeInterface(ModelMasterSection.this, javaProjectProvider);
-				fIsProjectAvailable = isProjectAvailable;
-			}
-
-			@Override
-			public Object visit(RootNode node) throws Exception {
-				return Arrays.asList(new Image[]{implementationStatusDecoration(node)});
-			}
-
-			@Override
-			public Object visit(ClassNode node) throws Exception {
-				return Arrays.asList(new Image[]{implementationStatusDecoration(node)});
-			}
-
-			@Override
-			public Object visit(MethodNode node) throws Exception {
-				return Arrays.asList(new Image[]{implementationStatusDecoration(node)});
-			}
-
-			@Override
-			public Object visit(MethodParameterNode node) throws Exception {
-				List<Image> decorations = new ArrayList<Image>();
-				decorations.add(implementationStatusDecoration(node));
-				if(node.isExpected()){
-					decorations.add(getImageFromFile("expected.png"));
-				}
-				if(node.isLinked()){
-					decorations.add(getImageFromFile("linked.png"));
-				}
-				return decorations;
-			}
-
-			@Override
-			public Object visit(GlobalParameterNode node) throws Exception {
-				List<Image> decorations = new ArrayList<Image>();
-				decorations.add(implementationStatusDecoration(node));
-				decorations.add(getImageFromFile("global.png"));
-				return decorations;
-			}
-
-			@Override
-			public Object visit(TestCaseNode node) throws Exception {
-				return Arrays.asList(new Image[]{implementationStatusDecoration(node)});
-			}
-
-			@Override
-			public Object visit(ConstraintNode node) throws Exception {
-				return Arrays.asList(new Image[]{implementationStatusDecoration(node)});
-			}
-
-			@Override
-			public Object visit(ChoiceNode node) throws Exception {
-				List<Image> decorations = new ArrayList<Image>();
-				decorations.add(implementationStatusDecoration(node));
-				if(node.isAbstract()){
-					decorations.add(getImageFromFile("abstract.png"));
-				}
-				return decorations;
-			}
-
-			private Image implementationStatusDecoration(AbstractNode node) {
-				if (!fIsProjectAvailable) {
-					return null;
-				}
-
-				switch (fNodeInterface.getImplementationStatus(node)){
-				case IMPLEMENTED:
-					return getImageFromFile("implemented.png");
-				case PARTIALLY_IMPLEMENTED:
-					return getImageFromFile("partially_implemented.png");
-				case NOT_IMPLEMENTED:
-					return getImageFromFile("unimplemented.png");
-				case IRRELEVANT:
-				default:
-					return null;
-				}
-			}
-		}
-
 	}
 
 	protected class MasterViewerMenuListener extends ViewerMenuListener{
@@ -413,7 +227,7 @@ public class ModelMasterSection extends TreeViewerSection {
 
 		private void addChildAddingActions(AbstractNode abstractNode) {
 			AddChildActionProvider actionProvider = 
-					new AddChildActionProvider(getTreeViewer(), ModelMasterSection.this, fJavaProjectProvider);
+					new AddChildActionProvider(getTreeViewer(), ModelMasterSection.this, getJavaProjectProvider());
 
 			List<AbstractAddChildAction> actions = actionProvider.getPossibleActions(abstractNode);
 
@@ -483,7 +297,7 @@ public class ModelMasterSection extends TreeViewerSection {
 			TestCaseInterface testCaseInterface = getTestCaseInterface();
 
 			AbstractNodeInterface nodeIf = 
-					NodeInterfaceFactory.getNodeInterface(testCaseInterface.getMethod(), null, fJavaProjectProvider);
+					NodeInterfaceFactory.getNodeInterface(testCaseInterface.getMethod(), null, getJavaProjectProvider());
 
 			MethodInterface methodInterface = (MethodInterface)nodeIf; 
 
@@ -499,7 +313,7 @@ public class ModelMasterSection extends TreeViewerSection {
 
 		private MethodInterface getMethodInterface() {
 			AbstractNodeInterface nodeIf = 
-					NodeInterfaceFactory.getNodeInterface(getSelectedNodes().get(0), null, fJavaProjectProvider);
+					NodeInterfaceFactory.getNodeInterface(getSelectedNodes().get(0), null, getJavaProjectProvider());
 
 			if (!(nodeIf instanceof MethodInterface)) {
 				final String MSG = "Invalid type of node interface. Method node interface expected"; 
@@ -511,7 +325,7 @@ public class ModelMasterSection extends TreeViewerSection {
 
 		private TestCaseInterface getTestCaseInterface() {
 			AbstractNodeInterface nodeInterface = 
-					NodeInterfaceFactory.getNodeInterface(getSelectedNodes().get(0), null, fJavaProjectProvider);
+					NodeInterfaceFactory.getNodeInterface(getSelectedNodes().get(0), null, getJavaProjectProvider());
 
 			if (!(nodeInterface instanceof TestCaseInterface)) {
 				final String MSG = "Invalid type of node interface. Test case interface expected"; 
@@ -528,7 +342,7 @@ public class ModelMasterSection extends TreeViewerSection {
 			}
 
 			TestOnlineAction testOnlineAction = 
-					new TestOnlineAction(fJavaProjectProvider, ModelMasterSection.this, methodInterface);
+					new TestOnlineAction(getJavaProjectProvider(), ModelMasterSection.this, methodInterface);
 
 			addMenuItem(testOnlineAction.getName(), testOnlineAction);
 			return true;
@@ -560,7 +374,7 @@ public class ModelMasterSection extends TreeViewerSection {
 			}
 
 			ExportOnlineAction exportOnlineAction = 
-					new ExportOnlineAction(fJavaProjectProvider, ModelMasterSection.this, methodInterface);
+					new ExportOnlineAction(getJavaProjectProvider(), ModelMasterSection.this, methodInterface);
 
 			addMenuItem(exportOnlineAction.getName(), exportOnlineAction);
 			return true;
