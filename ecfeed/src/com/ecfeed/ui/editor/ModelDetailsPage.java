@@ -46,7 +46,7 @@ public class ModelDetailsPage extends BasicDetailsPage {
 		super.createContents(parent);
 		getMainSection().setText("Model details"); 
 
-		fModelNameComposite = new ModelNameComposite(getMainComposite(), getFormObjectToolkit(), fRootIf);
+		fModelNameComposite = new ModelNameComposite(getMainComposite(), getEcFormToolkit(), fRootIf);
 
 		addCommentsSection();
 

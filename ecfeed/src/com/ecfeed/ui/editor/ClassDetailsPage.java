@@ -118,7 +118,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		composite.setLayout(new GridLayout(3, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
-		EcFormToolkit formObjectToolkit = getFormObjectToolkit(); 
+		EcFormToolkit formObjectToolkit = getEcFormToolkit(); 
 
 
 		formObjectToolkit.createLabel(composite, "Package name");
@@ -144,7 +144,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 
 		// col 1 and 2
 
-		EcFormToolkit formObjectToolkit = getFormObjectToolkit();
+		EcFormToolkit formObjectToolkit = getEcFormToolkit();
 
 		fRunOnAndroidCheckbox = 
 				formObjectToolkit.createGridCheckBox(

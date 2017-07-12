@@ -80,7 +80,7 @@ public abstract class BasicDetailsPage
 	private Section fMainSection;
 	private Composite fMainComposite;
 	private IManagedForm fManagedForm;
-	private EcFormToolkit fFormObjectToolkit;
+	private EcFormToolkit fEcFormToolkit;
 
 	private List<IFormPart> fForms;
 	private List<ViewerSection> fViewerSections;
@@ -108,7 +108,7 @@ public abstract class BasicDetailsPage
 	@Override
 	public void initialize(IManagedForm form) {
 		fManagedForm = form;
-		fFormObjectToolkit = new EcFormToolkit(form.getToolkit());
+		fEcFormToolkit = new EcFormToolkit(form.getToolkit());
 	}
 
 	@Override
@@ -228,11 +228,11 @@ public abstract class BasicDetailsPage
 
 	@Override
 	public FormToolkitAdapter getToolkit(){
-		return fFormObjectToolkit.getFormToolkitAdapter();
+		return fEcFormToolkit.getFormToolkitAdapter();
 	}
 
-	protected EcFormToolkit getFormObjectToolkit() {
-		return fFormObjectToolkit;
+	protected EcFormToolkit getEcFormToolkit() {
+		return fEcFormToolkit;
 	}
 
 	protected Section getMainSection(){

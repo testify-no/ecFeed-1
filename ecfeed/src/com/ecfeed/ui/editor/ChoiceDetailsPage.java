@@ -153,11 +153,11 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		fAttributesComposite.setLayout(new GridLayout(2, false));
 		fAttributesComposite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 
-		getFormObjectToolkit().createLabel(fAttributesComposite, "Name");
-		fNameText = getFormObjectToolkit().createGridText(fAttributesComposite, new NameApplier());
+		getEcFormToolkit().createLabel(fAttributesComposite, "Name");
+		fNameText = getEcFormToolkit().createGridText(fAttributesComposite, new NameApplier());
 
-		getFormObjectToolkit().createLabel(fAttributesComposite, "Value");
-		getFormObjectToolkit().paintBorders(fAttributesComposite);
+		getEcFormToolkit().createLabel(fAttributesComposite, "Value");
+		getEcFormToolkit().paintBorders(fAttributesComposite);
 	}
 
 	@Override

@@ -100,27 +100,27 @@ public class MethodDetailsPage extends BasicDetailsPage {
 			++gridColumns;
 		}
 
-		Composite gridComposite = getFormObjectToolkit().createGridComposite(
+		Composite gridComposite = getEcFormToolkit().createGridComposite(
 				getMainComposite(), gridColumns);
 
-		getFormObjectToolkit().createLabel(gridComposite, "Method name ");
-		fMethodNameText = getFormObjectToolkit().createGridText(gridComposite,
+		getEcFormToolkit().createLabel(gridComposite, "Method name ");
+		fMethodNameText = getEcFormToolkit().createGridText(gridComposite,
 				new MethodNameApplier());
 
 		if (ApplicationContext.isProjectAvailable()) {
-			fBrowseButton = getFormObjectToolkit().createButton(gridComposite,
+			fBrowseButton = getEcFormToolkit().createButton(gridComposite,
 					"Browse...", new ReassignAdapter());
 		}
 
-		getFormObjectToolkit().paintBorders(gridComposite);
+		getEcFormToolkit().paintBorders(gridComposite);
 	}
 
 	private void createTestAndExportButtons() {
 
-		Composite childComposite = getFormObjectToolkit().createRowComposite(
+		Composite childComposite = getEcFormToolkit().createRowComposite(
 				getMainComposite());
 
-		EcFormToolkit formObjectToolkit = getFormObjectToolkit();
+		EcFormToolkit formObjectToolkit = getEcFormToolkit();
 
 		fTestOnlineButton = formObjectToolkit.createButton(
 				childComposite, "Test online...", new OnlineTestAdapter());
@@ -132,7 +132,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	}
 
 	private void createRunnerCombo() {
-		EcFormToolkit formObjectToolkit = getFormObjectToolkit();
+		EcFormToolkit formObjectToolkit = getEcFormToolkit();
 		Composite gridComposite = formObjectToolkit.createGridComposite(getMainComposite(), 2);
 
 		formObjectToolkit.createLabel(gridComposite, "Runner");

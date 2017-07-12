@@ -32,7 +32,7 @@ public class WebParameterSection extends BasicSection {
 	AbstractParameterInterface fAbstractParameterInterface;
 	MethodParameterNode fMethodParameterNode;
 
-	private EcFormToolkit fFormObjectToolkit;
+	private EcFormToolkit fEcFormToolkit;
 	private Composite fClientComposite;
 	private Composite fGridComposite;
 
@@ -60,44 +60,44 @@ public class WebParameterSection extends BasicSection {
 
 		fAbstractParameterInterface = abstractParameterInterface;
 
-		fFormObjectToolkit = new EcFormToolkit(getToolkit());
+		fEcFormToolkit = new EcFormToolkit(getToolkit());
 
 		setText("Web runner properties");
 		fClientComposite = getClientComposite();
 
-		fGridComposite = fFormObjectToolkit.createGridComposite(fClientComposite, 2);
+		fGridComposite = fEcFormToolkit.createGridComposite(fClientComposite, 2);
 
 		createControls(fGridComposite);
-		fFormObjectToolkit.paintBorders(fGridComposite);
+		fEcFormToolkit.paintBorders(fGridComposite);
 	}
 
 	private void createControls(Composite gridComposite) {
 		fMethodParameterNode = (MethodParameterNode)fAbstractParameterInterface.getOwnNode();
 
 		//
-		fFormObjectToolkit.createLabel(fGridComposite, "Element type");
-		fWebElementTypeCombo = fFormObjectToolkit.createReadOnlyGridCombo(fGridComposite, new ElementTypeApplier());
+		fEcFormToolkit.createLabel(fGridComposite, "Element type");
+		fWebElementTypeCombo = fEcFormToolkit.createReadOnlyGridCombo(fGridComposite, new ElementTypeApplier());
 
 		//
-		fOptionalCheckbox = fFormObjectToolkit.createGridCheckBox(fGridComposite, "Optional", new OptionalValueApplier() );
+		fOptionalCheckbox = fEcFormToolkit.createGridCheckBox(fGridComposite, "Optional", new OptionalValueApplier() );
 		fOptionalCheckbox.setEnabled(false);
 		setParamsForTheFirstColumn(fOptionalCheckbox);
 
-		fFormObjectToolkit.createSpacer(fGridComposite, 1);
+		fEcFormToolkit.createSpacer(fGridComposite, 1);
 
 		// 
-		fFormObjectToolkit.createLabel(fGridComposite, "Identified by ");
-		fFormObjectToolkit.createSpacer(fGridComposite, 1);
+		fEcFormToolkit.createLabel(fGridComposite, "Identified by ");
+		fEcFormToolkit.createSpacer(fGridComposite, 1);
 
 		//
-		fFindByElemTypeCombo = fFormObjectToolkit.createReadOnlyGridCombo(fGridComposite, new FindByTypeApplier());
+		fFindByElemTypeCombo = fEcFormToolkit.createReadOnlyGridCombo(fGridComposite, new FindByTypeApplier());
 		setParamsForTheFirstColumn(fFindByElemTypeCombo);
 
-		fFindByElemValueText = fFormObjectToolkit.createGridText(fGridComposite, new FindByValueApplier());
+		fFindByElemValueText = fEcFormToolkit.createGridText(fGridComposite, new FindByValueApplier());
 
 		//
-		fFormObjectToolkit.createLabel(fGridComposite, "Action ");
-		fActionCombo = fFormObjectToolkit.createReadOnlyGridCombo(fGridComposite, new ActionApplier());
+		fEcFormToolkit.createLabel(fGridComposite, "Action ");
+		fActionCombo = fEcFormToolkit.createReadOnlyGridCombo(fGridComposite, new ActionApplier());
 	}
 
 	private void setParamsForTheFirstColumn(Control control) {
