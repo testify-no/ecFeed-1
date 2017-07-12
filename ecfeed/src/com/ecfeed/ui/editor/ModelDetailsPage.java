@@ -12,13 +12,13 @@ package com.ecfeed.ui.editor;
 
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IFormPart;
 
 import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
+import com.ecfeed.ui.editor.composites.ModelNameComposite;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.RootInterface;
 
@@ -26,7 +26,8 @@ public class ModelDetailsPage extends BasicDetailsPage {
 
 	private ClassViewer fClassesSection;
 	private GlobalParametersViewer fParametersSection;
-	private Text fModelNameText;
+	private ModelNameComposite fModelNameComposite;
+	
 	private RootInterface fRootIf;
 	private SingleTextCommentsSection fCommentsSection;
 	private IJavaProjectProvider fJavaProjectProvider;
@@ -45,7 +46,7 @@ public class ModelDetailsPage extends BasicDetailsPage {
 		super.createContents(parent);
 		getMainSection().setText("Model details"); 
 
-		createModelNameEdit(getMainComposite());
+		fModelNameComposite = new ModelNameComposite(getMainComposite(), getFormObjectToolkit(), fRootIf);
 
 		addCommentsSection();
 
@@ -72,24 +73,13 @@ public class ModelDetailsPage extends BasicDetailsPage {
 		}
 	}
 
-
-	private void createModelNameEdit(Composite parent) {
-
-		EcFormToolkit formObjectToolkit = getFormObjectToolkit();
-		Composite composite = formObjectToolkit.createGridComposite(parent, 2);		
-
-		formObjectToolkit.createLabel(composite, "Model name");
-		fModelNameText = formObjectToolkit.createGridText(composite, new ModelNameApplier());
-		formObjectToolkit.paintBorders(composite);
-	}
-
 	@Override
 	public void refresh() {
 		super.refresh();
 		if(getSelectedElement() instanceof RootNode){
 			RootNode selectedRoot = (RootNode)getSelectedElement();
 			fRootIf.setOwnNode(selectedRoot);
-			fModelNameText.setText(selectedRoot.getName());
+			fModelNameComposite.refresh(selectedRoot.getName());
 			fClassesSection.setInput(selectedRoot);
 			fParametersSection.setInput(selectedRoot);
 			fCommentsSection.setInput(selectedRoot);
@@ -108,14 +98,5 @@ public class ModelDetailsPage extends BasicDetailsPage {
 	protected Class<? extends AbstractNode> getNodeType() {
 		return RootNode.class;
 	}
-
-	private class ModelNameApplier implements IValueApplier{
-
-		@Override
-		public void applyValue() {
-			fRootIf.setName(fModelNameText.getText());
-			fModelNameText.setText(fRootIf.getName());
-		}
-	}	
 
 }
