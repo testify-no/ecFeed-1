@@ -52,7 +52,7 @@ public class EclipseHelper {
 		return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 	}
 
-	public IViewPart getViewPartById(String viewId) {
+	public static IViewPart getViewPartById(String viewId) {
 		
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		
