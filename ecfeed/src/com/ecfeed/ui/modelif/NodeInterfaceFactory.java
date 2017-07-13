@@ -25,6 +25,22 @@ import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 
 public class NodeInterfaceFactory{
 
+	public static AbstractNodeInterface getNodeInterface(
+			AbstractNode node, 
+			IModelUpdateContext context, 
+			IJavaProjectProvider javaProjectProvider) {
+
+		try {
+			return (AbstractNodeInterface)node.accept(new InterfaceProvider(context, javaProjectProvider));
+		} catch(Exception e) {
+			SystemLogger.logCatch(e.getMessage());
+		}
+
+		AbstractNodeInterface nodeIf = new AbstractNodeInterface(context, javaProjectProvider);
+		nodeIf.setOwnNode(node);
+		return nodeIf;
+	}
+
 	private static class InterfaceProvider  implements IModelVisitor {
 
 		private IJavaProjectProvider fJavaProjectProvider;
@@ -92,16 +108,4 @@ public class NodeInterfaceFactory{
 		}
 	}
 
-	public static AbstractNodeInterface getNodeInterface(
-			AbstractNode node, 
-			IModelUpdateContext context, 
-			IJavaProjectProvider javaProjectProvider){
-		try{
-			return (AbstractNodeInterface)node.accept(new InterfaceProvider(context, javaProjectProvider));
-		}
-		catch(Exception e){SystemLogger.logCatch(e.getMessage());}
-		AbstractNodeInterface nodeIf = new AbstractNodeInterface(context, javaProjectProvider);
-		nodeIf.setOwnNode(node);
-		return nodeIf;
-	}
 }
