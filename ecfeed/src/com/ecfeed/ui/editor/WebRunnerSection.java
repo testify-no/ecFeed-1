@@ -53,7 +53,7 @@ public class WebRunnerSection extends BasicSection  {
 		super(sectionContext, updateContext, javaProjectProvider, StyleDistributor.getCollapsibleSectionStyle());
 
 		fMethodInterface = methodInterface;
-		fEcFormToolkit = new EcFormToolkit(getToolkit());
+		fEcFormToolkit = new EcFormToolkit(getToolkit().getEclipseToolkit());
 
 		setText("Web runner properties");
 

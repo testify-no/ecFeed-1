@@ -31,10 +31,6 @@ public class EcFormToolkit {
 
 	private FormToolkitAdapter fFormToolkit = null;
 
-	public EcFormToolkit(FormToolkitAdapter formToolkit) {
-		fFormToolkit = formToolkit;
-	}
-	
 	public EcFormToolkit(FormToolkit formToolkit) {
 		fFormToolkit = new FormToolkitAdapter(formToolkit);
 	}

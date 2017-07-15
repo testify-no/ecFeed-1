@@ -60,7 +60,7 @@ public class WebParameterSection extends BasicSection {
 
 		fAbstractParameterInterface = abstractParameterInterface;
 
-		fEcFormToolkit = new EcFormToolkit(getToolkit());
+		fEcFormToolkit = new EcFormToolkit(getToolkit().getEclipseToolkit());
 
 		setText("Web runner properties");
 		fClientComposite = getClientComposite();
