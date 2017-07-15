@@ -29,31 +29,38 @@ import com.ecfeed.ui.common.CommonEditHelper;
 
 public class EcFormToolkit {
 
-	private FormToolkitAdapter fFormToolkit = null;
+	private FormToolkitAdapter fFormToolkitAdapter = null;
 
 	public EcFormToolkit(FormToolkit formToolkit) {
-		fFormToolkit = new FormToolkitAdapter(formToolkit);
+		fFormToolkitAdapter = new FormToolkitAdapter(formToolkit);
 	}
-	
+
 	public FormToolkitAdapter getFormToolkitAdapter() {
-		return fFormToolkit;
+		return fFormToolkitAdapter;
 	}
 
 	public void paintBorders(Composite composite) {
-		fFormToolkit.paintBordersFor(composite);
+		fFormToolkitAdapter.paintBordersFor(composite);
 	}
 
 	public Composite createGridComposite(Composite parentComposite, int countOfColumns) {
-		Composite composite = fFormToolkit.createComposite(parentComposite);
 
-		composite.setLayout(new GridLayout(countOfColumns, false));
-		composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+		Composite composite;
+
+		if (fFormToolkitAdapter.getEclipseToolkit() == null) {
+			composite = new Composite(parentComposite, SWT.NULL);
+			composite.setLayout(new GridLayout(countOfColumns, false));
+		} else {
+			composite = fFormToolkitAdapter.createComposite(parentComposite);
+			composite.setLayout(new GridLayout(countOfColumns, false));
+			composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+		}
 
 		return composite;
 	}
 
 	public Composite createRowComposite(Composite parentComposite) {
-		Composite composite = fFormToolkit.createComposite(parentComposite);
+		Composite composite = fFormToolkitAdapter.createComposite(parentComposite);
 
 		RowLayout rowLayout = new RowLayout();
 		composite.setLayout(rowLayout);
@@ -62,11 +69,11 @@ public class EcFormToolkit {
 	}	
 
 	public Label createLabel(Composite parentComposite, String text) {
-		return fFormToolkit.createLabel(parentComposite, text, SWT.NONE);
+		return fFormToolkitAdapter.createLabel(parentComposite, text, SWT.NONE);
 	}
 
 	public Label createEmptyLabel(Composite parentComposite) {
-		return fFormToolkit.createLabel(parentComposite, " ", SWT.NONE);
+		return fFormToolkitAdapter.createLabel(parentComposite, " ", SWT.NONE);
 	}
 
 	public Label createSpacer(Composite parentComposite, int size) {
@@ -77,7 +84,7 @@ public class EcFormToolkit {
 
 	public Text createGridText(Composite parentGridComposite, IValueApplier valueApplier) {
 
-		Text text = fFormToolkit.createText(parentGridComposite, null, SWT.NONE);
+		Text text = fFormToolkitAdapter.createText(parentGridComposite, null, SWT.NONE);
 		text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
 		TypedListener onLostFocusListener = 
@@ -98,7 +105,7 @@ public class EcFormToolkit {
 	}	
 
 	public Button createButton(Composite parentComposite, String text, ButtonClickListener selectionListener) {
-		Button button = fFormToolkit.createButton(parentComposite, text, SWT.NONE);
+		Button button = fFormToolkitAdapter.createButton(parentComposite, text, SWT.NONE);
 
 		if (selectionListener != null) {
 			button.addSelectionListener(selectionListener);
@@ -112,7 +119,7 @@ public class EcFormToolkit {
 			String checkboxLabel,
 			IValueApplier valueApplier) {
 
-		Button checkbox = fFormToolkit.createButton(parentComposite, checkboxLabel, SWT.CHECK);
+		Button checkbox = fFormToolkitAdapter.createButton(parentComposite, checkboxLabel, SWT.CHECK);
 		GridData checkboxGridData = new GridData(SWT.FILL, SWT.CENTER, true, false);
 		checkbox.setLayoutData(checkboxGridData);
 
