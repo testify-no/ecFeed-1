@@ -24,9 +24,10 @@ public class ModelNameComposite {
 		ecFormToolkit.paintBorders(composite);
 	}
 	
-	public void refresh(String rootNodeName) {
+	public void refresh() {
 		
-		fModelNameText.setText(rootNodeName);
+		String name = fRootIf.getName();
+		fModelNameText.setText(name);
 	}
 	
 	private class ModelNameApplier implements IValueApplier{

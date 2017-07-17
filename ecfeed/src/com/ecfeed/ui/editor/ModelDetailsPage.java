@@ -79,7 +79,7 @@ public class ModelDetailsPage extends BasicDetailsPage {
 		if(getSelectedElement() instanceof RootNode){
 			RootNode selectedRoot = (RootNode)getSelectedElement();
 			fRootIf.setOwnNode(selectedRoot);
-			fModelNameComposite.refresh(selectedRoot.getName());
+			fModelNameComposite.refresh();
 			fClassesSection.setInput(selectedRoot);
 			fParametersSection.setInput(selectedRoot);
 			fCommentsSection.setInput(selectedRoot);
