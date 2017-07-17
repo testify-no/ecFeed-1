@@ -105,7 +105,7 @@ public class ConstraintDetailsPage extends BasicDetailsPage {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			fConstraintIf.setName(fNameCombo.getText());
-			fNameCombo.setText(fConstraintIf.getName());
+			fNameCombo.setText(fConstraintIf.getNodeName());
 		}
 	}
 
@@ -114,7 +114,7 @@ public class ConstraintDetailsPage extends BasicDetailsPage {
 		@Override
 		public void focusLost(FocusEvent e) {
 			fConstraintIf.setName(fNameCombo.getText());
-			fNameCombo.setText(fConstraintIf.getName());
+			fNameCombo.setText(fConstraintIf.getNodeName());
 		}
 
 	}

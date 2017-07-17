@@ -132,7 +132,7 @@ public class MethodsViewer extends TableViewerSection {
 		@Override
 		protected Object getValue(Object element) {
 			fMethodIf.setOwnNode((MethodNode)element);
-			return fMethodIf.getName();
+			return fMethodIf.getNodeName();
 		}
 
 		@Override

@@ -82,12 +82,12 @@ public class AbstractNodeInterface {
 		return true;
 	}
 
-	public String getName(){
+	public String getNodeName(){
 		return fNode.getName();
 	}
 
 	public boolean setName(String newName){
-		if(newName.equals(getName())){
+		if(newName.equals(getNodeName())){
 			return false;
 		}
 		String problemTitle = "";

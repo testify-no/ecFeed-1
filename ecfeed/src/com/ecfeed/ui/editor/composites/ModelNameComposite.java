@@ -26,7 +26,7 @@ public class ModelNameComposite {
 	
 	public void refresh() {
 		
-		String name = fRootIf.getName();
+		String name = fRootIf.getNodeName();
 		fModelNameText.setText(name);
 	}
 	
@@ -36,7 +36,7 @@ public class ModelNameComposite {
 		public void applyValue() {
 			
 			fRootIf.setName(fModelNameText.getText());
-			fModelNameText.setText(fRootIf.getName());
+			fModelNameText.setText(fRootIf.getNodeName());
 		}
 	}	
 	

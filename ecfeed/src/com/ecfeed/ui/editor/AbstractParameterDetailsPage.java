@@ -42,7 +42,7 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 		@Override
 		public void applyValue() {
 			getParameterIf().setName(fNameText.getText());
-			fNameText.setText(getParameterIf().getName());
+			fNameText.setText(getParameterIf().getNodeName());
 		}
 	}	
 

@@ -170,7 +170,7 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		@Override
 		public void applyValue() {
 			fChoiceIf.setName(fNameText.getText());
-			fNameText.setText(fChoiceIf.getName());
+			fNameText.setText(fChoiceIf.getNodeName());
 		}
 	}
 

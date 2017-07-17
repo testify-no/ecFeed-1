@@ -182,7 +182,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 
 	private void refreshMethodNameAndSignature(MethodNode methodNode) {
 		getMainSection().setText(MethodNodeHelper.simplifiedToString(methodNode));
-		fMethodNameText.setText(fMethodInterface.getName());
+		fMethodNameText.setText(fMethodInterface.getNodeName());
 	}
 
 	private void refreshRunnerCombo(MethodNode methodNode) {
@@ -299,7 +299,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		@Override
 		public void applyValue() {
 			fMethodInterface.setName(fMethodNameText.getText());
-			fMethodNameText.setText(fMethodInterface.getName());
+			fMethodNameText.setText(fMethodInterface.getNodeName());
 		}
 	}	
 

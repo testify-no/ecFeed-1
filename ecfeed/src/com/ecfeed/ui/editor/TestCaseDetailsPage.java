@@ -147,7 +147,7 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 		@Override
 		public void widgetSelected(SelectionEvent e){
 			fTestCaseIf.setName(fTestSuiteNameCombo.getText());
-			fTestSuiteNameCombo.setText(fTestCaseIf.getName());
+			fTestSuiteNameCombo.setText(fTestCaseIf.getNodeName());
 		}
 	}	
 
