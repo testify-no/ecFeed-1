@@ -69,6 +69,13 @@ public class EcFormToolkit {
 	}	
 
 	public Label createLabel(Composite parentComposite, String text) {
+
+		if (fFormToolkitAdapter.getEclipseToolkit() == null) {
+			Label label = new Label(parentComposite, SWT.NONE);
+			label.setText(text);
+			return label;
+		}
+
 		return fFormToolkitAdapter.createLabel(parentComposite, text, SWT.NONE);
 	}
 
@@ -84,8 +91,17 @@ public class EcFormToolkit {
 
 	public Text createGridText(Composite parentGridComposite, IValueApplier valueApplier) {
 
-		Text text = fFormToolkitAdapter.createText(parentGridComposite, null, SWT.NONE);
-		text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		Text text;
+
+		if (fFormToolkitAdapter.getEclipseToolkit() == null) {
+			text = new Text(parentGridComposite, SWT.BORDER);
+			GridData gridData = new GridData(SWT.FILL, SWT.CENTER, true, false);
+			gridData.grabExcessHorizontalSpace = true;
+			text.setLayoutData(gridData);
+		} else {
+			text = fFormToolkitAdapter.createText(parentGridComposite, null, SWT.NONE);
+			text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		}
 
 		TypedListener onLostFocusListener = 
 				new TypedListener(new CommonEditHelper.ApplyValueWhenFocusLostListener(valueApplier));
