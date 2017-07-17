@@ -55,11 +55,11 @@ public class ClassDetailsPage extends BasicDetailsPage {
 
 
 	public ClassDetailsPage(
-			ModelMasterSection masterSection, 
+			IMainTreeProvider mainTreeProvider, 
 			IModelUpdateContext updateContext, 
 			IJavaProjectProvider javaProjectProvider) {
-		
-		super(masterSection, updateContext, javaProjectProvider);
+
+		super(mainTreeProvider, updateContext, javaProjectProvider);
 		fJavaProjectProvider = javaProjectProvider;
 		fIsAndroidProject = new EclipseProjectHelper(javaProjectProvider).isAndroidProject();
 		fClassIf = new ClassInterface(this, javaProjectProvider);

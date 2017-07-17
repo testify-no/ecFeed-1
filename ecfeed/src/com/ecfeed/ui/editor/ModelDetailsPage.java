@@ -27,16 +27,16 @@ public class ModelDetailsPage extends BasicDetailsPage {
 	private ClassViewer fClassesSection;
 	private GlobalParametersViewer fParametersSection;
 	private ModelNameComposite fModelNameComposite;
-	
+
 	private RootInterface fRootIf;
 	private SingleTextCommentsSection fCommentsSection;
 	private IJavaProjectProvider fJavaProjectProvider;
 
 	public ModelDetailsPage(
-			ModelMasterSection masterSection, 
+			IMainTreeProvider mainTreeProvider, 
 			IModelUpdateContext updateContext, 
 			IJavaProjectProvider javaProjectProvider) {
-		super(masterSection, updateContext, javaProjectProvider);
+		super(mainTreeProvider, updateContext, javaProjectProvider);
 		fJavaProjectProvider = javaProjectProvider;
 		fRootIf = new RootInterface(this, javaProjectProvider);
 	}

@@ -257,7 +257,6 @@ public class ChoicesViewer extends TableViewerSection {
 
 		fReplaceWithDefaultButton = addButton("Reset with default", new ReplaceWithDefaultAdapter());
 
-		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
 		fActionProvider = new ModelViewerActionProvider(getTableViewer(), this, javaProjectProvider);
 		setActionProvider(fActionProvider);
 		fDragListener = new ModelNodeDragListener(getViewer());

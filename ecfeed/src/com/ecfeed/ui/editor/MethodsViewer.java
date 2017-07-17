@@ -67,10 +67,9 @@ public class MethodsViewer extends TableViewerSection {
 								new DeleteAction(getViewer(), this), 
 								Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
 
-		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
 		addSelectionChangedListener(new SelectionChangedListener());
 		setActionProvider(new ModelViewerActionProvider(getTableViewer(), this, javaProjectProvider));
-		
+
 		getViewer().addDragSupport(
 				DND.DROP_COPY|DND.DROP_MOVE, 
 				new Transfer[]{ModelNodesTransfer.getInstance()}, 

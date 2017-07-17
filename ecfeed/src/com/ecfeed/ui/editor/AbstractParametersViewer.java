@@ -74,7 +74,6 @@ public abstract class AbstractParametersViewer extends TableViewerSection {
 		fNameColumn.setEditingSupport(new ParameterNameEditingSupport());
 		fTypeColumn.setEditingSupport(getParameterTypeEditingSupport());
 
-		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
 		setActionProvider(new ModelViewerActionProvider(getTableViewer(), this, javaProjectProvider));
 		addSelectionChangedListener(new SelectionChangedListener());
 	}

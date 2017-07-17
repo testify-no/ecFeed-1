@@ -104,7 +104,7 @@ public class LinkingMethodsViewer extends TreeViewerSection {
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext,
 			IJavaProjectProvider javaProjectProvider) {
-		
+
 		super(sectionContext, updateContext, javaProjectProvider, StyleDistributor.getSectionStyle());
 
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
@@ -112,8 +112,6 @@ public class LinkingMethodsViewer extends TreeViewerSection {
 		getSection().setLayoutData(gd);
 
 		getSection().setText("Linking methods");
-
-		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
 
 		getTreeViewer().setAutoExpandLevel(AbstractTreeViewer.ALL_LEVELS);
 	}

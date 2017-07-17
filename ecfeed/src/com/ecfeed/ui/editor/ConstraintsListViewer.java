@@ -71,14 +71,13 @@ public class ConstraintsListViewer extends TableViewerSection {
 						new ActionSelectionAdapter(
 								new DeleteAction(getViewer(), this), Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
 
-		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
 		setActionProvider(new ModelViewerActionProvider(getTableViewer(), updateContext, javaProjectProvider));
-		
+
 		getViewer().addDragSupport(
 				DND.DROP_COPY|DND.DROP_MOVE, 
 				new Transfer[]{ModelNodesTransfer.getInstance()}, 
 				new ModelNodeDragListener(getViewer()));
-		
+
 		addSelectionChangedListener(new SelectionChangedListener());
 	}
 

@@ -45,7 +45,7 @@ import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.IModelUpdateListener;
 
-public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISelectionChangedListener, ISectionContext{
+public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISelectionChangedListener, ISectionContext {
 
 	private ModelMasterSection fMasterSection;
 	private ISectionContext fMasterSectionContext;
@@ -64,14 +64,8 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 		fModel = null;
 	}
 
-	@Override
 	public ModelMasterSection getMasterSection(){
 		return fMasterSection;
-	}
-
-	@Override
-	public void selectionChanged(SelectionChangedEvent event) {
-		detailsPart.selectionChanged(fMasterSection, event.getSelection());
 	}
 
 	@Override
@@ -97,40 +91,44 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 
 	@Override
 	protected void registerPages(DetailsPart detailsPart) {
+
 		if (fModel == null) {
 			return;
 		}
+
+		MasterSectionMainTreeProvider mainTreeProvider = new MasterSectionMainTreeProvider(); 
+
 		detailsPart.registerPage(
 				RootNode.class, 
-				new ModelDetailsPage(fMasterSection, fUpdateContext, fJavaProjectProvider));
+				new ModelDetailsPage(mainTreeProvider, fUpdateContext, fJavaProjectProvider));
 
 		detailsPart.registerPage(
 				ClassNode.class, 
-				new ClassDetailsPage(fMasterSection, fUpdateContext, fJavaProjectProvider));
+				new ClassDetailsPage(mainTreeProvider, fUpdateContext, fJavaProjectProvider));
 
 		detailsPart.registerPage(
 				MethodNode.class, 
-				new MethodDetailsPage(fMasterSection, fUpdateContext, fJavaProjectProvider));
+				new MethodDetailsPage(mainTreeProvider, fUpdateContext, fJavaProjectProvider));
 
 		detailsPart.registerPage(
 				MethodParameterNode.class, 
-				new MethodParameterDetailsPage(fMasterSection, fUpdateContext, fJavaProjectProvider));
+				new MethodParameterDetailsPage(mainTreeProvider, fUpdateContext, fJavaProjectProvider));
 
 		detailsPart.registerPage(
 				GlobalParameterNode.class, 
-				new GlobalParameterDetailsPage(fMasterSection, fUpdateContext, fJavaProjectProvider));
+				new GlobalParameterDetailsPage(mainTreeProvider, fUpdateContext, fJavaProjectProvider));
 
 		detailsPart.registerPage(
 				TestCaseNode.class, 
-				new TestCaseDetailsPage(fMasterSection, fUpdateContext, fJavaProjectProvider));
+				new TestCaseDetailsPage(mainTreeProvider, fUpdateContext, fJavaProjectProvider));
 
 		detailsPart.registerPage(
 				ConstraintNode.class, 
-				new ConstraintDetailsPage(fMasterSection, fUpdateContext, fJavaProjectProvider));
+				new ConstraintDetailsPage(mainTreeProvider, fUpdateContext, fJavaProjectProvider));
 
 		detailsPart.registerPage(
 				ChoiceNode.class, 
-				new ChoiceDetailsPage(fMasterSection, fUpdateContext, fJavaProjectProvider));
+				new ChoiceDetailsPage(mainTreeProvider, fUpdateContext, fJavaProjectProvider));
 
 		selectNode(fModel);
 	}
@@ -163,6 +161,11 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 				ActionFactory.SELECT_ALL.getId(), new GenericToolbarAction(ActionFactory.SELECT_ALL.getId()));
 
 		actionBars.updateActionBars();
+	}
+
+	@Override
+	public void selectionChanged(SelectionChangedEvent event) {
+		detailsPart.selectionChanged(fMasterSection, event.getSelection());
 	}
 
 	@Override
@@ -273,11 +276,6 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 	private class MasterSectionContext implements ISectionContext{
 
 		@Override
-		public ModelMasterSection getMasterSection() {
-			return null;
-		}
-
-		@Override
 		public Composite getSectionComposite() {
 			return sashForm;
 		}
@@ -323,6 +321,27 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 				action.run();
 			}
 		}
+	}
+
+
+	private class MasterSectionMainTreeProvider implements IMainTreeProvider {
+
+		@Override
+		public AbstractNode getCurrentNode() {
+			return (AbstractNode)fMasterSection.getSelectedElement();
+		}
+
+		@Override
+		public void markDirty() {
+			fMasterSection.markDirty();
+
+		}
+
+		@Override
+		public void refresh() {
+			fMasterSection.refresh();
+		}
+
 	}
 
 }

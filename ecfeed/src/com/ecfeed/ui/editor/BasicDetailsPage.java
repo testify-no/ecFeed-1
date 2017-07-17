@@ -47,7 +47,7 @@ import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.IModelUpdateListener;
 
 public abstract class BasicDetailsPage 
-	implements IDetailsPage, IModelUpdateListener, ISectionContext, IModelUpdateContext {
+implements IDetailsPage, IModelUpdateListener, ISectionContext, IModelUpdateContext {
 
 	protected class ImplementToolbarAction extends ImplementAction{
 
@@ -84,7 +84,7 @@ public abstract class BasicDetailsPage
 
 	private List<IFormPart> fForms;
 	private List<ViewerSection> fViewerSections;
-	private ModelMasterSection fMasterSection;
+	private IMainTreeProvider fMainTreeProvider;
 	private IModelUpdateContext fModelUpdateContext;
 	private AbstractNode fSelectedNode;
 	private IModelImplementer fImplementer;
@@ -93,11 +93,11 @@ public abstract class BasicDetailsPage
 	private ToolBarManager fToolBarManager;
 
 	public BasicDetailsPage(
-			ModelMasterSection masterSection, 
+			IMainTreeProvider mainTreeProvider, 
 			IModelUpdateContext updateContext, 
 			IJavaProjectProvider javaProjectProvider){
 
-		fMasterSection = masterSection;
+		fMainTreeProvider = mainTreeProvider;
 		fForms = new ArrayList<IFormPart>();
 		fViewerSections = new ArrayList<ViewerSection>();
 		fModelUpdateContext = updateContext;
@@ -113,7 +113,7 @@ public abstract class BasicDetailsPage
 
 	@Override
 	public void selectionChanged(IFormPart part, ISelection selection) {
-		fSelectedNode = (AbstractNode)fMasterSection.getSelectedElement();
+		fSelectedNode = fMainTreeProvider.getCurrentNode();
 	}
 
 	@Override
@@ -167,7 +167,7 @@ public abstract class BasicDetailsPage
 
 	@Override
 	public void refresh(){
-		fSelectedNode = (AbstractNode)fMasterSection.getSelectedElement();
+		fSelectedNode = fMainTreeProvider.getCurrentNode();
 		refreshTextClient();
 	}
 
@@ -239,11 +239,6 @@ public abstract class BasicDetailsPage
 		return fMainSection;
 	}
 
-	@Override
-	public ModelMasterSection getMasterSection(){
-		return fMasterSection;
-	}
-
 	protected void addForm(IFormPart form){
 		fForms.add(form);
 		form.initialize(getManagedForm());
@@ -255,7 +250,7 @@ public abstract class BasicDetailsPage
 	}
 
 	protected Object getSelectedElement(){
-		return getMasterSection().getSelectedElement();
+		return fMainTreeProvider.getCurrentNode();
 	}
 
 	protected IManagedForm getManagedForm(){
@@ -271,11 +266,11 @@ public abstract class BasicDetailsPage
 		if(source != null){
 			source.markDirty();
 		}
-		if(getMasterSection() != null){
-			getMasterSection().markDirty();
+		if(fMainTreeProvider != null){
+			fMainTreeProvider.markDirty();
 		}
-		if(getMasterSection() != null){
-			getMasterSection().refresh();
+		if(fMainTreeProvider != null){
+			fMainTreeProvider.refresh();
 		}
 		refresh();
 	}

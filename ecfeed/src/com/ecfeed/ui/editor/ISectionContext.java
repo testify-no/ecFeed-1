@@ -13,7 +13,6 @@ package com.ecfeed.ui.editor;
 import org.eclipse.swt.widgets.Composite;
 
 public interface ISectionContext {
-	public ModelMasterSection getMasterSection();
 	public Composite getSectionComposite();
 	public FormToolkitAdapter getToolkit();
 }

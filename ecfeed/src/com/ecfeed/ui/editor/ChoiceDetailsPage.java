@@ -46,10 +46,10 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 
 
 	public ChoiceDetailsPage(
-			ModelMasterSection masterSection, 
+			IMainTreeProvider mainTreeProvider, 
 			IModelUpdateContext updateContext, 
 			IJavaProjectProvider javaProjectProvider) {
-		super(masterSection, updateContext, javaProjectProvider);
+		super(mainTreeProvider, updateContext, javaProjectProvider);
 		fJavaProjectProvider = javaProjectProvider;
 		fChoiceIf = new ChoiceInterface(this, fJavaProjectProvider);
 	}

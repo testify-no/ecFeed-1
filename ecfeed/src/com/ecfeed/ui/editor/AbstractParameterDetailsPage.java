@@ -65,9 +65,9 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 
 	}
 
-	public AbstractParameterDetailsPage(ModelMasterSection masterSection,
+	public AbstractParameterDetailsPage(IMainTreeProvider mainTreeProvider,
 			IModelUpdateContext updateContext, IJavaProjectProvider javaProjectProvider) {
-		super(masterSection, updateContext, javaProjectProvider);
+		super(mainTreeProvider, updateContext, javaProjectProvider);
 		fJavaProjectProvider = javaProjectProvider;
 	}
 

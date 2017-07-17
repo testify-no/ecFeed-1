@@ -43,10 +43,10 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 
 
 	public TestCaseDetailsPage(
-			ModelMasterSection masterSection, 
+			IMainTreeProvider mainTreeProvider, 
 			IModelUpdateContext updateContext, 
 			IJavaProjectProvider javaProjectProvider) {
-		super(masterSection, updateContext, javaProjectProvider);
+		super(mainTreeProvider, updateContext, javaProjectProvider);
 		fJavaProjectProvider = javaProjectProvider;
 		fTestCaseIf = new TestCaseInterface(this, javaProjectProvider);
 	}

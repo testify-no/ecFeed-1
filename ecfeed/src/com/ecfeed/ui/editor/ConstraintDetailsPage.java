@@ -38,10 +38,10 @@ public class ConstraintDetailsPage extends BasicDetailsPage {
 	private IJavaProjectProvider fJavaProjectProvider;
 
 	public ConstraintDetailsPage(
-			ModelMasterSection masterSection, 
+			IMainTreeProvider mainTreeProvider, 
 			IModelUpdateContext updateContext, 
 			IJavaProjectProvider javaProjectProvider) {
-		super(masterSection, updateContext, javaProjectProvider);
+		super(mainTreeProvider, updateContext, javaProjectProvider);
 		fJavaProjectProvider = javaProjectProvider;
 		fConstraintIf = new ConstraintInterface(this, javaProjectProvider);
 	}

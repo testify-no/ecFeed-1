@@ -27,11 +27,11 @@ public class GlobalParameterDetailsPage extends AbstractParameterDetailsPage {
 	private LinkingMethodsViewer fLinkingMethodsViewer;
 
 	public GlobalParameterDetailsPage(
-			ModelMasterSection masterSection, 
+			IMainTreeProvider mainTreeProvider, 
 			IModelUpdateContext updateContext, 
 			IJavaProjectProvider javaProjectProvider) {
-		
-		super(masterSection, updateContext, javaProjectProvider);
+
+		super(mainTreeProvider, updateContext, javaProjectProvider);
 		fJavaProjectProvider = javaProjectProvider;
 		getParameterIf();
 	}

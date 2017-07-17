@@ -47,11 +47,11 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 
 
 	public MethodParameterDetailsPage(
-			ModelMasterSection masterSection, 
+			IMainTreeProvider mainTreeProvider, 
 			IModelUpdateContext updateContext,
 			IJavaProjectProvider javaProjectProvider) {
-		
-		super(masterSection, updateContext, javaProjectProvider);
+
+		super(mainTreeProvider, updateContext, javaProjectProvider);
 		fJavaProjectProvider = javaProjectProvider;
 		getParameterIf();
 	}

@@ -306,7 +306,6 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 			addSelectionChangedListener(new LabelSelectionChangedListener());
 		}
 
-		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
 		setActionProvider(new LabelsViewerActionProvider());
 	}
 

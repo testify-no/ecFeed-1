@@ -177,8 +177,6 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 
 		fExportTestCasesButton = 
 				addButton("Export selected", new ExportTestCasesAdapter());
-
-		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
 	}
 
 	@Override
