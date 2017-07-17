@@ -37,6 +37,19 @@ public class ModelDetailsPage extends BasicDetailsPage {
 			IModelUpdateContext updateContext, 
 			IJavaProjectProvider javaProjectProvider) {
 		super(mainTreeProvider, updateContext, javaProjectProvider);
+		initFields(javaProjectProvider);
+	}
+
+	public ModelDetailsPage(
+			IMainTreeProvider mainTreeProvider, 
+			IModelUpdateContext updateContext, 
+			IJavaProjectProvider javaProjectProvider,
+			EcFormToolkit ecFormToolkit) {
+		super(mainTreeProvider, updateContext, javaProjectProvider, ecFormToolkit);
+		initFields(javaProjectProvider);
+	}
+	
+	private final void initFields(IJavaProjectProvider javaProjectProvider) {
 		fJavaProjectProvider = javaProjectProvider;
 		fRootIf = new RootInterface(this, javaProjectProvider);
 	}
@@ -79,7 +92,9 @@ public class ModelDetailsPage extends BasicDetailsPage {
 		if(getSelectedElement() instanceof RootNode){
 			RootNode selectedRoot = (RootNode)getSelectedElement();
 			fRootIf.setOwnNode(selectedRoot);
+
 			fModelNameComposite.refresh();
+
 			fClassesSection.setInput(selectedRoot);
 			fParametersSection.setInput(selectedRoot);
 			fCommentsSection.setInput(selectedRoot);

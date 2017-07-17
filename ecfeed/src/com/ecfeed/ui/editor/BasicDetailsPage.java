@@ -95,7 +95,16 @@ implements IDetailsPage, IModelUpdateListener, ISectionContext, IModelUpdateCont
 	public BasicDetailsPage(
 			IMainTreeProvider mainTreeProvider, 
 			IModelUpdateContext updateContext, 
-			IJavaProjectProvider javaProjectProvider){
+			IJavaProjectProvider javaProjectProvider) {
+
+		this(mainTreeProvider, updateContext, javaProjectProvider, null);
+	}
+	
+	public BasicDetailsPage(
+			IMainTreeProvider mainTreeProvider, 
+			IModelUpdateContext updateContext, 
+			IJavaProjectProvider javaProjectProvider,
+			EcFormToolkit ecFormToolkit) {
 
 		fMainTreeProvider = mainTreeProvider;
 		fForms = new ArrayList<IFormPart>();
@@ -103,8 +112,9 @@ implements IDetailsPage, IModelUpdateListener, ISectionContext, IModelUpdateCont
 		fModelUpdateContext = updateContext;
 		fImplementer = new EclipseModelImplementer(javaProjectProvider);
 		fJavaProjectProvider = javaProjectProvider;
+		fEcFormToolkit = ecFormToolkit;
 	}
-
+	
 	@Override
 	public void initialize(IManagedForm form) {
 		fManagedForm = form;
