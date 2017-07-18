@@ -66,10 +66,14 @@ public class ConstraintDetailsPage extends BasicDetailsPage {
 	}
 
 	private void createConstraintNameEdit(Composite parent) {
-		Composite composite = getToolkit().createComposite(parent);
+		Composite composite = 
+				getEcFormToolkit().getFormToolkitAdapter().createComposite(parent); // TODO TOOLKIT
+		
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
-		getToolkit().createLabel(composite, "Constraint name:");
+		
+		getEcFormToolkit().getFormToolkitAdapter().createLabel(composite, "Constraint name:"); // TODO TOOLKIT
+		
 		fNameCombo = new ComboViewer(composite, SWT.NONE).getCombo();
 		fNameCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		fNameCombo.addSelectionListener(new ConstraintNameChangedListener());

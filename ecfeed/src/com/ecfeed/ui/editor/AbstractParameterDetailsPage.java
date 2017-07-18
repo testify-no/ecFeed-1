@@ -83,7 +83,7 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 
 		addForm(fChoicesViewer = new ChoicesViewer(this, this, fJavaProjectProvider));
 
-		getToolkit().paintBordersFor(getMainComposite());
+		getEcFormToolkit().getFormToolkitAdapter().paintBordersFor(getMainComposite()); // TODO TOOLKIT
 	}
 
 	protected WebParameterSection createWebParameterSection() { 

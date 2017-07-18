@@ -74,7 +74,7 @@ public abstract class BasicSection extends SectionPart implements IModelUpdateCo
 			IModelUpdateContext updateContext,
 			IJavaProjectProvider javaProjectProvider,
 			int style){
-		super(sectionContext.getSectionComposite(), sectionContext.getToolkit().getEclipseToolkit(), style);
+		super(sectionContext.getSectionComposite(), sectionContext.getEcFormToolkit().getFormToolkitAdapter().getEclipseToolkit(), style); // TODO TOOLKIT
 		fSectionContext = sectionContext;
 		fUpdateContext = updateContext;
 		fJavaProjectProvider = javaProjectProvider;
@@ -89,8 +89,8 @@ public abstract class BasicSection extends SectionPart implements IModelUpdateCo
 		}
 	}
 
-	protected FormToolkitAdapter getToolkit(){
-		return fSectionContext.getToolkit();
+	protected EcFormToolkit getEcFormToolkit() {
+		return fSectionContext.getEcFormToolkit();
 	}
 
 	public void setText(String title){
@@ -110,19 +110,19 @@ public abstract class BasicSection extends SectionPart implements IModelUpdateCo
 	}
 
 	protected Composite createClientComposite() {
-		Composite client = getToolkit().createComposite(getSection());
+		Composite client = getEcFormToolkit().getFormToolkitAdapter().createComposite(getSection()); // TODO TOOLKIT
 		client.setLayout(clientLayout());
 		if(clientLayoutData() != null){
 			client.setLayoutData(clientLayoutData());
 		}
 		getSection().setClient(client);
-		getToolkit().adapt(client);
-		getToolkit().paintBordersFor(client);
+		getEcFormToolkit().getFormToolkitAdapter().adapt(client); // TODO TOOLKIT
+		getEcFormToolkit().getFormToolkitAdapter().paintBordersFor(client); // TODO TOOLKIT
 		return client;
 	}
 
 	protected Control createTextClient() {
-		Composite textClient = getToolkit().createComposite(getSection());
+		Composite textClient = getEcFormToolkit().getFormToolkitAdapter().createComposite(getSection()); // TODO TOOLKIT
 		textClient.setLayout(new FillLayout());
 		getSection().setTextClient(fTextClient);
 		return textClient;

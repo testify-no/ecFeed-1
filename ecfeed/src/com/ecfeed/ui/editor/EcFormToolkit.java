@@ -22,6 +22,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.TypedListener;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.forms.widgets.Section;
 
 import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.ui.common.ApplyValueMode;
@@ -39,6 +40,10 @@ public class EcFormToolkit {
 		return fFormToolkitAdapter;
 	}
 
+	public Section createSection(Composite parent, int style) {
+		return fFormToolkitAdapter.createSection(parent, style);	
+	}
+	
 	public void paintBorders(Composite composite) {
 		fFormToolkitAdapter.paintBordersFor(composite);
 	}

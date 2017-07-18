@@ -14,5 +14,5 @@ import org.eclipse.swt.widgets.Composite;
 
 public interface ISectionContext {
 	public Composite getSectionComposite();
-	public FormToolkitAdapter getToolkit();
+	public EcFormToolkit getEcFormToolkit();
 }

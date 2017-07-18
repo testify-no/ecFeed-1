@@ -99,7 +99,7 @@ implements IDetailsPage, IModelUpdateListener, ISectionContext, IModelUpdateCont
 
 		this(mainTreeProvider, updateContext, javaProjectProvider, null);
 	}
-	
+
 	public BasicDetailsPage(
 			IMainTreeProvider mainTreeProvider, 
 			IModelUpdateContext updateContext, 
@@ -114,7 +114,7 @@ implements IDetailsPage, IModelUpdateListener, ISectionContext, IModelUpdateCont
 		fJavaProjectProvider = javaProjectProvider;
 		fEcFormToolkit = ecFormToolkit;
 	}
-	
+
 	@Override
 	public void initialize(IManagedForm form) {
 		fManagedForm = form;
@@ -129,15 +129,15 @@ implements IDetailsPage, IModelUpdateListener, ISectionContext, IModelUpdateCont
 	@Override
 	public void createContents(Composite parent) {
 		parent.setLayout(new FillLayout());
-		fMainSection = getToolkit().createSection(parent, StyleDistributor.getSectionStyle());
+		fMainSection = getEcFormToolkit().getFormToolkitAdapter().createSection(parent, StyleDistributor.getSectionStyle()); // TODO TOOLKIT
 		Composite textClient = createTextClientComposite();
 		fMainSection.setTextClient(textClient);
 
-		getToolkit().adapt(getMainSection());
+		getEcFormToolkit().getFormToolkitAdapter().adapt(getMainSection()); // TODO TOOLKIT
 
-		fMainComposite = getToolkit().createComposite(getMainSection(), SWT.NONE);
+		fMainComposite = getEcFormToolkit().getFormToolkitAdapter().createComposite(getMainSection(), SWT.NONE); // TODO TOOLKIT
 		fMainComposite.setLayout(new GridLayout(1, false));
-		getToolkit().adapt(fMainComposite);
+		getEcFormToolkit().getFormToolkitAdapter().adapt(fMainComposite); // TODO TOOLKIT
 		getMainSection().setClient(fMainComposite);
 	}
 
@@ -237,11 +237,7 @@ implements IDetailsPage, IModelUpdateListener, ISectionContext, IModelUpdateCont
 	}
 
 	@Override
-	public FormToolkitAdapter getToolkit(){
-		return fEcFormToolkit.getFormToolkitAdapter();
-	}
-
-	protected EcFormToolkit getEcFormToolkit() {
+	public EcFormToolkit getEcFormToolkit() {
 		return fEcFormToolkit;
 	}
 

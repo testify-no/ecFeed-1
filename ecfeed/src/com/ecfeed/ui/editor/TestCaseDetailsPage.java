@@ -114,16 +114,16 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 	}	
 
 	private void createTestSuiteEdit(Composite parent) {
-		Composite composite = getToolkit().createComposite(parent);
+		Composite composite = getEcFormToolkit().getFormToolkitAdapter().createComposite(parent); // TODO TOOLKIT
 		composite.setLayout(new GridLayout(3, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
-		getToolkit().createLabel(composite, "Test suite: ");
+		getEcFormToolkit().getFormToolkitAdapter().createLabel(composite, "Test suite: "); // TODO TOOLKIT
 
 		fTestSuiteNameCombo = new ComboViewer(composite, SWT.NONE).getCombo();
 		fTestSuiteNameCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		fTestSuiteNameCombo.addSelectionListener(new RenameTestCaseAdapter());
 
-		fExecuteButton = getToolkit().createButton(composite, "Execute", SWT.NONE);
+		fExecuteButton = getEcFormToolkit().getFormToolkitAdapter().createButton(composite, "Execute", SWT.NONE); // TODO TOOLKIT
 		fExecuteButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent ev){
@@ -135,7 +135,7 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 			}
 		});
 
-		getToolkit().paintBordersFor(fTestSuiteNameCombo);
+		getEcFormToolkit().getFormToolkitAdapter().paintBordersFor(fTestSuiteNameCombo); // TODO TOOLKIT
 	}
 
 	@Override

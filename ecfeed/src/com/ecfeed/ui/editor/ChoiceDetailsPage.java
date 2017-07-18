@@ -65,7 +65,7 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		addViewerSection(fChildrenViewer = new ChoicesViewer(this, this, fJavaProjectProvider));
 		addViewerSection(fLabelsViewer = new ChoiceLabelsViewer(this, this, fJavaProjectProvider));
 
-		getToolkit().paintBordersFor(getMainComposite());
+		getEcFormToolkit().getFormToolkitAdapter().paintBordersFor(getMainComposite()); // TODO TOOLKIT
 	}
 
 	@Override
@@ -149,7 +149,7 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 	}
 
 	private void createNameValueEditor(Composite parent) {
-		fAttributesComposite = getToolkit().createComposite(parent);
+		fAttributesComposite = getEcFormToolkit().getFormToolkitAdapter().createComposite(parent); // TODO TOOLKIT
 		fAttributesComposite.setLayout(new GridLayout(2, false));
 		fAttributesComposite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 

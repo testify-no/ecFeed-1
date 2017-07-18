@@ -50,7 +50,8 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 	private ModelMasterSection fMasterSection;
 	private ISectionContext fMasterSectionContext;
 	private ModelPage fPage;
-	private FormToolkitAdapter fToolkit;
+	//private FormToolkitAdapter fToolkit;
+	private EcFormToolkit fEcFormToolkit;
 	private ModelUpdateContext fUpdateContext;
 	private IJavaProjectProvider fJavaProjectProvider;
 	private UndoActionHandler fUndoActionHandler;
@@ -77,7 +78,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 			return;
 		}
 
-		fToolkit = new FormToolkitAdapter(managedForm.getToolkit());
+		fEcFormToolkit = new EcFormToolkit(managedForm.getToolkit()); 
 
 		fMasterSection = new ModelMasterSection(this, fJavaProjectProvider);
 		fMasterSection.initialize(managedForm);
@@ -172,12 +173,12 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 	public Composite getSectionComposite() {
 		return sashForm;
 	}
-
+	
 	@Override
-	public FormToolkitAdapter getToolkit() {
-		return fToolkit;
+	public EcFormToolkit getEcFormToolkit() {
+		return fEcFormToolkit;
 	}
-
+	
 	public void selectNode(AbstractNode node) {
 		fMasterSection.selectElement(node);
 	}
@@ -281,8 +282,8 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 		}
 
 		@Override
-		public FormToolkitAdapter getToolkit() {
-			return fToolkit;
+		public EcFormToolkit getEcFormToolkit() { 
+			return fEcFormToolkit;
 		}
 
 	}

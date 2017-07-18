@@ -70,7 +70,7 @@ public class ModelDetailsPage extends BasicDetailsPage {
 		fParametersSection = new GlobalParametersViewer(this, this, fJavaProjectProvider);
 		addViewerSection(fParametersSection);
 
-		getToolkit().paintBordersFor(getMainComposite());
+		getEcFormToolkit().getFormToolkitAdapter().paintBordersFor(getMainComposite()); // TODO TOOLKIT
 	}
 
 	@Override

@@ -80,7 +80,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 			addViewerSection(fOtherMethodsSection = new OtherMethodsViewer(this, this, fJavaProjectProvider));
 		}
 
-		getToolkit().paintBordersFor(getMainComposite());
+		getEcFormToolkit().getFormToolkitAdapter().paintBordersFor(getMainComposite()); // TODO TOOLKIT
 	}
 
 	@Override
@@ -100,15 +100,20 @@ public class ClassDetailsPage extends BasicDetailsPage {
 
 	private void createBasicParametersComposite(Composite parent) {
 
-		Composite mainComposite = getToolkit().createComposite(parent);
+		Composite mainComposite = 
+				getEcFormToolkit().getFormToolkitAdapter().createComposite(parent);  // TODO TOOLKIT
+
 		mainComposite.setLayout(new GridLayout(1, false));
 		mainComposite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 
-		Composite packageAndClassComposite = getToolkit().createComposite(mainComposite);
+		Composite packageAndClassComposite = 
+				getEcFormToolkit().getFormToolkitAdapter().createComposite(mainComposite);  // TODO TOOLKIT
 		initAndFillClassComposite(packageAndClassComposite);
 
 		if (fIsAndroidProject) {
-			Composite androidComposite = getToolkit().createComposite(mainComposite);
+			Composite androidComposite = 
+					getEcFormToolkit().getFormToolkitAdapter().createComposite(mainComposite); // TODO TOOLKIT
+
 			initAndFillAndroidComposite(androidComposite);
 		}
 	}
@@ -158,7 +163,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 
 		if (baseRunnerFieldsActive()) {
 			// col 1 - label
-			fAndroidBaseRunnerLabel = getToolkit().createLabel(composite, "Base runner");
+			fAndroidBaseRunnerLabel = getEcFormToolkit().createLabel(composite, "Base runner");
 
 			// col 2 - runner combo
 			fAndroidBaseRunnerCombo = new ComboViewer(composite, SWT.NONE).getCombo();

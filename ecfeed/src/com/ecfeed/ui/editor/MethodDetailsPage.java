@@ -75,7 +75,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		addViewerSection(fTestCasesSection = 
 				new TestCasesViewer(this, this, javaProjectProvider));
 
-		getToolkit().paintBordersFor(getMainComposite());
+		getEcFormToolkit().getFormToolkitAdapter().paintBordersFor(getMainComposite()); // TODO TOOLKIT
 	}
 
 	@Override
