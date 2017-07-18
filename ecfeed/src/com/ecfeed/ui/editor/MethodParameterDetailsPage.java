@@ -85,8 +85,8 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 		SwtObjectHelper.setHorizontalSpan(fExpectedCheckbox, 3);
 
 
-		getEcFormToolkit().getFormToolkitAdapter().createLabel(attributesComposite, "Default value: ", SWT.NONE); // TODO TOOLKIT
-		fDefaultValueComboComposite = getEcFormToolkit().getFormToolkitAdapter().createComposite(attributesComposite); // TODO TOOLKIT
+		getEcFormToolkit().createLabel(attributesComposite, "Default value: ");
+		fDefaultValueComboComposite = getEcFormToolkit().createComposite(attributesComposite);
 		GridLayout gl = new GridLayout(1, false);
 		gl.marginHeight = 0;
 		gl.marginWidth = 0;
@@ -100,7 +100,7 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 		SwtObjectHelper.setHorizontalSpan(fLinkedCheckbox, 3);
 
 
-		getEcFormToolkit().getFormToolkitAdapter().createLabel(attributesComposite, "Parameter link: ", SWT.NONE); // TODO TOOLKIT
+		getEcFormToolkit().createLabel(attributesComposite, "Parameter link: ");
 
 		fLinkCombo = new Combo(attributesComposite,SWT.DROP_DOWN|SWT.READ_ONLY);
 		fLinkCombo.setLayoutData(comboGridData);

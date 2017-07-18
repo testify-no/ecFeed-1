@@ -1,6 +1,5 @@
 /*******************************************************************************
  *
- * Copyright (c) 2016 ecFeed AS.                                                
  * All rights reserved. This program and the accompanying materials              
  * are made available under the terms of the Eclipse Public License v1.0         
  * which accompanies this distribution, and is available at                      
@@ -12,7 +11,6 @@ package com.ecfeed.ui.editor;
 
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -114,28 +112,31 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 	}	
 
 	private void createTestSuiteEdit(Composite parent) {
-		Composite composite = getEcFormToolkit().getFormToolkitAdapter().createComposite(parent); // TODO TOOLKIT
+		Composite composite = getEcFormToolkit().createComposite(parent);
 		composite.setLayout(new GridLayout(3, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
-		getEcFormToolkit().getFormToolkitAdapter().createLabel(composite, "Test suite: "); // TODO TOOLKIT
+		getEcFormToolkit().createLabel(composite, "Test suite: ");
 
 		fTestSuiteNameCombo = new ComboViewer(composite, SWT.NONE).getCombo();
 		fTestSuiteNameCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		fTestSuiteNameCombo.addSelectionListener(new RenameTestCaseAdapter());
 
-		fExecuteButton = getEcFormToolkit().getFormToolkitAdapter().createButton(composite, "Execute", SWT.NONE); // TODO TOOLKIT
-		fExecuteButton.addSelectionListener(new SelectionAdapter() {
+		ButtonClickListener buttonClickListener = new ButtonClickListener() {
+
 			@Override
-			public void widgetSelected(SelectionEvent ev){
+			public void widgetSelected(SelectionEvent ev) {
 				try {
 					fTestCaseIf.executeStaticTest();
 				} catch (EcException e) {
 					ExceptionCatchDialog.open("Can not execute static tests.", e.getMessage());
 				}
 			}
-		});
 
-		getEcFormToolkit().getFormToolkitAdapter().paintBordersFor(fTestSuiteNameCombo); // TODO TOOLKIT
+		};
+
+		fExecuteButton = getEcFormToolkit().createButton(composite, "Execute", buttonClickListener);		
+
+		getEcFormToolkit().paintBordersFor(fTestSuiteNameCombo);
 	}
 
 	@Override
