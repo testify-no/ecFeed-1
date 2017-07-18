@@ -39,6 +39,10 @@ public class EcFormToolkit {
 	public FormToolkitAdapter getFormToolkitAdapter() {
 		return fFormToolkitAdapter;
 	}
+	
+	public FormToolkit getEclipseToolkit() {
+		return fFormToolkitAdapter.getEclipseToolkit();
+	}
 
 	public Section createSection(Composite parent, int style) {
 		return fFormToolkitAdapter.createSection(parent, style);	
@@ -47,7 +51,15 @@ public class EcFormToolkit {
 	public void paintBordersFor(Composite composite) {
 		fFormToolkitAdapter.paintBordersFor(composite);
 	}
+	
+	public void	adapt(Composite composite) {
+		fFormToolkitAdapter.adapt(composite);
+	}
 
+	public Composite createComposite(Composite parent) {
+		return fFormToolkitAdapter.createComposite(parent);
+	}
+	
 	public Composite createGridComposite(Composite parentComposite, int countOfColumns) {
 
 		Composite composite = fFormToolkitAdapter.createComposite(parentComposite);
