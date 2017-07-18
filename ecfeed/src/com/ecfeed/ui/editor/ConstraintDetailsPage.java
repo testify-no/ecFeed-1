@@ -17,7 +17,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
@@ -66,14 +65,11 @@ public class ConstraintDetailsPage extends BasicDetailsPage {
 	}
 
 	private void createConstraintNameEdit(Composite parent) {
-		Composite composite = 
-				getEcFormToolkit().getFormToolkitAdapter().createComposite(parent); // TODO TOOLKIT
-		
-		composite.setLayout(new GridLayout(2, false));
-		composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
-		
-		getEcFormToolkit().getFormToolkitAdapter().createLabel(composite, "Constraint name:"); // TODO TOOLKIT
-		
+
+		Composite composite = getEcFormToolkit().createGridComposite(parent, 2);
+
+		getEcFormToolkit().createLabel(composite, "Constraint name");
+
 		fNameCombo = new ComboViewer(composite, SWT.NONE).getCombo();
 		fNameCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		fNameCombo.addSelectionListener(new ConstraintNameChangedListener());
