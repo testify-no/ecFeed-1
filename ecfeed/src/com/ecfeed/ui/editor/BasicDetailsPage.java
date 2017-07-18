@@ -128,16 +128,18 @@ implements IDetailsPage, IModelUpdateListener, ISectionContext, IModelUpdateCont
 
 	@Override
 	public void createContents(Composite parent) {
+
 		parent.setLayout(new FillLayout());
-		fMainSection = getEcFormToolkit().getFormToolkitAdapter().createSection(parent, StyleDistributor.getSectionStyle()); // TODO TOOLKIT
+		fMainSection = getEcFormToolkit().createSection(parent, StyleDistributor.getSectionStyle());
 		Composite textClient = createTextClientComposite();
 		fMainSection.setTextClient(textClient);
 
-		getEcFormToolkit().getFormToolkitAdapter().adapt(getMainSection()); // TODO TOOLKIT
+		getEcFormToolkit().adapt(getMainSection());
 
-		fMainComposite = getEcFormToolkit().getFormToolkitAdapter().createComposite(getMainSection(), SWT.NONE); // TODO TOOLKIT
+		fMainComposite = getEcFormToolkit().createComposite(getMainSection());
 		fMainComposite.setLayout(new GridLayout(1, false));
-		getEcFormToolkit().getFormToolkitAdapter().adapt(fMainComposite); // TODO TOOLKIT
+
+		getEcFormToolkit().adapt(fMainComposite);
 		getMainSection().setClient(fMainComposite);
 	}
 
