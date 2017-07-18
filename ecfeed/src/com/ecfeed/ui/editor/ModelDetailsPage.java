@@ -48,7 +48,7 @@ public class ModelDetailsPage extends BasicDetailsPage {
 		super(mainTreeProvider, updateContext, javaProjectProvider, ecFormToolkit);
 		initFields(javaProjectProvider);
 	}
-	
+
 	private final void initFields(IJavaProjectProvider javaProjectProvider) {
 		fJavaProjectProvider = javaProjectProvider;
 		fRootIf = new RootInterface(this, javaProjectProvider);
@@ -56,21 +56,21 @@ public class ModelDetailsPage extends BasicDetailsPage {
 
 	@Override
 	public void createContents(Composite parent) {
-		
+
 		super.createContents(parent);
-		
+
 		getMainSection().setText("Model details"); 
 
 		fModelNameComposite = new ModelNameComposite(getMainComposite(), getEcFormToolkit(), fRootIf);
 
 		addCommentsSection();
-		
+
 		addViewerSection(fClassesSection = new ClassViewer(this, this, fJavaProjectProvider));
 
 		fParametersSection = new GlobalParametersViewer(this, this, fJavaProjectProvider);
 		addViewerSection(fParametersSection);
 
-		getEcFormToolkit().getFormToolkitAdapter().paintBordersFor(getMainComposite()); // TODO TOOLKIT
+		getEcFormToolkit().paintBordersFor(getMainComposite());
 	}
 
 	@Override
@@ -115,41 +115,40 @@ public class ModelDetailsPage extends BasicDetailsPage {
 	protected Class<? extends AbstractNode> getNodeType() {
 		return RootNode.class;
 	}
-	
+
 	private class ModelNameComposite {
-		
+
 		private Text fModelNameText;
 		private RootInterface fRootIf;
-		
+
 
 		public ModelNameComposite(Composite parent, EcFormToolkit ecFormToolkit, RootInterface rootIf) {
 
 			fRootIf = rootIf;
-			
+
 			Composite composite = ecFormToolkit.createGridComposite(parent, 2);		
 
 			ecFormToolkit.createLabel(composite, "Model name");
 			fModelNameText = ecFormToolkit.createGridText(composite, new ModelNameApplier());
 			ecFormToolkit.paintBordersFor(composite);
 		}
-		
+
 		public void refresh() {
-			
+
 			String name = fRootIf.getNodeName();
 			fModelNameText.setText(name);
 		}
-		
+
 		private class ModelNameApplier implements IValueApplier{
 
 			@Override
 			public void applyValue() {
-				
+
 				fRootIf.setName(fModelNameText.getText());
 				fModelNameText.setText(fRootIf.getNodeName());
 			}
 		}	
-		
+
 	}
-	
 
 }

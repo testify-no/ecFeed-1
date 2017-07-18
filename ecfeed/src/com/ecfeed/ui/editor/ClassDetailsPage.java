@@ -80,7 +80,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 			addViewerSection(fOtherMethodsSection = new OtherMethodsViewer(this, this, fJavaProjectProvider));
 		}
 
-		getEcFormToolkit().getFormToolkitAdapter().paintBordersFor(getMainComposite()); // TODO TOOLKIT
+		getEcFormToolkit().paintBordersFor(getMainComposite());
 	}
 
 	@Override
@@ -100,19 +100,13 @@ public class ClassDetailsPage extends BasicDetailsPage {
 
 	private void createBasicParametersComposite(Composite parent) {
 
-		Composite mainComposite = 
-				getEcFormToolkit().getFormToolkitAdapter().createComposite(parent);  // TODO TOOLKIT
+		Composite mainComposite = getEcFormToolkit().createGridComposite(parent, 1);
 
-		mainComposite.setLayout(new GridLayout(1, false));
-		mainComposite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
-
-		Composite packageAndClassComposite = 
-				getEcFormToolkit().getFormToolkitAdapter().createComposite(mainComposite);  // TODO TOOLKIT
+		Composite packageAndClassComposite = getEcFormToolkit().createComposite(mainComposite);
 		initAndFillClassComposite(packageAndClassComposite);
 
 		if (fIsAndroidProject) {
-			Composite androidComposite = 
-					getEcFormToolkit().getFormToolkitAdapter().createComposite(mainComposite); // TODO TOOLKIT
+			Composite androidComposite = getEcFormToolkit().createComposite(mainComposite);
 
 			initAndFillAndroidComposite(androidComposite);
 		}

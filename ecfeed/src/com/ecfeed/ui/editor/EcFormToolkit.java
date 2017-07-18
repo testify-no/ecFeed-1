@@ -39,7 +39,7 @@ public class EcFormToolkit {
 	public FormToolkitAdapter getFormToolkitAdapter() {
 		return fFormToolkitAdapter;
 	}
-	
+
 	public FormToolkit getEclipseToolkit() {
 		return fFormToolkitAdapter.getEclipseToolkit();
 	}
@@ -47,11 +47,11 @@ public class EcFormToolkit {
 	public Section createSection(Composite parent, int style) {
 		return fFormToolkitAdapter.createSection(parent, style);	
 	}
-	
+
 	public void paintBordersFor(Composite composite) {
 		fFormToolkitAdapter.paintBordersFor(composite);
 	}
-	
+
 	public void	adapt(Composite composite) {
 		fFormToolkitAdapter.adapt(composite);
 	}
@@ -59,12 +59,12 @@ public class EcFormToolkit {
 	public Composite createComposite(Composite parent) {
 		return fFormToolkitAdapter.createComposite(parent);
 	}
-	
+
 	public Composite createGridComposite(Composite parentComposite, int countOfColumns) {
 
 		Composite composite = fFormToolkitAdapter.createComposite(parentComposite);
 		composite.setLayout(new GridLayout(countOfColumns, false));
-		composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false)); // TODO causes exception on RAP
 
 		return composite;
 	}
@@ -119,7 +119,7 @@ public class EcFormToolkit {
 
 		return text;
 	}	
-	
+
 	public Button createButton(Composite parentComposite, String text, int style) {
 		return fFormToolkitAdapter.createButton(parentComposite, text, style);
 	}

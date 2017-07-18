@@ -127,7 +127,7 @@ public abstract class AbstractCommentsSection extends TabFolderSection {
 	}
 
 	protected TabItem addTextTab(String title, int index){
-		Text text = getEcFormToolkit().getFormToolkitAdapter().createText(getTabFolder(), "", SWT.WRAP | SWT.V_SCROLL | SWT.MULTI | SWT.READ_ONLY); // TODO TOOLKIT
+		Text text = getEcFormToolkit().createText(getTabFolder(), "", SWT.WRAP | SWT.V_SCROLL | SWT.MULTI | SWT.READ_ONLY);
 		text.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND));
 		TabItem item = addTabItem(text, title, index);
 		fTextItems.put(item, text);
