@@ -22,7 +22,7 @@ import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.RootInterface;
 
-public class ModelDetailsPage extends BasicDetailsPage {
+public class ModelRootDetailsPage extends BasicDetailsPage {
 
 	private ClassViewer fClassesSection;
 	private GlobalParametersViewer fParametersSection;
@@ -31,7 +31,7 @@ public class ModelDetailsPage extends BasicDetailsPage {
 	private RootInterface fRootIf;
 	private SingleTextCommentsSection fCommentsSection;
 
-	public ModelDetailsPage(
+	public ModelRootDetailsPage(
 			IMainTreeProvider mainTreeProvider, 
 			IModelUpdateContext updateContext, 
 			IJavaProjectProvider javaProjectProvider) {
@@ -39,7 +39,7 @@ public class ModelDetailsPage extends BasicDetailsPage {
 		initFields(javaProjectProvider);
 	}
 
-	public ModelDetailsPage(
+	public ModelRootDetailsPage(
 			IMainTreeProvider mainTreeProvider, 
 			IModelUpdateContext updateContext, 
 			IJavaProjectProvider javaProjectProvider,

@@ -101,7 +101,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 
 		detailsPart.registerPage(
 				RootNode.class, 
-				new ModelDetailsPage(mainTreeProvider, fUpdateContext, fJavaProjectProvider));
+				new ModelRootDetailsPage(mainTreeProvider, fUpdateContext, fJavaProjectProvider));
 
 		detailsPart.registerPage(
 				ClassNode.class, 
