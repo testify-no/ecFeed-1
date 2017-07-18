@@ -24,7 +24,7 @@ public class FormToolkitAdapter {
 	public FormToolkitAdapter(FormToolkit formToolkit) {
 		fFormToolkit = formToolkit;
 	}
-	
+
 	public FormToolkit getEclipseToolkit() {
 		return fFormToolkit;
 	}
@@ -32,37 +32,37 @@ public class FormToolkitAdapter {
 	public void paintBordersFor(Composite parent) {
 		fFormToolkit.paintBordersFor(parent);
 	}
-	
+
 	public Composite createComposite(Composite parent) {
 		return fFormToolkit.createComposite(parent);
 	}
-	
+
 	public Label createLabel(Composite composite, String text) {
 		return fFormToolkit.createLabel(composite, text);
 	}
-	
+
 	public Label createLabel(Composite parentComposite, String text, int style) {
 		return fFormToolkit.createLabel(parentComposite, text, style);
 	}
-	
+
 	public Text createText(Composite parentComposite, String value, int style) {
 		return fFormToolkit.createText(parentComposite, value, style);
 	}
-	
+
 	public Button createButton(Composite parentComposite, String text, int style) {
 		return fFormToolkit.createButton(parentComposite, text, style);
 	}
-	
+
 	public Section createSection(Composite parent, int style) {
 		return fFormToolkit.createSection(parent, style);	
 	}
-	
+
 	public Composite createComposite(Section section, int style) {
 		return fFormToolkit.createComposite(section, style);
 	}
-	
+
 	public void	adapt(Composite composite) {
 		fFormToolkit.adapt(composite);
 	}
-	
+
 }

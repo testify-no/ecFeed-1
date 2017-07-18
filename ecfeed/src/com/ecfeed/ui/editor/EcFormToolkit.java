@@ -45,16 +45,9 @@ public class EcFormToolkit {
 
 	public Composite createGridComposite(Composite parentComposite, int countOfColumns) {
 
-		Composite composite;
-
-		if (fFormToolkitAdapter.getEclipseToolkit() == null) {
-			composite = new Composite(parentComposite, SWT.NULL);
-			composite.setLayout(new GridLayout(countOfColumns, false));
-		} else {
-			composite = fFormToolkitAdapter.createComposite(parentComposite);
-			composite.setLayout(new GridLayout(countOfColumns, false));
-			composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
-		}
+		Composite composite = fFormToolkitAdapter.createComposite(parentComposite);
+		composite.setLayout(new GridLayout(countOfColumns, false));
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 
 		return composite;
 	}
@@ -70,16 +63,11 @@ public class EcFormToolkit {
 
 	public Label createLabel(Composite parentComposite, String text) {
 
-		if (fFormToolkitAdapter.getEclipseToolkit() == null) {
-			Label label = new Label(parentComposite, SWT.NONE);
-			label.setText(text);
-			return label;
-		}
-
 		return fFormToolkitAdapter.createLabel(parentComposite, text, SWT.NONE);
 	}
 
 	public Label createEmptyLabel(Composite parentComposite) {
+
 		return fFormToolkitAdapter.createLabel(parentComposite, " ", SWT.NONE);
 	}
 
@@ -91,17 +79,8 @@ public class EcFormToolkit {
 
 	public Text createGridText(Composite parentGridComposite, IValueApplier valueApplier) {
 
-		Text text;
-
-		if (fFormToolkitAdapter.getEclipseToolkit() == null) {
-			text = new Text(parentGridComposite, SWT.BORDER);
-			GridData gridData = new GridData(SWT.FILL, SWT.CENTER, true, false);
-			gridData.grabExcessHorizontalSpace = true;
-			text.setLayoutData(gridData);
-		} else {
-			text = fFormToolkitAdapter.createText(parentGridComposite, null, SWT.NONE);
-			text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		}
+		Text text = fFormToolkitAdapter.createText(parentGridComposite, null, SWT.NONE);
+		text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
 		TypedListener onLostFocusListener = 
 				new TypedListener(new CommonEditHelper.ApplyValueWhenFocusLostListener(valueApplier));

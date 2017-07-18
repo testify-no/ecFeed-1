@@ -55,14 +55,16 @@ public class ModelDetailsPage extends BasicDetailsPage {
 	}
 
 	@Override
-	public void createContents(Composite parent){
+	public void createContents(Composite parent) {
+		
 		super.createContents(parent);
+		
 		getMainSection().setText("Model details"); 
 
 		fModelNameComposite = new ModelNameComposite(getMainComposite(), getEcFormToolkit(), fRootIf);
 
 		addCommentsSection();
-
+		
 		addViewerSection(fClassesSection = new ClassViewer(this, this, fJavaProjectProvider));
 
 		fParametersSection = new GlobalParametersViewer(this, this, fJavaProjectProvider);
