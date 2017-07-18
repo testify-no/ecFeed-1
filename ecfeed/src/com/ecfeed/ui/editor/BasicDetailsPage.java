@@ -118,7 +118,7 @@ implements IDetailsPage, IModelUpdateListener, ISectionContext, IModelUpdateCont
 	@Override
 	public void initialize(IManagedForm form) {
 		fManagedForm = form;
-		fEcFormToolkit = new EcFormToolkit(form.getToolkit());
+		fEcFormToolkit = new EcFormToolkit(form.getToolkit(), false);
 	}
 
 	@Override
