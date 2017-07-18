@@ -36,7 +36,6 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.adapter.IModelImplementer;
-import com.ecfeed.core.adapter.ModelOperationManager;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.ui.common.EclipseModelImplementer;
 import com.ecfeed.ui.common.ImageManager;
@@ -299,11 +298,6 @@ implements IDetailsPage, IModelUpdateListener, ISectionContext, IModelUpdateCont
 	@Override
 	public Composite getSectionComposite(){
 		return fMainComposite;
-	}
-
-	@Override
-	public ModelOperationManager getOperationManager(){
-		return fModelUpdateContext.getOperationManager();
 	}
 
 	@Override

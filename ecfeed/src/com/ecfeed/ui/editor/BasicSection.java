@@ -33,7 +33,6 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.ui.forms.AbstractFormPart;
 import org.eclipse.ui.forms.SectionPart;
 
-import com.ecfeed.core.adapter.ModelOperationManager;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.ui.common.ImageManager;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
@@ -212,11 +211,6 @@ public abstract class BasicSection extends SectionPart implements IModelUpdateCo
 	@Override
 	public IUndoContext getUndoContext(){
 		return fUpdateContext.getUndoContext();
-	}
-
-	@Override
-	public ModelOperationManager getOperationManager(){
-		return fUpdateContext.getOperationManager();
 	}
 
 	@Override

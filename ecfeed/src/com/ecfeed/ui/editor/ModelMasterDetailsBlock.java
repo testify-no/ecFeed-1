@@ -29,7 +29,6 @@ import org.eclipse.ui.forms.MasterDetailsBlock;
 import org.eclipse.ui.operations.RedoActionHandler;
 import org.eclipse.ui.operations.UndoActionHandler;
 
-import com.ecfeed.core.adapter.ModelOperationManager;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.ClassNode;
@@ -173,12 +172,12 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 	public Composite getSectionComposite() {
 		return sashForm;
 	}
-	
+
 	@Override
 	public EcFormToolkit getEcFormToolkit() {
 		return fEcFormToolkit;
 	}
-	
+
 	public void selectNode(AbstractNode node) {
 		fMasterSection.selectElement(node);
 	}
@@ -252,11 +251,6 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 
 
 	private class ModelUpdateContext implements IModelUpdateContext {
-
-		@Override
-		public ModelOperationManager getOperationManager() {
-			return getPage().getEditor().getModelOperationManager();
-		}
 
 		@Override
 		public AbstractFormPart getSourceForm() {
