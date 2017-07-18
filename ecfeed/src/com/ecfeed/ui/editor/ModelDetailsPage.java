@@ -12,13 +12,13 @@ package com.ecfeed.ui.editor;
 
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IFormPart;
 
 import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
-import com.ecfeed.ui.editor.composites.ModelNameComposite;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.RootInterface;
 
@@ -115,5 +115,41 @@ public class ModelDetailsPage extends BasicDetailsPage {
 	protected Class<? extends AbstractNode> getNodeType() {
 		return RootNode.class;
 	}
+	
+	private class ModelNameComposite {
+		
+		private Text fModelNameText;
+		private RootInterface fRootIf;
+		
+
+		public ModelNameComposite(Composite parent, EcFormToolkit ecFormToolkit, RootInterface rootIf) {
+
+			fRootIf = rootIf;
+			
+			Composite composite = ecFormToolkit.createGridComposite(parent, 2);		
+
+			ecFormToolkit.createLabel(composite, "Model name");
+			fModelNameText = ecFormToolkit.createGridText(composite, new ModelNameApplier());
+			ecFormToolkit.paintBorders(composite);
+		}
+		
+		public void refresh() {
+			
+			String name = fRootIf.getNodeName();
+			fModelNameText.setText(name);
+		}
+		
+		private class ModelNameApplier implements IValueApplier{
+
+			@Override
+			public void applyValue() {
+				
+				fRootIf.setName(fModelNameText.getText());
+				fModelNameText.setText(fRootIf.getNodeName());
+			}
+		}	
+		
+	}
+	
 
 }
