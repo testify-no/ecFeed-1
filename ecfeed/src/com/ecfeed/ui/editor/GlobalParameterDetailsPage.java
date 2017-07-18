@@ -22,7 +22,6 @@ import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class GlobalParameterDetailsPage extends AbstractParameterDetailsPage {
 
-	private IJavaProjectProvider fJavaProjectProvider;
 	private GlobalParameterInterface fParameterIf;
 	private LinkingMethodsViewer fLinkingMethodsViewer;
 
@@ -32,21 +31,20 @@ public class GlobalParameterDetailsPage extends AbstractParameterDetailsPage {
 			IJavaProjectProvider javaProjectProvider) {
 
 		super(mainTreeProvider, updateContext, javaProjectProvider);
-		fJavaProjectProvider = javaProjectProvider;
 		getParameterIf();
 	}
 
 	@Override
 	public void createContents(Composite parent){
 		super.createContents(parent);
-		addForm(fLinkingMethodsViewer = new LinkingMethodsViewer(this, this, fJavaProjectProvider));
+		addForm(fLinkingMethodsViewer = new LinkingMethodsViewer(this, this, getJavaProjectProvider()));
 	}
 
 
 	@Override
 	protected AbstractParameterInterface getParameterIf() {
 		if(fParameterIf == null){
-			fParameterIf = new GlobalParameterInterface(this, fJavaProjectProvider);
+			fParameterIf = new GlobalParameterInterface(this, getJavaProjectProvider());
 		}
 		return fParameterIf;
 	}
@@ -77,9 +75,9 @@ public class GlobalParameterDetailsPage extends AbstractParameterDetailsPage {
 			IModelUpdateContext updateContext) {
 
 		if (ApplicationContext.isProjectAvailable()) {
-			return new GlobalParameterCommentsSection(sectionContext, updateContext, fJavaProjectProvider);
+			return new GlobalParameterCommentsSection(sectionContext, updateContext, getJavaProjectProvider());
 		} else {
-			return new SingleTextCommentsSection(this, this, fJavaProjectProvider);
+			return new SingleTextCommentsSection(this, this, getJavaProjectProvider());
 		}
 	}
 }

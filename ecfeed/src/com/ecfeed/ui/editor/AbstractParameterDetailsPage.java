@@ -28,7 +28,6 @@ import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 
-	private IJavaProjectProvider fJavaProjectProvider;
 	private Composite fAttributesComposite;
 	private Text fNameText;
 	private Combo fTypeCombo;
@@ -68,7 +67,6 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 	public AbstractParameterDetailsPage(IMainTreeProvider mainTreeProvider,
 			IModelUpdateContext updateContext, IJavaProjectProvider javaProjectProvider) {
 		super(mainTreeProvider, updateContext, javaProjectProvider);
-		fJavaProjectProvider = javaProjectProvider;
 	}
 
 	@Override
@@ -81,7 +79,7 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 
 		fWebParameterSection = createWebParameterSection();
 
-		addForm(fChoicesViewer = new ChoicesViewer(this, this, fJavaProjectProvider));
+		addForm(fChoicesViewer = new ChoicesViewer(this, this, getJavaProjectProvider()));
 
 		getEcFormToolkit().paintBordersFor(getMainComposite());
 	}

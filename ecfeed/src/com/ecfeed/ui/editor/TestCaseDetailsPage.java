@@ -31,7 +31,6 @@ import com.ecfeed.utils.SeleniumHelper;
 
 public class TestCaseDetailsPage extends BasicDetailsPage {
 
-	private IJavaProjectProvider fJavaProjectProvider;
 	private Combo fTestSuiteNameCombo;
 	private TestDataViewer fTestDataViewer;
 	private Button fExecuteButton;
@@ -45,7 +44,6 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 			IModelUpdateContext updateContext, 
 			IJavaProjectProvider javaProjectProvider) {
 		super(mainTreeProvider, updateContext, javaProjectProvider);
-		fJavaProjectProvider = javaProjectProvider;
 		fTestCaseIf = new TestCaseInterface(this, javaProjectProvider);
 	}
 
@@ -56,7 +54,7 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 
 		addCommentsSection();
 
-		addViewerSection(fTestDataViewer = new TestDataViewer(this, this, fJavaProjectProvider));
+		addViewerSection(fTestDataViewer = new TestDataViewer(this, this, getJavaProjectProvider()));
 	}
 
 	@Override
@@ -86,9 +84,9 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 	private void addCommentsSection() {
 
 		if (ApplicationContext.isProjectAvailable()) {
-			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fJavaProjectProvider));
+			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, getJavaProjectProvider()));
 		} else {
-			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fJavaProjectProvider));
+			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, getJavaProjectProvider()));
 		}
 	}
 

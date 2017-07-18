@@ -37,7 +37,6 @@ import com.ecfeed.ui.modelif.MethodParameterInterface;
 
 public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 
-	private IJavaProjectProvider fJavaProjectProvider;
 	private MethodParameterInterface fParameterIf;
 	private Button fExpectedCheckbox;
 	private Combo fDefaultValueCombo;
@@ -52,21 +51,20 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 			IJavaProjectProvider javaProjectProvider) {
 
 		super(mainTreeProvider, updateContext, javaProjectProvider);
-		fJavaProjectProvider = javaProjectProvider;
 		getParameterIf();
 	}
 
 	@Override
 	protected AbstractParameterInterface getParameterIf() {
 		if(fParameterIf == null){
-			fParameterIf = new MethodParameterInterface(this, fJavaProjectProvider);
+			fParameterIf = new MethodParameterInterface(this, getJavaProjectProvider());
 		}
 		return fParameterIf;
 	}
 
 	@Override
 	protected WebParameterSection createWebParameterSection() {
-		return new WebParameterSection(this, this, getParameterIf(), fJavaProjectProvider);
+		return new WebParameterSection(this, this, getParameterIf(), getJavaProjectProvider());
 	}
 
 	@Override
@@ -244,9 +242,9 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 			ISectionContext sectionContext, IModelUpdateContext updateContext) {
 
 		if (ApplicationContext.isProjectAvailable()) {
-			return new MethodParameterCommentsSection(sectionContext, updateContext, fJavaProjectProvider);
+			return new MethodParameterCommentsSection(sectionContext, updateContext, getJavaProjectProvider());
 		} else {
-			return new SingleTextCommentsSection(this, this, fJavaProjectProvider);
+			return new SingleTextCommentsSection(this, this, getJavaProjectProvider());
 		}
 	}
 

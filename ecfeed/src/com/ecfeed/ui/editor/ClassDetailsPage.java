@@ -41,7 +41,6 @@ import com.ecfeed.ui.modelif.IModelUpdateContext;
 public class ClassDetailsPage extends BasicDetailsPage {
 
 	private boolean fIsAndroidProject;
-	private IJavaProjectProvider fJavaProjectProvider;
 	private MethodsViewer fMethodsSection;
 	private OtherMethodsViewer fOtherMethodsSection;
 	private Text fClassNameText;
@@ -60,11 +59,10 @@ public class ClassDetailsPage extends BasicDetailsPage {
 			IJavaProjectProvider javaProjectProvider) {
 
 		super(mainTreeProvider, updateContext, javaProjectProvider);
-		fJavaProjectProvider = javaProjectProvider;
 		fIsAndroidProject = new EclipseProjectHelper(javaProjectProvider).isAndroidProject();
 		fClassIf = new ClassInterface(this, javaProjectProvider);
 	}
-	
+
 	public ClassDetailsPage(
 			IMainTreeProvider mainTreeProvider, 
 			IModelUpdateContext updateContext, 
@@ -72,11 +70,10 @@ public class ClassDetailsPage extends BasicDetailsPage {
 			EcFormToolkit ecForToolkit) {
 
 		super(mainTreeProvider, updateContext, javaProjectProvider, ecForToolkit);
-		fJavaProjectProvider = javaProjectProvider;
 		fIsAndroidProject = new EclipseProjectHelper(javaProjectProvider).isAndroidProject();
 		fClassIf = new ClassInterface(this, javaProjectProvider);
 	}
-	
+
 
 	@Override
 	public void createContents(Composite parent){
@@ -86,11 +83,11 @@ public class ClassDetailsPage extends BasicDetailsPage {
 
 		addCommentsSection();
 
-		addViewerSection(fMethodsSection = new MethodsViewer(this, this, fJavaProjectProvider));
-		addViewerSection(fGlobalParametersSection = new GlobalParametersViewer(this, this, fJavaProjectProvider));
+		addViewerSection(fMethodsSection = new MethodsViewer(this, this, getJavaProjectProvider()));
+		addViewerSection(fGlobalParametersSection = new GlobalParametersViewer(this, this, getJavaProjectProvider()));
 
 		if (ApplicationContext.isProjectAvailable()) {
-			addViewerSection(fOtherMethodsSection = new OtherMethodsViewer(this, this, fJavaProjectProvider));
+			addViewerSection(fOtherMethodsSection = new OtherMethodsViewer(this, this, getJavaProjectProvider()));
 		}
 
 		getEcFormToolkit().paintBordersFor(getMainComposite());
@@ -105,9 +102,9 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	private void addCommentsSection() {
 
 		if (ApplicationContext.isProjectAvailable()) {
-			addForm(fCommentsSection = new ExportableJavaDocCommentsSection(this, this, fJavaProjectProvider));
+			addForm(fCommentsSection = new ExportableJavaDocCommentsSection(this, this, getJavaProjectProvider()));
 		} else {
-			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fJavaProjectProvider));
+			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, getJavaProjectProvider()));
 		}
 	}
 
@@ -197,7 +194,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	private void fillAndroidBaseRunnerCombo() {
 		String projectPath = null;
 		try {
-			projectPath = new EclipseProjectHelper(fJavaProjectProvider).getProjectPath();
+			projectPath = new EclipseProjectHelper(getJavaProjectProvider()).getProjectPath();
 
 			List<String> runners = fClassIf.createRunnerList(projectPath);
 

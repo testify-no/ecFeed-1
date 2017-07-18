@@ -34,14 +34,12 @@ public class ConstraintDetailsPage extends BasicDetailsPage {
 	private ConstraintInterface fConstraintIf;
 	private ConstraintViewer fConstraintViewer;
 	private SingleTextCommentsSection fCommentsSection;
-	private IJavaProjectProvider fJavaProjectProvider;
 
 	public ConstraintDetailsPage(
 			IMainTreeProvider mainTreeProvider, 
 			IModelUpdateContext updateContext, 
 			IJavaProjectProvider javaProjectProvider) {
 		super(mainTreeProvider, updateContext, javaProjectProvider);
-		fJavaProjectProvider = javaProjectProvider;
 		fConstraintIf = new ConstraintInterface(this, javaProjectProvider);
 	}
 
@@ -52,15 +50,15 @@ public class ConstraintDetailsPage extends BasicDetailsPage {
 
 		addCommentsSection();
 
-		addViewerSection(fConstraintViewer = new ConstraintViewer(this, this, fJavaProjectProvider));
+		addViewerSection(fConstraintViewer = new ConstraintViewer(this, this, getJavaProjectProvider()));
 	}
 
 	private void addCommentsSection() {
 
 		if (ApplicationContext.isProjectAvailable()) {
-			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fJavaProjectProvider));
+			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, getJavaProjectProvider()));
 		} else {
-			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fJavaProjectProvider));
+			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, getJavaProjectProvider()));
 		}
 	}
 

@@ -57,14 +57,14 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	public void createContents(Composite parent) {
 		super.createContents(parent);
 
-		IJavaProjectProvider javaProjectProvider = getJavaProjectProvider();
-
 		createMethodNameWidgets();
 		createTestAndExportButtons();
 		createRunnerCombo();
-		createRunnerSection(javaProjectProvider);
+		createRunnerSection();
 
-		addCommentsSection(javaProjectProvider);
+		addCommentsSection();
+
+		IJavaProjectProvider javaProjectProvider = getJavaProjectProvider();
 
 		addViewerSection(fParemetersSection = 
 				new MethodParametersViewer(this, this, javaProjectProvider));
@@ -84,12 +84,12 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		return textClient;
 	}
 
-	private void addCommentsSection(IJavaProjectProvider javaProjectProvider) {
+	private void addCommentsSection() {
 
 		if (ApplicationContext.isProjectAvailable()) {
-			addForm(fCommentsSection = new ExportableJavaDocCommentsSection(this, this, javaProjectProvider));
+			addForm(fCommentsSection = new ExportableJavaDocCommentsSection(this, this, getJavaProjectProvider()));
 		} else {
-			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, javaProjectProvider));
+			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, getJavaProjectProvider()));
 		}
 	}
 
@@ -151,8 +151,8 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		}
 	}	
 
-	private void createRunnerSection(IJavaProjectProvider javaProjectProvider) {
-		fRunnerSection = new WebRunnerSection(this, this, fMethodInterface, javaProjectProvider);
+	private void createRunnerSection() {
+		fRunnerSection = new WebRunnerSection(this, this, fMethodInterface, getJavaProjectProvider());
 		fRunnerSection.initialize(getManagedForm());
 	}
 

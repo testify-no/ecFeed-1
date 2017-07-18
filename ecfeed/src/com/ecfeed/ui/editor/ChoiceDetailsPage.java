@@ -33,7 +33,6 @@ import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class ChoiceDetailsPage extends BasicDetailsPage {
 
-	private IJavaProjectProvider fJavaProjectProvider;	
 	private ChoicesViewer fChildrenViewer;
 	private ChoiceLabelsViewer fLabelsViewer;
 	private Composite fAttributesComposite;
@@ -49,8 +48,7 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 			IModelUpdateContext updateContext, 
 			IJavaProjectProvider javaProjectProvider) {
 		super(mainTreeProvider, updateContext, javaProjectProvider);
-		fJavaProjectProvider = javaProjectProvider;
-		fChoiceIf = new ChoiceInterface(this, fJavaProjectProvider);
+		fChoiceIf = new ChoiceInterface(this, javaProjectProvider);
 	}
 
 	@Override
@@ -61,8 +59,8 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 
 		addCommentsSection();
 
-		addViewerSection(fChildrenViewer = new ChoicesViewer(this, this, fJavaProjectProvider));
-		addViewerSection(fLabelsViewer = new ChoiceLabelsViewer(this, this, fJavaProjectProvider));
+		addViewerSection(fChildrenViewer = new ChoicesViewer(this, this, getJavaProjectProvider()));
+		addViewerSection(fLabelsViewer = new ChoiceLabelsViewer(this, this, getJavaProjectProvider()));
 
 		getEcFormToolkit().paintBordersFor(getMainComposite());
 	}
@@ -94,9 +92,9 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 	private void addCommentsSection() {
 
 		if (ApplicationContext.isProjectAvailable()) {
-			addForm(fCommentsSection = new ChoiceCommentsSection(this, this, fJavaProjectProvider));
+			addForm(fCommentsSection = new ChoiceCommentsSection(this, this, getJavaProjectProvider()));
 		} else {
-			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fJavaProjectProvider));
+			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, getJavaProjectProvider()));
 		}
 	}
 
