@@ -75,7 +75,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		addViewerSection(fTestCasesSection = 
 				new TestCasesViewer(this, this, javaProjectProvider));
 
-		getEcFormToolkit().getFormToolkitAdapter().paintBordersFor(getMainComposite()); // TODO TOOLKIT
+		getEcFormToolkit().paintBordersFor(getMainComposite());
 	}
 
 	@Override
@@ -112,7 +112,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 					"Browse...", new ReassignAdapter());
 		}
 
-		getEcFormToolkit().paintBorders(gridComposite);
+		getEcFormToolkit().paintBordersFor(gridComposite);
 	}
 
 	private void createTestAndExportButtons() {
@@ -128,7 +128,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		fExportOnlineButton = formObjectToolkit.createButton(
 				childComposite, "Export online...", new OnlineExportAdapter());
 
-		formObjectToolkit.paintBorders(childComposite);
+		formObjectToolkit.paintBordersFor(childComposite);
 	}
 
 	private void createRunnerCombo() {

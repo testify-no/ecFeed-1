@@ -58,14 +58,14 @@ public class WebRunnerSection extends BasicSection  {
 		setText("Web runner properties");
 
 		fClientComposite = getClientComposite();
-		fEcFormToolkit.paintBorders(fClientComposite);
+		fEcFormToolkit.paintBordersFor(fClientComposite);
 		createWebDriverPropertiesComposite(fClientComposite);
 	}
 
 	private void createWebDriverPropertiesComposite(Composite parentComposite) {
 
 		Composite composite = fEcFormToolkit.createGridComposite(parentComposite, 3);
-		fEcFormToolkit.paintBorders(composite);
+		fEcFormToolkit.paintBordersFor(composite);
 
 		createMapBrowserCheckBox(composite);
 		createBrowserCombo(composite);

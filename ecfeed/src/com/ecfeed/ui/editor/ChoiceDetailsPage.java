@@ -157,7 +157,7 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		fNameText = getEcFormToolkit().createGridText(fAttributesComposite, new NameApplier());
 
 		getEcFormToolkit().createLabel(fAttributesComposite, "Value");
-		getEcFormToolkit().paintBorders(fAttributesComposite);
+		getEcFormToolkit().paintBordersFor(fAttributesComposite);
 	}
 
 	@Override

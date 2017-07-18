@@ -44,7 +44,7 @@ public class EcFormToolkit {
 		return fFormToolkitAdapter.createSection(parent, style);	
 	}
 	
-	public void paintBorders(Composite composite) {
+	public void paintBordersFor(Composite composite) {
 		fFormToolkitAdapter.paintBordersFor(composite);
 	}
 
@@ -80,6 +80,10 @@ public class EcFormToolkit {
 		Label label = createLabel(parentComposite, StringHelper.createString("X", size));
 		label.setVisible(false);
 		return label;
+	}
+
+	public Text createText(Composite parentComposite, String value, int style) {
+		return fFormToolkitAdapter.createText(parentComposite, value, style);
 	}
 
 	public Text createGridText(Composite parentGridComposite, IValueApplier valueApplier) {

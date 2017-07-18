@@ -130,7 +130,7 @@ public class ModelDetailsPage extends BasicDetailsPage {
 
 			ecFormToolkit.createLabel(composite, "Model name");
 			fModelNameText = ecFormToolkit.createGridText(composite, new ModelNameApplier());
-			ecFormToolkit.paintBorders(composite);
+			ecFormToolkit.paintBordersFor(composite);
 		}
 		
 		public void refresh() {

@@ -68,7 +68,7 @@ public class WebParameterSection extends BasicSection {
 		fGridComposite = fEcFormToolkit.createGridComposite(fClientComposite, 2);
 
 		createControls(fGridComposite);
-		fEcFormToolkit.paintBorders(fGridComposite);
+		fEcFormToolkit.paintBordersFor(fGridComposite);
 	}
 
 	private void createControls(Composite gridComposite) {

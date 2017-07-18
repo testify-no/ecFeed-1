@@ -137,7 +137,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 			formObjectToolkit.createButton(composite, "Browse...", new BrowseClassesSelectionListener());
 		}
 
-		formObjectToolkit.paintBorders(composite);
+		formObjectToolkit.paintBordersFor(composite);
 	}
 
 	private void initAndFillAndroidComposite(Composite composite) {

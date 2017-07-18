@@ -83,7 +83,7 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 
 		addForm(fChoicesViewer = new ChoicesViewer(this, this, fJavaProjectProvider));
 
-		getEcFormToolkit().getFormToolkitAdapter().paintBordersFor(getMainComposite()); // TODO TOOLKIT
+		getEcFormToolkit().paintBordersFor(getMainComposite());
 	}
 
 	protected WebParameterSection createWebParameterSection() { 
@@ -152,7 +152,7 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 					fAttributesComposite, "Import...", new BrowseTypeSelectionListener());
 		}
 
-		formObjectToolkit.paintBorders(fAttributesComposite);
+		formObjectToolkit.paintBordersFor(fAttributesComposite);
 		return fAttributesComposite;
 	}
 
