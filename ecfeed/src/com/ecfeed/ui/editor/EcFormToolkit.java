@@ -119,6 +119,10 @@ public class EcFormToolkit {
 
 		return text;
 	}	
+	
+	public Button createButton(Composite parentComposite, String text, int style) {
+		return fFormToolkitAdapter.createButton(parentComposite, text, style);
+	}
 
 	public Button createButton(Composite parentComposite, String text, ButtonClickListener selectionListener) {
 		Button button = fFormToolkitAdapter.createButton(parentComposite, text, SWT.NONE);

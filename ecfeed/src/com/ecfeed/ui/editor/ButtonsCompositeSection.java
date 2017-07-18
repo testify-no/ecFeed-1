@@ -65,7 +65,7 @@ public class ButtonsCompositeSection extends BasicSection {
 	}
 
 	protected Composite createMainControlComposite(Composite parent) {
-		fMainControlComposite = getEcFormToolkit().getFormToolkitAdapter().createComposite(parent); // TODO TOOLKIT
+		fMainControlComposite = getEcFormToolkit().createComposite(parent);
 		GridLayout gl = new GridLayout(1, false);
 		gl.marginHeight = 0;
 		gl.marginWidth = 0;
@@ -81,8 +81,7 @@ public class ButtonsCompositeSection extends BasicSection {
 	}
 
 	protected Button addButton(String text, SelectionAdapter adapter, int style){
-		Button button = 
-				getEcFormToolkit().getFormToolkitAdapter().createButton(fButtonsComposite, text, style); // TODO TOOLKIT
+		Button button = getEcFormToolkit().createButton(fButtonsComposite, text, style);
 		
 		if(adapter != null){
 			button.addSelectionListener(adapter);
@@ -94,15 +93,18 @@ public class ButtonsCompositeSection extends BasicSection {
 	}
 
 	protected Text addText(String text, SelectionAdapter adapter) {
-		Text txt = getEcFormToolkit().getFormToolkitAdapter().createText(fButtonsComposite, text, SWT.BORDER); // TODO TOOLKIT
+		
+		Text txt = getEcFormToolkit().createText(fButtonsComposite, text, SWT.BORDER);
+		
 		if(adapter != null) {
 			txt.addSelectionListener(adapter);
 		}
+		
 		return txt;
 	}
 
 	protected Composite createButtonsComposite(Composite parent) {
-		Composite buttonsComposite = getEcFormToolkit().getFormToolkitAdapter().createComposite(parent); // TODO TOOLKIT
+		Composite buttonsComposite = getEcFormToolkit().createComposite(parent);
 		buttonsComposite.setLayout(buttonsCompositeLayout());
 		if(buttonsCompositeLayoutData() != null){
 			buttonsComposite.setLayoutData(buttonsCompositeLayoutData());
