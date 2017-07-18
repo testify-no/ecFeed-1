@@ -18,7 +18,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
@@ -65,7 +64,7 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		addViewerSection(fChildrenViewer = new ChoicesViewer(this, this, fJavaProjectProvider));
 		addViewerSection(fLabelsViewer = new ChoiceLabelsViewer(this, this, fJavaProjectProvider));
 
-		getEcFormToolkit().getFormToolkitAdapter().paintBordersFor(getMainComposite()); // TODO TOOLKIT
+		getEcFormToolkit().paintBordersFor(getMainComposite());
 	}
 
 	@Override
@@ -149,9 +148,8 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 	}
 
 	private void createNameValueEditor(Composite parent) {
-		fAttributesComposite = getEcFormToolkit().getFormToolkitAdapter().createComposite(parent); // TODO TOOLKIT
-		fAttributesComposite.setLayout(new GridLayout(2, false));
-		fAttributesComposite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+
+		fAttributesComposite = getEcFormToolkit().createGridComposite(parent, 2);
 
 		getEcFormToolkit().createLabel(fAttributesComposite, "Name");
 		fNameText = getEcFormToolkit().createGridText(fAttributesComposite, new NameApplier());

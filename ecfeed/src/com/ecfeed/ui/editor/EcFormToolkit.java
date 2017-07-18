@@ -36,10 +36,6 @@ public class EcFormToolkit {
 		fFormToolkitAdapter = new FormToolkitAdapter(formToolkit);
 	}
 
-	public FormToolkitAdapter getFormToolkitAdapter() {
-		return fFormToolkitAdapter;
-	}
-
 	public FormToolkit getEclipseToolkit() {
 		return fFormToolkitAdapter.getEclipseToolkit();
 	}

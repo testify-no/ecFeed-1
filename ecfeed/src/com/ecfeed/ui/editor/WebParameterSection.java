@@ -60,7 +60,7 @@ public class WebParameterSection extends BasicSection {
 
 		fAbstractParameterInterface = abstractParameterInterface;
 
-		fEcFormToolkit = new EcFormToolkit(getEcFormToolkit().getFormToolkitAdapter().getEclipseToolkit()); // TODO XYX REMOVE fEcFormToolkit NA getEcFormToolkit()
+		fEcFormToolkit = getEcFormToolkit(); 
 
 		setText("Web runner properties");
 		fClientComposite = getClientComposite();
@@ -318,7 +318,7 @@ public class WebParameterSection extends BasicSection {
 
 		@Override
 		public void applyValue() {
-			
+
 			String webElementType = fWebElementTypeCombo.getText();
 			fAbstractParameterInterface.setProperty(fWebElementTypePropertyId, webElementType);
 
@@ -326,7 +326,7 @@ public class WebParameterSection extends BasicSection {
 			refreshAction(webElementType);
 		}
 	}
-	
+
 	private class FindByTypeApplier implements IValueApplier {
 
 		@Override
@@ -347,7 +347,7 @@ public class WebParameterSection extends BasicSection {
 
 		@Override
 		public void applyValue() {
-			
+
 			fAbstractParameterInterface.setProperty(fActionPropertyId, fActionCombo.getText());
 		}
 	}	
@@ -356,7 +356,7 @@ public class WebParameterSection extends BasicSection {
 
 		@Override
 		public void applyValue() {
-			
+
 			String isOptionalStr = BooleanHelper.toString(fOptionalCheckbox.getSelection());
 			fAbstractParameterInterface.setProperty(fOptionalPropertyId, isOptionalStr);
 		}
