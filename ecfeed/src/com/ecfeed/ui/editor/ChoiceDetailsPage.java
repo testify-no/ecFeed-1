@@ -44,11 +44,12 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 
 
 	public ChoiceDetailsPage(
-			IMainTreeProvider mainTreeProvider, 
+			IMainTreeProvider mainTreeProvider,
+			ChoiceInterface choiceInterface,
 			IModelUpdateContext updateContext, 
 			IJavaProjectProvider javaProjectProvider) {
 		super(mainTreeProvider, updateContext, javaProjectProvider);
-		fChoiceIf = new ChoiceInterface(this, javaProjectProvider);
+		fChoiceIf = choiceInterface;
 	}
 
 	@Override

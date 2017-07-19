@@ -26,12 +26,13 @@ public class GlobalParameterDetailsPage extends AbstractParameterDetailsPage {
 	private LinkingMethodsViewer fLinkingMethodsViewer;
 
 	public GlobalParameterDetailsPage(
-			IMainTreeProvider mainTreeProvider, 
+			IMainTreeProvider mainTreeProvider,
+			GlobalParameterInterface globalParameterInterface,
 			IModelUpdateContext updateContext, 
 			IJavaProjectProvider javaProjectProvider) {
 
 		super(mainTreeProvider, updateContext, javaProjectProvider);
-		getParameterIf();
+		fParameterIf = globalParameterInterface;
 	}
 
 	@Override
@@ -43,9 +44,6 @@ public class GlobalParameterDetailsPage extends AbstractParameterDetailsPage {
 
 	@Override
 	protected AbstractParameterInterface getParameterIf() {
-		if(fParameterIf == null){
-			fParameterIf = new GlobalParameterInterface(this, getJavaProjectProvider());
-		}
 		return fParameterIf;
 	}
 

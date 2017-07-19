@@ -40,11 +40,12 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 
 
 	public TestCaseDetailsPage(
-			IMainTreeProvider mainTreeProvider, 
+			IMainTreeProvider mainTreeProvider,
+			TestCaseInterface testCaseInterface,
 			IModelUpdateContext updateContext, 
 			IJavaProjectProvider javaProjectProvider) {
 		super(mainTreeProvider, updateContext, javaProjectProvider);
-		fTestCaseIf = new TestCaseInterface(this, javaProjectProvider);
+		fTestCaseIf = testCaseInterface;
 	}
 
 	@Override

@@ -36,11 +36,12 @@ public class ConstraintDetailsPage extends BasicDetailsPage {
 	private SingleTextCommentsSection fCommentsSection;
 
 	public ConstraintDetailsPage(
-			IMainTreeProvider mainTreeProvider, 
+			IMainTreeProvider mainTreeProvider,
+			ConstraintInterface constraintInterface,
 			IModelUpdateContext updateContext, 
 			IJavaProjectProvider javaProjectProvider) {
 		super(mainTreeProvider, updateContext, javaProjectProvider);
-		fConstraintIf = new ConstraintInterface(this, javaProjectProvider);
+		fConstraintIf = constraintInterface; 
 	}
 
 	@Override

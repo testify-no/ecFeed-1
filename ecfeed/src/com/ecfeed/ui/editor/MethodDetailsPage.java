@@ -46,11 +46,14 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	private final NodePropertyDefs.PropertyId fRunnerPropertyId = NodePropertyDefs.PropertyId.PROPERTY_METHOD_RUNNER;
 
 
-	public MethodDetailsPage(IMainTreeProvider mainTreeProvider,
+	public MethodDetailsPage(
+			IMainTreeProvider mainTreeProvider,
+			MethodInterface methodInterface,
 			IModelUpdateContext updateContext,
 			IJavaProjectProvider javaProjectProvider) {
+		
 		super(mainTreeProvider, updateContext, javaProjectProvider);
-		fMethodInterface = new MethodInterface(this, javaProjectProvider);
+		fMethodInterface = methodInterface;
 	}
 
 	@Override

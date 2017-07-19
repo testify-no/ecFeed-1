@@ -41,10 +41,16 @@ import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
+import com.ecfeed.ui.modelif.ChoiceInterface;
 import com.ecfeed.ui.modelif.ClassInterface;
+import com.ecfeed.ui.modelif.ConstraintInterface;
+import com.ecfeed.ui.modelif.GlobalParameterInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.IModelUpdateListener;
+import com.ecfeed.ui.modelif.MethodInterface;
+import com.ecfeed.ui.modelif.MethodParameterInterface;
 import com.ecfeed.ui.modelif.RootInterface;
+import com.ecfeed.ui.modelif.TestCaseInterface;
 
 public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISelectionChangedListener, ISectionContext {
 
@@ -118,27 +124,51 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 
 		detailsPart.registerPage(
 				MethodNode.class, 
-				new MethodDetailsPage(mainTreeProvider, fUpdateContext, fJavaProjectProvider));
+				new MethodDetailsPage(
+						mainTreeProvider,
+						new MethodInterface(fUpdateContext, fJavaProjectProvider),
+						fUpdateContext, 
+						fJavaProjectProvider));
 
 		detailsPart.registerPage(
 				MethodParameterNode.class, 
-				new MethodParameterDetailsPage(mainTreeProvider, fUpdateContext, fJavaProjectProvider));
+				new MethodParameterDetailsPage(
+						mainTreeProvider,
+						new MethodParameterInterface(fUpdateContext, fJavaProjectProvider),
+						fUpdateContext, 
+						fJavaProjectProvider));
 
 		detailsPart.registerPage(
 				GlobalParameterNode.class, 
-				new GlobalParameterDetailsPage(mainTreeProvider, fUpdateContext, fJavaProjectProvider));
+				new GlobalParameterDetailsPage(
+						mainTreeProvider,
+						new GlobalParameterInterface(fUpdateContext, fJavaProjectProvider),
+						fUpdateContext, 
+						fJavaProjectProvider));
 
 		detailsPart.registerPage(
 				TestCaseNode.class, 
-				new TestCaseDetailsPage(mainTreeProvider, fUpdateContext, fJavaProjectProvider));
+				new TestCaseDetailsPage(
+						mainTreeProvider,
+						new TestCaseInterface(fUpdateContext, fJavaProjectProvider),
+						fUpdateContext, 
+						fJavaProjectProvider));
 
 		detailsPart.registerPage(
 				ConstraintNode.class, 
-				new ConstraintDetailsPage(mainTreeProvider, fUpdateContext, fJavaProjectProvider));
+				new ConstraintDetailsPage(
+						mainTreeProvider,
+						new ConstraintInterface(fUpdateContext, fJavaProjectProvider),
+						fUpdateContext, 
+						fJavaProjectProvider));
 
 		detailsPart.registerPage(
 				ChoiceNode.class, 
-				new ChoiceDetailsPage(mainTreeProvider, fUpdateContext, fJavaProjectProvider));
+				new ChoiceDetailsPage(
+						mainTreeProvider,
+						new ChoiceInterface(fUpdateContext, fJavaProjectProvider),
+						fUpdateContext, 
+						fJavaProjectProvider));
 
 		selectNode(fModel);
 	}

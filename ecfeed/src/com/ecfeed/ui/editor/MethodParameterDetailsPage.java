@@ -46,19 +46,17 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 
 
 	public MethodParameterDetailsPage(
-			IMainTreeProvider mainTreeProvider, 
+			IMainTreeProvider mainTreeProvider,
+			MethodParameterInterface methodParameterInterface,
 			IModelUpdateContext updateContext,
 			IJavaProjectProvider javaProjectProvider) {
 
 		super(mainTreeProvider, updateContext, javaProjectProvider);
-		getParameterIf();
+		fParameterIf = methodParameterInterface;
 	}
 
 	@Override
 	protected AbstractParameterInterface getParameterIf() {
-		if(fParameterIf == null){
-			fParameterIf = new MethodParameterInterface(this, getJavaProjectProvider());
-		}
 		return fParameterIf;
 	}
 
