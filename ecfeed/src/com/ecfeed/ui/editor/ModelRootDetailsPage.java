@@ -28,28 +28,28 @@ public class ModelRootDetailsPage extends BasicDetailsPage {
 	private GlobalParametersViewer fParametersSection;
 	private ModelNameComposite fModelNameComposite;
 
-	private RootInterface fRootIf;
+	private RootInterface fRootInterface;
 	private SingleTextCommentsSection fCommentsSection;
 
 	public ModelRootDetailsPage(
-			IMainTreeProvider mainTreeProvider, 
+			IMainTreeProvider mainTreeProvider,
+			RootInterface rootInterface,
 			IModelUpdateContext updateContext, 
 			IJavaProjectProvider javaProjectProvider) {
+		
 		super(mainTreeProvider, updateContext, javaProjectProvider);
-		initFields(javaProjectProvider);
+		fRootInterface = rootInterface;
 	}
 
 	public ModelRootDetailsPage(
-			IMainTreeProvider mainTreeProvider, 
+			IMainTreeProvider mainTreeProvider,
+			RootInterface rootInterface,
 			IModelUpdateContext updateContext, 
 			IJavaProjectProvider javaProjectProvider,
 			EcFormToolkit ecFormToolkit) {
+		
 		super(mainTreeProvider, updateContext, javaProjectProvider, ecFormToolkit);
-		initFields(javaProjectProvider);
-	}
-
-	private final void initFields(IJavaProjectProvider javaProjectProvider) {
-		fRootIf = new RootInterface(this, javaProjectProvider);
+		fRootInterface = rootInterface;
 	}
 
 	@Override
@@ -59,7 +59,7 @@ public class ModelRootDetailsPage extends BasicDetailsPage {
 
 		getMainSection().setText("Model details"); 
 
-		fModelNameComposite = new ModelNameComposite(getMainComposite(), getEcFormToolkit(), fRootIf);
+		fModelNameComposite = new ModelNameComposite(getMainComposite(), getEcFormToolkit(), fRootInterface);
 
 		addCommentsSection();
 
@@ -91,7 +91,7 @@ public class ModelRootDetailsPage extends BasicDetailsPage {
 		super.refresh();
 		if(getSelectedElement() instanceof RootNode){
 			RootNode selectedRoot = (RootNode)getSelectedElement();
-			fRootIf.setOwnNode(selectedRoot);
+			fRootInterface.setOwnNode(selectedRoot);
 
 			fModelNameComposite.refresh();
 
@@ -105,7 +105,7 @@ public class ModelRootDetailsPage extends BasicDetailsPage {
 	public void selectionChanged(IFormPart part, ISelection selection) {
 		super.selectionChanged(part, selection);
 		if(getSelectedElement() instanceof RootNode){
-			fRootIf.setOwnNode((RootNode)getSelectedElement());
+			fRootInterface.setOwnNode((RootNode)getSelectedElement());
 		}
 	}
 

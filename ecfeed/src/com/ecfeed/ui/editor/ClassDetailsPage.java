@@ -54,24 +54,26 @@ public class ClassDetailsPage extends BasicDetailsPage {
 
 
 	public ClassDetailsPage(
-			IMainTreeProvider mainTreeProvider, 
+			IMainTreeProvider mainTreeProvider,
+			ClassInterface classInterface,
 			IModelUpdateContext updateContext, 
 			IJavaProjectProvider javaProjectProvider) {
 
 		super(mainTreeProvider, updateContext, javaProjectProvider);
 		fIsAndroidProject = new EclipseProjectHelper(javaProjectProvider).isAndroidProject();
-		fClassIf = new ClassInterface(this, javaProjectProvider);
+		fClassIf = classInterface;
 	}
 
 	public ClassDetailsPage(
-			IMainTreeProvider mainTreeProvider, 
+			IMainTreeProvider mainTreeProvider,
+			ClassInterface classInterface,
 			IModelUpdateContext updateContext, 
 			IJavaProjectProvider javaProjectProvider,
 			EcFormToolkit ecForToolkit) {
 
 		super(mainTreeProvider, updateContext, javaProjectProvider, ecForToolkit);
 		fIsAndroidProject = new EclipseProjectHelper(javaProjectProvider).isAndroidProject();
-		fClassIf = new ClassInterface(this, javaProjectProvider);
+		fClassIf = classInterface;
 	}
 
 

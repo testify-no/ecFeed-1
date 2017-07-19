@@ -41,8 +41,10 @@ import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
+import com.ecfeed.ui.modelif.ClassInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.IModelUpdateListener;
+import com.ecfeed.ui.modelif.RootInterface;
 
 public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISelectionChangedListener, ISectionContext {
 
@@ -100,11 +102,19 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 
 		detailsPart.registerPage(
 				RootNode.class, 
-				new ModelRootDetailsPage(mainTreeProvider, fUpdateContext, fJavaProjectProvider));
+				new ModelRootDetailsPage(
+						mainTreeProvider,
+						new RootInterface(fUpdateContext, fJavaProjectProvider),
+						fUpdateContext, 
+						fJavaProjectProvider));
 
 		detailsPart.registerPage(
 				ClassNode.class, 
-				new ClassDetailsPage(mainTreeProvider, fUpdateContext, fJavaProjectProvider));
+				new ClassDetailsPage(
+						mainTreeProvider,
+						new ClassInterface(fUpdateContext, fJavaProjectProvider),
+						fUpdateContext, 
+						fJavaProjectProvider));
 
 		detailsPart.registerPage(
 				MethodNode.class, 
