@@ -48,34 +48,6 @@ import com.ecfeed.ui.modelif.IModelUpdateListener;
 public abstract class BasicDetailsPage 
 implements IDetailsPage, IModelUpdateListener, ISectionContext, IModelUpdateContext {
 
-	protected class ImplementToolbarAction extends ImplementAction{
-
-		public ImplementToolbarAction() {
-			super(null, BasicDetailsPage.this, fImplementer);
-			setToolTipText("Implement node");
-			setImageDescriptor(getIconDescription("implement.png"));
-		}
-
-		@Override
-		protected List<AbstractNode> getSelectedNodes(){
-			return Arrays.asList(new AbstractNode[]{fSelectedNode});
-		}
-	}
-
-	protected class GoToImplementationToolbarAction extends GoToImplementationAction {
-
-		public GoToImplementationToolbarAction() {
-			super(null, fJavaProjectProvider);
-			setToolTipText("Go to node's implementation");
-			setImageDescriptor(getIconDescription("goto_impl.png"));
-		}
-
-		@Override
-		protected List<AbstractNode> getSelectedNodes(){
-			return Arrays.asList(new AbstractNode[]{fSelectedNode});
-		}
-	}
-
 	private Section fMainSection;
 	private Composite fMainComposite;
 	private IManagedForm fManagedForm;
@@ -320,4 +292,33 @@ implements IDetailsPage, IModelUpdateListener, ISectionContext, IModelUpdateCont
 	}
 
 	abstract protected Class<? extends AbstractNode> getNodeType();
+
+	protected class ImplementToolbarAction extends ImplementAction{
+
+		public ImplementToolbarAction() {
+			super(null, BasicDetailsPage.this, fImplementer);
+			setToolTipText("Implement node");
+			setImageDescriptor(getIconDescription("implement.png"));
+		}
+
+		@Override
+		protected List<AbstractNode> getSelectedNodes(){
+			return Arrays.asList(new AbstractNode[]{fSelectedNode});
+		}
+	}
+
+	protected class GoToImplementationToolbarAction extends GoToImplementationAction {
+
+		public GoToImplementationToolbarAction() {
+			super(null, fJavaProjectProvider);
+			setToolTipText("Go to node's implementation");
+			setImageDescriptor(getIconDescription("goto_impl.png"));
+		}
+
+		@Override
+		protected List<AbstractNode> getSelectedNodes(){
+			return Arrays.asList(new AbstractNode[]{fSelectedNode});
+		}
+	}
+
 }

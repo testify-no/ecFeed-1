@@ -48,7 +48,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	private Button fRunOnAndroidCheckbox;
 	private Label fAndroidBaseRunnerLabel;
 	private Combo fAndroidBaseRunnerCombo;	
-	private ClassInterface fClassIf;
+	private ClassInterface fClassInterface;
 	private GlobalParametersViewer fGlobalParametersSection;
 	private AbstractCommentsSection fCommentsSection;
 
@@ -61,7 +61,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 
 		super(mainTreeProvider, updateContext, javaProjectProvider);
 		fIsAndroidProject = new EclipseProjectHelper(javaProjectProvider).isAndroidProject();
-		fClassIf = classInterface;
+		fClassInterface = classInterface;
 	}
 
 	public ClassDetailsPage(
@@ -73,7 +73,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 
 		super(mainTreeProvider, updateContext, javaProjectProvider, ecForToolkit);
 		fIsAndroidProject = new EclipseProjectHelper(javaProjectProvider).isAndroidProject();
-		fClassIf = classInterface;
+		fClassInterface = classInterface;
 	}
 
 
@@ -198,7 +198,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		try {
 			projectPath = new EclipseProjectHelper(getJavaProjectProvider()).getProjectPath();
 
-			List<String> runners = fClassIf.createRunnerList(projectPath);
+			List<String> runners = fClassInterface.createRunnerList(projectPath);
 
 			for(String runner : runners) {
 				fAndroidBaseRunnerCombo.add(runner);
@@ -213,13 +213,13 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		super.refresh();
 		if(getSelectedElement() instanceof ClassNode){
 			ClassNode selectedClass = (ClassNode)getSelectedElement();
-			fClassIf.setOwnNode(selectedClass);
-			String title = fClassIf.getQualifiedName();
+			fClassInterface.setOwnNode(selectedClass);
+			String title = fClassInterface.getQualifiedName();
 			//Remove implementation status for performance reasons
 			//			String title = fClassIf.getQualifiedName() + " [" + fClassIf.getImplementationStatus() + "]";
 			getMainSection().setText(title);
-			fClassNameText.setText(fClassIf.getLocalName());
-			fPackageNameText.setText(fClassIf.getPackageName());
+			fClassNameText.setText(fClassInterface.getLocalName());
+			fPackageNameText.setText(fClassInterface.getPackageName());
 
 			if (fIsAndroidProject) {
 				refreshAndroid();
@@ -241,7 +241,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 			return;
 		}
 
-		if (fClassIf.getImplementationStatus() == EImplementationStatus.NOT_IMPLEMENTED) {
+		if (fClassInterface.getImplementationStatus() == EImplementationStatus.NOT_IMPLEMENTED) {
 			fOtherMethodsSection.setVisible(false);
 			return;
 		}
@@ -251,14 +251,14 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	}
 
 	private void refreshAndroid() {
-		boolean runOnAndroid = fClassIf.getRunOnAndroid(); 
+		boolean runOnAndroid = fClassInterface.getRunOnAndroid(); 
 		fRunOnAndroidCheckbox.setSelection(runOnAndroid);
 
 		if (baseRunnerFieldsActive()) {
 			fAndroidBaseRunnerLabel.setEnabled(runOnAndroid);
 			fAndroidBaseRunnerCombo.setEnabled(runOnAndroid);
 
-			String androidBaseRunner = fClassIf.getAndroidBaseRunner();
+			String androidBaseRunner = fClassInterface.getAndroidBaseRunner();
 
 			if (androidBaseRunner == null) {
 				androidBaseRunner = "";
@@ -281,7 +281,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	private class BrowseClassesSelectionListener extends ButtonClickListener {
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			fClassIf.reassignImplementedClass();
+			fClassInterface.reassignImplementedClass();
 		}
 	}
 
@@ -290,9 +290,9 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		public void widgetSelected(SelectionEvent e){
 
 			if (baseRunnerFieldsActive()) {
-				fClassIf.setAndroidBaseRunner(fAndroidBaseRunnerCombo.getText());
+				fClassInterface.setAndroidBaseRunner(fAndroidBaseRunnerCombo.getText());
 
-				String androidBaseRunner = fClassIf.getAndroidBaseRunner();
+				String androidBaseRunner = fClassInterface.getAndroidBaseRunner();
 				fAndroidBaseRunnerCombo.setText(androidBaseRunner);
 			}
 		}
@@ -314,8 +314,8 @@ public class ClassDetailsPage extends BasicDetailsPage {
 
 		@Override
 		public void applyValue() {
-			fClassIf.setLocalName(fClassNameText.getText());
-			fClassNameText.setText(fClassIf.getLocalName());
+			fClassInterface.setLocalName(fClassNameText.getText());
+			fClassNameText.setText(fClassInterface.getLocalName());
 		}
 	}	
 
@@ -323,8 +323,8 @@ public class ClassDetailsPage extends BasicDetailsPage {
 
 		@Override
 		public void applyValue() {
-			fClassIf.setPackageName(fPackageNameText.getText());
-			fPackageNameText.setText(fClassIf.getPackageName());
+			fClassInterface.setPackageName(fPackageNameText.getText());
+			fPackageNameText.setText(fClassInterface.getPackageName());
 		}
 	}	
 
@@ -334,7 +334,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		public void applyValue() {
 
 			boolean selection = fRunOnAndroidCheckbox.getSelection();
-			fClassIf.setRunOnAndroid(selection);
+			fClassInterface.setRunOnAndroid(selection);
 
 			if (selection) {
 				adjustAndroidBaseRunner();
@@ -348,14 +348,14 @@ public class ClassDetailsPage extends BasicDetailsPage {
 					AndroidBaseRunnerHelper.getDefaultAndroidBaseRunnerName();
 
 			if (!baseRunnerFieldsActive()) {
-				fClassIf.setAndroidBaseRunner(defaultBaseAndroidBaseRunner);
+				fClassInterface.setAndroidBaseRunner(defaultBaseAndroidBaseRunner);
 				return;
 			}
 
-			String androidBaseRunner = fClassIf.getAndroidBaseRunner();
+			String androidBaseRunner = fClassInterface.getAndroidBaseRunner();
 			if (androidBaseRunner == null || androidBaseRunner.isEmpty()) {
 
-				fClassIf.setAndroidBaseRunner(defaultBaseAndroidBaseRunner);
+				fClassInterface.setAndroidBaseRunner(defaultBaseAndroidBaseRunner);
 			}
 		}
 
