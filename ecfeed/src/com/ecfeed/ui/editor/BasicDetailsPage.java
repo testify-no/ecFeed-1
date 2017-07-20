@@ -241,16 +241,26 @@ implements IDetailsPage, IModelUpdateListener, ISectionContext, IModelUpdateCont
 	}
 
 	@Override
-	public void modelUpdated(AbstractFormPart source){
-		if(source != null){
-			source.markDirty();
+	public void modelUpdated(Object source){
+		
+		if (!(source instanceof AbstractFormPart)) {
+			return;
 		}
-		if(fMainTreeProvider != null){
+		
+		AbstractFormPart abstractFormPart = (AbstractFormPart)source;
+		
+		if (abstractFormPart != null) {
+			abstractFormPart.markDirty();
+		}
+		
+		if (fMainTreeProvider != null) {
 			fMainTreeProvider.markDirty();
 		}
-		if(fMainTreeProvider != null){
+		
+		if (fMainTreeProvider != null) {
 			fMainTreeProvider.refresh();
 		}
+		
 		refresh();
 	}
 

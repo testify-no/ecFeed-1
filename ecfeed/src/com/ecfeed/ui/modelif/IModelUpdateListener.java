@@ -10,8 +10,7 @@
 
 package com.ecfeed.ui.modelif;
 
-import org.eclipse.ui.forms.AbstractFormPart;
 
 public interface IModelUpdateListener {
-	public void modelUpdated(AbstractFormPart source);
+	public void modelUpdated(Object source);
 }

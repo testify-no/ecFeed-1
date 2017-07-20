@@ -201,8 +201,14 @@ public class ModelMasterSection extends TreeViewerSection {
 
 	private class UpdateListener implements IModelUpdateListener {
 		@Override
-		public void modelUpdated(AbstractFormPart source) {
-			source.markDirty();
+		public void modelUpdated(Object source) {
+			
+			if (!(source instanceof AbstractFormPart)) {
+				return;
+			}
+			
+			AbstractFormPart abstractFormPart = (AbstractFormPart)source;
+			abstractFormPart.markDirty();
 			refresh();
 		}
 	}
