@@ -57,7 +57,6 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 	private ModelMasterSection fMasterSection;
 	private ISectionContext fMasterSectionContext;
 	private ModelPage fPage;
-	//private FormToolkitAdapter fToolkit;
 	private EcFormToolkit fEcFormToolkit;
 	private ModelUpdateContext fUpdateContext;
 	private IJavaProjectProvider fJavaProjectProvider;
@@ -294,12 +293,12 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 
 		@Override
 		public AbstractFormPart getSourceForm() {
-			return null;
+			return fMasterSection.getSourceForm();
 		}
 
 		@Override
 		public List<IModelUpdateListener> getUpdateListeners() {
-			return null;
+			return fMasterSection.getUpdateListeners();
 		}
 
 		@Override
