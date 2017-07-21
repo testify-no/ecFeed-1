@@ -154,10 +154,12 @@ public class ModelMasterSection extends TreeViewerSection {
 		return new MasterViewerMenuListener(getMenu());
 	}
 
-	public List<IModelUpdateListener> getUpdateListeners(){
+	public List<IModelUpdateListener> getUpdateListeners() {
+
 		if (fUpdateListener == null) {
 			fUpdateListener = new UpdateListener();
 		}
+
 		return Arrays.asList(new IModelUpdateListener[]{fUpdateListener});
 	}
 

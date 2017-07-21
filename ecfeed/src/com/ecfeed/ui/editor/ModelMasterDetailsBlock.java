@@ -288,32 +288,23 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 		return fPage.getEditorSite().getActionBars();
 	}
 
-
-	private class ModelUpdateContext implements IModelUpdateContext {
+	private class ModelUpdateContext extends AModelUpdateContext {
 
 		@Override
 		public IUndoContext getUndoContext() {
 			return getPage().getEditor().getUndoContext();
 		}
 
-		@Override
-		public void notifyUpdateListeners() {
-
-			List<IModelUpdateListener> updateListeners = fMasterSection.getUpdateListeners();
-
-			if (updateListeners == null) {
-				return;
-			}
-
-			AbstractFormPart abstractFormPart = fMasterSection.getSourceForm(); 
-
-			for (IModelUpdateListener listener : updateListeners) {
-				listener.notifyModelUpdated(abstractFormPart);
-			}
+		protected List<IModelUpdateListener> getUpdateListeners() {
+			return fMasterSection.getUpdateListeners();
+		}
+		
+		protected AbstractFormPart getAbstractFormPart() {
+			return fMasterSection.getSourceForm();
 		}
 
 	}
-
+	
 	private class MasterSectionContext implements ISectionContext{
 
 		@Override
