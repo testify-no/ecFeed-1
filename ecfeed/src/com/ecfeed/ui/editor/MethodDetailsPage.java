@@ -50,10 +50,20 @@ public class MethodDetailsPage extends BasicDetailsPage {
 			IMainTreeProvider mainTreeProvider,
 			MethodInterface methodInterface,
 			IModelUpdateContext updateContext,
+			IJavaProjectProvider javaProjectProvider,
+			EcFormToolkit ecForToolkit) {
+
+		super(mainTreeProvider, updateContext, javaProjectProvider, ecForToolkit);
+		fMethodInterface = methodInterface;
+	}
+
+	public MethodDetailsPage(
+			IMainTreeProvider mainTreeProvider,
+			MethodInterface methodInterface,
+			IModelUpdateContext updateContext,
 			IJavaProjectProvider javaProjectProvider) {
 
-		super(mainTreeProvider, updateContext, javaProjectProvider);
-		fMethodInterface = methodInterface;
+		this(mainTreeProvider, methodInterface, updateContext, javaProjectProvider, null);
 	}
 
 	@Override

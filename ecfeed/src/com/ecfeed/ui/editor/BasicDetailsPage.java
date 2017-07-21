@@ -64,14 +64,6 @@ implements IDetailsPage, IModelUpdateListener, ISectionContext {
 
 	public BasicDetailsPage(
 			IMainTreeProvider mainTreeProvider, 
-			IModelUpdateContext updateContext, 
-			IJavaProjectProvider javaProjectProvider) {
-
-		this(mainTreeProvider, updateContext, javaProjectProvider, null);
-	}
-
-	public BasicDetailsPage(
-			IMainTreeProvider mainTreeProvider, 
 			IModelUpdateContext modelUpdateContext, 
 			IJavaProjectProvider javaProjectProvider,
 			EcFormToolkit ecFormToolkit) {
@@ -83,6 +75,13 @@ implements IDetailsPage, IModelUpdateListener, ISectionContext {
 		fImplementer = new EclipseModelImplementer(javaProjectProvider);
 		fJavaProjectProvider = javaProjectProvider;
 		fEcFormToolkit = ecFormToolkit;
+	}
+
+	public BasicDetailsPage(
+			IMainTreeProvider mainTreeProvider, 
+			IModelUpdateContext modelUpdateContext, 
+			IJavaProjectProvider javaProjectProvider) {
+		this(mainTreeProvider, modelUpdateContext, javaProjectProvider, null);
 	}
 
 	@Override

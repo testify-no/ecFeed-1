@@ -52,18 +52,6 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	private GlobalParametersViewer fGlobalParametersSection;
 	private AbstractCommentsSection fCommentsSection;
 
-
-	public ClassDetailsPage(
-			IMainTreeProvider mainTreeProvider,
-			ClassInterface classInterface,
-			IModelUpdateContext updateContext, 
-			IJavaProjectProvider javaProjectProvider) {
-
-		super(mainTreeProvider, updateContext, javaProjectProvider);
-		fIsAndroidProject = new EclipseProjectHelper(javaProjectProvider).isAndroidProject();
-		fClassInterface = classInterface;
-	}
-
 	public ClassDetailsPage(
 			IMainTreeProvider mainTreeProvider,
 			ClassInterface classInterface,
@@ -76,6 +64,14 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		fClassInterface = classInterface;
 	}
 
+	public ClassDetailsPage(
+			IMainTreeProvider mainTreeProvider,
+			ClassInterface classInterface,
+			IModelUpdateContext updateContext, 
+			IJavaProjectProvider javaProjectProvider) {
+
+		this(mainTreeProvider, classInterface, updateContext, javaProjectProvider, null);
+	}
 
 	@Override
 	public void createContents(Composite parent){

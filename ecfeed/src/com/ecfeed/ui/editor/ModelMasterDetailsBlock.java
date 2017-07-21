@@ -298,13 +298,13 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 		protected List<IModelUpdateListener> getUpdateListeners() {
 			return fMasterSection.getUpdateListeners();
 		}
-		
+
 		protected AbstractFormPart getAbstractFormPart() {
 			return fMasterSection.getSourceForm();
 		}
 
 	}
-	
+
 	private class MasterSectionContext implements ISectionContext{
 
 		@Override
