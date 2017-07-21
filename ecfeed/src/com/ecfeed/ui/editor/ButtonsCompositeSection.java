@@ -44,7 +44,7 @@ public class ButtonsCompositeSection extends BasicSection {
 			IModelUpdateContext updateContext,
 			IJavaProjectProvider javaProjectProvider,
 			int style) {
-		
+
 		super(sectionContext, updateContext, javaProjectProvider, style);
 	}
 
@@ -82,7 +82,7 @@ public class ButtonsCompositeSection extends BasicSection {
 
 	protected Button addButton(String text, SelectionAdapter adapter, int style){
 		Button button = getEcFormToolkit().createButton(fButtonsComposite, text, style);
-		
+
 		if(adapter != null){
 			button.addSelectionListener(adapter);
 		}
@@ -93,13 +93,13 @@ public class ButtonsCompositeSection extends BasicSection {
 	}
 
 	protected Text addText(String text, SelectionAdapter adapter) {
-		
+
 		Text txt = getEcFormToolkit().createText(fButtonsComposite, text, SWT.BORDER);
-		
+
 		if(adapter != null) {
 			txt.addSelectionListener(adapter);
 		}
-		
+
 		return txt;
 	}
 

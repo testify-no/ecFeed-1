@@ -37,7 +37,6 @@ import com.ecfeed.ui.common.ImageManager;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.editor.actions.IActionProvider;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
-import com.ecfeed.ui.modelif.IModelUpdateListener;
 
 public abstract class BasicSection extends SectionPart {
 	private Composite fClientComposite;
@@ -158,12 +157,6 @@ public abstract class BasicSection extends SectionPart {
 
 	protected Shell getActiveShell(){
 		return Display.getCurrent().getActiveShell();
-	}
-
-	protected void modelUpdated(){
-		for(IModelUpdateListener listener : fUpdateContext.getUpdateListeners()){
-			listener.modelUpdated(this);
-		}
 	}
 
 	protected ToolBarManager getToolBarManager(){

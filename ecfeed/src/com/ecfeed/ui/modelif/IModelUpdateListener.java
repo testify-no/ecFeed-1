@@ -12,5 +12,5 @@ package com.ecfeed.ui.modelif;
 
 
 public interface IModelUpdateListener {
-	public void modelUpdated(Object source);
+	public void notifyModelUpdated(Object source);
 }

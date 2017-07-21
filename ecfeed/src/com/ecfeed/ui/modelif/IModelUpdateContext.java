@@ -10,13 +10,9 @@
 
 package com.ecfeed.ui.modelif;
 
-import java.util.List;
-
 import org.eclipse.core.commands.operations.IUndoContext;
-import org.eclipse.ui.forms.AbstractFormPart;
 
 public interface IModelUpdateContext {
-	public AbstractFormPart getSourceForm();
-	public List<IModelUpdateListener> getUpdateListeners();
 	public IUndoContext getUndoContext();
+	public void notifyUpdateListeners();
 }

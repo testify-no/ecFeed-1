@@ -10,8 +10,6 @@
 
 package com.ecfeed.ui.modelif;
 
-import java.util.List;
-
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.AbstractOperation;
 import org.eclipse.core.commands.operations.IOperationHistory;
@@ -23,7 +21,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.forms.AbstractFormPart;
 
 import com.ecfeed.core.adapter.CachedImplementationStatusResolver;
 import com.ecfeed.core.adapter.IModelOperation;
@@ -32,16 +29,14 @@ import com.ecfeed.core.utils.SystemLogger;
 
 public class OperationExecuter {
 
-	private IModelUpdateContext fUpdateContext;
-	private List<IModelUpdateListener> fUpdateListeners;
+	private IModelUpdateContext fModelUpdateContext;
 	private IOperationHistory fOperationHistory;
 
-	
+
 	public OperationExecuter(IModelUpdateContext updateContext){
 		fOperationHistory = OperationHistoryFactory.getOperationHistory();
 		if(updateContext != null){
-			fUpdateContext = updateContext;
-			fUpdateListeners = updateContext.getUpdateListeners();
+			fModelUpdateContext = updateContext;
 		}
 	}
 
@@ -55,14 +50,10 @@ public class OperationExecuter {
 	}
 
 	protected IModelUpdateContext getUpdateContext(){
-		return fUpdateContext;
+		return fModelUpdateContext;
 	}
 
-	private AbstractFormPart getSourceForm(){
-		return getUpdateContext().getSourceForm();
-	}
-	
-	private class UndoableOperation extends AbstractOperation{
+	private class UndoableOperation extends AbstractOperation {
 
 		private IModelOperation fOperation;
 		private String fErrorMessageTitle;
@@ -100,10 +91,10 @@ public class OperationExecuter {
 				executeWithoutExceptionLogging(operation);
 
 				CachedImplementationStatusResolver.clearCache();
-				updateListeners();
+				fModelUpdateContext.notifyUpdateListeners();
 				return Status.OK_STATUS;
 			} catch (ModelOperationException e) {
-				updateListeners();
+				fModelUpdateContext.notifyUpdateListeners();
 				MessageDialog.openError(Display.getCurrent().getActiveShell(),
 						fErrorMessageTitle,
 						e.getMessage());
@@ -121,14 +112,7 @@ public class OperationExecuter {
 			}
 		}
 
-		private void updateListeners() {
-			if(fUpdateListeners != null){
-				for(IModelUpdateListener listener : fUpdateListeners){
-					listener.modelUpdated(getSourceForm());
-				}
-			}
-		}
 	}
-	
+
 }
 

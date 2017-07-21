@@ -240,7 +240,7 @@ implements IDetailsPage, IModelUpdateListener, ISectionContext {
 	}
 
 	@Override
-	public void modelUpdated(Object source){
+	public void notifyModelUpdated(Object source){
 
 		if (!(source instanceof AbstractFormPart)) {
 			return;

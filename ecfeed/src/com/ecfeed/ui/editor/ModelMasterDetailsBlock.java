@@ -292,19 +292,26 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 	private class ModelUpdateContext implements IModelUpdateContext {
 
 		@Override
-		public AbstractFormPart getSourceForm() {
-			return fMasterSection.getSourceForm();
-		}
-
-		@Override
-		public List<IModelUpdateListener> getUpdateListeners() {
-			return fMasterSection.getUpdateListeners();
-		}
-
-		@Override
 		public IUndoContext getUndoContext() {
 			return getPage().getEditor().getUndoContext();
 		}
+
+		@Override
+		public void notifyUpdateListeners() {
+
+			List<IModelUpdateListener> updateListeners = fMasterSection.getUpdateListeners();
+
+			if (updateListeners == null) {
+				return;
+			}
+
+			AbstractFormPart abstractFormPart = fMasterSection.getSourceForm(); 
+
+			for (IModelUpdateListener listener : updateListeners) {
+				listener.notifyModelUpdated(abstractFormPart);
+			}
+		}
+
 	}
 
 	private class MasterSectionContext implements ISectionContext{

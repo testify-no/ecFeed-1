@@ -204,7 +204,7 @@ public class ModelMasterSection extends TreeViewerSection {
 
 	private class UpdateListener implements IModelUpdateListener {
 		@Override
-		public void modelUpdated(Object source) {
+		public void notifyModelUpdated(Object source) {
 
 			if (!(source instanceof AbstractFormPart)) {
 				return;
