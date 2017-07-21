@@ -11,7 +11,7 @@ public abstract class AModelUpdateContext implements IModelUpdateContext {
 
 	protected abstract List<IModelUpdateListener> getUpdateListeners();
 	protected abstract AbstractFormPart getAbstractFormPart();
-	
+
 	@Override
 	public final void notifyUpdateListeners() {
 
@@ -27,5 +27,5 @@ public abstract class AModelUpdateContext implements IModelUpdateContext {
 			listener.notifyModelUpdated(abstractFormPart);
 		}
 	}
-	
+
 }
