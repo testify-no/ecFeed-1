@@ -13,7 +13,6 @@ package com.ecfeed.ui.editor;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -40,7 +39,7 @@ import com.ecfeed.ui.editor.actions.IActionProvider;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.IModelUpdateListener;
 
-public abstract class BasicSection extends SectionPart implements IModelUpdateContext{
+public abstract class BasicSection extends SectionPart {
 	private Composite fClientComposite;
 	private Control fTextClient;
 	private IActionProvider fActionProvider;
@@ -189,10 +188,6 @@ public abstract class BasicSection extends SectionPart implements IModelUpdateCo
 		return fActionProvider;
 	}
 
-	protected IModelUpdateContext getUpdateContext(){
-		return this;
-	}
-
 	protected ImageDescriptor getIconDescription(String fileName) {
 		return ImageManager.getInstance().getImageDescriptor(fileName);
 	}
@@ -208,17 +203,10 @@ public abstract class BasicSection extends SectionPart implements IModelUpdateCo
 		getSection().setEnabled(enabled);
 	}	
 
-	@Override
-	public IUndoContext getUndoContext(){
-		return fUpdateContext.getUndoContext();
+	public IModelUpdateContext getModelUpdateContext() {
+		return fUpdateContext;
 	}
 
-	@Override
-	public List<IModelUpdateListener> getUpdateListeners(){
-		return fUpdateContext.getUpdateListeners();
-	}
-
-	@Override
 	public AbstractFormPart getSourceForm(){
 		return this;
 	}

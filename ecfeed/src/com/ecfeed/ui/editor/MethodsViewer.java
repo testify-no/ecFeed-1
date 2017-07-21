@@ -54,8 +54,8 @@ public class MethodsViewer extends TableViewerSection {
 			IJavaProjectProvider javaProjectProvider) {
 		super(sectionContext, updateContext, javaProjectProvider, StyleDistributor.getSectionStyle());
 
-		fClassIf = new ClassInterface(this, javaProjectProvider);
-		fMethodIf = new MethodInterface(this, javaProjectProvider);
+		fClassIf = new ClassInterface(getModelUpdateContext(), javaProjectProvider);
+		fMethodIf = new MethodInterface(getModelUpdateContext(), javaProjectProvider);
 
 		fMethodsColumn.setEditingSupport(new MethodNameEditingSupport());
 
@@ -64,11 +64,14 @@ public class MethodsViewer extends TableViewerSection {
 		fRemoveSelectedButton = 
 				addButton("Remove selected", 
 						new ActionSelectionAdapter(
-								new DeleteAction(getViewer(), this), 
+								new DeleteAction(getViewer(), getModelUpdateContext()), 
 								Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
 
 		addSelectionChangedListener(new SelectionChangedListener());
-		setActionProvider(new ModelViewerActionProvider(getTableViewer(), this, javaProjectProvider));
+
+		setActionProvider(
+				new ModelViewerActionProvider(
+						getTableViewer(), getModelUpdateContext(), javaProjectProvider));
 
 		getViewer().addDragSupport(
 				DND.DROP_COPY|DND.DROP_MOVE, 

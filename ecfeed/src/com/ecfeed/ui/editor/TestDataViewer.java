@@ -96,7 +96,7 @@ public class TestDataViewer extends TableViewerSection implements ITestDataEdito
 
 	protected TestCaseInterface getTestCaseInterface() {
 		if(fTestCaseIf == null){
-			fTestCaseIf = new TestCaseInterface(this, fJavaProjectProvider);
+			fTestCaseIf = new TestCaseInterface(getModelUpdateContext(), fJavaProjectProvider);
 		}
 		return fTestCaseIf;
 	}

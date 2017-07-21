@@ -163,8 +163,8 @@ public class ClassViewer extends TableViewerSection {
 		fNameColumn.setEditingSupport(new LocalNameEditingSupport());
 		fPackageNameColumn.setEditingSupport(new PackageNameEditingSupport());
 
-		fRootIf = new RootInterface(this, javaProjectProvider);
-		fClassIf = new ClassInterface(this, javaProjectProvider);
+		fRootIf = new RootInterface(getModelUpdateContext(), javaProjectProvider);
+		fClassIf = new ClassInterface(getModelUpdateContext(), javaProjectProvider);
 
 		setText("Classes");
 
@@ -175,9 +175,9 @@ public class ClassViewer extends TableViewerSection {
 		addButton("New test class", new AddNewClassAdapter());
 		addButton("Remove selected", 
 				new ActionSelectionAdapter(
-						new DeleteAction(getViewer(), this), Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
+						new DeleteAction(getViewer(), getModelUpdateContext()), Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
 
-		setActionProvider(new ModelViewerActionProvider(getTableViewer(), this, javaProjectProvider));
+		setActionProvider(new ModelViewerActionProvider(getTableViewer(), getModelUpdateContext(), javaProjectProvider));
 
 		getViewer().addDragSupport(
 				DND.DROP_COPY|DND.DROP_MOVE, 
@@ -209,7 +209,7 @@ public class ClassViewer extends TableViewerSection {
 
 	private ClassInterface classIf(){
 		if(fClassIf == null){
-			fClassIf = new ClassInterface(this, fJavaProjectProvider);
+			fClassIf = new ClassInterface(getModelUpdateContext(), fJavaProjectProvider);
 		}
 		return fClassIf;
 	}

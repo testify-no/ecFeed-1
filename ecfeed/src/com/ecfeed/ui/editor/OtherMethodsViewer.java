@@ -51,7 +51,7 @@ public class OtherMethodsViewer extends CheckboxTableViewerSection {
 			IModelUpdateContext updateContext, 
 			IJavaProjectProvider javaProjectProvider) {
 		super(sectionContext, updateContext, javaProjectProvider, STYLE);
-		fClassIf = new ClassInterface(this, javaProjectProvider);
+		fClassIf = new ClassInterface(getModelUpdateContext(), javaProjectProvider);
 		fAddSelectedButton = addButton("Add selected", new AddSelectedAdapter());
 	}
 

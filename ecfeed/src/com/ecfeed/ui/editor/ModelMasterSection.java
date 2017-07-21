@@ -96,7 +96,11 @@ public class ModelMasterSection extends TreeViewerSection {
 
 		ModelViewerActionProvider modelViewerActionProvider = 
 				new ModelViewerActionProvider(
-						getTreeViewer(), this, javaProjectProvider, basicActionRunnerProvider, false);
+						getTreeViewer(), 
+						getModelUpdateContext(), 
+						javaProjectProvider, 
+						basicActionRunnerProvider, 
+						false);
 
 		setActionProvider(modelViewerActionProvider, includeDeleteAction);		
 
@@ -108,7 +112,7 @@ public class ModelMasterSection extends TreeViewerSection {
 		getTreeViewer().addDropSupport(
 				DND.DROP_COPY|DND.DROP_MOVE|DND.DROP_LINK, 
 				new Transfer[]{ModelNodesTransfer.getInstance()}, 
-				new ModelNodeDropListener(getTreeViewer(), this, javaProjectProvider));
+				new ModelNodeDropListener(getTreeViewer(), getModelUpdateContext(), javaProjectProvider));
 	}
 
 	@Override
@@ -142,7 +146,7 @@ public class ModelMasterSection extends TreeViewerSection {
 		return new DecoratingLabelProvider(
 				new ModelTreeLabelProvider(), 
 				new ModelTreeLabelDecorator(
-						ModelMasterSection.this, javaProjectProvider));
+						getModelUpdateContext(), javaProjectProvider));
 	}
 
 	@Override
@@ -150,7 +154,6 @@ public class ModelMasterSection extends TreeViewerSection {
 		return new MasterViewerMenuListener(getMenu());
 	}
 
-	@Override
 	public List<IModelUpdateListener> getUpdateListeners(){
 		if (fUpdateListener == null) {
 			fUpdateListener = new UpdateListener();
@@ -202,11 +205,11 @@ public class ModelMasterSection extends TreeViewerSection {
 	private class UpdateListener implements IModelUpdateListener {
 		@Override
 		public void modelUpdated(Object source) {
-			
+
 			if (!(source instanceof AbstractFormPart)) {
 				return;
 			}
-			
+
 			AbstractFormPart abstractFormPart = (AbstractFormPart)source;
 			abstractFormPart.markDirty();
 			refresh();
@@ -233,7 +236,7 @@ public class ModelMasterSection extends TreeViewerSection {
 
 		private void addChildAddingActions(AbstractNode abstractNode) {
 			AddChildActionProvider actionProvider = 
-					new AddChildActionProvider(getTreeViewer(), ModelMasterSection.this, getJavaProjectProvider());
+					new AddChildActionProvider(getTreeViewer(), getModelUpdateContext(), getJavaProjectProvider());
 
 			List<AbstractAddChildAction> actions = actionProvider.getPossibleActions(abstractNode);
 

@@ -44,7 +44,7 @@ public class GlobalParametersViewer extends AbstractParametersViewer {
 
 	protected ParametersParentInterface getGlobalParametersParentIf() {
 		if(fParentIf == null){
-			fParentIf = new GlobalParametersParentInterface(this, getJavaProjectProvider());
+			fParentIf = new GlobalParametersParentInterface(getModelUpdateContext(), getJavaProjectProvider());
 		}
 		return fParentIf;
 	}
@@ -57,7 +57,7 @@ public class GlobalParametersViewer extends AbstractParametersViewer {
 	@Override
 	protected AbstractParameterInterface getParameterInterface() {
 		if(fParameterIf == null){
-			fParameterIf = new GlobalParameterInterface(this, getJavaProjectProvider());
+			fParameterIf = new GlobalParameterInterface(getModelUpdateContext(), getJavaProjectProvider());
 		}
 		return fParameterIf;
 	}

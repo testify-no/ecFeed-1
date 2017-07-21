@@ -59,8 +59,8 @@ public class ConstraintsListViewer extends TableViewerSection {
 
 		getSection().setText("Constraints");
 
-		fMethodInterface = new MethodInterface(this, javaProjectProvider);
-		fConstraintIf = new ConstraintInterface(this, javaProjectProvider);
+		fMethodInterface = new MethodInterface(getModelUpdateContext(), javaProjectProvider);
+		fConstraintIf = new ConstraintInterface(getModelUpdateContext(), javaProjectProvider);
 
 		fNameColumn.setEditingSupport(new ConstraintNameEditingSupport());
 
@@ -69,7 +69,10 @@ public class ConstraintsListViewer extends TableViewerSection {
 				addButton(
 						"Remove selected", 
 						new ActionSelectionAdapter(
-								new DeleteAction(getViewer(), this), Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
+								new DeleteAction(
+										getViewer(), 
+										getModelUpdateContext()), 
+										Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
 
 		setActionProvider(new ModelViewerActionProvider(getTableViewer(), updateContext, javaProjectProvider));
 

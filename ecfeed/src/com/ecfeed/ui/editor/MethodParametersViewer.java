@@ -308,7 +308,7 @@ public class MethodParametersViewer extends AbstractParametersViewer {
 
 	protected MethodInterface getMethodIf() {
 		if(fMethodIf == null){
-			fMethodIf = new MethodInterface(this, getJavaProjectProvider());
+			fMethodIf = new MethodInterface(getModelUpdateContext(), getJavaProjectProvider());
 		}
 		return fMethodIf;
 	}
@@ -316,7 +316,7 @@ public class MethodParametersViewer extends AbstractParametersViewer {
 	@Override
 	protected AbstractParameterInterface getParameterInterface() {
 		if(fParameterIf == null){
-			fParameterIf = new MethodParameterInterface(this, getJavaProjectProvider());
+			fParameterIf = new MethodParameterInterface(getModelUpdateContext(), getJavaProjectProvider());
 		}
 		return fParameterIf;
 	}

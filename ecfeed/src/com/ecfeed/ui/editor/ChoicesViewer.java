@@ -220,7 +220,7 @@ public class ChoicesViewer extends TableViewerSection {
 				if(fSelectedParent == fSelectedParent.getParameter()){
 					AbstractParameterInterface parameterIf = 
 							(AbstractParameterInterface)NodeInterfaceFactory.getNodeInterface(
-									fSelectedParent, ChoicesViewer.this, fJavaProjectProvider);
+									fSelectedParent, getModelUpdateContext(), fJavaProjectProvider);
 					parameterIf.resetChoicesToDefault();
 
 					setRemoveSelectedStatus();
@@ -239,8 +239,8 @@ public class ChoicesViewer extends TableViewerSection {
 
 		fJavaProjectProvider = javaProjectProvider;
 
-		fParentIf = new ChoicesParentInterface(this, fJavaProjectProvider);
-		fTableItemIf = new ChoiceInterface(this, fJavaProjectProvider);
+		fParentIf = new ChoicesParentInterface(getModelUpdateContext(), fJavaProjectProvider);
+		fTableItemIf = new ChoiceInterface(getModelUpdateContext(), fJavaProjectProvider);
 
 		fNameEditingSupport = new ChoiceNameEditingSupport();
 		fValueEditingSupport = new ChoiceValueEditingSupport(this);
@@ -253,14 +253,17 @@ public class ChoicesViewer extends TableViewerSection {
 		fRemoveSelectedButton = 
 				addButton("Remove selected", 
 						new ActionSelectionAdapter(
-								new DeleteAction(getViewer(), this), Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
+								new DeleteAction(
+										getViewer(), 
+										getModelUpdateContext()), 
+										Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
 
 		fReplaceWithDefaultButton = addButton("Reset with default", new ReplaceWithDefaultAdapter());
 
-		fActionProvider = new ModelViewerActionProvider(getTableViewer(), this, javaProjectProvider);
+		fActionProvider = new ModelViewerActionProvider(getTableViewer(), getModelUpdateContext(), javaProjectProvider);
 		setActionProvider(fActionProvider);
 		fDragListener = new ModelNodeDragListener(getViewer());
-		fDropListener = new ModelNodeDropListener(getViewer(), this, javaProjectProvider);
+		fDropListener = new ModelNodeDropListener(getViewer(), getModelUpdateContext(), javaProjectProvider);
 		getViewer().addDragSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, fDragListener);
 		getViewer().addDropSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, fDropListener);
 

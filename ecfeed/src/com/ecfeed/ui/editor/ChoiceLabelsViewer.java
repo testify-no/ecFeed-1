@@ -91,11 +91,11 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 			addAction("edit", 
 					new CutAction(
 							new LabelCopyAction(), 
-							new LabelDeleteAction(ChoiceLabelsViewer.this)));
+							new LabelDeleteAction(getModelUpdateContext())));
 
 
-			addAction("edit", new LabelPasteAction(ChoiceLabelsViewer.this));
-			addAction("edit", new LabelDeleteAction(ChoiceLabelsViewer.this));
+			addAction("edit", new LabelPasteAction(getModelUpdateContext()));
+			addAction("edit", new LabelDeleteAction(getModelUpdateContext()));
 			addAction("selection", new SelectAllAction(getTableViewer()));
 		}
 	}
@@ -290,7 +290,7 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 			IJavaProjectProvider javaProjectProvider) {
 		super(sectionContext, updateContext, javaProjectProvider, STYLE);
 
-		fChoiceIf = new ChoiceInterface(this, javaProjectProvider);
+		fChoiceIf = new ChoiceInterface(getModelUpdateContext(), javaProjectProvider);
 		getSection().setText("Labels");
 
 		addButton("Add label", new AddLabelAdapter());

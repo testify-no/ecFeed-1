@@ -119,7 +119,7 @@ public class MethodParameterCommentsSection extends AbstractParameterCommentsSec
 	@Override
 	protected MethodParameterInterface getTargetIf() {
 		if(fTargetIf == null){
-			fTargetIf = new MethodParameterInterface(getUpdateContext(), fJavaProjectProvider);
+			fTargetIf = new MethodParameterInterface(getModelUpdateContext(), fJavaProjectProvider);
 		}
 		return fTargetIf;
 	}

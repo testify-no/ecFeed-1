@@ -207,7 +207,7 @@ public class ConstraintViewer extends TreeViewerSection {
 
 		public DeleteStatementAction(IModelUpdateContext updateContext) {
 			super(GlobalActions.DELETE.getId(), GlobalActions.DELETE.getDescription(), 
-					getTreeViewer(), ConstraintViewer.this);
+					getTreeViewer(), getModelUpdateContext());
 		}
 
 		@Override

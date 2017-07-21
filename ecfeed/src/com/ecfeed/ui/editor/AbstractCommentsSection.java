@@ -46,7 +46,7 @@ public abstract class AbstractCommentsSection extends TabFolderSection {
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext,
 			IJavaProjectProvider javaProjectProvider) {
-		
+
 		super(sectionContext, updateContext, javaProjectProvider, StyleDistributor.getCollapsibleSectionStyle());
 		fJavaProjectProvider = javaProjectProvider;
 
@@ -109,7 +109,7 @@ public abstract class AbstractCommentsSection extends TabFolderSection {
 
 	protected AbstractNodeInterface getTargetIf(){
 		if(fTargetIf == null){
-			fTargetIf = new AbstractNodeInterface(getUpdateContext(), fJavaProjectProvider);
+			fTargetIf = new AbstractNodeInterface(getModelUpdateContext(), fJavaProjectProvider);
 		}
 		return fTargetIf;
 	}

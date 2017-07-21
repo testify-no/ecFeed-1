@@ -33,7 +33,7 @@ public class GlobalParameterCommentsSection extends AbstractParameterCommentsSec
 	@Override
 	protected AbstractParameterInterface getTargetIf() {
 		if(fTargetIf == null){
-			fTargetIf = new GlobalParameterInterface(getUpdateContext(), fJavaProjectProvider);
+			fTargetIf = new GlobalParameterInterface(getModelUpdateContext(), fJavaProjectProvider);
 		}
 		return fTargetIf;
 	}

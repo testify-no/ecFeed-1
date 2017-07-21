@@ -153,7 +153,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 		gd.minimumHeight = 250;
 		getSection().setLayoutData(gd);
 
-		fMethodIf = new MethodInterface(this, javaProjectProvider);
+		fMethodIf = new MethodInterface(getModelUpdateContext(), javaProjectProvider);
 
 		getCheckboxViewer().addCheckStateListener(new TreeCheckStateListener(getCheckboxViewer()));
 

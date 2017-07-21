@@ -69,12 +69,13 @@ public abstract class AbstractParametersViewer extends TableViewerSection {
 		addButton("Add parameter", new AddNewParameterAdapter());
 		fRemoveSelectedButton = addButton("Remove selected", 
 				new ActionSelectionAdapter(
-						new DeleteAction(getViewer(), this), Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
+						new DeleteAction(
+								getViewer(), getModelUpdateContext()), Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
 
 		fNameColumn.setEditingSupport(new ParameterNameEditingSupport());
 		fTypeColumn.setEditingSupport(getParameterTypeEditingSupport());
 
-		setActionProvider(new ModelViewerActionProvider(getTableViewer(), this, javaProjectProvider));
+		setActionProvider(new ModelViewerActionProvider(getTableViewer(), getModelUpdateContext(), javaProjectProvider));
 		addSelectionChangedListener(new SelectionChangedListener());
 	}
 
