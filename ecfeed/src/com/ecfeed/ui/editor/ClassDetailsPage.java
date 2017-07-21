@@ -85,11 +85,15 @@ public class ClassDetailsPage extends BasicDetailsPage {
 
 		addCommentsSection();
 
-		addViewerSection(fMethodsSection = new MethodsViewer(this, this, getJavaProjectProvider()));
-		addViewerSection(fGlobalParametersSection = new GlobalParametersViewer(this, this, getJavaProjectProvider()));
+		addViewerSection(fMethodsSection = 
+				new MethodsViewer(this, getModelUpdateContext(), getJavaProjectProvider()));
+
+		addViewerSection(fGlobalParametersSection = 
+				new GlobalParametersViewer(this, getModelUpdateContext(), getJavaProjectProvider()));
 
 		if (ApplicationContext.isProjectAvailable()) {
-			addViewerSection(fOtherMethodsSection = new OtherMethodsViewer(this, this, getJavaProjectProvider()));
+			addViewerSection(fOtherMethodsSection = 
+					new OtherMethodsViewer(this, getModelUpdateContext(), getJavaProjectProvider()));
 		}
 
 		getEcFormToolkit().paintBordersFor(getMainComposite());
@@ -104,9 +108,11 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	private void addCommentsSection() {
 
 		if (ApplicationContext.isProjectAvailable()) {
-			addForm(fCommentsSection = new ExportableJavaDocCommentsSection(this, this, getJavaProjectProvider()));
+			addForm(fCommentsSection = 
+					new ExportableJavaDocCommentsSection(this, getModelUpdateContext(), getJavaProjectProvider()));
 		} else {
-			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, getJavaProjectProvider()));
+			addForm(fCommentsSection = 
+					new SingleTextCommentsSection(this, getModelUpdateContext(), getJavaProjectProvider()));
 		}
 	}
 

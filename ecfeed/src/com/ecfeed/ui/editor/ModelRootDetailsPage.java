@@ -36,7 +36,7 @@ public class ModelRootDetailsPage extends BasicDetailsPage {
 			RootInterface rootInterface,
 			IModelUpdateContext updateContext, 
 			IJavaProjectProvider javaProjectProvider) {
-		
+
 		super(mainTreeProvider, updateContext, javaProjectProvider);
 		fRootInterface = rootInterface;
 	}
@@ -47,7 +47,7 @@ public class ModelRootDetailsPage extends BasicDetailsPage {
 			IModelUpdateContext updateContext, 
 			IJavaProjectProvider javaProjectProvider,
 			EcFormToolkit ecFormToolkit) {
-		
+
 		super(mainTreeProvider, updateContext, javaProjectProvider, ecFormToolkit);
 		fRootInterface = rootInterface;
 	}
@@ -63,9 +63,9 @@ public class ModelRootDetailsPage extends BasicDetailsPage {
 
 		addCommentsSection();
 
-		addViewerSection(fClassesSection = new ClassViewer(this, this, getJavaProjectProvider()));
+		addViewerSection(fClassesSection = new ClassViewer(this, getModelUpdateContext(), getJavaProjectProvider()));
 
-		fParametersSection = new GlobalParametersViewer(this, this, getJavaProjectProvider());
+		fParametersSection = new GlobalParametersViewer(this, getModelUpdateContext(), getJavaProjectProvider());
 		addViewerSection(fParametersSection);
 
 		getEcFormToolkit().paintBordersFor(getMainComposite());
@@ -80,9 +80,9 @@ public class ModelRootDetailsPage extends BasicDetailsPage {
 	private void addCommentsSection() {
 
 		if (ApplicationContext.isProjectAvailable()) {
-			addForm(fCommentsSection = new ExportableSingleTextCommentsSection(this, this, getJavaProjectProvider()));
+			addForm(fCommentsSection = new ExportableSingleTextCommentsSection(this, getModelUpdateContext(), getJavaProjectProvider()));
 		} else {
-			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, getJavaProjectProvider()));
+			addForm(fCommentsSection = new SingleTextCommentsSection(this, getModelUpdateContext(), getJavaProjectProvider()));
 		}
 	}
 

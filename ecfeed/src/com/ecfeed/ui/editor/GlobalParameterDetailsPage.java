@@ -38,7 +38,8 @@ public class GlobalParameterDetailsPage extends AbstractParameterDetailsPage {
 	@Override
 	public void createContents(Composite parent){
 		super.createContents(parent);
-		addForm(fLinkingMethodsViewer = new LinkingMethodsViewer(this, this, getJavaProjectProvider()));
+		addForm(fLinkingMethodsViewer = 
+				new LinkingMethodsViewer(this, getModelUpdateContext(), getJavaProjectProvider()));
 	}
 
 
@@ -75,7 +76,7 @@ public class GlobalParameterDetailsPage extends AbstractParameterDetailsPage {
 		if (ApplicationContext.isProjectAvailable()) {
 			return new GlobalParameterCommentsSection(sectionContext, updateContext, getJavaProjectProvider());
 		} else {
-			return new SingleTextCommentsSection(this, this, getJavaProjectProvider());
+			return new SingleTextCommentsSection(this, getModelUpdateContext(), getJavaProjectProvider());
 		}
 	}
 }

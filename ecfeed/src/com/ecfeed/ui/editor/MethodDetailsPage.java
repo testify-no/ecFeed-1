@@ -51,7 +51,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 			MethodInterface methodInterface,
 			IModelUpdateContext updateContext,
 			IJavaProjectProvider javaProjectProvider) {
-		
+
 		super(mainTreeProvider, updateContext, javaProjectProvider);
 		fMethodInterface = methodInterface;
 	}
@@ -70,13 +70,13 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		IJavaProjectProvider javaProjectProvider = getJavaProjectProvider();
 
 		addViewerSection(fParemetersSection = 
-				new MethodParametersViewer(this, this, javaProjectProvider));
+				new MethodParametersViewer(this, getModelUpdateContext(), javaProjectProvider));
 
 		addViewerSection(fConstraintsSection = 
-				new ConstraintsListViewer(this, this, javaProjectProvider));
+				new ConstraintsListViewer(this, getModelUpdateContext(), javaProjectProvider));
 
 		addViewerSection(fTestCasesSection = 
-				new TestCasesViewer(this, this, javaProjectProvider));
+				new TestCasesViewer(this, getModelUpdateContext(), javaProjectProvider));
 
 		getEcFormToolkit().paintBordersFor(getMainComposite());
 	}
@@ -90,9 +90,11 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	private void addCommentsSection() {
 
 		if (ApplicationContext.isProjectAvailable()) {
-			addForm(fCommentsSection = new ExportableJavaDocCommentsSection(this, this, getJavaProjectProvider()));
+			addForm(fCommentsSection = 
+					new ExportableJavaDocCommentsSection(this, getModelUpdateContext(), getJavaProjectProvider()));
 		} else {
-			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, getJavaProjectProvider()));
+			addForm(fCommentsSection = 
+					new SingleTextCommentsSection(this, getModelUpdateContext(), getJavaProjectProvider()));
 		}
 	}
 
@@ -155,7 +157,10 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	}	
 
 	private void createRunnerSection() {
-		fRunnerSection = new WebRunnerSection(this, this, fMethodInterface, getJavaProjectProvider());
+		fRunnerSection = 
+				new WebRunnerSection(
+						this, getModelUpdateContext(), fMethodInterface, getJavaProjectProvider());
+
 		fRunnerSection.initialize(getManagedForm());
 	}
 

@@ -55,7 +55,8 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 
 		addCommentsSection();
 
-		addViewerSection(fTestDataViewer = new TestDataViewer(this, this, getJavaProjectProvider()));
+		addViewerSection(fTestDataViewer = 
+				new TestDataViewer(this, getModelUpdateContext(), getJavaProjectProvider()));
 	}
 
 	@Override
@@ -85,9 +86,11 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 	private void addCommentsSection() {
 
 		if (ApplicationContext.isProjectAvailable()) {
-			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, getJavaProjectProvider()));
+			addForm(fCommentsSection = 
+					new SingleTextCommentsSection(this, getModelUpdateContext(), getJavaProjectProvider()));
 		} else {
-			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, getJavaProjectProvider()));
+			addForm(fCommentsSection = 
+					new SingleTextCommentsSection(this, getModelUpdateContext(), getJavaProjectProvider()));
 		}
 	}
 

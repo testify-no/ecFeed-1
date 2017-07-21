@@ -51,15 +51,15 @@ public class ConstraintDetailsPage extends BasicDetailsPage {
 
 		addCommentsSection();
 
-		addViewerSection(fConstraintViewer = new ConstraintViewer(this, this, getJavaProjectProvider()));
+		addViewerSection(fConstraintViewer = new ConstraintViewer(this, getModelUpdateContext(), getJavaProjectProvider()));
 	}
 
 	private void addCommentsSection() {
 
 		if (ApplicationContext.isProjectAvailable()) {
-			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, getJavaProjectProvider()));
+			addForm(fCommentsSection = new SingleTextCommentsSection(this, getModelUpdateContext(), getJavaProjectProvider()));
 		} else {
-			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, getJavaProjectProvider()));
+			addForm(fCommentsSection = new SingleTextCommentsSection(this, getModelUpdateContext(), getJavaProjectProvider()));
 		}
 	}
 

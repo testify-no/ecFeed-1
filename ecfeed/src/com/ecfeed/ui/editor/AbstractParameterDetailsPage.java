@@ -75,11 +75,11 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 
 		createAttributesComposite();
 
-		addForm(fCommentsSection = getCommentsSection(this, this));
+		addForm(fCommentsSection = getCommentsSection(this, getModelUpdateContext()));
 
 		fWebParameterSection = createWebParameterSection();
 
-		addForm(fChoicesViewer = new ChoicesViewer(this, this, getJavaProjectProvider()));
+		addForm(fChoicesViewer = new ChoicesViewer(this, getModelUpdateContext(), getJavaProjectProvider()));
 
 		getEcFormToolkit().paintBordersFor(getMainComposite());
 	}

@@ -62,7 +62,7 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 
 	@Override
 	protected WebParameterSection createWebParameterSection() {
-		return new WebParameterSection(this, this, getParameterIf(), getJavaProjectProvider());
+		return new WebParameterSection(this, getModelUpdateContext(), getParameterIf(), getJavaProjectProvider());
 	}
 
 	@Override
@@ -242,7 +242,7 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 		if (ApplicationContext.isProjectAvailable()) {
 			return new MethodParameterCommentsSection(sectionContext, updateContext, getJavaProjectProvider());
 		} else {
-			return new SingleTextCommentsSection(this, this, getJavaProjectProvider());
+			return new SingleTextCommentsSection(this, getModelUpdateContext(), getJavaProjectProvider());
 		}
 	}
 

@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -46,7 +45,7 @@ import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.IModelUpdateListener;
 
 public abstract class BasicDetailsPage 
-implements IDetailsPage, IModelUpdateListener, ISectionContext, IModelUpdateContext {
+implements IDetailsPage, IModelUpdateListener, ISectionContext {
 
 	private Section fMainSection;
 	private Composite fMainComposite;
@@ -73,14 +72,14 @@ implements IDetailsPage, IModelUpdateListener, ISectionContext, IModelUpdateCont
 
 	public BasicDetailsPage(
 			IMainTreeProvider mainTreeProvider, 
-			IModelUpdateContext updateContext, 
+			IModelUpdateContext modelUpdateContext, 
 			IJavaProjectProvider javaProjectProvider,
 			EcFormToolkit ecFormToolkit) {
 
 		fMainTreeProvider = mainTreeProvider;
 		fForms = new ArrayList<IFormPart>();
 		fViewerSections = new ArrayList<ViewerSection>();
-		fModelUpdateContext = updateContext;
+		fModelUpdateContext = modelUpdateContext;
 		fImplementer = new EclipseModelImplementer(javaProjectProvider);
 		fJavaProjectProvider = javaProjectProvider;
 		fEcFormToolkit = ecFormToolkit;
@@ -242,25 +241,25 @@ implements IDetailsPage, IModelUpdateListener, ISectionContext, IModelUpdateCont
 
 	@Override
 	public void modelUpdated(Object source){
-		
+
 		if (!(source instanceof AbstractFormPart)) {
 			return;
 		}
-		
+
 		AbstractFormPart abstractFormPart = (AbstractFormPart)source;
-		
+
 		if (abstractFormPart != null) {
 			abstractFormPart.markDirty();
 		}
-		
+
 		if (fMainTreeProvider != null) {
 			fMainTreeProvider.markDirty();
 		}
-		
+
 		if (fMainTreeProvider != null) {
 			fMainTreeProvider.refresh();
 		}
-		
+
 		refresh();
 	}
 
@@ -282,19 +281,8 @@ implements IDetailsPage, IModelUpdateListener, ISectionContext, IModelUpdateCont
 		return fMainComposite;
 	}
 
-	@Override
-	public AbstractFormPart getSourceForm(){
-		return null;
-	}
-
-	@Override
-	public List<IModelUpdateListener> getUpdateListeners(){
-		return Arrays.asList(new IModelUpdateListener[]{this});
-	}
-
-	@Override
-	public IUndoContext getUndoContext(){
-		return fModelUpdateContext.getUndoContext();
+	IModelUpdateContext getModelUpdateContext() {
+		return fModelUpdateContext;
 	}
 
 	protected ImageDescriptor getIconDescription(String fileName) {
@@ -306,7 +294,7 @@ implements IDetailsPage, IModelUpdateListener, ISectionContext, IModelUpdateCont
 	protected class ImplementToolbarAction extends ImplementAction{
 
 		public ImplementToolbarAction() {
-			super(null, BasicDetailsPage.this, fImplementer);
+			super(null, getModelUpdateContext(), fImplementer);
 			setToolTipText("Implement node");
 			setImageDescriptor(getIconDescription("implement.png"));
 		}

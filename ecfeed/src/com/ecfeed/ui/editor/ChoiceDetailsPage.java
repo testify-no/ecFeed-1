@@ -60,8 +60,8 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 
 		addCommentsSection();
 
-		addViewerSection(fChildrenViewer = new ChoicesViewer(this, this, getJavaProjectProvider()));
-		addViewerSection(fLabelsViewer = new ChoiceLabelsViewer(this, this, getJavaProjectProvider()));
+		addViewerSection(fChildrenViewer = new ChoicesViewer(this, getModelUpdateContext(), getJavaProjectProvider()));
+		addViewerSection(fLabelsViewer = new ChoiceLabelsViewer(this, getModelUpdateContext(), getJavaProjectProvider()));
 
 		getEcFormToolkit().paintBordersFor(getMainComposite());
 	}
@@ -93,9 +93,9 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 	private void addCommentsSection() {
 
 		if (ApplicationContext.isProjectAvailable()) {
-			addForm(fCommentsSection = new ChoiceCommentsSection(this, this, getJavaProjectProvider()));
+			addForm(fCommentsSection = new ChoiceCommentsSection(this, getModelUpdateContext(), getJavaProjectProvider()));
 		} else {
-			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, getJavaProjectProvider()));
+			addForm(fCommentsSection = new SingleTextCommentsSection(this, getModelUpdateContext(), getJavaProjectProvider()));
 		}
 	}
 
