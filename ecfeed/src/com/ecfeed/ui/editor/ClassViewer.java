@@ -48,111 +48,6 @@ public class ClassViewer extends TableViewerSection {
 	private IJavaProjectProvider fJavaProjectProvider;
 
 
-	private abstract class ClassNameEditingSupport extends EditingSupport{
-
-		private TextCellEditor fNameCellEditor;
-
-		public ClassNameEditingSupport() {
-			super(getTableViewer());
-			fNameCellEditor = new TextCellEditor(getTable());
-		}
-
-		@Override
-		protected CellEditor getCellEditor(Object element) {
-			return fNameCellEditor;
-		}
-
-		@Override
-		protected boolean canEdit(Object element) {
-			return true;
-		}
-
-		protected void renameClass(ClassNode target, String qualifiedName){
-			classIf().setOwnNode(target);
-			classIf().setQualifiedName(qualifiedName);
-		}
-	}
-
-	private class LocalNameEditingSupport extends ClassNameEditingSupport {
-
-		@Override
-		protected Object getValue(Object element) {
-			return ClassInterface.getLocalName((ClassNode)element);
-		}
-
-		@Override
-		protected void setValue(Object element, Object value) {
-			ClassNode target = (ClassNode)element;
-			String packageName = ClassInterface.getPackageName(target);
-			String localName = (String)value;
-			renameClass(target, ClassInterface.getQualifiedName(packageName, localName));
-		}
-
-	}
-
-	private class PackageNameEditingSupport extends ClassNameEditingSupport{
-
-		@Override
-		protected Object getValue(Object element) {
-			return ClassInterface.getPackageName((ClassNode)element);
-		}
-
-		@Override
-		protected void setValue(Object element, Object value) {
-			ClassNode target = (ClassNode)element;
-			String localName = ClassInterface.getLocalName(target);
-			String packageName = (String)value;
-			renameClass(target, ClassInterface.getQualifiedName(packageName, localName));
-		}
-	}
-
-
-	private class AddImplementedClassAdapter extends SelectionAdapter {
-		@Override
-		public void widgetSelected(SelectionEvent ev) {
-			try {
-				ClassNode addedClass = fRootIf.addImplementedClass();
-				if(addedClass != null){
-					selectElement(addedClass);
-					fNameColumn.getViewer().editElement(addedClass, 0);
-				}
-			} catch (Exception e) {
-				ExceptionCatchDialog.open("Can not add implemented class.", e.getMessage());
-			}
-		}
-	}
-
-	private class AddNewClassAdapter extends SelectionAdapter {
-		@Override
-		public void widgetSelected(SelectionEvent ev) {
-			try {
-				ClassNode addedClass = fRootIf.addNewClass();
-				if(addedClass != null){
-					selectElement(addedClass);
-					fNameColumn.getViewer().editElement(addedClass, 0);
-				}
-			} catch (Exception e) {
-				ExceptionCatchDialog.open("Can not create new test class.", e.getMessage());
-			}
-		}
-	}
-
-	private class ClassViewerColumnLabelProvider extends ColumnLabelProvider {
-		@Override
-		public Color getForeground(Object element) {
-			if (!(element instanceof ClassNode)) {
-				return null;
-			}
-			if (!ApplicationContext.isProjectAvailable()) {
-				return null;
-			}
-			if(fRootIf.getImplementationStatus((ClassNode)element) == EImplementationStatus.IMPLEMENTED){
-				return ColorManager.getColor(ColorConstants.ITEM_IMPLEMENTED);
-			}
-			return null;
-		}
-	}
-
 	public ClassViewer(
 			ISectionContext parent, 
 			IModelUpdateContext updateContext, 
@@ -213,4 +108,111 @@ public class ClassViewer extends TableViewerSection {
 		}
 		return fClassIf;
 	}
+
+	private abstract class ClassNameEditingSupport extends EditingSupport{
+
+		private TextCellEditor fNameCellEditor;
+
+		public ClassNameEditingSupport() {
+			super(getTableViewer());
+			fNameCellEditor = new TextCellEditor(getTable());
+		}
+
+		@Override
+		protected CellEditor getCellEditor(Object element) {
+			return fNameCellEditor;
+		}
+
+		@Override
+		protected boolean canEdit(Object element) {
+			return true;
+		}
+
+		protected void renameClass(ClassNode target, String qualifiedName){
+			classIf().setOwnNode(target);
+			classIf().setQualifiedName(qualifiedName);
+		}
+	}
+
+	private class LocalNameEditingSupport extends ClassNameEditingSupport {
+
+		@Override
+		protected Object getValue(Object element) {
+			return ClassInterface.getLocalName((ClassNode)element);
+		}
+
+		@Override
+		protected void setValue(Object element, Object value) {
+			ClassNode target = (ClassNode)element;
+			String packageName = ClassInterface.getPackageName(target);
+			String localName = (String)value;
+			renameClass(target, ClassInterface.getQualifiedName(packageName, localName));
+		}
+
+	}
+
+
+	private class PackageNameEditingSupport extends ClassNameEditingSupport{
+
+		@Override
+		protected Object getValue(Object element) {
+			return ClassInterface.getPackageName((ClassNode)element);
+		}
+
+		@Override
+		protected void setValue(Object element, Object value) {
+			ClassNode target = (ClassNode)element;
+			String localName = ClassInterface.getLocalName(target);
+			String packageName = (String)value;
+			renameClass(target, ClassInterface.getQualifiedName(packageName, localName));
+		}
+	}
+
+	private class AddImplementedClassAdapter extends SelectionAdapter {
+		@Override
+		public void widgetSelected(SelectionEvent ev) {
+			try {
+				ClassNode addedClass = fRootIf.addImplementedClass();
+				if(addedClass != null){
+					selectElement(addedClass);
+					fNameColumn.getViewer().editElement(addedClass, 0);
+				}
+			} catch (Exception e) {
+				ExceptionCatchDialog.open("Can not add implemented class.", e.getMessage());
+			}
+		}
+	}
+
+
+	private class AddNewClassAdapter extends SelectionAdapter {
+		@Override
+		public void widgetSelected(SelectionEvent ev) {
+			try {
+				ClassNode addedClass = fRootIf.addNewClass();
+				if(addedClass != null){
+					selectElement(addedClass);
+					fNameColumn.getViewer().editElement(addedClass, 0);
+				}
+			} catch (Exception e) {
+				ExceptionCatchDialog.open("Can not create new test class.", e.getMessage());
+			}
+		}
+	}
+
+	private class ClassViewerColumnLabelProvider extends ColumnLabelProvider {
+		@Override
+		public Color getForeground(Object element) {
+			if (!(element instanceof ClassNode)) {
+				return null;
+			}
+			if (!ApplicationContext.isProjectAvailable()) {
+				return null;
+			}
+			if(fRootIf.getImplementationStatus((ClassNode)element) == EImplementationStatus.IMPLEMENTED){
+				return ColorManager.getColor(ColorConstants.ITEM_IMPLEMENTED);
+			}
+			return null;
+		}
+	}
+
 }
