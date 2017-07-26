@@ -64,10 +64,22 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 
 	}
 
-	public AbstractParameterDetailsPage(IMainTreeProvider mainTreeProvider,
-			IModelUpdateContext updateContext, IJavaProjectProvider javaProjectProvider) {
-		super(mainTreeProvider, updateContext, javaProjectProvider);
+	public AbstractParameterDetailsPage(
+			IMainTreeProvider mainTreeProvider,
+			IModelUpdateContext updateContext, 
+			IJavaProjectProvider javaProjectProvider) {
+
+		this(mainTreeProvider, updateContext, javaProjectProvider, null);
 	}
+
+	public AbstractParameterDetailsPage(
+			IMainTreeProvider mainTreeProvider,
+			IModelUpdateContext updateContext, 
+			IJavaProjectProvider javaProjectProvider,
+			EcFormToolkit ecFormToolkit) {
+
+		super(mainTreeProvider, updateContext, javaProjectProvider, ecFormToolkit);
+	}	
 
 	@Override
 	public void createContents(Composite parent){
