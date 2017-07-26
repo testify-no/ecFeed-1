@@ -48,7 +48,16 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 			ChoiceInterface choiceInterface,
 			IModelUpdateContext updateContext, 
 			IJavaProjectProvider javaProjectProvider) {
-		super(mainTreeProvider, updateContext, javaProjectProvider);
+		this(mainTreeProvider, choiceInterface, updateContext, javaProjectProvider, null);
+	}
+	
+	public ChoiceDetailsPage(
+			IMainTreeProvider mainTreeProvider,
+			ChoiceInterface choiceInterface,
+			IModelUpdateContext updateContext, 
+			IJavaProjectProvider javaProjectProvider,
+			EcFormToolkit ecFormToolkit) {
+		super(mainTreeProvider, updateContext, javaProjectProvider, ecFormToolkit);
 		fChoiceIf = choiceInterface;
 	}
 

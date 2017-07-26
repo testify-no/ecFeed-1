@@ -31,9 +31,19 @@ public class GlobalParameterDetailsPage extends AbstractParameterDetailsPage {
 			IModelUpdateContext updateContext, 
 			IJavaProjectProvider javaProjectProvider) {
 
-		super(mainTreeProvider, updateContext, javaProjectProvider);
-		fParameterIf = globalParameterInterface;
+		this(mainTreeProvider, globalParameterInterface, updateContext, javaProjectProvider, null);
 	}
+
+	public GlobalParameterDetailsPage(
+			IMainTreeProvider mainTreeProvider,
+			GlobalParameterInterface globalParameterInterface,
+			IModelUpdateContext updateContext, 
+			IJavaProjectProvider javaProjectProvider,
+			EcFormToolkit ecFormToolkit) {
+
+		super(mainTreeProvider, updateContext, javaProjectProvider, ecFormToolkit);
+		fParameterIf = globalParameterInterface;
+	}	
 
 	@Override
 	public void createContents(Composite parent){

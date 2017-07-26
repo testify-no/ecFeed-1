@@ -44,9 +44,18 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 			TestCaseInterface testCaseInterface,
 			IModelUpdateContext updateContext, 
 			IJavaProjectProvider javaProjectProvider) {
-		super(mainTreeProvider, updateContext, javaProjectProvider);
-		fTestCaseIf = testCaseInterface;
+		this(mainTreeProvider, testCaseInterface, updateContext, javaProjectProvider, null);
 	}
+	
+	public TestCaseDetailsPage(
+			IMainTreeProvider mainTreeProvider,
+			TestCaseInterface testCaseInterface,
+			IModelUpdateContext updateContext, 
+			IJavaProjectProvider javaProjectProvider,
+			EcFormToolkit ecFormToolkit) {
+		super(mainTreeProvider, updateContext, javaProjectProvider, ecFormToolkit);
+		fTestCaseIf = testCaseInterface;
+	}	
 
 	@Override
 	public void createContents(Composite parent) {

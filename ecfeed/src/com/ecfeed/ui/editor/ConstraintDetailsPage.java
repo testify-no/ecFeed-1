@@ -40,9 +40,19 @@ public class ConstraintDetailsPage extends BasicDetailsPage {
 			ConstraintInterface constraintInterface,
 			IModelUpdateContext updateContext, 
 			IJavaProjectProvider javaProjectProvider) {
-		super(mainTreeProvider, updateContext, javaProjectProvider);
-		fConstraintIf = constraintInterface; 
+
+		this(mainTreeProvider, constraintInterface, updateContext, javaProjectProvider, null);
 	}
+
+	public ConstraintDetailsPage(
+			IMainTreeProvider mainTreeProvider,
+			ConstraintInterface constraintInterface,
+			IModelUpdateContext updateContext, 
+			IJavaProjectProvider javaProjectProvider,
+			EcFormToolkit ecFormToolkit) {
+		super(mainTreeProvider, updateContext, javaProjectProvider, ecFormToolkit);
+		fConstraintIf = constraintInterface; 
+	}	
 
 	@Override
 	public void createContents(Composite parent){
