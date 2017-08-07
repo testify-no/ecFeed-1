@@ -10,8 +10,7 @@
 
 package com.ecfeed.core.generators;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -139,6 +138,41 @@ public class TestResultsAnalysisTest {
 
 		assertTrue(analysisContainsCulprits(testResultsAnalysis, aggregatedCulprits));
 	}	
+	
+	@Test 
+	public void ShouldCalculateFailureIndex()
+	{
+		TestResultsAnalysis testresultanalysis = new TestResultsAnalysis();
+		Culprit culprit1 = createCulpritWith1Dimension("1", 3, 1);
+		Culprit culprit2 = createCulpritWith2Dimensions("1", "1", 5, 2);
+		Culprit culprit3 = createCulpritWith2Dimensions("1", "1", 7, 3);
+		Culprit culprit4 = createCulpritWith2Dimensions("1", "1", 9, 2);
+		testresultanalysis.aggregateCulprit(culprit1);
+		testresultanalysis.aggregateCulprit(culprit2);
+		testresultanalysis.aggregateCulprit(culprit3);
+		testresultanalysis.aggregateCulprit(culprit4);
+		testresultanalysis.calculateFailureIndexes();
+		double expectedIndex2 = 100*(100*7/21) + (100*21/2);
+		double expectedIndex1 = 100*(100*1/3) + (100*3/2);
+		assertEquals(expectedIndex2, culprit2.getFailureIndex(), 0.0);
+		assertEquals(expectedIndex1, (double) culprit1.getFailureIndex(), 0.0);
+	}
+	
+	@Test
+	public void ShouldFindCulprit()
+	{
+		TestResultsAnalysis testresultanalysis = new TestResultsAnalysis();
+		Culprit culprit2 = createCulpritWith2Dimensions("1", "1", 5, 2);
+		Culprit culprit3 = createCulpritWith2Dimensions("1", "1", 7, 3);
+		Culprit culprit4 = createCulpritWith2Dimensions("1", "1", 9, 2);
+		testresultanalysis.aggregateCulprit(culprit2);
+		testresultanalysis.aggregateCulprit(culprit3);
+		Culprit FoundCulprit = testresultanalysis.findCulpritByTuple(culprit4);
+		Culprit expectedCulprit = createCulpritWith2Dimensions("1", "1", 12, 5);
+		assertTrue(expectedCulprit.isTupleMatch(FoundCulprit));
+		assertTrue(testresultanalysis.containsCulprit(culprit2));
+		assertFalse(testresultanalysis.containsCulprit(culprit4));
+	}
 
 	private static Culprit createCulpritWith1Dimension(String testInputValue1, int occurences, int failures) {
 

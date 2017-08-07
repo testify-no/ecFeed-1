@@ -68,5 +68,13 @@ public class CulpritTest {
 		Culprit culprit = new Culprit();
 		assertTrue(culprit.isTupleMatch(candidate));
 	}
+	
+	@Test
+	public void ShouldMatchClonedCulprit(){
+		Culprit culpritone = new Culprit(new ArrayList<DimensionedString>(), 3, 5);
+		Culprit clonedculprit = culpritone.makeClone();
+		assertTrue(clonedculprit.isBasicMatch(culpritone));
+		
+	}
 
 }
