@@ -20,9 +20,11 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 
 import com.ecfeed.core.utils.StringHelper;
@@ -126,11 +128,30 @@ public class DialogObjectToolkit {
 
 		return button;
 	}
+	
+	public Combo createCombo(Composite parent, int maxLimit)
+	{
+		final Combo combo = new Combo(parent, SWT.VERTICAL | SWT.DROP_DOWN | SWT.BORDER | SWT.READ_ONLY);
+		for(int i = 1; i < maxLimit; i++)
+		{
+			combo.add(Integer.toString(i));
+		}
+		combo.select(0);
+		return combo;
+	}
 
 	public Button createBrowseButton(Composite parent,
 			SelectionListener selectionListener) {
 		final String BROWSE_LABEL = "Browse...";
 		return createButton(parent, BROWSE_LABEL, selectionListener);
+	}
+	
+	public Table createTable(Composite parent)
+	{
+		final Table table = new Table(parent, SWT.NONE);
+		table.setHeaderVisible(true);
+		table.setLinesVisible(true);
+		return table;
 	}
 
 	public Text createFileSelectionComposite(Composite parent,
