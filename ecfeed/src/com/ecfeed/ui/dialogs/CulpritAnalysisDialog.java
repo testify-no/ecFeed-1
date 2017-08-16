@@ -10,6 +10,9 @@
 
 package com.ecfeed.ui.dialogs;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionListener;
@@ -24,6 +27,11 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
+import com.ecfeed.core.generators.Culprit;
+import com.ecfeed.core.generators.TestResultDescription;
+import com.ecfeed.core.generators.TestResultsAnalysis;
+import com.ecfeed.core.generators.TestResultsAnalyzer;
+import com.ecfeed.core.generators.TestResultsAnalyzerTest;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.dialogs.TestCasesExportDialog.LoadButtonSelectionAdapter;
@@ -69,18 +77,17 @@ public class CulpritAnalysisDialog extends TitleAreaDialog{
 		createLabel(ChildComp, text);
 		Composite ChildComp2 = (Composite) fDialogObjectToolkit.createGridComposite(dialogArea, 4);
 		createLabel(ChildComp2, "from");
-		createCombo(ChildComp2);
+		createCombo(ChildComp2, 0);
 		createLabel(ChildComp2, "to");
-		createCombo(ChildComp2);
+		createCombo(ChildComp2, 2);
 		Composite ChildComp3 = (Composite) fDialogObjectToolkit.createGridComposite(dialogArea, 1);
 		createTableContents(ChildComp3, 4);
 		return dialogArea;
 	}
 	
-	private void createCombo(Composite parentComposite)
+	private void createCombo(Composite parentComposite, int defaultValue)
 	{
-		fDialogObjectToolkit.createCombo(parentComposite, 10);
-		
+		Combo combo = fDialogObjectToolkit.createCombo(parentComposite, 10, defaultValue);	
 	}
 	private void createLabel(Composite parentComposite, String text) {
 		fDialogObjectToolkit.createLabel(parentComposite, text);
@@ -102,7 +109,9 @@ public class CulpritAnalysisDialog extends TitleAreaDialog{
 		column[3] = new TableColumn(table, SWT.NONE);
 		column[3].setText("Index");
 		
-		fillTable(table, 10);
+		List<TestResultDescription> testResultDescrs = createtestResultDescrs();
+		System.out.println(testResultDescrs);
+		fillTable(table, testResultDescrs);
 		
 		for(int i = 0; i< column.length; i++)
 		{
@@ -110,14 +119,43 @@ public class CulpritAnalysisDialog extends TitleAreaDialog{
 		}	
 	}
 	
-	private void fillTable(Table table, int rowNr) {
+	private void fillTable(Table table, List<TestResultDescription> testResultDescrs ) {
 		table.setRedraw(false);
-		for(int i = 0; i<rowNr; i++)
+		TestResultsAnalysis testResultsAnalysis = new TestResultsAnalyzer().generateAnalysis(testResultDescrs, 0, 1);
+		for(int i = 0; i<testResultsAnalysis.getCulpritCount(); i++)
 		{
 			TableItem item = new TableItem(table, SWT.NONE);
-			item.setText("-");
+			int c = 0;
+			item.setText(c++, "-");
+			item.setText(c++, Integer.toString(testResultsAnalysis.getCulprit(i).getOccurenceCount()));
+			item.setText(c++, Integer.toString(testResultsAnalysis.getCulprit(i).getFailureCount()));
+			item.setText(c++, Integer.toString(testResultsAnalysis.getCulprit(i).getFailureIndex()));
 		}
 		table.setRedraw(true);	
+	}
+	
+	private void addTestResult(
+			String[] testArguments, boolean result, List<TestResultDescription> testResultDescrs) {
+
+		List<String> testArgList = new ArrayList<String>();
+
+		for (String testArgument : testArguments) {
+			testArgList.add(testArgument);
+		}
+
+		testResultDescrs.add(new TestResultDescription(testArgList, result));
+	}
+	
+	public List<TestResultDescription> createtestResultDescrs()
+	{
+		List<TestResultDescription> testResultDescrs = new ArrayList<TestResultDescription>();
+
+		addTestResult(new String[]{ "1", "2", "3", "4", "5" }, false, testResultDescrs);
+		addTestResult(new String[]{ "0", "2", "3", "5", "4" }, false, testResultDescrs);
+		addTestResult(new String[]{ "5", "2", "3", "7", "8" }, true, testResultDescrs);
+		addTestResult(new String[]{ "7", "7", "3", "9", "8" }, false, testResultDescrs);
+		addTestResult(new String[]{ "2", "4", "5", "3", "8" }, true, testResultDescrs);
+		return testResultDescrs;
 	}
 
 	public static void main(String[] args)

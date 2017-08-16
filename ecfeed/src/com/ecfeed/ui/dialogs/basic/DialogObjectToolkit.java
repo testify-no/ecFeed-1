@@ -129,14 +129,14 @@ public class DialogObjectToolkit {
 		return button;
 	}
 	
-	public Combo createCombo(Composite parent, int maxLimit)
+	public Combo createCombo(Composite parent, int maxLimit, int defaultValue)
 	{
 		final Combo combo = new Combo(parent, SWT.VERTICAL | SWT.DROP_DOWN | SWT.BORDER | SWT.READ_ONLY);
 		for(int i = 1; i < maxLimit; i++)
 		{
 			combo.add(Integer.toString(i));
 		}
-		combo.select(0);
+		combo.select(defaultValue);
 		return combo;
 	}
 
