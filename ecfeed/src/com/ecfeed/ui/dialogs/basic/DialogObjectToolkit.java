@@ -10,6 +10,8 @@
 
 package com.ecfeed.ui.dialogs.basic;
 
+import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -25,6 +27,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 
 import com.ecfeed.core.utils.StringHelper;
@@ -148,10 +151,41 @@ public class DialogObjectToolkit {
 	
 	public Table createTable(Composite parent)
 	{
-		final Table table = new Table(parent, SWT.NONE);
+		TableViewer viewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL| SWT.V_SCROLL | SWT.FULL_SELECTION| SWT.BORDER | SWT.TOP);
+		
+		final Table table = viewer.getTable();
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
+		viewer.setContentProvider(ArrayContentProvider.getInstance());
+		
+		GridData gridData = createTableGrid();
+        viewer.getControl().setLayoutData(gridData);
 		return table;
+	}
+	
+	public GridData createTableGrid()
+	{
+		GridData gridData = new GridData();
+        gridData.verticalAlignment = GridData.CENTER;
+        gridData.horizontalSpan = 2;
+        gridData.heightHint=500;
+        gridData.grabExcessHorizontalSpace = true;
+        gridData.grabExcessVerticalSpace = false;
+        gridData.horizontalAlignment = GridData.CENTER;
+        return gridData;
+		
+	}
+	public TableColumn[] addColumn(Table table, int ColumnNr, String[] name){
+		TableColumn[] column = new TableColumn[ColumnNr];
+		for(int i = 0; i < ColumnNr; i ++ )
+		{
+			column[i] = new TableColumn(table, SWT.NONE);
+			column[i].setText(name[i]);
+			column[i].setResizable(true);
+			column[i].setMoveable(true);
+		}
+		
+		return column;
 	}
 
 	public Text createFileSelectionComposite(Composite parent,

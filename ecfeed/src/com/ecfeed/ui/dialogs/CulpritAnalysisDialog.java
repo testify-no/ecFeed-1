@@ -14,6 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.dialogs.TitleAreaDialog;
+import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Combo;
@@ -21,6 +24,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
@@ -41,12 +46,14 @@ import com.ecfeed.ui.dialogs.basic.DialogObjectToolkit;
 public class CulpritAnalysisDialog extends TitleAreaDialog{
 	private DialogObjectToolkit fDialogObjectToolkit;
 
-	public CulpritAnalysisDialog(Shell parent) {
+	public CulpritAnalysisDialog(Shell parent) 
+	{
 		super(parent);
 		fDialogObjectToolkit = DialogObjectToolkit.getInstance();
 	}
 	
-	public CulpritAnalysisDialog(){
+	public CulpritAnalysisDialog()
+	{
 		super(null);
 		fDialogObjectToolkit = DialogObjectToolkit.getInstance();
 	}
@@ -54,9 +61,7 @@ public class CulpritAnalysisDialog extends TitleAreaDialog{
 	public void run()
 	{
 		setBlockOnOpen(true);
-		
 		open();
-		
 		Display.getCurrent().dispose();
 	}
 	
@@ -64,8 +69,7 @@ public class CulpritAnalysisDialog extends TitleAreaDialog{
 	public void create()
 	{
 		super.create();
-		setTitle("Test execution report");
-		
+		setTitle("Test execution report");	
 	}
 	
 	@Override
@@ -76,9 +80,9 @@ public class CulpritAnalysisDialog extends TitleAreaDialog{
 		final String text = "Select tuple size for combinatoric analysis";
 		createLabel(ChildComp, text);
 		Composite ChildComp2 = (Composite) fDialogObjectToolkit.createGridComposite(dialogArea, 4);
-		createLabel(ChildComp2, "from");
+		createLabel(ChildComp2, "min");
 		createCombo(ChildComp2, 0);
-		createLabel(ChildComp2, "to");
+		createLabel(ChildComp2, "max");
 		createCombo(ChildComp2, 2);
 		Composite ChildComp3 = (Composite) fDialogObjectToolkit.createGridComposite(dialogArea, 1);
 		createTableContents(ChildComp3, 4);
@@ -89,44 +93,33 @@ public class CulpritAnalysisDialog extends TitleAreaDialog{
 	{
 		Combo combo = fDialogObjectToolkit.createCombo(parentComposite, 10, defaultValue);	
 	}
-	private void createLabel(Composite parentComposite, String text) {
+	
+	private void createLabel(Composite parentComposite, String text) 
+	{
 		fDialogObjectToolkit.createLabel(parentComposite, text);
 	}
 	
 	private void createTableContents(Composite parentComposite, int ColumnNr)
 	{
 		Table table = fDialogObjectToolkit.createTable(parentComposite);
-		TableColumn[] column = new TableColumn[4];
-		column[0] = new TableColumn(table, SWT.NONE);
-		column[0].setText("Tuple");
-		
-		column[1] = new TableColumn(table, SWT.NONE);
-		column[1].setText("Occurences");
-		
-		column[2] = new TableColumn(table, SWT.NONE);
-		column[2].setText("Fails");
-		
-		column[3] = new TableColumn(table, SWT.NONE);
-		column[3].setText("Index");
-		
+		String[] ColumnNames = {"Tuple", "Occurences", "Fails", "Failure Index"};
+		TableColumn[] column = fDialogObjectToolkit.addColumn(table, 4, ColumnNames);
 		List<TestResultDescription> testResultDescrs = createtestResultDescrs();
-		System.out.println(testResultDescrs);
 		fillTable(table, testResultDescrs);
-		
-		for(int i = 0; i< column.length; i++)
+		for (int i = 0; i< column.length; i++)
 		{
 			column[i].pack();
-		}	
+		}		
 	}
 	
 	private void fillTable(Table table, List<TestResultDescription> testResultDescrs ) {
 		table.setRedraw(false);
-		TestResultsAnalysis testResultsAnalysis = new TestResultsAnalyzer().generateAnalysis(testResultDescrs, 0, 1);
-		for(int i = 0; i<testResultsAnalysis.getCulpritCount(); i++)
+		TestResultsAnalysis testResultsAnalysis = new TestResultsAnalyzer().generateAnalysis(testResultDescrs, 0, 3);
+		for (int i = 0; i<testResultsAnalysis.getCulpritCount(); i++)
 		{
 			TableItem item = new TableItem(table, SWT.NONE);
 			int c = 0;
-			item.setText(c++, "-");
+			item.setText(c++, testResultsAnalysis.getCulprit(i).getItem().toString());
 			item.setText(c++, Integer.toString(testResultsAnalysis.getCulprit(i).getOccurenceCount()));
 			item.setText(c++, Integer.toString(testResultsAnalysis.getCulprit(i).getFailureCount()));
 			item.setText(c++, Integer.toString(testResultsAnalysis.getCulprit(i).getFailureIndex()));
@@ -135,21 +128,18 @@ public class CulpritAnalysisDialog extends TitleAreaDialog{
 	}
 	
 	private void addTestResult(
-			String[] testArguments, boolean result, List<TestResultDescription> testResultDescrs) {
-
+			String[] testArguments, boolean result, List<TestResultDescription> testResultDescrs) 
+	{
 		List<String> testArgList = new ArrayList<String>();
-
 		for (String testArgument : testArguments) {
 			testArgList.add(testArgument);
 		}
-
 		testResultDescrs.add(new TestResultDescription(testArgList, result));
 	}
 	
 	public List<TestResultDescription> createtestResultDescrs()
 	{
 		List<TestResultDescription> testResultDescrs = new ArrayList<TestResultDescription>();
-
 		addTestResult(new String[]{ "1", "2", "3", "4", "5" }, false, testResultDescrs);
 		addTestResult(new String[]{ "0", "2", "3", "5", "4" }, false, testResultDescrs);
 		addTestResult(new String[]{ "5", "2", "3", "7", "8" }, true, testResultDescrs);
