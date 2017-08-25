@@ -22,6 +22,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -85,18 +86,23 @@ public class CulpritAnalysisDialog extends TitleAreaDialog{
 	protected Control createDialogArea(Composite parent)
 	{
 		Composite dialogArea = (Composite) super.createDialogArea(parent);
-		Composite ChildComp = (Composite) fDialogObjectToolkit.createGridComposite(dialogArea, 1);
+		Composite LabelComposite = (Composite) fDialogObjectToolkit.createGridComposite(dialogArea, 1);
 		final String text = "Select tuple size for combinatoric analysis";
-		createLabel(ChildComp, text);
-		Composite ChildComp2 = (Composite) fDialogObjectToolkit.createGridComposite(dialogArea, 4);
-		createLabel(ChildComp2, "min");
-		createCombo(ChildComp2, 0);
-		createLabel(ChildComp2, "max");
-		createCombo(ChildComp2, 2);
-		Composite ChildComp3 = (Composite) fDialogObjectToolkit.createGridComposite(dialogArea, 2);
-		table = createTableContents(ChildComp3, 4);
-		Button NextButton = fDialogObjectToolkit.createButton(ChildComp3, "Next Page", new NextButtonSelectionAdapter());
-		Button PrevButton = fDialogObjectToolkit.createButton(ChildComp3, "Previous Page", new PrevButtonSelectionAdapter());
+		createLabel(LabelComposite, text);
+		Composite ComboComposite = (Composite) fDialogObjectToolkit.createGridComposite(dialogArea, 4);
+		createLabel(ComboComposite, "min");
+		createCombo(ComboComposite, 0);
+		createLabel(ComboComposite, "max");
+		createCombo(ComboComposite, 2);
+		Composite TableComposite = (Composite) fDialogObjectToolkit.createGridComposite(dialogArea, 1);
+		table = createTableContents(TableComposite, 4);
+		Composite ButtonComposite = (Composite) fDialogObjectToolkit.createGridComposite(dialogArea, 2);
+		Button PrevButton = fDialogObjectToolkit.createButton(ButtonComposite, "Previous Page", new PrevButtonSelectionAdapter());
+		Button NextButton = fDialogObjectToolkit.createButton(ButtonComposite, "Next Page", new NextButtonSelectionAdapter());
+		PrevButton.setLayoutData(new GridData(SWT.RIGHT, SWT.RIGHT, true, true));
+		NextButton.setLayoutData(new GridData(SWT.RIGHT, SWT.RIGHT, false, false));
+
+
 		return dialogArea;
 	}
 	
