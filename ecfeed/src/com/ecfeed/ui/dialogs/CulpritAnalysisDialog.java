@@ -18,10 +18,13 @@ import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ControlAdapter;
+import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
@@ -51,10 +54,13 @@ import com.ecfeed.ui.dialogs.basic.DialogObjectToolkit;
 
 public class CulpritAnalysisDialog extends TitleAreaDialog{
 	private DialogObjectToolkit fDialogObjectToolkit;
+	private int count = 0;
 	private int numRow = 0;
-	Table table = null;
+	private Table table = null;
 	private List<TestResultDescription> testResultDescrs = createtestResultDescrs();
-	private TestResultsAnalysis testResultsAnalysis = new TestResultsAnalyzer().generateAnalysis(testResultDescrs, 0, 3);
+	private TestResultsAnalysis testResultsAnalysis = new TestResultsAnalyzer().generateAnalysis(testResultDescrs, 2, 5);
+	
+	
 
 	public CulpritAnalysisDialog(Shell parent) 
 	{
@@ -83,6 +89,12 @@ public class CulpritAnalysisDialog extends TitleAreaDialog{
 	}
 	
 	@Override
+	protected boolean isResizable()
+	{
+		return true;
+	}
+	
+	@Override
 	protected Control createDialogArea(Composite parent)
 	{
 		Composite dialogArea = (Composite) super.createDialogArea(parent);
@@ -101,8 +113,6 @@ public class CulpritAnalysisDialog extends TitleAreaDialog{
 		Button NextButton = fDialogObjectToolkit.createButton(ButtonComposite, "Next Page", new NextButtonSelectionAdapter());
 		PrevButton.setLayoutData(new GridData(SWT.RIGHT, SWT.RIGHT, true, true));
 		NextButton.setLayoutData(new GridData(SWT.RIGHT, SWT.RIGHT, false, false));
-
-
 		return dialogArea;
 	}
 	
@@ -119,33 +129,96 @@ public class CulpritAnalysisDialog extends TitleAreaDialog{
 	private Table createTableContents(Composite parentComposite, int ColumnNr)
 	{
 		Table table = fDialogObjectToolkit.createTable(parentComposite);
-		String[] ColumnNames = {"NumTuple", "Tuple", "Occurences", "Fails", "Failure Index"};
+		String[] ColumnNames = {"Rank", "Tuple", "Failure Index", "Occurences", "Fails"};
 		TableColumn[] column = fDialogObjectToolkit.addColumn(table, 5, ColumnNames);
 		fillTable(table, testResultDescrs);
+		
 		for (int i = 0; i< column.length; i++)
 		{
 			column[i].pack();
 		}
+		MakeColumnResizable(parentComposite, column);
 		return table;
 	}
 	
 	private void fillTable(Table table, List<TestResultDescription> testResultDescrs ) {
+		
 		table.setRedraw(false);
 		
-			for (int i = numRow; i<numRow+27; i++)
+		if(numRow == 0)
+		{
+			if(testResultsAnalysis.getCulpritCount() > 31)
 			{
-				TableItem item = new TableItem(table, SWT.NONE);
-				int c = 0;
-				item.setText(c++, Integer.toString(i));
-				item.setText(c++, testResultsAnalysis.getCulprit(i).getItem().toString());
-				item.setText(c++, Integer.toString(testResultsAnalysis.getCulprit(i).getOccurenceCount()));
-				item.setText(c++, Integer.toString(testResultsAnalysis.getCulprit(i).getFailureCount()));
-				item.setText(c++, Integer.toString(testResultsAnalysis.getCulprit(i).getFailureIndex()));
+				numRow = 31;
 			}
+			else
+			{
+				numRow = testResultsAnalysis.getCulpritCount();
+			}
+		}
 		
+		while(count < numRow)
+		{
+			testResultsAnalysis.calculateFailureIndexes();
+			TableItem item = new TableItem(table, SWT.NONE);
+			int c = 0;
+			item.setText(c++, Integer.toString(count+1));
+			item.setText(c++, testResultsAnalysis.getCulprit(count).getItem().toString());
+			item.setText(c++, String.valueOf(testResultsAnalysis.getCulprit(count).getFailureIndex()));
+			item.setText(c++, Integer.toString(testResultsAnalysis.getCulprit(count).getOccurenceCount()));
+			item.setText(c++, Integer.toString(testResultsAnalysis.getCulprit(count).getFailureCount()));
+			count++;
+		}
 		table.setRedraw(true);	
 	}
 	
+	private void MakeColumnResizable(Composite parentComposite, TableColumn[] column) {
+
+		parentComposite.addControlListener(new ControlAdapter(){
+			public void controlResized(ControlEvent e)
+			{
+				Rectangle area = parentComposite.getClientArea();
+				Point preferredSize = table.computeSize(SWT.DEFAULT, SWT.DEFAULT);
+				int width = area.width - 2*table.getBorderWidth();
+				if (preferredSize.y > area.height + table.getHeaderHeight())
+				{
+					Point vBarSize = table.getVerticalBar().getSize();
+					width -= vBarSize.x;
+				}
+				Point oldSize = table.getSize();
+				if (oldSize.x > area.width)
+				{
+					for (int i = 0; i < column.length; i++)
+					{
+						if (i == 1) //More space needed to describe the tuple
+						{
+							column[i].setWidth(width / 2);
+						}
+						else
+						{
+							column[i].setWidth(((width - width / 3))/(column.length));
+						}
+					}
+					table.setSize(area.width, area.height);
+				}
+				else{
+					table.setSize(area.width, area.height);
+					for (int i = 0; i < column.length; i++)
+					{
+						if (i == 1) //More space needed to describe the tuple
+						{
+							column[i].setWidth(width / 2);
+						}
+						else
+						{
+							column[i].setWidth((width - width / 3)/(column.length));
+						}
+					}
+
+				}
+			}
+		});	
+	}
 	private void addTestResult(
 			String[] testArguments, boolean result, List<TestResultDescription> testResultDescrs) 
 	{
@@ -166,60 +239,51 @@ public class CulpritAnalysisDialog extends TitleAreaDialog{
 		addTestResult(new String[]{ "2", "4", "5", "3", "8" }, true, testResultDescrs);
 		return testResultDescrs;
 	}
+	
+	
 	class NextButtonSelectionAdapter extends SelectionAdapter {
+		
 		@Override
 		public void widgetSelected(SelectionEvent arg0)
 		{
 			int total = testResultsAnalysis.getCulpritCount();
-			if(total - numRow >= 28)
+			if (total - numRow >= 31)
 			{
-				numRow = numRow + 28;
-				System.out.println("number of rows"+ numRow);
+				numRow = numRow + 31;
+				table.removeAll();
+				fillTable(table, testResultDescrs);
 			}
-			else{
-				numRow = numRow + (total-numRow);
-			}
-			if(numRow < total)
-			{
-			table.removeAll();
-			fillTable(table, testResultDescrs);
+			else if (numRow < total){
+				numRow = total;
+				table.removeAll();
+				fillTable(table, testResultDescrs);
 			}
 		}
-		
-		@Override
-		public void widgetDefaultSelected(SelectionEvent e)
-		{
-
-		}
-	
 	}
+	
+	
 	class PrevButtonSelectionAdapter extends SelectionAdapter {
+		
 		@Override
 		public void widgetSelected(SelectionEvent arg0)
 		{
-			int total = testResultsAnalysis.getCulpritCount();
-			if(numRow >= 28)
+			if(numRow >= 31 && count >= 31*2)
 			{
-				numRow = numRow - 28;
-				System.out.println("number of rows"+ numRow);
+				numRow = numRow - 31;
+				count = count - 31 * 2;
+				table.removeAll();
+				fillTable(table, testResultDescrs);
 			}
-			else{
-				System.out.println("number of rows"+ numRow);
-			}
-			if(numRow < total)
+			else if(count - 31 * 2 < 0)
 			{
-			table.removeAll();
-			fillTable(table, testResultDescrs);
+				count = 0;
+				numRow = 31;
+				table.removeAll();
+				fillTable(table, testResultDescrs);
 			}
 		}
-		
-		@Override
-		public void widgetDefaultSelected(SelectionEvent e)
-		{
-
-		}
-	
 	}
+
 
 	public static void main(String[] args)
 	{

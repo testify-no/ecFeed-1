@@ -151,6 +151,7 @@ public class DialogObjectToolkit {
 	
 	public Table createTable(Composite parent)
 	{
+		//parent.setLayout(new FillLayout());
 		TableViewer viewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL| SWT.V_SCROLL | SWT.FULL_SELECTION| SWT.BORDER | SWT.TOP);
 		
 		final Table table = viewer.getTable();
@@ -158,8 +159,10 @@ public class DialogObjectToolkit {
 		table.setLinesVisible(true);
 		viewer.setContentProvider(ArrayContentProvider.getInstance());
 		
-		GridData gridData = createTableGrid();
-        viewer.getControl().setLayoutData(gridData);
+		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
+		viewer.getControl().setLayoutData(gridData);
+		//GridData gridData = createTableGrid();
+        //viewer.getControl().setLayoutData(gridData);
 		return table;
 	}
 	
