@@ -16,14 +16,16 @@ import com.ecfeed.core.utils.StringHelper;
 public class AboutDialogHelper {
 
 	public static String createAboutInformation() {
-		return createAboutInformation(null);
+		return createAboutInformation("com.ecfeed", null);
 	}
 
-	public static String createAboutInformation(String rapVersionInfo) {
+	public static String createAboutInformation(String mainBundleName, String rapVersionInfo) {
 
 		StringBuilder stringBuilder = new StringBuilder();
 
-		stringBuilder.append("     ecFeed for Eclipse, version " + ApplicationContext.getEcFeedVersion() + "\n");
+		stringBuilder.append(
+				"     ecFeed for Eclipse, version " + 
+						ApplicationContext.getEcFeedVersion(mainBundleName) + "\n");
 
 		if (!StringHelper.isNullOrEmpty(rapVersionInfo)) {
 			stringBuilder.append("     "); 

@@ -51,8 +51,12 @@ public class ApplicationContext {
 	}
 
 	public static String getEcFeedVersion() {
+		return getEcFeedVersion("com.ecfeed");	
+	}
+	
+	public static String getEcFeedVersion(String mainBundleName) {
 
-		Bundle bundle = Platform.getBundle("com.ecfeed");
+		Bundle bundle = Platform.getBundle(mainBundleName);
 
 		if (bundle == null) {
 			return null;
