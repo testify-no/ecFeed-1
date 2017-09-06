@@ -159,6 +159,30 @@ public class TestResultsAnalysisTest {
 	}
 	
 	@Test
+	public void ShouldCalculateFailureIndexWith5Dim()
+	{
+		List<TestResultDescription> fTestResultDescrs = createtestResultDescrs();
+		TestResultsAnalysis fTestResultsAnalysis 
+		= new TestResultsAnalyzer().generateAnalysis(fTestResultDescrs, 1, 1);
+		
+		int failureCount0 = fTestResultsAnalysis.getCulprit(0).getFailureCount();
+		int occurenceCount0 = fTestResultsAnalysis.getCulprit(0).getOccurenceCount();
+		int total = fTestResultDescrs.size();
+		double expectedIndex = 100*(100*failureCount0/occurenceCount0) + (100*occurenceCount0/total);
+		double actualIndex = fTestResultsAnalysis.getCulprit(0).getFailureIndex();
+		assertEquals(expectedIndex, actualIndex, 0.0);
+		
+		TestResultsAnalysis fTestResultsAnalysis2 
+		= new TestResultsAnalyzer().generateAnalysis(fTestResultDescrs, 2, 5);
+		int failureCount5 = fTestResultsAnalysis2.getCulprit(4).getFailureCount();
+		int occurenceCount5 = fTestResultsAnalysis2.getCulprit(4).getOccurenceCount();
+		double expectedIndex5 = 100*(100*failureCount5/occurenceCount5) + (100*occurenceCount5/total);
+		double actualIndex5 = fTestResultsAnalysis2.getCulprit(0).getFailureIndex();
+		assertEquals(expectedIndex5, actualIndex5, 0.0);
+		
+	}
+	
+	@Test
 	public void ShouldFindCulprit()
 	{
 		TestResultsAnalysis testresultanalysis = new TestResultsAnalysis();
@@ -207,6 +231,31 @@ public class TestResultsAnalysisTest {
 		}
 
 		return true;
+	}
+	
+	private void addTestResult(
+			String[] testArguments, boolean result, List<TestResultDescription> testResultDescrs) {
+
+		List<String> testArgList = new ArrayList<String>();
+
+		for (String testArgument : testArguments) {
+			testArgList.add(testArgument);
+		}
+
+		testResultDescrs.add(new TestResultDescription(testArgList, result));
+	}
+
+	public List<TestResultDescription> createtestResultDescrs()	{ 
+
+		List<TestResultDescription> testResultDescrs = new ArrayList<TestResultDescription>();
+
+		addTestResult(new String[]{ "1", "2", "3", "4", "5" }, false, testResultDescrs);
+		addTestResult(new String[]{ "0", "2", "3", "5", "4" }, false, testResultDescrs);
+		addTestResult(new String[]{ "5", "2", "3", "7", "8" }, true, testResultDescrs);
+		addTestResult(new String[]{ "7", "7", "3", "9", "8" }, false, testResultDescrs);
+		addTestResult(new String[]{ "2", "4", "5", "3", "8" }, true, testResultDescrs);
+
+		return testResultDescrs;
 	}
 
 }
