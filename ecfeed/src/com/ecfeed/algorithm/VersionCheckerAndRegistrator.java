@@ -55,14 +55,14 @@ public class VersionCheckerAndRegistrator {
 		}
 
 		String operatingSystem;
-		if (ApplicationContext.isStandaloneApplication()) {
+		if (ApplicationContext.isApplicationTypeLocalStandalone()) {
 			operatingSystem = SystemHelper.getOperatingSystemType();
 		} else {
 			operatingSystem = "All";
 		}
 
 		String productType;
-		if (ApplicationContext.isStandaloneApplication()) {
+		if (ApplicationContext.isApplicationTypeLocalStandalone()) {
 			productType = "ES";
 		} else {
 			productType = "EP";

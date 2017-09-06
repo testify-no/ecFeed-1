@@ -18,27 +18,60 @@ import com.ecfeed.core.utils.StringHelper;
 
 public class ApplicationContext {
 
-	static boolean fIsStandaloneApplication = false;
+	private enum ApplicationType {
+		LOCAL_PLUGIN,
+		LOCAL_STANDALONE,
+		REMOTE_RAP
+	}
+
+	static ApplicationType fApplicationType = ApplicationType.LOCAL_PLUGIN;
 	static String fExportFileName;
 
-	public static boolean isStandaloneApplication() {
+	public static boolean isApplicationTypeLocalStandalone() {
 
-		return fIsStandaloneApplication;
+		if (fApplicationType == ApplicationType.LOCAL_STANDALONE) {
+			return true;
+		}
+
+		return false;
 	}
+
+	public static boolean isApplicationTypeLocalPlugin() {
+
+		if (fApplicationType == ApplicationType.LOCAL_PLUGIN) {
+			return true;
+		}
+
+		return false;
+	}	
+
+	public static boolean isApplicationTypeRemoteRap() {
+
+		if (fApplicationType == ApplicationType.REMOTE_RAP) {
+			return true;
+		}
+
+		return false;
+	}	
 
 	public static boolean isProjectAvailable() {
 
-		if (fIsStandaloneApplication) {
-			return false;
+		if (isApplicationTypeLocalPlugin()) {
+			return true;
 		}
 
-		return true;
+		return false;
 	}
 
-	public static void setStandaloneApplication() {
+	public static void setApplicationTypeLocalStandalone() {
 
-		fIsStandaloneApplication = true;
+		fApplicationType = ApplicationType.LOCAL_STANDALONE;
 	}
+
+	public static void setApplicationTypeRemoteRap() {
+
+		fApplicationType = ApplicationType.REMOTE_RAP;
+	}	
 
 	public static void setExportTargetFile(String exportFileName) {
 
@@ -53,7 +86,7 @@ public class ApplicationContext {
 	public static String getEcFeedVersion() {
 		return getEcFeedVersion("com.ecfeed");	
 	}
-	
+
 	public static String getEcFeedVersion(String mainBundleName) {
 
 		Bundle bundle = Platform.getBundle(mainBundleName);

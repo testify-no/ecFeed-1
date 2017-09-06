@@ -84,7 +84,7 @@ public class ModelMasterSection extends TreeViewerSection {
 		fMasterDetailsBlock = parentBlock;
 
 		boolean includeDeleteAction = false;
-		if (ApplicationContext.isStandaloneApplication()) {
+		if (ApplicationContext.isApplicationTypeLocalStandalone()) {
 			includeDeleteAction = true;
 		}
 
@@ -366,7 +366,7 @@ public class ModelMasterSection extends TreeViewerSection {
 				return true;
 			}
 
-			if (ApplicationContext.isStandaloneApplication()) {
+			if (ApplicationContext.isApplicationTypeLocalStandalone()) {
 				return false;
 			}
 

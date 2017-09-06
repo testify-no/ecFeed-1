@@ -255,7 +255,7 @@ public class CheckForUpdatesDialog extends TitleAreaDialog {
 
 	private String createDownloadInstructions() {
 
-		if (ApplicationContext.isStandaloneApplication()) {
+		if (ApplicationContext.isApplicationTypeLocalStandalone()) {
 			return "You can download the new version from:\nhttp://ecfeed.com/index.php/download/\n";
 		}
 

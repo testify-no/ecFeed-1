@@ -174,7 +174,7 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 
 	private boolean isReplaceButtonEnabledForUserType() {
 
-		if (ApplicationContext.isStandaloneApplication()) {
+		if (ApplicationContext.isApplicationTypeLocalStandalone()) {
 			return false;
 		} 
 
