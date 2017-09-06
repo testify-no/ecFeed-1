@@ -39,11 +39,11 @@ import com.ecfeed.ui.dialogs.basic.DialogObjectToolkit;
 public class CulpritAnalysisDialog extends TitleAreaDialog {
 
 	private DialogObjectToolkit fDialogObjectToolkit;
-	private int count = 0;
-	private int numRow = 0;
-	private Table table = null;
-	private List<TestResultDescription> testResultDescrs = createtestResultDescrs();
-	private TestResultsAnalysis testResultsAnalysis = new TestResultsAnalyzer().generateAnalysis(testResultDescrs, 2, 5);
+	private int fCount = 0;
+	private int fNumRow = 0;
+	private Table fTable = null;
+	private List<TestResultDescription> fTestResultDescrs = createtestResultDescrs();
+	private TestResultsAnalysis fTestResultsAnalysis = new TestResultsAnalyzer().generateAnalysis(fTestResultDescrs, 2, 5);
 
 	public CulpritAnalysisDialog(Shell parent) {
 		super(parent);
@@ -88,7 +88,7 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 		createCombo(ComboComposite, 2);
 
 		Composite TableComposite = (Composite) fDialogObjectToolkit.createGridComposite(dialogArea, 1);
-		table = createTableContents(TableComposite, 4);
+		fTable = createTableContents(TableComposite, 4);
 
 		Composite ButtonComposite = (Composite) fDialogObjectToolkit.createGridComposite(dialogArea, 2);
 
@@ -119,7 +119,7 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 		Table table = fDialogObjectToolkit.createTable(parentComposite);
 		String[] ColumnNames = {"Rank", "Tuple", "Failure Index", "Occurences", "Fails"};
 		TableColumn[] column = fDialogObjectToolkit.addColumn(table, 5, ColumnNames);
-		fillTable(table, testResultDescrs);
+		fillTable(table, fTestResultDescrs);
 
 		for (int i = 0; i< column.length; i++) {
 			column[i].pack();
@@ -133,24 +133,24 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 
 		table.setRedraw(false);
 
-		if (numRow == 0) {
-			if (testResultsAnalysis.getCulpritCount() > 31) {
-				numRow = 31;
+		if (fNumRow == 0) {
+			if (fTestResultsAnalysis.getCulpritCount() > 31) {
+				fNumRow = 31;
 			} else {
-				numRow = testResultsAnalysis.getCulpritCount();
+				fNumRow = fTestResultsAnalysis.getCulpritCount();
 			}
 		}
 
-		while(count < numRow) {
-			testResultsAnalysis.calculateFailureIndexes();
+		while(fCount < fNumRow) {
+			fTestResultsAnalysis.calculateFailureIndexes();
 			TableItem item = new TableItem(table, SWT.NONE);
 			int c = 0;
-			item.setText(c++, Integer.toString(count+1));
-			item.setText(c++, testResultsAnalysis.getCulprit(count).getItem().toString());
-			item.setText(c++, String.valueOf(testResultsAnalysis.getCulprit(count).getFailureIndex()));
-			item.setText(c++, Integer.toString(testResultsAnalysis.getCulprit(count).getOccurenceCount()));
-			item.setText(c++, Integer.toString(testResultsAnalysis.getCulprit(count).getFailureCount()));
-			count++;
+			item.setText(c++, Integer.toString(fCount+1));
+			item.setText(c++, fTestResultsAnalysis.getCulprit(fCount).getItem().toString());
+			item.setText(c++, String.valueOf(fTestResultsAnalysis.getCulprit(fCount).getFailureIndex()));
+			item.setText(c++, Integer.toString(fTestResultsAnalysis.getCulprit(fCount).getOccurenceCount()));
+			item.setText(c++, Integer.toString(fTestResultsAnalysis.getCulprit(fCount).getFailureCount()));
+			fCount++;
 		}
 
 		table.setRedraw(true);	
@@ -174,15 +174,15 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 		public void controlResized(ControlEvent e) {
 
 			Rectangle area = fParentComposite.getClientArea();
-			Point preferredSize = table.computeSize(SWT.DEFAULT, SWT.DEFAULT);
-			int width = area.width - 2 * table.getBorderWidth();
+			Point preferredSize = fTable.computeSize(SWT.DEFAULT, SWT.DEFAULT);
+			int width = area.width - 2 * fTable.getBorderWidth();
 
-			if (preferredSize.y > area.height + table.getHeaderHeight()) {
-				Point vBarSize = table.getVerticalBar().getSize();
+			if (preferredSize.y > area.height + fTable.getHeaderHeight()) {
+				Point vBarSize = fTable.getVerticalBar().getSize();
 				width -= vBarSize.x;
 			}
 
-			Point oldSize = table.getSize();
+			Point oldSize = fTable.getSize();
 
 			if (oldSize.x > area.width) {
 
@@ -194,11 +194,11 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 					}
 				}
 
-				table.setSize(area.width, area.height);
+				fTable.setSize(area.width, area.height);
 
 			} else {
 
-				table.setSize(area.width, area.height);
+				fTable.setSize(area.width, area.height);
 
 				for (int i = 0; i < fColumn.length; i++) {
 
@@ -243,16 +243,16 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 		@Override
 		public void widgetSelected(SelectionEvent arg0)
 		{
-			int total = testResultsAnalysis.getCulpritCount();
+			int total = fTestResultsAnalysis.getCulpritCount();
 
-			if (total - numRow >= 31) {
-				numRow = numRow + 31;
-				table.removeAll();
-				fillTable(table, testResultDescrs);
-			} else if (numRow < total) {
-				numRow = total;
-				table.removeAll();
-				fillTable(table, testResultDescrs);
+			if (total - fNumRow >= 31) {
+				fNumRow = fNumRow + 31;
+				fTable.removeAll();
+				fillTable(fTable, fTestResultDescrs);
+			} else if (fNumRow < total) {
+				fNumRow = total;
+				fTable.removeAll();
+				fillTable(fTable, fTestResultDescrs);
 			}
 		}
 	}
@@ -262,16 +262,16 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 		@Override
 		public void widgetSelected(SelectionEvent arg0) {
 
-			if (numRow >= 31 && count >= 31*2) {
-				numRow = numRow - 31;
-				count = count - 31 * 2;
-				table.removeAll();
-				fillTable(table, testResultDescrs);
-			} else if(count - 31 * 2 < 0) {
-				count = 0;
-				numRow = 31;
-				table.removeAll();
-				fillTable(table, testResultDescrs);
+			if (fNumRow >= 31 && fCount >= 31*2) {
+				fNumRow = fNumRow - 31;
+				fCount = fCount - 31 * 2;
+				fTable.removeAll();
+				fillTable(fTable, fTestResultDescrs);
+			} else if(fCount - 31 * 2 < 0) {
+				fCount = 0;
+				fNumRow = 31;
+				fTable.removeAll();
+				fillTable(fTable, fTestResultDescrs);
 			}
 		}
 	}
