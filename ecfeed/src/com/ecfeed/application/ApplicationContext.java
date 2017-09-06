@@ -45,6 +45,20 @@ public class ApplicationContext {
 		return false;
 	}	
 
+	public static boolean isApplicationTypeLocal() {
+
+		if (isApplicationTypeLocalStandalone()) {
+			return true;
+		}
+
+		if (isApplicationTypeLocalPlugin()) {
+			return true;
+		}
+
+		return false;
+	}	
+
+
 	public static boolean isApplicationTypeRemoteRap() {
 
 		if (fApplicationType == ApplicationType.REMOTE_RAP) {

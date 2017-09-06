@@ -89,7 +89,9 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 
 		addForm(fCommentsSection = getCommentsSection(this, getModelUpdateContext()));
 
-		fWebParameterSection = createWebParameterSection();
+		if (ApplicationContext.isApplicationTypeLocal()) {
+			fWebParameterSection = createWebParameterSection();
+		}
 
 		addForm(fChoicesViewer = new ChoicesViewer(this, getModelUpdateContext(), getJavaProjectProvider()));
 

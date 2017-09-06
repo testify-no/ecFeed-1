@@ -73,7 +73,10 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		createMethodNameWidgets();
 		createTestAndExportButtons();
 		createRunnerCombo();
-		createRunnerSection();
+
+		if (ApplicationContext.isApplicationTypeLocal()) {
+			createRunnerSection();
+		}
 
 		addCommentsSection();
 
@@ -211,6 +214,11 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	}
 
 	private void refreshRunnerSection(MethodNode methodNode) {
+
+		if (fRunnerSection == null) {
+			return;
+		}
+
 		fRunnerSection.refresh();
 
 		String runner = methodNode.getPropertyValue(fRunnerPropertyId);
