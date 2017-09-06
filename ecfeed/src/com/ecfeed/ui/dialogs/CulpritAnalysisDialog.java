@@ -42,10 +42,13 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 	private int fCount = 0;
 	private int fNumRow = 0;
 	private Table fTable = null;
-	private List<TestResultDescription> fTestResultDescrs = createtestResultDescrs();
-	private TestResultsAnalysis fTestResultsAnalysis = new TestResultsAnalyzer().generateAnalysis(fTestResultDescrs, 2, 5);
+	private List<TestResultDescription> fTestResultDescrs = createtestResultDescrs(); // MDX move create... to constructor
+	private TestResultsAnalysis fTestResultsAnalysis 
+	= new TestResultsAnalyzer().generateAnalysis(fTestResultDescrs, 2, 5); // MDX move creation to contructor
+	// MDX please define 2 and 5 as final variables (no magic numbers)
 
-	public CulpritAnalysisDialog(Shell parent) {
+
+	public CulpritAnalysisDialog(Shell parent) { // MDX do we need both constructors ? 
 		super(parent);
 		fDialogObjectToolkit = DialogObjectToolkit.getInstance();
 	}
@@ -55,7 +58,7 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 		fDialogObjectToolkit = DialogObjectToolkit.getInstance();
 	}
 
-	public void run() {
+	public void run() { // MDX do we need this now ?
 		setBlockOnOpen(true);
 		open();
 		Display.getCurrent().dispose();
@@ -102,12 +105,14 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 
 		PrevButton.setLayoutData(new GridData(SWT.RIGHT, SWT.RIGHT, true, true));
 		NextButton.setLayoutData(new GridData(SWT.RIGHT, SWT.RIGHT, false, false));
+		
+		// MDX convert PrevButton and NextButton to class fields + call e.g fPrevButton.setEnabled methods
 
 		return dialogArea;
 	}
 
 	private void createCombo(Composite parentComposite, int defaultValue) {
-		fDialogObjectToolkit.createCombo(parentComposite, 10, defaultValue);	
+		fDialogObjectToolkit.createCombo(parentComposite, 10, defaultValue); // MDX define 10 as final variable
 	}
 
 	private void createLabel(Composite parentComposite, String text) {
@@ -125,7 +130,7 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 			column[i].pack();
 		}
 
-		MakeColumnResizable(parentComposite, column);
+		MakeColumnResizable(parentComposite, column); // MDX method starts with lowercase 
 		return table;
 	}
 
@@ -133,8 +138,9 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 
 		table.setRedraw(false);
 
+		// MDX extract to a method e.g. initializeRowCount
 		if (fNumRow == 0) {
-			if (fTestResultsAnalysis.getCulpritCount() > 31) {
+			if (fTestResultsAnalysis.getCulpritCount() > 31) {  // MDX magic numbers to final variables
 				fNumRow = 31;
 			} else {
 				fNumRow = fTestResultsAnalysis.getCulpritCount();
@@ -143,6 +149,8 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 
 		while(fCount < fNumRow) {
 			fTestResultsAnalysis.calculateFailureIndexes();
+
+			// MDX extract code to a method createTableItem
 			TableItem item = new TableItem(table, SWT.NONE);
 			int c = 0;
 			item.setText(c++, Integer.toString(fCount+1));
@@ -173,6 +181,8 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 		@Override
 		public void controlResized(ControlEvent e) {
 
+			// MDX method too complex - divide into smaller methods
+
 			Rectangle area = fParentComposite.getClientArea();
 			Point preferredSize = fTable.computeSize(SWT.DEFAULT, SWT.DEFAULT);
 			int width = area.width - 2 * fTable.getBorderWidth();
@@ -187,6 +197,7 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 			if (oldSize.x > area.width) {
 
 				for (int i = 0; i < fColumn.length; i++) {
+
 					if (i == 1) { //More space needed to describe the tuple
 						fColumn[i].setWidth(width / 2);
 					} else {
@@ -200,6 +211,7 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 
 				fTable.setSize(area.width, area.height);
 
+				// MDX similar code as above - extract to a method e.g. calculateColumnWidths
 				for (int i = 0; i < fColumn.length; i++) {
 
 					if (i == 1) { //More space needed to describe the tuple
@@ -225,7 +237,7 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 		testResultDescrs.add(new TestResultDescription(testArgList, result));
 	}
 
-	public List<TestResultDescription> createtestResultDescrs()	{
+	public List<TestResultDescription> createtestResultDescrs()	{ // MDX to be removed after connecting to a real dialog
 
 		List<TestResultDescription> testResultDescrs = new ArrayList<TestResultDescription>();
 
@@ -245,7 +257,7 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 		{
 			int total = fTestResultsAnalysis.getCulpritCount();
 
-			if (total - fNumRow >= 31) {
+			if (total - fNumRow >= 31) { // MDX magic number
 				fNumRow = fNumRow + 31;
 				fTable.removeAll();
 				fillTable(fTable, fTestResultDescrs);
@@ -262,7 +274,7 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 		@Override
 		public void widgetSelected(SelectionEvent arg0) {
 
-			if (fNumRow >= 31 && fCount >= 31*2) {
+			if (fNumRow >= 31 && fCount >= 31*2) { // MDX similar code as above - maybe extract to methods 
 				fNumRow = fNumRow - 31;
 				fCount = fCount - 31 * 2;
 				fTable.removeAll();
@@ -276,7 +288,7 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 		}
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) { // MDX do we need this ?
 		new CulpritAnalysisDialog().run();
 	}
 

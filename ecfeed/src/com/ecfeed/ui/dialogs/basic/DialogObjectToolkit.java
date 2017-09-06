@@ -135,10 +135,11 @@ public class DialogObjectToolkit {
 	public Combo createCombo(Composite parent, int maxLimit, int defaultValue)
 	{
 		final Combo combo = new Combo(parent, SWT.VERTICAL | SWT.DROP_DOWN | SWT.BORDER | SWT.READ_ONLY);
-		for(int i = 1; i < maxLimit; i++)
-		{
+		
+		for (int i = 1; i < maxLimit; i++) { // MDX this is not an universal method - divide to creating combo, but add integers in the dialog
 			combo.add(Integer.toString(i));
 		}
+		
 		combo.select(defaultValue);
 		return combo;
 	}
