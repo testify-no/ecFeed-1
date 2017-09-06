@@ -172,8 +172,10 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 						"Remove selected", 
 						new RemoveSelectedAdapter(Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
 
-		fExecuteSelectedButton = 
-				addButton("Execute selected", new ExecuteStaticTestAdapter());
+		if (ApplicationContext.isApplicationTypeLocal()) {
+			fExecuteSelectedButton = 
+					addButton("Execute selected", new ExecuteStaticTestAdapter());
+		}
 
 		fExportTestCasesButton = 
 				addButton("Export selected", new ExportTestCasesAdapter());
@@ -187,7 +189,10 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 		boolean testCasesExist = getSelectedMethod().hasTestCases();
 		fRenameSuiteButton.setEnabled(testCasesExist);
 		fCalculateCoverageButton.setEnabled(testCasesExist && parametersExist);
-		fExecuteSelectedButton.setEnabled(executionEnabled());
+
+		if (fExecuteSelectedButton != null) {
+			fExecuteSelectedButton.setEnabled(executionEnabled());
+		}
 
 		boolean selectedTestCasesExist = anyTestCaseSelected();
 		fExportTestCasesButton.setEnabled(selectedTestCasesExist);
@@ -231,11 +236,11 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 		tree.addListener(SWT.Selection, new Listener() {
 			@Override
 			public void handleEvent(Event event) {
-				if (event.detail == SWT.CHECK && ApplicationContext.isProjectAvailable()) {
+
+				if (fExecuteSelectedButton != null) {
 					fExecuteSelectedButton.setEnabled(executionEnabled());
 				}
 
-				fExecuteSelectedButton.setEnabled(executionEnabled());
 				boolean anySelected = anyTestCaseSelected();
 				fExportTestCasesButton.setEnabled(anySelected);
 				fRemoveSelectedButton.setEnabled(anySelected);

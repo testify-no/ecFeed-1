@@ -72,9 +72,9 @@ public class MethodDetailsPage extends BasicDetailsPage {
 
 		createMethodNameWidgets();
 		createTestAndExportButtons();
-		createRunnerCombo();
 
 		if (ApplicationContext.isApplicationTypeLocal()) {
+			createRunnerCombo();
 			createRunnerSection();
 		}
 
@@ -140,8 +140,11 @@ public class MethodDetailsPage extends BasicDetailsPage {
 
 		EcFormToolkit formObjectToolkit = getEcFormToolkit();
 
-		fTestOnlineButton = formObjectToolkit.createButton(
-				childComposite, "Test online...", new OnlineTestAdapter());
+		if (ApplicationContext.isApplicationTypeLocal()) {
+			fTestOnlineButton = 
+					formObjectToolkit.createButton(
+							childComposite, "Test online...", new OnlineTestAdapter());
+		}
 
 		fExportOnlineButton = formObjectToolkit.createButton(
 				childComposite, "Export online...", new OnlineExportAdapter());
@@ -207,6 +210,11 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	}
 
 	private void refreshRunnerCombo(MethodNode methodNode) {
+
+		if (fRunnerCombo == null) {
+			return;
+		}
+
 		String methodRunner = methodNode.getPropertyValue(fRunnerPropertyId);
 		if (methodRunner != null) {
 			fRunnerCombo.setText(methodRunner);
@@ -230,6 +238,11 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	}
 
 	private void refrestTestOnlineButton() {
+
+		if (fTestOnlineButton == null) {
+			return;
+		}
+
 		EImplementationStatus methodImplementationStatus = null;
 		if (ApplicationContext.isProjectAvailable()) {
 			methodImplementationStatus = fMethodInterface.getImplementationStatus();
