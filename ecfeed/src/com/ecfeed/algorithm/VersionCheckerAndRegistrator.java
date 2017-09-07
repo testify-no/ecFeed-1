@@ -21,11 +21,11 @@ import com.ecfeed.core.utils.SystemHelper;
 
 public class VersionCheckerAndRegistrator {
 
-	public static void registerApp(IHttpCommunicator httpComunicator, int timeoutInSeconds) {
-		registerAppAndGetCurrentReleases(httpComunicator, timeoutInSeconds);
+	public static void registerApp(IHttpCommunicator httpCommunicator, int timeoutInSeconds) {
+		registerAppAndGetCurrentReleases(httpCommunicator, timeoutInSeconds);
 	}
 
-	public static CurrentReleases registerAppAndGetCurrentReleases(IHttpCommunicator httpComunicator, int timeoutInSeconds) {
+	public static CurrentReleases registerAppAndGetCurrentReleases(IHttpCommunicator httpCommunicator, int timeoutInSeconds) {
 
 		List<HttpProperty> properties = new ArrayList<HttpProperty>();
 
@@ -33,7 +33,7 @@ public class VersionCheckerAndRegistrator {
 		properties.add(createEcIdProperty());
 
 		try {
-			return sendAndParseRequest(httpComunicator, properties, timeoutInSeconds);
+			return sendAndParseRequest(httpCommunicator, properties, timeoutInSeconds);
 		} catch (Exception e) {
 			return null;
 		}
