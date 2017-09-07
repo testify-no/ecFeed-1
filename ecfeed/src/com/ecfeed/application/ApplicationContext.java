@@ -26,6 +26,7 @@ public class ApplicationContext {
 
 	static ApplicationType fApplicationType = ApplicationType.LOCAL_PLUGIN;
 	static String fExportFileName;
+	static String fMainBundleName = "com.ecfeed";
 
 	public static boolean isApplicationTypeLocalStandalone() {
 
@@ -87,6 +88,14 @@ public class ApplicationContext {
 		fApplicationType = ApplicationType.REMOTE_RAP;
 	}	
 
+	public static void setMainBundleName(String mainBundleName) {
+		fMainBundleName = mainBundleName;
+	}
+
+	public static String getMainBundleName() {
+		return fMainBundleName;
+	}	
+
 	public static void setExportTargetFile(String exportFileName) {
 
 		fExportFileName = exportFileName;
@@ -98,12 +107,8 @@ public class ApplicationContext {
 	}
 
 	public static String getEcFeedVersion() {
-		return getEcFeedVersion("com.ecfeed");	
-	}
 
-	public static String getEcFeedVersion(String mainBundleName) {
-
-		Bundle bundle = Platform.getBundle(mainBundleName);
+		Bundle bundle = Platform.getBundle(getMainBundleName());
 
 		if (bundle == null) {
 			return null;
