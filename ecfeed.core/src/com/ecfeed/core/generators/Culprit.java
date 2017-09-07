@@ -18,7 +18,21 @@ import com.ecfeed.core.generators.algorithms.DimensionedString;
 public class Culprit {
 
 	private static class OtherData {
-		public int fFailureIndex = 0;
+		public int fFailureIndex;
+		
+		public OtherData()
+		{
+			fFailureIndex = 0;
+		}
+		public OtherData(int failureIndex)
+		{
+			fFailureIndex = failureIndex;
+		}
+		
+		public OtherData makeClone()
+		{
+			return new Culprit.OtherData(fFailureIndex);
+		}
 	}
 
 	private List<DimensionedString> fTestInput;
@@ -193,7 +207,9 @@ public class Culprit {
 
 	public Culprit makeClone() {
 
-		return new Culprit(fTestInput, fOccurenceCount, fFailureCount);
+		Culprit culprit = new Culprit(fTestInput, fOccurenceCount, fFailureCount);
+		culprit.fOtherData = fOtherData.makeClone();
+		return culprit;
 	}
 
 }
