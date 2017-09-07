@@ -21,7 +21,11 @@ import com.ecfeed.core.utils.SystemHelper;
 
 public class VersionCheckerAndRegistrator {
 
-	public static CurrentReleases registerAndGetCurrentReleases(IHttpCommunicator httpComunicator, int timeoutInSeconds) {
+	public static void registerApp(IHttpCommunicator httpComunicator, int timeoutInSeconds) {
+		registerAppAndGetCurrentReleases(httpComunicator, timeoutInSeconds);
+	}
+
+	public static CurrentReleases registerAppAndGetCurrentReleases(IHttpCommunicator httpComunicator, int timeoutInSeconds) {
 
 		List<HttpProperty> properties = new ArrayList<HttpProperty>();
 

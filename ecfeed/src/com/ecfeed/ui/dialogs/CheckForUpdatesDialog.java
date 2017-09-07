@@ -54,7 +54,7 @@ public class CheckForUpdatesDialog extends TitleAreaDialog {
 		final int timeoutInSeconds = 15;
 
 		CurrentReleases currentReleases = 
-				VersionCheckerAndRegistrator.registerAndGetCurrentReleases(httpCommunicator, timeoutInSeconds);
+				VersionCheckerAndRegistrator.registerAppAndGetCurrentReleases(httpCommunicator, timeoutInSeconds);
 
 		CheckForUpdatesDialog updatesDialog = new CheckForUpdatesDialog(currentReleases);
 		updatesDialog.open();		
@@ -75,7 +75,7 @@ public class CheckForUpdatesDialog extends TitleAreaDialog {
 		final int timeoutInSeconds = 5;
 
 		CurrentReleases currentReleases = 
-				VersionCheckerAndRegistrator.registerAndGetCurrentReleases(httpCommunicator, timeoutInSeconds);
+				VersionCheckerAndRegistrator.registerAppAndGetCurrentReleases(httpCommunicator, timeoutInSeconds);
 
 		if (!shouldOpenConditionalDialog(
 				ApplicationContext.getEcFeedVersion(),
