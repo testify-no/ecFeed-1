@@ -21,8 +21,8 @@ import com.ecfeed.application.ApplicationContext;
 public class Application implements IApplication {
 
 	public Object start(IApplicationContext context) {
-		ApplicationContext.setStandaloneApplication();
-		
+		ApplicationContext.setApplicationTypeLocalStandalone();
+
 		Display display = PlatformUI.createDisplay();
 		try {
 			int returnCode = PlatformUI.createAndRunWorkbench(display, new ApplicationWorkbenchAdvisor());
