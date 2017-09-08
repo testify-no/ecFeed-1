@@ -60,7 +60,7 @@ public class MethodsViewer extends TableViewerSection {
 		fMethodsColumn.setEditingSupport(new MethodNameEditingSupport());
 
 		setText("Methods");
-		addButton("Add new method", new AddNewMethodAdapter());
+		addButton("Add method", new AddNewMethodAdapter());
 		fRemoveSelectedButton = 
 				addButton("Remove selected", 
 						new ActionSelectionAdapter(
