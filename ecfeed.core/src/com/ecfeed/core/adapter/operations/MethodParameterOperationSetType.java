@@ -95,8 +95,8 @@ public class MethodParameterOperationSetType extends BulkOperation {
 			public Object visit(ExpectedValueStatement statement) throws Exception {
 
 				boolean success = true;
-				ITypeAdapter adapter = getAdapterProvider().getAdapter(getNewType());
-				String newValue = adapter.convert(statement.getCondition().getValueString());
+				ITypeAdapter typeAdapter = getTypeAdapterProvider().getAdapter(getNewType());
+				String newValue = typeAdapter.convert(statement.getCondition().getValueString());
 				fOriginalStatementValues.put(statement, statement.getCondition().getValueString());
 				statement.getCondition().setValueString(newValue);
 				if (JavaTypeHelper.isUserType(getNewType())) {
@@ -207,7 +207,7 @@ public class MethodParameterOperationSetType extends BulkOperation {
 			@Override
 			public IModelOperation reverseOperation() {
 
-				return new SetTypeOperation(fMethodParameterNode, getNewType(), getAdapterProvider());
+				return new SetTypeOperation(fMethodParameterNode, getNewType(), getTypeAdapterProvider());
 			}
 
 			private void restoreStatementValues() {
@@ -234,24 +234,41 @@ public class MethodParameterOperationSetType extends BulkOperation {
 		@Override
 		public void execute() throws ModelOperationException {
 
-			MethodNode method = fMethodParameterNode.getMethod();
-			List<String> types = method.getParameterTypes();
-			types.set(fMethodParameterNode.getIndex(), getNewType());
+			MethodNode methodNode = fMethodParameterNode.getMethod();
 
-			if (method.getClassNode().getMethod(method.getName(), types) != null && method.getClassNode().getMethod(method.getName(), types) != method) {
-				ModelOperationException.report(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM(method.getClassNode().getName(), method.getName()));
-			}
+			checkForDuplicateSignature(methodNode);
 
 			super.execute();
-			fOriginalTestCases = new ArrayList<>(fMethodParameterNode.getMethod().getTestCases());
-			fOriginalConstraints = new ArrayList<>(fMethodParameterNode.getMethod().getConstraintNodes());
+
+			fOriginalTestCases = new ArrayList<>(methodNode.getTestCases());
+			fOriginalConstraints = new ArrayList<>(methodNode.getConstraintNodes());
+
 			adaptDefaultValue();
+
 			if (fMethodParameterNode.isExpected()) {
 				adaptTestCases();
 				adaptConstraints();
 			}
 
 			markModelUpdated();
+		}
+
+		private void checkForDuplicateSignature(MethodNode oldMethodNode) throws ModelOperationException {
+
+			List<String> types = oldMethodNode.getParameterTypes();
+			types.set(fMethodParameterNode.getIndex(), getNewType());
+
+			MethodNode newMethodNode = oldMethodNode.getClassNode().getMethod(oldMethodNode.getName(), types);
+
+			if ( newMethodNode == null) {
+				return;
+			}
+
+			if (newMethodNode == oldMethodNode) {
+				return;
+			}
+
+			ModelOperationException.report(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM(oldMethodNode.getClassNode().getName(), oldMethodNode.getName()));
 		}
 
 		@Override
@@ -270,8 +287,10 @@ public class MethodParameterOperationSetType extends BulkOperation {
 
 		private void adaptDefaultValue() {
 
+			String newType = getNewType();
+
 			fOriginalDefaultValue = fMethodParameterNode.getDefaultValue();
-			ITypeAdapter adapter = getAdapterProvider().getAdapter(getNewType());
+			ITypeAdapter adapter = getTypeAdapterProvider().getAdapter(newType);
 			String defaultValue = adapter.convert(fMethodParameterNode.getDefaultValue());
 
 			if (defaultValue == null) {
@@ -282,7 +301,8 @@ public class MethodParameterOperationSetType extends BulkOperation {
 					defaultValue = adapter.defaultValue();
 				}
 			}
-			if (JavaTypeHelper.isUserType(getNewType())) {
+
+			if (JavaTypeHelper.isUserType(newType)) {
 				if (fMethodParameterNode.getLeafChoices().size() > 0) {
 					if (fMethodParameterNode.getLeafChoiceValues().contains(defaultValue) == false) {
 						defaultValue = fMethodParameterNode.getLeafChoiceValues().toArray(new String[]{})[0];
@@ -292,6 +312,7 @@ public class MethodParameterOperationSetType extends BulkOperation {
 					fMethodParameterNode.addChoice(new ChoiceNode(defaultValue.toLowerCase(), defaultValue));
 				}
 			}
+
 			fMethodParameterNode.setDefaultValueString(defaultValue);
 		}
 
@@ -300,7 +321,7 @@ public class MethodParameterOperationSetType extends BulkOperation {
 			MethodNode method = fMethodParameterNode.getMethod();
 			if (method != null) {
 				Iterator<TestCaseNode> tcIt = method.getTestCases().iterator();
-				ITypeAdapter adapter = getAdapterProvider().getAdapter(getNewType());
+				ITypeAdapter adapter = getTypeAdapterProvider().getAdapter(getNewType());
 				while (tcIt.hasNext()) {
 					ChoiceNode expectedValue = tcIt.next().getTestData().get(fMethodParameterNode.getIndex());
 					String newValue = adapter.convert(expectedValue.getValueString());

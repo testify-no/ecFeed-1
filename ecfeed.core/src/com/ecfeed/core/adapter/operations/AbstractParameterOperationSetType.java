@@ -215,7 +215,7 @@ public class AbstractParameterOperationSetType extends AbstractModelOperation {
 		return parent.getChoices();
 	}
 
-	protected ITypeAdapterProvider getAdapterProvider(){
+	protected ITypeAdapterProvider getTypeAdapterProvider(){
 		return fAdapterProvider;
 	}
 

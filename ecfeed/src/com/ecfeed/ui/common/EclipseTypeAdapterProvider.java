@@ -104,11 +104,11 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 		}
 	}
 
-	private class UserTypeTypeAdapter implements ITypeAdapter{
+	private class UserTypeAdapter implements ITypeAdapter{
 
 		private String fType;
 
-		public UserTypeTypeAdapter(String type){
+		public UserTypeAdapter(String type){
 			fType = type;
 		}
 
@@ -363,7 +363,7 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 		case JavaTypeHelper.TYPE_NAME_STRING:
 			return new StringTypeAdapter();
 		default:
-			return new UserTypeTypeAdapter(type);
+			return new UserTypeAdapter(type);
 		}
 	}
 }
