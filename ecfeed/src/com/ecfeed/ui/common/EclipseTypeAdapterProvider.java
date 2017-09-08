@@ -12,6 +12,7 @@ package com.ecfeed.ui.common;
 
 import java.util.Arrays;
 
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.adapter.ITypeAdapter;
 import com.ecfeed.core.adapter.ITypeAdapterProvider;
 import com.ecfeed.core.utils.JavaLanguageHelper;
@@ -117,8 +118,13 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 			return Arrays.asList(TYPES_CONVERTABLE_TO_USER_TYPE).contains(type);
 		}
 
-		public String convert(String value){
-			return JavaLanguageHelper.isValidJavaIdentifier(value) ? value : null;
+		public String convert(String value) {
+
+			if (JavaLanguageHelper.isValidJavaIdentifier(value)) {
+				return value;
+			}
+
+			return null;
 		}
 
 		@Override

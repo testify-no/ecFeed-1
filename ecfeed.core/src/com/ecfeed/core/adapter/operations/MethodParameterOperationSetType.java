@@ -291,29 +291,29 @@ public class MethodParameterOperationSetType extends BulkOperation {
 
 			fOriginalDefaultValue = fMethodParameterNode.getDefaultValue();
 			ITypeAdapter adapter = getTypeAdapterProvider().getAdapter(newType);
-			String defaultValue = adapter.convert(fMethodParameterNode.getDefaultValue());
+			String newDefaultValue = adapter.convert(fMethodParameterNode.getDefaultValue());
 
-			if (defaultValue == null) {
+			if (newDefaultValue == null) {
 				if (fMethodParameterNode.getLeafChoices().size() > 0) {
-					defaultValue = fMethodParameterNode.getLeafChoices().toArray(new ChoiceNode[]{})[0].getValueString();
+					newDefaultValue = fMethodParameterNode.getLeafChoices().toArray(new ChoiceNode[]{})[0].getValueString();
 				}
 				else{
-					defaultValue = adapter.defaultValue();
+					newDefaultValue = adapter.defaultValue();
 				}
 			}
 
 			if (JavaTypeHelper.isUserType(newType)) {
 				if (fMethodParameterNode.getLeafChoices().size() > 0) {
-					if (fMethodParameterNode.getLeafChoiceValues().contains(defaultValue) == false) {
-						defaultValue = fMethodParameterNode.getLeafChoiceValues().toArray(new String[]{})[0];
+					if (fMethodParameterNode.getLeafChoiceValues().contains(newDefaultValue) == false) {
+						newDefaultValue = fMethodParameterNode.getLeafChoiceValues().toArray(new String[]{})[0];
 					}
 				}
 				else{
-					fMethodParameterNode.addChoice(new ChoiceNode(defaultValue.toLowerCase(), defaultValue));
+					fMethodParameterNode.addChoice(new ChoiceNode(newDefaultValue.toLowerCase(), newDefaultValue));
 				}
 			}
 
-			fMethodParameterNode.setDefaultValueString(defaultValue);
+			fMethodParameterNode.setDefaultValueString(newDefaultValue);
 		}
 
 		private void adaptTestCases() {
