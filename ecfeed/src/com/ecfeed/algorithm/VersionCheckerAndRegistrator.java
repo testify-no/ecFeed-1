@@ -17,20 +17,25 @@ import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.net.HttpProperty;
 import com.ecfeed.core.net.IHttpCommunicator;
 import com.ecfeed.core.utils.SystemHelper;
+import com.ecfeed.core.utils.SystemLogger;
 
 
 public class VersionCheckerAndRegistrator {
 
 	public static void registerApp(IHttpCommunicator httpCommunicator, int timeoutInSeconds) {
-		registerAppAndGetCurrentReleases(httpCommunicator, timeoutInSeconds);
+
+		List<HttpProperty> properties = createHttpProperties();
+
+		try {
+			sendRegisteringRequest(httpCommunicator, properties, timeoutInSeconds);
+		} catch (Exception e) {
+			SystemLogger.logCatch("Can not register application.");
+		}
 	}
 
 	public static CurrentReleases registerAppAndGetCurrentReleases(IHttpCommunicator httpCommunicator, int timeoutInSeconds) {
 
-		List<HttpProperty> properties = new ArrayList<HttpProperty>();
-
-		properties.add(createUserAgentProperty());
-		properties.add(createEcIdProperty());
+		List<HttpProperty> properties = createHttpProperties();
 
 		try {
 			return sendAndParseRequest(httpCommunicator, properties, timeoutInSeconds);
@@ -39,17 +44,35 @@ public class VersionCheckerAndRegistrator {
 		}
 	}
 
+	private static List<HttpProperty> createHttpProperties() {
+
+		List<HttpProperty> properties = new ArrayList<HttpProperty>();
+
+		properties.add(createUserAgentProperty());
+		properties.add(createEcIdProperty());
+
+		return properties;
+	}
+
 	private static CurrentReleases sendAndParseRequest(
+			IHttpCommunicator httpComunicator, 
+			List<HttpProperty> properties,
+			int timeoutInSeconds) throws Exception {
+
+		String xmlResponse = sendRegisteringRequest(httpComunicator, properties, timeoutInSeconds);
+
+		return ReleasesXmlParser.parseXml(xmlResponse);		
+	}
+
+	private static String sendRegisteringRequest(
 			IHttpCommunicator httpComunicator, 
 			List<HttpProperty> properties,
 			int timeoutInSeconds) throws Exception {
 
 		String url = "http://www.ecfeed.com/get_releases.php";
 
-		String xmlResponse = httpComunicator.sendGetRequest(url, properties, timeoutInSeconds);
-
-		return ReleasesXmlParser.parseXml(xmlResponse);		
-	}
+		return httpComunicator.sendGetRequest(url, properties, timeoutInSeconds);
+	}	
 
 	private static HttpProperty createUserAgentProperty() {
 
@@ -65,11 +88,18 @@ public class VersionCheckerAndRegistrator {
 			operatingSystem = "All";
 		}
 
-		String productType;
+		String productType = "?";
+
 		if (ApplicationContext.isApplicationTypeLocalStandalone()) {
 			productType = "ES";
-		} else {
+		} 
+
+		if (ApplicationContext.isApplicationTypeLocalPlugin()) {
 			productType = "EP";
+		}
+
+		if (ApplicationContext.isApplicationTypeRemoteRap()) {
+			productType = "ER";
 		}
 
 		return new HttpProperty(
