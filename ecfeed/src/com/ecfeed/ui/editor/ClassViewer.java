@@ -67,7 +67,7 @@ public class ClassViewer extends TableViewerSection {
 			addButton("Add implemented class", new AddImplementedClassAdapter());
 		}
 
-		addButton("New test class", new AddNewClassAdapter());
+		addButton("Add class", new AddNewClassAdapter());
 		addButton("Remove selected", 
 				new ActionSelectionAdapter(
 						new DeleteAction(getViewer(), getModelUpdateContext()), Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
