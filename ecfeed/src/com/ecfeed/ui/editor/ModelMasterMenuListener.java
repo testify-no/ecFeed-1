@@ -40,7 +40,7 @@ import com.ecfeed.ui.modelif.TestCaseInterface;
 import com.ecfeed.utils.SeleniumHelper;
 
 
-class ModelMasterMenuListener extends ViewerMenuListener {
+public class ModelMasterMenuListener extends ViewerMenuListener {
 
 	INodeSelectionProvider fNodeSelectionProvider;
 	TreeViewer fTreeViewer;
