@@ -27,45 +27,28 @@ import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.ui.forms.AbstractFormPart;
 import org.eclipse.ui.forms.IDetailsPage;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.ecfeed.application.ApplicationContext;
-import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.GlobalParameterNode;
-import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.RootNode;
-import com.ecfeed.core.model.TestCaseNode;
-import com.ecfeed.core.utils.ExceptionHelper;
-import com.ecfeed.core.utils.SystemHelper;
 import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.About2Dialog;
 import com.ecfeed.ui.dialogs.CheckForUpdatesDialog;
-import com.ecfeed.ui.editor.actions.AbstractAddChildAction;
-import com.ecfeed.ui.editor.actions.AddChildActionProvider;
 import com.ecfeed.ui.editor.actions.BasicActionRunnerProvider;
-import com.ecfeed.ui.editor.actions.ExecuteTestCaseAction;
-import com.ecfeed.ui.editor.actions.ExportOnlineAction;
 import com.ecfeed.ui.editor.actions.IActionRunner;
 import com.ecfeed.ui.editor.actions.ModelViewerActionProvider;
-import com.ecfeed.ui.editor.actions.TestOnlineAction;
 import com.ecfeed.ui.editor.data.ModelTreeContentProvider;
 import com.ecfeed.ui.editor.data.ModelTreeLabelDecorator;
 import com.ecfeed.ui.editor.data.ModelTreeLabelProvider;
 import com.ecfeed.ui.editor.data.TreeRootNodeWrapper;
-import com.ecfeed.ui.modelif.AbstractNodeInterface;
 import com.ecfeed.ui.modelif.IModelUpdateListener;
-import com.ecfeed.ui.modelif.MethodInterface;
 import com.ecfeed.ui.modelif.ModelNodesTransfer;
-import com.ecfeed.ui.modelif.NodeInterfaceFactory;
-import com.ecfeed.ui.modelif.TestCaseInterface;
-import com.ecfeed.utils.SeleniumHelper;
 
 public class ModelMasterSection extends TreeViewerSection {
 
@@ -160,7 +143,10 @@ public class ModelMasterSection extends TreeViewerSection {
 			}
 		};
 
-		return new MasterViewerMenuListener(getMenu(), nodeSelectionProvider);
+		return new ModelMasterMenuListener(
+				getMenu(), getActionProvider(), 
+				nodeSelectionProvider, getTreeViewer(), getModelUpdateContext(), 
+				getJavaProjectProvider(), ModelMasterSection.this);
 	}
 
 	public List<IModelUpdateListener> getUpdateListeners() {
@@ -225,182 +211,6 @@ public class ModelMasterSection extends TreeViewerSection {
 			abstractFormPart.markDirty();
 			refresh();
 		}
-	}
-
-	public class MasterViewerMenuListener extends ViewerMenuListener{
-
-		public MasterViewerMenuListener(Menu menu, INodeSelectionProvider nodeSelectionProvider) {
-			super(menu, getActionProvider(), nodeSelectionProvider);
-		}
-
-		@Override
-		protected void populateMenu() {
-			AbstractNode firstSelectedNode = getFirstSelectedNode();
-			if (firstSelectedNode == null) {
-				return;
-			}
-
-			addChildAddingActions(firstSelectedNode);
-			addActionsForMethod(firstSelectedNode);
-			addActionsForTestCase(firstSelectedNode);
-			super.populateMenu();
-		}
-
-		private void addChildAddingActions(AbstractNode abstractNode) {
-			AddChildActionProvider actionProvider = 
-					new AddChildActionProvider(getTreeViewer(), getModelUpdateContext(), getJavaProjectProvider());
-
-			List<AbstractAddChildAction> actions = actionProvider.getPossibleActions(abstractNode);
-
-			boolean menuItemAdded = false;
-			boolean actionNameConverted = false;
-
-			for(AbstractAddChildAction action : actions) {
-
-				String actionName = action.getName();
-
-				if (!actionNameConverted) {
-					actionName = convertActionName(action.getName());
-					actionNameConverted = true;
-				}
-
-				addMenuItem(actionName, action);
-				menuItemAdded = true;
-			}
-
-			if (menuItemAdded) {
-				new MenuItem(getMenu(), SWT.SEPARATOR);
-			}
-		}
-
-		private String convertActionName(String actionName) {
-
-			if (!actionName.startsWith("Add")) {
-				return actionName;
-			}
-
-			final String insertKey = "INS";
-
-			if (SystemHelper.isOperatingSystemMacOs()) {
-				return actionName + "   (" + insertKey + ")";
-			}
-			return actionName + "\t" + insertKey;
-		}
-
-		private void addActionsForMethod(AbstractNode abstractNode) {
-
-			if (!(abstractNode instanceof MethodNode)) {
-				return;
-			}
-
-			MethodNode methodNode = (MethodNode)abstractNode;
-			MethodInterface methodInterface = getMethodInterface();
-			boolean isAction = false;
-
-			if (addTestOnlineAction(methodInterface)) {
-				isAction = true;
-			}
-			if (addExportOnlineAction(methodNode, methodInterface)) {
-				isAction = true;
-			}
-
-			if (isAction) {
-				new MenuItem(getMenu(), SWT.SEPARATOR);
-			}
-		}
-
-		private void addActionsForTestCase(AbstractNode abstractNode) {
-
-			if (!(abstractNode instanceof TestCaseNode)) {
-				return;
-			}
-
-			TestCaseInterface testCaseInterface = getTestCaseInterface();
-
-			AbstractNodeInterface nodeIf = 
-					NodeInterfaceFactory.getNodeInterface(testCaseInterface.getMethod(), null, getJavaProjectProvider());
-
-			MethodInterface methodInterface = (MethodInterface)nodeIf; 
-
-			if (!isActionExecutable(methodInterface)) {
-				return;
-			}
-
-			ExecuteTestCaseAction action = new ExecuteTestCaseAction(ModelMasterSection.this, testCaseInterface);
-			addMenuItem(action.getName(), action);
-
-			new MenuItem(getMenu(), SWT.SEPARATOR);
-		}
-
-		private MethodInterface getMethodInterface() {
-			AbstractNodeInterface nodeIf = 
-					NodeInterfaceFactory.getNodeInterface(getSelectedNodes().get(0), null, getJavaProjectProvider());
-
-			if (!(nodeIf instanceof MethodInterface)) {
-				final String MSG = "Invalid type of node interface. Method node interface expected"; 
-				ExceptionHelper.reportRuntimeException(MSG);
-			}
-
-			return (MethodInterface)nodeIf; 
-		}
-
-		private TestCaseInterface getTestCaseInterface() {
-			AbstractNodeInterface nodeInterface = 
-					NodeInterfaceFactory.getNodeInterface(getSelectedNodes().get(0), null, getJavaProjectProvider());
-
-			if (!(nodeInterface instanceof TestCaseInterface)) {
-				final String MSG = "Invalid type of node interface. Test case interface expected"; 
-				ExceptionHelper.reportRuntimeException(MSG);
-			}
-
-			return (TestCaseInterface)nodeInterface; 
-		}
-
-		private boolean addTestOnlineAction(MethodInterface methodInterface) {
-
-			if (!isActionExecutable(methodInterface)) {
-				return false;
-			}
-
-			TestOnlineAction testOnlineAction = 
-					new TestOnlineAction(getJavaProjectProvider(), ModelMasterSection.this, methodInterface);
-
-			addMenuItem(testOnlineAction.getName(), testOnlineAction);
-			return true;
-		}
-
-		private boolean isActionExecutable(MethodInterface methodInterface) {
-			MethodNode methodNode = methodInterface.getOwnNode();
-
-			if (SeleniumHelper.isSeleniumRunnerMethod(methodNode)) {
-				return true;
-			}
-
-			if (ApplicationContext.isApplicationTypeLocalStandalone()) {
-				return false;
-			}
-
-			EImplementationStatus methodStatus = methodInterface.getImplementationStatus();
-
-			if (methodStatus != EImplementationStatus.IMPLEMENTED) {
-				return false;
-			}
-
-			return true;
-		}
-
-		private boolean addExportOnlineAction(MethodNode methodNode, MethodInterface methodInterface) {
-			if (methodNode.getParametersCount() == 0) {
-				return false;
-			}
-
-			ExportOnlineAction exportOnlineAction = 
-					new ExportOnlineAction(getJavaProjectProvider(), ModelMasterSection.this, methodInterface);
-
-			addMenuItem(exportOnlineAction.getName(), exportOnlineAction);
-			return true;
-		}
-
 	}
 
 	protected class ShowInfoToolbarAction extends Action {
