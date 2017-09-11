@@ -31,14 +31,12 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
-import org.eclipse.swt.events.MenuEvent;
 import org.eclipse.swt.events.MenuListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.MenuItem;
 
 import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.model.AbstractNode;
@@ -270,7 +268,16 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 	}
 
 	protected MenuListener getMenuListener() {
-		return new ViewerMenuListener(fMenu);
+
+		INodeSelectionProvider nodeSelectionProvider = new INodeSelectionProvider() {
+
+			@Override
+			public AbstractNode getFirstSelectedAbstractNode() {
+				return getFirstSelectedNode();
+			}
+		};
+
+		return new ViewerMenuListener(fMenu, getActionProvider(), nodeSelectionProvider);
 	}
 
 	protected Menu getMenu(){
@@ -319,121 +326,6 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 			}
 			fAction.run();
 		}
-	}
-
-	protected class ViewerMenuListener implements MenuListener {
-
-		private Menu fMenu;
-		private final int LAST_MENU_POSITION = -1;
-
-		public ViewerMenuListener(Menu menu) {
-			fMenu = menu;
-		}
-
-		protected Menu getMenu(){
-			return fMenu;
-		}
-
-		@Override
-		public void menuHidden(MenuEvent e) {
-		}
-
-		@Override
-		public void menuShown(MenuEvent e) {
-
-			for(MenuItem item : getMenu().getItems()) {
-				item.dispose();
-			}
-
-			populateMenu();
-		}
-
-		protected void populateMenu() {
-
-			IActionProvider provider = getActionProvider();
-			if(provider == null) {
-				return;
-			}
-
-			AbstractNode firstSelectedNode = getFirstSelectedNode();
-			if (firstSelectedNode == null) {
-				return;
-			}
-
-			addActionsForAllGroups(provider);
-		}
-
-		private void addActionsForAllGroups(IActionProvider provider) {
-
-			Iterator<String> groupIt = provider.getGroups().iterator();
-
-			while(groupIt.hasNext()) {
-
-				addActionsForGroup(groupIt, provider);
-
-				if(groupIt.hasNext()){
-					new MenuItem(fMenu, SWT.SEPARATOR);
-				}
-			}
-		}
-
-		private void addActionsForGroup(
-				Iterator<String> groupIt, IActionProvider actionProvider) {
-
-			for (NamedAction action : actionProvider.getActions(groupIt.next())) {
-
-				addMenuItem(action.getName(), action, getMenuItemIndex(action));
-			}
-		}
-
-		protected void addMenuItem(String text, Action action, int index) {
-
-			MenuItem item;
-
-			if (index == LAST_MENU_POSITION) {
-				item = new MenuItem(getMenu(), SWT.NONE);
-			} else {
-				item = new MenuItem(getMenu(), SWT.NONE, index);
-			}
-
-			item.setText(text);
-			item.setEnabled(action.isEnabled());
-			item.addSelectionListener(new MenuItemSelectionAdapter(action)); 
-		}
-
-		protected void addMenuItem(String text, Action action) {
-			addMenuItem(text, action, LAST_MENU_POSITION);
-		}		
-
-		private int getMenuItemIndex(NamedAction action) {
-
-			String actionName = action.getName();
-
-			if (actionName.equals(GlobalActions.INSERT.getDescription())) {
-				return 1;
-			}
-
-			return LAST_MENU_POSITION;
-		}		
-
-		private class MenuItemSelectionAdapter extends SelectionAdapter {
-
-			private Action fAction;
-
-			public MenuItemSelectionAdapter(Action action){
-				fAction = action;
-			}
-
-			@Override
-			public void widgetSelected(SelectionEvent ev){
-				try {
-					fAction.run();
-				} catch (Exception e) {
-					ExceptionCatchDialog.open(null, e.getMessage());
-				}
-			}
-		}
-
 	}
 
 }

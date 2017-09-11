@@ -151,7 +151,16 @@ public class ModelMasterSection extends TreeViewerSection {
 
 	@Override
 	protected ViewerMenuListener getMenuListener() {
-		return new MasterViewerMenuListener(getMenu());
+
+		INodeSelectionProvider nodeSelectionProvider = new INodeSelectionProvider() {
+
+			@Override
+			public AbstractNode getFirstSelectedAbstractNode() {
+				return getFirstSelectedNode();
+			}
+		};
+
+		return new MasterViewerMenuListener(getMenu(), nodeSelectionProvider);
 	}
 
 	public List<IModelUpdateListener> getUpdateListeners() {
@@ -218,9 +227,10 @@ public class ModelMasterSection extends TreeViewerSection {
 		}
 	}
 
-	protected class MasterViewerMenuListener extends ViewerMenuListener{
-		public MasterViewerMenuListener(Menu menu) {
-			super(menu);
+	public class MasterViewerMenuListener extends ViewerMenuListener{
+
+		public MasterViewerMenuListener(Menu menu, INodeSelectionProvider nodeSelectionProvider) {
+			super(menu, getActionProvider(), nodeSelectionProvider);
 		}
 
 		@Override
