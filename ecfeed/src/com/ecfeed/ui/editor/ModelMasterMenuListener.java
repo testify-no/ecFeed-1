@@ -42,7 +42,6 @@ import com.ecfeed.utils.SeleniumHelper;
 
 public class ModelMasterMenuListener extends ViewerMenuListener {
 
-	INodeSelectionProvider fNodeSelectionProvider;
 	TreeViewer fTreeViewer;
 	IModelUpdateContext fModelUpdateContext;
 	IJavaProjectProvider fJavaProjectProvider;
@@ -52,14 +51,12 @@ public class ModelMasterMenuListener extends ViewerMenuListener {
 	public ModelMasterMenuListener(
 			Menu menu, 
 			IActionProvider actionProvider, 
-			INodeSelectionProvider nodeSelectionProvider,
 			TreeViewer treeViewer,
 			IModelUpdateContext modelUpdateContext,
 			IJavaProjectProvider javaProjectProvider,
 			ISelectionProvider selectionProvider) {
-		super(menu, actionProvider, nodeSelectionProvider);
+		super(menu, actionProvider, selectionProvider);
 
-		fNodeSelectionProvider = nodeSelectionProvider;
 		fTreeViewer = treeViewer;
 		fModelUpdateContext = modelUpdateContext;
 		fJavaProjectProvider = javaProjectProvider;
@@ -69,7 +66,8 @@ public class ModelMasterMenuListener extends ViewerMenuListener {
 	@Override
 	protected void populateMenu() {
 
-		AbstractNode firstSelectedNode = fNodeSelectionProvider.getFirstSelectedAbstractNode();
+		AbstractNode firstSelectedNode = getFirstSelectedNode();
+
 		if (firstSelectedNode == null) {
 			return;
 		}
@@ -167,9 +165,10 @@ public class ModelMasterMenuListener extends ViewerMenuListener {
 	}
 
 	private MethodInterface getMethodInterface() {
+
 		AbstractNodeInterface nodeIf = 
 				NodeInterfaceFactory.getNodeInterface(
-						fNodeSelectionProvider.getFirstSelectedAbstractNode(), null, fJavaProjectProvider);
+						getFirstSelectedNode(), null, fJavaProjectProvider);
 
 		if (!(nodeIf instanceof MethodInterface)) {
 			final String MSG = "Invalid type of node interface. Method node interface expected"; 
@@ -180,9 +179,10 @@ public class ModelMasterMenuListener extends ViewerMenuListener {
 	}
 
 	private TestCaseInterface getTestCaseInterface() {
+
 		AbstractNodeInterface nodeInterface = 
 				NodeInterfaceFactory.getNodeInterface(
-						fNodeSelectionProvider.getFirstSelectedAbstractNode(), null, fJavaProjectProvider);
+						getFirstSelectedNode(), null, fJavaProjectProvider);
 
 		if (!(nodeInterface instanceof TestCaseInterface)) {
 			final String MSG = "Invalid type of node interface. Test case interface expected"; 

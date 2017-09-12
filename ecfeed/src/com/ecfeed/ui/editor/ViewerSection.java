@@ -39,7 +39,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 
 import com.ecfeed.application.ApplicationContext;
-import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.utils.SystemHelper;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
@@ -140,26 +139,6 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 
 	public StructuredViewer getViewer(){
 		return fViewer;
-	}
-
-	public List<AbstractNode> getSelectedNodes(){
-		List<AbstractNode> result = new ArrayList<>();
-		for(Object o : getSelection().toList()){
-			if(o instanceof AbstractNode){
-				result.add((AbstractNode)o);
-			}
-		}
-		return result;
-	}
-
-	public AbstractNode getFirstSelectedNode() {
-		List<AbstractNode> selectedNodes = getSelectedNodes();
-
-		if(selectedNodes.size() == 0) {
-			return null;
-		}
-
-		return selectedNodes.get(0);
 	}
 
 	protected void createViewer() {
@@ -269,15 +248,7 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 
 	protected MenuListener getMenuListener() {
 
-		INodeSelectionProvider nodeSelectionProvider = new INodeSelectionProvider() {
-
-			@Override
-			public AbstractNode getFirstSelectedAbstractNode() {
-				return getFirstSelectedNode();
-			}
-		};
-
-		return new ViewerMenuListener(fMenu, getActionProvider(), nodeSelectionProvider);
+		return new ViewerMenuListener(fMenu, getActionProvider(), fViewer);
 	}
 
 	protected Menu getMenu(){
