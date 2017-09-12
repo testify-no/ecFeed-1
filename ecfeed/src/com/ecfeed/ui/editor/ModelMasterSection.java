@@ -13,10 +13,6 @@ package com.ecfeed.ui.editor;
 import java.util.Arrays;
 import java.util.List;
 
-import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.commands.operations.IOperationHistory;
-import org.eclipse.core.commands.operations.IUndoContext;
-import org.eclipse.core.commands.operations.OperationHistoryFactory;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.viewers.DecoratingLabelProvider;
@@ -36,12 +32,10 @@ import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.GlobalParameterNode;
 import com.ecfeed.core.model.RootNode;
-import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.About2Dialog;
 import com.ecfeed.ui.dialogs.CheckForUpdatesDialog;
 import com.ecfeed.ui.editor.actions.BasicActionRunnerProvider;
-import com.ecfeed.ui.editor.actions.IActionRunner;
 import com.ecfeed.ui.editor.actions.ModelViewerActionProvider;
 import com.ecfeed.ui.editor.data.ModelTreeContentProvider;
 import com.ecfeed.ui.editor.data.ModelTreeLabelDecorator;
@@ -226,46 +220,5 @@ public class ModelMasterSection extends TreeViewerSection {
 		}
 
 	}	
-
-	private class SaveActionRunner implements IActionRunner {
-
-		@Override
-		public void run() {
-			ModelEditorHelper.saveActiveEditor();
-		}
-
-	}
-
-	private class UndoActionRunner implements IActionRunner {
-
-		@Override
-		public void run() {
-			IOperationHistory operationHistory = OperationHistoryFactory.getOperationHistory();
-			IUndoContext undoContext = ModelEditorHelper.getActiveModelEditor().getUndoContext();
-
-			try {
-				operationHistory.undo(undoContext, null, null);
-			} catch (ExecutionException e) {
-				SystemLogger.logCatch("Can not undo operation.");
-			}
-		}
-
-	}
-
-	private class RedoActionRunner implements IActionRunner {
-
-		@Override
-		public void run() {
-			IOperationHistory operationHistory = OperationHistoryFactory.getOperationHistory();
-			IUndoContext undoContext = ModelEditorHelper.getActiveModelEditor().getUndoContext();
-
-			try {
-				operationHistory.redo(undoContext, null, null);
-			} catch (ExecutionException e) {
-				SystemLogger.logCatch("Can not undo operation.");
-			}
-		}
-
-	}
 
 }
