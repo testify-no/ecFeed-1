@@ -30,13 +30,12 @@ public class ModelViewerActionProvider extends ActionProvider {
 	private static final String VIEWER_GROUP = "viewer";
 	private static final String INFO_GROUP = "info";
 
-	
+
 	BasicActionRunnerProvider fBasicActionRunnerProvider;
 
 	public ModelViewerActionProvider(
 			TreeViewer viewer, 
-			IModelUpdateContext 
-			context, 
+			IModelUpdateContext context, 
 			IJavaProjectProvider javaProjectProvider,
 			BasicActionRunnerProvider basicActionRunnerProvider,
 			boolean selectRoot) {
@@ -110,31 +109,31 @@ public class ModelViewerActionProvider extends ActionProvider {
 
 	private void addImplementationActions(
 			StructuredViewer viewer, IModelUpdateContext context, IJavaProjectProvider javaProjectProvider) {
-		
+
 		IModelImplementer implementer = new EclipseModelImplementer(javaProjectProvider);
 		addAction(IMPLEMENT_GROUP, new ImplementAction(viewer, context, implementer));
 		addAction(IMPLEMENT_GROUP, new GoToImplementationAction(viewer, javaProjectProvider));
 	}
 
 	private void addMoveActions(ISelectionProvider selectionProvider, IModelUpdateContext context){
-		
+
 		addAction(MOVE_GROUP, new MoveUpDownAction(true, selectionProvider, context));
 		addAction(MOVE_GROUP, new MoveUpDownAction(false, selectionProvider, context));
 	}
 
 	private void addViewerActions(TreeViewer viewer, IModelUpdateContext context, boolean selectRoot){
-		
+
 		addAction(VIEWER_GROUP, new SelectAllAction(viewer, selectRoot));
 		addAction(VIEWER_GROUP, new ExpandCollapseAction(viewer));
 	}
 
 	private void addViewerActions(TableViewer viewer){
-		
+
 		addAction(VIEWER_GROUP, new SelectAllAction(viewer));
 	}
 
 	private void addInfoActions() {
-		
+
 		addAction(INFO_GROUP, new AboutAction());
 		addAction(INFO_GROUP, new CheckForUpdatesAction());
 	}

@@ -12,7 +12,6 @@ package com.ecfeed.ui.common;
 
 import java.util.Arrays;
 
-import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.adapter.ITypeAdapter;
 import com.ecfeed.core.adapter.ITypeAdapterProvider;
 import com.ecfeed.core.utils.JavaLanguageHelper;

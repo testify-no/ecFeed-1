@@ -18,9 +18,71 @@ import java.util.Set;
 public abstract class ActionProvider implements IActionProvider {
 
 	private boolean fEnabled;
+	private Set<GrouppedAction> fActions;
+
+	public ActionProvider() {
+		fActions = new LinkedHashSet<>();
+		fEnabled = true;
+	}
+
+	@Override
+	public Set<String> getGroups() {
+		Set<String> result = new LinkedHashSet<>();
+
+		if (fEnabled) {
+			for(GrouppedAction record : fActions) {
+				result.add(record.fGroupId);
+			}
+		}
+
+		return result;
+	}
+
+	@Override
+	public Set<NamedAction> getActions(String groupId) {
+
+		Set<NamedAction> result = new LinkedHashSet<>();
+
+		for (GrouppedAction record : fActions) {
+			if (record.fGroupId.equals(groupId)) {
+				result.add(record.fAction);
+			}
+		}
+
+		return result;
+	}
+
+	@Override
+	public NamedAction getAction(String actionId) {
+
+		for (GrouppedAction record : fActions) {
+			if (record.fAction.getId().equals(actionId)) {
+				return record.fAction;
+			}
+		}
+
+		return null;
+	}
+
+	public void setEnabled(boolean enabled) {
+		fEnabled = enabled;
+	}
+
+	protected void addAction(String group, NamedAction action) {
+
+		Iterator<GrouppedAction> iterator = fActions.iterator();
+
+		while (iterator.hasNext()) {
+			if (iterator.next().fAction.getId().equals(action.getId())) {
+				iterator.remove();
+			}
+		}
+
+		fActions.add(new GrouppedAction(group, action));
+	}
 
 	private class GrouppedAction {
-		public GrouppedAction(String group, NamedAction action){
+		public GrouppedAction(String group, NamedAction action) {
 			fGroupId = group;
 			fAction = action;
 		}
@@ -29,56 +91,4 @@ public abstract class ActionProvider implements IActionProvider {
 		private NamedAction fAction;
 	}
 
-	private Set<GrouppedAction> fActions;
-
-	public ActionProvider(){
-		fActions = new LinkedHashSet<>();
-		fEnabled = true;
-	}
-
-	protected void addAction(String group, NamedAction action){
-		Iterator<GrouppedAction> iterator = fActions.iterator();
-		while(iterator.hasNext()){
-			if(iterator.next().fAction.getId().equals(action.getId())){
-				iterator.remove();
-			}
-		}
-		fActions.add(new GrouppedAction(group, action));
-	}
-
-	@Override
-	public Set<String> getGroups(){
-		Set<String> result = new LinkedHashSet<>();
-		if(fEnabled){
-			for(GrouppedAction record : fActions){
-				result.add(record.fGroupId);
-			}
-		}
-		return result;
-	}
-
-	@Override
-	public Set<NamedAction> getActions(String groupId){
-		Set<NamedAction> result = new LinkedHashSet<>();
-		for(GrouppedAction record : fActions){
-			if(record.fGroupId.equals(groupId)){
-				result.add(record.fAction);
-			}
-		}
-		return result;
-	}
-
-	@Override
-	public NamedAction getAction(String actionId){
-		for(GrouppedAction record : fActions){
-			if(record.fAction.getId().equals(actionId)){
-				return record.fAction;
-			}
-		}
-		return null;
-	}
-
-	public void setEnabled(boolean enabled){
-		fEnabled = enabled;
-	}
 }
