@@ -135,7 +135,10 @@ public class ModelViewerActionProvider extends ActionProvider {
 	private void addInfoActions() {
 
 		addAction(INFO_GROUP, new AboutAction());
-		addAction(INFO_GROUP, new CheckForUpdatesAction());
+		
+		if (ApplicationContext.isApplicationTypeLocal()) {
+			addAction(INFO_GROUP, new CheckForUpdatesAction());
+		}
 	}
 
 }
