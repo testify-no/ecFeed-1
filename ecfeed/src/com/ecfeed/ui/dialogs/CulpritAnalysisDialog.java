@@ -11,6 +11,8 @@
 package com.ecfeed.ui.dialogs;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 
 import org.eclipse.jface.dialogs.TitleAreaDialog;
@@ -26,6 +28,8 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -37,28 +41,28 @@ import com.ecfeed.core.generators.TestResultsAnalyzer;
 import com.ecfeed.ui.dialogs.basic.DialogObjectToolkit;
 
 public class CulpritAnalysisDialog extends TitleAreaDialog {
-
+	
 	private DialogObjectToolkit fDialogObjectToolkit;
 	private int fCount = 0;
 	private int fNumRow = 0;
+	final private int n1 = 1;
+	final private int n2 = 3;
+	final private int maxNumRow = 31;
+	final private int ComboMaxLimit = 10;
 	private Table fTable = null;
-	private List<TestResultDescription> fTestResultDescrs = createtestResultDescrs(); // MDX move create... to constructor
+	private List<TestResultDescription> fTestResultDescrs = createtestResultDescrs(); // MDX move create... to constructor -- yes when this is connected to a real dialog
 	private TestResultsAnalysis fTestResultsAnalysis 
-	= new TestResultsAnalyzer().generateAnalysis(fTestResultDescrs, 2, 5); // MDX move creation to contructor
-	// MDX please define 2 and 5 as final variables (no magic numbers)
-
-
-	public CulpritAnalysisDialog(Shell parent) { // MDX do we need both constructors ? 
-		super(parent);
-		fDialogObjectToolkit = DialogObjectToolkit.getInstance();
-	}
+	= new TestResultsAnalyzer().generateAnalysis(fTestResultDescrs, n1, n2); // MDX move creation to contructor -- yes when this is connected to a real dialog
+	int total = fTestResultsAnalysis.getCulpritCount();	
+	Button NextButton;
+	Button PrevButton;
 
 	public CulpritAnalysisDialog() {
 		super(null);
 		fDialogObjectToolkit = DialogObjectToolkit.getInstance();
 	}
 
-	public void run() { // MDX do we need this now ?
+	public void run() { // MDX do we need this now ? -- until we connect this to a real dialog.
 		setBlockOnOpen(true);
 		open();
 		Display.getCurrent().dispose();
@@ -94,25 +98,26 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 		fTable = createTableContents(TableComposite, 4);
 
 		Composite ButtonComposite = (Composite) fDialogObjectToolkit.createGridComposite(dialogArea, 2);
-
-		Button PrevButton = 
+		PrevButton = 
 				fDialogObjectToolkit.createButton(
 						ButtonComposite, "Previous Page", new PrevButtonSelectionAdapter());
-
-		Button NextButton = 
+		NextButton = 
 				fDialogObjectToolkit.createButton(
 						ButtonComposite, "Next Page", new NextButtonSelectionAdapter());
-
 		PrevButton.setLayoutData(new GridData(SWT.RIGHT, SWT.RIGHT, true, true));
 		NextButton.setLayoutData(new GridData(SWT.RIGHT, SWT.RIGHT, false, false));
+		PrevButton.setEnabled(false);
 		
-		// MDX convert PrevButton and NextButton to class fields + call e.g fPrevButton.setEnabled methods
+		
+		// MDX convert PrevButton and NextButton to class fields + call e.g fPrevButton.setEnabled methods -- we agreed to discuss this
 
 		return dialogArea;
 	}
 
+
+
 	private void createCombo(Composite parentComposite, int defaultValue) {
-		fDialogObjectToolkit.createCombo(parentComposite, 10, defaultValue); // MDX define 10 as final variable
+		fDialogObjectToolkit.createCombo(parentComposite, ComboMaxLimit, defaultValue);
 	}
 
 	private void createLabel(Composite parentComposite, String text) {
@@ -130,7 +135,8 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 			column[i].pack();
 		}
 
-		MakeColumnResizable(parentComposite, column); // MDX method starts with lowercase 
+		makeColumnResizable(parentComposite, column);
+		SortByHeaders(table, column);
 		return table;
 	}
 
@@ -138,33 +144,40 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 
 		table.setRedraw(false);
 
-		// MDX extract to a method e.g. initializeRowCount
-		if (fNumRow == 0) {
-			if (fTestResultsAnalysis.getCulpritCount() > 31) {  // MDX magic numbers to final variables
-				fNumRow = 31;
-			} else {
-				fNumRow = fTestResultsAnalysis.getCulpritCount();
-			}
-		}
-
-		while(fCount < fNumRow) {
-			fTestResultsAnalysis.calculateFailureIndexes();
-
-			// MDX extract code to a method createTableItem
-			TableItem item = new TableItem(table, SWT.NONE);
-			int c = 0;
-			item.setText(c++, Integer.toString(fCount+1));
-			item.setText(c++, fTestResultsAnalysis.getCulprit(fCount).getItem().toString());
-			item.setText(c++, String.valueOf(fTestResultsAnalysis.getCulprit(fCount).getFailureIndex()));
-			item.setText(c++, Integer.toString(fTestResultsAnalysis.getCulprit(fCount).getOccurenceCount()));
-			item.setText(c++, Integer.toString(fTestResultsAnalysis.getCulprit(fCount).getFailureCount()));
+		initializeRowCount();	
+		
+		while (fCount < fNumRow) {
+			
+			createTableItem(table);
 			fCount++;
 		}
-
+		
 		table.setRedraw(true);	
 	}
 
-	private void MakeColumnResizable(Composite parentComposite, TableColumn[] column) {
+	private void createTableItem( Table table) {
+		
+		int c = 0;
+		TableItem item = new TableItem(table, SWT.NONE);
+		item.setText(c++, Integer.toString(fCount+1));
+		item.setText(c++, fTestResultsAnalysis.getCulprit(fCount).getItem().toString());
+		item.setText(c++, String.valueOf(fTestResultsAnalysis.getCulprit(fCount).getFailureIndex()));
+		item.setText(c++, Integer.toString(fTestResultsAnalysis.getCulprit(fCount).getOccurenceCount()));
+		item.setText(c++, Integer.toString(fTestResultsAnalysis.getCulprit(fCount).getFailureCount()));	
+		
+	}
+
+	private void initializeRowCount() {
+		if (fNumRow == 0) {
+			if (fTestResultsAnalysis.getCulpritCount() > maxNumRow) {  
+				fNumRow = maxNumRow;
+			} else {
+				fNumRow = fTestResultsAnalysis.getCulpritCount();
+			}
+		}	
+	}
+
+	private void makeColumnResizable(Composite parentComposite, TableColumn[] column) {
 		parentComposite.addControlListener(new ColumnResizeListener(parentComposite, column));
 	}
 
@@ -181,8 +194,6 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 		@Override
 		public void controlResized(ControlEvent e) {
 
-			// MDX method too complex - divide into smaller methods
-
 			Rectangle area = fParentComposite.getClientArea();
 			Point preferredSize = fTable.computeSize(SWT.DEFAULT, SWT.DEFAULT);
 			int width = area.width - 2 * fTable.getBorderWidth();
@@ -193,17 +204,16 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 			}
 
 			Point oldSize = fTable.getSize();
+			
+			RegulateTableSize(oldSize, width, area);
 
+		}
+
+		private void RegulateTableSize(Point oldSize, int width, Rectangle area) {
+			
 			if (oldSize.x > area.width) {
 
-				for (int i = 0; i < fColumn.length; i++) {
-
-					if (i == 1) { //More space needed to describe the tuple
-						fColumn[i].setWidth(width / 2);
-					} else {
-						fColumn[i].setWidth(((width - width / 3))/(fColumn.length));
-					}
-				}
+				setColumnWidth(width);
 
 				fTable.setSize(area.width, area.height);
 
@@ -211,18 +221,21 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 
 				fTable.setSize(area.width, area.height);
 
-				// MDX similar code as above - extract to a method e.g. calculateColumnWidths
-				for (int i = 0; i < fColumn.length; i++) {
-
-					if (i == 1) { //More space needed to describe the tuple
-						fColumn[i].setWidth(width / 2);
-					} else {
-						fColumn[i].setWidth((width - width / 3)/(fColumn.length));
-					}
-				}
+				setColumnWidth(width);
 			}
 		}
 
+		private void setColumnWidth(int width) {
+			
+			for (int i = 0; i < fColumn.length; i++) {
+
+				if (i == 1) { //More space needed to describe the tuple
+					fColumn[i].setWidth(width / 2);
+				} else {
+					fColumn[i].setWidth(((width - width / 3))/(fColumn.length));
+				}
+			}
+		}
 	}
 
 	private void addTestResult(
@@ -237,7 +250,7 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 		testResultDescrs.add(new TestResultDescription(testArgList, result));
 	}
 
-	public List<TestResultDescription> createtestResultDescrs()	{ // MDX to be removed after connecting to a real dialog
+	public List<TestResultDescription> createtestResultDescrs()	{ // MDX to be removed after connecting to a real dialog -> yes 
 
 		List<TestResultDescription> testResultDescrs = new ArrayList<TestResultDescription>();
 
@@ -249,22 +262,110 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 
 		return testResultDescrs;
 	}
+	
+	private void SortByHeaders(Table table, TableColumn[] column)
+	{
+		CompareByVal(column);
+		
+		Listener sortListener = new Listener(){
+			public void handleEvent(Event e)
+			{
+				TableColumn sortColumn = table.getSortColumn();
+				TableColumn selectedColumn = (TableColumn) e.widget;
+				int dir = table.getSortDirection();
+	
+				setSortDir(sortColumn, selectedColumn, dir);
+				
+				if(dir == SWT.UP)
+				{
+					fTestResultsAnalysis.SortColumnInput("SWT.UP", selectedColumn.getText());
+					fTable.removeAll();
+					fCount = 0;
+					fillTable(fTable, fTestResultDescrs);
+					
+				} else {
+					fTestResultsAnalysis.SortColumnInput("SWT.DOWN", selectedColumn.getText());
+					fTable.removeAll();
+					fCount = 0;
+					fillTable(fTable, fTestResultDescrs);
+				}			
+			}
+			
+			private void setSortDir(TableColumn sortColumn, TableColumn selectedColumn, int dir) {
+				
+				if (sortColumn == selectedColumn)
+				{
+					if (dir == SWT.UP)
+					{
+						table.setSortDirection(SWT.DOWN);
+					} else {
+						table.setSortDirection(SWT.UP);
+					}
+				} else {
+					table.setSortColumn(selectedColumn);
+					dir = SWT.UP;
+				}
+				
+			}
+		};
+		
+		for (int i = 0; i < column.length; i++)
+		{
+			column[i].addListener(SWT.Selection, sortListener);
+		}	
+	}
+
+	private void CompareByVal(TableColumn[] column) {
+		for(int i = 0; i < column.length; i++)
+		{
+			column[i].setData(new Comparator<TableItem>(){
+				
+				@Override
+				public int compare(TableItem item1, TableItem item2)
+				{
+					int val1 = Integer.parseInt(item1.getText());
+					int val2 = Integer.parseInt(item2.getText());
+					if(val1 < val2)
+					{
+						return -1;
+					}
+					if(val1 > val2)
+					{
+						return 1;
+					}
+					return 0;
+				}
+			});
+		}
+	}
+	
 
 	class NextButtonSelectionAdapter extends SelectionAdapter {
 
 		@Override
 		public void widgetSelected(SelectionEvent arg0)
 		{
-			int total = fTestResultsAnalysis.getCulpritCount();
 
-			if (total - fNumRow >= 31) { // MDX magic number
-				fNumRow = fNumRow + 31;
+			if (total - fNumRow >= maxNumRow) { 
+				fNumRow = fNumRow + maxNumRow;
 				fTable.removeAll();
 				fillTable(fTable, fTestResultDescrs);
+				
 			} else if (fNumRow < total) {
 				fNumRow = total;
 				fTable.removeAll();
 				fillTable(fTable, fTestResultDescrs);
+			}
+			
+			if (fCount == total && NextButton.isEnabled())
+			{
+
+				NextButton.setEnabled(false);
+			}
+			
+			if (fCount > 0 && !PrevButton.isEnabled())
+			{
+				PrevButton.setEnabled(true);
 			}
 		}
 	}
@@ -273,22 +374,31 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 
 		@Override
 		public void widgetSelected(SelectionEvent arg0) {
-
-			if (fNumRow >= 31 && fCount >= 31*2) { // MDX similar code as above - maybe extract to methods 
-				fNumRow = fNumRow - 31;
-				fCount = fCount - 31 * 2;
+			
+			if (fNumRow >= maxNumRow && fCount >= maxNumRow*2) { // MDX similar code as above - maybe extract to methods -> It is different algorithm ..
+				fNumRow = fNumRow - maxNumRow;
+				fCount = fCount - maxNumRow * 2;
 				fTable.removeAll();
 				fillTable(fTable, fTestResultDescrs);
-			} else if(fCount - 31 * 2 < 0) {
+			} else if(fCount - maxNumRow * 2 < 0) {
 				fCount = 0;
-				fNumRow = 31;
+				fNumRow = maxNumRow;
 				fTable.removeAll();
 				fillTable(fTable, fTestResultDescrs);
+			}
+			
+			if (fCount < total && !NextButton.isEnabled())
+			{
+				NextButton.setEnabled(true);
+			}
+			if (fCount == maxNumRow && PrevButton.isEnabled())
+			{
+				PrevButton.setEnabled(false);
 			}
 		}
 	}
 
-	public static void main(String[] args) { // MDX do we need this ?
+	public static void main(String[] args) { // MDX do we need this ? -- until we connect this to a real dialog
 		new CulpritAnalysisDialog().run();
 	}
 
