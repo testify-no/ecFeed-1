@@ -10,7 +10,7 @@
 
 package com.ecfeed.ui.editor.actions;
 
-import com.ecfeed.ui.dialogs.About2Dialog;
+import com.ecfeed.ui.dialogs.AboutDialog;
 
 public class AboutAction extends NamedAction {
 
@@ -20,7 +20,7 @@ public class AboutAction extends NamedAction {
 
 	@Override
 	public void run() {
-		About2Dialog.open();
+		AboutDialog.open();
 	}
 
 	@Override

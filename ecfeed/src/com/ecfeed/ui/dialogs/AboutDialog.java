@@ -16,7 +16,7 @@ import org.eclipse.swt.widgets.Display;
 import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.utils.StringHelper;
 
-public class About2Dialog {
+public class AboutDialog {
 
 	public static void open() {
 

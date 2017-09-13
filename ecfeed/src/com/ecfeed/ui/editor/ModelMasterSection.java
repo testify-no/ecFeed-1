@@ -32,7 +32,7 @@ import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.model.GlobalParameterNode;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
-import com.ecfeed.ui.dialogs.About2Dialog;
+import com.ecfeed.ui.dialogs.AboutDialog;
 import com.ecfeed.ui.dialogs.CheckForUpdatesDialog;
 import com.ecfeed.ui.editor.actions.BasicActionRunnerProvider;
 import com.ecfeed.ui.editor.actions.ModelViewerActionProvider;
@@ -207,7 +207,7 @@ public class ModelMasterSection extends TreeViewerSection {
 
 		@Override
 		public void run() {
-			About2Dialog.open();
+			AboutDialog.open();
 		}
 
 	}	
