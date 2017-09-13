@@ -106,22 +106,101 @@ public class Culprit {
 
 	public static int compareForSort(Culprit culprit1, Culprit culprit2) {
 
-		if (culprit1.fOtherData.fFailureIndex > culprit2.fOtherData.fFailureIndex) {
+		if (culprit1.fOtherData.fFailureIndex > culprit2.fOtherData.fFailureIndex) 
+		{
 			return -1;
 		}
 
-		if (culprit1.fOtherData.fFailureIndex < culprit2.fOtherData.fFailureIndex) {
+		if (culprit1.fOtherData.fFailureIndex < culprit2.fOtherData.fFailureIndex) 
+		{
 			return 1;
 		}	        
 
-		if (culprit1.fTestInput.size() > culprit2.fTestInput.size()) {
+		int compareSize = compareByTestInputSize(culprit1, culprit2);
+		if (compareSize != 0)
+		{
+			return compareSize;
+		}  
+		
+		int compareResult = compareResult(culprit1, culprit2);
+		if(compareResult != 0)
+		{
+			return compareResult;
+		}
+		
+		return 0;
+	}
+
+	public static int compareByFailureCountForSort(Culprit culprit1, Culprit culprit2) {
+		
+		if (culprit1.fFailureCount > culprit2.fFailureCount)
+		{
 			return -1;
 		}
-
-		if (culprit1.fTestInput.size() < culprit2.fTestInput.size()) {
+		
+		if (culprit1.fFailureCount < culprit2.fFailureCount)
+		{
 			return 1;
-		}    	
+		}
+		
+		int compareSize = compareByTestInputSize(culprit1, culprit2);
+		if (compareSize != 0)
+		{
+			return compareSize;
+		}
+		
+		int compareResult = compareResult(culprit1, culprit2);
+		if (compareResult != 0)
+		{
+			return compareResult;
+		}
+		
+		return 0;
+	}
+	
+	public static int compareByOccurenceCountForSort(Culprit culprit1, Culprit culprit2)
+	{
+		if (culprit1.fOccurenceCount > culprit2.fOccurenceCount)
+		{
+			return -1;
+		}
+		
+		if (culprit1.fOccurenceCount < culprit2.fOccurenceCount)
+		{
+			return 1;
+		}
+		
+		int compareSize = compareByTestInputSize(culprit1, culprit2);
+		if (compareSize != 0)
+		{
+			return compareSize;
+		}
+		
+		int compareResult = compareResult(culprit1, culprit2);
+		if (compareResult != 0)
+		{
+			return compareResult;
+		}
+		
+		return 0;
+	}
 
+	private static int compareByTestInputSize(Culprit culprit1, Culprit culprit2) {
+		
+		if (culprit1.fTestInput.size() > culprit2.fTestInput.size())
+		{
+			return -1;
+		}
+		
+		if (culprit1.fTestInput.size() < culprit2.fTestInput.size())
+		{
+			return 1;
+		}
+		
+		return 0;
+	}
+
+	private static int compareResult(Culprit culprit1, Culprit culprit2) {
 		int compareResult;
 		int size = culprit1.fTestInput.size();
 
@@ -131,12 +210,11 @@ public class Culprit {
 			DimensionedString DimensionedString2 = culprit2.fTestInput.get(index);
 
 			compareResult = DimensionedString.compareForSort(DimensionedString1, DimensionedString2);
-
+			
 			if (compareResult != 0) {
 				return compareResult;
 			}
 		}
-
 		return 0;
 	}
 

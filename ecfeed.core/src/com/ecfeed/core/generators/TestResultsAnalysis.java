@@ -18,7 +18,7 @@ import java.util.List;
 public class TestResultsAnalysis {
 
 	private List<Culprit> fCulprits = new ArrayList<Culprit>();
-
+	
 	public void aggregateCulprit(Culprit culpritToAggregate) {
 
 		Culprit extCulpritFromList = findCulpritByTuple(culpritToAggregate);
@@ -103,7 +103,58 @@ public class TestResultsAnalysis {
 
 		Collections.sort(fCulprits, new FailureIndexComparator());
 	}
-
+	
+	public void SortColumnInput(String dir, String name)
+	{
+		if (dir == "SWT.UP")
+		{
+			if (name == "Occurences")
+			{
+				Collections.sort(fCulprits, new OccurenceComparator());
+			}
+			if (name == "Fails")
+			{
+				Collections.sort(fCulprits, new FailureComparator());
+			}
+			if (name == "Failure Index")
+			{
+				Collections.sort(fCulprits, new FailureIndexComparator());
+			}
+		}else
+		{
+			if (name == "Occurences")
+			{
+				Collections.sort(fCulprits, new OccurenceComparatorDecreasing());
+			}
+			if (name == "Fails")
+			{
+				Collections.sort(fCulprits, new FailureComparatorDecreasing());
+			}
+			if (name == "Failure Index")
+			{
+				Collections.sort(fCulprits, new FailureIndexComparatorDecreasing());
+			}
+		}
+	}
+	
+	class FailureComparator implements Comparator<Culprit>{
+		
+		@Override
+		public int compare(Culprit culprit1, Culprit culprit2)
+		{
+			return Culprit.compareByFailureCountForSort(culprit1, culprit2);
+		}
+	}
+	
+	class OccurenceComparator implements Comparator<Culprit>{
+		
+		@Override
+		public int compare(Culprit culprit1, Culprit culprit2)
+		{
+			return Culprit.compareByOccurenceCountForSort(culprit1, culprit2);
+		}
+	}
+	
 	class FailureIndexComparator implements Comparator<Culprit> {
 
 		@Override
@@ -112,7 +163,32 @@ public class TestResultsAnalysis {
 			return Culprit.compareForSort(culprit1, culprit2);
 		}
 	}
+	
+	class FailureComparatorDecreasing implements Comparator<Culprit>{
 
+		@Override
+		public int compare(Culprit culprit1, Culprit culprit2)
+		{
+			return (Culprit.compareByFailureCountForSort(culprit1, culprit2) )* -1;
+		}
+	}
 
+	class OccurenceComparatorDecreasing implements Comparator<Culprit>{
+
+		@Override
+		public int compare(Culprit culprit1, Culprit culprit2)
+		{
+			return (Culprit.compareByOccurenceCountForSort(culprit1, culprit2)) * -1;
+		}
+	}
+
+	class FailureIndexComparatorDecreasing implements Comparator<Culprit> {
+
+		@Override
+		public int compare(Culprit culprit1, Culprit culprit2) {
+
+			return (Culprit.compareForSort(culprit1, culprit2)) * -1;
+		}
+	}
 }
 
