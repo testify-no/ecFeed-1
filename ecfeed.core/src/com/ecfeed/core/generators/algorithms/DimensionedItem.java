@@ -39,11 +39,11 @@ public class DimensionedItem<E> {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 
-		sb.append("[dim:");
+		sb.append("dim:");
 		sb.append(fDimension);
 		sb.append(", item:");
 		sb.append(fItem);
-		sb.append("]");
+		//sb.append("]");
 
 		return sb.toString();
 	}
