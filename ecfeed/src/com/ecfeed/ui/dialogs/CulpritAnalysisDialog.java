@@ -11,7 +11,6 @@
 package com.ecfeed.ui.dialogs;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
@@ -30,7 +29,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -41,7 +39,7 @@ import com.ecfeed.core.generators.TestResultsAnalyzer;
 import com.ecfeed.ui.dialogs.basic.DialogObjectToolkit;
 
 public class CulpritAnalysisDialog extends TitleAreaDialog {
-	
+
 	private DialogObjectToolkit fDialogObjectToolkit;
 	private int fCount = 0;
 	private int fNumRow = 0;
@@ -107,8 +105,8 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 		PrevButton.setLayoutData(new GridData(SWT.RIGHT, SWT.RIGHT, true, true));
 		NextButton.setLayoutData(new GridData(SWT.RIGHT, SWT.RIGHT, false, false));
 		PrevButton.setEnabled(false);
-		
-		
+
+
 		// MDX convert PrevButton and NextButton to class fields + call e.g fPrevButton.setEnabled methods -- we agreed to discuss this
 
 		return dialogArea;
@@ -145,18 +143,18 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 		table.setRedraw(false);
 
 		initializeRowCount();	
-		
+
 		while (fCount < fNumRow) {
-			
+
 			createTableItem(table);
 			fCount++;
 		}
-		
+
 		table.setRedraw(true);	
 	}
 
 	private void createTableItem( Table table) {
-		
+
 		int c = 0;
 		TableItem item = new TableItem(table, SWT.NONE);
 		item.setText(c++, Integer.toString(fCount+1));
@@ -164,7 +162,7 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 		item.setText(c++, String.valueOf(fTestResultsAnalysis.getCulprit(fCount).getFailureIndex()));
 		item.setText(c++, Integer.toString(fTestResultsAnalysis.getCulprit(fCount).getOccurenceCount()));
 		item.setText(c++, Integer.toString(fTestResultsAnalysis.getCulprit(fCount).getFailureCount()));	
-		
+
 	}
 
 	private void initializeRowCount() {
@@ -204,13 +202,13 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 			}
 
 			Point oldSize = fTable.getSize();
-			
+
 			RegulateTableSize(oldSize, width, area);
 
 		}
 
 		private void RegulateTableSize(Point oldSize, int width, Rectangle area) {
-			
+
 			if (oldSize.x > area.width) {
 
 				setColumnWidth(width);
@@ -226,7 +224,7 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 		}
 
 		private void setColumnWidth(int width) {
-			
+
 			for (int i = 0; i < fColumn.length; i++) {
 
 				if (i == 1) { //More space needed to describe the tuple
@@ -262,64 +260,74 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 
 		return testResultDescrs;
 	}
-	
+
 	private void SortByHeaders(Table table, TableColumn[] column)
 	{
 		CompareByVal(column);
-		
-		Listener sortListener = new Listener(){
-			public void handleEvent(Event e)
-			{
-				TableColumn sortColumn = table.getSortColumn();
-				TableColumn selectedColumn = (TableColumn) e.widget;
-				int dir = table.getSortDirection();
-	
-				setSortDir(sortColumn, selectedColumn, dir);
-				
-				if(dir == SWT.UP)
-				{
-					fTestResultsAnalysis.SortColumnInput("SWT.UP", selectedColumn.getText());
-					fTable.removeAll();
-					fCount = 0;
-					fillTable(fTable, fTestResultDescrs);
-					
-				} else {
-					fTestResultsAnalysis.SortColumnInput("SWT.DOWN", selectedColumn.getText());
-					fTable.removeAll();
-					fCount = 0;
-					fillTable(fTable, fTestResultDescrs);
-				}			
-			}
-			
-			private void setSortDir(TableColumn sortColumn, TableColumn selectedColumn, int dir) {
-				
-				if (sortColumn == selectedColumn)
-				{
-					if (dir == SWT.UP)
-					{
-						table.setSortDirection(SWT.DOWN);
-					} else {
-						table.setSortDirection(SWT.UP);
-					}
-				} else {
-					table.setSortColumn(selectedColumn);
-					dir = SWT.UP;
-				}
-				
-			}
-		};
-		
+
+		Listener sortListener = new SortByHeadersListener(table);
+
 		for (int i = 0; i < column.length; i++)
 		{
 			column[i].addListener(SWT.Selection, sortListener);
 		}	
 	}
 
+	private class SortByHeadersListener implements Listener {
+
+		Table fTable;
+
+		public SortByHeadersListener(Table table) {
+			fTable = table;
+		}
+
+		public void handleEvent(Event e)
+		{
+			TableColumn sortColumn = fTable.getSortColumn();
+			TableColumn selectedColumn = (TableColumn) e.widget;
+			int dir = fTable.getSortDirection();
+
+			setSortDir(sortColumn, selectedColumn, dir);
+
+			if(dir == SWT.UP)
+			{
+				fTestResultsAnalysis.SortColumnInput("SWT.UP", selectedColumn.getText());
+				fTable.removeAll();
+				fCount = 0;
+				fillTable(fTable, fTestResultDescrs);
+
+			} else {
+				fTestResultsAnalysis.SortColumnInput("SWT.DOWN", selectedColumn.getText());
+				fTable.removeAll();
+				fCount = 0;
+				fillTable(fTable, fTestResultDescrs);
+			}			
+		}
+
+		private void setSortDir(TableColumn sortColumn, TableColumn selectedColumn, int dir) {
+
+			if (sortColumn == selectedColumn)
+			{
+				if (dir == SWT.UP)
+				{
+					fTable.setSortDirection(SWT.DOWN);
+				} else {
+					fTable.setSortDirection(SWT.UP);
+				}
+			} else {
+				fTable.setSortColumn(selectedColumn);
+				dir = SWT.UP;
+			}
+
+		}
+
+	}
+
 	private void CompareByVal(TableColumn[] column) {
 		for(int i = 0; i < column.length; i++)
 		{
 			column[i].setData(new Comparator<TableItem>(){
-				
+
 				@Override
 				public int compare(TableItem item1, TableItem item2)
 				{
@@ -338,7 +346,7 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 			});
 		}
 	}
-	
+
 
 	class NextButtonSelectionAdapter extends SelectionAdapter {
 
@@ -350,19 +358,19 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 				fNumRow = fNumRow + maxNumRow;
 				fTable.removeAll();
 				fillTable(fTable, fTestResultDescrs);
-				
+
 			} else if (fNumRow < total) {
 				fNumRow = total;
 				fTable.removeAll();
 				fillTable(fTable, fTestResultDescrs);
 			}
-			
+
 			if (fCount == total && NextButton.isEnabled())
 			{
 
 				NextButton.setEnabled(false);
 			}
-			
+
 			if (fCount > 0 && !PrevButton.isEnabled())
 			{
 				PrevButton.setEnabled(true);
@@ -374,7 +382,7 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 
 		@Override
 		public void widgetSelected(SelectionEvent arg0) {
-			
+
 			if (fNumRow >= maxNumRow && fCount >= maxNumRow*2) { // MDX similar code as above - maybe extract to methods -> It is different algorithm ..
 				fNumRow = fNumRow - maxNumRow;
 				fCount = fCount - maxNumRow * 2;
@@ -386,7 +394,7 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 				fTable.removeAll();
 				fillTable(fTable, fTestResultDescrs);
 			}
-			
+
 			if (fCount < total && !NextButton.isEnabled())
 			{
 				NextButton.setEnabled(true);
