@@ -12,12 +12,15 @@ package com.ecfeed.application;
 
 import java.util.Dictionary;
 
+import org.eclipse.core.commands.operations.IUndoContext;
+import org.eclipse.core.commands.operations.ObjectUndoContext;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.ui.PlatformUI;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
 
 import com.ecfeed.core.utils.StringHelper;
+import com.ecfeed.ui.editor.ModelEditorHelper;
 
 
 public class ApplicationContext {
@@ -31,6 +34,7 @@ public class ApplicationContext {
 	static ApplicationType fApplicationType = ApplicationType.LOCAL_PLUGIN;
 	static String fExportFileName;
 	static String fMainBundleName = "com.ecfeed";
+	static private ObjectUndoContext fRapObjectUndoContext = null;
 
 	public static boolean isApplicationTypeLocalStandalone() {
 
@@ -99,9 +103,9 @@ public class ApplicationContext {
 	public static String getMainBundleName() {
 		return fMainBundleName;
 	}
-	
+
 	public static String getRapVersion() {
-		
+
 		Bundle bundle = Platform.getBundle( PlatformUI.PLUGIN_ID );
 		Dictionary<String, String> headers = bundle.getHeaders();
 		return headers.get( Constants.BUNDLE_VERSION );
@@ -129,6 +133,19 @@ public class ApplicationContext {
 		version = StringHelper.removeFromPostfix(".qualifier", version);
 
 		return version;
+	}
+
+	public static void setRapUndoContextObject(Object obj) {
+		fRapObjectUndoContext = new ObjectUndoContext(obj);
+	}
+
+	public static IUndoContext getUndoContext() {
+
+		if (isApplicationTypeLocal()) {
+			return ModelEditorHelper.getActiveModelEditor().getUndoContext();
+		}
+
+		return fRapObjectUndoContext;
 	}
 
 }

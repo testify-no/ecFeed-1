@@ -15,6 +15,7 @@ import org.eclipse.core.commands.operations.IOperationHistory;
 import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.core.commands.operations.OperationHistoryFactory;
 
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.editor.actions.IActionRunner;
 
@@ -23,7 +24,7 @@ public class RedoActionRunner implements IActionRunner {
 	@Override
 	public void run() {
 		IOperationHistory operationHistory = OperationHistoryFactory.getOperationHistory();
-		IUndoContext undoContext = ModelEditorHelper.getActiveModelEditor().getUndoContext();
+		IUndoContext undoContext = ApplicationContext.getUndoContext();
 
 		try {
 			operationHistory.redo(undoContext, null, null);
