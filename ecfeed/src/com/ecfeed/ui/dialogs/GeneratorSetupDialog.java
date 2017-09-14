@@ -61,8 +61,10 @@ import com.ecfeed.core.model.ConstraintNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelHelper;
+import com.ecfeed.core.model.ModelSizeHelper;
 import com.ecfeed.core.serialization.export.ExportTemplateFactory;
 import com.ecfeed.core.serialization.export.IExportTemplate;
+import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.StringHolder;
 import com.ecfeed.ui.common.ApplyValueMode;
@@ -74,6 +76,7 @@ import com.ecfeed.ui.common.TreeCheckStateListener;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.TestCasesExportDialog.FileCompositeVisibility;
 import com.ecfeed.ui.dialogs.basic.DialogObjectToolkit;
+import com.ecfeed.ui.dialogs.basic.InfoDialog;
 import com.ecfeed.ui.editor.IValueApplier;
 
 public abstract class GeneratorSetupDialog extends TitleAreaDialog {
@@ -107,7 +110,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 	public final static int GENERATOR_SELECTION_COMPOSITE = 1 << 3;
 	public final static int TEST_CASES_EXPORT_COMPOSITE = 1 << 4;
 
-	public GeneratorSetupDialog(
+	protected GeneratorSetupDialog(
 			Shell parentShell, 
 			MethodNode method,
 			boolean generateExecutables, 
@@ -116,6 +119,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 			String targetFile) {
 
 		super(parentShell);
+
 		setHelpAvailable(false);
 		setShellStyle(SWT.BORDER | SWT.RESIZE | SWT.TITLE | SWT.APPLICATION_MODAL);
 
@@ -134,6 +138,22 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		}
 
 		fTargetFile = targetFile;
+	}
+
+	public static boolean canCreate(MethodNode methodNode) {
+
+		if (ApplicationContext.isApplicationTypeLocal()) {
+			return true;
+		}
+
+		String errMessage = ModelSizeHelper.isMethodOkForFreeUse(methodNode);
+
+		if (errMessage == null) {
+			return true;
+		}
+
+		InfoDialog.open(errMessage);
+		return false;
 	}
 
 	protected abstract String getDialogTitle();

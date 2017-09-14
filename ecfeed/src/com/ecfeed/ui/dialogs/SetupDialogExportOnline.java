@@ -18,7 +18,26 @@ import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 
 public class SetupDialogExportOnline extends SetupDialogOnline {
 
-	public SetupDialogExportOnline(
+	public static SetupDialogExportOnline create(
+			Shell parentShell, 
+			MethodNode method,
+			IJavaProjectProvider javaProjectProvider,
+			ExportTemplateFactory exportTemplateFactory,
+			String targetFile) {
+
+		if (!canCreate(method)) {
+			return null; 
+		}
+
+		return new SetupDialogExportOnline (
+				parentShell, 
+				method,
+				javaProjectProvider,
+				exportTemplateFactory,
+				targetFile);
+	}
+	
+	protected SetupDialogExportOnline(
 			Shell parentShell, 
 			MethodNode method,
 			IJavaProjectProvider javaProjectProvider,

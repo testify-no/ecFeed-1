@@ -49,7 +49,7 @@ public class OnlineExportSupport extends AbstractOnlineSupport {
 		ExportTemplateFactory exportTemplateFactory = 
 				new ExportTemplateFactory(methodNode);
 
-		return new SetupDialogExportOnline(
+		return SetupDialogExportOnline.create(
 				activeShell, methodNode, javaProjectProvider, exportTemplateFactory, fTargetFile);
 	}
 

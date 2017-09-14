@@ -17,7 +17,25 @@ import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 
 public class SetupDialogExecuteOnline extends SetupDialogOnline {
 
-	public SetupDialogExecuteOnline(
+
+	public static SetupDialogExecuteOnline create(
+			Shell parentShell, 
+			MethodNode method,
+			IJavaProjectProvider javaProjectProvider, 
+			String targetFile) {
+
+		if (!canCreate(method)) {
+			return null;
+		}
+
+		return new SetupDialogExecuteOnline(
+				parentShell, 
+				method,
+				javaProjectProvider, 
+				targetFile);				
+	}
+
+	protected SetupDialogExecuteOnline(
 			Shell parentShell, 
 			MethodNode method,
 			IJavaProjectProvider javaProjectProvider, 

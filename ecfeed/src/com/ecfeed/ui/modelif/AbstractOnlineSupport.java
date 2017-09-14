@@ -139,6 +139,10 @@ public abstract class AbstractOnlineSupport {
 				createSetupDialog(
 						Display.getCurrent().getActiveShell(), fMethodNode, fJavaProjectProvider);
 
+		if (dialog == null) {
+			return Result.CANCELED;
+		}
+
 		if (dialog.open() != IDialogConstants.OK_ID) {
 			return Result.CANCELED;
 		}

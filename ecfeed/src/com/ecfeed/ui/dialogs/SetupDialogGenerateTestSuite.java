@@ -18,7 +18,24 @@ import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 
 public class SetupDialogGenerateTestSuite extends GeneratorSetupDialog {
 
-	public SetupDialogGenerateTestSuite(
+	public static SetupDialogGenerateTestSuite create(
+			Shell parentShell, 
+			MethodNode method,
+			ExportTemplateFactory exportTemplateFactory,
+			IJavaProjectProvider javaProjectProvider) {
+
+		if (!canCreate(method)) {
+			return null;
+		}
+
+		return new SetupDialogGenerateTestSuite(
+				parentShell, 
+				method,
+				exportTemplateFactory,
+				javaProjectProvider);
+	}
+
+	protected SetupDialogGenerateTestSuite(
 			Shell parentShell, 
 			MethodNode method,
 			ExportTemplateFactory exportTemplateFactory,

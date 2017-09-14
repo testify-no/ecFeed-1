@@ -117,25 +117,32 @@ public class TestSuiteGenerationSupport {
 		fHasData = generate() && !fCanceled;
 	}
 
-	protected boolean generate(){
+	protected boolean generate() {
+
 		SetupDialogGenerateTestSuite dialog = 
-				new SetupDialogGenerateTestSuite(
+				SetupDialogGenerateTestSuite.create(
 						getActiveShell(), fTarget, null, fJavaProjectProvider);
 
-		if(dialog.open() == IDialogConstants.OK_ID){
-			IGenerator<ChoiceNode> selectedGenerator = dialog.getSelectedGenerator();
-			List<List<ChoiceNode>> algorithmInput = dialog.getAlgorithmInput();
-			fSelectedConstraints = new ArrayList<IConstraint<ChoiceNode>>();
-			fSelectedConstraints.addAll(dialog.getConstraints());
-			fSelectedConstraints.add(new ExpectedValueReplacer());
-			List<IConstraint<ChoiceNode>> constraints = new ArrayList<IConstraint<ChoiceNode>>();
-			constraints.addAll(fSelectedConstraints);
-			fTestSuiteName = dialog.getTestSuiteName();
-			Map<String, Object> parameters = dialog.getGeneratorParameters();
-			fGeneratedData = generateTestData(selectedGenerator, algorithmInput, constraints, parameters);
-			return true;
+		if (dialog == null) {
+			return false;
 		}
-		return false;
+
+		if (dialog.open() != IDialogConstants.OK_ID) {
+			return false;
+		}
+
+		IGenerator<ChoiceNode> selectedGenerator = dialog.getSelectedGenerator();
+		List<List<ChoiceNode>> algorithmInput = dialog.getAlgorithmInput();
+		fSelectedConstraints = new ArrayList<IConstraint<ChoiceNode>>();
+		fSelectedConstraints.addAll(dialog.getConstraints());
+		fSelectedConstraints.add(new ExpectedValueReplacer());
+		List<IConstraint<ChoiceNode>> constraints = new ArrayList<IConstraint<ChoiceNode>>();
+		constraints.addAll(fSelectedConstraints);
+		fTestSuiteName = dialog.getTestSuiteName();
+		Map<String, Object> parameters = dialog.getGeneratorParameters();
+		fGeneratedData = generateTestData(selectedGenerator, algorithmInput, constraints, parameters);
+
+		return true;
 	}
 
 	public List<List<ChoiceNode>> getGeneratedData(){

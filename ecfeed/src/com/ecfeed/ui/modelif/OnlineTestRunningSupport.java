@@ -63,8 +63,9 @@ public class OnlineTestRunningSupport extends AbstractOnlineSupport {
 	protected SetupDialogOnline createSetupDialog(Shell activeShell,
 			MethodNode methodNode, IJavaProjectProvider javaProjectProvider) {
 
-		return new SetupDialogExecuteOnline(
+		return SetupDialogExecuteOnline.create(
 				activeShell, methodNode, javaProjectProvider, null);
+
 	}
 
 	@Override

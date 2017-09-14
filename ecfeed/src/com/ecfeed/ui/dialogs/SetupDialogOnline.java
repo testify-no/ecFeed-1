@@ -18,7 +18,7 @@ import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 
 public abstract class SetupDialogOnline extends GeneratorSetupDialog {
 
-	public SetupDialogOnline(
+	protected SetupDialogOnline(
 			Shell parentShell, 
 			MethodNode method, 
 			boolean generateExecutables,
