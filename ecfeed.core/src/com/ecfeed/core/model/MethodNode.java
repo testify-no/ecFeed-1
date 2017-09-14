@@ -191,6 +191,11 @@ public class MethodNode extends ParametersParentNode {
 	public MethodParameterNode getMethodParameter(int index) {
 		return (MethodParameterNode)(getParameters().get(index));
 	}
+	
+	public int getMethodParameterCount()
+	{
+		return getParameters().size();
+	}
 
 	public List<ConstraintNode> getConstraintNodes(){
 		return fConstraints;
