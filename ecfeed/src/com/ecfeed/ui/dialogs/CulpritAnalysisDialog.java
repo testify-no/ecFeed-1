@@ -20,10 +20,12 @@ import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -36,6 +38,7 @@ import org.eclipse.swt.widgets.TableItem;
 import com.ecfeed.core.generators.TestResultDescription;
 import com.ecfeed.core.generators.TestResultsAnalysis;
 import com.ecfeed.core.generators.TestResultsAnalyzer;
+import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.ui.dialogs.basic.DialogObjectToolkit;
 
 public class CulpritAnalysisDialog extends TitleAreaDialog {
@@ -43,21 +46,28 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 	private DialogObjectToolkit fDialogObjectToolkit;
 	private int fCount = 0;
 	private int fNumRow = 0;
-	final private int n1 = 1;
-	final private int n2 = 3;
+	final private int fNumColumn = 5;
+	private int n1 = 1;
+	private int n2 = 3;
 	final private int maxNumRow = 31;
 	final private int ComboMaxLimit = 10;
 	private Table fTable = null;
 	private List<TestResultDescription> fTestResultDescrs = createtestResultDescrs(); // MDX move create... to constructor -- yes when this is connected to a real dialog
 	private TestResultsAnalysis fTestResultsAnalysis 
 	= new TestResultsAnalyzer().generateAnalysis(fTestResultDescrs, n1, n2); // MDX move creation to contructor -- yes when this is connected to a real dialog
-	int total = fTestResultsAnalysis.getCulpritCount();	
+	int total = fTestResultsAnalysis.getCulpritCount();
 	Button NextButton;
 	Button PrevButton;
+	Combo minCombo;
+	Combo maxCombo;
+	
 
 	public CulpritAnalysisDialog() {
 		super(null);
 		fDialogObjectToolkit = DialogObjectToolkit.getInstance();
+		setBlockOnOpen(true);
+		open();
+		Display.getCurrent().dispose();
 	}
 
 	public void run() { // MDX do we need this now ? -- until we connect this to a real dialog.
@@ -88,9 +98,9 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 
 		Composite ComboComposite = (Composite) fDialogObjectToolkit.createGridComposite(dialogArea, 4);
 		createLabel(ComboComposite, "min");
-		createCombo(ComboComposite, 0);
+		minCombo = createCombo(ComboComposite, 0, new MinComboSelectionAdapter());
 		createLabel(ComboComposite, "max");
-		createCombo(ComboComposite, 2);
+		maxCombo = createCombo(ComboComposite, 2, new MaxComboSelectionAdapter());
 
 		Composite TableComposite = (Composite) fDialogObjectToolkit.createGridComposite(dialogArea, 1);
 		fTable = createTableContents(TableComposite, 4);
@@ -114,8 +124,14 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 
 
 
-	private void createCombo(Composite parentComposite, int defaultValue) {
-		fDialogObjectToolkit.createCombo(parentComposite, ComboMaxLimit, defaultValue);
+	private Combo createCombo(Composite parentComposite, int defaultValue, SelectionListener selectionListener) {
+		Combo c = fDialogObjectToolkit.createCombo(parentComposite, ComboMaxLimit, defaultValue);
+		
+		if(selectionListener != null)
+		{
+			c.addSelectionListener(selectionListener);
+		}
+		return c;
 	}
 
 	private void createLabel(Composite parentComposite, String text) {
@@ -126,7 +142,7 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 
 		Table table = fDialogObjectToolkit.createTable(parentComposite);
 		String[] ColumnNames = {"Rank", "Tuple", "Failure Index", "Occurences", "Fails"};
-		TableColumn[] column = fDialogObjectToolkit.addColumn(table, 5, ColumnNames);
+		TableColumn[] column = fDialogObjectToolkit.addColumn(table, fNumColumn, ColumnNames);
 		fillTable(table, fTestResultDescrs);
 
 		for (int i = 0; i< column.length; i++) {
@@ -134,7 +150,7 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 		}
 
 		makeColumnResizable(parentComposite, column);
-		SortByHeaders(table, column);
+		sortByHeaders(table, column);
 		return table;
 	}
 
@@ -261,9 +277,9 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 		return testResultDescrs;
 	}
 
-	private void SortByHeaders(Table table, TableColumn[] column)
+	private void sortByHeaders(Table table, TableColumn[] column)
 	{
-		CompareByVal(column);
+		//compareByVal(column);
 
 		Listener sortListener = new SortByHeadersListener(table);
 
@@ -323,36 +339,14 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 
 	}
 
-	private void CompareByVal(TableColumn[] column) {
-		for(int i = 0; i < column.length; i++)
-		{
-			column[i].setData(new Comparator<TableItem>(){
-
-				@Override
-				public int compare(TableItem item1, TableItem item2)
-				{
-					int val1 = Integer.parseInt(item1.getText());
-					int val2 = Integer.parseInt(item2.getText());
-					if(val1 < val2)
-					{
-						return -1;
-					}
-					if(val1 > val2)
-					{
-						return 1;
-					}
-					return 0;
-				}
-			});
-		}
-	}
-
 
 	class NextButtonSelectionAdapter extends SelectionAdapter {
 
 		@Override
 		public void widgetSelected(SelectionEvent arg0)
 		{
+			System.out.println(total+ " " +fNumRow);
+			
 
 			if (total - fNumRow >= maxNumRow) { 
 				fNumRow = fNumRow + maxNumRow;
@@ -403,6 +397,62 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 			{
 				PrevButton.setEnabled(false);
 			}
+		}
+	}
+	
+	class MinComboSelectionAdapter extends SelectionAdapter {
+		
+		@Override
+		public void widgetSelected(SelectionEvent e)
+		{
+			n1 = Integer.parseInt(minCombo.getText());
+			loadNewData(n1);
+			
+		}
+
+		private void loadNewData(int n1) {
+			if(n1 < n2)
+			{
+				System.out.println(fCount + " " + fNumRow);
+				if(fCount == fNumRow)
+				{
+					fCount = 0;
+				}
+				System.out.println(fCount + " " + fNumRow);
+				fTestResultsAnalysis = new TestResultsAnalyzer().generateAnalysis(fTestResultDescrs, n1, n2);
+				total = fTestResultsAnalysis.getCulpritCount();
+				fTable.removeAll();
+				fillTable(fTable, fTestResultDescrs);
+			}
+			
+		}
+	}
+	
+	class MaxComboSelectionAdapter extends SelectionAdapter {
+		
+		@Override
+		public void widgetSelected(SelectionEvent e)
+		{
+			n2 = Integer.parseInt(maxCombo.getText());
+			loadNewData(n2);
+			
+		}
+
+		private void loadNewData(int n2) {
+			if(n1 < n2)
+			{
+				System.out.println(fCount + " " + fNumRow);
+				if(fCount == fNumRow)
+				{
+					fCount = 0;
+				}
+				System.out.println(fCount + " " + fNumRow);
+				fTestResultsAnalysis = new TestResultsAnalyzer().generateAnalysis(fTestResultDescrs, n1, n2);
+				total = fTestResultsAnalysis.getCulpritCount();
+				fTable.removeAll();
+				fillTable(fTable, fTestResultDescrs);
+			}
+			
 		}
 	}
 
