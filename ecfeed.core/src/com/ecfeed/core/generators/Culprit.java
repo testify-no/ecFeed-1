@@ -114,7 +114,17 @@ public class Culprit {
 		if (culprit1.fOtherData.fFailureIndex < culprit2.fOtherData.fFailureIndex) 
 		{
 			return 1;
-		}	        
+		}	
+		
+		if (culprit1.fOccurenceCount > culprit2.fOccurenceCount)
+		{
+			return -1;
+		}
+		
+		if (culprit1.fOccurenceCount < culprit2.fOccurenceCount)
+		{
+			return 1;
+		}
 
 		int compareSize = compareByTestInputSize(culprit1, culprit2);
 		if (compareSize != 0)
@@ -128,6 +138,12 @@ public class Culprit {
 			return compareResult;
 		}
 		
+		int compOccur = compareByOccurenceCountForSort(culprit1, culprit2);
+		if(compOccur>0)
+		{
+			return compOccur;
+		}
+		
 		return 0;
 	}
 
@@ -139,6 +155,15 @@ public class Culprit {
 		}
 		
 		if (culprit1.fFailureCount < culprit2.fFailureCount)
+		{
+			return 1;
+		}
+		if (culprit1.fOccurenceCount > culprit2.fOccurenceCount)
+		{
+			return -1;
+		}
+		
+		if (culprit1.fOccurenceCount < culprit2.fOccurenceCount)
 		{
 			return 1;
 		}
@@ -166,6 +191,16 @@ public class Culprit {
 		}
 		
 		if (culprit1.fOccurenceCount < culprit2.fOccurenceCount)
+		{
+			return 1;
+		}
+		
+		if (culprit1.fOtherData.fFailureIndex > culprit2.fOtherData.fFailureIndex) 
+		{
+			return -1;
+		}
+
+		if (culprit1.fOtherData.fFailureIndex < culprit2.fOtherData.fFailureIndex) 
 		{
 			return 1;
 		}
