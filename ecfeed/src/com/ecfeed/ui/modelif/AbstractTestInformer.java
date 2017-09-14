@@ -19,9 +19,11 @@ import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.Display;
 
 import com.ecfeed.core.runner.RunnerException;
 import com.ecfeed.ui.common.Messages;
+import com.ecfeed.ui.dialogs.basic.AdvancedStatisticsButtonDialog;
 import com.ecfeed.ui.plugin.Activator;
 
 public abstract class AbstractTestInformer {
@@ -83,8 +85,11 @@ public abstract class AbstractTestInformer {
 							fUnsuccesfullExecutionStatuses.toArray(new Status[]{}), 
 							"Open details to see more", 
 							new RunnerException("Problematic test cases"));
+			
+			AdvancedStatisticsButtonDialog dialog = new AdvancedStatisticsButtonDialog(null, Messages.DIALOG_TEST_EXECUTION_REPORT_TITLE, msg, ms, IStatus.ERROR);
+			dialog.open();
 
-			ErrorDialog.openError(null, Messages.DIALOG_TEST_EXECUTION_REPORT_TITLE, msg, ms);
+//			ErrorDialog.openError(null, Messages.DIALOG_TEST_EXECUTION_REPORT_TITLE, msg, ms);
 			return;
 		}
 		if (fExecutedTestCases > 0) {
