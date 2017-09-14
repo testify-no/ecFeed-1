@@ -14,8 +14,8 @@ import java.util.List;
 
 public class ModelSizeHelper {
 
-	static final int MAX_PARAMETER_COUNT_FOR_FREE_VERSION = 2; 
-	static final int MAX_CHOICE_COUNT_FOR_FREE_VERSION = 2;
+	static final int MAX_PARAMETER_COUNT_FOR_FREE_VERSION = 7; 
+	static final int MAX_CHOICE_COUNT_FOR_FREE_VERSION = 7;
 
 	public static String isMethodOkForFreeUse(MethodNode methodNode) {
 

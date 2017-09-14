@@ -74,7 +74,7 @@ public abstract class ChoicesParentNode extends AbstractNode{
 	public int getChoiceCount() {
 		return getChoices().size();
 	}
-	
+
 	public List<ChoiceNode> getChoicesWithCopies() {
 		return fChoices;
 	}

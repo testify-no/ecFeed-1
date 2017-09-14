@@ -36,7 +36,7 @@ public class SetupDialogExportOnline extends SetupDialogOnline {
 				exportTemplateFactory,
 				targetFile);
 	}
-	
+
 	protected SetupDialogExportOnline(
 			Shell parentShell, 
 			MethodNode method,

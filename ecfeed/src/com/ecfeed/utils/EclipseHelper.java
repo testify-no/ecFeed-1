@@ -21,7 +21,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
 public class EclipseHelper {
-	
+
 	public static Shell getActiveShell() {
 		return Display.getDefault().getActiveShell();
 	}
@@ -29,11 +29,11 @@ public class EclipseHelper {
 	public static IWorkbenchPage getActiveWorkBenchPage() {
 		return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 	}
-	
+
 	public static IWorkbenchWindow getActiveWorkbenchWindow() {
 		return PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 	}
-	
+
 	public static IAction getGlobalAction(String actionId) {
 		IActionBars actionBars = EclipseHelper.getActionBarsForActiveEditor();
 		return actionBars.getGlobalActionHandler(actionId);
@@ -47,20 +47,20 @@ public class EclipseHelper {
 		}
 		return editorPart.getEditorSite().getActionBars();
 	}
-	
+
 	public static IEditorPart getActiveEditor() {
 		return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 	}
 
 	public static IViewPart getViewPartById(String viewId) {
-		
+
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-		
+
 		if (page == null) {
 			return null;
 		}
-			
+
 		return page.findView(viewId);
 	}
-	
+
 }
