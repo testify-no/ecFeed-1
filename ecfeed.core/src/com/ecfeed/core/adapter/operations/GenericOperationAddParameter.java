@@ -101,7 +101,7 @@ public class GenericOperationAddParameter extends AbstractModelOperation {
 
 	@Override
 	public AbstractNode getNodeToBeSelectedAfterTheOperation() {
-		return fAbstractParameterNode;
+		return fParametersParentNode;
 	}
 
 }
