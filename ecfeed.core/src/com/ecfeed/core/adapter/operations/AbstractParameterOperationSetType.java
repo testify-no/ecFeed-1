@@ -20,6 +20,7 @@ import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.ITypeAdapter;
 import com.ecfeed.core.adapter.ITypeAdapterProvider;
 import com.ecfeed.core.adapter.java.Messages;
+import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.ChoicesParentNode;
@@ -71,6 +72,11 @@ public class AbstractParameterOperationSetType extends AbstractModelOperation {
 				}
 				restoreOriginalValues(choice);
 			}
+		}
+
+		@Override
+		public AbstractNode getNodeToBeSelectedAfterTheOperation() {
+			return fTarget;
 		}
 
 	}
@@ -221,6 +227,11 @@ public class AbstractParameterOperationSetType extends AbstractModelOperation {
 
 	protected String getNewType(){
 		return fNewType;
+	}
+
+	@Override
+	public AbstractNode getNodeToBeSelectedAfterTheOperation() {
+		return fTarget;
 	}
 
 }

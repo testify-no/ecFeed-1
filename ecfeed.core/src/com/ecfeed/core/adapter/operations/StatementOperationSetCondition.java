@@ -13,6 +13,7 @@ package com.ecfeed.core.adapter.operations;
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.model.RelationStatement;
 import com.ecfeed.core.model.ModelOperationException;
+import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.IStatementCondition;
 
 public class StatementOperationSetCondition extends AbstractModelOperation {
@@ -37,6 +38,11 @@ public class StatementOperationSetCondition extends AbstractModelOperation {
 	@Override
 	public IModelOperation reverseOperation() {
 		return new StatementOperationSetCondition(fTarget, fCurrentCondition);
+	}
+
+	@Override
+	public AbstractNode getNodeToBeSelectedAfterTheOperation() {
+		return null;
 	}
 
 }

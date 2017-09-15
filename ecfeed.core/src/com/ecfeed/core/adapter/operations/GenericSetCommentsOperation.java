@@ -39,4 +39,9 @@ public class GenericSetCommentsOperation extends AbstractModelOperation {
 		return new GenericSetCommentsOperation(fTarget, fCurrentComments);
 	}
 
+	@Override
+	public AbstractNode getNodeToBeSelectedAfterTheOperation() {
+		return fTarget;
+	}
+
 }

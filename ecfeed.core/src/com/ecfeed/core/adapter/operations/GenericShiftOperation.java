@@ -41,7 +41,7 @@ public class GenericShiftOperation extends AbstractModelOperation {
 		fCollection = collection;
 		fShift = shift;
 	}
-	
+
 	@Override
 	public void execute() throws ModelOperationException {
 		shiftElements(fCollection, indices(fCollection, fShifted), fShift);
@@ -68,7 +68,7 @@ public class GenericShiftOperation extends AbstractModelOperation {
 	protected void setShift(int shift){
 		fShift = shift;
 	}
-	
+
 	protected int minAllowedShift(List<? extends AbstractNode> shifted, boolean up){
 		int shift = up ? -1 : 1;
 		return shiftAllowed(shifted, shift) ? shift : 0; 
@@ -95,11 +95,11 @@ public class GenericShiftOperation extends AbstractModelOperation {
 		}
 		return true;
 	}
-	
+
 	protected AbstractNode borderNode(List<? extends AbstractNode> nodes, int shift){
 		return shift < 0 ? minIndexNode(nodes) : maxIndexNode(nodes);
 	}
-	
+
 	protected List<Integer> indices(List<?> collection, List<?> elements){
 		List<Integer> indices = new ArrayList<>();
 		for(Object element : elements){
@@ -119,7 +119,7 @@ public class GenericShiftOperation extends AbstractModelOperation {
 		}
 	}
 	protected void shiftElement(List<?> list, int index, int shift) {
-	
+
 		int minIndex = Math.min(index, index+shift);
 		int maxIndex = Math.max(index, index+shift) + ((shift < 0) ? 1:0);
 		List<?> rotated = list.subList(minIndex, (shift > 0) ? maxIndex + 1 : maxIndex);
@@ -157,6 +157,12 @@ public class GenericShiftOperation extends AbstractModelOperation {
 			maxIndexNode = node.getIndex() > maxIndexNode.getIndex() ? node : maxIndexNode; 
 		}
 		return maxIndexNode;
+	}
+
+	@Override
+	public AbstractNode getNodeToBeSelectedAfterTheOperation() {
+		// TODO XYX
+		return null;
 	}
 
 }

@@ -12,7 +12,9 @@ package com.ecfeed.ui.modelif;
 
 import org.eclipse.core.commands.operations.IUndoContext;
 
+import com.ecfeed.core.model.AbstractNode;
+
 public interface IModelUpdateContext {
 	public IUndoContext getUndoContext();
-	public void notifyUpdateListeners();
+	public void notifyUpdateListeners(AbstractNode nodeToSelectAfterTheOperation);
 }

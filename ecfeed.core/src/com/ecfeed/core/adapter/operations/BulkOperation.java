@@ -17,9 +17,10 @@ import java.util.Set;
 
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.java.Messages;
+import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ModelOperationException;
 
-public class BulkOperation extends AbstractModelOperation{
+public class BulkOperation extends AbstractModelOperation {
 
 	List<IModelOperation> fOperations;
 	List<IModelOperation> fExecutedOperations;
@@ -28,7 +29,7 @@ public class BulkOperation extends AbstractModelOperation{
 	private final boolean fAtomic;
 	private final List<ICheckOperation> fCheckOperations;
 
-	protected interface ICheckOperation{
+	protected interface ICheckOperation {
 		public void check() throws ModelOperationException;
 	}
 
@@ -38,6 +39,7 @@ public class BulkOperation extends AbstractModelOperation{
 
 	public BulkOperation(String name, List<IModelOperation> operations, boolean atomic) {
 		super(name);
+
 		fOperations = operations;
 		fExecutedOperations = new ArrayList<IModelOperation>();
 		fCheckOperations = new ArrayList<ICheckOperation>();
@@ -54,34 +56,40 @@ public class BulkOperation extends AbstractModelOperation{
 
 	@Override
 	public void execute() throws ModelOperationException {
+
 		Set<String> errors = new HashSet<String>();
 		fExecutedOperations.clear();
-		for(IModelOperation operation : fOperations){
-			try{
+
+		for (IModelOperation operation : fOperations) {
+			try {
 				operation.execute();
 				fExecutedOperations.add(operation);
-			}catch(ModelOperationException e){
+			} catch(ModelOperationException e) {
 				errors.add(e.getMessage());
-				if(fAtomic){
+
+				if(fAtomic) {
 					reverseOperation().execute();
 					break;
 				}
 			}
 		}
-		for(ICheckOperation operation : fCheckOperations){
-			try{
+
+		for (ICheckOperation operation : fCheckOperations) {
+			try {
 				operation.check();
-			}catch(ModelOperationException e){
+			} catch(ModelOperationException e) {
 				errors.add(e.getMessage());
 				reverseOperation().execute();
 				break;
 			}
 		}
-		if(errors.size() > 0){
+
+		if (errors.size() > 0) {
 			String message = Messages.PROBLEM_WITH_BULK_OPERATION(getName());
-			for(String error : errors){
+			for(String error : errors) {
 				message += "\n" + error;
 			}
+
 			ModelOperationException.report(message);
 		}
 	}
@@ -116,5 +124,17 @@ public class BulkOperation extends AbstractModelOperation{
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public AbstractNode getNodeToBeSelectedAfterTheOperation() {
+		for (IModelOperation operation : fOperations) {
+
+			AbstractNode abstractNode = operation.getNodeToBeSelectedAfterTheOperation(); 
+			if (abstractNode != null) {
+				return abstractNode;
+			}
+		}
+		return null;
 	}
 }

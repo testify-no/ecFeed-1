@@ -11,6 +11,7 @@
 package com.ecfeed.core.adapter.operations;
 
 import com.ecfeed.core.adapter.IModelOperation;
+import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.ModelOperationException;
@@ -38,14 +39,19 @@ public class ChoiceOperationRemoveLabel extends BulkOperation{
 		public IModelOperation reverseOperation() {
 			return new ChoiceOperationAddLabel(fTarget, fLabel);
 		}
+
+		@Override
+		public AbstractNode getNodeToBeSelectedAfterTheOperation() {
+			return fTarget;
+		}
 	}
 
 	public ChoiceOperationRemoveLabel(ChoiceNode target, String label) {
 		super(OperationNames.REMOVE_PARTITION_LABEL, true);
 		addOperation(new RemoveLabelOperation(target, label));
 		for(MethodNode method : target.getParameter().getMethods())
-		if(method != null){
-			addOperation(new MethodOperationMakeConsistent(method));
-		}
+			if(method != null){
+				addOperation(new MethodOperationMakeConsistent(method));
+			}
 	}
 }

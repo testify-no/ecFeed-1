@@ -10,6 +10,7 @@
 package com.ecfeed.core.adapter.operations;
 
 import com.ecfeed.core.adapter.IModelOperation;
+import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.ModelOperationException;
 
@@ -35,6 +36,11 @@ public class ClassOperationSetRunOnAndroid extends AbstractModelOperation {
 	@Override
 	public IModelOperation reverseOperation() {
 		return new ClassOperationSetRunOnAndroid(fClassNode, fOriginalValue);
+	}
+
+	@Override
+	public AbstractNode getNodeToBeSelectedAfterTheOperation() {
+		return fClassNode;
 	}
 
 }

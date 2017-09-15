@@ -14,6 +14,7 @@ import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.ITypeAdapterProvider;
 import com.ecfeed.core.adapter.java.AdapterConstants;
 import com.ecfeed.core.adapter.java.Messages;
+import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.GlobalParameterNode;
@@ -153,6 +154,16 @@ public class ChoiceOperationSetValue extends AbstractModelOperation {
 		public IModelOperation reverseOperation() {
 			return new ChoiceOperationSetValue(fTarget, fNewValue, fAdapterProvider);
 		}
+
+		@Override
+		public AbstractNode getNodeToBeSelectedAfterTheOperation() {
+			return fTarget;
+		}
+	}
+
+	@Override
+	public AbstractNode getNodeToBeSelectedAfterTheOperation() {
+		return fTarget;
 	}
 
 }

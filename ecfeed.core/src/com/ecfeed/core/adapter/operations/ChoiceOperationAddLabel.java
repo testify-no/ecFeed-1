@@ -13,6 +13,7 @@ package com.ecfeed.core.adapter.operations;
 import java.util.Set;
 
 import com.ecfeed.core.adapter.IModelOperation;
+import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.ModelOperationException;
 
@@ -21,7 +22,7 @@ public class ChoiceOperationAddLabel extends AbstractModelOperation {
 	private ChoiceNode fTarget;
 	private String fLabel;
 	private Set<ChoiceNode> fLabeledDescendants;
-	
+
 	private class ReverseOperation extends AbstractModelOperation{
 
 		public ReverseOperation() {
@@ -41,7 +42,12 @@ public class ChoiceOperationAddLabel extends AbstractModelOperation {
 		public IModelOperation reverseOperation() {
 			return new ChoiceOperationAddLabel(fTarget, fLabel);
 		}
-		
+
+		@Override
+		public AbstractNode getNodeToBeSelectedAfterTheOperation() {
+			return fTarget;
+		}
+
 	}
 
 	public ChoiceOperationAddLabel(ChoiceNode target, String label){
@@ -50,7 +56,7 @@ public class ChoiceOperationAddLabel extends AbstractModelOperation {
 		fLabel = label;
 		fLabeledDescendants = target.getLabeledChoices(fLabel);
 	}
-	
+
 	@Override
 	public void execute() throws ModelOperationException {
 		fTarget.addLabel(fLabel);
@@ -63,5 +69,10 @@ public class ChoiceOperationAddLabel extends AbstractModelOperation {
 	@Override
 	public IModelOperation reverseOperation() {
 		return new ReverseOperation();
+	}
+
+	@Override
+	public AbstractNode getNodeToBeSelectedAfterTheOperation() {
+		return fTarget;
 	}
 }

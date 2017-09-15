@@ -48,6 +48,11 @@ public class FactoryRemoveOperation {
 		public String getName() {
 			return "";
 		}
+
+		@Override
+		public AbstractNode getNodeToBeSelectedAfterTheOperation() {
+			return null;
+		}
 	}
 
 	private static class RemoveOperationVisitor implements IModelVisitor{

@@ -13,6 +13,7 @@ package com.ecfeed.core.adapter.operations;
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.ITypeAdapter;
 import com.ecfeed.core.adapter.java.Messages;
+import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelOperationException;
 
@@ -44,6 +45,11 @@ public class ParameterOperationSetDefaultValue extends AbstractModelOperation {
 	@Override
 	public IModelOperation reverseOperation() {
 		return new ParameterOperationSetDefaultValue(fTarget, fOriginalValue, fTypeAdapter);
+	}
+
+	@Override
+	public AbstractNode getNodeToBeSelectedAfterTheOperation() {
+		return fTarget;
 	}
 
 }

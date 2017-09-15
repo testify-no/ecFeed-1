@@ -23,6 +23,7 @@ import org.junit.runner.RunWith;
 
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.ModelOperationManager;
+import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.junit.StaticRunner;
 import com.ecfeed.junit.annotations.EcModel;
@@ -30,16 +31,16 @@ import com.ecfeed.junit.annotations.EcModel;
 @RunWith(StaticRunner.class)
 @EcModel("test/com/ecfeed/adapter/ModelOperationManagerTest.ect")
 public class ModelOperationManagerTest {
-	
+
 	private static class Operation implements IModelOperation{
 		private boolean fExecuted;
 		private int fId;
 		private static int fLastId = 0;
-		
+
 		public Operation(){
 			fId = ++fLastId;
 		}
-		
+
 		@Override
 		public void execute() throws ModelOperationException {
 			fExecuted = true;
@@ -64,21 +65,26 @@ public class ModelOperationManagerTest {
 		public String getName() {
 			return "Operation";
 		}
-		
+
 		public boolean isExecuted(){
 			return fExecuted;
 		}
-		
+
 		public int getId(){
 			return fId;
 		}
-		
+
 		@Override
 		public String toString(){
 			return getName() + " " + getId() + "[" + (isExecuted()?"":"not ") + "executed]";
 		}
+
+		@Override
+		public AbstractNode getNodeToBeSelectedAfterTheOperation() {
+			return null;
+		}
 	}
-	
+
 	@Test
 	public void executeTest(){
 		ModelOperationManager operationManager = new ModelOperationManager();
@@ -91,18 +97,18 @@ public class ModelOperationManagerTest {
 			fail("Unexpected exception: " + e.getMessage());
 		}
 	}
-	
+
 	@Test
 	public void undoEnabledTest(int operations, int undos, int redos, int additionalOperations){
 		if(undos > operations || redos > undos){
 			//improperly defined test case, skip it
 			return;
 		}
-//		System.out.println("undoEnabledTest(" + operations + ", " + undos + ", " + redos + ", " + additionalOperations + ")");
+		//		System.out.println("undoEnabledTest(" + operations + ", " + undos + ", " + redos + ", " + additionalOperations + ")");
 		int historyCount = operations - undos + redos + additionalOperations;
 		ModelOperationManager operationManager = new ModelOperationManager();
 		executeScenario(operationManager, operations, undos, redos, additionalOperations);
-//		System.out.println("expected: " + (historyCount > 0) + ", is: " + operationManager.undoEnabled());
+		//		System.out.println("expected: " + (historyCount > 0) + ", is: " + operationManager.undoEnabled());
 		assertEquals(historyCount > 0, operationManager.undoEnabled());
 	}
 
@@ -114,19 +120,19 @@ public class ModelOperationManagerTest {
 		}
 		ModelOperationManager operationManager = new ModelOperationManager();
 		executeScenario(operationManager, operationsPerformed, undosPerformed, redosPerformed, 0);
-		
+
 		boolean expected = (undosPerformed > 0) && (undosPerformed > redosPerformed);
-		
+
 		assertEquals(expected, operationManager.redoEnabled());
 	}
-	
+
 	@Test
 	public void undoTest(int operations, int undos, int redos, int additionalOperations){
 		if(undos > operations || redos > undos){
 			//improperly defined test case, skip it
 			return;
 		}
-//		System.out.println("undoTest(" + operations + ", " + undos + ", " + redos + ", " + additionalOperations + ")");
+		//		System.out.println("undoTest(" + operations + ", " + undos + ", " + redos + ", " + additionalOperations + ")");
 		ModelOperationManager operationManager = new ModelOperationManager();
 		List<Operation> executed = executeScenario(operationManager, operations, undos, redos, additionalOperations);
 		int pointer = operations - undos + redos + additionalOperations;
@@ -141,14 +147,14 @@ public class ModelOperationManagerTest {
 			assertFalse(executed.get(pointer - 1).isExecuted());
 		}
 	}
-	
+
 	@Test
 	public void redoTest(int operations, int undos, int redos){
 		if(undos > operations || redos > undos){
 			//improperly defined test case, skip it
 			return;
 		}
-//		System.out.println("redoTest(" + operations + ", " + undos + ", " + redos + ")");
+		//		System.out.println("redoTest(" + operations + ", " + undos + ", " + redos + ")");
 		ModelOperationManager operationManager = new ModelOperationManager();
 		List<Operation> executed = executeScenario(operationManager, operations, undos, redos, 0);
 		int pointer = operations - undos + redos;
@@ -163,7 +169,7 @@ public class ModelOperationManagerTest {
 			assertTrue(executed.get(pointer).isExecuted());
 		}
 	}
-	
+
 	protected List<Operation> executeScenario(ModelOperationManager manager, int operations, int undos, int redos, int additionalOperations){
 		List<Operation> performed = executeOperations(manager, operations);
 		executeUndo(manager, undos);
@@ -179,7 +185,7 @@ public class ModelOperationManagerTest {
 		}
 		return performed;
 	}
-	
+
 	protected List<Operation> executeOperations(ModelOperationManager manager, int times){
 		List<Operation> executed = new ArrayList<>();
 		for(int i = 0; i < times; i++){
@@ -194,7 +200,7 @@ public class ModelOperationManagerTest {
 		}
 		return executed;
 	}
-	
+
 	protected void executeUndo(ModelOperationManager manager, int times){
 		for(int i = 0; i < times; i++){
 			try{

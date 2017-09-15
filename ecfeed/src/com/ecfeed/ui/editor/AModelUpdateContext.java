@@ -4,18 +4,19 @@ import java.util.List;
 
 import org.eclipse.ui.forms.AbstractFormPart;
 
+import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.IModelUpdateListener;
 
 public abstract class AModelUpdateContext implements IModelUpdateContext {
 
-	protected abstract List<IModelUpdateListener> getUpdateListeners();
+	protected abstract List<IModelUpdateListener> createUpdateListeners(AbstractNode nodeToSelectAfterTheOperation);
 	protected abstract AbstractFormPart getAbstractFormPart();
 
 	@Override
-	public final void notifyUpdateListeners() {
+	public final void notifyUpdateListeners(AbstractNode nodeToSelectAfterTheOperation) {
 
-		List<IModelUpdateListener> updateListeners = getUpdateListeners();
+		List<IModelUpdateListener> updateListeners = createUpdateListeners(nodeToSelectAfterTheOperation);
 
 		if (updateListeners == null) {
 			return;

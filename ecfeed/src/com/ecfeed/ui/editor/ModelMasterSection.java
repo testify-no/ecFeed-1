@@ -29,6 +29,7 @@ import org.eclipse.ui.forms.IDetailsPage;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.ecfeed.application.ApplicationContext;
+import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.GlobalParameterNode;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
@@ -134,7 +135,9 @@ public class ModelMasterSection extends TreeViewerSection {
 				getJavaProjectProvider(), ModelMasterSection.this);
 	}
 
-	public List<IModelUpdateListener> getUpdateListeners() {
+	public List<IModelUpdateListener> getUpdateListeners(AbstractNode nodeToSelectAfterTheOperation) {
+		
+		// TODO XYX
 
 		if (fUpdateListener == null) {
 			fUpdateListener = new UpdateListener();

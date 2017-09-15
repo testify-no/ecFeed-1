@@ -14,6 +14,7 @@ import java.util.List;
 
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.model.Messages;
+import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.GlobalParameterNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
@@ -41,6 +42,11 @@ public class MethodParameterOperationSetLink extends BulkOperation {
 			public IModelOperation reverseOperation() {
 				return new SetLinkOperation(fTarget, fNewLink);
 			}
+
+			@Override
+			public AbstractNode getNodeToBeSelectedAfterTheOperation() {
+				return fTarget;
+			}
 		}
 
 		public SetLinkOperation(MethodParameterNode target, GlobalParameterNode link) {
@@ -65,6 +71,11 @@ public class MethodParameterOperationSetLink extends BulkOperation {
 		@Override
 		public IModelOperation reverseOperation() {
 			return new ReverseOperation();
+		}
+
+		@Override
+		public AbstractNode getNodeToBeSelectedAfterTheOperation() {
+			return fTarget;
 		}
 	}
 

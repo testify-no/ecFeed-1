@@ -10,6 +10,7 @@
 
 package com.ecfeed.core.adapter;
 
+import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ModelOperationException;
 
 
@@ -18,4 +19,5 @@ public interface IModelOperation {
 	public boolean modelUpdated();
 	public IModelOperation reverseOperation();
 	public String getName();
+	public AbstractNode getNodeToBeSelectedAfterTheOperation();
 }

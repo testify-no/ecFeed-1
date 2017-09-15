@@ -17,6 +17,7 @@ import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.ModelOperationManager;
 import com.ecfeed.core.adapter.operations.AbstractModelOperation;
 import com.ecfeed.core.adapter.operations.BulkOperation;
+import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ModelOperationException;
 
 public class BulkOperationTest {
@@ -29,16 +30,21 @@ public class BulkOperationTest {
 
 		@Override
 		public void execute() throws ModelOperationException {
-//			System.out.println("executed " + getName());
+			//			System.out.println("executed " + getName());
 		}
 
 		@Override
 		public IModelOperation reverseOperation() {
 			return new DummyPrimitiveOperation("reverse " + getName());
 		}
-		
+
+		@Override
+		public AbstractNode getNodeToBeSelectedAfterTheOperation() {
+			return null;
+		}
+
 	}
-	
+
 	private class DummyBulkOperation extends BulkOperation{
 
 		public DummyBulkOperation(String name) {
@@ -47,17 +53,17 @@ public class BulkOperationTest {
 			addOperation(new DummyPrimitiveOperation("op2"));	
 		}
 	}
-	
+
 	@Test
 	public void undoRedoTest(){
 		ModelOperationManager opManager = new ModelOperationManager();
-		
+
 		IModelOperation operation = new DummyBulkOperation("operation");
 		try{
 			opManager.execute(operation);
-//			System.out.println("Undo:");
+			//			System.out.println("Undo:");
 			opManager.undo();
-//			System.out.println("Redo:");
+			//			System.out.println("Redo:");
 			opManager.redo();
 		}catch(ModelOperationException e){
 			fail("Unexpected exception: " + e.getMessage());

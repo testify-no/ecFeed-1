@@ -14,6 +14,7 @@ import java.util.Arrays;
 
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.java.Messages;
+import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.EStatementRelation;
 import com.ecfeed.core.model.IRelationalStatement;
 import com.ecfeed.core.model.ModelOperationException;
@@ -43,6 +44,11 @@ public class StatementOperationSetRelation extends AbstractModelOperation {
 	@Override
 	public IModelOperation reverseOperation() {
 		return new StatementOperationSetRelation(fTarget, fCurrentRelation);
+	}
+
+	@Override
+	public AbstractNode getNodeToBeSelectedAfterTheOperation() {
+		return null;
 	}
 
 }

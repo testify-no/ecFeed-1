@@ -16,6 +16,7 @@ import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.ITypeAdapter;
 import com.ecfeed.core.adapter.ITypeAdapterProvider;
 import com.ecfeed.core.adapter.java.Messages;
+import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.ChoicesParentNode;
 import com.ecfeed.core.model.GlobalParameterNode;
@@ -28,7 +29,7 @@ import com.ecfeed.core.utils.SystemLogger;
 
 public class GenericOperationRemoveChoice extends BulkOperation {
 
-	private class RemoveChoiceOperation extends AbstractModelOperation{
+	private class RemoveChoiceOperation extends AbstractModelOperation {
 
 		private ChoicesParentNode fTarget;
 		private ChoiceNode fChoice;
@@ -73,6 +74,11 @@ public class GenericOperationRemoveChoice extends BulkOperation {
 				try{
 					fTarget.getParameter().accept(new ReverseParameterAdapter());
 				}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
+			}
+
+			@Override
+			public AbstractNode getNodeToBeSelectedAfterTheOperation() {
+				return fTarget;
 			}
 
 		}
@@ -172,6 +178,11 @@ public class GenericOperationRemoveChoice extends BulkOperation {
 		@Override
 		public IModelOperation reverseOperation() {
 			return new ReverseOperation();
+		}
+
+		@Override
+		public AbstractNode getNodeToBeSelectedAfterTheOperation() {
+			return fTarget;
 		}
 	}
 

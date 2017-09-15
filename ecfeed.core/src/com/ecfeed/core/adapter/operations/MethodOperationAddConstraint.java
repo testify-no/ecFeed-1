@@ -13,6 +13,7 @@ package com.ecfeed.core.adapter.operations;
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.java.AdapterConstants;
 import com.ecfeed.core.adapter.java.Messages;
+import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ConstraintNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.ModelOperationException;
@@ -52,6 +53,11 @@ public class MethodOperationAddConstraint extends AbstractModelOperation {
 	@Override
 	public IModelOperation reverseOperation() {
 		return new MethodOperationRemoveConstraint(fMethodNode, fConstraint);
+	}
+
+	@Override
+	public AbstractNode getNodeToBeSelectedAfterTheOperation() {
+		return fMethodNode;
 	}
 
 }

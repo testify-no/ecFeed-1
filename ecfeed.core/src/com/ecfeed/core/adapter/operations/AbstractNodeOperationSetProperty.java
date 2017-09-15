@@ -46,4 +46,9 @@ public class AbstractNodeOperationSetProperty extends AbstractModelOperation {
 		return new AbstractNodeOperationSetProperty(fPropertyId, fOriginalValue, fAbstractNode);
 	}
 
+	@Override
+	public AbstractNode getNodeToBeSelectedAfterTheOperation() {
+		return fAbstractNode;
+	}
+
 }

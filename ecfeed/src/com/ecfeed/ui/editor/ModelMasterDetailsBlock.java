@@ -16,6 +16,7 @@ import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IActionBars;
@@ -295,8 +296,9 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 			return getPage().getEditor().getUndoContext();
 		}
 
-		protected List<IModelUpdateListener> getUpdateListeners() {
-			return fMasterSection.getUpdateListeners();
+		protected List<IModelUpdateListener> createUpdateListeners(AbstractNode nodeToSelectAfterTheOperation) {
+			// TODO XYX
+			return fMasterSection.getUpdateListeners(nodeToSelectAfterTheOperation);
 		}
 
 		protected AbstractFormPart getAbstractFormPart() {
@@ -372,6 +374,11 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 		@Override
 		public void refresh() {
 			fMasterSection.refresh();
+		}
+
+		@Override
+		public void setCurrentNode(AbstractNode abstractNode) {
+			fMasterSection.setSelection(new StructuredSelection(abstractNode));
 		}
 
 	}

@@ -32,24 +32,31 @@ public class OperationExecuter {
 	private IModelUpdateContext fModelUpdateContext;
 	private IOperationHistory fOperationHistory;
 
+	public OperationExecuter(IModelUpdateContext updateContext) {
 
-	public OperationExecuter(IModelUpdateContext updateContext){
 		fOperationHistory = OperationHistoryFactory.getOperationHistory();
-		if(updateContext != null){
+
+		if (updateContext != null) {
 			fModelUpdateContext = updateContext;
 		}
 	}
 
-	public boolean execute(IModelOperation operation, String errorMessageTitle){
-		try{
-			UndoableOperation action = new UndoableOperation(operation, getUpdateContext().getUndoContext(), errorMessageTitle);
+	public boolean execute(IModelOperation operation, String errorMessageTitle) {
+
+		try {
+			UndoableOperation action = 
+					new UndoableOperation(
+							operation, getUpdateContext().getUndoContext(), errorMessageTitle);
+
 			fOperationHistory.execute(action, null, null);
 			return true;
-		} catch (ExecutionException e) {SystemLogger.logCatch(e.getMessage());}
+		} catch (ExecutionException e) {
+			SystemLogger.logCatch(e.getMessage());
+		}
 		return false;
 	}
 
-	protected IModelUpdateContext getUpdateContext(){
+	protected IModelUpdateContext getUpdateContext() {
 		return fModelUpdateContext;
 	}
 
@@ -59,7 +66,7 @@ public class OperationExecuter {
 		private String fErrorMessageTitle;
 
 
-		public UndoableOperation(IModelOperation operation, IUndoContext context, String errorMessageTitle){
+		public UndoableOperation(IModelOperation operation, IUndoContext context, String errorMessageTitle) {
 			super(operation.getName());
 			fOperation = operation;
 			fErrorMessageTitle = errorMessageTitle;
@@ -86,15 +93,19 @@ public class OperationExecuter {
 			return executeOperation(fOperation.reverseOperation(), monitor, info);
 		}
 
-		private IStatus executeOperation(IModelOperation operation, IProgressMonitor monitor, IAdaptable info){
+		private IStatus executeOperation(IModelOperation operation, IProgressMonitor monitor, IAdaptable info) {
+
 			try {
 				executeWithoutExceptionLogging(operation);
 
 				CachedImplementationStatusResolver.clearCache();
-				fModelUpdateContext.notifyUpdateListeners();
+				fModelUpdateContext.notifyUpdateListeners(operation.getNodeToBeSelectedAfterTheOperation());
+
 				return Status.OK_STATUS;
+				
 			} catch (ModelOperationException e) {
-				fModelUpdateContext.notifyUpdateListeners();
+
+				fModelUpdateContext.notifyUpdateListeners(null);
 				MessageDialog.openError(Display.getCurrent().getActiveShell(),
 						fErrorMessageTitle,
 						e.getMessage());
@@ -104,6 +115,7 @@ public class OperationExecuter {
 		}
 
 		private void executeWithoutExceptionLogging(IModelOperation operation) throws ModelOperationException {
+
 			try {
 				ModelOperationException.pushLoggingState(false);
 				operation.execute();

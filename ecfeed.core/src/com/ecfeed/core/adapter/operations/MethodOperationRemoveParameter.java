@@ -15,6 +15,7 @@ import java.util.List;
 
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.model.Messages;
+import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ClassNodeHelper;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
@@ -28,7 +29,7 @@ public class MethodOperationRemoveParameter extends BulkOperation{
 		private List<TestCaseNode> fOriginalTestCases;
 		private boolean fIgnoreDuplicates;
 
-		private class ReverseOperation extends AbstractReverseOperation{
+		private class ReverseOperation extends AbstractReverseOperation {
 			public ReverseOperation() {
 				super(RemoveMethodParameterOperation.this);
 			}
@@ -44,13 +45,19 @@ public class MethodOperationRemoveParameter extends BulkOperation{
 				return new MethodOperationRemoveParameter(getMethodTarget(), (MethodParameterNode)getParameter());
 			}
 
+			@Override
+			public AbstractNode getNodeToBeSelectedAfterTheOperation() {
+				// TODO XYX
+				return null;
+			}
+
 		}
 
 		public RemoveMethodParameterOperation(MethodNode target, MethodParameterNode parameter) {
 			super(target, parameter);
 			fOriginalTestCases = new ArrayList<>();
 		}
-		
+
 		public RemoveMethodParameterOperation(MethodNode target, MethodParameterNode parameter, boolean ignoreDuplicates){
 			this(target, parameter);
 			fIgnoreDuplicates = ignoreDuplicates;
@@ -100,7 +107,7 @@ public class MethodOperationRemoveParameter extends BulkOperation{
 	public MethodOperationRemoveParameter(MethodNode target, MethodParameterNode parameter) {
 		this(target, parameter, true);
 	}
-	
+
 	public MethodOperationRemoveParameter(MethodNode target, MethodParameterNode parameter, boolean validate, boolean ignoreDuplicates){
 		super(OperationNames.REMOVE_METHOD_PARAMETER, true);
 		addOperation(new RemoveMethodParameterOperation(target, parameter, ignoreDuplicates));
@@ -108,5 +115,5 @@ public class MethodOperationRemoveParameter extends BulkOperation{
 			addOperation(new MethodOperationMakeConsistent(target));
 		}
 	}
-	
+
 }

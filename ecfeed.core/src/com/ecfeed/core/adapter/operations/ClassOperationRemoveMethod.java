@@ -12,6 +12,7 @@ package com.ecfeed.core.adapter.operations;
 
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.java.Messages;
+import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.ModelOperationException;
@@ -28,7 +29,7 @@ public class ClassOperationRemoveMethod extends AbstractModelOperation {
 		fMethod = method;
 		fCurrentIndex = fMethod.getIndex();
 	}
-	
+
 	@Override
 	public void execute() throws ModelOperationException {
 		fCurrentIndex = fMethod.getIndex();
@@ -41,6 +42,11 @@ public class ClassOperationRemoveMethod extends AbstractModelOperation {
 	@Override
 	public IModelOperation reverseOperation() {
 		return new ClassOperationAddMethod(fTarget, fMethod, fCurrentIndex);
+	}
+
+	@Override
+	public AbstractNode getNodeToBeSelectedAfterTheOperation() {
+		return fTarget;
 	}
 
 }
