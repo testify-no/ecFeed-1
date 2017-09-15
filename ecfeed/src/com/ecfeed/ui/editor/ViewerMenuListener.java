@@ -120,13 +120,13 @@ public class ViewerMenuListener implements MenuListener {
 
 	private int getMenuItemIndex(NamedAction action) {
 
-		String actionName = action.getName();
+//		String actionName = action.getName();
+//
+//		if (actionName.equals(GlobalActions.INSERT.getDescription())) {
+//			return 1;
+//		}
 
-		if (actionName.equals(GlobalActions.INSERT.getDescription())) {
-			return 1;
-		}
-
-		return LAST_MENU_POSITION;
+		return LAST_MENU_POSITION; // TODO XYX
 	}
 
 	protected AbstractNode getFirstSelectedNode() {

@@ -196,7 +196,7 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 
 	private void addKeyListenersForActions(IActionProvider provider, boolean addDeleteAction) {
 
-		addKeyListener(GlobalActions.INSERT.getId(), SWT.INSERT, SWT.NONE, provider);
+		//addKeyListener(GlobalActions.INSERT.getId(), SWT.INSERT, SWT.NONE, provider);
 		addKeyListener(GlobalActions.DELETE.getId(), SWT.DEL, SWT.NONE, provider);
 
 		addKeyListener(GlobalActions.MOVE_UP.getId(), SWT.ARROW_UP, SWT.ALT, provider);
