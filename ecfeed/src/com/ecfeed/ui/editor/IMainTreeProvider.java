@@ -6,6 +6,7 @@ public interface IMainTreeProvider {
 
 	AbstractNode getCurrentNode();
 	void setCurrentNode(AbstractNode abstractNode);
+	void expandChildren(AbstractNode abstractNode);
 	void markDirty();
 	void refresh();
 

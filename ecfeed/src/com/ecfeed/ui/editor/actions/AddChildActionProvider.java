@@ -14,7 +14,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.jface.viewers.StructuredViewer;
-import org.eclipse.jface.viewers.TreeViewer;
 
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.AbstractParameterNode;
@@ -47,8 +46,6 @@ public class AddChildActionProvider {
 	private StructuredViewer fViewer;
 	private IModelUpdateContext fContext;
 	private IJavaProjectProvider fJavaProjectProvider;
-	private static final boolean CHILD_SELECT_ON = true;
-	private static final boolean CHILD_SELECT_OFF = false;
 
 
 	private void reportExceptionInvalidNodeType() {
@@ -72,24 +69,12 @@ public class AddChildActionProvider {
 		abstractNodeInterface.setOwnNode(abstractNode);
 	}
 
-	private void expandCurrentTreeViewerNode() {
-		if (!(fViewer instanceof TreeViewer)) {
-			return;
-		}
-
-		TreeViewer treeViewer = (TreeViewer)fViewer;
-		ExpandOneLevelAction expandOneLevelAction = new ExpandOneLevelAction(treeViewer);
-		expandOneLevelAction.run();
-	}
-
-	private class AddGlobalParameterAction extends AbstractAddChildAction{
+	private class AddGlobalParameterAction extends AbstractAddChildAction {
 		private GlobalParametersParentInterface fParentIf;
-		private boolean fSelectChild;
 
-		public AddGlobalParameterAction(boolean selectChild) {
+		public AddGlobalParameterAction() {
 			super(ADD_GLOBAL_PARAMETER_ACTION_ID, ADD_GLOBAL_PARAMETER_ACTION_NAME, fViewer, fContext);
 			fParentIf = new GlobalParametersParentInterface(fContext, fJavaProjectProvider);
-			fSelectChild = selectChild;
 		}
 
 		@Override
@@ -102,12 +87,7 @@ public class AddChildActionProvider {
 
 			setOwnNode(selectedNode, fParentIf);
 
-			AbstractNode newNode = fParentIf.addNewParameter();
-			if (fSelectChild) {
-				select(newNode);
-			} else {
-				expandCurrentTreeViewerNode();
-			}
+			fParentIf.addNewParameter();
 		}
 
 		@Override
@@ -119,12 +99,10 @@ public class AddChildActionProvider {
 
 	private class AddClassAction extends AbstractAddChildAction{
 		private RootInterface fParentIf;
-		private boolean fSelectChild; 
 
-		public AddClassAction(boolean selectChild){
+		public AddClassAction() {
 			super(ADD_CLASS_ACTION_ID, ADD_CLASS_ACTION_NAME, fViewer, fContext);
 			fParentIf = new RootInterface(fContext, fJavaProjectProvider);
-			fSelectChild = selectChild;
 		}
 
 		@Override
@@ -142,23 +120,16 @@ public class AddChildActionProvider {
 
 			setOwnNode(selectedNode, fParentIf);
 
-			AbstractNode node = getParentInterface().addNewClass();
-			if (fSelectChild) {
-				select(node);
-			} else {
-				expandCurrentTreeViewerNode();
-			}
+			getParentInterface().addNewClass();
 		}
 	}
 
 	private class AddMethodAction extends AbstractAddChildAction{
 		private ClassInterface fParentIf;
-		private boolean fSelectChild;
 
-		public AddMethodAction(boolean selectChild) {
+		public AddMethodAction() {
 			super(ADD_METHOD_ACTION_ID, ADD_METHOD_ACTION_NAME, fViewer, fContext);
 			fParentIf = new ClassInterface(fContext, fJavaProjectProvider);
-			fSelectChild = selectChild;
 		}
 
 		@Override
@@ -176,12 +147,7 @@ public class AddChildActionProvider {
 
 			setOwnNode(selectedNode, fParentIf);
 
-			AbstractNode node = getParentInterface().addNewMethod();
-			if (fSelectChild) {
-				select(node);
-			} else {
-				expandCurrentTreeViewerNode();
-			}
+			getParentInterface().addNewMethod();
 		}
 	}
 
@@ -210,64 +176,44 @@ public class AddChildActionProvider {
 	}
 
 	private class AddMethodParameterAction extends AddMethodChildAction{
-		private boolean fSelectChild;
 
-		public AddMethodParameterAction(boolean selectChild) {
+		public AddMethodParameterAction() {
 			super(ADD_METHOD_PARAMETER_ACTION_ID, ADD_METHOD_PARAMETER_ACTION_NAME);
-			fSelectChild = selectChild;
 		}
 
 		@Override
 		public void run() {
 			prepareRun();
 
-			AbstractNode node = getParentInterface().addNewParameter();
-			if (fSelectChild) {
-				select(node);
-			} else {
-				expandCurrentTreeViewerNode();
-			}
+			getParentInterface().addNewParameter();
 		}
 	}
 
 	private class AddConstraintAction extends AddMethodChildAction{
-		private boolean fSelectChild;
 
-		public AddConstraintAction(boolean selectChild) {
+		public AddConstraintAction() {
 			super(ADD_CONSTRAINT_ACTION_ID, ADD_CONSTRAINT_ACTION_NAME);
-			fSelectChild = selectChild;
 		}
 
 		@Override
 		public void run() {
 			prepareRun();
 
-			AbstractNode node = getParentInterface().addNewConstraint();
-			if (fSelectChild) {
-				select(node);
-			} else {
-				expandCurrentTreeViewerNode();
-			}
+			getParentInterface().addNewConstraint();
 		}
 	}
 
 	private class AddTestCaseAction extends AddMethodChildAction{
-		private boolean fSelectChild;
-		public AddTestCaseAction(boolean selectChild) {
+
+		public AddTestCaseAction() {
 			super(ADD_TEST_CASE_ACTION_ID, ADD_TEST_CASE_ACTION_NAME);
-			fSelectChild = selectChild;
 		}
 
 		@Override
 		public void run() {
 			prepareRun();
 
-			AbstractNode node = getParentInterface().addTestCase();
-			if (fSelectChild) {
-				select(node);
-			} else {
-				expandCurrentTreeViewerNode();
-			}
+			getParentInterface().addTestCase();
 		}
 	}
 
@@ -285,7 +231,6 @@ public class AddChildActionProvider {
 
 	private class AddChoiceAction extends AbstractAddChildAction{
 		private ChoicesParentInterface fParentIf;
-		private boolean fSelectChild;
 
 		private class EnableVisitor implements IParameterVisitor{
 
@@ -301,10 +246,9 @@ public class AddChildActionProvider {
 
 		}
 
-		public AddChoiceAction(IJavaProjectProvider javaProjectProvider, boolean selectChild){
+		public AddChoiceAction(IJavaProjectProvider javaProjectProvider){
 			super(ADD_PARTITION_ACTION_ID, ADD_PARTITION_ACTION_NAME, fViewer, fContext);
 			fParentIf = new ChoicesParentInterface(fContext, javaProjectProvider);
-			fSelectChild = selectChild;
 		}
 
 		@Override
@@ -322,12 +266,7 @@ public class AddChildActionProvider {
 
 			setOwnNode(selectedNode, fParentIf);
 
-			AbstractNode node = fParentIf.addNewChoice();
-			if (fSelectChild) {
-				select(node);
-			} else {
-				expandCurrentTreeViewerNode();
-			}
+			fParentIf.addNewChoice();
 		}
 
 		@Override
@@ -352,25 +291,25 @@ public class AddChildActionProvider {
 		@Override
 		public Object visit(RootNode node) throws Exception {
 			return Arrays.asList(new AbstractAddChildAction[]{
-					new AddClassAction(CHILD_SELECT_ON),
-					new AddGlobalParameterAction(CHILD_SELECT_ON)
+					new AddClassAction(),
+					new AddGlobalParameterAction()
 			});
 		}
 
 		@Override
 		public Object visit(ClassNode node) throws Exception {
 			return Arrays.asList(new AbstractAddChildAction[]{
-					new AddMethodAction(CHILD_SELECT_ON),
-					new AddGlobalParameterAction(CHILD_SELECT_ON)
+					new AddMethodAction(),
+					new AddGlobalParameterAction()
 			});
 		}
 
 		@Override
 		public Object visit(MethodNode node) throws Exception {
 			return Arrays.asList(new AbstractAddChildAction[]{
-					new AddMethodParameterAction(CHILD_SELECT_ON),
-					new AddConstraintAction(CHILD_SELECT_ON),
-					new AddTestCaseAction(CHILD_SELECT_ON),
+					new AddMethodParameterAction(),
+					new AddConstraintAction(),
+					new AddTestCaseAction(),
 					new AddTestSuiteAction()
 			});
 		}
@@ -378,14 +317,14 @@ public class AddChildActionProvider {
 		@Override
 		public Object visit(MethodParameterNode node) throws Exception {
 			return Arrays.asList(new AbstractAddChildAction[]{
-					new AddChoiceAction(fJavaProjectProvider, CHILD_SELECT_ON)
+					new AddChoiceAction(fJavaProjectProvider)
 			});
 		}
 
 		@Override
 		public Object visit(GlobalParameterNode node) throws Exception {
 			return Arrays.asList(new AbstractAddChildAction[]{
-					new AddChoiceAction(fJavaProjectProvider, CHILD_SELECT_ON)
+					new AddChoiceAction(fJavaProjectProvider)
 			});
 		}
 
@@ -402,7 +341,7 @@ public class AddChildActionProvider {
 		@Override
 		public Object visit(ChoiceNode node) throws Exception {
 			return Arrays.asList(new AbstractAddChildAction[] {
-					new AddChoiceAction(fJavaProjectProvider, CHILD_SELECT_ON)
+					new AddChoiceAction(fJavaProjectProvider)
 			});
 		}
 	}
@@ -431,27 +370,27 @@ public class AddChildActionProvider {
 
 		@Override
 		public Object visit(RootNode node) throws Exception {
-			return new AddClassAction(CHILD_SELECT_OFF);
+			return new AddClassAction();
 		}
 
 		@Override
 		public Object visit(ClassNode node) throws Exception {
-			return new AddMethodAction(CHILD_SELECT_OFF);
+			return new AddMethodAction();
 		}
 
 		@Override
 		public Object visit(MethodNode node) throws Exception {
-			return new AddMethodParameterAction(CHILD_SELECT_OFF);
+			return new AddMethodParameterAction();
 		}
 
 		@Override
 		public Object visit(MethodParameterNode node) throws Exception {
-			return new AddChoiceAction(fJavaProjectProvider, CHILD_SELECT_OFF);
+			return new AddChoiceAction(fJavaProjectProvider);
 		}
 
 		@Override
 		public Object visit(GlobalParameterNode node) throws Exception {
-			return new AddChoiceAction(fJavaProjectProvider, CHILD_SELECT_OFF); 
+			return new AddChoiceAction(fJavaProjectProvider); 
 		}
 
 		@Override
@@ -466,7 +405,7 @@ public class AddChildActionProvider {
 
 		@Override
 		public Object visit(ChoiceNode node) throws Exception {
-			return new AddChoiceAction(fJavaProjectProvider, CHILD_SELECT_OFF);
+			return new AddChoiceAction(fJavaProjectProvider);
 		}
 	}
 
