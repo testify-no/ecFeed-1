@@ -12,7 +12,6 @@ package com.ecfeed.core.adapter.operations;
 
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.java.Messages;
-import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.ModelOperationException;
@@ -32,21 +31,20 @@ public class ClassOperationRemoveMethod extends AbstractModelOperation {
 
 	@Override
 	public void execute() throws ModelOperationException {
+
+		setNodeToBeSelectedAfterTheOperation(fTarget);
 		fCurrentIndex = fMethod.getIndex();
-		if(fTarget.removeMethod(fMethod) == false){
+
+		if (fTarget.removeMethod(fMethod) == false) {
 			ModelOperationException.report(Messages.UNEXPECTED_PROBLEM_WHILE_REMOVING_ELEMENT);
 		}
+
 		markModelUpdated();
 	}
 
 	@Override
 	public IModelOperation reverseOperation() {
 		return new ClassOperationAddMethod(fTarget, fMethod, fCurrentIndex);
-	}
-
-	@Override
-	public AbstractNode getNodeToBeSelectedAfterTheOperation() {
-		return fTarget;
 	}
 
 }

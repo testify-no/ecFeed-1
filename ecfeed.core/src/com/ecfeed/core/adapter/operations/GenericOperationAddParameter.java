@@ -12,7 +12,6 @@ package com.ecfeed.core.adapter.operations;
 
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.java.Messages;
-import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.model.ParametersParentNode;
@@ -38,6 +37,8 @@ public class GenericOperationAddParameter extends AbstractModelOperation {
 
 		@Override
 		public void execute() throws ModelOperationException {
+
+			setNodeToBeSelectedAfterTheOperation(fParametersParentNode);
 			fOriginalIndex = fReversedParameter.getIndex();
 			fReversedTarget.removeParameter(fReversedParameter);
 			markModelUpdated();
@@ -48,10 +49,6 @@ public class GenericOperationAddParameter extends AbstractModelOperation {
 			return new GenericOperationAddParameter(fReversedTarget, fReversedParameter, fOriginalIndex);
 		}
 
-		@Override
-		public AbstractNode getNodeToBeSelectedAfterTheOperation() {
-			return fParametersParentNode;
-		}
 	}
 
 	public GenericOperationAddParameter(ParametersParentNode target, AbstractParameterNode parameter, int index) {
@@ -69,6 +66,7 @@ public class GenericOperationAddParameter extends AbstractModelOperation {
 	@Override
 	public void execute() throws ModelOperationException {
 
+		setNodeToBeSelectedAfterTheOperation(fParametersParentNode);
 		generateUniqueParameterName(fAbstractParameterNode);
 		String parameterName = fAbstractParameterNode.getName();
 
@@ -97,11 +95,6 @@ public class GenericOperationAddParameter extends AbstractModelOperation {
 	@Override
 	public IModelOperation reverseOperation() {
 		return new ReverseOperation(fParametersParentNode, fAbstractParameterNode);
-	}
-
-	@Override
-	public AbstractNode getNodeToBeSelectedAfterTheOperation() {
-		return fParametersParentNode;
 	}
 
 }

@@ -12,7 +12,6 @@ package com.ecfeed.core.adapter.operations;
 
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.java.Messages;
-import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.AbstractStatement;
 import com.ecfeed.core.model.Constraint;
 import com.ecfeed.core.model.ConstraintNode;
@@ -33,14 +32,17 @@ public class ConstraintOperationReplaceStatement extends AbstractModelOperation{
 
 	@Override
 	public void execute() throws ModelOperationException {
+
+		setNodeToBeSelectedAfterTheOperation(fTarget);
 		Constraint constraint = fTarget.getConstraint();
-		if(constraint.getPremise() == fCurrentStatement){
+
+		if (constraint.getPremise() == fCurrentStatement) {
 			constraint.setPremise(fNewStatement);
 		}
-		else if(constraint.getConsequence() == fCurrentStatement){
+		else if (constraint.getConsequence() == fCurrentStatement) {
 			constraint.setConsequence(fNewStatement);
 		}
-		else{
+		else {
 			ModelOperationException.report(Messages.TARGET_STATEMENT_NOT_FOUND_PROBLEM);
 		}
 		markModelUpdated();
@@ -49,11 +51,6 @@ public class ConstraintOperationReplaceStatement extends AbstractModelOperation{
 	@Override
 	public IModelOperation reverseOperation() {
 		return new ConstraintOperationReplaceStatement(fTarget, fNewStatement, fCurrentStatement);
-	}
-
-	@Override
-	public AbstractNode getNodeToBeSelectedAfterTheOperation() {
-		return fTarget;
 	}
 
 }

@@ -11,7 +11,6 @@
 package com.ecfeed.core.adapter.operations;
 
 import com.ecfeed.core.adapter.IModelOperation;
-import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.AbstractStatement;
 import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.model.StatementArray;
@@ -40,8 +39,4 @@ public class StatementOperationRemoveStatement extends AbstractModelOperation {
 		return new StatementOperationAddStatement(fTarget, fStatement, fIndex);
 	}
 
-	@Override
-	public AbstractNode getNodeToBeSelectedAfterTheOperation() {
-		return null;
-	}
 }

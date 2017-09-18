@@ -11,7 +11,6 @@
 package com.ecfeed.core.adapter.operations;
 
 import com.ecfeed.core.adapter.IModelOperation;
-import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.ModelOperationException;
@@ -31,6 +30,7 @@ public class ChoiceOperationRemoveLabel extends BulkOperation{
 
 		@Override
 		public void execute() throws ModelOperationException {
+			setNodeToBeSelectedAfterTheOperation(fTarget);
 			fTarget.removeLabel(fLabel);
 			markModelUpdated();
 		}
@@ -40,10 +40,6 @@ public class ChoiceOperationRemoveLabel extends BulkOperation{
 			return new ChoiceOperationAddLabel(fTarget, fLabel);
 		}
 
-		@Override
-		public AbstractNode getNodeToBeSelectedAfterTheOperation() {
-			return fTarget;
-		}
 	}
 
 	public ChoiceOperationRemoveLabel(ChoiceNode target, String label) {

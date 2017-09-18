@@ -37,18 +37,16 @@ public class AbstractNodeOperationSetProperty extends AbstractModelOperation {
 
 	@Override
 	public void execute() throws ModelOperationException {
+		
+		setNodeToBeSelectedAfterTheOperation(fAbstractNode);
 		fAbstractNode.setPropertyValue(fPropertyId, fNewValue);
+		
 		markModelUpdated();
 	}
 
 	@Override
 	public IModelOperation reverseOperation() {
 		return new AbstractNodeOperationSetProperty(fPropertyId, fOriginalValue, fAbstractNode);
-	}
-
-	@Override
-	public AbstractNode getNodeToBeSelectedAfterTheOperation() {
-		return fAbstractNode;
 	}
 
 }

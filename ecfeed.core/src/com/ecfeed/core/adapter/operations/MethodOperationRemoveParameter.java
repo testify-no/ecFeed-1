@@ -14,9 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ecfeed.core.adapter.IModelOperation;
-import com.ecfeed.core.model.Messages;
-import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ClassNodeHelper;
+import com.ecfeed.core.model.Messages;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelOperationException;
@@ -36,6 +35,8 @@ public class MethodOperationRemoveParameter extends BulkOperation{
 
 			@Override
 			public void execute() throws ModelOperationException {
+
+				setNodeToBeSelectedAfterTheOperation(getMethodTarget());
 				getMethodTarget().replaceTestCases(fOriginalTestCases);
 				RemoveMethodParameterOperation.super.reverseOperation().execute();
 			}
@@ -43,12 +44,6 @@ public class MethodOperationRemoveParameter extends BulkOperation{
 			@Override
 			public IModelOperation reverseOperation() {
 				return new MethodOperationRemoveParameter(getMethodTarget(), (MethodParameterNode)getParameter());
-			}
-
-			@Override
-			public AbstractNode getNodeToBeSelectedAfterTheOperation() {
-				// TODO XYX
-				return null;
 			}
 
 		}

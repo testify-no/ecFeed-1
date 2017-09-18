@@ -20,7 +20,6 @@ import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.ITypeAdapter;
 import com.ecfeed.core.adapter.ITypeAdapterProvider;
 import com.ecfeed.core.adapter.java.Messages;
-import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.ChoicesParentNode;
@@ -40,7 +39,7 @@ public class AbstractParameterOperationSetType extends AbstractModelOperation {
 	private Map<ChoicesParentNode, List<ChoiceNode>> fOriginalChoices;
 	private Map<ChoiceNode, String> fOriginalValues;
 
-	protected class ReverseOperation extends AbstractReverseOperation{
+	protected class ReverseOperation extends AbstractReverseOperation {
 
 		public ReverseOperation() {
 			super(AbstractParameterOperationSetType.this);
@@ -48,8 +47,12 @@ public class AbstractParameterOperationSetType extends AbstractModelOperation {
 
 		@Override
 		public void execute() throws ModelOperationException {
+			
+			setNodeToBeSelectedAfterTheOperation(fTarget);
+			
 			restoreOriginalChoices(fTarget);
 			restoreOriginalValues(fTarget);
+			
 			fTarget.setType(fCurrentType);
 		}
 
@@ -74,11 +77,6 @@ public class AbstractParameterOperationSetType extends AbstractModelOperation {
 			}
 		}
 
-		@Override
-		public AbstractNode getNodeToBeSelectedAfterTheOperation() {
-			return fTarget;
-		}
-
 	}
 
 	public AbstractParameterOperationSetType(AbstractParameterNode target, String newType, ITypeAdapterProvider adapterProvider) {
@@ -92,6 +90,9 @@ public class AbstractParameterOperationSetType extends AbstractModelOperation {
 
 	@Override
 	public void execute() throws ModelOperationException {
+		
+		setNodeToBeSelectedAfterTheOperation(fTarget);
+		
 		fCurrentType = fTarget.getType();
 		getOriginalChoices().clear();
 		getOriginalValues().clear();
@@ -227,11 +228,6 @@ public class AbstractParameterOperationSetType extends AbstractModelOperation {
 
 	protected String getNewType(){
 		return fNewType;
-	}
-
-	@Override
-	public AbstractNode getNodeToBeSelectedAfterTheOperation() {
-		return fTarget;
 	}
 
 }

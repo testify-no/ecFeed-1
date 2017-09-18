@@ -382,11 +382,21 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 
 		@Override
 		public void setCurrentNode(AbstractNode abstractNode) {
+			
+			if (abstractNode == null) {
+				return;
+			}
+			
 			fMasterSection.setSelection(new StructuredSelection(abstractNode));
 		}
 
 		@Override
 		public void expandChildren(AbstractNode abstractNode) {
+			
+			if (abstractNode == null) {
+				return;
+			}
+			
 			fMasterSection.expandChildren(abstractNode);
 		}
 		

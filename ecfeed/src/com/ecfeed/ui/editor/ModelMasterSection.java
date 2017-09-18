@@ -136,6 +136,11 @@ public class ModelMasterSection extends TreeViewerSection {
 	}
 
 	public void expandChildren(AbstractNode abstractNode) {
+		
+		if (abstractNode == null) {
+			return;
+			
+		}
 		getTreeViewer().expandToLevel(abstractNode, 1);
 	}
 

@@ -15,7 +15,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.ecfeed.core.adapter.IModelOperation;
-import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ConstraintNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.ModelOperationException;
@@ -35,6 +34,8 @@ public class MethodOperationMakeConsistent extends AbstractModelOperation {
 
 		@Override
 		public void execute() throws ModelOperationException {
+
+			setNodeToBeSelectedAfterTheOperation(fMethodNode);
 			fMethodNode.replaceTestCases(fOriginalTestCases);
 			fMethodNode.replaceConstraints(fOriginalConstraints);
 			markModelUpdated();
@@ -43,11 +44,6 @@ public class MethodOperationMakeConsistent extends AbstractModelOperation {
 		@Override
 		public IModelOperation reverseOperation() {
 			return new MethodOperationMakeConsistent(fMethodNode);
-		}
-
-		@Override
-		public AbstractNode getNodeToBeSelectedAfterTheOperation() {
-			return fMethodNode;
 		}
 
 	}
@@ -61,6 +57,8 @@ public class MethodOperationMakeConsistent extends AbstractModelOperation {
 
 	@Override
 	public void execute() throws ModelOperationException {
+
+		setNodeToBeSelectedAfterTheOperation(fMethodNode);
 
 		boolean modelUpdated = false;
 
@@ -88,11 +86,6 @@ public class MethodOperationMakeConsistent extends AbstractModelOperation {
 	@Override
 	public IModelOperation reverseOperation() {
 		return new ReverseOperation();
-	}
-
-	@Override
-	public AbstractNode getNodeToBeSelectedAfterTheOperation() {
-		return fMethodNode;
 	}
 
 }

@@ -13,7 +13,6 @@ package com.ecfeed.core.adapter.operations;
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.java.AdapterConstants;
 import com.ecfeed.core.adapter.java.Messages;
-import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.model.RootNode;
@@ -37,6 +36,8 @@ public class RootOperationAddNewClass extends AbstractModelOperation {
 
 	@Override
 	public void execute() throws ModelOperationException {
+
+		setNodeToBeSelectedAfterTheOperation(fRootNode);
 		String name = fclassToAdd.getName();
 		if(fAddIndex == -1){
 			fAddIndex = fRootNode.getClasses().size();
@@ -54,11 +55,6 @@ public class RootOperationAddNewClass extends AbstractModelOperation {
 	@Override
 	public IModelOperation reverseOperation() {
 		return new RootOperationRemoveClass(fRootNode, fclassToAdd);
-	}
-
-	@Override
-	public AbstractNode getNodeToBeSelectedAfterTheOperation() {
-		return fRootNode;
 	}
 
 }

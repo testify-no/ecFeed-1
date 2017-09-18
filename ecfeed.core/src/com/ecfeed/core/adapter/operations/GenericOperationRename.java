@@ -129,6 +129,8 @@ public class GenericOperationRename extends AbstractModelOperation {
 
 	@Override
 	public void execute() throws ModelOperationException{
+
+		setNodeToBeSelectedAfterTheOperation(fTarget);
 		verifyNameWithRegex();
 		verifyNewName(fNewName);
 		fTarget.setName(fNewName);
@@ -180,8 +182,4 @@ public class GenericOperationRename extends AbstractModelOperation {
 		return "";
 	}
 
-	@Override
-	public AbstractNode getNodeToBeSelectedAfterTheOperation() {
-		return fTarget;
-	}
 }

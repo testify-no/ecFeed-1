@@ -27,7 +27,7 @@ import com.ecfeed.core.model.RootNodeHelper;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.utils.StringHelper;
 
-public class FactoryAddChildOperation implements IModelVisitor{
+public class FactoryAddChildOperation implements IModelVisitor{ // XYX
 
 	private AbstractNode fChild;
 	private int fIndex;

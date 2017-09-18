@@ -14,10 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ecfeed.core.adapter.IModelOperation;
+import com.ecfeed.core.model.ConstraintNode;
 //import com.ecfeed.core.adapter.java.Messages;
 import com.ecfeed.core.model.Messages;
-import com.ecfeed.core.model.AbstractNode;
-import com.ecfeed.core.model.ConstraintNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelOperationException;
@@ -41,6 +40,7 @@ public class MethodParameterOperationSetLinked extends BulkOperation{
 			@Override
 			public void execute() throws ModelOperationException {
 
+				setNodeToBeSelectedAfterTheOperation(fTarget);
 				MethodNode methodNode = fTarget.getMethod();
 
 				methodNode.replaceTestCases(fOriginalTestCases);
@@ -61,11 +61,6 @@ public class MethodParameterOperationSetLinked extends BulkOperation{
 				return new SetLinkedOperation(fTarget, fLinked);
 			}
 
-			@Override
-			public AbstractNode getNodeToBeSelectedAfterTheOperation() {
-				return fTarget;
-			}
-
 		}
 
 		public SetLinkedOperation(MethodParameterNode target, boolean linked) {
@@ -76,6 +71,9 @@ public class MethodParameterOperationSetLinked extends BulkOperation{
 
 		@Override
 		public void execute() throws ModelOperationException {
+
+			setNodeToBeSelectedAfterTheOperation(fTarget);
+
 			MethodNode method = fTarget.getMethod();
 			String newType;
 			if(fLinked){
@@ -139,10 +137,6 @@ public class MethodParameterOperationSetLinked extends BulkOperation{
 			return new ReverseSetLinkedOperation();
 		}
 
-		@Override
-		public AbstractNode getNodeToBeSelectedAfterTheOperation() {
-			return fTarget;
-		}
 	}
 
 	public MethodParameterOperationSetLinked(MethodParameterNode target, boolean linked) {

@@ -15,12 +15,11 @@ import java.util.List;
 import java.util.ListIterator;
 
 import com.ecfeed.core.adapter.IModelOperation;
-import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ChoiceNode;
-import com.ecfeed.core.model.ModelConstants;
 import com.ecfeed.core.model.ConstraintNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
+import com.ecfeed.core.model.ModelConstants;
 import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.utils.JavaTypeHelper;
@@ -42,8 +41,11 @@ public class ParameterOperationSetExpected extends AbstractModelOperation {
 
 		@Override
 		public void execute() throws ModelOperationException {
+
+			setNodeToBeSelectedAfterTheOperation(fTarget);
+
 			fTarget.setExpected(!fExpected);
-			if(fTarget.getMethod() != null){
+			if (fTarget.getMethod() != null) { 
 				fTarget.getMethod().replaceConstraints(fOriginalConstraints);
 				fTarget.getMethod().replaceTestCases(fOriginalTestCases);
 			}
@@ -55,11 +57,6 @@ public class ParameterOperationSetExpected extends AbstractModelOperation {
 		@Override
 		public IModelOperation reverseOperation() {
 			return new ParameterOperationSetExpected(fTarget, fExpected);
-		}
-
-		@Override
-		public AbstractNode getNodeToBeSelectedAfterTheOperation() {
-			return fTarget;
 		}
 
 	}
@@ -83,6 +80,9 @@ public class ParameterOperationSetExpected extends AbstractModelOperation {
 
 	@Override
 	public void execute() throws ModelOperationException {
+
+		setNodeToBeSelectedAfterTheOperation(fTarget);
+
 		fTarget.setExpected(fExpected);
 		String type = fTarget.getType();
 		if(fExpected && JavaTypeHelper.hasLimitedValuesSet(type)){
@@ -144,11 +144,6 @@ public class ParameterOperationSetExpected extends AbstractModelOperation {
 
 	protected boolean getExpected(){
 		return fExpected;
-	}
-
-	@Override
-	public AbstractNode getNodeToBeSelectedAfterTheOperation() {
-		return fTarget;
 	}
 
 }

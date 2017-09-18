@@ -30,10 +30,14 @@ public class GenericMoveOperation extends BulkOperation {
 		this(moved, newParent, adapterProvider, -1);
 	}
 
-	public GenericMoveOperation(List<? extends AbstractNode> moved, AbstractNode newParent, ITypeAdapterProvider adapterProvider, int newIndex) throws ModelOperationException {
+	public GenericMoveOperation(List<? extends AbstractNode> moved, AbstractNode newParent, ITypeAdapterProvider adapterProvider, int newIndex) throws ModelOperationException { // XYX
 		super(OperationNames.MOVE, true);
+		
 		Set<MethodNode> methodsInvolved = new HashSet<>();
 		try {
+			EmptyModelOperation leadingOperation = new EmptyModelOperation(); 
+			addOperation(leadingOperation);
+			
 			//all nodes have parents other than newParent
 			if(externalNodes(moved, newParent)){
 				for(AbstractNode node : moved){
@@ -41,6 +45,7 @@ public class GenericMoveOperation extends BulkOperation {
 						methodsInvolved.addAll(((ChoicesParentNode)node).getParameter().getMethods());
 					}
 					addOperation((IModelOperation)node.getParent().accept(new FactoryRemoveChildOperation(node, adapterProvider, false)));
+					
 					if(node instanceof GlobalParameterNode && newParent instanceof MethodNode){
 						GlobalParameterNode parameter = (GlobalParameterNode)node;
 						node = new MethodParameterNode(parameter, adapterProvider.getAdapter(parameter.getType()).defaultValue(), false);
@@ -63,6 +68,8 @@ public class GenericMoveOperation extends BulkOperation {
 		} catch (Exception e) {
 			ModelOperationException.report(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
 		}
+		
+		setNodeToBeSelectedAfterTheOperation(newParent);
 	}
 
 	protected boolean externalNodes(List<? extends AbstractNode> moved, AbstractNode newParent){

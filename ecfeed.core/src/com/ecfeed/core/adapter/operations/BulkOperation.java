@@ -50,7 +50,7 @@ public class BulkOperation extends AbstractModelOperation {
 		fOperations.add(operation);
 	}
 
-	protected void addCheckOperation(ICheckOperation operation){
+	protected void addCheckOperation(ICheckOperation operation) {
 		fCheckOperations.add(operation);
 	}
 
@@ -95,31 +95,35 @@ public class BulkOperation extends AbstractModelOperation {
 	}
 
 	@Override
-	public IModelOperation reverseOperation(){
+	public IModelOperation reverseOperation() {
 		return new BulkOperation("reverse " + getName(), reverseOperations(), fAtomic);
 	}
 
 
-	protected List<IModelOperation> operations(){
+	protected List<IModelOperation> operations() {
 		return fOperations;
 	}
 
-	protected List<IModelOperation> executedOperations(){
+	protected List<IModelOperation> executedOperations() {
 		return fExecutedOperations;
 	}
 
-	protected List<IModelOperation> reverseOperations(){
+	protected List<IModelOperation> reverseOperations() {
+		
 		List<IModelOperation> reverseOperations = new ArrayList<IModelOperation>();
-		for(IModelOperation operation : executedOperations()){
+		
+		for (IModelOperation operation : executedOperations()){
 			reverseOperations.add(0, operation.reverseOperation());
 		}
+		
 		return reverseOperations;
 	}
 
 	@Override
 	public boolean modelUpdated() {
-		for(IModelOperation operation : fExecutedOperations){
-			if(operation.modelUpdated()){
+		
+		for (IModelOperation operation : fExecutedOperations) {
+			if (operation.modelUpdated()) {
 				return true;
 			}
 		}
@@ -128,6 +132,7 @@ public class BulkOperation extends AbstractModelOperation {
 
 	@Override
 	public AbstractNode getNodeToBeSelectedAfterTheOperation() {
+		
 		for (IModelOperation operation : fOperations) {
 
 			AbstractNode abstractNode = operation.getNodeToBeSelectedAfterTheOperation(); 
@@ -137,4 +142,16 @@ public class BulkOperation extends AbstractModelOperation {
 		}
 		return null;
 	}
+	
+	@Override
+	public void setNodeToBeSelectedAfterTheOperation(AbstractNode newParent) {
+		
+		if (fOperations.isEmpty()) {
+			return;
+		}
+		
+		IModelOperation modelOperation = fOperations.get(0);
+		modelOperation.setNodeToBeSelectedAfterTheOperation(newParent);
+	}
+
 }

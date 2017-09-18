@@ -11,7 +11,6 @@
 package com.ecfeed.core.adapter.operations;
 
 import com.ecfeed.core.adapter.IModelOperation;
-import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.EStatementOperator;
 import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.model.StatementArray;
@@ -38,11 +37,6 @@ public class StatementOperationChangeOperator extends AbstractModelOperation {
 	@Override
 	public IModelOperation reverseOperation() {
 		return new StatementOperationChangeOperator(fTarget, fCurrentOperator);
-	}
-
-	@Override
-	public AbstractNode getNodeToBeSelectedAfterTheOperation() {
-		return null;
 	}
 
 }

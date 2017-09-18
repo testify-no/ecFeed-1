@@ -13,7 +13,6 @@ package com.ecfeed.core.adapter.operations;
 import java.util.Set;
 
 import com.ecfeed.core.adapter.IModelOperation;
-import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.ModelOperationException;
 
@@ -31,10 +30,14 @@ public class ChoiceOperationAddLabel extends AbstractModelOperation {
 
 		@Override
 		public void execute() throws ModelOperationException {
+			
+			setNodeToBeSelectedAfterTheOperation(fTarget);
 			fTarget.removeLabel(fLabel);
+			
 			for(ChoiceNode p : fLabeledDescendants){
 				p.addLabel(fLabel);
 			}
+			
 			markModelUpdated();
 		}
 
@@ -43,15 +46,11 @@ public class ChoiceOperationAddLabel extends AbstractModelOperation {
 			return new ChoiceOperationAddLabel(fTarget, fLabel);
 		}
 
-		@Override
-		public AbstractNode getNodeToBeSelectedAfterTheOperation() {
-			return fTarget;
-		}
-
 	}
 
 	public ChoiceOperationAddLabel(ChoiceNode target, String label){
 		super(OperationNames.ADD_PARTITION_LABEL);
+		
 		fTarget = target;
 		fLabel = label;
 		fLabeledDescendants = target.getLabeledChoices(fLabel);
@@ -59,7 +58,10 @@ public class ChoiceOperationAddLabel extends AbstractModelOperation {
 
 	@Override
 	public void execute() throws ModelOperationException {
+		
+		setNodeToBeSelectedAfterTheOperation(fTarget);
 		fTarget.addLabel(fLabel);
+		
 		for(ChoiceNode p : fLabeledDescendants){
 			p.removeLabel(fLabel);
 		}
@@ -71,8 +73,4 @@ public class ChoiceOperationAddLabel extends AbstractModelOperation {
 		return new ReverseOperation();
 	}
 
-	@Override
-	public AbstractNode getNodeToBeSelectedAfterTheOperation() {
-		return fTarget;
-	}
 }

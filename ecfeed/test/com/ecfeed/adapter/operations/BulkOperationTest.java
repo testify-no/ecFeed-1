@@ -17,7 +17,6 @@ import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.ModelOperationManager;
 import com.ecfeed.core.adapter.operations.AbstractModelOperation;
 import com.ecfeed.core.adapter.operations.BulkOperation;
-import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ModelOperationException;
 
 public class BulkOperationTest {
@@ -36,11 +35,6 @@ public class BulkOperationTest {
 		@Override
 		public IModelOperation reverseOperation() {
 			return new DummyPrimitiveOperation("reverse " + getName());
-		}
-
-		@Override
-		public AbstractNode getNodeToBeSelectedAfterTheOperation() {
-			return null;
 		}
 
 	}

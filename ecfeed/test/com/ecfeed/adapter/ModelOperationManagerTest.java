@@ -83,6 +83,12 @@ public class ModelOperationManagerTest {
 		public AbstractNode getNodeToBeSelectedAfterTheOperation() {
 			return null;
 		}
+
+		@Override
+		public void setNodeToBeSelectedAfterTheOperation(AbstractNode abstractNode) {
+
+		}
+
 	}
 
 	@Test

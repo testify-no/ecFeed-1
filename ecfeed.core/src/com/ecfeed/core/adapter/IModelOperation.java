@@ -20,4 +20,5 @@ public interface IModelOperation {
 	public IModelOperation reverseOperation();
 	public String getName();
 	public AbstractNode getNodeToBeSelectedAfterTheOperation();
+	public void setNodeToBeSelectedAfterTheOperation(AbstractNode abstractNode);
 }

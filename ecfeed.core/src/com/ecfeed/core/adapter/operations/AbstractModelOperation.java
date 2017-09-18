@@ -11,11 +11,13 @@
 package com.ecfeed.core.adapter.operations;
 
 import com.ecfeed.core.adapter.IModelOperation;
+import com.ecfeed.core.model.AbstractNode;
 
 public abstract class AbstractModelOperation implements IModelOperation {
 
 	private boolean fModelUpdated;
 	private String fName;
+	private AbstractNode fNodeToBeSelectedAfterTheOperation = null;
 
 	public AbstractModelOperation(String name){
 		fName = name;
@@ -35,7 +37,18 @@ public abstract class AbstractModelOperation implements IModelOperation {
 		return fName;
 	}
 	
-	@Override public String toString(){
+	@Override
+	public String toString(){
 		return getName();
 	}
+	
+	@Override
+	public void setNodeToBeSelectedAfterTheOperation(AbstractNode nodeToBeSelectedAfterTheOperation) {
+		fNodeToBeSelectedAfterTheOperation = nodeToBeSelectedAfterTheOperation;
+	}
+	
+	public AbstractNode getNodeToBeSelectedAfterTheOperation() {
+		return fNodeToBeSelectedAfterTheOperation;
+	}
+	
 }

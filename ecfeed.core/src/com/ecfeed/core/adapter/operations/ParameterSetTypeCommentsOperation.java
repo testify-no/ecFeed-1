@@ -11,7 +11,6 @@
 package com.ecfeed.core.adapter.operations;
 
 import com.ecfeed.core.adapter.IModelOperation;
-import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ModelOperationException;
 
@@ -29,6 +28,8 @@ public class ParameterSetTypeCommentsOperation extends AbstractModelOperation {
 
 	@Override
 	public void execute() throws ModelOperationException {
+
+		setNodeToBeSelectedAfterTheOperation(fTarget);
 		fCurrentComments = fTarget.getTypeComments() != null ? fTarget.getTypeComments() : "";
 		fTarget.setTypeComments(fComments);
 	}
@@ -36,11 +37,6 @@ public class ParameterSetTypeCommentsOperation extends AbstractModelOperation {
 	@Override
 	public IModelOperation reverseOperation() {
 		return new ParameterSetTypeCommentsOperation(fTarget, fCurrentComments);
-	}
-
-	@Override
-	public AbstractNode getNodeToBeSelectedAfterTheOperation() {
-		return fTarget;
 	}
 
 }

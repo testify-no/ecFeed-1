@@ -53,6 +53,11 @@ public class FactoryRemoveOperation {
 		public AbstractNode getNodeToBeSelectedAfterTheOperation() {
 			return null;
 		}
+
+		@Override
+		public void setNodeToBeSelectedAfterTheOperation(AbstractNode abstractNode) {
+		}
+
 	}
 
 	private static class RemoveOperationVisitor implements IModelVisitor{

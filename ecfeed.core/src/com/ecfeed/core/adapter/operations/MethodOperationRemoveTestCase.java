@@ -13,7 +13,6 @@ package com.ecfeed.core.adapter.operations;
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.ITypeAdapter;
 import com.ecfeed.core.adapter.ITypeAdapterProvider;
-import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.model.TestCaseNode;
@@ -59,6 +58,8 @@ public class MethodOperationRemoveTestCase extends AbstractModelOperation {
 
 	@Override
 	public void execute() throws ModelOperationException {
+
+		setNodeToBeSelectedAfterTheOperation(fMethodNode);
 		fIndex = fTestCase.getIndex();
 		fMethodNode.removeTestCase(fTestCase);
 		markModelUpdated();
@@ -67,11 +68,6 @@ public class MethodOperationRemoveTestCase extends AbstractModelOperation {
 	@Override
 	public IModelOperation reverseOperation() {
 		return new MethodOperationAddTestCase(fMethodNode, fTestCase, new DummyAdapterProvider(), fIndex);
-	}
-
-	@Override
-	public AbstractNode getNodeToBeSelectedAfterTheOperation() {
-		return fMethodNode;
 	}
 
 }

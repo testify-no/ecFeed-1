@@ -12,7 +12,6 @@ package com.ecfeed.core.adapter.operations;
 
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.java.Messages;
-import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.model.TestCaseNode;
@@ -34,9 +33,13 @@ public class TestCaseOperationUpdateTestData extends AbstractModelOperation {
 
 	@Override
 	public void execute() throws ModelOperationException {
+
+		setNodeToBeSelectedAfterTheOperation(fTarget);
+
 		if(fNewValue.getParameter() != fTarget.getTestData().get(fIndex).getParameter()){
 			ModelOperationException.report(Messages.TEST_DATA_CATEGORY_MISMATCH_PROBLEM);
 		}
+
 		fTarget.getTestData().set(fIndex, fNewValue);
 		markModelUpdated();
 	}
@@ -44,11 +47,6 @@ public class TestCaseOperationUpdateTestData extends AbstractModelOperation {
 	@Override
 	public IModelOperation reverseOperation() {
 		return new TestCaseOperationUpdateTestData(fTarget, fIndex, fPreviousValue);
-	}
-
-	@Override
-	public AbstractNode getNodeToBeSelectedAfterTheOperation() {
-		return fTarget;
 	}
 
 }

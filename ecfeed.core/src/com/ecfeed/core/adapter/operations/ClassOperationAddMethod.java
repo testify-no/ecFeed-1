@@ -15,7 +15,6 @@ import java.util.List;
 
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.java.Messages;
-import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.ClassNodeHelper;
 import com.ecfeed.core.model.MethodNode;
@@ -42,6 +41,7 @@ public class ClassOperationAddMethod extends AbstractModelOperation{
 	@Override
 	public void execute() throws ModelOperationException {
 
+		setNodeToBeSelectedAfterTheOperation(fClassNode);
 		List<String> problems = new ArrayList<String>();
 
 		if(fIndex == -1){
@@ -72,11 +72,6 @@ public class ClassOperationAddMethod extends AbstractModelOperation{
 	@Override
 	public IModelOperation reverseOperation() {
 		return new ClassOperationRemoveMethod(fClassNode, fMethod);
-	}
-
-	@Override
-	public AbstractNode getNodeToBeSelectedAfterTheOperation() {
-		return fClassNode;
 	}
 
 }

@@ -14,7 +14,6 @@ import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.ITypeAdapterProvider;
 import com.ecfeed.core.adapter.java.AdapterConstants;
 import com.ecfeed.core.adapter.java.Messages;
-import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.GlobalParameterNode;
@@ -43,6 +42,8 @@ public class ChoiceOperationSetValue extends AbstractModelOperation {
 
 	@Override
 	public void execute() throws ModelOperationException {
+
+		setNodeToBeSelectedAfterTheOperation(fTarget);
 
 		String convertedValue = validateChoiceValue(fTarget.getParameter().getType(), fNewValue);
 
@@ -136,6 +137,7 @@ public class ChoiceOperationSetValue extends AbstractModelOperation {
 		@Override
 		public void execute() throws ModelOperationException {
 
+			setNodeToBeSelectedAfterTheOperation(fTarget);
 			fTarget.setValueString(fOriginalValue);
 			adaptParameter(fTarget.getParameter());
 			markModelUpdated();
@@ -155,15 +157,6 @@ public class ChoiceOperationSetValue extends AbstractModelOperation {
 			return new ChoiceOperationSetValue(fTarget, fNewValue, fAdapterProvider);
 		}
 
-		@Override
-		public AbstractNode getNodeToBeSelectedAfterTheOperation() {
-			return fTarget;
-		}
-	}
-
-	@Override
-	public AbstractNode getNodeToBeSelectedAfterTheOperation() {
-		return fTarget;
 	}
 
 }
