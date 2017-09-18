@@ -40,6 +40,8 @@ import com.ecfeed.core.generators.TestResultsAnalysis;
 import com.ecfeed.core.generators.TestResultsAnalyzer;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.ui.dialogs.basic.DialogObjectToolkit;
+import com.ecfeed.ui.modelif.TestResultsHolder;
+
 
 public class CulpritAnalysisDialog extends TitleAreaDialog {
 
@@ -50,31 +52,38 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 	private int n1 = 1;
 	private int n2 = 3;
 	final private int maxNumRow = 31;
-	final private int ComboMaxLimit = 10;
+	final private int ComboMaxLimit;
 	private Table fTable = null;
-	private List<TestResultDescription> fTestResultDescrs = createtestResultDescrs(); // MDX move create... to constructor -- yes when this is connected to a real dialog
-	private TestResultsAnalysis fTestResultsAnalysis 
-	= new TestResultsAnalyzer().generateAnalysis(fTestResultDescrs, n1, n2); // MDX move creation to contructor -- yes when this is connected to a real dialog
-	int total = fTestResultsAnalysis.getCulpritCount();
+	private List<TestResultDescription> fTestResultDescrs; 
+	private TestResultsAnalysis fTestResultsAnalysis;
+	int total;
 	Button NextButton;
 	Button PrevButton;
 	Combo minCombo;
 	Combo maxCombo;
+	TestResultsHolder testResultsHolder;
+	MethodNode methodNode;
 	
 
 	public CulpritAnalysisDialog() {
 		super(null);
+		testResultsHolder = new TestResultsHolder();
+		fTestResultDescrs = testResultsHolder.getTestResultDescription();
+		fTestResultsAnalysis 
+		= new TestResultsAnalyzer().generateAnalysis(fTestResultDescrs, n1, n2);
+		total = fTestResultsAnalysis.getCulpritCount();
+		ComboMaxLimit = methodNode.getMethodParameterCount();
 		fDialogObjectToolkit = DialogObjectToolkit.getInstance();
 		setBlockOnOpen(true);
 		open();
 		Display.getCurrent().dispose();
 	}
 
-	public void run() { // MDX do we need this now ? -- until we connect this to a real dialog.
-		setBlockOnOpen(true);
-		open();
-		Display.getCurrent().dispose();
-	}
+//	public void run() { // MDX do we need this now ? -- until we connect this to a real dialog.
+//		setBlockOnOpen(true);
+//		open();
+//		Display.getCurrent().dispose();
+//	}
 
 	@Override
 	public void create() {
@@ -252,30 +261,6 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 		}
 	}
 
-	private void addTestResult(
-			String[] testArguments, boolean result, List<TestResultDescription> testResultDescrs) {
-
-		List<String> testArgList = new ArrayList<String>();
-
-		for (String testArgument : testArguments) {
-			testArgList.add(testArgument);
-		}
-
-		testResultDescrs.add(new TestResultDescription(testArgList, result));
-	}
-
-	public List<TestResultDescription> createtestResultDescrs()	{ // MDX to be removed after connecting to a real dialog -> yes 
-
-		List<TestResultDescription> testResultDescrs = new ArrayList<TestResultDescription>();
-
-		addTestResult(new String[]{ "1", "2", "3", "4", "5" }, false, testResultDescrs);
-		addTestResult(new String[]{ "0", "2", "3", "5", "4" }, false, testResultDescrs);
-		addTestResult(new String[]{ "5", "2", "3", "7", "8" }, true, testResultDescrs);
-		addTestResult(new String[]{ "7", "7", "3", "9", "8" }, false, testResultDescrs);
-		addTestResult(new String[]{ "2", "4", "5", "3", "8" }, true, testResultDescrs);
-
-		return testResultDescrs;
-	}
 
 	private void sortByHeaders(Table table, TableColumn[] column)
 	{
@@ -456,8 +441,8 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 		}
 	}
 
-	public static void main(String[] args) { // MDX do we need this ? -- until we connect this to a real dialog
-		new CulpritAnalysisDialog().run();
-	}
+//	public static void main(String[] args) { // MDX do we need this ? -- until we connect this to a real dialog
+//		new CulpritAnalysisDialog().run();
+//	}
 
 }
