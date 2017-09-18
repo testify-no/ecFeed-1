@@ -49,7 +49,7 @@ public class ModelMasterSection extends TreeViewerSection {
 	private static final int AUTO_EXPAND_LEVEL = 3;
 
 	private final ModelMasterDetailsBlock fMasterDetailsBlock;
-	private IModelUpdateListener fUpdateListener;
+	//	private IModelUpdateListener fUpdateListener;
 
 
 	public ModelMasterSection(ModelMasterDetailsBlock parentBlock, IJavaProjectProvider javaProjectProvider) {
@@ -135,15 +135,14 @@ public class ModelMasterSection extends TreeViewerSection {
 				getJavaProjectProvider(), ModelMasterSection.this);
 	}
 
-	public List<IModelUpdateListener> getUpdateListeners(AbstractNode nodeToSelectAfterTheOperation) {
-		
-		// TODO XYX
+	public void expandChildren(AbstractNode abstractNode) {
+		getTreeViewer().expandToLevel(abstractNode, 1);
+	}
 
-		if (fUpdateListener == null) {
-			fUpdateListener = new UpdateListener();
-		}
+	public List<IModelUpdateListener> createUpdateListeners(AbstractNode nodeToSelectAfterTheOperation) {
 
-		return Arrays.asList(new IModelUpdateListener[]{fUpdateListener});
+		IModelUpdateListener updateListener = new UpdateListener(nodeToSelectAfterTheOperation);
+		return Arrays.asList(new IModelUpdateListener[]{updateListener});
 	}
 
 	public void setInput(RootNode model) {
@@ -188,6 +187,13 @@ public class ModelMasterSection extends TreeViewerSection {
 	}
 
 	private class UpdateListener implements IModelUpdateListener {
+
+		AbstractNode fNodeToSelectAfterTheOperation;
+
+		UpdateListener(AbstractNode nodeToSelectAfterTheOperation) {
+			fNodeToSelectAfterTheOperation = nodeToSelectAfterTheOperation;
+		}
+
 		@Override
 		public void notifyModelUpdated(Object source) {
 
@@ -198,6 +204,10 @@ public class ModelMasterSection extends TreeViewerSection {
 			AbstractFormPart abstractFormPart = (AbstractFormPart)source;
 			abstractFormPart.markDirty();
 			refresh();
+
+			IMainTreeProvider mainTreeProvider = fMasterDetailsBlock.getMainTreeProvider();
+			mainTreeProvider.expandChildren(fNodeToSelectAfterTheOperation);
+			mainTreeProvider.setCurrentNode(fNodeToSelectAfterTheOperation);
 		}
 	}
 

@@ -63,7 +63,8 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 	private IJavaProjectProvider fJavaProjectProvider;
 	private UndoActionHandler fUndoActionHandler;
 	private RedoActionHandler fRedoActionHandler;
-	private RootNode fModel; 
+	private RootNode fModel;
+	private MasterSectionMainTreeProvider fMainTreeProvider;
 
 	public ModelMasterDetailsBlock(ModelPage modelPage, IJavaProjectProvider javaProjectProvider) {
 		fPage = modelPage;
@@ -104,12 +105,12 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 			return;
 		}
 
-		MasterSectionMainTreeProvider mainTreeProvider = new MasterSectionMainTreeProvider(); 
+		fMainTreeProvider = new MasterSectionMainTreeProvider(); 
 
 		detailsPart.registerPage(
 				RootNode.class, 
 				new ModelRootDetailsPage(
-						mainTreeProvider,
+						fMainTreeProvider,
 						new RootInterface(fUpdateContext, fJavaProjectProvider),
 						fUpdateContext, 
 						fJavaProjectProvider));
@@ -117,7 +118,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 		detailsPart.registerPage(
 				ClassNode.class, 
 				new ClassDetailsPage(
-						mainTreeProvider,
+						fMainTreeProvider,
 						new ClassInterface(fUpdateContext, fJavaProjectProvider),
 						fUpdateContext, 
 						fJavaProjectProvider));
@@ -125,7 +126,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 		detailsPart.registerPage(
 				MethodNode.class, 
 				new MethodDetailsPage(
-						mainTreeProvider,
+						fMainTreeProvider,
 						new MethodInterface(fUpdateContext, fJavaProjectProvider),
 						fUpdateContext, 
 						fJavaProjectProvider));
@@ -133,7 +134,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 		detailsPart.registerPage(
 				MethodParameterNode.class, 
 				new MethodParameterDetailsPage(
-						mainTreeProvider,
+						fMainTreeProvider,
 						new MethodParameterInterface(fUpdateContext, fJavaProjectProvider),
 						fUpdateContext, 
 						fJavaProjectProvider));
@@ -141,7 +142,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 		detailsPart.registerPage(
 				GlobalParameterNode.class, 
 				new GlobalParameterDetailsPage(
-						mainTreeProvider,
+						fMainTreeProvider,
 						new GlobalParameterInterface(fUpdateContext, fJavaProjectProvider),
 						fUpdateContext, 
 						fJavaProjectProvider));
@@ -149,7 +150,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 		detailsPart.registerPage(
 				TestCaseNode.class, 
 				new TestCaseDetailsPage(
-						mainTreeProvider,
+						fMainTreeProvider,
 						new TestCaseInterface(fUpdateContext, fJavaProjectProvider),
 						fUpdateContext, 
 						fJavaProjectProvider));
@@ -157,7 +158,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 		detailsPart.registerPage(
 				ConstraintNode.class, 
 				new ConstraintDetailsPage(
-						mainTreeProvider,
+						fMainTreeProvider,
 						new ConstraintInterface(fUpdateContext, fJavaProjectProvider),
 						fUpdateContext, 
 						fJavaProjectProvider));
@@ -165,7 +166,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 		detailsPart.registerPage(
 				ChoiceNode.class, 
 				new ChoiceDetailsPage(
-						mainTreeProvider,
+						fMainTreeProvider,
 						new ChoiceInterface(fUpdateContext, fJavaProjectProvider),
 						fUpdateContext, 
 						fJavaProjectProvider));
@@ -260,6 +261,10 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 		return fUpdateContext;
 	}
 
+	public IMainTreeProvider getMainTreeProvider() {
+		return fMainTreeProvider;
+	}
+	
 	protected BasicSection getFocusedSection() {
 
 		if (fMasterSection.getViewer().getControl().isFocusControl()) {
@@ -297,8 +302,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 		}
 
 		protected List<IModelUpdateListener> createUpdateListeners(AbstractNode nodeToSelectAfterTheOperation) {
-			// TODO XYX
-			return fMasterSection.getUpdateListeners(nodeToSelectAfterTheOperation);
+			return fMasterSection.createUpdateListeners(nodeToSelectAfterTheOperation);
 		}
 
 		protected AbstractFormPart getAbstractFormPart() {
@@ -383,7 +387,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 
 		@Override
 		public void expandChildren(AbstractNode abstractNode) {
-			// TODO XYX
+			fMasterSection.expandChildren(abstractNode);
 		}
 		
 	}
