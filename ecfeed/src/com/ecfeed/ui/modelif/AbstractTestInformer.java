@@ -71,7 +71,7 @@ public abstract class AbstractTestInformer {
 		return false;
 	}
 
-	protected void clearFailedTests(){
+	protected void clearFailedTests(){ 
 		fUnsuccesfullExecutionStatuses.clear();
 	}
 
