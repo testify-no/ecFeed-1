@@ -21,6 +21,7 @@ import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
+import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.runner.RunnerException;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.dialogs.basic.AdvancedStatisticsButtonDialog;
@@ -32,9 +33,16 @@ public abstract class AbstractTestInformer {
 	int fTotalWork;
 	private int fExecutedTestCases = 0;
 	private List<Status> fUnsuccesfullExecutionStatuses;
+	MethodNode fmethodNode;
+	TestResultsHolder ftestResultsHolder;
 
 	public AbstractTestInformer(){
 		fUnsuccesfullExecutionStatuses = new ArrayList<>();
+	}
+	
+	public AbstractTestInformer(MethodNode methodNode, TestResultsHolder testResultsHolder){
+		fmethodNode = methodNode;
+		ftestResultsHolder = testResultsHolder;
 	}
 
 	protected abstract void setTestProgressMessage();
@@ -86,7 +94,7 @@ public abstract class AbstractTestInformer {
 							"Open details to see more", 
 							new RunnerException("Problematic test cases"));
 			
-			AdvancedStatisticsButtonDialog dialog = new AdvancedStatisticsButtonDialog(null, Messages.DIALOG_TEST_EXECUTION_REPORT_TITLE, msg, ms, IStatus.ERROR);
+			AdvancedStatisticsButtonDialog dialog = new AdvancedStatisticsButtonDialog(null, Messages.DIALOG_TEST_EXECUTION_REPORT_TITLE, msg, ms, IStatus.ERROR, fmethodNode, ftestResultsHolder);
 			dialog.open();
 
 //			ErrorDialog.openError(null, Messages.DIALOG_TEST_EXECUTION_REPORT_TITLE, msg, ms);
