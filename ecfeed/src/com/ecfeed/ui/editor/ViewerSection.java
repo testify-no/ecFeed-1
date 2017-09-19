@@ -28,8 +28,6 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.KeyAdapter;
-import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.MenuListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -176,7 +174,7 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 	}
 
 	protected KeyListener createKeyListener(int keyCode, int modifier, Action action){
-		ViewerKeyAdapter adapter = new ViewerKeyAdapter(keyCode, modifier, action);
+		ActionKeyListener adapter = new ActionKeyListener(keyCode, modifier, action);
 		fViewer.getControl().addKeyListener(adapter);
 		return adapter;
 	}
@@ -272,30 +270,6 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 			} catch (Exception e) {
 				ExceptionCatchDialog.open(fDescriptionWhenError, e.getMessage());
 			}
-		}
-	}
-
-	protected class ViewerKeyAdapter extends KeyAdapter {
-		private int fKeyCode;
-		private Action fAction;
-		private int fModifier;
-
-		public ViewerKeyAdapter(int keyCode, int modifier, Action action){
-			fKeyCode = keyCode;
-			fModifier = modifier;
-			fAction = action;
-		}
-
-		@Override
-		public void keyReleased(KeyEvent e) {
-
-			if(e.keyCode != fKeyCode) {
-				return;
-			}
-			if (e.stateMask != fModifier) {
-				return;
-			}
-			fAction.run();
 		}
 	}
 

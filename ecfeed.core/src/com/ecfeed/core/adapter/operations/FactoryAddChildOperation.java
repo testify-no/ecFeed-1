@@ -27,21 +27,30 @@ import com.ecfeed.core.model.RootNodeHelper;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.utils.StringHelper;
 
-public class FactoryAddChildOperation implements IModelVisitor{ // XYX
+public class FactoryAddChildOperation implements IModelVisitor{
 
 	private AbstractNode fChild;
 	private int fIndex;
 	private boolean fValidate;
 	private ITypeAdapterProvider fAdapterProvider;
 
-	public FactoryAddChildOperation(AbstractNode child, int index, ITypeAdapterProvider adapterProvider, boolean validate) {
+	public FactoryAddChildOperation(
+			AbstractNode child, 
+			int index, 
+			ITypeAdapterProvider adapterProvider, 
+			boolean validate) {
+
 		fChild = child;
 		fIndex = index;
 		fValidate = validate;
 		fAdapterProvider = adapterProvider;
 	}
 
-	public FactoryAddChildOperation(AbstractNode child, ITypeAdapterProvider adapterProvider, boolean validate) {
+	public FactoryAddChildOperation(
+			AbstractNode child, 
+			ITypeAdapterProvider adapterProvider, 
+			boolean validate) {
+
 		this(child, -1, adapterProvider, validate);
 	}
 
