@@ -18,7 +18,7 @@ import com.ecfeed.core.model.MethodNode;
 public class ClassOperationAddMethods extends BulkOperation{
 
 	public ClassOperationAddMethods(ClassNode target, Collection<MethodNode> methods, int index) {
-		super(OperationNames.ADD_METHODS, false);
+		super(OperationNames.ADD_METHODS, false, target, target);
 		for(MethodNode method : methods){
 			addOperation(new ClassOperationAddMethod(target, method, index++));
 		}

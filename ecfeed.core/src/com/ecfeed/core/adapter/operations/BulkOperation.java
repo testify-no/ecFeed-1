@@ -28,22 +28,39 @@ public class BulkOperation extends AbstractModelOperation {
 	// otherwise after first error the reverse operation is called
 	private final boolean fAtomic;
 	private final List<ICheckOperation> fCheckOperations;
+	private AbstractNode fNodeToBeSelectedAfterReverseOperation;
 
 	protected interface ICheckOperation {
 		public void check() throws ModelOperationException;
 	}
 
-	public BulkOperation(String name, boolean atomic) {
-		this(name, new ArrayList<IModelOperation>(), atomic);
+	public BulkOperation(
+			String name, 
+			boolean atomic,
+			AbstractNode nodeToBeSelectedAfterTheOperation,
+			AbstractNode nodeToBeSelectedAfterReverseOperation) {
+
+		this(name, new ArrayList<IModelOperation>(), atomic, 
+				nodeToBeSelectedAfterTheOperation, nodeToBeSelectedAfterReverseOperation);
 	}
 
-	public BulkOperation(String name, List<IModelOperation> operations, boolean atomic) {
+	public BulkOperation(
+			String name, 
+			List<IModelOperation> operations, 
+			boolean atomic, 
+			AbstractNode nodeToBeSelectedAfterTheOperation,
+			AbstractNode nodeToBeSelectedAfterReverseOperation) {
+
 		super(name);
 
 		fOperations = operations;
 		fExecutedOperations = new ArrayList<IModelOperation>();
 		fCheckOperations = new ArrayList<ICheckOperation>();
 		fAtomic = atomic;
+
+		setNodeToBeSelectedAfterTheOperation(nodeToBeSelectedAfterTheOperation);
+		
+		fNodeToBeSelectedAfterReverseOperation = nodeToBeSelectedAfterReverseOperation;
 	}
 
 	protected void addOperation(IModelOperation operation) {
@@ -96,7 +113,9 @@ public class BulkOperation extends AbstractModelOperation {
 
 	@Override
 	public IModelOperation reverseOperation() {
-		return new BulkOperation("reverse " + getName(), reverseOperations(), fAtomic);
+		return new BulkOperation(
+				"reverse " + getName(), reverseOperations(), 
+				fAtomic, fNodeToBeSelectedAfterReverseOperation, null);
 	}
 
 
@@ -109,49 +128,25 @@ public class BulkOperation extends AbstractModelOperation {
 	}
 
 	protected List<IModelOperation> reverseOperations() {
-		
+
 		List<IModelOperation> reverseOperations = new ArrayList<IModelOperation>();
-		
+
 		for (IModelOperation operation : executedOperations()){
 			reverseOperations.add(0, operation.reverseOperation());
 		}
-		
+
 		return reverseOperations;
 	}
 
 	@Override
 	public boolean modelUpdated() {
-		
+
 		for (IModelOperation operation : fExecutedOperations) {
 			if (operation.modelUpdated()) {
 				return true;
 			}
 		}
 		return false;
-	}
-
-	@Override
-	public AbstractNode getNodeToBeSelectedAfterTheOperation() {
-		
-		for (IModelOperation operation : fOperations) {
-
-			AbstractNode abstractNode = operation.getNodeToBeSelectedAfterTheOperation(); 
-			if (abstractNode != null) {
-				return abstractNode;
-			}
-		}
-		return null;
-	}
-	
-	@Override
-	public void setNodeToBeSelectedAfterTheOperation(AbstractNode newParent) {
-		
-		if (fOperations.isEmpty()) {
-			return;
-		}
-		
-		IModelOperation modelOperation = fOperations.get(0);
-		modelOperation.setNodeToBeSelectedAfterTheOperation(newParent);
 	}
 
 }

@@ -75,7 +75,7 @@ public class MethodParameterOperationSetLink extends BulkOperation {
 	}
 
 	public MethodParameterOperationSetLink(MethodParameterNode target, GlobalParameterNode link) {
-		super(OperationNames.SET_LINK, true);
+		super(OperationNames.SET_LINK, true, target, target);
 		addOperation(new SetLinkOperation(target, link));
 		addOperation(new MethodOperationMakeConsistent(target.getMethod()));
 	}

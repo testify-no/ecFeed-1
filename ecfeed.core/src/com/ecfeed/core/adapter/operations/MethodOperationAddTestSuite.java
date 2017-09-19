@@ -19,10 +19,18 @@ import com.ecfeed.core.model.TestCaseNode;
 
 public class MethodOperationAddTestSuite extends BulkOperation {
 
-	public MethodOperationAddTestSuite(MethodNode target, String testSuiteName, List<List<ChoiceNode>> testData, ITypeAdapterProvider adapterProvider) {
-		super(OperationNames.ADD_TEST_CASES, false);
-		for(List<ChoiceNode> values : testData){
-			addOperation(new MethodOperationAddTestCase(target, new TestCaseNode(testSuiteName, values), adapterProvider));
+	public MethodOperationAddTestSuite(
+			MethodNode target, 
+			String testSuiteName, 
+			List<List<ChoiceNode>> testData, 
+			ITypeAdapterProvider adapterProvider) {
+
+		super(OperationNames.ADD_TEST_CASES, false, target, target);
+
+		for (List<ChoiceNode> values : testData) {
+			addOperation(
+					new MethodOperationAddTestCase(
+							target, new TestCaseNode(testSuiteName, values), adapterProvider));
 		}
 	}
 

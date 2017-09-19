@@ -369,7 +369,7 @@ public class MethodParameterOperationSetType extends BulkOperation {
 
 	public MethodParameterOperationSetType(MethodParameterNode target, String newType, ITypeAdapterProvider adapterProvider) {
 
-		super(OperationNames.SET_TYPE, true);
+		super(OperationNames.SET_TYPE, true, target, target);
 		addOperation(new SetTypeOperation(target, newType, adapterProvider));
 		if (target.getMethod() != null) {
 			addOperation(new MethodOperationMakeConsistent(target.getMethod()));

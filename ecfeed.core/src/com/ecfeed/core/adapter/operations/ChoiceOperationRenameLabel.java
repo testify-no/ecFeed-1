@@ -15,7 +15,7 @@ import com.ecfeed.core.model.ChoiceNode;
 public class ChoiceOperationRenameLabel extends BulkOperation {
 
 	public ChoiceOperationRenameLabel(ChoiceNode target, String currentLabel, String newLabel) {
-		super(OperationNames.RENAME_LABEL, true);
+		super(OperationNames.RENAME_LABEL, true, target, target);
 		addOperation(new ChoiceOperationRemoveLabel(target, currentLabel));
 		addOperation(new ChoiceOperationAddLabel(target, newLabel));
 	}

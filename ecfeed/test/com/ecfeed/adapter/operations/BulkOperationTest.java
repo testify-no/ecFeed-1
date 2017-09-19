@@ -42,7 +42,7 @@ public class BulkOperationTest {
 	private class DummyBulkOperation extends BulkOperation{
 
 		public DummyBulkOperation(String name) {
-			super(name, false);
+			super(name, false, null, null);
 			addOperation(new DummyPrimitiveOperation("op1"));	
 			addOperation(new DummyPrimitiveOperation("op2"));	
 		}

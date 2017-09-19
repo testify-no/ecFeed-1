@@ -33,8 +33,17 @@ public class GenericRemoveNodesOperation extends BulkOperation {
 
 	private Set<AbstractNode> fRemoved;
 
-	public GenericRemoveNodesOperation(Collection<? extends AbstractNode> nodes, ITypeAdapterProvider adapterProvider, boolean validate){
-		super(OperationNames.REMOVE_NODES, false);
+	public GenericRemoveNodesOperation(
+			Collection<? extends AbstractNode> nodes, 
+			ITypeAdapterProvider adapterProvider, 
+			boolean validate,
+			AbstractNode nodeToBeSelectedAfterTheOperation,
+			AbstractNode nodeToBeSelectedAfterReverseOperation) {
+		
+		super(OperationNames.REMOVE_NODES, false,
+				nodeToBeSelectedAfterTheOperation,
+				nodeToBeSelectedAfterReverseOperation);
+		
 		fRemoved = new HashSet<>(nodes);
 		Iterator<AbstractNode> it = fRemoved.iterator();
 		while(it.hasNext()){

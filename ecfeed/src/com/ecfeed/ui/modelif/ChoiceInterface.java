@@ -95,7 +95,9 @@ public class ChoiceInterface extends ChoicesParentInterface {
 
 	public boolean addLabels(List<String> labels) {
 
-		IModelOperation operation = new ChoiceOperationAddLabels(getOwnNode(), labels);
+		IModelOperation operation = 
+				new ChoiceOperationAddLabels(getOwnNode(), labels, getOwnNode(), getOwnNode());
+
 		return getOperationExecuter().execute(operation, Messages.DIALOG_ADD_LABEL_PROBLEM_TITLE);
 	}
 

@@ -180,11 +180,18 @@ public class GenericOperationRemoveChoice extends BulkOperation {
 
 	}
 
-	public GenericOperationRemoveChoice(ChoicesParentNode target, ChoiceNode choice, ITypeAdapterProvider adapterProvider, boolean validate) {
-		super(OperationNames.REMOVE_PARTITION, true);
+	public GenericOperationRemoveChoice(
+			ChoicesParentNode target, 
+			ChoiceNode choice, 
+			ITypeAdapterProvider adapterProvider, 
+			boolean validate) {
+
+		super(OperationNames.REMOVE_PARTITION, true, target, target);
+
 		addOperation(new RemoveChoiceOperation(target, choice, adapterProvider));
-		if(validate){
-			for(MethodNode method : target.getParameter().getMethods()){
+
+		if (validate) {
+			for (MethodNode method : target.getParameter().getMethods()) {
 				addOperation(new MethodOperationMakeConsistent(method));
 			}
 		}

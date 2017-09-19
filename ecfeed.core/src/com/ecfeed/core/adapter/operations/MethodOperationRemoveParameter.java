@@ -93,7 +93,7 @@ public class MethodOperationRemoveParameter extends BulkOperation{
 	}
 
 	public MethodOperationRemoveParameter(MethodNode target, MethodParameterNode parameter, boolean validate) {
-		super(OperationNames.REMOVE_METHOD_PARAMETER, true);
+		super(OperationNames.REMOVE_METHOD_PARAMETER, true, target, target);
 		addOperation(new RemoveMethodParameterOperation(target, parameter));
 		if(validate){
 			addOperation(new MethodOperationMakeConsistent(target));
@@ -104,7 +104,7 @@ public class MethodOperationRemoveParameter extends BulkOperation{
 	}
 
 	public MethodOperationRemoveParameter(MethodNode target, MethodParameterNode parameter, boolean validate, boolean ignoreDuplicates){
-		super(OperationNames.REMOVE_METHOD_PARAMETER, true);
+		super(OperationNames.REMOVE_METHOD_PARAMETER, true, target, target);
 		addOperation(new RemoveMethodParameterOperation(target, parameter, ignoreDuplicates));
 		if(validate){
 			addOperation(new MethodOperationMakeConsistent(target));

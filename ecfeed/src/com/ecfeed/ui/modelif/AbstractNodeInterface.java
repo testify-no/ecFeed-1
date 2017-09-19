@@ -146,16 +146,21 @@ public class AbstractNodeInterface {
 	}
 
 	public boolean removeChildren(Collection<? extends AbstractNode> children, String message){
-		if(children == null || children.size() == 0) { 
+
+		if (children == null || children.size() == 0) { 
 			return false;
 		}
 
-		for(AbstractNode node : children){
-			if(node.getParent() != fNode) { 
+		for (AbstractNode node : children) {
+			if (node.getParent() != fNode) { 
 				return false;
 			}
 		}
-		return getOperationExecuter().execute(new GenericRemoveNodesOperation(children, fAdapterProvider, true), message);
+
+		GenericRemoveNodesOperation genericRemoveNodesOperation = 
+				new GenericRemoveNodesOperation(children, fAdapterProvider, true, fNode, fNode);
+
+		return getOperationExecuter().execute(genericRemoveNodesOperation, message);
 	}
 
 	public String canAddChildren(Collection<? extends AbstractNode> children) {
@@ -205,11 +210,11 @@ public class AbstractNodeInterface {
 	protected IJavaProjectProvider getJavaProjectProvider() {
 		return fJavaProjectProvider;
 	}
-	
+
 	protected OperationExecuter getOperationExecuter() {
 		return fOperationExecuter;
 	}
-	
+
 	protected boolean executeMoveOperation(IModelOperation moveOperation) {
 		return getOperationExecuter().execute(moveOperation, Messages.DIALOG_MOVE_NODE_PROBLEM_TITLE);
 	}
@@ -245,7 +250,10 @@ public class AbstractNodeInterface {
 	public boolean importAllJavadocComments() {
 		List<IModelOperation> operations = getImportAllJavadocCommentsOperations();
 		if(operations.size() > 0){
-			IModelOperation operation = new BulkOperation(OperationNames.SET_COMMENTS, operations, false);
+			IModelOperation operation = 
+					new BulkOperation(
+							OperationNames.SET_COMMENTS, operations, false, getOwnNode(), getOwnNode());
+
 			return getOperationExecuter().execute(operation, Messages.DIALOG_SET_COMMENTS_PROBLEM_TITLE);
 		}
 		return false;
@@ -263,19 +271,19 @@ public class AbstractNodeInterface {
 	}
 
 	protected List<IModelOperation> getImportAllJavadocCommentsOperations() {
-		
+
 		List<IModelOperation> result = new ArrayList<IModelOperation>();
 		String javadoc = JavaDocSupport.importJavadoc(getOwnNode());
-		
+
 		if(javadoc != null && getComments() != javadoc){
 			result.add(new GenericSetCommentsOperation(fNode, javadoc));
 		}
-		
+
 		for(AbstractNode child : getOwnNode().getChildren()){
 			AbstractNodeInterface childIf = 
 					NodeInterfaceFactory.getNodeInterface(
 							child, getOperationExecuter().getUpdateContext(), fJavaProjectProvider);
-			
+
 			result.addAll(childIf.getImportAllJavadocCommentsOperations());
 		}
 		return result;

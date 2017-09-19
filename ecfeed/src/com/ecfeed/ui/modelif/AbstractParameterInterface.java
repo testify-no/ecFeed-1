@@ -140,7 +140,10 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 	}
 
 	public void importFullTypeJavadocComments() {
-		IModelOperation operation = new BulkOperation("Import javadoc", getFullTypeImportOperations(), false);
+		IModelOperation operation = 
+				new BulkOperation(
+						"Import javadoc", getFullTypeImportOperations(), false, getOwnNode(), getOwnNode());
+
 		getOperationExecuter().execute(operation, Messages.DIALOG_SET_COMMENTS_PROBLEM_TITLE);
 	}
 

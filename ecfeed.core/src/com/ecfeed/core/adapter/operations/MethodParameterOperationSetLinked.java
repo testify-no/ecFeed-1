@@ -140,7 +140,7 @@ public class MethodParameterOperationSetLinked extends BulkOperation{
 	}
 
 	public MethodParameterOperationSetLinked(MethodParameterNode target, boolean linked) {
-		super(OperationNames.SET_LINKED, true);
+		super(OperationNames.SET_LINKED, true, target, target);
 		addOperation(new SetLinkedOperation(target, linked));
 		addOperation(new MethodOperationMakeConsistent(target.getMethod())); 
 	}

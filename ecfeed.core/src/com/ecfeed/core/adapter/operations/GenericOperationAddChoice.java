@@ -25,7 +25,7 @@ public class GenericOperationAddChoice extends BulkOperation {
 	public GenericOperationAddChoice(
 			ChoicesParentNode target, ChoiceNode choice, ITypeAdapterProvider adapterProvider, int index, boolean validate) {
 
-		super(OperationNames.ADD_PARTITION, true);
+		super(OperationNames.ADD_PARTITION, true, target, target);
 		addOperation(new AddChoiceOperation(target, choice, adapterProvider, index));
 
 		for (MethodNode method : target.getParameter().getMethods()) {
