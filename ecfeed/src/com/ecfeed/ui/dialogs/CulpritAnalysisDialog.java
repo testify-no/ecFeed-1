@@ -61,14 +61,15 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 	Button PrevButton;
 	Combo minCombo;
 	Combo maxCombo;
-	TestResultsHolder testResultsHolder;
-	MethodNode methodNode;
+	TestResultsHolder ftestResultsHolder;
+	MethodNode fmethodNode;
 	
 
-	public CulpritAnalysisDialog() {
+	public CulpritAnalysisDialog(MethodNode methodNode, TestResultsHolder testResultsHolder) {
 		super(null);
-		testResultsHolder = new TestResultsHolder();
+		ftestResultsHolder = testResultsHolder;
 		fTestResultDescrs = testResultsHolder.getTestResultDescription();
+		fmethodNode = methodNode;
 		fTestResultsAnalysis 
 		= new TestResultsAnalyzer().generateAnalysis(fTestResultDescrs, n1, n2);
 		total = fTestResultsAnalysis.getCulpritCount();
@@ -79,11 +80,11 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 		Display.getCurrent().dispose();
 	}
 
-//	public void run() { // MDX do we need this now ? -- until we connect this to a real dialog.
-//		setBlockOnOpen(true);
-//		open();
-//		Display.getCurrent().dispose();
-//	}
+	public void run() { // MDX do we need this now ? -- until we connect this to a real dialog.
+		setBlockOnOpen(true);
+		open();
+		Display.getCurrent().dispose();
+	}
 
 	@Override
 	public void create() {
