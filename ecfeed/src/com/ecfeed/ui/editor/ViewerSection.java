@@ -11,10 +11,7 @@
 package com.ecfeed.ui.editor;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
@@ -34,15 +31,12 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 
-import com.ecfeed.application.ApplicationContext;
-import com.ecfeed.core.utils.SystemHelper;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
-import com.ecfeed.ui.editor.actions.GlobalActions;
 import com.ecfeed.ui.editor.actions.IActionProvider;
-import com.ecfeed.ui.editor.actions.NamedAction;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 /**
@@ -53,11 +47,10 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 	private final int VIEWER_STYLE = SWT.BORDER | SWT.MULTI;
 
 	private List<Object> fSelectedElements;
-
 	private StructuredViewer fViewer;
 	private Composite fViewerComposite;
 	private Menu fMenu;
-	private Set<KeyListener> fKeyListeners;
+	private KeyRegistrator fKeyRegistrator = null;
 
 	protected abstract void createViewerColumns();
 	protected abstract StructuredViewer createViewer(Composite viewerComposite, int style);
@@ -72,7 +65,14 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 			int style) {
 		super(sectionContext, updateContext, javaProjectProvider, style);
 		fSelectedElements = new ArrayList<>();
-		fKeyListeners = new HashSet<KeyListener>();
+	}
+
+	@Override
+	protected Composite createClientComposite() {
+		Composite client = super.createClientComposite();
+		createViewer();
+
+		return client;
 	}
 
 	@Override
@@ -101,13 +101,6 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 	@Override
 	public void setSelection(ISelection selection){
 		fViewer.setSelection(selection);
-	}
-
-	@Override
-	protected Composite createClientComposite() {
-		Composite client = super.createClientComposite();
-		createViewer();
-		return client;
 	}
 
 	@Override
@@ -179,68 +172,32 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 		return adapter;
 	}
 
-	protected void setActionProvider(IActionProvider provider, boolean addDeleteAction){
-		super.setActionProvider(provider);
-		fMenu = new Menu(fViewer.getControl());
-		fViewer.getControl().setMenu(fMenu);
+	protected void setActionProvider(IActionProvider actionProvider, boolean addDeleteAction) {
+
+		super.setActionProvider(actionProvider);
+
+		Control viewerControl = fViewer.getControl();
+
+		configureContextMenu(viewerControl);
+		registerKeyShortcuts(viewerControl, actionProvider);
+	}
+
+	private void configureContextMenu(Control viewerControl) {
+
+		fMenu = new Menu(viewerControl);
+		viewerControl.setMenu(fMenu);
 		fMenu.addMenuListener(getMenuListener());
+	}
 
-		if(provider != null) {
-			addKeyListenersForActions(provider, addDeleteAction);
+	private void registerKeyShortcuts(
+			Control viewerControl, IActionProvider actionProvider) {
+
+		fKeyRegistrator = new KeyRegistrator(viewerControl, actionProvider);
+
+		if (actionProvider != null) {
+			fKeyRegistrator.registerKeyListeners();
 		} else {
-			removeKeyListeners();
-		}
-	}
-
-	private void addKeyListenersForActions(IActionProvider provider, boolean addDeleteAction) {
-
-		//addKeyListener(GlobalActions.INSERT.getId(), SWT.INSERT, SWT.NONE, provider);
-		addKeyListener(GlobalActions.DELETE.getId(), SWT.DEL, SWT.NONE, provider);
-
-		addKeyListener(GlobalActions.MOVE_UP.getId(), SWT.ARROW_UP, SWT.ALT, provider);
-		addKeyListener(GlobalActions.MOVE_DOWN.getId(), SWT.ARROW_DOWN, SWT.ALT, provider);
-
-		if (!ApplicationContext.isProjectAvailable()) {
-			addActionsForStandaloneApp(provider);
-		}
-	}
-
-	private void addActionsForStandaloneApp(IActionProvider provider) {
-
-		int ctrlModifier = getCtrlModifier();
-
-		addKeyListener(GlobalActions.COPY.getId(), 'c', ctrlModifier, provider);
-		addKeyListener(GlobalActions.CUT.getId(), 'x', ctrlModifier, provider);
-		addKeyListener(GlobalActions.PASTE.getId(), 'v', ctrlModifier, provider);
-
-		addKeyListener(GlobalActions.SAVE.getId(), 's', ctrlModifier, provider);
-		addKeyListener(GlobalActions.UNDO.getId(), 'z', ctrlModifier, provider);
-		addKeyListener(GlobalActions.REDO.getId(), 'z', ctrlModifier | SWT.SHIFT, provider);
-	}
-
-	private void addKeyListener(String actionId, int keyCode, int modifier, IActionProvider provider) {
-		NamedAction action = provider.getAction(actionId);
-		if (action == null) {
-			return;
-		}
-		fKeyListeners.add(createKeyListener(keyCode, modifier, action));
-	}
-
-
-	int getCtrlModifier() {
-
-		if (SystemHelper.isOperatingSystemMacOs()) {
-			return SWT.COMMAND;
-		} else {
-			return SWT.CTRL;
-		}
-	}
-
-	private void removeKeyListeners() {
-		Iterator<KeyListener> it = fKeyListeners.iterator();
-		while(it.hasNext()){
-			fViewer.getControl().removeKeyListener(it.next());
-			it.remove();
+			fKeyRegistrator.unregisterKeyListeners();
 		}
 	}
 
