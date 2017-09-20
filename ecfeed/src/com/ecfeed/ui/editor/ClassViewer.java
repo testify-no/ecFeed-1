@@ -12,6 +12,7 @@ package com.ecfeed.ui.editor;
 
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TextCellEditor;
@@ -109,6 +110,21 @@ public class ClassViewer extends TableViewerSection {
 		return fClassIf;
 	}
 
+	private void startEditingAddedClass(ClassNode addedClass) {
+
+		if (fNameColumn == null) {
+			return;
+		}
+
+		ColumnViewer columnViewer = fNameColumn.getViewer();
+
+		if (columnViewer == null) {
+			return;
+		}
+
+		columnViewer.editElement(addedClass, 0);
+	}
+
 	private abstract class ClassNameEditingSupport extends EditingSupport{
 
 		private TextCellEditor fNameCellEditor;
@@ -175,7 +191,7 @@ public class ClassViewer extends TableViewerSection {
 				ClassNode addedClass = fRootIf.addImplementedClass();
 				if(addedClass != null){
 					selectElement(addedClass);
-					fNameColumn.getViewer().editElement(addedClass, 0);
+					startEditingAddedClass(addedClass);
 				}
 			} catch (Exception e) {
 				ExceptionCatchDialog.open("Can not add implemented class.", e.getMessage());
@@ -191,12 +207,13 @@ public class ClassViewer extends TableViewerSection {
 				ClassNode addedClass = fRootIf.addNewClass();
 				if(addedClass != null){
 					selectElement(addedClass);
-					fNameColumn.getViewer().editElement(addedClass, 0);
+					startEditingAddedClass(addedClass);
 				}
 			} catch (Exception e) {
 				ExceptionCatchDialog.open("Can not create new test class.", e.getMessage());
 			}
 		}
+
 	}
 
 	private class ClassViewerColumnLabelProvider extends ColumnLabelProvider {

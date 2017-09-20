@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -223,11 +224,26 @@ public abstract class AbstractParametersViewer extends TableViewerSection {
 				AbstractParameterNode addedParameter = fParentIf.addNewParameter();
 				if(addedParameter != null){
 					selectElement(addedParameter);
-					fNameColumn.getViewer().editElement(addedParameter, 0);
+					startEditingNewParameter(addedParameter);
 				}
 			} catch (Exception e) {
 				ExceptionCatchDialog.open("Can not create parameter.", e.getMessage());
 			}
+		}
+
+		private void startEditingNewParameter(AbstractParameterNode addedParameter) {
+
+			if (fNameColumn == null) {
+				return;
+			}
+
+			ColumnViewer columnViewer = fNameColumn.getViewer();
+
+			if (columnViewer == null) {
+				return;
+			}
+
+			columnViewer.editElement(addedParameter, 0);
 		}
 	}
 

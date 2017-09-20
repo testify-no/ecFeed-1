@@ -21,6 +21,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
@@ -159,13 +160,26 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 		public void widgetSelected(SelectionEvent ev){
 			try {
 				String newLabel = fChoiceIf.addNewLabel();
-				if(newLabel != null){
-					getTableViewer().editElement(newLabel, 0);
-				}
+				startEditingNewLabel(newLabel);
 			}
 			catch (Exception e) {
 				ExceptionCatchDialog.open("Can not add label.", e.getMessage());
 			}
+		}
+
+		private void startEditingNewLabel(String newLabel) {
+			
+			if (newLabel == null) {
+				return;
+			}
+			
+			TableViewer tableViewer = getTableViewer();
+			
+			if (tableViewer == null) {
+				return;
+			}
+			
+			tableViewer.editElement(newLabel, 0);
 		}
 	}
 

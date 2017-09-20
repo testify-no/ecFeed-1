@@ -11,6 +11,7 @@
 package com.ecfeed.ui.editor;
 
 import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -72,7 +73,7 @@ public class ConstraintsListViewer extends TableViewerSection {
 								new DeleteAction(
 										getViewer(), 
 										getModelUpdateContext()), 
-										Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
+								Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
 
 		setActionProvider(new ModelViewerActionProvider(getTableViewer(), updateContext, javaProjectProvider));
 
@@ -150,10 +151,28 @@ public class ConstraintsListViewer extends TableViewerSection {
 		@Override 
 		public void widgetSelected(SelectionEvent e){
 			ConstraintNode constraint = fMethodInterface.addNewConstraint();
-			if(constraint != null){
-				selectElement(constraint);
-				fNameColumn.getViewer().editElement(constraint, 0);
+			startEditingConstraint(constraint);
+		}
+
+		private void startEditingConstraint(ConstraintNode constraint) {
+
+			if (constraint == null) {
+				return;
 			}
+
+			if (getViewer() == null) {
+				return;
+			}
+
+			selectElement(constraint);
+
+			ColumnViewer columnViewer = fNameColumn.getViewer();
+
+			if (columnViewer == null) {
+				return;
+			}
+
+			fNameColumn.getViewer().editElement(constraint, 0);
 		}
 	}
 

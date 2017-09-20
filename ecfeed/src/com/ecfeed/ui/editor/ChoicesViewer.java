@@ -31,6 +31,7 @@ import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Table;
 
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ChoiceNode;
@@ -200,15 +201,29 @@ public class ChoicesViewer extends TableViewerSection {
 		@Override
 		public void widgetSelected(SelectionEvent ev){
 			try {
-				ChoiceNode added = fParentIf.addNewChoice();
-				if(added != null){
-					getTable().setSelection(added.getIndex());
-				}
-
+				ChoiceNode choiceNode = fParentIf.addNewChoice();
+				setSelectionOnChoice(choiceNode);
 				setRemoveSelectedStatus();
 			} catch (Exception e) {
 				ExceptionCatchDialog.open("Can not add choice.", e.getMessage());
 			}
+		}
+
+		private void setSelectionOnChoice(ChoiceNode choiceNode) {
+
+			if (choiceNode == null) {
+				return;
+			}
+
+			Table table = getTable();
+
+			if (table == null) {
+				return;
+			}
+
+			try {
+				table.setSelection(choiceNode.getIndex());
+			} catch (Exception e) {}
 		}
 	}
 
@@ -256,7 +271,7 @@ public class ChoicesViewer extends TableViewerSection {
 								new DeleteAction(
 										getViewer(), 
 										getModelUpdateContext()), 
-										Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
+								Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
 
 		fReplaceWithDefaultButton = addButton("Reset with default", new ReplaceWithDefaultAdapter());
 
@@ -322,6 +337,10 @@ public class ChoicesViewer extends TableViewerSection {
 	}
 
 	private void setRemoveSelectedStatus() {
+
+		if (fRemoveSelectedButton.isDisposed()) {
+			return;
+		}
 
 		if (!fChoiceViewerEnabled) {
 			fRemoveSelectedButton.setEnabled(false);

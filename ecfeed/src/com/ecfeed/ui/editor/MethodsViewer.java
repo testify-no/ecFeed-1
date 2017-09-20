@@ -153,24 +153,42 @@ public class MethodsViewer extends TableViewerSection {
 				MethodNode newMethod = fClassIf.addNewMethod();
 				if(newMethod != null){
 					selectElement(newMethod);
-					fMethodsColumn.getViewer().editElement(newMethod, 0);
+					startEditingAddedMethod(newMethod);
 				}
 			} catch (Exception e) {
 				ExceptionCatchDialog.open("Can not add new method", e.getMessage());
 			}
 		}
+
+		private void startEditingAddedMethod(MethodNode newMethod) {
+
+			if (fMethodsColumn == null) {
+				return;
+			}
+
+			if (fMethodsColumn.getViewer() == null) {
+				return;
+			}
+
+			fMethodsColumn.getViewer().editElement(newMethod, 0);
+		}
 	}
 
-	private class MethodsArgsLabelProvider extends NodeViewerColumnLabelProvider{
+	private class MethodsArgsLabelProvider extends NodeViewerColumnLabelProvider {
+
 		@Override
-		public String getText(Object element){
+		public String getText(Object element) {
+
 			List<String> argTypes = fMethodIf.getArgTypes((MethodNode)element);
 			List<String> argNames = fMethodIf.getArgNames((MethodNode)element);
+
 			List<MethodParameterNode> parameters = ((MethodNode)element).getMethodParameters();
 			String result = "";
-			for(int i = 0; i < argTypes.size(); i++){
+
+			for (int i = 0; i < argTypes.size(); i++) {
 				result += (parameters.get(i).isExpected()?"[e]":"") + ModelHelper.convertToLocalName(argTypes.get(i)) + " " + argNames.get(i);
-				if(i < argTypes.size() - 1){
+
+				if (i < argTypes.size() - 1) {
 					result += ", ";
 				}
 			}
