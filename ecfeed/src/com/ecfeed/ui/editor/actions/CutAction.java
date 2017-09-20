@@ -18,7 +18,7 @@ public class CutAction extends NamedAction {
 	private Action fDeleteAction;
 
 	public CutAction(Action copyAction, Action deleteAction) {
-		super(GlobalActions.CUT.getId(), GlobalActions.CUT.getDescription());
+		super(ActionDescriptionProvider.CUT.getId(), ActionDescriptionProvider.CUT.getDescription());
 		fCopyAction = copyAction;
 		fDeleteAction = deleteAction;
 	}

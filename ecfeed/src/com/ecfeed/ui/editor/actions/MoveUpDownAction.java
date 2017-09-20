@@ -34,10 +34,10 @@ public class MoveUpDownAction extends ModelModifyingAction {
 	}
 
 	private static String chooseId(boolean up){
-		return up?GlobalActions.MOVE_UP.getId():GlobalActions.MOVE_DOWN.getId();
+		return up?ActionDescriptionProvider.MOVE_UP.getId():ActionDescriptionProvider.MOVE_DOWN.getId();
 	}
 
 	private static String chooseName(boolean up){
-		return up?GlobalActions.MOVE_UP.getDescription():GlobalActions.MOVE_DOWN.getDescription();
+		return up?ActionDescriptionProvider.MOVE_UP.getDescription():ActionDescriptionProvider.MOVE_DOWN.getDescription();
 	}
 }

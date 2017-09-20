@@ -46,7 +46,7 @@ import com.ecfeed.ui.dialogs.basic.ErrorDialog;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.editor.actions.ActionProvider;
 import com.ecfeed.ui.editor.actions.CutAction;
-import com.ecfeed.ui.editor.actions.GlobalActions;
+import com.ecfeed.ui.editor.actions.ActionDescriptionProvider;
 import com.ecfeed.ui.editor.actions.ModelModifyingAction;
 import com.ecfeed.ui.editor.actions.NamedAction;
 import com.ecfeed.ui.editor.actions.SelectAllAction;
@@ -103,7 +103,7 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 
 	private class LabelCopyAction extends NamedAction{
 		public LabelCopyAction() {
-			super(GlobalActions.COPY.getId(), GlobalActions.COPY.getDescription());
+			super(ActionDescriptionProvider.COPY.getId(), ActionDescriptionProvider.COPY.getDescription());
 		}
 
 		@Override
@@ -119,7 +119,7 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 
 	private class LabelPasteAction extends ModelModifyingAction{
 		public LabelPasteAction(IModelUpdateContext updateContext) {
-			super(GlobalActions.PASTE.getId(), GlobalActions.PASTE.getDescription(), getViewer(), updateContext);
+			super(ActionDescriptionProvider.PASTE.getId(), ActionDescriptionProvider.PASTE.getDescription(), getViewer(), updateContext);
 		}
 
 		@Override
@@ -135,7 +135,7 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 
 	private class LabelDeleteAction extends ModelModifyingAction{
 		public LabelDeleteAction(IModelUpdateContext updateContext) {
-			super(GlobalActions.DELETE.getId(), GlobalActions.DELETE.getDescription(), 
+			super(ActionDescriptionProvider.DELETE.getId(), ActionDescriptionProvider.DELETE.getDescription(), 
 					getTableViewer(), updateContext);
 		}
 

@@ -43,8 +43,8 @@ public class PasteAction extends ModelModifyingAction {
 			ISelectionProvider selectionProvider, 
 			IModelUpdateContext updateContext,
 			IJavaProjectProvider javaProjectProvider) {
-		super(GlobalActions.PASTE.getId(), 
-				GlobalActions.PASTE.getDescription(), selectionProvider, updateContext);
+		super(ActionDescriptionProvider.PASTE.getId(), 
+				ActionDescriptionProvider.PASTE.getDescription(), selectionProvider, updateContext);
 		fIndex = index;
 		fJavaProjectProvider = javaProjectProvider;
 	}

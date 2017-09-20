@@ -91,19 +91,19 @@ public class ModelViewerActionProvider extends ActionProvider {
 		addAction(
 				EDIT_GROUP, 
 				new NamedActionWithRunner(
-						GlobalActions.SAVE.getId(), GlobalActions.SAVE.getDescription(), 
+						ActionDescriptionProvider.SAVE.getId(), ActionDescriptionProvider.SAVE.getDescription(), 
 						fBasicActionRunnerProvider.getSaveRunner()));
 
 		addAction(
 				EDIT_GROUP, 
 				new NamedActionWithRunner(
-						GlobalActions.UNDO.getId(), GlobalActions.UNDO.getDescription(), 
+						ActionDescriptionProvider.UNDO.getId(), ActionDescriptionProvider.UNDO.getDescription(), 
 						fBasicActionRunnerProvider.getUndoRunner()));
 
 		addAction(
 				EDIT_GROUP, 
 				new NamedActionWithRunner(
-						GlobalActions.REDO.getId(), GlobalActions.REDO.getDescription(), 
+						ActionDescriptionProvider.REDO.getId(), ActionDescriptionProvider.REDO.getDescription(), 
 						fBasicActionRunnerProvider.getRedoRunner()));
 	}
 

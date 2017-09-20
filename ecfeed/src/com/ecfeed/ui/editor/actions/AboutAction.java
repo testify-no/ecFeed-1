@@ -15,7 +15,7 @@ import com.ecfeed.ui.dialogs.AboutDialog;
 public class AboutAction extends NamedAction {
 
 	public AboutAction(){
-		super(GlobalActions.ABOUT.getId(), GlobalActions.ABOUT.getDescription());
+		super(ActionDescriptionProvider.ABOUT.getId(), ActionDescriptionProvider.ABOUT.getDescription());
 	}
 
 	@Override

@@ -20,13 +20,13 @@ public class SelectAllAction extends NamedAction {
 	private boolean fSelectRoot;
 
 	public SelectAllAction(TreeViewer viewer, boolean selectRoot){
-		super(GlobalActions.SELECT_ALL.getId(), GlobalActions.SELECT_ALL.getDescription());
+		super(ActionDescriptionProvider.SELECT_ALL.getId(), ActionDescriptionProvider.SELECT_ALL.getDescription());
 		fTreeViewer = viewer;
 		fSelectRoot = selectRoot;
 	}
 
 	public SelectAllAction(TableViewer viewer){
-		super(GlobalActions.SELECT_ALL.getId(), GlobalActions.SELECT_ALL.getDescription());
+		super(ActionDescriptionProvider.SELECT_ALL.getId(), ActionDescriptionProvider.SELECT_ALL.getDescription());
 		fTableViewer = viewer;
 	}
 

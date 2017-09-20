@@ -96,7 +96,7 @@ class Names {
 
 }
 
-public enum GlobalActions {
+public enum ActionDescriptionProvider {
 	COPY(Names.COPY_ACTION_ID, Names.COPY_ACTION_NAME, Names.COPY_ACTION_SHORTCUT, Names.COPY_ACTION_MAC_SHORTCUT),
 	CUT(Names.CUT_ACTION_ID, Names.CUT_ACTION_NAME, Names.CUT_ACTION_SHORTCUT, Names.CUT_ACTION_MAC_SHORTCUT),
 	PASTE(Names.PASTE_ACTION_ID, Names.PASTE_ACTION_NAME, Names.PASTE_ACTION_SHORTCUT, Names.PASTE_ACTION_MAC_SHORTCUT),
@@ -119,7 +119,7 @@ public enum GlobalActions {
 	private String fShortcut;
 	private String fMacShortcut;
 
-	GlobalActions(String actionId, String actionName, String shortcut, String macShortcut) {
+	ActionDescriptionProvider(String actionId, String actionName, String shortcut, String macShortcut) {
 		fId = actionId;
 		fName = actionName;
 		fShortcut = shortcut;

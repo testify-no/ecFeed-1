@@ -15,7 +15,7 @@ import com.ecfeed.ui.dialogs.CheckForUpdatesDialog;
 public class CheckForUpdatesAction extends NamedAction {
 
 	public CheckForUpdatesAction(){
-		super(GlobalActions.CHECK_FOR_UPDATES.getId(), GlobalActions.CHECK_FOR_UPDATES.getDescription());
+		super(ActionDescriptionProvider.CHECK_FOR_UPDATES.getId(), ActionDescriptionProvider.CHECK_FOR_UPDATES.getDescription());
 	}
 
 	@Override

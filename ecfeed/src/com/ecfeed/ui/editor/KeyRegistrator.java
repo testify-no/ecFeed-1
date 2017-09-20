@@ -20,7 +20,7 @@ import org.eclipse.swt.widgets.Control;
 
 import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.utils.SystemHelper;
-import com.ecfeed.ui.editor.actions.GlobalActions;
+import com.ecfeed.ui.editor.actions.ActionDescriptionProvider;
 import com.ecfeed.ui.editor.actions.IActionProvider;
 import com.ecfeed.ui.editor.actions.NamedAction;
 
@@ -49,10 +49,10 @@ public class KeyRegistrator {
 
 	public void registerKeyListeners() {
 
-		addKeyListener(GlobalActions.DELETE.getId(), SWT.DEL, SWT.NONE);
+		addKeyListener(ActionDescriptionProvider.DELETE.getId(), SWT.DEL, SWT.NONE);
 
-		addKeyListener(GlobalActions.MOVE_UP.getId(), SWT.ARROW_UP, SWT.ALT);
-		addKeyListener(GlobalActions.MOVE_DOWN.getId(), SWT.ARROW_DOWN, SWT.ALT);
+		addKeyListener(ActionDescriptionProvider.MOVE_UP.getId(), SWT.ARROW_UP, SWT.ALT);
+		addKeyListener(ActionDescriptionProvider.MOVE_DOWN.getId(), SWT.ARROW_DOWN, SWT.ALT);
 
 		if (!ApplicationContext.isProjectAvailable()) {
 			addActionsForStandaloneApp();
@@ -63,13 +63,13 @@ public class KeyRegistrator {
 
 		int ctrlModifier = getCtrlModifier();
 
-		addKeyListener(GlobalActions.COPY.getId(), 'c', ctrlModifier);
-		addKeyListener(GlobalActions.CUT.getId(), 'x', ctrlModifier);
-		addKeyListener(GlobalActions.PASTE.getId(), 'v', ctrlModifier);
+		addKeyListener(ActionDescriptionProvider.COPY.getId(), 'c', ctrlModifier);
+		addKeyListener(ActionDescriptionProvider.CUT.getId(), 'x', ctrlModifier);
+		addKeyListener(ActionDescriptionProvider.PASTE.getId(), 'v', ctrlModifier);
 
-		addKeyListener(GlobalActions.SAVE.getId(), 's', ctrlModifier);
-		addKeyListener(GlobalActions.UNDO.getId(), 'z', ctrlModifier);
-		addKeyListener(GlobalActions.REDO.getId(), 'z', ctrlModifier | SWT.SHIFT);
+		addKeyListener(ActionDescriptionProvider.SAVE.getId(), 's', ctrlModifier);
+		addKeyListener(ActionDescriptionProvider.UNDO.getId(), 'z', ctrlModifier);
+		addKeyListener(ActionDescriptionProvider.REDO.getId(), 'z', ctrlModifier | SWT.SHIFT);
 	}
 
 	private void addKeyListener(String actionId, int keyCode, int modifier) {
