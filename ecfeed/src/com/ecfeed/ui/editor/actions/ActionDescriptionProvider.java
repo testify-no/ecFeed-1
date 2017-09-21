@@ -10,6 +10,7 @@
 
 package com.ecfeed.ui.editor.actions;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.ui.actions.ActionFactory;
 
 import com.ecfeed.core.utils.SystemHelper;
@@ -49,6 +50,8 @@ class Names {
 	public static final String PASTE_ACTION_MAC_SHORTCUT = "Cmd+V";
 
 	public static final String INSERT_ACTION_NAME = "Insert";
+	public static final String INSERT_ACTION_SHORTCUT = "Ctrl+I";
+	public static final String INSERT_ACTION_MAC_SHORTCUT = "Cmd+I";
 
 	public static final String DELETE_ACTION_NAME = "Delete";
 	public static final String DELETE_ACTION_SHORTCUT = "Ctrl+D";
@@ -94,37 +97,162 @@ class Names {
 
 	public static final String ABOUT_ACTION_NAME = "About ecFeed...";
 	public static final String CHECK_FOR_UPDATES_ACTION_NAME = "Check for updates...";
-
 }
 
 public enum ActionDescriptionProvider {
-	COPY(Names.COPY_ACTION_ID, Names.COPY_ACTION_NAME, Names.COPY_ACTION_SHORTCUT, Names.COPY_ACTION_MAC_SHORTCUT),
-	CUT(Names.CUT_ACTION_ID, Names.CUT_ACTION_NAME, Names.CUT_ACTION_SHORTCUT, Names.CUT_ACTION_MAC_SHORTCUT),
-	PASTE(Names.PASTE_ACTION_ID, Names.PASTE_ACTION_NAME, Names.PASTE_ACTION_SHORTCUT, Names.PASTE_ACTION_MAC_SHORTCUT),
-//	INSERT(Names.INSERT_ACTION_ID, Names.INSERT_ACTION_NAME, null, null),
-	DELETE(Names.DELETE_ACTION_ID, Names.DELETE_ACTION_NAME, Names.DELETE_ACTION_SHORTCUT, Names.DELETE_ACTION_MAC_SHORTCUT),
-	SELECT_ALL(Names.SELECT_ALL_ACTION_ID, Names.SELECT_ALL_ACTION_NAME, Names.SELECT_ALL_ACTION_SHORTCUT, Names.SELECT_ALL_ACTION_MAC_SHORTCUT),
-	UNDO(Names.UNDO_ACTION_ID, Names.UNDO_ACTION_NAME, Names.UNDO_ACTION_SHORTCUT, Names.UNDO_ACTION_MAC_SHORTCUT),
-	REDO(Names.REDO_ACTION_ID, Names.REDO_ACTION_NAME, Names.REDO_ACTION_SHORTCUT, Names.REDO_ACTION_MAC_SHORTCUT),
-	MOVE_UP(Names.MOVE_UP_ACTION_ID, Names.MOVE_UP_ACTION_NAME, Names.MOVE_UP_ACTION_SHORTCUT, Names.MOVE_UP_ACTION_SHORTCUT),
-	MOVE_DOWN(Names.MOVE_DOWN_ACTION_ID, Names.MOVE_DOWN_ACTION_NAME, Names.MOVE_DOWN_ACTION_SHORTCUT, Names.MOVE_DOWN_ACTION_SHORTCUT),
-	EXPAND(Names.EXPAND_ACTION_ID, Names.EXPAND_ACTION_NAME, Names.EXPAND_ACTION_SHORTCUT, Names.EXPAND_ACTION_MAC_SHORTCUT),
-	COLLAPSE(Names.COLLAPSE_ACTION_ID, Names.COLLAPSE_ACTION_NAME, Names.COLLAPSE_ACTION_SHORTCUT, Names.COLLAPSE_ACTION_MAC_SHORTCUT),
-	EXPAND_COLLAPSE(Names.EXPAND_COLLAPSE_ACTION_ID, Names.EXPAND_COLLAPSE_ACTION_NAME, Names.EXPAND_COLLAPSE_ACTION_SHORTCUT, Names.EXPAND_COLLAPSE_ACTION_SHORTCUT),
-	SAVE(Names.SAVE_ACTION_ID, Names.SAVE_ACTION_NAME, Names.SAVE_ACTION_SHORTCUT, Names.SAVE_ACTION_MAC_SHORTCUT),
-	ABOUT(Names.ABOUT_ACTION_ID, Names.ABOUT_ACTION_NAME, null, null),
-	CHECK_FOR_UPDATES(Names.CHECK_FOR_UPDATES_ACTION_ID, Names.CHECK_FOR_UPDATES_ACTION_NAME, null, null);
+
+	COPY(Names.COPY_ACTION_ID, 
+			Names.COPY_ACTION_NAME, 
+			Names.COPY_ACTION_SHORTCUT, 
+			Names.COPY_ACTION_MAC_SHORTCUT, 
+			'c',
+			SWT.CTRL,
+			SWT.COMMAND),
+
+	CUT(Names.CUT_ACTION_ID, 
+			Names.CUT_ACTION_NAME, 
+			Names.CUT_ACTION_SHORTCUT, 
+			Names.CUT_ACTION_MAC_SHORTCUT, 
+			'x',
+			SWT.CTRL,
+			SWT.COMMAND),
+
+	PASTE(Names.PASTE_ACTION_ID, 
+			Names.PASTE_ACTION_NAME, 
+			Names.PASTE_ACTION_SHORTCUT, 
+			Names.PASTE_ACTION_MAC_SHORTCUT, 
+			'v',
+			SWT.CTRL,
+			SWT.COMMAND),
+
+	INSERT(Names.INSERT_ACTION_ID, 
+			Names.INSERT_ACTION_NAME, 
+			Names.INSERT_ACTION_SHORTCUT, 
+			Names.INSERT_ACTION_MAC_SHORTCUT, 
+			'i',
+			SWT.CTRL,
+			SWT.COMMAND),
+
+	DELETE(Names.DELETE_ACTION_ID, 
+			Names.DELETE_ACTION_NAME, 
+			Names.DELETE_ACTION_SHORTCUT, 
+			Names.DELETE_ACTION_MAC_SHORTCUT, 
+			'd',
+			SWT.CTRL,
+			SWT.COMMAND),
+
+	SELECT_ALL(Names.SELECT_ALL_ACTION_ID, 
+			Names.SELECT_ALL_ACTION_NAME, 
+			Names.SELECT_ALL_ACTION_SHORTCUT, 
+			Names.SELECT_ALL_ACTION_MAC_SHORTCUT, 
+			'a',
+			SWT.CTRL,
+			SWT.COMMAND),
+
+	UNDO(Names.UNDO_ACTION_ID, 
+			Names.UNDO_ACTION_NAME, 
+			Names.UNDO_ACTION_SHORTCUT, 
+			Names.UNDO_ACTION_MAC_SHORTCUT, 
+			'z',
+			SWT.CTRL,
+			SWT.COMMAND),
+
+	REDO(Names.REDO_ACTION_ID, 
+			Names.REDO_ACTION_NAME, 
+			Names.REDO_ACTION_SHORTCUT, 
+			Names.REDO_ACTION_MAC_SHORTCUT, 
+			'z',
+			SWT.CTRL | SWT.SHIFT,
+			SWT.COMMAND | SWT.SHIFT),
+
+	SAVE(Names.SAVE_ACTION_ID, 
+			Names.SAVE_ACTION_NAME, 
+			Names.SAVE_ACTION_SHORTCUT, 
+			Names.SAVE_ACTION_MAC_SHORTCUT,
+			's', 
+			SWT.CTRL,
+			SWT.COMMAND),
+
+	MOVE_UP(Names.MOVE_UP_ACTION_ID, 
+			Names.MOVE_UP_ACTION_NAME, 
+			Names.MOVE_UP_ACTION_SHORTCUT, 
+			Names.MOVE_UP_ACTION_SHORTCUT, 
+			SWT.ARROW_UP,
+			SWT.ALT,
+			SWT.ALT),
+
+	MOVE_DOWN(Names.MOVE_DOWN_ACTION_ID, 
+			Names.MOVE_DOWN_ACTION_NAME, 
+			Names.MOVE_DOWN_ACTION_SHORTCUT, 
+			Names.MOVE_DOWN_ACTION_SHORTCUT,
+			SWT.ARROW_DOWN,
+			SWT.ALT,
+			SWT.ALT),
+
+	EXPAND(Names.EXPAND_ACTION_ID, 
+			Names.EXPAND_ACTION_NAME, 
+			Names.EXPAND_ACTION_SHORTCUT, 
+			Names.EXPAND_ACTION_MAC_SHORTCUT, 
+			SWT.NONE,
+			SWT.CTRL,
+			SWT.COMMAND),
+
+	COLLAPSE(Names.COLLAPSE_ACTION_ID, 
+			Names.COLLAPSE_ACTION_NAME, 
+			Names.COLLAPSE_ACTION_SHORTCUT, 
+			Names.COLLAPSE_ACTION_MAC_SHORTCUT, 
+			SWT.NONE,
+			SWT.NONE,
+			SWT.NONE),
+
+	EXPAND_COLLAPSE(Names.EXPAND_COLLAPSE_ACTION_ID, 
+			Names.EXPAND_COLLAPSE_ACTION_NAME, 
+			Names.EXPAND_COLLAPSE_ACTION_SHORTCUT, 
+			Names.EXPAND_COLLAPSE_ACTION_SHORTCUT,
+			SWT.NONE,
+			SWT.NONE,
+			SWT.NONE),
+
+	ABOUT(Names.ABOUT_ACTION_ID, 
+			Names.ABOUT_ACTION_NAME, 
+			null, 
+			null,
+			SWT.NONE,
+			SWT.NONE,
+			SWT.NONE),
+
+	CHECK_FOR_UPDATES(Names.CHECK_FOR_UPDATES_ACTION_ID, 
+			Names.CHECK_FOR_UPDATES_ACTION_NAME, 
+			null, 
+			null,
+			SWT.NONE,
+			SWT.NONE,
+			SWT.NONE);
 
 	private String fId;
 	private String fName;
 	private String fShortcut;
 	private String fMacShortcut;
+	private int fKeyCode;
+	private int fModifier;
+	private int fMacModifier;
 
-	ActionDescriptionProvider(String actionId, String actionName, String shortcut, String macShortcut) {
+	ActionDescriptionProvider(
+			String actionId, 
+			String actionName, 
+			String shortcut, 
+			String macShortcut, 
+			int keyCode, 
+			int modifier,
+			int macModifier) {
+
 		fId = actionId;
 		fName = actionName;
 		fShortcut = shortcut;
 		fMacShortcut = macShortcut;
+		fKeyCode = keyCode;
+		fModifier = modifier;
+		fMacModifier = macModifier;
 	}
 
 	public String getDescription() {
@@ -148,9 +276,26 @@ public enum ActionDescriptionProvider {
 	}
 
 	private String getShortcut(boolean isMacOs) {
+
 		if (isMacOs) {
 			return fMacShortcut;
 		}
+
 		return fShortcut;
 	}
+
+	public int getKeyCode() {
+
+		return fKeyCode;
+	}
+
+	public int getModifier() {
+
+		if (SystemHelper.isOperatingSystemMacOs()) {
+			return fMacModifier;
+		}
+
+		return fModifier;
+	}
+
 }

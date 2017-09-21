@@ -49,27 +49,58 @@ public class KeyRegistrator {
 
 	public void registerKeyListeners() {
 
-		int ctrlModifier = getCtrlModifier();
+		addKeyListener(
+				ActionDescriptionProvider.DELETE.getId(), 
+				ActionDescriptionProvider.DELETE.getKeyCode(),
+				ActionDescriptionProvider.DELETE.getModifier());
 
-		addKeyListener(ActionDescriptionProvider.DELETE.getId(), 'd', ctrlModifier);
+		addKeyListener(
+				ActionDescriptionProvider.MOVE_UP.getId(), 
+				ActionDescriptionProvider.MOVE_UP.getKeyCode(), 
+				ActionDescriptionProvider.MOVE_UP.getModifier());
 
-		addKeyListener(ActionDescriptionProvider.MOVE_UP.getId(), SWT.ARROW_UP, SWT.ALT);
-		addKeyListener(ActionDescriptionProvider.MOVE_DOWN.getId(), SWT.ARROW_DOWN, SWT.ALT);
+		addKeyListener(
+				ActionDescriptionProvider.MOVE_DOWN.getId(),
+				ActionDescriptionProvider.MOVE_DOWN.getKeyCode(), 
+				ActionDescriptionProvider.MOVE_DOWN.getModifier());
 
 		if (!ApplicationContext.isProjectAvailable()) {
-			addActionsForStandaloneApp(ctrlModifier);
+			addActionsForStandaloneApp();
 		}
 	}
 
-	private void addActionsForStandaloneApp(int ctrlModifier) {
+	private void addActionsForStandaloneApp() {
 
-		addKeyListener(ActionDescriptionProvider.COPY.getId(), 'c', ctrlModifier);
-		addKeyListener(ActionDescriptionProvider.CUT.getId(), 'x', ctrlModifier);
-		addKeyListener(ActionDescriptionProvider.PASTE.getId(), 'v', ctrlModifier);
+		addKeyListener(
+				ActionDescriptionProvider.COPY.getId(), 
+				ActionDescriptionProvider.COPY.getKeyCode(), 
+				ActionDescriptionProvider.COPY.getModifier());
 
-		addKeyListener(ActionDescriptionProvider.SAVE.getId(), 's', ctrlModifier);
-		addKeyListener(ActionDescriptionProvider.UNDO.getId(), 'z', ctrlModifier);
-		addKeyListener(ActionDescriptionProvider.REDO.getId(), 'z', ctrlModifier | SWT.SHIFT);
+		addKeyListener(
+				ActionDescriptionProvider.CUT.getId(), 
+				ActionDescriptionProvider.CUT.getKeyCode(), 
+				ActionDescriptionProvider.CUT.getModifier());
+
+
+		addKeyListener(
+				ActionDescriptionProvider.PASTE.getId(), 
+				ActionDescriptionProvider.PASTE.getKeyCode(), 
+				ActionDescriptionProvider.PASTE.getModifier());
+
+		addKeyListener(
+				ActionDescriptionProvider.SAVE.getId(), 
+				ActionDescriptionProvider.SAVE.getKeyCode(), 
+				ActionDescriptionProvider.SAVE.getModifier());
+
+		addKeyListener(
+				ActionDescriptionProvider.UNDO.getId(), 
+				ActionDescriptionProvider.UNDO.getKeyCode(), 
+				ActionDescriptionProvider.UNDO.getModifier());
+
+		addKeyListener(
+				ActionDescriptionProvider.REDO.getId(), 
+				ActionDescriptionProvider.REDO.getKeyCode(), 
+				ActionDescriptionProvider.REDO.getModifier());
 	}
 
 	private void addKeyListener(String actionId, int keyCode, int modifier) {
@@ -87,16 +118,6 @@ public class KeyRegistrator {
 		fControl.addKeyListener(keyListener);
 
 		fKeyListeners.add(keyListener);
-	}
-
-
-	private int getCtrlModifier() {
-
-		if (SystemHelper.isOperatingSystemMacOs()) {
-			return SWT.COMMAND;
-		} else {
-			return SWT.CTRL;
-		}
 	}
 
 }
