@@ -49,19 +49,19 @@ public class KeyRegistrator {
 
 	public void registerKeyListeners() {
 
-		addKeyListener(ActionDescriptionProvider.DELETE.getId(), SWT.DEL, SWT.NONE);
+		int ctrlModifier = getCtrlModifier();
+
+		addKeyListener(ActionDescriptionProvider.DELETE.getId(), 'd', ctrlModifier);
 
 		addKeyListener(ActionDescriptionProvider.MOVE_UP.getId(), SWT.ARROW_UP, SWT.ALT);
 		addKeyListener(ActionDescriptionProvider.MOVE_DOWN.getId(), SWT.ARROW_DOWN, SWT.ALT);
 
 		if (!ApplicationContext.isProjectAvailable()) {
-			addActionsForStandaloneApp();
+			addActionsForStandaloneApp(ctrlModifier);
 		}
 	}
 
-	private void addActionsForStandaloneApp() {
-
-		int ctrlModifier = getCtrlModifier();
+	private void addActionsForStandaloneApp(int ctrlModifier) {
 
 		addKeyListener(ActionDescriptionProvider.COPY.getId(), 'c', ctrlModifier);
 		addKeyListener(ActionDescriptionProvider.CUT.getId(), 'x', ctrlModifier);
