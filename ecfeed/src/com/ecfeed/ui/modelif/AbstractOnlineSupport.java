@@ -61,6 +61,7 @@ public abstract class AbstractOnlineSupport {
 			MethodNode methodNode, ITestMethodInvoker testMethodInvoker, 
 			IFileInfoProvider fileInfoProvider) {
 		this(methodNode, testMethodInvoker, fileInfoProvider, false, null);
+
 	}
 
 	public AbstractOnlineSupport(
@@ -73,8 +74,9 @@ public abstract class AbstractOnlineSupport {
 		fFileInfoProvider = fileInfoProvider;
 		fInitialExportTemplate = initialExportTemplate;
 		fTestRunMode = TestRunModeHelper.getTestRunMode(methodNode);
-		fTestInformer = createTestInformer(isExport);
+		fMethodNode = methodNode;
 		ftestResultsHolder = new TestResultsHolder();
+		fTestInformer = createTestInformer(isExport);
 
 		setOwnMethodNode(methodNode);
 	}
