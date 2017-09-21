@@ -48,6 +48,7 @@ public abstract class AbstractOnlineSupport {
 	}
 
 	private MethodNode fMethodNode;
+	private TestResultsHolder ftestResultsHolder;
 	private JavaTestRunner fRunner;
 	private IFileInfoProvider fFileInfoProvider;
 	private String fTargetFile;
@@ -73,6 +74,7 @@ public abstract class AbstractOnlineSupport {
 		fInitialExportTemplate = initialExportTemplate;
 		fTestRunMode = TestRunModeHelper.getTestRunMode(methodNode);
 		fTestInformer = createTestInformer(isExport);
+		ftestResultsHolder = new TestResultsHolder();
 
 		setOwnMethodNode(methodNode);
 	}
@@ -83,7 +85,7 @@ public abstract class AbstractOnlineSupport {
 			return new ExportTestInformer();
 		}
 
-		return new ExecutionTestInformer();
+		return new ExecutionTestInformer(fMethodNode, ftestResultsHolder);
 	}
 
 	protected TestRunMode getTestRunMode() {
@@ -150,9 +152,9 @@ public abstract class AbstractOnlineSupport {
 		Collection<IConstraint<ChoiceNode>> constraintList = new ArrayList<IConstraint<ChoiceNode>>();
 		constraintList.addAll(dialog.getConstraints());
 		Map<String, Object> parameters = dialog.getGeneratorParameters();
-		TestResultsHolder testResultsHolder = new TestResultsHolder();
+		//TestResultsHolder testResultsHolder = new TestResultsHolder();
 
-		runParametrizedTests(selectedGenerator, algorithmInput, constraintList, parameters, testResultsHolder);
+		runParametrizedTests(selectedGenerator, algorithmInput, constraintList, parameters);
 		displayRunSummary();
 
 		fTargetFile = dialog.getTargetFile();
@@ -164,13 +166,13 @@ public abstract class AbstractOnlineSupport {
 	private void runParametrizedTests(IGenerator<ChoiceNode> generator,
 			List<List<ChoiceNode>> input,
 			Collection<IConstraint<ChoiceNode>> constraints,
-			Map<String, Object> parameters, TestResultsHolder testResultsHolder) {
+			Map<String, Object> parameters) {
 
 		GeneratorProgressMonitorDialog progressDialog = new GeneratorProgressMonitorDialog(
 				Display.getCurrent().getActiveShell(), generator);
 
 		ParametrizedTestRunnable runnable = new ParametrizedTestRunnable(
-				generator, input, constraints, parameters, testResultsHolder);
+				generator, input, constraints, parameters);
 		progressDialog.open();
 		try {
 			progressDialog.run(true, true, runnable);
@@ -195,18 +197,18 @@ public abstract class AbstractOnlineSupport {
 		private List<List<ChoiceNode>> fInput;
 		private Collection<IConstraint<ChoiceNode>> fConstraints;
 		private Map<String, Object> fParameters;
-		TestResultsHolder ftestResultsHolder;
+		//TestResultsHolder ftestResultsHolder;
 		boolean resultOk;
 
 		ParametrizedTestRunnable(IGenerator<ChoiceNode> generator,
 				List<List<ChoiceNode>> input,
 				Collection<IConstraint<ChoiceNode>> constraints,
-				Map<String, Object> parameters, TestResultsHolder testResultsHolder) {
+				Map<String, Object> parameters) {
 			fGenerator = generator;
 			fInput = input;
 			fConstraints = constraints;
 			fParameters = parameters;
-			ftestResultsHolder = testResultsHolder;
+			//ftestResultsHolder = new;
 		}
 
 		@Override
