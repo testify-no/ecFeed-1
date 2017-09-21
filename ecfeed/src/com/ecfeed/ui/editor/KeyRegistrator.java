@@ -50,6 +50,11 @@ public class KeyRegistrator {
 	public void registerKeyListeners() {
 
 		addKeyListener(
+				ActionDescriptionProvider.INSERT.getId(), 
+				ActionDescriptionProvider.INSERT.getKeyCode(),
+				ActionDescriptionProvider.INSERT.getModifier());
+
+		addKeyListener(
 				ActionDescriptionProvider.DELETE.getId(), 
 				ActionDescriptionProvider.DELETE.getKeyCode(),
 				ActionDescriptionProvider.DELETE.getModifier());

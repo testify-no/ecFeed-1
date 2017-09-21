@@ -27,6 +27,7 @@ import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.SystemHelper;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.editor.actions.AbstractAddChildAction;
+import com.ecfeed.ui.editor.actions.ActionDescriptionProvider;
 import com.ecfeed.ui.editor.actions.AddChildActionProvider;
 import com.ecfeed.ui.editor.actions.ExecuteTestCaseAction;
 import com.ecfeed.ui.editor.actions.ExportOnlineAction;
@@ -111,12 +112,12 @@ public class ModelMasterMenuListener extends ViewerMenuListener {
 			return actionName;
 		}
 
-		final String insertKey = "INS";
+		final String shortcut = ActionDescriptionProvider.INSERT.getShortcut();
 
 		if (SystemHelper.isOperatingSystemMacOs()) {
-			return actionName + "   (" + insertKey + ")";
+			return actionName + "   (" + shortcut + ")";
 		}
-		return actionName + "\t" + insertKey;
+		return actionName + "\t" + shortcut;
 	}
 
 	private void addActionsForMethod(AbstractNode abstractNode) {

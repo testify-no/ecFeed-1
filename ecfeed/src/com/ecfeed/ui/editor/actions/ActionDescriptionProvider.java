@@ -257,15 +257,13 @@ public enum ActionDescriptionProvider {
 
 	public String getDescription() {
 
-		boolean isMacOs = SystemHelper.isOperatingSystemMacOs();
-
-		String shortcut = getShortcut(isMacOs);
+		String shortcut = getShortcut();
 
 		if (shortcut == null) {
 			return fName;
 		}
 
-		if (isMacOs) {
+		if (SystemHelper.isOperatingSystemMacOs()) {
 			return fName + "  (" + shortcut + ")";	
 		}
 		return fName + "\t" + shortcut;
@@ -275,9 +273,9 @@ public enum ActionDescriptionProvider {
 		return fId;
 	}
 
-	private String getShortcut(boolean isMacOs) {
+	public String getShortcut() {
 
-		if (isMacOs) {
+		if (SystemHelper.isOperatingSystemMacOs()) {
 			return fMacShortcut;
 		}
 
