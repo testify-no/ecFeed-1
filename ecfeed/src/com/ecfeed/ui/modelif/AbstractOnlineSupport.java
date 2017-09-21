@@ -152,7 +152,6 @@ public abstract class AbstractOnlineSupport {
 		Collection<IConstraint<ChoiceNode>> constraintList = new ArrayList<IConstraint<ChoiceNode>>();
 		constraintList.addAll(dialog.getConstraints());
 		Map<String, Object> parameters = dialog.getGeneratorParameters();
-		//TestResultsHolder testResultsHolder = new TestResultsHolder();
 
 		runParametrizedTests(selectedGenerator, algorithmInput, constraintList, parameters);
 		displayRunSummary();
@@ -197,8 +196,7 @@ public abstract class AbstractOnlineSupport {
 		private List<List<ChoiceNode>> fInput;
 		private Collection<IConstraint<ChoiceNode>> fConstraints;
 		private Map<String, Object> fParameters;
-		//TestResultsHolder ftestResultsHolder;
-		boolean resultOk;
+		private boolean resultOk;
 
 		ParametrizedTestRunnable(IGenerator<ChoiceNode> generator,
 				List<List<ChoiceNode>> input,
@@ -208,7 +206,6 @@ public abstract class AbstractOnlineSupport {
 			fInput = input;
 			fConstraints = constraints;
 			fParameters = parameters;
-			//ftestResultsHolder = new;
 		}
 
 		@Override

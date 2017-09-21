@@ -29,8 +29,8 @@ import org.eclipse.jface.dialogs.ErrorDialog;
 
 public class AdvancedStatisticsButtonDialog extends ErrorDialog {
 	
-	MethodNode fmethodNode;
-	TestResultsHolder ftestResultsHolder;
+	private MethodNode fmethodNode;
+	private TestResultsHolder ftestResultsHolder;
 	
 	public AdvancedStatisticsButtonDialog(Shell parentShell, String title, String message, IStatus status, int displayMask, MethodNode methodnode, TestResultsHolder testResultsHolder){
 		
