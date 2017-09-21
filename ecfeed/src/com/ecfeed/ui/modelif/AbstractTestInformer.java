@@ -33,16 +33,13 @@ public abstract class AbstractTestInformer {
 	int fTotalWork;
 	private int fExecutedTestCases = 0;
 	private List<Status> fUnsuccesfullExecutionStatuses;
-	MethodNode fmethodNode;
-	TestResultsHolder ftestResultsHolder;
-
-	public AbstractTestInformer(){
-		fUnsuccesfullExecutionStatuses = new ArrayList<>();
-	}
+	private MethodNode fmethodNode;
+	private TestResultsHolder ftestResultsHolder;
 	
 	public AbstractTestInformer(MethodNode methodNode, TestResultsHolder testResultsHolder){
 		fmethodNode = methodNode;
 		ftestResultsHolder = testResultsHolder;
+		fUnsuccesfullExecutionStatuses = new ArrayList<>();
 	}
 
 	protected abstract void setTestProgressMessage();
@@ -97,7 +94,6 @@ public abstract class AbstractTestInformer {
 			AdvancedStatisticsButtonDialog dialog = new AdvancedStatisticsButtonDialog(null, Messages.DIALOG_TEST_EXECUTION_REPORT_TITLE, msg, ms, IStatus.ERROR, fmethodNode, ftestResultsHolder);
 			dialog.open();
 
-//			ErrorDialog.openError(null, Messages.DIALOG_TEST_EXECUTION_REPORT_TITLE, msg, ms);
 			return;
 		}
 		if (fExecutedTestCases > 0) {
