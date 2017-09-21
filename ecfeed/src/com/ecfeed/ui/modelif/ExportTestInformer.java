@@ -12,6 +12,11 @@ package com.ecfeed.ui.modelif;
 
 
 public class ExportTestInformer extends AbstractTestInformer {
+	
+	public ExportTestInformer()
+	{
+		super(null, null);
+	}
 
 	@Override
 	protected void setTestProgressMessage() {

@@ -14,14 +14,12 @@ import com.ecfeed.core.model.MethodNode;
 
 public class ExecutionTestInformer extends AbstractTestInformer {
 	
-	MethodNode fmethodNode;
-	TestResultsHolder ftestResultsHolder;
 
 	public ExecutionTestInformer(MethodNode methodNode, TestResultsHolder testResultsHolder)
 	{
-		fmethodNode = methodNode;
-		ftestResultsHolder = testResultsHolder;	
+		super(methodNode, testResultsHolder);
 	}
+	
 	@Override
 	protected void setTestProgressMessage() {
 		String message = "Executed: " + getExecutedTestCases() + "  Failed: " + getFailedTestCases();		
