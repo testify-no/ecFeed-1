@@ -8,10 +8,9 @@
  *  
  *******************************************************************************/
 
-package com.ecfeed.ui.editor;
+package com.ecfeed.ui.editor.actions;
 
-import com.ecfeed.ui.editor.actions.ActionDescriptionProvider;
-import com.ecfeed.ui.editor.actions.NamedAction;
+import com.ecfeed.ui.editor.ModelEditorHelper;
 
 public class SaveAction extends NamedAction {
 

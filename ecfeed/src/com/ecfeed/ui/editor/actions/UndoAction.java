@@ -8,7 +8,7 @@
  *  
  *******************************************************************************/
 
-package com.ecfeed.ui.editor;
+package com.ecfeed.ui.editor.actions;
 
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.IOperationHistory;
@@ -17,8 +17,6 @@ import org.eclipse.core.commands.operations.OperationHistoryFactory;
 
 import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.utils.SystemLogger;
-import com.ecfeed.ui.editor.actions.ActionDescriptionProvider;
-import com.ecfeed.ui.editor.actions.NamedAction;
 
 public class UndoAction extends NamedAction {
 

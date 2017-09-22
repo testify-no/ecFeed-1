@@ -19,9 +19,6 @@ import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.adapter.IModelImplementer;
 import com.ecfeed.ui.common.EclipseModelImplementer;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
-import com.ecfeed.ui.editor.RedoAction;
-import com.ecfeed.ui.editor.SaveAction;
-import com.ecfeed.ui.editor.UndoAction;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 
