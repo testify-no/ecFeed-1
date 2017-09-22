@@ -77,14 +77,14 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 		fDialogObjectToolkit = DialogObjectToolkit.getInstance();
 		setBlockOnOpen(true);
 		open();
-		Display.getCurrent().dispose();
+		//Display.getCurrent().dispose();
 	}
 
-	public void run() { // MDX do we need this now ? -- until we connect this to a real dialog.
-		setBlockOnOpen(true);
-		open();
-		Display.getCurrent().dispose();
-	}
+//	public void run() { // MDX do we need this now ? -- until we connect this to a real dialog.
+//		setBlockOnOpen(true);
+//		open();
+//		Display.getCurrent().dispose();
+//	}
 
 	@Override
 	public void create() {
