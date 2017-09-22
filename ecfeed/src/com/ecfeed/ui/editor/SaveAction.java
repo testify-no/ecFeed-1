@@ -8,27 +8,21 @@
  *  
  *******************************************************************************/
 
-package com.ecfeed.ui.editor.actions;
+package com.ecfeed.ui.editor;
 
+import com.ecfeed.ui.editor.actions.ActionDescriptionProvider;
+import com.ecfeed.ui.editor.actions.NamedAction;
 
-public class NamedActionWithRunner extends NamedAction {
+public class SaveAction extends NamedAction {
 
-	IActionRunner fRunner;
-	public NamedActionWithRunner(String id, String name, IActionRunner runner) {
-		super(id, name);
-		fRunner = runner;
+	public SaveAction() {
+		super(ActionDescriptionProvider.SAVE.getId(), ActionDescriptionProvider.SAVE.getDescription());
 	}
 
 	@Override
 	public void run() {
-		if (fRunner != null) {
-			fRunner.run();
-		}
+		ModelEditorHelper.saveActiveEditor();
 	}
 
-	@Override
-	public boolean isEnabled(){
-		return true;
-	}
 }
 

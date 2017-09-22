@@ -20,7 +20,7 @@ public class NamedAction extends Action {
 	public NamedAction(String id, String name){
 		fId = id;
 		fName = name;
-		
+
 		setText(name);
 		setId(id);
 	}

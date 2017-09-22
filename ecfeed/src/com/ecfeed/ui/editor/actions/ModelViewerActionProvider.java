@@ -19,6 +19,9 @@ import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.adapter.IModelImplementer;
 import com.ecfeed.ui.common.EclipseModelImplementer;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
+import com.ecfeed.ui.editor.RedoAction;
+import com.ecfeed.ui.editor.SaveAction;
+import com.ecfeed.ui.editor.UndoAction;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 
@@ -31,13 +34,13 @@ public class ModelViewerActionProvider extends ActionProvider {
 	private static final String INFO_GROUP = "info";
 
 
-	BasicActionRunnerProvider fBasicActionRunnerProvider;
+	BasicActionProvider fBasicActionRunnerProvider;
 
 	public ModelViewerActionProvider(
 			TreeViewer viewer, 
 			IModelUpdateContext context, 
 			IJavaProjectProvider javaProjectProvider,
-			BasicActionRunnerProvider basicActionRunnerProvider,
+			BasicActionProvider basicActionRunnerProvider,
 			boolean selectRoot) {
 
 		fBasicActionRunnerProvider = basicActionRunnerProvider;
@@ -88,23 +91,9 @@ public class ModelViewerActionProvider extends ActionProvider {
 
 	private void addBasicEditActions() {
 
-		addAction(
-				EDIT_GROUP, 
-				new NamedActionWithRunner(
-						ActionDescriptionProvider.SAVE.getId(), ActionDescriptionProvider.SAVE.getDescription(), 
-						fBasicActionRunnerProvider.getSaveRunner()));
-
-		addAction(
-				EDIT_GROUP, 
-				new NamedActionWithRunner(
-						ActionDescriptionProvider.UNDO.getId(), ActionDescriptionProvider.UNDO.getDescription(), 
-						fBasicActionRunnerProvider.getUndoRunner()));
-
-		addAction(
-				EDIT_GROUP, 
-				new NamedActionWithRunner(
-						ActionDescriptionProvider.REDO.getId(), ActionDescriptionProvider.REDO.getDescription(), 
-						fBasicActionRunnerProvider.getRedoRunner()));
+		addAction(EDIT_GROUP, new SaveAction());
+		addAction(EDIT_GROUP, new UndoAction());
+		addAction(EDIT_GROUP, new RedoAction());
 	}
 
 	private void addImplementationActions(

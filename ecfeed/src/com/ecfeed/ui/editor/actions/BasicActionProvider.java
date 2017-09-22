@@ -10,29 +10,28 @@
 
 package com.ecfeed.ui.editor.actions;
 
+public class BasicActionProvider {
 
-public class BasicActionRunnerProvider {
+	NamedAction fSaveAction;
+	NamedAction fUndoAction;
+	NamedAction fRedoAction;
 
-	IActionRunner fSaveRunner;
-	IActionRunner fUndoRunner;
-	IActionRunner fRedoRunner;
-
-	public BasicActionRunnerProvider(IActionRunner saveRunner, IActionRunner undoRunner, IActionRunner redoRunner) {
-		fSaveRunner = saveRunner;
-		fUndoRunner = undoRunner;
-		fRedoRunner = redoRunner;
+	public BasicActionProvider(NamedAction saveAction, NamedAction undoAction, NamedAction redoAction) {
+		fSaveAction = saveAction;
+		fUndoAction = undoAction;
+		fRedoAction = redoAction;
 	}
 
-	public IActionRunner getSaveRunner() {
-		return fSaveRunner;
+	public NamedAction getSaveRunner() {
+		return fSaveAction;
 	}
 
-	public IActionRunner getUndoRunner() {
-		return fUndoRunner;
+	public NamedAction getUndoRunner() {
+		return fUndoAction;
 	}
 
-	public IActionRunner getRedoRunner() {
-		return fRedoRunner;
+	public NamedAction getRedoRunner() {
+		return fRedoAction;
 	}	
 
 }

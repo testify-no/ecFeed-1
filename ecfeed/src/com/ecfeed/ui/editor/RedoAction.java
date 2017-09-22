@@ -17,9 +17,14 @@ import org.eclipse.core.commands.operations.OperationHistoryFactory;
 
 import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.utils.SystemLogger;
-import com.ecfeed.ui.editor.actions.IActionRunner;
+import com.ecfeed.ui.editor.actions.ActionDescriptionProvider;
+import com.ecfeed.ui.editor.actions.NamedAction;
 
-public class RedoActionRunner implements IActionRunner {
+public class RedoAction extends NamedAction {
+
+	public RedoAction() {
+		super(ActionDescriptionProvider.REDO.getId(), ActionDescriptionProvider.REDO.getDescription());
+	}
 
 	@Override
 	public void run() {
