@@ -84,22 +84,22 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 		}
 	}
 
-	private class LabelsViewerActionProvider extends ActionProvider{
-
-		public LabelsViewerActionProvider(){
-			super();
-			addAction("edit", new LabelCopyAction());
-			addAction("edit", 
-					new CutAction(
-							new LabelCopyAction(), 
-							new LabelDeleteAction(getModelUpdateContext())));
-
-
-			addAction("edit", new LabelPasteAction(getModelUpdateContext()));
-			addAction("edit", new LabelDeleteAction(getModelUpdateContext()));
-			addAction("selection", new SelectAllAction(getTableViewer()));
-		}
-	}
+//	private class LabelsViewerActionProvider extends ActionProvider{
+//
+//		public LabelsViewerActionProvider(){
+//			super();
+//			addAction("edit", new LabelCopyAction());
+//			addAction("edit", 
+//					new CutAction(
+//							new LabelCopyAction(), 
+//							new LabelDeleteAction(getModelUpdateContext())));
+//
+//
+//			addAction("edit", new LabelPasteAction(getModelUpdateContext()));
+//			addAction("edit", new LabelDeleteAction(getModelUpdateContext()));
+//			addAction("selection", new SelectAllAction(getTableViewer()));
+//		}
+//	}
 
 	private class LabelCopyAction extends DescribedAction{
 		public LabelCopyAction() {
@@ -323,7 +323,7 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 			addSelectionChangedListener(new LabelSelectionChangedListener());
 		}
 
-		setActionProvider(new LabelsViewerActionProvider());
+//		setActionProvider(new LabelsViewerActionProvider());
 	}
 
 	private boolean isLabelEditionInTextField() {
