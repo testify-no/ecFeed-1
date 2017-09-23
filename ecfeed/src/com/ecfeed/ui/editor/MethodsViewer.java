@@ -13,6 +13,7 @@ package com.ecfeed.ui.editor;
 import java.util.List;
 
 import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -166,11 +167,16 @@ public class MethodsViewer extends TableViewerSection {
 				return;
 			}
 
-			if (fMethodsColumn.getViewer() == null) {
+			ColumnViewer columnViewer = fMethodsColumn.getViewer(); 
+			if (columnViewer == null) {
 				return;
 			}
 
-			fMethodsColumn.getViewer().editElement(newMethod, 0);
+			if (columnViewer.getControl().isDisposed()) {
+				return;
+			}
+
+			columnViewer.editElement(newMethod, 0);
 		}
 	}
 

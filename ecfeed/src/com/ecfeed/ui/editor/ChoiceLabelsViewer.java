@@ -178,6 +178,10 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 				return;
 			}
 
+			if (tableViewer.getControl().isDisposed()) {
+				return;
+			}
+
 			tableViewer.editElement(newLabel, 0);
 		}
 	}

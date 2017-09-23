@@ -122,6 +122,10 @@ public class ClassViewer extends TableViewerSection {
 			return;
 		}
 
+		if (columnViewer.getControl().isDisposed()) {
+			return;
+		}
+
 		columnViewer.editElement(addedClass, 0);
 	}
 

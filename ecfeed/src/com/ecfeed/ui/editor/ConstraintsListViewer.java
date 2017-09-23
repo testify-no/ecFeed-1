@@ -164,6 +164,10 @@ public class ConstraintsListViewer extends TableViewerSection {
 				return;
 			}
 
+			if (getViewer().getControl().isDisposed()) {
+				return;
+			}
+
 			selectElement(constraint);
 
 			ColumnViewer columnViewer = fNameColumn.getViewer();
@@ -172,7 +176,11 @@ public class ConstraintsListViewer extends TableViewerSection {
 				return;
 			}
 
-			fNameColumn.getViewer().editElement(constraint, 0);
+			if (columnViewer.getControl().isDisposed()) {
+				return;
+			}
+
+			columnViewer.editElement(constraint, 0);
 		}
 	}
 

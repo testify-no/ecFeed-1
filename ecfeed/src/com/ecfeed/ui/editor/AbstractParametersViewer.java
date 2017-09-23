@@ -242,6 +242,10 @@ public abstract class AbstractParametersViewer extends TableViewerSection {
 			if (columnViewer == null) {
 				return;
 			}
+			
+			if (columnViewer.getControl().isDisposed()) {
+				return;
+			}
 
 			columnViewer.editElement(addedParameter, 0);
 		}
