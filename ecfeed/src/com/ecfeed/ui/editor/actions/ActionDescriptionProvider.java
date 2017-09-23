@@ -133,6 +133,15 @@ public class ActionDescriptionProvider {
 			fModifier = modifier;
 			fMacModifier = macModifier;
 		}
+
+	}
+
+	private static class ActionDescriptionShort extends ActionDescription{
+
+		ActionDescriptionShort(ActionId id, String strId, String name) {
+			super(id, strId, name, null, null, SWT.NONE, SWT.NONE, SWT.NONE);
+		}
+
 	}
 
 	private static ActionDescriptionProvider fActionDescriptionProvider = null;
@@ -308,172 +317,95 @@ public class ActionDescriptionProvider {
 						SWT.NONE));
 
 		fActionDescriptions.add(
-				new ActionDescription(
+				new ActionDescriptionShort(
 						ActionId.ABOUT,
 						ABOUT_ACTION_ID, 
-						ABOUT_ACTION_NAME, 
-						null, 
-						null,
-						SWT.NONE,
-						SWT.NONE,
-						SWT.NONE));
+						ABOUT_ACTION_NAME));
 
 		fActionDescriptions.add(
-				new ActionDescription(
+				new ActionDescriptionShort(
 						ActionId.CHECK_FOR_UPDATES,
 						CHECK_FOR_UPDATES_ACTION_ID, 
-						CHECK_FOR_UPDATES_ACTION_NAME, 
-						null, 
-						null,
-						SWT.NONE,
-						SWT.NONE,
-						SWT.NONE));		
+						CHECK_FOR_UPDATES_ACTION_NAME));		
 
 		fActionDescriptions.add(
-				new ActionDescription(
+				new ActionDescriptionShort(
 						ActionId.IMPLEMENT,
 						"implement", 
-						"Implement", 
-						null, 
-						null,
-						SWT.NONE,
-						SWT.NONE,
-						SWT.NONE));
+						"Implement"));
 
 		fActionDescriptions.add(
-				new ActionDescription(
+				new ActionDescriptionShort(
 						ActionId.TEST_ONLINE,
 						"testOnline", 
-						"Test online", 
-						null, 
-						null,
-						SWT.NONE,
-						SWT.NONE,
-						SWT.NONE));		
+						"Test online"));		
 
 		fActionDescriptions.add(
-				new ActionDescription(
+				new ActionDescriptionShort(
 						ActionId.EXECUTE_TEST_CASE,
 						"execute", 
-						"Execute", 
-						null, 
-						null,
-						SWT.NONE,
-						SWT.NONE,
-						SWT.NONE));
+						"Execute"));
 
 		fActionDescriptions.add(
-				new ActionDescription(
+				new ActionDescriptionShort(
 						ActionId.EXPORT_ONLINE,
 						"exportOnline", 
-						"Export online", 
-						null, 
-						null,
-						SWT.NONE,
-						SWT.NONE,
-						SWT.NONE));		
+						"Export online"));		
 
 		fActionDescriptions.add(
-				new ActionDescription(
+				new ActionDescriptionShort(
 						ActionId.GO_TO_IMPLEMENTATION,
 						"goToImpl", 
-						"Go to implementation", 
-						null, 
-						null,
-						SWT.NONE,
-						SWT.NONE,
-						SWT.NONE));		
+						"Go to implementation"));		
 
 		fActionDescriptions.add(
-				new ActionDescription(
+				new ActionDescriptionShort(
 						ActionId.ADD_GLOBAL_PARAMETER,
 						"addGlobalParameter", 
-						"Add global parameter", 
-						null, 
-						null,
-						SWT.NONE,
-						SWT.NONE,
-						SWT.NONE));		
+						"Add global parameter"));		
 
 		fActionDescriptions.add(
-				new ActionDescription(
+				new ActionDescriptionShort(
 						ActionId.ADD_CLASS,
 						"addClass", 
-						"Add class", 
-						null, 
-						null,
-						SWT.NONE,
-						SWT.NONE,
-						SWT.NONE));
+						"Add class"));
 
 		fActionDescriptions.add(
-				new ActionDescription(
+				new ActionDescriptionShort(
 						ActionId.ADD_METHOD,
 						"addMethod", 
-						"Add method", 
-						null, 
-						null,
-						SWT.NONE,
-						SWT.NONE,
-						SWT.NONE));		
+						"Add method"));		
 
 		fActionDescriptions.add(
-				new ActionDescription(
+				new ActionDescriptionShort(
 						ActionId.ADD_METHOD_PARAMETER,
 						"addMethodParameter", 
-						"Add parameter", 
-						null, 
-						null,
-						SWT.NONE,
-						SWT.NONE,
-						SWT.NONE));		
+						"Add parameter"));		
 
 		fActionDescriptions.add(
-				new ActionDescription(
+				new ActionDescriptionShort(
 						ActionId.ADD_CHOICE,
 						"addChoice", 
-						"Add choice", 
-						null, 
-						null,
-						SWT.NONE,
-						SWT.NONE,
-						SWT.NONE));
+						"Add choice"));
 
 		fActionDescriptions.add(
-				new ActionDescription(
+				new ActionDescriptionShort(
 						ActionId.ADD_CONSTRAINT,
 						"addConstraint", 
-						"Add constraint", 
-						null, 
-						null,
-						SWT.NONE,
-						SWT.NONE,
-						SWT.NONE));	
+						"Add constraint"));	
 
 
 		fActionDescriptions.add(
-				new ActionDescription(
+				new ActionDescriptionShort(
 						ActionId.ADD_TEST_CASE,
 						"addTestCase", 
-						"Add test case", 
-						null, 
-						null,
-						SWT.NONE,
-						SWT.NONE,
-						SWT.NONE));	
+						"Add test case"));	
 
 		fActionDescriptions.add(
-				new ActionDescription(
+				new ActionDescriptionShort(
 						ActionId.ADD_TEST_SUITE,
 						"generateTestSuite", 
-						"Generate test suite", 
-						null, 
-						null,
-						SWT.NONE,
-						SWT.NONE,
-						SWT.NONE));	
-
-
+						"Generate test suite"));	
 	}
 
 	private ActionDescription getActionDescription(ActionId actionId) {
