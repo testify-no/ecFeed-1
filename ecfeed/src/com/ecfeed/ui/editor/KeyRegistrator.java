@@ -18,7 +18,7 @@ import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.widgets.Control;
 
 import com.ecfeed.application.ApplicationContext;
-import com.ecfeed.ui.editor.actions.ActionDescriptionProvider2;
+import com.ecfeed.ui.editor.actions.ActionDescriptionProvider;
 import com.ecfeed.ui.editor.actions.ActionId;
 import com.ecfeed.ui.editor.actions.IActionProvider;
 import com.ecfeed.ui.editor.actions.NamedAction;
@@ -77,7 +77,7 @@ public class KeyRegistrator {
 			return;
 		}
 
-		ActionDescriptionProvider2 actionDescriptionProvider = ActionDescriptionProvider2.getInstance();
+		ActionDescriptionProvider actionDescriptionProvider = ActionDescriptionProvider.getInstance();
 
 		String strActionId = actionDescriptionProvider.getStrId(actionId);
 		NamedAction action = fActionProvider.getAction(strActionId); // XYX TODO USE ActionId

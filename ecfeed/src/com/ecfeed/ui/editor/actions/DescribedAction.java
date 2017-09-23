@@ -16,8 +16,8 @@ public class DescribedAction extends NamedAction {
 
 	public DescribedAction(ActionId actionId) {
 
-		super(ActionDescriptionProvider2.getInstance().getStrId(actionId),
-				ActionDescriptionProvider2.getInstance().getName(actionId));
+		super(ActionDescriptionProvider.getInstance().getStrId(actionId),
+				ActionDescriptionProvider.getInstance().getName(actionId));
 	}
 
 }

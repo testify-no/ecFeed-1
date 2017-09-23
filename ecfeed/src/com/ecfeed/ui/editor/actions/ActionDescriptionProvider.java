@@ -19,7 +19,7 @@ import org.eclipse.ui.actions.ActionFactory;
 import com.ecfeed.core.utils.SystemHelper;
 
 
-public class ActionDescriptionProvider2 {
+public class ActionDescriptionProvider {
 
 	public static final String COPY_ACTION_ID = ActionFactory.COPY.getId();
 	public static final String CUT_ACTION_ID = ActionFactory.CUT.getId();
@@ -135,21 +135,21 @@ public class ActionDescriptionProvider2 {
 		}
 	}
 
-	private static ActionDescriptionProvider2 fActionDescriptionProvider = null;
+	private static ActionDescriptionProvider fActionDescriptionProvider = null;
 
 	private List<ActionDescription> fActionDescriptions;
 
-	public static ActionDescriptionProvider2 getInstance() {
+	public static ActionDescriptionProvider getInstance() {
 
 		if (fActionDescriptionProvider == null) {
-			fActionDescriptionProvider = new ActionDescriptionProvider2();
+			fActionDescriptionProvider = new ActionDescriptionProvider();
 		}
 
 		return fActionDescriptionProvider;
 	}
 
 
-	ActionDescriptionProvider2() {
+	ActionDescriptionProvider() {
 		fActionDescriptions = new ArrayList<ActionDescription>();
 
 		fActionDescriptions.add(

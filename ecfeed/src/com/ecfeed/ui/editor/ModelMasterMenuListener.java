@@ -27,7 +27,7 @@ import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.SystemHelper;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.editor.actions.AbstractAddChildAction;
-import com.ecfeed.ui.editor.actions.ActionDescriptionProvider2;
+import com.ecfeed.ui.editor.actions.ActionDescriptionProvider;
 import com.ecfeed.ui.editor.actions.ActionId;
 import com.ecfeed.ui.editor.actions.AddChildActionProvider;
 import com.ecfeed.ui.editor.actions.ExecuteTestCaseAction;
@@ -113,7 +113,7 @@ public class ModelMasterMenuListener extends ViewerMenuListener {
 			return actionName;
 		}
 
-		final String shortcut = ActionDescriptionProvider2.getInstance().getShortcut(ActionId.INSERT);
+		final String shortcut = ActionDescriptionProvider.getInstance().getShortcut(ActionId.INSERT);
 
 		if (SystemHelper.isOperatingSystemMacOs()) {
 			return actionName + "   (" + shortcut + ")";

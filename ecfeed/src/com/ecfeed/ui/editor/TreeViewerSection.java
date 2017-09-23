@@ -17,7 +17,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
 
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
-import com.ecfeed.ui.editor.actions.ActionDescriptionProvider2;
+import com.ecfeed.ui.editor.actions.ActionDescriptionProvider;
 import com.ecfeed.ui.editor.actions.ActionId;
 import com.ecfeed.ui.editor.actions.IActionProvider;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
@@ -61,7 +61,7 @@ public abstract class TreeViewerSection extends ViewerSection {
 	protected void setActionProvider(IActionProvider provider){
 		super.setActionProvider(provider);
 
-		String strActionId = ActionDescriptionProvider2.getInstance().getStrId(ActionId.EXPAND_COLLAPSE);
+		String strActionId = ActionDescriptionProvider.getInstance().getStrId(ActionId.EXPAND_COLLAPSE);
 
 		if (provider.getAction(strActionId) != null){
 			createKeyListener(
