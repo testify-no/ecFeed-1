@@ -18,10 +18,10 @@ import org.eclipse.core.commands.operations.OperationHistoryFactory;
 import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.utils.SystemLogger;
 
-public class RedoAction extends NamedAction {
+public class RedoAction extends DescribedAction {
 
 	public RedoAction() {
-		super(ActionDescriptionProvider.REDO.getId(), ActionDescriptionProvider.REDO.getDescription());
+		super(ActionId.REDO);
 	}
 
 	@Override

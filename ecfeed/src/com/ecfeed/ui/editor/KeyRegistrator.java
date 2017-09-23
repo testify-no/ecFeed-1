@@ -14,13 +14,12 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.widgets.Control;
 
 import com.ecfeed.application.ApplicationContext;
-import com.ecfeed.core.utils.SystemHelper;
-import com.ecfeed.ui.editor.actions.ActionDescriptionProvider;
+import com.ecfeed.ui.editor.actions.ActionDescriptionProvider2;
+import com.ecfeed.ui.editor.actions.ActionId;
 import com.ecfeed.ui.editor.actions.IActionProvider;
 import com.ecfeed.ui.editor.actions.NamedAction;
 
@@ -49,25 +48,11 @@ public class KeyRegistrator {
 
 	public void registerKeyListeners() {
 
-		addKeyListener(
-				ActionDescriptionProvider.INSERT.getId(), 
-				ActionDescriptionProvider.INSERT.getKeyCode(),
-				ActionDescriptionProvider.INSERT.getModifier());
+		addKeyListener(ActionId.INSERT);
+		addKeyListener(ActionId.DELETE);
 
-		addKeyListener(
-				ActionDescriptionProvider.DELETE.getId(), 
-				ActionDescriptionProvider.DELETE.getKeyCode(),
-				ActionDescriptionProvider.DELETE.getModifier());
-
-		addKeyListener(
-				ActionDescriptionProvider.MOVE_UP.getId(), 
-				ActionDescriptionProvider.MOVE_UP.getKeyCode(), 
-				ActionDescriptionProvider.MOVE_UP.getModifier());
-
-		addKeyListener(
-				ActionDescriptionProvider.MOVE_DOWN.getId(),
-				ActionDescriptionProvider.MOVE_DOWN.getKeyCode(), 
-				ActionDescriptionProvider.MOVE_DOWN.getModifier());
+		addKeyListener(ActionId.MOVE_UP);
+		addKeyListener(ActionId.MOVE_DOWN);
 
 		if (!ApplicationContext.isProjectAvailable()) {
 			addActionsForStandaloneApp();
@@ -76,48 +61,32 @@ public class KeyRegistrator {
 
 	private void addActionsForStandaloneApp() {
 
-		addKeyListener(
-				ActionDescriptionProvider.COPY.getId(), 
-				ActionDescriptionProvider.COPY.getKeyCode(), 
-				ActionDescriptionProvider.COPY.getModifier());
+		addKeyListener(ActionId.COPY);
+		addKeyListener(ActionId.CUT);
+		addKeyListener(ActionId.PASTE);
 
-		addKeyListener(
-				ActionDescriptionProvider.CUT.getId(), 
-				ActionDescriptionProvider.CUT.getKeyCode(), 
-				ActionDescriptionProvider.CUT.getModifier());
+		addKeyListener(ActionId.SAVE);
 
-
-		addKeyListener(
-				ActionDescriptionProvider.PASTE.getId(), 
-				ActionDescriptionProvider.PASTE.getKeyCode(), 
-				ActionDescriptionProvider.PASTE.getModifier());
-
-		addKeyListener(
-				ActionDescriptionProvider.SAVE.getId(), 
-				ActionDescriptionProvider.SAVE.getKeyCode(), 
-				ActionDescriptionProvider.SAVE.getModifier());
-
-		addKeyListener(
-				ActionDescriptionProvider.UNDO.getId(), 
-				ActionDescriptionProvider.UNDO.getKeyCode(), 
-				ActionDescriptionProvider.UNDO.getModifier());
-
-		addKeyListener(
-				ActionDescriptionProvider.REDO.getId(), 
-				ActionDescriptionProvider.REDO.getKeyCode(), 
-				ActionDescriptionProvider.REDO.getModifier());
+		addKeyListener(ActionId.UNDO);
+		addKeyListener(ActionId.REDO);
 	}
 
-	private void addKeyListener(String actionId, int keyCode, int modifier) {
+	private void addKeyListener(ActionId actionId) {
 
 		if (fActionProvider == null) {
 			return;
 		}
 
-		NamedAction action = fActionProvider.getAction(actionId);
+		ActionDescriptionProvider2 actionDescriptionProvider = ActionDescriptionProvider2.getInstance();
+
+		String strActionId = actionDescriptionProvider.getStrId(actionId);
+		NamedAction action = fActionProvider.getAction(strActionId); // XYX TODO USE ActionId
 		if (action == null) {
 			return;
 		}
+
+		int keyCode = actionDescriptionProvider.getKeyCode(actionId);
+		int modifier = actionDescriptionProvider.getModifier(actionId);
 
 		KeyListener keyListener = new ActionKeyListener(keyCode, modifier, action);
 		fControl.addKeyListener(keyListener);

@@ -19,15 +19,15 @@ public class ModelModifyingAction extends ModelSelectionAction {
 
 	private IModelUpdateContext fUPdateContext;
 
-	public ModelModifyingAction(String id, String name, ISelectionProvider selectionProvider, IModelUpdateContext updateContext) {
-		super(id, name, selectionProvider);
+	public ModelModifyingAction(ActionId actionId, ISelectionProvider selectionProvider, IModelUpdateContext updateContext) {
+		super(actionId, selectionProvider);
 		fUPdateContext = updateContext;
 	}
 
 	protected IModelUpdateContext getUpdateContext(){
 		return fUPdateContext;
 	}
-	
+
 	protected SelectionInterface getSelectionInterface(){
 		return getSelectionUtils().getSelectionInterface(fUPdateContext);
 	}

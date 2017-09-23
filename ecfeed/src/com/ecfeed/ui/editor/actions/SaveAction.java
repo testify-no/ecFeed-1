@@ -12,10 +12,10 @@ package com.ecfeed.ui.editor.actions;
 
 import com.ecfeed.ui.editor.ModelEditorHelper;
 
-public class SaveAction extends NamedAction {
+public class SaveAction extends DescribedAction {
 
 	public SaveAction() {
-		super(ActionDescriptionProvider.SAVE.getId(), ActionDescriptionProvider.SAVE.getDescription());
+		super(ActionId.SAVE);
 	}
 
 	@Override

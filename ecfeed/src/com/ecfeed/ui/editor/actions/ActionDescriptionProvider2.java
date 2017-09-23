@@ -19,7 +19,7 @@ import org.eclipse.ui.actions.ActionFactory;
 import com.ecfeed.core.utils.SystemHelper;
 
 
-class ActionDescriptionProvider2 {
+public class ActionDescriptionProvider2 {
 
 	public static final String COPY_ACTION_ID = ActionFactory.COPY.getId();
 	public static final String CUT_ACTION_ID = ActionFactory.CUT.getId();
@@ -135,7 +135,18 @@ class ActionDescriptionProvider2 {
 		}
 	}
 
+	private static ActionDescriptionProvider2 fActionDescriptionProvider = null;
+
 	private List<ActionDescription> fActionDescriptions;
+
+	public static ActionDescriptionProvider2 getInstance() {
+
+		if (fActionDescriptionProvider == null) {
+			fActionDescriptionProvider = new ActionDescriptionProvider2();
+		}
+
+		return fActionDescriptionProvider;
+	}
 
 
 	ActionDescriptionProvider2() {
@@ -155,10 +166,10 @@ class ActionDescriptionProvider2 {
 		fActionDescriptions.add(
 				new ActionDescription(
 						ActionId.CUT,
-						Names.CUT_ACTION_ID, 
-						Names.CUT_ACTION_NAME, 
-						Names.CUT_ACTION_SHORTCUT, 
-						Names.CUT_ACTION_MAC_SHORTCUT, 
+						CUT_ACTION_ID, 
+						CUT_ACTION_NAME, 
+						CUT_ACTION_SHORTCUT, 
+						CUT_ACTION_MAC_SHORTCUT, 
 						'x',
 						SWT.CTRL,
 						SWT.COMMAND));
@@ -166,10 +177,10 @@ class ActionDescriptionProvider2 {
 		fActionDescriptions.add(
 				new ActionDescription(
 						ActionId.PASTE,
-						Names.PASTE_ACTION_ID, 
-						Names.PASTE_ACTION_NAME, 
-						Names.PASTE_ACTION_SHORTCUT, 
-						Names.PASTE_ACTION_MAC_SHORTCUT, 
+						PASTE_ACTION_ID, 
+						PASTE_ACTION_NAME, 
+						PASTE_ACTION_SHORTCUT, 
+						PASTE_ACTION_MAC_SHORTCUT, 
 						'v',
 						SWT.CTRL,
 						SWT.COMMAND));
@@ -177,10 +188,10 @@ class ActionDescriptionProvider2 {
 		fActionDescriptions.add(
 				new ActionDescription(
 						ActionId.INSERT,
-						Names.INSERT_ACTION_ID, 
-						Names.INSERT_ACTION_NAME, 
-						Names.INSERT_ACTION_SHORTCUT, 
-						Names.INSERT_ACTION_MAC_SHORTCUT, 
+						INSERT_ACTION_ID, 
+						INSERT_ACTION_NAME, 
+						INSERT_ACTION_SHORTCUT, 
+						INSERT_ACTION_MAC_SHORTCUT, 
 						'i',
 						SWT.CTRL,
 						SWT.COMMAND));
@@ -188,10 +199,10 @@ class ActionDescriptionProvider2 {
 		fActionDescriptions.add(
 				new ActionDescription(
 						ActionId.DELETE,
-						Names.DELETE_ACTION_ID, 
-						Names.DELETE_ACTION_NAME, 
-						Names.DELETE_ACTION_SHORTCUT, 
-						Names.DELETE_ACTION_MAC_SHORTCUT, 
+						DELETE_ACTION_ID, 
+						DELETE_ACTION_NAME, 
+						DELETE_ACTION_SHORTCUT, 
+						DELETE_ACTION_MAC_SHORTCUT, 
 						'd',
 						SWT.CTRL,
 						SWT.COMMAND));
@@ -199,10 +210,10 @@ class ActionDescriptionProvider2 {
 		fActionDescriptions.add(
 				new ActionDescription(
 						ActionId.SELECT_ALL,
-						Names.SELECT_ALL_ACTION_ID, 
-						Names.SELECT_ALL_ACTION_NAME, 
-						Names.SELECT_ALL_ACTION_SHORTCUT, 
-						Names.SELECT_ALL_ACTION_MAC_SHORTCUT, 
+						SELECT_ALL_ACTION_ID, 
+						SELECT_ALL_ACTION_NAME, 
+						SELECT_ALL_ACTION_SHORTCUT, 
+						SELECT_ALL_ACTION_MAC_SHORTCUT, 
 						'a',
 						SWT.CTRL,
 						SWT.COMMAND));
@@ -210,10 +221,10 @@ class ActionDescriptionProvider2 {
 		fActionDescriptions.add(
 				new ActionDescription(
 						ActionId.UNDO,
-						Names.UNDO_ACTION_ID, 
-						Names.UNDO_ACTION_NAME, 
-						Names.UNDO_ACTION_SHORTCUT, 
-						Names.UNDO_ACTION_MAC_SHORTCUT, 
+						UNDO_ACTION_ID, 
+						UNDO_ACTION_NAME, 
+						UNDO_ACTION_SHORTCUT, 
+						UNDO_ACTION_MAC_SHORTCUT, 
 						'z',
 						SWT.CTRL,
 						SWT.COMMAND));
@@ -222,10 +233,10 @@ class ActionDescriptionProvider2 {
 		fActionDescriptions.add(
 				new ActionDescription(
 						ActionId.REDO,
-						Names.REDO_ACTION_ID, 
-						Names.REDO_ACTION_NAME, 
-						Names.REDO_ACTION_SHORTCUT, 
-						Names.REDO_ACTION_MAC_SHORTCUT, 
+						REDO_ACTION_ID, 
+						REDO_ACTION_NAME, 
+						REDO_ACTION_SHORTCUT, 
+						REDO_ACTION_MAC_SHORTCUT, 
 						'z',
 						SWT.CTRL | SWT.SHIFT,
 						SWT.COMMAND | SWT.SHIFT));		
@@ -233,10 +244,10 @@ class ActionDescriptionProvider2 {
 		fActionDescriptions.add(
 				new ActionDescription(
 						ActionId.SAVE,
-						Names.SAVE_ACTION_ID, 
-						Names.SAVE_ACTION_NAME, 
-						Names.SAVE_ACTION_SHORTCUT, 
-						Names.SAVE_ACTION_MAC_SHORTCUT,
+						SAVE_ACTION_ID, 
+						SAVE_ACTION_NAME, 
+						SAVE_ACTION_SHORTCUT, 
+						SAVE_ACTION_MAC_SHORTCUT,
 						's', 
 						SWT.CTRL,
 						SWT.COMMAND));
@@ -244,10 +255,10 @@ class ActionDescriptionProvider2 {
 		fActionDescriptions.add(
 				new ActionDescription(
 						ActionId.MOVE_UP,
-						Names.MOVE_UP_ACTION_ID, 
-						Names.MOVE_UP_ACTION_NAME, 
-						Names.MOVE_UP_ACTION_SHORTCUT, 
-						Names.MOVE_UP_ACTION_SHORTCUT, 
+						MOVE_UP_ACTION_ID, 
+						MOVE_UP_ACTION_NAME, 
+						MOVE_UP_ACTION_SHORTCUT, 
+						MOVE_UP_ACTION_SHORTCUT, 
 						SWT.ARROW_UP,
 						SWT.ALT,
 						SWT.ALT));
@@ -255,10 +266,10 @@ class ActionDescriptionProvider2 {
 		fActionDescriptions.add(
 				new ActionDescription(
 						ActionId.MOVE_DOWN,
-						Names.MOVE_DOWN_ACTION_ID, 
-						Names.MOVE_DOWN_ACTION_NAME, 
-						Names.MOVE_DOWN_ACTION_SHORTCUT, 
-						Names.MOVE_DOWN_ACTION_SHORTCUT,
+						MOVE_DOWN_ACTION_ID, 
+						MOVE_DOWN_ACTION_NAME, 
+						MOVE_DOWN_ACTION_SHORTCUT, 
+						MOVE_DOWN_ACTION_SHORTCUT,
 						SWT.ARROW_DOWN,
 						SWT.ALT,
 						SWT.ALT));
@@ -266,10 +277,10 @@ class ActionDescriptionProvider2 {
 		fActionDescriptions.add(
 				new ActionDescription(
 						ActionId.EXPAND,
-						Names.EXPAND_ACTION_ID, 
-						Names.EXPAND_ACTION_NAME, 
-						Names.EXPAND_ACTION_SHORTCUT, 
-						Names.EXPAND_ACTION_MAC_SHORTCUT, 
+						EXPAND_ACTION_ID, 
+						EXPAND_ACTION_NAME, 
+						EXPAND_ACTION_SHORTCUT, 
+						EXPAND_ACTION_MAC_SHORTCUT, 
 						SWT.NONE,
 						SWT.CTRL,
 						SWT.COMMAND));		
@@ -277,10 +288,10 @@ class ActionDescriptionProvider2 {
 		fActionDescriptions.add(
 				new ActionDescription(
 						ActionId.COLLAPSE,
-						Names.COLLAPSE_ACTION_ID, 
-						Names.COLLAPSE_ACTION_NAME, 
-						Names.COLLAPSE_ACTION_SHORTCUT, 
-						Names.COLLAPSE_ACTION_MAC_SHORTCUT, 
+						COLLAPSE_ACTION_ID, 
+						COLLAPSE_ACTION_NAME, 
+						COLLAPSE_ACTION_SHORTCUT, 
+						COLLAPSE_ACTION_MAC_SHORTCUT, 
 						SWT.NONE,
 						SWT.NONE,
 						SWT.NONE));
@@ -288,10 +299,10 @@ class ActionDescriptionProvider2 {
 		fActionDescriptions.add(
 				new ActionDescription(
 						ActionId.EXPAND_COLLAPSE,
-						Names.EXPAND_COLLAPSE_ACTION_ID, 
-						Names.EXPAND_COLLAPSE_ACTION_NAME, 
-						Names.EXPAND_COLLAPSE_ACTION_SHORTCUT, 
-						Names.EXPAND_COLLAPSE_ACTION_SHORTCUT,
+						EXPAND_COLLAPSE_ACTION_ID, 
+						EXPAND_COLLAPSE_ACTION_NAME, 
+						EXPAND_COLLAPSE_ACTION_SHORTCUT, 
+						EXPAND_COLLAPSE_ACTION_SHORTCUT,
 						SWT.NONE,
 						SWT.NONE,
 						SWT.NONE));
@@ -299,8 +310,8 @@ class ActionDescriptionProvider2 {
 		fActionDescriptions.add(
 				new ActionDescription(
 						ActionId.ABOUT,
-						Names.ABOUT_ACTION_ID, 
-						Names.ABOUT_ACTION_NAME, 
+						ABOUT_ACTION_ID, 
+						ABOUT_ACTION_NAME, 
 						null, 
 						null,
 						SWT.NONE,
@@ -310,15 +321,205 @@ class ActionDescriptionProvider2 {
 		fActionDescriptions.add(
 				new ActionDescription(
 						ActionId.CHECK_FOR_UPDATES,
-						Names.CHECK_FOR_UPDATES_ACTION_ID, 
-						Names.CHECK_FOR_UPDATES_ACTION_NAME, 
+						CHECK_FOR_UPDATES_ACTION_ID, 
+						CHECK_FOR_UPDATES_ACTION_NAME, 
 						null, 
 						null,
 						SWT.NONE,
 						SWT.NONE,
 						SWT.NONE));		
 
+		fActionDescriptions.add(
+				new ActionDescription(
+						ActionId.IMPLEMENT,
+						"implement", 
+						"Implement", 
+						null, 
+						null,
+						SWT.NONE,
+						SWT.NONE,
+						SWT.NONE));
+
+		fActionDescriptions.add(
+				new ActionDescription(
+						ActionId.TEST_ONLINE,
+						"testOnline", 
+						"Test online", 
+						null, 
+						null,
+						SWT.NONE,
+						SWT.NONE,
+						SWT.NONE));		
+
+		fActionDescriptions.add(
+				new ActionDescription(
+						ActionId.EXECUTE_TEST_CASE,
+						"execute", 
+						"Execute", 
+						null, 
+						null,
+						SWT.NONE,
+						SWT.NONE,
+						SWT.NONE));
+
+		fActionDescriptions.add(
+				new ActionDescription(
+						ActionId.EXPORT_ONLINE,
+						"exportOnline", 
+						"Export online", 
+						null, 
+						null,
+						SWT.NONE,
+						SWT.NONE,
+						SWT.NONE));		
+
+		fActionDescriptions.add(
+				new ActionDescription(
+						ActionId.GO_TO_IMPLEMENTATION,
+						"goToImpl", 
+						"Go to implementation", 
+						null, 
+						null,
+						SWT.NONE,
+						SWT.NONE,
+						SWT.NONE));		
+
+		fActionDescriptions.add(
+				new ActionDescription(
+						ActionId.ADD_GLOBAL_PARAMETER,
+						"addGlobalParameter", 
+						"Add global parameter", 
+						null, 
+						null,
+						SWT.NONE,
+						SWT.NONE,
+						SWT.NONE));		
+
+		fActionDescriptions.add(
+				new ActionDescription(
+						ActionId.ADD_CLASS,
+						"addClass", 
+						"Add class", 
+						null, 
+						null,
+						SWT.NONE,
+						SWT.NONE,
+						SWT.NONE));
+
+		fActionDescriptions.add(
+				new ActionDescription(
+						ActionId.ADD_METHOD,
+						"addMethod", 
+						"Add method", 
+						null, 
+						null,
+						SWT.NONE,
+						SWT.NONE,
+						SWT.NONE));		
+
+		fActionDescriptions.add(
+				new ActionDescription(
+						ActionId.ADD_METHOD_PARAMETER,
+						"addMethodParameter", 
+						"Add parameter", 
+						null, 
+						null,
+						SWT.NONE,
+						SWT.NONE,
+						SWT.NONE));		
+
+		fActionDescriptions.add(
+				new ActionDescription(
+						ActionId.ADD_CHOICE,
+						"addChoice", 
+						"Add choice", 
+						null, 
+						null,
+						SWT.NONE,
+						SWT.NONE,
+						SWT.NONE));
+
+		fActionDescriptions.add(
+				new ActionDescription(
+						ActionId.ADD_CONSTRAINT,
+						"addConstraint", 
+						"Add constraint", 
+						null, 
+						null,
+						SWT.NONE,
+						SWT.NONE,
+						SWT.NONE));	
+
+
+		fActionDescriptions.add(
+				new ActionDescription(
+						ActionId.ADD_TEST_CASE,
+						"addTestCase", 
+						"Add test case", 
+						null, 
+						null,
+						SWT.NONE,
+						SWT.NONE,
+						SWT.NONE));	
+
+		fActionDescriptions.add(
+				new ActionDescription(
+						ActionId.ADD_TEST_SUITE,
+						"generateTestSuite", 
+						"Generate test suite", 
+						null, 
+						null,
+						SWT.NONE,
+						SWT.NONE,
+						SWT.NONE));	
+
+
 	}
+
+	private ActionDescription getActionDescription(ActionId actionId) {
+
+		for (ActionDescription actionDescription : fActionDescriptions) {
+			if (actionDescription.fId == actionId) {
+				return actionDescription;
+			}
+		}
+
+		return null;
+	}
+
+	public String getStrId(ActionId actionId) {
+
+		return getActionDescription(actionId).fStrId;
+	}
+
+	public String getName(ActionId actionId) {
+
+		return getActionDescription(actionId).fName;
+	}	
+
+	public int getKeyCode(ActionId actionId) {
+
+		return getActionDescription(actionId).fKeyCode;		
+	}
+
+	public int getModifier(ActionId actionId) {
+
+		if (SystemHelper.isOperatingSystemMacOs()) {
+			return getActionDescription(actionId).fMacModifier;
+		}
+
+		return getActionDescription(actionId).fModifier;
+	}
+
+	public String getShortcut(ActionId actionId) {
+
+		if (SystemHelper.isOperatingSystemMacOs()) {
+			return getActionDescription(actionId).fMacShortcut;
+		}
+
+		return getActionDescription(actionId).fShortcut;
+	}
+
 
 }
 

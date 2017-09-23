@@ -18,10 +18,10 @@ import org.eclipse.core.commands.operations.OperationHistoryFactory;
 import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.utils.SystemLogger;
 
-public class UndoAction extends NamedAction {
+public class UndoAction extends DescribedAction {
 
 	public UndoAction() {
-		super(ActionDescriptionProvider.UNDO.getId(), ActionDescriptionProvider.UNDO.getDescription());
+		super(ActionId.UNDO);
 	}
 
 	@Override

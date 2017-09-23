@@ -22,7 +22,7 @@ public class CollapseAction extends ModelSelectionAction {
 	private TreeViewer fViewer;
 
 	public CollapseAction(TreeViewer viewer) {
-		super(ActionDescriptionProvider.COLLAPSE.getId(), ActionDescriptionProvider.COLLAPSE.getDescription(), viewer);
+		super(ActionId.COLLAPSE, viewer);
 		fViewer = viewer;
 	}
 

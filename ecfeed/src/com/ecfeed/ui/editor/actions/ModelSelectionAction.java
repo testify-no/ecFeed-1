@@ -17,15 +17,17 @@ import org.eclipse.jface.viewers.ISelectionProvider;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.ui.modelif.NodeSelectionUtils;
 
-public abstract class ModelSelectionAction extends NamedAction {
-	
+public abstract class ModelSelectionAction extends DescribedAction {
+
 	private NodeSelectionUtils fSelectionUtils;
 
-	public ModelSelectionAction(String id, String name, ISelectionProvider selectionProvider){
-		super(id, name);
+	public ModelSelectionAction(ActionId actionId, ISelectionProvider selectionProvider) {
+
+		super(actionId);
+
 		fSelectionUtils = new NodeSelectionUtils(selectionProvider);
 	}
-	
+
 	protected List<AbstractNode> getSelectedNodes(){
 		return getSelectionUtils().getSelectedNodes();
 	}
@@ -33,11 +35,11 @@ public abstract class ModelSelectionAction extends NamedAction {
 	protected boolean isSelectionSibling(){
 		return getSelectionUtils().isSelectionSibling();
 	}
-	
+
 	protected boolean isSelectionSingleType(){
 		return getSelectionUtils().isSelectionSingleType();
 	}
-	
+
 	protected NodeSelectionUtils getSelectionUtils(){
 		return fSelectionUtils;
 	}

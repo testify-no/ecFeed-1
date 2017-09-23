@@ -12,13 +12,13 @@ package com.ecfeed.ui.editor.actions;
 
 import org.eclipse.jface.action.Action;
 
-public class CutAction extends NamedAction {
+public class CutAction extends DescribedAction {
 
 	private Action fCopyAction;
 	private Action fDeleteAction;
 
 	public CutAction(Action copyAction, Action deleteAction) {
-		super(ActionDescriptionProvider.CUT.getId(), ActionDescriptionProvider.CUT.getDescription());
+		super(ActionId.CUT);
 		fCopyAction = copyAction;
 		fDeleteAction = deleteAction;
 	}

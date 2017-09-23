@@ -22,34 +22,34 @@ public class GoToImplementationAction extends ModelSelectionAction {
 	private IJavaProjectProvider fJavaProjectProvider;
 
 	public GoToImplementationAction(ISelectionProvider selectionProvider, IJavaProjectProvider javaProjectProvider) {
-		super("goToImpl", "Go to implementation", selectionProvider);
+		super(ActionId.GO_TO_IMPLEMENTATION, selectionProvider);
 		fJavaProjectProvider = javaProjectProvider;
 	}
 
 	@Override
 	public void run() {
-		
+
 		if (getSelectedNodes().size() != 1) {
 			return;
 		}
-		
+
 		AbstractNode node = getSelectedNodes().get(0);
 		AbstractNodeInterface nodeIf = 
 				NodeInterfaceFactory.getNodeInterface(node, null, fJavaProjectProvider);
-		
+
 		nodeIf.goToImplementation();
 	}
 
 	@Override
 	public boolean isEnabled() {
-		
+
 		if (getSelectedNodes().size() != 1) {
 			return false;
 		}
-		
+
 		AbstractNodeInterface nodeIf = 
 				NodeInterfaceFactory.getNodeInterface(getSelectedNodes().get(0), null, fJavaProjectProvider);
-		
+
 		return nodeIf.goToImplementationEnabled();
 	}
 

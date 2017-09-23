@@ -44,11 +44,11 @@ import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.basic.ErrorDialog;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
+import com.ecfeed.ui.editor.actions.ActionId;
 import com.ecfeed.ui.editor.actions.ActionProvider;
 import com.ecfeed.ui.editor.actions.CutAction;
-import com.ecfeed.ui.editor.actions.ActionDescriptionProvider;
+import com.ecfeed.ui.editor.actions.DescribedAction;
 import com.ecfeed.ui.editor.actions.ModelModifyingAction;
-import com.ecfeed.ui.editor.actions.NamedAction;
 import com.ecfeed.ui.editor.actions.SelectAllAction;
 import com.ecfeed.ui.modelif.ChoiceInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
@@ -101,9 +101,9 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 		}
 	}
 
-	private class LabelCopyAction extends NamedAction{
+	private class LabelCopyAction extends DescribedAction{
 		public LabelCopyAction() {
-			super(ActionDescriptionProvider.COPY.getId(), ActionDescriptionProvider.COPY.getDescription());
+			super(ActionId.COPY);
 		}
 
 		@Override
@@ -119,7 +119,7 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 
 	private class LabelPasteAction extends ModelModifyingAction{
 		public LabelPasteAction(IModelUpdateContext updateContext) {
-			super(ActionDescriptionProvider.PASTE.getId(), ActionDescriptionProvider.PASTE.getDescription(), getViewer(), updateContext);
+			super(ActionId.PASTE, getViewer(), updateContext);
 		}
 
 		@Override
@@ -135,8 +135,7 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 
 	private class LabelDeleteAction extends ModelModifyingAction{
 		public LabelDeleteAction(IModelUpdateContext updateContext) {
-			super(ActionDescriptionProvider.DELETE.getId(), ActionDescriptionProvider.DELETE.getDescription(), 
-					getTableViewer(), updateContext);
+			super(ActionId.DELETE, getTableViewer(), updateContext);
 		}
 
 		@Override
@@ -168,17 +167,17 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 		}
 
 		private void startEditingNewLabel(String newLabel) {
-			
+
 			if (newLabel == null) {
 				return;
 			}
-			
+
 			TableViewer tableViewer = getTableViewer();
-			
+
 			if (tableViewer == null) {
 				return;
 			}
-			
+
 			tableViewer.editElement(newLabel, 0);
 		}
 	}

@@ -73,7 +73,9 @@ public class AddChildActionProvider {
 		private GlobalParametersParentInterface fParentIf;
 
 		public AddGlobalParameterAction() {
-			super(ADD_GLOBAL_PARAMETER_ACTION_ID, ADD_GLOBAL_PARAMETER_ACTION_NAME, fViewer, fContext);
+
+			super(ActionId.ADD_GLOBAL_PARAMETER, fViewer, fContext);
+
 			fParentIf = new GlobalParametersParentInterface(fContext, fJavaProjectProvider);
 		}
 
@@ -101,7 +103,7 @@ public class AddChildActionProvider {
 		private RootInterface fParentIf;
 
 		public AddClassAction() {
-			super(ADD_CLASS_ACTION_ID, ADD_CLASS_ACTION_NAME, fViewer, fContext);
+			super(ActionId.ADD_CLASS, fViewer, fContext);
 			fParentIf = new RootInterface(fContext, fJavaProjectProvider);
 		}
 
@@ -128,7 +130,7 @@ public class AddChildActionProvider {
 		private ClassInterface fParentIf;
 
 		public AddMethodAction() {
-			super(ADD_METHOD_ACTION_ID, ADD_METHOD_ACTION_NAME, fViewer, fContext);
+			super(ActionId.ADD_METHOD, fViewer, fContext);
 			fParentIf = new ClassInterface(fContext, fJavaProjectProvider);
 		}
 
@@ -154,8 +156,8 @@ public class AddChildActionProvider {
 	private abstract class AddMethodChildAction extends AbstractAddChildAction{
 		private MethodInterface fParentIf;
 
-		public AddMethodChildAction(String id, String name) {
-			super(id, name, fViewer, fContext);
+		public AddMethodChildAction(ActionId actionId) {
+			super(actionId, fViewer, fContext);
 			fParentIf = new MethodInterface(fContext, fJavaProjectProvider);
 		}
 
@@ -178,7 +180,7 @@ public class AddChildActionProvider {
 	private class AddMethodParameterAction extends AddMethodChildAction{
 
 		public AddMethodParameterAction() {
-			super(ADD_METHOD_PARAMETER_ACTION_ID, ADD_METHOD_PARAMETER_ACTION_NAME);
+			super(ActionId.ADD_METHOD_PARAMETER);
 		}
 
 		@Override
@@ -192,7 +194,7 @@ public class AddChildActionProvider {
 	private class AddConstraintAction extends AddMethodChildAction{
 
 		public AddConstraintAction() {
-			super(ADD_CONSTRAINT_ACTION_ID, ADD_CONSTRAINT_ACTION_NAME);
+			super(ActionId.ADD_CONSTRAINT);
 		}
 
 		@Override
@@ -206,7 +208,7 @@ public class AddChildActionProvider {
 	private class AddTestCaseAction extends AddMethodChildAction{
 
 		public AddTestCaseAction() {
-			super(ADD_TEST_CASE_ACTION_ID, ADD_TEST_CASE_ACTION_NAME);
+			super(ActionId.ADD_TEST_CASE);
 		}
 
 		@Override
@@ -219,7 +221,7 @@ public class AddChildActionProvider {
 
 	private class AddTestSuiteAction extends AddMethodChildAction{
 		public AddTestSuiteAction() {
-			super(ADD_TEST_SUITE_ACTION_ID, ADD_TEST_SUITE_ACTION_NAME);
+			super(ActionId.ADD_TEST_SUITE);
 		}
 
 		@Override
@@ -247,7 +249,7 @@ public class AddChildActionProvider {
 		}
 
 		public AddChoiceAction(IJavaProjectProvider javaProjectProvider){
-			super(ADD_PARTITION_ACTION_ID, ADD_PARTITION_ACTION_NAME, fViewer, fContext);
+			super(ActionId.ADD_CHOICE, fViewer, fContext);
 			fParentIf = new ChoicesParentInterface(fContext, javaProjectProvider);
 		}
 

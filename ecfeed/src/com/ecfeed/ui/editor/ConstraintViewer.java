@@ -34,7 +34,7 @@ import com.ecfeed.ui.common.ImageManager;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
-import com.ecfeed.ui.editor.actions.ActionDescriptionProvider;
+import com.ecfeed.ui.editor.actions.ActionId;
 import com.ecfeed.ui.editor.actions.ModelModifyingAction;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 
@@ -206,8 +206,7 @@ public class ConstraintViewer extends TreeViewerSection {
 	public class DeleteStatementAction extends ModelModifyingAction {
 
 		public DeleteStatementAction(IModelUpdateContext updateContext) {
-			super(ActionDescriptionProvider.DELETE.getId(), ActionDescriptionProvider.DELETE.getDescription(), 
-					getTreeViewer(), getModelUpdateContext());
+			super(ActionId.DELETE, getTreeViewer(), getModelUpdateContext());
 		}
 
 		@Override

@@ -26,8 +26,8 @@ public class TestOnlineAction extends ModelSelectionAction {
 			IJavaProjectProvider javaProjectProvider, 
 			ISelectionProvider selectionProvider, 
 			MethodInterface methodInterface) {
-		
-		super("testOnline", "Test online", selectionProvider);
+
+		super(ActionId.TEST_ONLINE, selectionProvider);
 		fJavaProjectProvider = javaProjectProvider;
 		fMethodInterface = methodInterface;
 	}

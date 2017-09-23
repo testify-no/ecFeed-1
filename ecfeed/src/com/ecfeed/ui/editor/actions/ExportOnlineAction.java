@@ -26,8 +26,8 @@ public class ExportOnlineAction extends ModelSelectionAction {
 			IJavaProjectProvider javaProjectProvider, 
 			ISelectionProvider selectionProvider, 
 			MethodInterface methodInterface) {
-		
-		super("exportOnline", "Export online", selectionProvider);
+
+		super(ActionId.EXPORT_ONLINE, selectionProvider);
 		fJavaProjectProvider = javaProjectProvider;
 		fMethodInterface = methodInterface;
 	}

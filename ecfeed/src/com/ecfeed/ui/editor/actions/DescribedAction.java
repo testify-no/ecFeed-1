@@ -10,21 +10,14 @@
 
 package com.ecfeed.ui.editor.actions;
 
-import com.ecfeed.ui.dialogs.CheckForUpdatesDialog;
+import org.eclipse.jface.action.Action;
 
-public class CheckForUpdatesAction extends DescribedAction {
+public class DescribedAction extends NamedAction {
 
-	public CheckForUpdatesAction(){
-		super(ActionId.CHECK_FOR_UPDATES);
+	public DescribedAction(ActionId actionId) {
+
+		super(ActionDescriptionProvider2.getInstance().getStrId(actionId),
+				ActionDescriptionProvider2.getInstance().getName(actionId));
 	}
 
-	@Override
-	public void run() {
-		CheckForUpdatesDialog.openUnconditionally();
-	}
-
-	@Override
-	public boolean isEnabled(){
-		return true;
-	}
 }

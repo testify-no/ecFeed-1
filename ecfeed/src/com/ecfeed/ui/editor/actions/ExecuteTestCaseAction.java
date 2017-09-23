@@ -21,7 +21,7 @@ public class ExecuteTestCaseAction extends ModelSelectionAction {
 	private TestCaseInterface fTestCaseInterface;
 
 	public ExecuteTestCaseAction(ISelectionProvider selectionProvider, TestCaseInterface TestCaseInterface) {
-		super("execute", "Execute", selectionProvider);
+		super(ActionId.EXECUTE_TEST_CASE, selectionProvider);
 		fTestCaseInterface = TestCaseInterface;
 	}
 

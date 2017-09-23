@@ -19,7 +19,7 @@ public class ExpandCollapseAction extends ModelSelectionAction {
 	private CollapseAction fCollapseAction;
 
 	public ExpandCollapseAction(TreeViewer treeViewer) {
-		super(ActionDescriptionProvider.EXPAND_COLLAPSE.getId(), ActionDescriptionProvider.EXPAND_COLLAPSE.getDescription(), treeViewer);
+		super(ActionId.EXPAND_COLLAPSE, treeViewer);
 		fExpandAction = new ExpandAction(treeViewer);
 		fCollapseAction = new CollapseAction(treeViewer);
 	}

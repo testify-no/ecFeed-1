@@ -30,8 +30,7 @@ public class InsertAction extends ModelModifyingAction {
 			StructuredViewer structuredViewer,
 			IModelUpdateContext updateContext,
 			IJavaProjectProvider javaProjectProvider) {
-		super(ActionDescriptionProvider.INSERT.getId(), ActionDescriptionProvider.INSERT.getDescription(), 
-				selectionProvider, updateContext);
+		super(ActionId.INSERT, selectionProvider, updateContext);
 		fJavaProjectProvider = javaProjectProvider;
 		fStructuredViewer = structuredViewer;
 		fUpdateContext = updateContext;

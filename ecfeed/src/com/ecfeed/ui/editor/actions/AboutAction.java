@@ -12,10 +12,10 @@ package com.ecfeed.ui.editor.actions;
 
 import com.ecfeed.ui.dialogs.AboutDialog;
 
-public class AboutAction extends NamedAction {
+public class AboutAction extends DescribedAction {
 
-	public AboutAction(){
-		super(ActionDescriptionProvider.ABOUT.getId(), ActionDescriptionProvider.ABOUT.getDescription());
+	public AboutAction() {
+		super(ActionId.ABOUT);
 	}
 
 	@Override

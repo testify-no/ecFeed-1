@@ -17,7 +17,7 @@ import com.ecfeed.ui.modelif.NodeClipboard;
 public class CopyAction extends ModelSelectionAction {
 
 	public CopyAction(ISelectionProvider selectionProvider){
-		super(ActionDescriptionProvider.COPY.getId(), ActionDescriptionProvider.COPY.getDescription(), selectionProvider);
+		super(ActionId.COPY, selectionProvider);
 	}
 
 	@Override
