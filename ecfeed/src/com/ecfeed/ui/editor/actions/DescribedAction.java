@@ -10,14 +10,13 @@
 
 package com.ecfeed.ui.editor.actions;
 
-import org.eclipse.jface.action.Action;
 
 public class DescribedAction extends NamedAction {
 
 	public DescribedAction(ActionId actionId) {
 
 		super(ActionDescriptionProvider.getInstance().getStrId(actionId),
-				ActionDescriptionProvider.getInstance().getName(actionId));
+				ActionDescriptionProvider.getInstance().getDescription(actionId));	
 	}
 
 }

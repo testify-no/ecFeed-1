@@ -408,7 +408,7 @@ public class ActionDescriptionProvider {
 						"Generate test suite"));	
 	}
 
-	private ActionDescription getActionDescription(ActionId actionId) {
+	private ActionDescription getDescriptionRecord(ActionId actionId) {
 
 		for (ActionDescription actionDescription : fActionDescriptions) {
 			if (actionDescription.fId == actionId) {
@@ -421,37 +421,58 @@ public class ActionDescriptionProvider {
 
 	public String getStrId(ActionId actionId) {
 
-		return getActionDescription(actionId).fStrId;
+		return getDescriptionRecord(actionId).fStrId;
 	}
 
 	public String getName(ActionId actionId) {
 
-		return getActionDescription(actionId).fName;
+		return getDescriptionRecord(actionId).fName;
 	}	
+
+	public String getDescription(ActionId actionId) {
+
+		ActionDescription actionDescription = getDescriptionRecord(actionId);
+
+		String shortcut = getShortcut(actionDescription);
+
+		if (shortcut == null) {
+			return actionDescription.fName;
+		}
+
+		if (SystemHelper.isOperatingSystemMacOs()) {
+			return actionDescription.fName + "  (" + shortcut + ")";	
+		}
+
+		return actionDescription.fName + "\t" + shortcut;
+	}
 
 	public int getKeyCode(ActionId actionId) {
 
-		return getActionDescription(actionId).fKeyCode;		
+		return getDescriptionRecord(actionId).fKeyCode;		
 	}
 
 	public int getModifier(ActionId actionId) {
 
 		if (SystemHelper.isOperatingSystemMacOs()) {
-			return getActionDescription(actionId).fMacModifier;
+			return getDescriptionRecord(actionId).fMacModifier;
 		}
 
-		return getActionDescription(actionId).fModifier;
+		return getDescriptionRecord(actionId).fModifier;
 	}
 
 	public String getShortcut(ActionId actionId) {
 
-		if (SystemHelper.isOperatingSystemMacOs()) {
-			return getActionDescription(actionId).fMacShortcut;
-		}
-
-		return getActionDescription(actionId).fShortcut;
+		return getShortcut(getDescriptionRecord(actionId));
 	}
 
+	private String getShortcut(ActionDescription actionDescription) {
+
+		if (SystemHelper.isOperatingSystemMacOs()) {
+			return actionDescription.fMacShortcut;
+		}
+
+		return actionDescription.fShortcut;
+	}
 
 }
 
