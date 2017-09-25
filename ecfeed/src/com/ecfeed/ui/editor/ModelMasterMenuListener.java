@@ -29,7 +29,7 @@ import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.editor.actions.AbstractAddChildAction;
 import com.ecfeed.ui.editor.actions.ActionDescriptionProvider;
 import com.ecfeed.ui.editor.actions.ActionId;
-import com.ecfeed.ui.editor.actions.AddChildActionProvider;
+import com.ecfeed.ui.editor.actions.AddChildActionFactory;
 import com.ecfeed.ui.editor.actions.ExecuteTestCaseAction;
 import com.ecfeed.ui.editor.actions.ExportOnlineAction;
 import com.ecfeed.ui.editor.actions.IActionProvider;
@@ -81,15 +81,15 @@ public class ModelMasterMenuListener extends ViewerMenuListener {
 	}
 
 	private void addChildAddingActions(AbstractNode abstractNode) {
-		AddChildActionProvider actionProvider = 
-				new AddChildActionProvider(fTreeViewer, fModelUpdateContext, fJavaProjectProvider);
 
-		List<AbstractAddChildAction> actions = actionProvider.getPossibleActions(abstractNode);
+		List<AbstractAddChildAction> actions = 
+				AddChildActionFactory.createPossibleActions(
+						abstractNode, fTreeViewer, fModelUpdateContext, fJavaProjectProvider);
 
 		boolean menuItemAdded = false;
 		boolean actionNameConverted = false;
 
-		for(AbstractAddChildAction action : actions) {
+		for (AbstractAddChildAction action : actions) {
 
 			String actionName = action.getName();
 

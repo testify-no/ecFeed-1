@@ -41,23 +41,46 @@ import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.MethodInterface;
 import com.ecfeed.ui.modelif.RootInterface;
 
-public class AddChildActionProvider {
+public class AddChildActionFactory {
 
 	private StructuredViewer fViewer;
 	private IModelUpdateContext fContext;
 	private IJavaProjectProvider fJavaProjectProvider;
 
 
-	public AddChildActionProvider(
+	public static AbstractAddChildAction createMainInsertAction(
+			AbstractNode parent,
 			StructuredViewer viewer, 
 			IModelUpdateContext context, 
 			IJavaProjectProvider javaProjectProvider) {
+
+		AddChildActionFactory addChildActionFactory = new AddChildActionFactory(viewer, context, javaProjectProvider);
+
+		return addChildActionFactory.createMainInsertActionIntr(parent);
+	}
+
+	public static List<AbstractAddChildAction> createPossibleActions(
+			AbstractNode parent,
+			StructuredViewer viewer, 
+			IModelUpdateContext context, 
+			IJavaProjectProvider javaProjectProvider) {
+
+		AddChildActionFactory addChildActionFactory = new AddChildActionFactory(viewer, context, javaProjectProvider);
+
+		return addChildActionFactory.createPossibleActionsIntr(parent);
+	}
+
+	private AddChildActionFactory(
+			StructuredViewer viewer, 
+			IModelUpdateContext context, 
+			IJavaProjectProvider javaProjectProvider) {
+
 		fJavaProjectProvider = javaProjectProvider;
 		fContext = context;
 		fViewer = viewer;
 	}
 
-	public AbstractAddChildAction getMainInsertAction(AbstractNode parent) {
+	private AbstractAddChildAction createMainInsertActionIntr(AbstractNode parent) {
 
 		try {
 			return (AbstractAddChildAction)parent.accept(new GetMainInsertActionProvider());
@@ -69,7 +92,7 @@ public class AddChildActionProvider {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<AbstractAddChildAction> getPossibleActions(AbstractNode parent) {
+	private List<AbstractAddChildAction> createPossibleActionsIntr(AbstractNode parent) {
 
 		try {
 			return (List<AbstractAddChildAction>)parent.accept(new AddNewChilActionProvider());

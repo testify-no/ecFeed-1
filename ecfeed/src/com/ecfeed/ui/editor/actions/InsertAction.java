@@ -51,10 +51,10 @@ public class InsertAction extends ModelModifyingAction {
 
 		AbstractNode abstractNode = selectedNodes.get(0);
 
-		AddChildActionProvider actionProvider = 
-				new AddChildActionProvider(fStructuredViewer, fUpdateContext, fJavaProjectProvider);
+		AbstractAddChildAction insertAction = 
+				AddChildActionFactory.createMainInsertAction(
+						abstractNode, fStructuredViewer, fUpdateContext, fJavaProjectProvider); 
 
-		AbstractAddChildAction insertAction = actionProvider.getMainInsertAction(abstractNode);
 		if (insertAction == null) {
 			return;
 		}
