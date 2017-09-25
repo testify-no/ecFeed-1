@@ -35,7 +35,7 @@ import com.ecfeed.core.model.RootNode;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.AboutDialog;
 import com.ecfeed.ui.dialogs.CheckForUpdatesDialog;
-import com.ecfeed.ui.editor.actions.ModelViewerActionProvider;
+import com.ecfeed.ui.editor.actions.MainActionProvider;
 import com.ecfeed.ui.editor.data.ModelTreeContentProvider;
 import com.ecfeed.ui.editor.data.ModelTreeLabelDecorator;
 import com.ecfeed.ui.editor.data.ModelTreeLabelProvider;
@@ -48,7 +48,6 @@ public class ModelMasterSection extends TreeViewerSection {
 	private static final int AUTO_EXPAND_LEVEL = 3;
 
 	private final ModelMasterDetailsBlock fMasterDetailsBlock;
-	//	private IModelUpdateListener fUpdateListener;
 
 
 	public ModelMasterSection(ModelMasterDetailsBlock parentBlock, IJavaProjectProvider javaProjectProvider) {
@@ -59,19 +58,14 @@ public class ModelMasterSection extends TreeViewerSection {
 
 		fMasterDetailsBlock = parentBlock;
 
-		boolean includeDeleteAction = false;
-		if (ApplicationContext.isApplicationTypeLocalStandalone()) {
-			includeDeleteAction = true;
-		}
-
-		ModelViewerActionProvider modelViewerActionProvider = 
-				new ModelViewerActionProvider(
+		MainActionProvider modelViewerActionProvider = 
+				new MainActionProvider(
 						getTreeViewer(), 
 						getModelUpdateContext(), 
 						javaProjectProvider, 
 						false);
 
-		setActionProvider(modelViewerActionProvider, includeDeleteAction);		
+		setActionProvider(modelViewerActionProvider);		
 
 		getTreeViewer().addDragSupport(
 				DND.DROP_COPY|DND.DROP_MOVE|DND.DROP_LINK,

@@ -35,7 +35,7 @@ import com.ecfeed.ui.common.NodeViewerColumnLabelProvider;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.editor.actions.DeleteAction;
-import com.ecfeed.ui.editor.actions.ModelViewerActionProvider;
+import com.ecfeed.ui.editor.actions.MainActionProvider;
 import com.ecfeed.ui.modelif.ClassInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.MethodInterface;
@@ -71,7 +71,7 @@ public class MethodsViewer extends TableViewerSection {
 		addSelectionChangedListener(new SelectionChangedListener());
 
 		setActionProvider(
-				new ModelViewerActionProvider(
+				new MainActionProvider(
 						getTableViewer(), getModelUpdateContext(), javaProjectProvider));
 
 		getViewer().addDragSupport(

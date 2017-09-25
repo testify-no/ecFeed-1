@@ -33,7 +33,7 @@ import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.editor.actions.DeleteAction;
-import com.ecfeed.ui.editor.actions.ModelViewerActionProvider;
+import com.ecfeed.ui.editor.actions.MainActionProvider;
 import com.ecfeed.ui.modelif.ClassInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.ModelNodesTransfer;
@@ -73,7 +73,7 @@ public class ClassViewer extends TableViewerSection {
 				new ActionSelectionAdapter(
 						new DeleteAction(getViewer(), getModelUpdateContext()), Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
 
-		setActionProvider(new ModelViewerActionProvider(getTableViewer(), getModelUpdateContext(), javaProjectProvider));
+		setActionProvider(new MainActionProvider(getTableViewer(), getModelUpdateContext(), javaProjectProvider));
 
 		getViewer().addDragSupport(
 				DND.DROP_COPY|DND.DROP_MOVE, 

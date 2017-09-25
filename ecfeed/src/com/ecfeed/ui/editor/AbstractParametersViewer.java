@@ -37,7 +37,7 @@ import com.ecfeed.ui.common.NodeViewerColumnLabelProvider;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.editor.actions.DeleteAction;
-import com.ecfeed.ui.editor.actions.ModelViewerActionProvider;
+import com.ecfeed.ui.editor.actions.MainActionProvider;
 import com.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.ParametersParentInterface;
@@ -76,7 +76,7 @@ public abstract class AbstractParametersViewer extends TableViewerSection {
 		fNameColumn.setEditingSupport(new ParameterNameEditingSupport());
 		fTypeColumn.setEditingSupport(getParameterTypeEditingSupport());
 
-		setActionProvider(new ModelViewerActionProvider(getTableViewer(), getModelUpdateContext(), javaProjectProvider));
+		setActionProvider(new MainActionProvider(getTableViewer(), getModelUpdateContext(), javaProjectProvider));
 		addSelectionChangedListener(new SelectionChangedListener());
 	}
 

@@ -104,14 +104,23 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 	}
 
 	@Override
-	protected void setActionProvider(IActionProvider provider){
-		setActionProvider(provider, true);
+	protected void setActionProvider(IActionProvider actionProvider) {
+
+		super.setActionProvider(actionProvider);
+
+		Control viewerControl = fViewer.getControl();
+
+		configureContextMenu(viewerControl);
+		registerKeyShortcuts(viewerControl, actionProvider);
 	}
 
+
 	public Object getSelectedElement() {
+
 		if (fSelectedElements.size() > 0) {
 			return fSelectedElements.get(0);
 		}
+
 		return null;
 	}
 
@@ -133,9 +142,11 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 	}
 
 	protected void createViewer() {
+
 		fViewer = createViewer(getMainControlComposite(), getViewerStyle());
 		fViewer.setContentProvider(createViewerContentProvider());
 		fViewer.setLabelProvider(createViewerLabelProvider());
+
 		createViewerColumns();
 
 		fViewer.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -172,35 +183,6 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 		return adapter;
 	}
 
-	protected void setActionProvider(IActionProvider actionProvider, boolean addDeleteAction) {
-
-		super.setActionProvider(actionProvider);
-
-		Control viewerControl = fViewer.getControl();
-
-		configureContextMenu(viewerControl);
-		registerKeyShortcuts(viewerControl, actionProvider);
-	}
-
-	private void configureContextMenu(Control viewerControl) {
-
-		fMenu = new Menu(viewerControl);
-		viewerControl.setMenu(fMenu);
-		fMenu.addMenuListener(getMenuListener());
-	}
-
-	private void registerKeyShortcuts(
-			Control viewerControl, IActionProvider actionProvider) {
-
-		fKeyRegistrator = new KeyRegistrator(viewerControl, actionProvider);
-
-		if (actionProvider != null) {
-			fKeyRegistrator.registerKeyListeners();
-		} else {
-			fKeyRegistrator.unregisterKeyListeners();
-		}
-	}
-
 	protected MenuListener getMenuListener() {
 
 		return new ViewerMenuListener(fMenu, getActionProvider(), fViewer);
@@ -227,6 +209,25 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 			} catch (Exception e) {
 				ExceptionCatchDialog.open(fDescriptionWhenError, e.getMessage());
 			}
+		}
+	}
+
+	private void configureContextMenu(Control viewerControl) {
+
+		fMenu = new Menu(viewerControl);
+		viewerControl.setMenu(fMenu);
+		fMenu.addMenuListener(getMenuListener());
+	}
+
+	private void registerKeyShortcuts(
+			Control viewerControl, IActionProvider actionProvider) {
+
+		fKeyRegistrator = new KeyRegistrator(viewerControl, actionProvider);
+
+		if (actionProvider != null) {
+			fKeyRegistrator.registerKeyListeners();
+		} else {
+			fKeyRegistrator.unregisterKeyListeners();
 		}
 	}
 

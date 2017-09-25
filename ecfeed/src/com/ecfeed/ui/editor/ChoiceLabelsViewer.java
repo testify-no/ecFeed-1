@@ -45,7 +45,7 @@ import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.basic.ErrorDialog;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.editor.actions.ActionId;
-import com.ecfeed.ui.editor.actions.ActionProvider;
+import com.ecfeed.ui.editor.actions.BasicActionProvider;
 import com.ecfeed.ui.editor.actions.CutAction;
 import com.ecfeed.ui.editor.actions.DescribedAction;
 import com.ecfeed.ui.editor.actions.ModelModifyingAction;

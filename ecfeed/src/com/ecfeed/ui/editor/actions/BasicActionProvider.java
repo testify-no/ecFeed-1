@@ -15,12 +15,12 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 
-public abstract class ActionProvider implements IActionProvider {
+public abstract class BasicActionProvider implements IActionProvider {
 
 	private boolean fEnabled;
 	private Set<GrouppedAction> fActions;
 
-	public ActionProvider() {
+	public BasicActionProvider() {
 		fActions = new LinkedHashSet<>();
 		fEnabled = true;
 	}

@@ -33,7 +33,7 @@ import com.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.ecfeed.ui.common.NodeViewerColumnLabelProvider;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.editor.actions.DeleteAction;
-import com.ecfeed.ui.editor.actions.ModelViewerActionProvider;
+import com.ecfeed.ui.editor.actions.MainActionProvider;
 import com.ecfeed.ui.modelif.ConstraintInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.MethodInterface;
@@ -75,7 +75,7 @@ public class ConstraintsListViewer extends TableViewerSection {
 										getModelUpdateContext()), 
 								Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
 
-		setActionProvider(new ModelViewerActionProvider(getTableViewer(), updateContext, javaProjectProvider));
+		setActionProvider(new MainActionProvider(getTableViewer(), updateContext, javaProjectProvider));
 
 		getViewer().addDragSupport(
 				DND.DROP_COPY|DND.DROP_MOVE, 

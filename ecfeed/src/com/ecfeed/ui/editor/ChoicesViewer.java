@@ -43,7 +43,7 @@ import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.editor.actions.DeleteAction;
 import com.ecfeed.ui.editor.actions.IActionProvider;
-import com.ecfeed.ui.editor.actions.ModelViewerActionProvider;
+import com.ecfeed.ui.editor.actions.MainActionProvider;
 import com.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.ecfeed.ui.modelif.ChoiceInterface;
 import com.ecfeed.ui.modelif.ChoicesParentInterface;
@@ -275,7 +275,7 @@ public class ChoicesViewer extends TableViewerSection {
 
 		fReplaceWithDefaultButton = addButton("Reset with default", new ReplaceWithDefaultAdapter());
 
-		fActionProvider = new ModelViewerActionProvider(getTableViewer(), getModelUpdateContext(), javaProjectProvider);
+		fActionProvider = new MainActionProvider(getTableViewer(), getModelUpdateContext(), javaProjectProvider);
 		setActionProvider(fActionProvider);
 		fDragListener = new ModelNodeDragListener(getViewer());
 		fDropListener = new ModelNodeDropListener(getViewer(), getModelUpdateContext(), javaProjectProvider);

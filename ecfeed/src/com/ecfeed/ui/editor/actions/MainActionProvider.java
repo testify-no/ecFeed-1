@@ -22,7 +22,7 @@ import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 
-public class ModelViewerActionProvider extends ActionProvider {
+public class MainActionProvider extends BasicActionProvider {
 
 	private static final String EDIT_GROUP = "edit";
 	private static final String IMPLEMENT_GROUP = "implement";
@@ -31,7 +31,7 @@ public class ModelViewerActionProvider extends ActionProvider {
 	private static final String INFO_GROUP = "info";
 
 
-	public ModelViewerActionProvider(
+	public MainActionProvider(
 			TreeViewer viewer, 
 			IModelUpdateContext context, 
 			IJavaProjectProvider javaProjectProvider,
@@ -48,7 +48,7 @@ public class ModelViewerActionProvider extends ActionProvider {
 		addInfoActions();
 	}
 
-	public ModelViewerActionProvider(
+	public MainActionProvider(
 			TableViewer viewer, 
 			IModelUpdateContext context, 
 			IJavaProjectProvider javaProjectProvider) {
