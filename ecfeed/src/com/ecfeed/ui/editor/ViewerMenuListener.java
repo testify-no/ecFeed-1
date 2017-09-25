@@ -24,8 +24,8 @@ import org.eclipse.swt.widgets.MenuItem;
 
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
+import com.ecfeed.ui.editor.actions.DescribedAction;
 import com.ecfeed.ui.editor.actions.IActionProvider;
-import com.ecfeed.ui.editor.actions.NamedAction;
 
 public class ViewerMenuListener implements MenuListener {
 
@@ -92,9 +92,9 @@ public class ViewerMenuListener implements MenuListener {
 	private void addActionsForGroup(
 			Iterator<String> groupIt, IActionProvider actionProvider) {
 
-		for (NamedAction action : actionProvider.getActions(groupIt.next())) {
+		for (DescribedAction action : actionProvider.getActions(groupIt.next())) {
 
-			addMenuItem(action.getName(), action, LAST_MENU_POSITION);
+			addMenuItem(action.getDescriptionWithShortcut(), action, LAST_MENU_POSITION);
 		}
 	}
 

@@ -10,13 +10,25 @@
 
 package com.ecfeed.ui.editor.actions;
 
+import org.eclipse.jface.action.Action;
 
-public class DescribedAction extends NamedAction {
+public class DescribedAction extends Action {
+
+	private final String fDescriptionWithShortcut;
+	private final String fId;
 
 	public DescribedAction(ActionId actionId) {
 
-		super(ActionDescriptionProvider.getInstance().getStrId(actionId),
-				ActionDescriptionProvider.getInstance().getDescription(actionId));	
+		fId = ActionDescriptionProvider.getInstance().getStrId(actionId);
+		fDescriptionWithShortcut = ActionDescriptionProvider.getInstance().getDescriptionWithShortcut(actionId);	
 	}
 
+	@Override
+	public String getId() {
+		return fId;
+	}
+
+	public String getDescriptionWithShortcut() {
+		return fDescriptionWithShortcut;
+	}
 }

@@ -91,10 +91,10 @@ public class ModelMasterMenuListener extends ViewerMenuListener {
 
 		for (AbstractAddChildAction action : actions) {
 
-			String actionName = action.getName();
+			String actionName = action.getDescriptionWithShortcut();
 
 			if (!actionNameConverted) {
-				actionName = convertActionName(action.getName());
+				actionName = convertActionName(action.getDescriptionWithShortcut());
 				actionNameConverted = true;
 			}
 
@@ -161,7 +161,7 @@ public class ModelMasterMenuListener extends ViewerMenuListener {
 		}
 
 		ExecuteTestCaseAction action = new ExecuteTestCaseAction(fSelectionProvider, testCaseInterface);
-		addMenuItem(action.getName(), action);
+		addMenuItem(action.getDescriptionWithShortcut(), action);
 
 		new MenuItem(getMenu(), SWT.SEPARATOR);
 	}
@@ -203,7 +203,7 @@ public class ModelMasterMenuListener extends ViewerMenuListener {
 		TestOnlineAction testOnlineAction = 
 				new TestOnlineAction(fJavaProjectProvider, fSelectionProvider, methodInterface);
 
-		addMenuItem(testOnlineAction.getName(), testOnlineAction);
+		addMenuItem(testOnlineAction.getDescriptionWithShortcut(), testOnlineAction);
 		return true;
 	}
 
@@ -235,7 +235,7 @@ public class ModelMasterMenuListener extends ViewerMenuListener {
 		ExportOnlineAction exportOnlineAction = 
 				new ExportOnlineAction(fJavaProjectProvider, fSelectionProvider, methodInterface);
 
-		addMenuItem(exportOnlineAction.getName(), exportOnlineAction);
+		addMenuItem(exportOnlineAction.getDescriptionWithShortcut(), exportOnlineAction);
 		return true;
 	}
 

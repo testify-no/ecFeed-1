@@ -20,8 +20,8 @@ import org.eclipse.swt.widgets.Control;
 import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.ui.editor.actions.ActionDescriptionProvider;
 import com.ecfeed.ui.editor.actions.ActionId;
+import com.ecfeed.ui.editor.actions.DescribedAction;
 import com.ecfeed.ui.editor.actions.IActionProvider;
-import com.ecfeed.ui.editor.actions.NamedAction;
 
 public class KeyRegistrator {
 
@@ -80,7 +80,7 @@ public class KeyRegistrator {
 		ActionDescriptionProvider actionDescriptionProvider = ActionDescriptionProvider.getInstance();
 
 		String strActionId = actionDescriptionProvider.getStrId(actionId);
-		NamedAction action = fActionProvider.getAction(strActionId); // XYX TODO USE ActionId
+		DescribedAction action = fActionProvider.getAction(strActionId); // XYX TODO USE ActionId
 		if (action == null) {
 			return;
 		}

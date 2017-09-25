@@ -15,7 +15,7 @@ import java.util.Set;
 public interface IActionProvider {
 
 	public Set<String> getGroups();
-	public Set<NamedAction> getActions(String groupId);
-	public NamedAction getAction(String actionId);
+	public Set<DescribedAction> getActions(String groupId);
+	public DescribedAction getAction(String actionId);
 	public void setEnabled(boolean enabled);
 }

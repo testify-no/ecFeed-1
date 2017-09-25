@@ -39,9 +39,9 @@ public abstract class BasicActionProvider implements IActionProvider {
 	}
 
 	@Override
-	public Set<NamedAction> getActions(String groupId) {
+	public Set<DescribedAction> getActions(String groupId) {
 
-		Set<NamedAction> result = new LinkedHashSet<>();
+		Set<DescribedAction> result = new LinkedHashSet<>();
 
 		for (GrouppedAction record : fActions) {
 			if (record.fGroupId.equals(groupId)) {
@@ -53,7 +53,7 @@ public abstract class BasicActionProvider implements IActionProvider {
 	}
 
 	@Override
-	public NamedAction getAction(String actionId) {
+	public DescribedAction getAction(String actionId) {
 
 		for (GrouppedAction record : fActions) {
 			if (record.fAction.getId().equals(actionId)) {
@@ -68,7 +68,7 @@ public abstract class BasicActionProvider implements IActionProvider {
 		fEnabled = enabled;
 	}
 
-	protected void addAction(String group, NamedAction action) {
+	protected void addAction(String group, DescribedAction action) {
 
 		Iterator<GrouppedAction> iterator = fActions.iterator();
 
@@ -82,13 +82,13 @@ public abstract class BasicActionProvider implements IActionProvider {
 	}
 
 	private class GrouppedAction {
-		public GrouppedAction(String group, NamedAction action) {
+		public GrouppedAction(String group, DescribedAction action) {
 			fGroupId = group;
 			fAction = action;
 		}
 
 		private String fGroupId;
-		private NamedAction fAction;
+		private DescribedAction fAction;
 	}
 
 }

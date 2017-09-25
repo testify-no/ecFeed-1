@@ -429,7 +429,7 @@ public class ActionDescriptionProvider {
 		return getDescriptionRecord(actionId).fName;
 	}	
 
-	public String getDescription(ActionId actionId) {
+	public String getDescriptionWithShortcut(ActionId actionId) {
 
 		ActionDescription actionDescription = getDescriptionRecord(actionId);
 
