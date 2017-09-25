@@ -11,24 +11,19 @@
 package com.ecfeed.ui.editor.actions;
 
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.resource.ImageDescriptor;
 
 public class DescribedAction extends Action {
 
-	private final String fDescriptionWithShortcut;
-	private final String fId;
-
 	public DescribedAction(ActionId actionId) {
 
-		fId = ActionDescriptionProvider.getInstance().getStrId(actionId);
-		fDescriptionWithShortcut = ActionDescriptionProvider.getInstance().getDescriptionWithShortcut(actionId);	
+		ActionDescriptionProvider actionDescriptionProvider = ActionDescriptionProvider.getInstance();
+		
+		setId(actionDescriptionProvider.getStrId(actionId));
+
+		setText(actionDescriptionProvider.getDescriptionWithShortcut(actionId));
+
+		setImageDescriptor(actionDescriptionProvider.getImageDescriptor(actionId));
 	}
 
-	@Override
-	public String getId() {
-		return fId;
-	}
-
-	public String getDescriptionWithShortcut() {
-		return fDescriptionWithShortcut;
-	}
 }

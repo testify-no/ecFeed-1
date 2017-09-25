@@ -13,8 +13,10 @@ package com.ecfeed.ui.editor.actions;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.ui.actions.ActionFactory;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.ecfeed.core.utils.SystemHelper;
 
@@ -113,6 +115,7 @@ public class ActionDescriptionProvider {
 		private int fKeyCode;
 		private int fModifier;
 		private int fMacModifier;
+		private ImageDescriptor fImageDescriptor;
 
 		ActionDescription(
 				ActionId id,
@@ -122,7 +125,8 @@ public class ActionDescriptionProvider {
 				String macShortcut,
 				int keyCode,
 				int modifier,
-				int macModifier) {
+				int macModifier,
+				ImageDescriptor imageDescriptor) {
 
 			fId = id;
 			fStrId = strId;
@@ -132,6 +136,7 @@ public class ActionDescriptionProvider {
 			fKeyCode = keyCode;
 			fModifier = modifier;
 			fMacModifier = macModifier;
+			fImageDescriptor = imageDescriptor;
 		}
 
 	}
@@ -139,7 +144,7 @@ public class ActionDescriptionProvider {
 	private static class ActionDescriptionShort extends ActionDescription{
 
 		ActionDescriptionShort(ActionId id, String strId, String name) {
-			super(id, strId, name, null, null, SWT.NONE, SWT.NONE, SWT.NONE);
+			super(id, strId, name, null, null, SWT.NONE, SWT.NONE, SWT.NONE, null);
 		}
 
 	}
@@ -156,7 +161,10 @@ public class ActionDescriptionProvider {
 
 		return fActionDescriptionProvider;
 	}
-
+	
+	private static ImageDescriptor getImageDescriptor(String imageFilePath) {
+		return AbstractUIPlugin.imageDescriptorFromPlugin( "org.eclipse.rap.demo", imageFilePath );
+	}
 
 	ActionDescriptionProvider() {
 		fActionDescriptions = new ArrayList<ActionDescription>();
@@ -170,7 +178,8 @@ public class ActionDescriptionProvider {
 						COPY_ACTION_MAC_SHORTCUT, 
 						'c',
 						SWT.CTRL,
-						SWT.COMMAND));
+						SWT.COMMAND,
+						null));
 
 		fActionDescriptions.add(
 				new ActionDescription(
@@ -181,7 +190,8 @@ public class ActionDescriptionProvider {
 						CUT_ACTION_MAC_SHORTCUT, 
 						'x',
 						SWT.CTRL,
-						SWT.COMMAND));
+						SWT.COMMAND,
+						null));
 
 		fActionDescriptions.add(
 				new ActionDescription(
@@ -192,7 +202,8 @@ public class ActionDescriptionProvider {
 						PASTE_ACTION_MAC_SHORTCUT, 
 						'v',
 						SWT.CTRL,
-						SWT.COMMAND));
+						SWT.COMMAND,
+						null));
 
 		fActionDescriptions.add(
 				new ActionDescription(
@@ -203,7 +214,8 @@ public class ActionDescriptionProvider {
 						INSERT_ACTION_MAC_SHORTCUT, 
 						'i',
 						SWT.CTRL,
-						SWT.COMMAND));
+						SWT.COMMAND,
+						null));
 
 		fActionDescriptions.add(
 				new ActionDescription(
@@ -214,7 +226,8 @@ public class ActionDescriptionProvider {
 						DELETE_ACTION_MAC_SHORTCUT, 
 						'd',
 						SWT.CTRL,
-						SWT.COMMAND));
+						SWT.COMMAND,
+						null));
 
 		fActionDescriptions.add(
 				new ActionDescription(
@@ -225,7 +238,8 @@ public class ActionDescriptionProvider {
 						SELECT_ALL_ACTION_MAC_SHORTCUT, 
 						'a',
 						SWT.CTRL,
-						SWT.COMMAND));
+						SWT.COMMAND,
+						null));
 
 		fActionDescriptions.add(
 				new ActionDescription(
@@ -236,7 +250,8 @@ public class ActionDescriptionProvider {
 						UNDO_ACTION_MAC_SHORTCUT, 
 						'z',
 						SWT.CTRL,
-						SWT.COMMAND));
+						SWT.COMMAND,
+						null));
 
 
 		fActionDescriptions.add(
@@ -248,7 +263,8 @@ public class ActionDescriptionProvider {
 						REDO_ACTION_MAC_SHORTCUT, 
 						'z',
 						SWT.CTRL | SWT.SHIFT,
-						SWT.COMMAND | SWT.SHIFT));		
+						SWT.COMMAND | SWT.SHIFT,
+						null));		
 
 		fActionDescriptions.add(
 				new ActionDescription(
@@ -259,7 +275,8 @@ public class ActionDescriptionProvider {
 						SAVE_ACTION_MAC_SHORTCUT,
 						's', 
 						SWT.CTRL,
-						SWT.COMMAND));
+						SWT.COMMAND,
+						null));
 
 		fActionDescriptions.add(
 				new ActionDescription(
@@ -270,7 +287,8 @@ public class ActionDescriptionProvider {
 						MOVE_UP_ACTION_SHORTCUT, 
 						SWT.ARROW_UP,
 						SWT.ALT,
-						SWT.ALT));
+						SWT.ALT,
+						null));
 
 		fActionDescriptions.add(
 				new ActionDescription(
@@ -281,7 +299,8 @@ public class ActionDescriptionProvider {
 						MOVE_DOWN_ACTION_SHORTCUT,
 						SWT.ARROW_DOWN,
 						SWT.ALT,
-						SWT.ALT));
+						SWT.ALT,
+						null));
 
 		fActionDescriptions.add(
 				new ActionDescription(
@@ -292,7 +311,8 @@ public class ActionDescriptionProvider {
 						EXPAND_ACTION_MAC_SHORTCUT, 
 						SWT.NONE,
 						SWT.CTRL,
-						SWT.COMMAND));		
+						SWT.COMMAND,
+						null));		
 
 		fActionDescriptions.add(
 				new ActionDescription(
@@ -303,7 +323,8 @@ public class ActionDescriptionProvider {
 						COLLAPSE_ACTION_MAC_SHORTCUT, 
 						SWT.NONE,
 						SWT.NONE,
-						SWT.NONE));
+						SWT.NONE,
+						null));
 
 		fActionDescriptions.add(
 				new ActionDescription(
@@ -314,13 +335,20 @@ public class ActionDescriptionProvider {
 						EXPAND_COLLAPSE_ACTION_SHORTCUT,
 						SWT.NONE,
 						SWT.NONE,
-						SWT.NONE));
+						SWT.NONE,
+						null));
 
 		fActionDescriptions.add(
-				new ActionDescriptionShort(
+				new ActionDescription(
 						ActionId.ABOUT,
 						ABOUT_ACTION_ID, 
-						ABOUT_ACTION_NAME));
+						ABOUT_ACTION_NAME,
+						null, 
+						null,
+						SWT.NONE,
+						SWT.NONE,
+						SWT.NONE,
+						getImageDescriptor("icons/help.gif")));
 
 		fActionDescriptions.add(
 				new ActionDescriptionShort(
@@ -465,6 +493,10 @@ public class ActionDescriptionProvider {
 		return getShortcut(getDescriptionRecord(actionId));
 	}
 
+	public ImageDescriptor getImageDescriptor(ActionId actionId) {
+		return getDescriptionRecord(actionId).fImageDescriptor;
+	}
+	
 	private String getShortcut(ActionDescription actionDescription) {
 
 		if (SystemHelper.isOperatingSystemMacOs()) {

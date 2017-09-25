@@ -94,7 +94,7 @@ public class ViewerMenuListener implements MenuListener {
 
 		for (DescribedAction action : actionProvider.getActions(groupIt.next())) {
 
-			addMenuItem(action.getDescriptionWithShortcut(), action, LAST_MENU_POSITION);
+			addMenuItem(action.getText(), action, LAST_MENU_POSITION);
 		}
 	}
 
