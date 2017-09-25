@@ -31,16 +31,11 @@ public class ModelViewerActionProvider extends ActionProvider {
 	private static final String INFO_GROUP = "info";
 
 
-	BasicActionProvider fBasicActionRunnerProvider;
-
 	public ModelViewerActionProvider(
 			TreeViewer viewer, 
 			IModelUpdateContext context, 
 			IJavaProjectProvider javaProjectProvider,
-			BasicActionProvider basicActionRunnerProvider,
 			boolean selectRoot) {
-
-		fBasicActionRunnerProvider = basicActionRunnerProvider;
 
 		addEditActions(viewer, viewer, context, javaProjectProvider);
 
@@ -81,9 +76,7 @@ public class ModelViewerActionProvider extends ActionProvider {
 		addAction(EDIT_GROUP, new InsertAction(selectionProvider, structuredViewer, context, javaProjectProvider));
 		addAction(EDIT_GROUP, deleteAction);
 
-		if (fBasicActionRunnerProvider != null) {
-			addBasicEditActions();
-		}
+		addBasicEditActions();
 	}
 
 	private void addBasicEditActions() {
