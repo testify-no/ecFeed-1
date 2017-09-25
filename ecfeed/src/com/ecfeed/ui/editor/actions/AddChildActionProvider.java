@@ -48,28 +48,66 @@ public class AddChildActionProvider {
 	private IJavaProjectProvider fJavaProjectProvider;
 
 
+	public AddChildActionProvider(
+			StructuredViewer viewer, 
+			IModelUpdateContext context, 
+			IJavaProjectProvider javaProjectProvider) {
+		fJavaProjectProvider = javaProjectProvider;
+		fContext = context;
+		fViewer = viewer;
+	}
+
+	public AbstractAddChildAction getMainInsertAction(AbstractNode parent) {
+
+		try {
+			return (AbstractAddChildAction)parent.accept(new GetMainInsertActionProvider());
+		} catch(Exception e) {
+			SystemLogger.logCatch(e.getMessage());
+		}
+
+		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<AbstractAddChildAction> getPossibleActions(AbstractNode parent) {
+
+		try {
+			return (List<AbstractAddChildAction>)parent.accept(new AddNewChilActionProvider());
+		} catch(Exception e) {
+			SystemLogger.logCatch(e.getMessage());
+		}
+
+		return null;
+	}
+
 	private void reportExceptionInvalidNodeType() {
+
 		final String MSG = "Invalid type of selected node.";
 		ExceptionHelper.reportRuntimeException(MSG);
 	}
 
 	private AbstractNode getOneNode(List<AbstractNode> nodes) {
-		if(nodes.size() != 1) {
+
+		if (nodes.size() != 1) {
 			final String MSG = "Too many nodes selected for action.";
 			ExceptionHelper.reportRuntimeException(MSG);
 		}
+
 		return nodes.get(0); 
 	}
 
 	private void setOwnNode(AbstractNode abstractNode, AbstractNodeInterface abstractNodeInterface) {
+
 		if (abstractNodeInterface == null ) {
 			final String MSG = "Invalid parent interface.";
 			ExceptionHelper.reportRuntimeException(MSG);
 		}
+
 		abstractNodeInterface.setOwnNode(abstractNode);
 	}
 
 	private class AddGlobalParameterAction extends AbstractAddChildAction {
+
 		private GlobalParametersParentInterface fParentIf;
 
 		public AddGlobalParameterAction() {
@@ -81,6 +119,7 @@ public class AddChildActionProvider {
 
 		@Override
 		public void run() {
+
 			AbstractNode selectedNode = getOneNode(getSelectedNodes());
 
 			if (!(selectedNode instanceof GlobalParametersParentNode)) {
@@ -99,7 +138,7 @@ public class AddChildActionProvider {
 
 	}
 
-	private class AddClassAction extends AbstractAddChildAction{
+	private class AddClassAction extends AbstractAddChildAction {
 		private RootInterface fParentIf;
 
 		public AddClassAction() {
@@ -126,7 +165,7 @@ public class AddChildActionProvider {
 		}
 	}
 
-	private class AddMethodAction extends AbstractAddChildAction{
+	private class AddMethodAction extends AbstractAddChildAction {
 		private ClassInterface fParentIf;
 
 		public AddMethodAction() {
@@ -141,6 +180,7 @@ public class AddChildActionProvider {
 
 		@Override
 		public void run() {
+
 			AbstractNode selectedNode = getOneNode(getSelectedNodes());
 
 			if (!(selectedNode instanceof ClassNode)) {
@@ -153,7 +193,8 @@ public class AddChildActionProvider {
 		}
 	}
 
-	private abstract class AddMethodChildAction extends AbstractAddChildAction{
+	private abstract class AddMethodChildAction extends AbstractAddChildAction {
+
 		private MethodInterface fParentIf;
 
 		public AddMethodChildAction(ActionId actionId) {
@@ -177,7 +218,7 @@ public class AddChildActionProvider {
 		}
 	}
 
-	private class AddMethodParameterAction extends AddMethodChildAction{
+	private class AddMethodParameterAction extends AddMethodChildAction {
 
 		public AddMethodParameterAction() {
 			super(ActionId.ADD_METHOD_PARAMETER);
@@ -191,7 +232,7 @@ public class AddChildActionProvider {
 		}
 	}
 
-	private class AddConstraintAction extends AddMethodChildAction{
+	private class AddConstraintAction extends AddMethodChildAction {
 
 		public AddConstraintAction() {
 			super(ActionId.ADD_CONSTRAINT);
@@ -205,7 +246,7 @@ public class AddChildActionProvider {
 		}
 	}
 
-	private class AddTestCaseAction extends AddMethodChildAction{
+	private class AddTestCaseAction extends AddMethodChildAction {
 
 		public AddTestCaseAction() {
 			super(ActionId.ADD_TEST_CASE);
@@ -219,7 +260,7 @@ public class AddChildActionProvider {
 		}
 	}
 
-	private class AddTestSuiteAction extends AddMethodChildAction{
+	private class AddTestSuiteAction extends AddMethodChildAction {
 		public AddTestSuiteAction() {
 			super(ActionId.ADD_TEST_SUITE);
 		}
@@ -231,10 +272,10 @@ public class AddChildActionProvider {
 		}
 	}
 
-	private class AddChoiceAction extends AbstractAddChildAction{
+	private class AddChoiceAction extends AbstractAddChildAction {
 		private ChoicesParentInterface fParentIf;
 
-		private class EnableVisitor implements IParameterVisitor{
+		private class EnableVisitor implements IParameterVisitor {
 
 			@Override
 			public Object visit(MethodParameterNode node) throws Exception {
@@ -248,7 +289,7 @@ public class AddChildActionProvider {
 
 		}
 
-		public AddChoiceAction(IJavaProjectProvider javaProjectProvider){
+		public AddChoiceAction(IJavaProjectProvider javaProjectProvider) {
 			super(ActionId.ADD_CHOICE, fViewer, fContext);
 			fParentIf = new ChoicesParentInterface(fContext, javaProjectProvider);
 		}
@@ -272,27 +313,31 @@ public class AddChildActionProvider {
 		}
 
 		@Override
-		public boolean isEnabled(){
+		public boolean isEnabled() {
+
 			if(super.isEnabled() == false) 
 				return false;
 
 			ChoicesParentNode target = (ChoicesParentNode)getSelectedNodes().get(0);
 
 			AbstractParameterNode parameter = target.getParameter();
+
 			try {
 				return (boolean)parameter.accept(new EnableVisitor());
 			} catch(Exception e) {
 				SystemLogger.logCatch(e.getMessage());
 			}
+
 			return false;
 		}
 	}
 
-	private class AddNewChilActionProvider implements IModelVisitor{
+	private class AddNewChilActionProvider implements IModelVisitor {
 
 		@Override
 		public Object visit(RootNode node) throws Exception {
-			return Arrays.asList(new AbstractAddChildAction[]{
+
+			return Arrays.asList(new AbstractAddChildAction[] {
 					new AddClassAction(),
 					new AddGlobalParameterAction()
 			});
@@ -300,7 +345,8 @@ public class AddChildActionProvider {
 
 		@Override
 		public Object visit(ClassNode node) throws Exception {
-			return Arrays.asList(new AbstractAddChildAction[]{
+
+			return Arrays.asList(new AbstractAddChildAction[] {
 					new AddMethodAction(),
 					new AddGlobalParameterAction()
 			});
@@ -308,7 +354,8 @@ public class AddChildActionProvider {
 
 		@Override
 		public Object visit(MethodNode node) throws Exception {
-			return Arrays.asList(new AbstractAddChildAction[]{
+
+			return Arrays.asList(new AbstractAddChildAction[] {
 					new AddMethodParameterAction(),
 					new AddConstraintAction(),
 					new AddTestCaseAction(),
@@ -318,106 +365,90 @@ public class AddChildActionProvider {
 
 		@Override
 		public Object visit(MethodParameterNode node) throws Exception {
-			return Arrays.asList(new AbstractAddChildAction[]{
+
+			return Arrays.asList(new AbstractAddChildAction[] {
 					new AddChoiceAction(fJavaProjectProvider)
 			});
 		}
 
 		@Override
 		public Object visit(GlobalParameterNode node) throws Exception {
-			return Arrays.asList(new AbstractAddChildAction[]{
+
+			return Arrays.asList(new AbstractAddChildAction[] {
 					new AddChoiceAction(fJavaProjectProvider)
 			});
 		}
 
 		@Override
 		public Object visit(TestCaseNode node) throws Exception {
+
 			return Arrays.asList(new AbstractAddChildAction[]{});
 		}
 
 		@Override
 		public Object visit(ConstraintNode node) throws Exception {
+
 			return Arrays.asList(new AbstractAddChildAction[]{});
 		}
 
 		@Override
 		public Object visit(ChoiceNode node) throws Exception {
+
 			return Arrays.asList(new AbstractAddChildAction[] {
 					new AddChoiceAction(fJavaProjectProvider)
 			});
 		}
 	}
 
-	public AddChildActionProvider(
-			StructuredViewer viewer, 
-			IModelUpdateContext context, 
-			IJavaProjectProvider javaProjectProvider) {
-		fJavaProjectProvider = javaProjectProvider;
-		fContext = context;
-		fViewer = viewer;
-	}
-
-
-	@SuppressWarnings("unchecked")
-	public List<AbstractAddChildAction> getPossibleActions(AbstractNode parent){
-		try {
-			return (List<AbstractAddChildAction>)parent.accept(new AddNewChilActionProvider());
-		} catch(Exception e) {
-			SystemLogger.logCatch(e.getMessage());
-		}
-		return null;
-	}
-
-	private class GetMainInsertActionProvider implements IModelVisitor{
+	private class GetMainInsertActionProvider implements IModelVisitor {
 
 		@Override
 		public Object visit(RootNode node) throws Exception {
+
 			return new AddClassAction();
 		}
 
 		@Override
 		public Object visit(ClassNode node) throws Exception {
+
 			return new AddMethodAction();
 		}
 
 		@Override
 		public Object visit(MethodNode node) throws Exception {
+
 			return new AddMethodParameterAction();
 		}
 
 		@Override
 		public Object visit(MethodParameterNode node) throws Exception {
+
 			return new AddChoiceAction(fJavaProjectProvider);
 		}
 
 		@Override
 		public Object visit(GlobalParameterNode node) throws Exception {
+
 			return new AddChoiceAction(fJavaProjectProvider); 
 		}
 
 		@Override
 		public Object visit(TestCaseNode node) throws Exception {
+
 			return null;
 		}
 
 		@Override
 		public Object visit(ConstraintNode node) throws Exception {
+
 			return null;
 		}
 
 		@Override
 		public Object visit(ChoiceNode node) throws Exception {
+
 			return new AddChoiceAction(fJavaProjectProvider);
 		}
-	}
-
-	public AbstractAddChildAction getMainInsertAction(AbstractNode parent) {
-		try {
-			return (AbstractAddChildAction)parent.accept(new GetMainInsertActionProvider());
-		} catch(Exception e) {
-			SystemLogger.logCatch(e.getMessage());
-		}
-		return null;
 	}
 
 }
