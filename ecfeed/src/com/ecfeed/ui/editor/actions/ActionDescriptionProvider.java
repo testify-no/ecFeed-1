@@ -179,7 +179,7 @@ public class ActionDescriptionProvider {
 						'c',
 						SWT.CTRL,
 						SWT.COMMAND,
-						null));
+						getImageDescriptor("icons/copy.png")));
 
 		fActionDescriptions.add(
 				new ActionDescription(
