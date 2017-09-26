@@ -42,23 +42,10 @@ public class GenericShiftOperation extends AbstractModelOperation {
 		fShift = shift;
 	}
 
-	private void printNodes(List<? extends AbstractNode> collection, String messge) {
-
-		System.out.println(messge);
-
-		for(AbstractNode abstractNode : collection) {
-			System.out.println("Node: " + abstractNode.getName() + " Parent " + abstractNode.getParent().getName());
-		}
-	}
-
 	@Override
 	public void execute() throws ModelOperationException {
 
 		setNodeToBeSelectedAfterTheOperation();
-		printNodes(fCollection, "Collection");
-		printNodes(fShifted, "Shifted");
-		System.out.println("fShift " + fShift );
-
 		shiftElements(fCollection, indices(fCollection, fShifted), fShift);
 		markModelUpdated();
 	}
