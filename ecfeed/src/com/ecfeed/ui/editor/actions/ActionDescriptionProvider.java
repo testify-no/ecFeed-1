@@ -161,7 +161,7 @@ public class ActionDescriptionProvider {
 
 		return fActionDescriptionProvider;
 	}
-	
+
 	private static ImageDescriptor getImageDescriptor(String imageFilePath) {
 		return AbstractUIPlugin.imageDescriptorFromPlugin( "org.eclipse.rap.demo", imageFilePath );
 	}
@@ -276,7 +276,7 @@ public class ActionDescriptionProvider {
 						's', 
 						SWT.CTRL,
 						SWT.COMMAND,
-						null));
+						getImageDescriptor("icons/save.png")));
 
 		fActionDescriptions.add(
 				new ActionDescription(
@@ -496,7 +496,7 @@ public class ActionDescriptionProvider {
 	public ImageDescriptor getImageDescriptor(ActionId actionId) {
 		return getDescriptionRecord(actionId).fImageDescriptor;
 	}
-	
+
 	private String getShortcut(ActionDescription actionDescription) {
 
 		if (SystemHelper.isOperatingSystemMacOs()) {

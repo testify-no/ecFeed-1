@@ -73,7 +73,7 @@ public class MainActionProvider extends BasicActionProvider {
 		addAction(EDIT_GROUP, new CopyAction(selectionProvider));
 		addAction(EDIT_GROUP, new CutAction(new CopyAction(selectionProvider), deleteAction));
 		addAction(EDIT_GROUP, new PasteAction(selectionProvider, context, javaProjectProvider));
-		addAction(EDIT_GROUP, new InsertAction(selectionProvider, structuredViewer, context, javaProjectProvider));
+//		addAction(EDIT_GROUP, new InsertAction(selectionProvider, structuredViewer, context, javaProjectProvider));
 		addAction(EDIT_GROUP, deleteAction);
 
 		addBasicEditActions();
