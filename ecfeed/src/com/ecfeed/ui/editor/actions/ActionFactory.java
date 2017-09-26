@@ -17,6 +17,7 @@ import com.ecfeed.ui.modelif.NodeClipboard;
 public class ActionFactory {
 
 	private static AboutAction fAboutAction = null;
+	private static SaveAction fSaveAction = null;
 
 	public static AboutAction getAboutAction() {
 
@@ -26,4 +27,14 @@ public class ActionFactory {
 
 		return fAboutAction;
 	}
+
+	public static SaveAction getSaveAction() {
+
+		if (fSaveAction == null) {
+			fSaveAction = new SaveAction();
+		}
+
+		return fSaveAction;
+	}
+
 }

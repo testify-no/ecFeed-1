@@ -73,7 +73,6 @@ public class MainActionProvider extends BasicActionProvider {
 		addAction(EDIT_GROUP, new CopyAction(selectionProvider));
 		addAction(EDIT_GROUP, new CutAction(new CopyAction(selectionProvider), deleteAction));
 		addAction(EDIT_GROUP, new PasteAction(selectionProvider, context, javaProjectProvider));
-//		addAction(EDIT_GROUP, new InsertAction(selectionProvider, structuredViewer, context, javaProjectProvider));
 		addAction(EDIT_GROUP, deleteAction);
 
 		addBasicEditActions();
@@ -81,7 +80,7 @@ public class MainActionProvider extends BasicActionProvider {
 
 	private void addBasicEditActions() {
 
-		addAction(EDIT_GROUP, new SaveAction());
+		addAction(EDIT_GROUP, ActionFactory.getSaveAction());
 		addAction(EDIT_GROUP, new UndoAction());
 		addAction(EDIT_GROUP, new RedoAction());
 	}
