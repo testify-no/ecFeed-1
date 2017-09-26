@@ -18,6 +18,8 @@ public class ActionFactory {
 
 	private static AboutAction fAboutAction = null;
 	private static SaveAction fSaveAction = null;
+	private static UndoAction fUndoAction = null;
+	private static RedoAction fRedoAction = null;
 
 	public static AboutAction getAboutAction() {
 
@@ -37,4 +39,22 @@ public class ActionFactory {
 		return fSaveAction;
 	}
 
+	public static UndoAction getUndoAction() {
+
+		if (fUndoAction == null) {
+			fUndoAction = new UndoAction();
+		}
+
+		return fUndoAction;
+	}	
+
+	public static RedoAction getRedoAction() {
+
+		if (fRedoAction == null) {
+			fRedoAction = new RedoAction();
+		}
+
+		return fRedoAction;
+	}	
+	
 }

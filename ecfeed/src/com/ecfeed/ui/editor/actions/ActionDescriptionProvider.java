@@ -251,7 +251,7 @@ public class ActionDescriptionProvider {
 						'z',
 						SWT.CTRL,
 						SWT.COMMAND,
-						null));
+						getImageDescriptor("icons/undo.png")));
 
 
 		fActionDescriptions.add(
@@ -264,7 +264,7 @@ public class ActionDescriptionProvider {
 						'z',
 						SWT.CTRL | SWT.SHIFT,
 						SWT.COMMAND | SWT.SHIFT,
-						null));		
+						getImageDescriptor("icons/redo.png")));		
 
 		fActionDescriptions.add(
 				new ActionDescription(
