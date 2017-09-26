@@ -42,8 +42,8 @@ import com.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.editor.actions.DeleteAction;
-import com.ecfeed.ui.editor.actions.IActionProvider;
-import com.ecfeed.ui.editor.actions.MainActionProvider;
+import com.ecfeed.ui.editor.actions.IActionGrouppingProvider;
+import com.ecfeed.ui.editor.actions.MainActionGrouppingProvider;
 import com.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.ecfeed.ui.modelif.ChoiceInterface;
 import com.ecfeed.ui.modelif.ChoicesParentInterface;
@@ -73,7 +73,7 @@ public class ChoicesViewer extends TableViewerSection {
 	private ModelNodeDropListener fDropListener;
 	private ModelNodeDragListener fDragListener;
 
-	private IActionProvider fActionProvider;
+	private IActionGrouppingProvider fActionGroupingProvider;
 
 	private Button fReplaceWithDefaultButton;
 
@@ -275,8 +275,8 @@ public class ChoicesViewer extends TableViewerSection {
 
 		fReplaceWithDefaultButton = addButton("Reset with default", new ReplaceWithDefaultAdapter());
 
-		fActionProvider = new MainActionProvider(getTableViewer(), getModelUpdateContext(), javaProjectProvider);
-		setActionProvider(fActionProvider);
+		fActionGroupingProvider = new MainActionGrouppingProvider(getTableViewer(), getModelUpdateContext(), javaProjectProvider);
+		setActionGrouppingProvider(fActionGroupingProvider);
 		fDragListener = new ModelNodeDragListener(getViewer());
 		fDropListener = new ModelNodeDropListener(getViewer(), getModelUpdateContext(), javaProjectProvider);
 		getViewer().addDragSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, fDragListener);
@@ -326,9 +326,9 @@ public class ChoicesViewer extends TableViewerSection {
 		fDragListener.setEnabled(enabled);
 		fDropListener.setEnabled(enabled);
 		if(enabled){
-			setActionProvider(fActionProvider);
+			setActionGrouppingProvider(fActionGroupingProvider);
 		}else{
-			setActionProvider(null);
+			setActionGrouppingProvider(null);
 		}
 	}
 

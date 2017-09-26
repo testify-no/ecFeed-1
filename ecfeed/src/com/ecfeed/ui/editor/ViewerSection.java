@@ -36,7 +36,7 @@ import org.eclipse.swt.widgets.Menu;
 
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
-import com.ecfeed.ui.editor.actions.IActionProvider;
+import com.ecfeed.ui.editor.actions.IActionGrouppingProvider;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 /**
@@ -104,9 +104,9 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 	}
 
 	@Override
-	protected void setActionProvider(IActionProvider actionProvider) {
+	protected void setActionGrouppingProvider(IActionGrouppingProvider actionProvider) {
 
-		super.setActionProvider(actionProvider);
+		super.setActionGrouppingProvider(actionProvider);
 
 		Control viewerControl = fViewer.getControl();
 
@@ -185,7 +185,7 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 
 	protected MenuListener getMenuListener() {
 
-		return new ViewerMenuListener(fMenu, getActionProvider(), fViewer);
+		return new ViewerMenuListener(fMenu, getActionGroupingProvider(), fViewer);
 	}
 
 	protected Menu getMenu(){
@@ -220,7 +220,7 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 	}
 
 	private void registerKeyShortcuts(
-			Control viewerControl, IActionProvider actionProvider) {
+			Control viewerControl, IActionGrouppingProvider actionProvider) {
 
 		fKeyRegistrator = new KeyRegistrator(viewerControl, actionProvider);
 

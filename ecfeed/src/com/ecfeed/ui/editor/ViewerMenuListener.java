@@ -26,20 +26,20 @@ import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.editor.actions.DescribedAction;
 import com.ecfeed.ui.editor.actions.DescribedAction.ActionType;
-import com.ecfeed.ui.editor.actions.IActionProvider;
+import com.ecfeed.ui.editor.actions.IActionGrouppingProvider;
 
 public class ViewerMenuListener implements MenuListener {
 
 	private Menu fMenu;
-	private IActionProvider fActionProvider;
+	private IActionGrouppingProvider fActionGroupingProvider;
 	private ISelectionProvider fSelectionProvider;
 
 	private final int LAST_MENU_POSITION = -1;
 
 	public ViewerMenuListener(
-			Menu menu, IActionProvider actionProvider, ISelectionProvider selectionProvider) {
+			Menu menu, IActionGrouppingProvider actionProvider, ISelectionProvider selectionProvider) {
 		fMenu = menu;
-		fActionProvider = actionProvider;
+		fActionGroupingProvider = actionProvider;
 		fSelectionProvider = selectionProvider;
 	}
 
@@ -63,7 +63,7 @@ public class ViewerMenuListener implements MenuListener {
 
 	protected void populateMenu() {
 
-		IActionProvider provider = fActionProvider;
+		IActionGrouppingProvider provider = fActionGroupingProvider;
 		if(provider == null) {
 			return;
 		}
@@ -76,7 +76,7 @@ public class ViewerMenuListener implements MenuListener {
 		addActionsForAllGroups(provider);
 	}
 
-	private void addActionsForAllGroups(IActionProvider provider) {
+	private void addActionsForAllGroups(IActionGrouppingProvider provider) {
 
 		Iterator<String> groupIt = provider.getGroups().iterator();
 
@@ -91,7 +91,7 @@ public class ViewerMenuListener implements MenuListener {
 	}
 
 	private void addActionsForGroup(
-			Iterator<String> groupIt, IActionProvider actionProvider) {
+			Iterator<String> groupIt, IActionGrouppingProvider actionProvider) {
 
 		for (DescribedAction action : actionProvider.getActions(groupIt.next())) {
 

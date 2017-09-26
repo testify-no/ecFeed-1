@@ -21,18 +21,18 @@ import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.ui.editor.actions.ActionDescriptionProvider;
 import com.ecfeed.ui.editor.actions.ActionId;
 import com.ecfeed.ui.editor.actions.DescribedAction;
-import com.ecfeed.ui.editor.actions.IActionProvider;
+import com.ecfeed.ui.editor.actions.IActionGrouppingProvider;
 
 public class KeyRegistrator {
 
 	private Control fControl;
-	private IActionProvider fActionProvider;
+	private IActionGrouppingProvider fActionGroupingProvider;
 	private Set<KeyListener> fKeyListeners;
 
 
-	public KeyRegistrator(Control control, IActionProvider actionProvider) {
+	public KeyRegistrator(Control control, IActionGrouppingProvider actionProvider) {
 		fControl = control;
-		fActionProvider = actionProvider;
+		fActionGroupingProvider = actionProvider;
 		fKeyListeners = new HashSet<KeyListener>(); 
 	}
 
@@ -73,18 +73,18 @@ public class KeyRegistrator {
 
 	private void addKeyListener(ActionId actionId) {
 
-		if (fActionProvider == null) {
+		if (fActionGroupingProvider == null) {
 			return;
 		}
 
 		ActionDescriptionProvider actionDescriptionProvider = ActionDescriptionProvider.getInstance();
 
 		String strActionId = actionDescriptionProvider.getStrId(actionId);
-		DescribedAction action = fActionProvider.getAction(strActionId); // TODO USE ActionId
+		DescribedAction action = fActionGroupingProvider.getAction(strActionId); // TODO USE ActionId
 		if (action == null) {
 			return;
 		}
-		
+
 		int keyCode = actionDescriptionProvider.getKeyCode(actionId);
 		int modifier = actionDescriptionProvider.getModifier(actionId);
 

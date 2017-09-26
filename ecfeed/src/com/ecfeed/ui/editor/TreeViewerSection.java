@@ -19,7 +19,7 @@ import org.eclipse.swt.widgets.Tree;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.editor.actions.ActionDescriptionProvider;
 import com.ecfeed.ui.editor.actions.ActionId;
-import com.ecfeed.ui.editor.actions.IActionProvider;
+import com.ecfeed.ui.editor.actions.IActionGrouppingProvider;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.utils.SwtHelper;
 
@@ -58,8 +58,8 @@ public abstract class TreeViewerSection extends ViewerSection {
 	}
 
 	@Override
-	protected void setActionProvider(IActionProvider provider){
-		super.setActionProvider(provider);
+	protected void setActionGrouppingProvider(IActionGrouppingProvider provider){
+		super.setActionGrouppingProvider(provider);
 
 		String strActionId = ActionDescriptionProvider.getInstance().getStrId(ActionId.EXPAND_COLLAPSE);
 

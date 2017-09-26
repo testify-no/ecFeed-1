@@ -34,7 +34,7 @@ import com.ecfeed.core.model.RootNode;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.AboutDialog;
 import com.ecfeed.ui.dialogs.CheckForUpdatesDialog;
-import com.ecfeed.ui.editor.actions.MainActionProvider;
+import com.ecfeed.ui.editor.actions.MainActionGrouppingProvider;
 import com.ecfeed.ui.editor.data.ModelTreeContentProvider;
 import com.ecfeed.ui.editor.data.ModelTreeLabelDecorator;
 import com.ecfeed.ui.editor.data.ModelTreeLabelProvider;
@@ -57,14 +57,14 @@ public class ModelMasterSection extends TreeViewerSection {
 
 		fMasterDetailsBlock = parentBlock;
 
-		MainActionProvider modelViewerActionProvider = 
-				new MainActionProvider(
+		MainActionGrouppingProvider modelViewerActionProvider = 
+				new MainActionGrouppingProvider(
 						getTreeViewer(), 
 						getModelUpdateContext(), 
 						javaProjectProvider, 
 						false);
 
-		setActionProvider(modelViewerActionProvider);		
+		setActionGrouppingProvider(modelViewerActionProvider);		
 
 		getTreeViewer().addDragSupport(
 				DND.DROP_COPY|DND.DROP_MOVE|DND.DROP_LINK,
@@ -115,7 +115,7 @@ public class ModelMasterSection extends TreeViewerSection {
 	protected ViewerMenuListener getMenuListener() {
 
 		return new ModelMasterMenuListener(
-				getMenu(), getActionProvider(), 
+				getMenu(), getActionGroupingProvider(), 
 				getTreeViewer(), getModelUpdateContext(), 
 				getJavaProjectProvider(), ModelMasterSection.this);
 	}

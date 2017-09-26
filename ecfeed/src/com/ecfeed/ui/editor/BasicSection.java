@@ -35,13 +35,13 @@ import org.eclipse.ui.forms.SectionPart;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.ui.common.ImageManager;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
-import com.ecfeed.ui.editor.actions.IActionProvider;
+import com.ecfeed.ui.editor.actions.IActionGrouppingProvider;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 public abstract class BasicSection extends SectionPart {
 	private Composite fClientComposite;
 	private Control fTextClient;
-	private IActionProvider fActionProvider;
+	private IActionGrouppingProvider fActionGroupingProvider;
 	private IModelUpdateContext fUpdateContext;
 	private IJavaProjectProvider fJavaProjectProvider;
 	private ISectionContext fSectionContext;
@@ -167,18 +167,18 @@ public abstract class BasicSection extends SectionPart {
 	}
 
 	public Action getAction(String actionId) {
-		if(fActionProvider != null){
-			return fActionProvider.getAction(actionId);
+		if(fActionGroupingProvider != null){
+			return fActionGroupingProvider.getAction(actionId);
 		}
 		return null;
 	}
 
-	protected void setActionProvider(IActionProvider provider){
-		fActionProvider = provider;
+	protected void setActionGrouppingProvider(IActionGrouppingProvider provider){
+		fActionGroupingProvider = provider;
 	}
 
-	protected IActionProvider getActionProvider(){
-		return fActionProvider;
+	protected IActionGrouppingProvider getActionGroupingProvider(){
+		return fActionGroupingProvider;
 	}
 
 	protected ImageDescriptor getIconDescription(String fileName) {

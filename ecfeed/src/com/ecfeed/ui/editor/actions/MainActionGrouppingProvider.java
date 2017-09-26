@@ -22,7 +22,7 @@ import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 
-public class MainActionProvider extends BasicActionProvider {
+public class MainActionGrouppingProvider extends BasicActionGrouppingProvider {
 
 	private static final String EDIT_GROUP = "edit";
 	private static final String IMPLEMENT_GROUP = "implement";
@@ -31,7 +31,7 @@ public class MainActionProvider extends BasicActionProvider {
 	private static final String INFO_GROUP = "info";
 
 
-	public MainActionProvider(
+	public MainActionGrouppingProvider(
 			TreeViewer viewer, 
 			IModelUpdateContext context, 
 			IJavaProjectProvider javaProjectProvider,
@@ -48,7 +48,7 @@ public class MainActionProvider extends BasicActionProvider {
 		addInfoActions();
 	}
 
-	public MainActionProvider(
+	public MainActionGrouppingProvider(
 			TableViewer viewer, 
 			IModelUpdateContext context, 
 			IJavaProjectProvider javaProjectProvider) {
@@ -74,7 +74,6 @@ public class MainActionProvider extends BasicActionProvider {
 		addAction(EDIT_GROUP, new CutAction(new CopyAction(selectionProvider), deleteAction));
 		addAction(EDIT_GROUP, new PasteAction(selectionProvider, context, javaProjectProvider));
 
-		// TODO - REMOVE INSERT BUT LEAVE THE SHORTCUT
 		addAction(EDIT_GROUP, new InsertAction(selectionProvider, structuredViewer, context, javaProjectProvider)); 
 		addAction(EDIT_GROUP, deleteAction);
 

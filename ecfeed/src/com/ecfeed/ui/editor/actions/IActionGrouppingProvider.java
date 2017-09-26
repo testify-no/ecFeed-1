@@ -12,7 +12,7 @@ package com.ecfeed.ui.editor.actions;
 
 import java.util.Set;
 
-public interface IActionProvider {
+public interface IActionGrouppingProvider {
 
 	public Set<String> getGroups();
 	public Set<DescribedAction> getActions(String groupId);

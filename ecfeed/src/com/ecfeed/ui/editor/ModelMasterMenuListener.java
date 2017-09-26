@@ -32,7 +32,7 @@ import com.ecfeed.ui.editor.actions.ActionId;
 import com.ecfeed.ui.editor.actions.AddChildActionFactory;
 import com.ecfeed.ui.editor.actions.ExecuteTestCaseAction;
 import com.ecfeed.ui.editor.actions.ExportOnlineAction;
-import com.ecfeed.ui.editor.actions.IActionProvider;
+import com.ecfeed.ui.editor.actions.IActionGrouppingProvider;
 import com.ecfeed.ui.editor.actions.TestOnlineAction;
 import com.ecfeed.ui.modelif.AbstractNodeInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
@@ -52,7 +52,7 @@ public class ModelMasterMenuListener extends ViewerMenuListener {
 
 	public ModelMasterMenuListener(
 			Menu menu, 
-			IActionProvider actionProvider, 
+			IActionGrouppingProvider actionProvider, 
 			TreeViewer treeViewer,
 			IModelUpdateContext modelUpdateContext,
 			IJavaProjectProvider javaProjectProvider,
