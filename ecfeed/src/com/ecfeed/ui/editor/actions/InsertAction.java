@@ -34,6 +34,8 @@ public class InsertAction extends ModelModifyingAction {
 		fJavaProjectProvider = javaProjectProvider;
 		fStructuredViewer = structuredViewer;
 		fUpdateContext = updateContext;
+		
+		setActionType(ActionType.KEY_ONLY_ACTION);
 	}
 
 	@Override

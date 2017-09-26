@@ -14,6 +14,13 @@ import org.eclipse.jface.action.Action;
 
 public class DescribedAction extends Action {
 
+	public enum ActionType {
+		MENU_AND_KEY_ACTION,
+		KEY_ONLY_ACTION
+	}
+	
+	private ActionType fActionType = ActionType.MENU_AND_KEY_ACTION;
+	
 	public DescribedAction(ActionId actionId) {
 
 		ActionDescriptionProvider actionDescriptionProvider = ActionDescriptionProvider.getInstance();
@@ -24,5 +31,13 @@ public class DescribedAction extends Action {
 
 		setImageDescriptor(actionDescriptionProvider.getImageDescriptor(actionId));
 	}
+	
+	public void setActionType(ActionType actionType) {
+		fActionType = actionType;
+	}
+	
+	public ActionType getActionType() {
+		return fActionType;
+	}	
 
 }

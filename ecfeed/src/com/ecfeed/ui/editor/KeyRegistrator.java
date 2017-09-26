@@ -84,7 +84,7 @@ public class KeyRegistrator {
 		if (action == null) {
 			return;
 		}
-
+		
 		int keyCode = actionDescriptionProvider.getKeyCode(actionId);
 		int modifier = actionDescriptionProvider.getModifier(actionId);
 

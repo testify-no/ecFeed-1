@@ -25,6 +25,7 @@ import org.eclipse.swt.widgets.MenuItem;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.editor.actions.DescribedAction;
+import com.ecfeed.ui.editor.actions.DescribedAction.ActionType;
 import com.ecfeed.ui.editor.actions.IActionProvider;
 
 public class ViewerMenuListener implements MenuListener {
@@ -94,7 +95,9 @@ public class ViewerMenuListener implements MenuListener {
 
 		for (DescribedAction action : actionProvider.getActions(groupIt.next())) {
 
-			addMenuItem(action.getText(), action, LAST_MENU_POSITION);
+			if (action.getActionType() != ActionType.KEY_ONLY_ACTION) {
+				addMenuItem(action.getText(), action, LAST_MENU_POSITION);
+			}
 		}
 	}
 
