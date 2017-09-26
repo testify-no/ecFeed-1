@@ -10,9 +10,6 @@
 
 package com.ecfeed.ui.editor.actions;
 
-import org.eclipse.jface.viewers.ISelectionProvider;
-
-import com.ecfeed.ui.modelif.NodeClipboard;
 
 public class ActionFactory {
 

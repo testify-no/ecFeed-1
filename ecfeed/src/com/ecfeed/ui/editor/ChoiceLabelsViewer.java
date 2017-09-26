@@ -10,7 +10,6 @@
 
 package com.ecfeed.ui.editor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.viewers.CellEditor;
@@ -45,11 +44,7 @@ import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.basic.ErrorDialog;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.editor.actions.ActionId;
-import com.ecfeed.ui.editor.actions.BasicActionProvider;
-import com.ecfeed.ui.editor.actions.CutAction;
-import com.ecfeed.ui.editor.actions.DescribedAction;
 import com.ecfeed.ui.editor.actions.ModelModifyingAction;
-import com.ecfeed.ui.editor.actions.SelectAllAction;
 import com.ecfeed.ui.modelif.ChoiceInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 
@@ -61,28 +56,29 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 	private Text fSelectedLabelText;
 	private String fSelectedLabel;
 
-	private static class LabelClipboard{
-		private static List<String> fLabels = new ArrayList<>();
-
-		public static List<String> getContent(){
-			return fLabels;
-		}
-
-		public static List<String> getContentCopy(){
-			List<String> copy = new ArrayList<>();
-			for(String label : fLabels){
-				copy.add(new String(label));
-			}
-			return copy;
-		}
-
-		public static void setContent(List<String> labels){
-			fLabels.clear();
-			for(String label : labels){
-				fLabels.add(new String(label));
-			}
-		}
-	}
+//	private static class LabelClipboard {
+//		
+//		private static List<String> fLabels = new ArrayList<>();
+//
+//		public static List<String> getContent(){
+//			return fLabels;
+//		}
+//
+//		public static List<String> getContentCopy(){
+//			List<String> copy = new ArrayList<>();
+//			for(String label : fLabels){
+//				copy.add(new String(label));
+//			}
+//			return copy;
+//		}
+//
+//		public static void setContent(List<String> labels){
+//			fLabels.clear();
+//			for(String label : labels){
+//				fLabels.add(new String(label));
+//			}
+//		}
+//	}
 
 //	private class LabelsViewerActionProvider extends ActionProvider{
 //
@@ -101,37 +97,37 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 //		}
 //	}
 
-	private class LabelCopyAction extends DescribedAction{
-		public LabelCopyAction() {
-			super(ActionId.COPY);
-		}
+//	private class LabelCopyAction extends DescribedAction{
+//		public LabelCopyAction() {
+//			super(ActionId.COPY);
+//		}
+//
+//		@Override
+//		public boolean isEnabled(){
+//			return getSelectedLabels().size() > 0;
+//		}
+//
+//		@Override
+//		public void run(){
+//			LabelClipboard.setContent(getSelectedLabels());
+//		}
+//	}
 
-		@Override
-		public boolean isEnabled(){
-			return getSelectedLabels().size() > 0;
-		}
-
-		@Override
-		public void run(){
-			LabelClipboard.setContent(getSelectedLabels());
-		}
-	}
-
-	private class LabelPasteAction extends ModelModifyingAction{
-		public LabelPasteAction(IModelUpdateContext updateContext) {
-			super(ActionId.PASTE, getViewer(), updateContext);
-		}
-
-		@Override
-		public boolean isEnabled(){
-			return LabelClipboard.getContent().size() > 0;
-		}
-
-		@Override
-		public void run(){
-			fChoiceIf.addLabels(LabelClipboard.getContentCopy());
-		}
-	}
+//	private class LabelPasteAction extends ModelModifyingAction{
+//		public LabelPasteAction(IModelUpdateContext updateContext) {
+//			super(ActionId.PASTE, getViewer(), updateContext);
+//		}
+//
+//		@Override
+//		public boolean isEnabled(){
+//			return LabelClipboard.getContent().size() > 0;
+//		}
+//
+//		@Override
+//		public void run(){
+//			fChoiceIf.addLabels(LabelClipboard.getContentCopy());
+//		}
+//	}
 
 	private class LabelDeleteAction extends ModelModifyingAction{
 		public LabelDeleteAction(IModelUpdateContext updateContext) {
