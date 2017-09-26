@@ -39,6 +39,10 @@ public class TestResultsAnalysis {
 		}
 		return null;
 	}
+	
+	public List<Culprit> getCulpritList(){
+		return fCulprits;
+	}
 
 	public int getCulpritCount() {
 
