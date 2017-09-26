@@ -113,7 +113,7 @@ public class MainActionProvider extends BasicActionProvider {
 
 	private void addInfoActions() {
 
-		addAction(INFO_GROUP, new AboutAction());
+		addAction(INFO_GROUP, ActionFactory.getAboutAction());
 
 		if (ApplicationContext.isApplicationTypeLocal()) {
 			addAction(INFO_GROUP, new CheckForUpdatesAction());

@@ -80,7 +80,7 @@ public class KeyRegistrator {
 		ActionDescriptionProvider actionDescriptionProvider = ActionDescriptionProvider.getInstance();
 
 		String strActionId = actionDescriptionProvider.getStrId(actionId);
-		DescribedAction action = fActionProvider.getAction(strActionId); // XYX TODO USE ActionId
+		DescribedAction action = fActionProvider.getAction(strActionId); // TODO USE ActionId
 		if (action == null) {
 			return;
 		}
