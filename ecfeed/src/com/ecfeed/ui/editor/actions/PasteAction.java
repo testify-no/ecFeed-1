@@ -11,6 +11,7 @@
 package com.ecfeed.ui.editor.actions;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -66,7 +67,17 @@ public class PasteAction extends ModelModifyingAction {
 
 	@Override
 	public boolean isEnabled(){
-		if(getSelectedNodes().size() != 1) return false;
+		
+		List<AbstractNode> selectedNodes = getSelectedNodes();
+		
+		if (selectedNodes == null) {
+			return false;
+		}
+		
+		if (getSelectedNodes().size() != 1) {
+			return false;
+		}
+
 		AbstractNodeInterface nodeIf = 
 				NodeInterfaceFactory.getNodeInterface(
 						getSelectedNodes().get(0), 

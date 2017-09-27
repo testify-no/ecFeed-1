@@ -81,7 +81,12 @@ public class KeyRegistrator {
 
 		String strActionId = actionDescriptionProvider.getStrId(actionId);
 		DescribedAction action = fActionGroupingProvider.getAction(strActionId); // TODO USE ActionId
+
 		if (action == null) {
+			return;
+		}
+
+		if (!action.isKeyActionType()) {
 			return;
 		}
 

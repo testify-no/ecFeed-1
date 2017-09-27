@@ -10,6 +10,7 @@
 
 package com.ecfeed.ui.editor.actions;
 
+import org.eclipse.jface.viewers.ISelectionProvider;
 
 public class ActionFactory {
 
@@ -17,6 +18,8 @@ public class ActionFactory {
 	private static SaveAction fSaveAction = null;
 	private static UndoAction fUndoAction = null;
 	private static RedoAction fRedoAction = null;
+	private static CopyAction fCopyAction = null;
+	private static CopyToolbarAction fCopyToolbarAction = null;
 
 	public static AboutAction getAboutAction() {
 
@@ -53,5 +56,33 @@ public class ActionFactory {
 
 		return fRedoAction;
 	}	
-	
+
+	public static CopyAction getCopyAction(ISelectionProvider selectionProvider) {
+
+		if (fCopyAction == null) {
+			fCopyAction = new CopyAction(selectionProvider);
+		}
+
+		return fCopyAction;
+	}
+
+	public static CopyAction getCopyAction() {
+
+		if (fCopyAction == null) {
+			fCopyAction = new CopyAction();
+		}
+
+		return fCopyAction;
+	}
+
+
+	public static CopyToolbarAction getCopyToolbarAction() {
+
+		if (fCopyToolbarAction == null) {
+			fCopyToolbarAction = new CopyToolbarAction();
+		}
+
+		return fCopyToolbarAction;
+	}	
+
 }

@@ -16,28 +16,42 @@ public class DescribedAction extends Action {
 
 	public enum ActionType {
 		MENU_AND_KEY_ACTION,
-		KEY_ONLY_ACTION
+		KEY_ONLY_ACTION,
+		TOOLBAR_ONLY_ACTION
 	}
-	
+
 	private ActionType fActionType = ActionType.MENU_AND_KEY_ACTION;
-	
+
 	public DescribedAction(ActionId actionId) {
 
 		ActionDescriptionProvider actionDescriptionProvider = ActionDescriptionProvider.getInstance();
-		
+
 		setId(actionDescriptionProvider.getStrId(actionId));
 
 		setText(actionDescriptionProvider.getDescriptionWithShortcut(actionId));
 
 		setImageDescriptor(actionDescriptionProvider.getImageDescriptor(actionId));
 	}
-	
+
 	public void setActionType(ActionType actionType) {
 		fActionType = actionType;
 	}
-	
+
 	public ActionType getActionType() {
 		return fActionType;
-	}	
+	}
+
+	public boolean isKeyActionType() {
+
+		if (fActionType == ActionType.MENU_AND_KEY_ACTION) {
+			return true;
+		}
+
+		if (fActionType == ActionType.KEY_ONLY_ACTION) {
+			return true;
+		}
+
+		return false;
+	}
 
 }

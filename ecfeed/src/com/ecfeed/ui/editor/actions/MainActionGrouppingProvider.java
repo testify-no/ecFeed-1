@@ -70,7 +70,7 @@ public class MainActionGrouppingProvider extends BasicActionGrouppingProvider {
 			IJavaProjectProvider javaProjectProvider) {
 
 		DeleteAction deleteAction = new DeleteAction(selectionProvider, context);
-		addAction(EDIT_GROUP, new CopyAction(selectionProvider));
+		addAction(EDIT_GROUP, ActionFactory.getCopyAction(selectionProvider));
 		addAction(EDIT_GROUP, new CutAction(new CopyAction(selectionProvider), deleteAction));
 		addAction(EDIT_GROUP, new PasteAction(selectionProvider, context, javaProjectProvider));
 

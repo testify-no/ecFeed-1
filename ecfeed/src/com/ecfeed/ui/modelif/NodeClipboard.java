@@ -23,7 +23,7 @@ public class NodeClipboard{
 	public static List<AbstractNode> getContent(){
 		return fClipboardNodes;
 	}
-	
+
 	public static List<AbstractNode> getContentCopy(){
 		List<AbstractNode> copy = new ArrayList<AbstractNode>();
 		for(AbstractNode node : fClipboardNodes){
@@ -31,13 +31,14 @@ public class NodeClipboard{
 		}
 		return copy;
 	}
-	
+
 	public static void setContent(AbstractNode node){
 		fClipboardNodes.clear();
 		fClipboardNodes.add(node.makeClone());
 	}
-	
+
 	public static void setContent(List<AbstractNode> nodes){
+
 		fClipboardNodes.clear();
 		for(AbstractNode node : nodes){
 			if(isPredecessorInCollection(node, nodes) == false){
@@ -45,7 +46,7 @@ public class NodeClipboard{
 			}
 		}
 	}
-	
+
 	private static boolean isPredecessorInCollection(AbstractNode node, Collection<AbstractNode> nodes) {
 		AbstractNode predecessor = node.getParent();
 		while(predecessor != null){
