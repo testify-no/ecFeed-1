@@ -12,6 +12,9 @@ package com.ecfeed.ui.editor.actions;
 
 import org.eclipse.jface.viewers.ISelectionProvider;
 
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
+import com.ecfeed.ui.modelif.IModelUpdateContext;
+
 public class ActionFactory {
 
 	private static AboutAction fAboutAction = null;
@@ -20,6 +23,7 @@ public class ActionFactory {
 	private static RedoAction fRedoAction = null;
 	private static CopyAction fCopyAction = null;
 	private static CopyToolbarAction fCopyToolbarAction = null;
+	private static PasteToolbarAction fPasteToolbarAction = null;
 
 	public static AboutAction getAboutAction() {
 
@@ -75,11 +79,25 @@ public class ActionFactory {
 
 		return fCopyToolbarAction;
 	}
+	
+	public static PasteToolbarAction getPasteToolbarAction() {
 
-	public static void setSelectionProvider(ISelectionProvider selectionProvider) {
+		if (fPasteToolbarAction == null) {
+			fPasteToolbarAction = new PasteToolbarAction();
+		}
 
-		getCopyAction().setSelectionProvider(selectionProvider);
-		getCopyToolbarAction().setSelectionProvider(selectionProvider);
+		return fPasteToolbarAction;
+	}
+	
+
+	public static void setContextForActions(
+			ISelectionProvider selectionProvider,
+			IModelUpdateContext updateContext,
+			IJavaProjectProvider javaProjectProvider) {
+
+		getCopyAction().setContext(selectionProvider);
+		getCopyToolbarAction().setContext(selectionProvider);
+		getPasteToolbarAction().setContext(selectionProvider, updateContext, javaProjectProvider);
 	}
 
 }

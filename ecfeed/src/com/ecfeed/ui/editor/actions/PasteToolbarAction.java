@@ -25,20 +25,12 @@ import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.NodeClipboard;
 import com.ecfeed.ui.modelif.NodeInterfaceFactory;
 
-public class PasteAction extends ModelModifyingAction {
+public class PasteToolbarAction extends PasteAction {
 
 	private IJavaProjectProvider fJavaProjectProvider;
 
-	public PasteAction(
-			ISelectionProvider selectionProvider, 
-			IModelUpdateContext updateContext,
-			IJavaProjectProvider javaProjectProvider) {
-		super(ActionId.PASTE, selectionProvider, updateContext);
-		fJavaProjectProvider = javaProjectProvider;
-	}
-
-	public PasteAction() {
-		super(ActionId.PASTE);
+	public PasteToolbarAction() {
+		super();
 	}
 
 	public void setContext(
@@ -54,40 +46,7 @@ public class PasteAction extends ModelModifyingAction {
 	@Override
 	public boolean isEnabled(){
 
-		List<AbstractNode> selectedNodes = getSelectedNodes();
-
-		if (selectedNodes == null) {
-			return false;
-		}
-
-		if (getSelectedNodes().size() != 1) {
-			return false;
-		}
-
-		AbstractNodeInterface nodeIf = 
-				NodeInterfaceFactory.getNodeInterface(
-						getSelectedNodes().get(0), 
-						getUpdateContext(), 
-						fJavaProjectProvider);
-
-		return nodeIf.pasteEnabled(NodeClipboard.getContent());
-	}
-
-	@Override
-	public void run() {
-		AbstractNode parent = getSelectedNodes().get(0);
-		AbstractNodeInterface parentIf = 
-				NodeInterfaceFactory.getNodeInterface(parent, getUpdateContext(), fJavaProjectProvider);
-
-		Collection<AbstractNode> childrenToAdd = NodeClipboard.getContentCopy();
-		String errorMessage = parentIf.canAddChildren(childrenToAdd);
-
-		if (errorMessage != null) {
-			MessageDialog.openError(Display.getDefault().getActiveShell(), Messages.CAN_NOT_PASTE_CHOICES, errorMessage);
-			return;
-		}
-
-		parentIf.addChildren(childrenToAdd);
+		return true;
 	}
 
 }

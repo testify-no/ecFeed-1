@@ -12,6 +12,8 @@ package com.ecfeed.ui.editor.actions;
 
 import java.util.List;
 
+import org.eclipse.jface.viewers.ISelectionProvider;
+
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.ui.modelif.NodeClipboard;
 
@@ -21,6 +23,10 @@ public class CopyAction extends ModelSelectionAction {
 		super(ActionId.COPY);
 	}
 
+	public void setContext(ISelectionProvider selectionProvider) {
+		super.setSelectionProvider(selectionProvider);
+	}
+	
 	@Override
 	public void run() {
 		NodeClipboard.setContent(getSelectedNodes());

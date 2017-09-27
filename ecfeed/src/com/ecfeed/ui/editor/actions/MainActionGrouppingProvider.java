@@ -47,7 +47,7 @@ public class MainActionGrouppingProvider extends BasicActionGrouppingProvider {
 		addMoveActions(viewer, context);
 		addInfoActions();
 
-		ActionFactory.setSelectionProvider(viewer);
+		ActionFactory.setContextForActions(viewer, context, javaProjectProvider);
 	}
 
 	public MainActionGrouppingProvider(

@@ -32,7 +32,7 @@ public abstract class ModelSelectionAction extends DescribedAction {
 		this(actionId, null);
 	}	
 
-	public void setSelectionProvider(ISelectionProvider selectionProvider) {
+	protected void setSelectionProvider(ISelectionProvider selectionProvider) {
 		fSelectionUtils = new NodeSelectionUtils(selectionProvider);
 	}
 

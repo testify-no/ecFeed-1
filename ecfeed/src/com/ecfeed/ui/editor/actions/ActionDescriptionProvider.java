@@ -203,7 +203,7 @@ public class ActionDescriptionProvider {
 						'v',
 						SWT.CTRL,
 						SWT.COMMAND,
-						null));
+						getImageDescriptor("icons/paste.png")));
 
 		fActionDescriptions.add(
 				new ActionDescription(

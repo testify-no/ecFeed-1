@@ -16,12 +16,16 @@ import com.ecfeed.ui.modelif.NodeClipboard;
 
 public class CopyToolbarAction extends ModelSelectionAction {
 
-	public CopyToolbarAction(ISelectionProvider selectionProvider){
+	public CopyToolbarAction(ISelectionProvider selectionProvider) {
 		super(ActionId.COPY, selectionProvider);
 		setActionType(ActionType.TOOLBAR_ONLY_ACTION);
 	}
 
-	public CopyToolbarAction(){
+	public void setContext(ISelectionProvider selectionProvider) {
+		super.setSelectionProvider(selectionProvider);
+	}
+	
+	public CopyToolbarAction() {
 		super(ActionId.COPY);
 	}
 
