@@ -83,6 +83,11 @@ public class ActionFactory {
 		}
 
 		return fCopyToolbarAction;
-	}	
+	}
+	
+	public static void setSelectionProvider(ISelectionProvider selectionProvider) {
+		fCopyAction.setSelectionProvider(selectionProvider);
+		fCopyToolbarAction.setSelectionProvider(selectionProvider);
+	}
 
 }
