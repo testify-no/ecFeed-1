@@ -29,7 +29,6 @@ import com.ecfeed.ui.modelif.NodeInterfaceFactory;
 public class PasteAction extends ModelModifyingAction {
 
 	private IJavaProjectProvider fJavaProjectProvider;
-	private TreeViewer fTreeViewer;
 
 	public PasteAction(
 			ISelectionProvider selectionProvider, 
@@ -76,9 +75,6 @@ public class PasteAction extends ModelModifyingAction {
 		}
 
 		parentIf.addChildren(childrenToAdd);
-		if(fTreeViewer != null) {
-			fTreeViewer.expandToLevel(parent, 1);
-		}
 	}
 
 }
