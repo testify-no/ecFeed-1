@@ -46,6 +46,8 @@ public class MainActionGrouppingProvider extends BasicActionGrouppingProvider {
 		addViewerActions(viewer, context, selectRoot);
 		addMoveActions(viewer, context);
 		addInfoActions();
+
+		ActionFactory.setSelectionProvider(viewer);
 	}
 
 	public MainActionGrouppingProvider(
@@ -70,8 +72,8 @@ public class MainActionGrouppingProvider extends BasicActionGrouppingProvider {
 			IJavaProjectProvider javaProjectProvider) {
 
 		DeleteAction deleteAction = new DeleteAction(selectionProvider, context);
-		addAction(EDIT_GROUP, ActionFactory.getCopyAction(selectionProvider));
-		addAction(EDIT_GROUP, new CutAction(new CopyAction(selectionProvider), deleteAction));
+		addAction(EDIT_GROUP, ActionFactory.getCopyAction());
+		addAction(EDIT_GROUP, new CutAction(ActionFactory.getCopyAction(), deleteAction));
 		addAction(EDIT_GROUP, new PasteAction(selectionProvider, context, javaProjectProvider));
 
 		addAction(EDIT_GROUP, new InsertAction(selectionProvider, structuredViewer, context, javaProjectProvider)); 

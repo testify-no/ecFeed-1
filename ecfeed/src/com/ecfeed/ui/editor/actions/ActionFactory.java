@@ -57,15 +57,6 @@ public class ActionFactory {
 		return fRedoAction;
 	}	
 
-	public static CopyAction getCopyAction(ISelectionProvider selectionProvider) {
-
-		if (fCopyAction == null) {
-			fCopyAction = new CopyAction(selectionProvider);
-		}
-
-		return fCopyAction;
-	}
-
 	public static CopyAction getCopyAction() {
 
 		if (fCopyAction == null) {
@@ -84,10 +75,11 @@ public class ActionFactory {
 
 		return fCopyToolbarAction;
 	}
-	
+
 	public static void setSelectionProvider(ISelectionProvider selectionProvider) {
-		fCopyAction.setSelectionProvider(selectionProvider);
-		fCopyToolbarAction.setSelectionProvider(selectionProvider);
+
+		getCopyAction().setSelectionProvider(selectionProvider);
+		getCopyToolbarAction().setSelectionProvider(selectionProvider);
 	}
 
 }

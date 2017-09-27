@@ -12,16 +12,10 @@ package com.ecfeed.ui.editor.actions;
 
 import java.util.List;
 
-import org.eclipse.jface.viewers.ISelectionProvider;
-
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.ui.modelif.NodeClipboard;
 
 public class CopyAction extends ModelSelectionAction {
-
-	public CopyAction(ISelectionProvider selectionProvider){
-		super(ActionId.COPY, selectionProvider);
-	}
 
 	public CopyAction(){
 		super(ActionId.COPY);
