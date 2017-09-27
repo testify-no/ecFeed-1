@@ -40,6 +40,10 @@ public class PagingContainer<RecordType> {
 		return CurrentPage;
 	}
 	
+	public List<RecordType> getRecordsList(){
+		return fRecords;
+	}
+	
 	public int StepCount(int start) {
 		
 		int count = 0;
