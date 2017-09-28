@@ -21,16 +21,22 @@ public class DescribedAction extends Action {
 	}
 
 	private ActionType fActionType = ActionType.MENU_AND_KEY_ACTION;
+	private ActionId fActionId;
+	private int fKeyCode;
+	private int fKeyModifier;
 
 	public DescribedAction(ActionId actionId) {
+
+		fActionId = actionId;
 
 		ActionDescriptionProvider actionDescriptionProvider = ActionDescriptionProvider.getInstance();
 
 		setId(actionDescriptionProvider.getStrId(actionId));
-
 		setText(actionDescriptionProvider.getDescriptionWithShortcut(actionId));
-
 		setImageDescriptor(actionDescriptionProvider.getImageDescriptor(actionId));
+
+		fKeyCode = actionDescriptionProvider.getKeyCode(actionId);
+		fKeyModifier = actionDescriptionProvider.getKeyModifier(actionId);
 	}
 
 	public void setActionType(ActionType actionType) {
@@ -52,6 +58,18 @@ public class DescribedAction extends Action {
 		}
 
 		return false;
+	}
+
+	public ActionId getActionId() {
+		return fActionId;
+	}
+
+	public int getKeyCode() {
+		return fKeyCode;
+	}
+
+	public int getKeyModifier() {
+		return fKeyModifier;
 	}
 
 }

@@ -77,10 +77,7 @@ public class KeyRegistrator {
 			return;
 		}
 
-		ActionDescriptionProvider actionDescriptionProvider = ActionDescriptionProvider.getInstance();
-
-		String strActionId = actionDescriptionProvider.getStrId(actionId);
-		DescribedAction action = fActionGroupingProvider.getAction(strActionId); // TODO USE ActionId
+		DescribedAction action = fActionGroupingProvider.getAction(actionId);
 
 		if (action == null) {
 			return;
@@ -90,8 +87,8 @@ public class KeyRegistrator {
 			return;
 		}
 
-		int keyCode = actionDescriptionProvider.getKeyCode(actionId);
-		int modifier = actionDescriptionProvider.getModifier(actionId);
+		int keyCode = action.getKeyCode();;
+		int modifier = action.getKeyModifier();
 
 		KeyListener keyListener = new ActionKeyListener(keyCode, modifier, action);
 		fControl.addKeyListener(keyListener);

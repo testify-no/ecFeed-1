@@ -17,5 +17,6 @@ public interface IActionGrouppingProvider {
 	public Set<String> getGroups();
 	public Set<DescribedAction> getActions(String groupId);
 	public DescribedAction getAction(String actionId);
+	public DescribedAction getAction(ActionId actionId);
 	public void setEnabled(boolean enabled);
 }

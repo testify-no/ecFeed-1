@@ -52,7 +52,6 @@ public abstract class BasicActionGrouppingProvider implements IActionGrouppingPr
 		return result;
 	}
 
-	@Override
 	public DescribedAction getAction(String actionId) {
 
 		for (GrouppedAction record : fActions) {
@@ -63,6 +62,18 @@ public abstract class BasicActionGrouppingProvider implements IActionGrouppingPr
 
 		return null;
 	}
+
+	public DescribedAction getAction(ActionId actionId) {
+
+		for (GrouppedAction record : fActions) {
+			if (record.fAction.getActionId().equals(actionId)) {
+				return record.fAction;
+			}
+		}
+
+		return null;
+	}
+
 
 	public void setEnabled(boolean enabled) {
 		fEnabled = enabled;

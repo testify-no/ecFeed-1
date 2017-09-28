@@ -113,8 +113,8 @@ public class ActionDescriptionProvider {
 		private String fShortcut;
 		private String fMacShortcut;
 		private int fKeyCode;
-		private int fModifier;
-		private int fMacModifier;
+		private int fKeyModifier;
+		private int fMacKeyModifier;
 		private ImageDescriptor fImageDescriptor;
 
 		ActionDescription(
@@ -134,8 +134,8 @@ public class ActionDescriptionProvider {
 			fShortcut = shortcut;
 			fMacShortcut = macShortcut;
 			fKeyCode = keyCode;
-			fModifier = modifier;
-			fMacModifier = macModifier;
+			fKeyModifier = modifier;
+			fMacKeyModifier = macModifier;
 			fImageDescriptor = imageDescriptor;
 		}
 
@@ -479,13 +479,13 @@ public class ActionDescriptionProvider {
 		return getDescriptionRecord(actionId).fKeyCode;		
 	}
 
-	public int getModifier(ActionId actionId) {
+	public int getKeyModifier(ActionId actionId) {
 
 		if (SystemHelper.isOperatingSystemMacOs()) {
-			return getDescriptionRecord(actionId).fMacModifier;
+			return getDescriptionRecord(actionId).fMacKeyModifier;
 		}
 
-		return getDescriptionRecord(actionId).fModifier;
+		return getDescriptionRecord(actionId).fKeyModifier;
 	}
 
 	public String getShortcut(ActionId actionId) {
