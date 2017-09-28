@@ -23,7 +23,7 @@ public class ModelNodeDragListener implements DragSourceListener {
 	private NodeDnDBuffer fDnDBuffer;
 	private boolean fEnabled;
 
-	ModelNodeDragListener(ISelectionProvider selectionProvider){
+	public ModelNodeDragListener(ISelectionProvider selectionProvider){
 		fSelectionToolbox = new NodeSelectionUtils(selectionProvider);
 		fDnDBuffer = NodeDnDBuffer.getInstance();
 		fEnabled = true;

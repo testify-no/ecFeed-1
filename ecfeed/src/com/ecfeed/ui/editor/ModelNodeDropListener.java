@@ -47,7 +47,7 @@ public class ModelNodeDropListener extends ViewerDropAdapter {
 	private boolean fEnabled;
 
 
-	protected ModelNodeDropListener(Viewer viewer, 
+	public ModelNodeDropListener(Viewer viewer, 
 			IModelUpdateContext updateContext, 
 			IJavaProjectProvider javaProjectProvider) {
 		super(viewer);
