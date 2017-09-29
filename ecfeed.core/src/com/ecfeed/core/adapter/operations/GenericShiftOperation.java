@@ -21,8 +21,8 @@ import com.ecfeed.core.model.ModelOperationException;
 
 public class GenericShiftOperation extends AbstractModelOperation {
 
-	private List<? extends AbstractNode> fShifted;
-	private int fShift;
+	private List<? extends AbstractNode> fToBeShifted;
+	private int fShiftSize;
 	private List<? extends AbstractNode> fCollection;
 
 	public GenericShiftOperation(List<? extends AbstractNode> collection, AbstractNode shifted, boolean up){
@@ -31,32 +31,32 @@ public class GenericShiftOperation extends AbstractModelOperation {
 
 	public GenericShiftOperation(List<? extends AbstractNode> collection, List<? extends AbstractNode> shifted, boolean up){
 		this(collection, shifted, 0);
-		fShift = minAllowedShift(shifted, up);
+		fShiftSize = minAllowedShift(shifted, up);
 	}
 
 	public GenericShiftOperation(List<? extends AbstractNode> collection, List<? extends AbstractNode> shifted, int shift){
 		super(OperationNames.MOVE);
 		shift = shiftAllowed(shifted, shift) ? shift : 0;
-		fShifted = new ArrayList<>(shifted);
+		fToBeShifted = new ArrayList<>(shifted);
 		fCollection = collection;
-		fShift = shift;
+		fShiftSize = shift;
 	}
 
 	@Override
 	public void execute() throws ModelOperationException {
 
 		setNodeToBeSelectedAfterTheOperation();
-		shiftElements(fCollection, indices(fCollection, fShifted), fShift);
+		shiftElements(fCollection, indices(fCollection, fToBeShifted), fShiftSize);
 		markModelUpdated();
 	}
 
 	@Override
 	public IModelOperation reverseOperation() {
-		return new GenericShiftOperation(fCollection, fShifted, -fShift);
+		return new GenericShiftOperation(fCollection, fToBeShifted, -fShiftSize);
 	}
 
 	public int getShift(){
-		return fShift;
+		return fShiftSize;
 	}
 
 	protected List<? extends AbstractNode> getCollection(){
@@ -64,11 +64,11 @@ public class GenericShiftOperation extends AbstractModelOperation {
 	}
 
 	protected List<? extends AbstractNode> getShiftedElements(){
-		return fShifted;
+		return fToBeShifted;
 	}
 
 	protected void setShift(int shift){
-		fShift = shift;
+		fShiftSize = shift;
 	}
 
 	protected int minAllowedShift(List<? extends AbstractNode> shifted, boolean up){
@@ -163,13 +163,13 @@ public class GenericShiftOperation extends AbstractModelOperation {
 
 	private void setNodeToBeSelectedAfterTheOperation() {
 
-		if (fCollection.isEmpty()) {
+		if (fToBeShifted.isEmpty()) {
 			return;
 		}
 
-		AbstractNode abstractNode = fCollection.get(0);
+		AbstractNode abstractNode = fToBeShifted.get(0);
 
-		setNodeToBeSelectedAfterTheOperation(abstractNode.getParent());
+		setNodeToBeSelectedAfterTheOperation(abstractNode);
 	}
 
 }
