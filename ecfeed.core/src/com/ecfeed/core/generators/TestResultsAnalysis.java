@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import org.apache.commons.math3.distribution.HypergeometricDistribution;
 
 public class TestResultsAnalysis {
 
@@ -93,19 +94,40 @@ public class TestResultsAnalysis {
 	public void calculateFailureIndexes() {
 
 		int total = fCulprits.size();
+		int count = 0;
+		HypergeometricDistribution hypergeometricDistr;
+		
+		for (Culprit culprit: fCulprits){
+			count += culprit.getFailureCount();	
+		}
 
 		for (Culprit culprit : fCulprits) {
 
 			int occurences = culprit.getOccurenceCount();
 			int failures = culprit.getFailureCount();
+			
+//			hypergeometricDistr = new HypergeometricDistribution(total, count, occurences);
+//			double prob = hypergeometricDistr.cumulativeProbability(failures);
+//			culprit.setFailureIndex((int) prob);
 
 			int failsByOccurs = 100 * failures / occurences;
-			int occurencesByTotal = 100 * occurences / total;
+//			int occurencesByTotal = 100 * occurences / total;
 
-			culprit.setFailureIndex(100 * failsByOccurs + occurencesByTotal); 
+			culprit.setFailureIndex(failsByOccurs); 
+			
 		}
+		
+		
 
 		Collections.sort(fCulprits, new FailureIndexComparator());
+	}
+	
+	public int binom(int n, int k){
+		if(k==n || k==0){
+			return 1;
+		}else{
+			return binom(n-1, k-1) + binom(n-1, k);
+		}
 	}
 	
 	public void SortColumnInput(String dir, String name)
