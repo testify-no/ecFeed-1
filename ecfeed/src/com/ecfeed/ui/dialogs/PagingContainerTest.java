@@ -108,7 +108,7 @@ public class PagingContainerTest<RecordType> {
 		assertFalse(pagingContainer.getRecordsList().isEmpty());
 		assertFalse(pagingContainer.getCurrentPage().isEmpty());
 		
-		pagingContainer.removeAll();
+		pagingContainer.removeAllRecords();;
 		assertTrue(pagingContainer.getRecordsList().isEmpty());
 		assertTrue(pagingContainer.getCurrentPage().isEmpty());	
 	}
