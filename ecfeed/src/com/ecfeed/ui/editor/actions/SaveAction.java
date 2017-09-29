@@ -10,6 +10,7 @@
 
 package com.ecfeed.ui.editor.actions;
 
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.ui.editor.ModelEditorHelper;
 
 public class SaveAction extends DescribedAction {
@@ -23,5 +24,15 @@ public class SaveAction extends DescribedAction {
 		ModelEditorHelper.saveActiveEditor();
 	}
 
+	@Override
+	public boolean isEnabled() {
+		
+		if (ApplicationContext.isApplicationTypeLocal()) {
+			return true;
+		}
+		
+		return false;
+	}
+	
 }
 
