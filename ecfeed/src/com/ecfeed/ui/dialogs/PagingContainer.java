@@ -26,100 +26,91 @@ public class PagingContainer<RecordType> {
 		fCurrentPage = 0;
 	}
 	
-	public List<RecordType> getCurrentPage(){
+	public List<RecordType> getCurrentPage() {
 		
 		List<RecordType> CurrentPage = new ArrayList<RecordType>();
 		
-		int start = initialPageCount();
-		int count = StepCount(start);
+		int firstRecordIndex = getFirstRecordIndex();
+		int recordsOnPage = getCountOfRecordsOnCurrentPage(firstRecordIndex);
 		
-		for (int index = start; index < count; index++)
-		{
+		for (int index = firstRecordIndex; index < recordsOnPage; index++){
 			CurrentPage.add(fRecords.get(index));
 		}
+		
 		return CurrentPage;
 	}
 	
 	public List<RecordType> getRecordsList(){
+		
 		return fRecords;
 	}
 	
-	public int StepCount(int start) {
+	public int getCountOfRecordsOnCurrentPage(int firstRecordIndex) {
 		
-		int count = 0;
+		int recordsCount = 0;
 		
-		if(start + fPageSize < fRecords.size())
-		{
-			count = start + fPageSize;
+		if (firstRecordIndex + fPageSize < fRecords.size()){
+			recordsCount = firstRecordIndex + fPageSize;
+		}else{
+			recordsCount = fRecords.size();
 		}
-		else{
-			count = fRecords.size();
-		}
-		return count;
+		
+		return recordsCount;
 	}
 
-	public int initialPageCount() {
+	public int getFirstRecordIndex() {
 		
-		int start = 0;
+		int index = 0;
 		
-		if(fCurrentPage == 0)
-		{
-			start = 0;
+		if (fCurrentPage == 0){
+			index = 0;
+		}else{
+			index = fPageSize * fCurrentPage;	
 		}
-		else{
-			start = fPageSize * fCurrentPage;	
-		}
-		return start;
+		return index;
 	}
 
-	public boolean hasNextPage(){
+	public boolean hasNextPage() {
 		
-		if (fCurrentPage * fPageSize < fRecords.size())
-		{
+		if (fCurrentPage * fPageSize < fRecords.size()){
 			return true;
-		}
-		else{
+		}else{
 			return false;
 		}
 	}
 	
 	public boolean hasPreviousPage(){
 		
-		if (fCurrentPage > 0)
-		{
+		if (fCurrentPage > 0){
 			return true;
-		}
-		else{
+		}else{
 			return false;
 		}
 	}
 	
 	public void switchToNextPage(){
 		
-		if (hasNextPage())
-		{
+		if (hasNextPage()){
 			fCurrentPage += 1;	
 		}
 	}
 	
 	public void switchToPreviousPage(){
 		
-		if (hasPreviousPage())
-		{
+		if (hasPreviousPage()){
 			fCurrentPage -= 1;
 		}
 	}
 	
 	public void addItem(RecordType item){
 		
-		if(item != null)
-		{
+		if (item != null){
 			fRecords.add(item);
 		}
 		
 	}
 	
-	public void removeAll(){
+	public void removeAllRecords(){
 		
 		fRecords.clear();
 	}
