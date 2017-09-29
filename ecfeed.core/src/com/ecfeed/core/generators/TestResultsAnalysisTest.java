@@ -152,8 +152,8 @@ public class TestResultsAnalysisTest {
 		testresultanalysis.aggregateCulprit(culprit3);
 		testresultanalysis.aggregateCulprit(culprit4);
 		testresultanalysis.calculateFailureIndexes();
-		double expectedIndex2 = 100*(100*7/21) + (100*21/2);
-		double expectedIndex1 = 100*(100*1/3) + (100*3/2);
+		double expectedIndex2 = (100*7/21);
+		double expectedIndex1 = (100*1/3) ;
 		assertEquals(expectedIndex2, culprit2.getFailureIndex(), 0.0);
 		assertEquals(expectedIndex1, (double) culprit1.getFailureIndex(), 0.0);
 	}
@@ -169,8 +169,8 @@ public class TestResultsAnalysisTest {
 		int occurenceCount0 = fTestResultsAnalysis.getCulprit(0).getOccurenceCount();
 		int total = fTestResultsAnalysis.getCulpritCount();
 		int failsByOccurs = 100 * failureCount0 / occurenceCount0;
-		int occurencesByTotal = 100 * occurenceCount0 /total;
-		double expectedIndex = (100* failsByOccurs + occurencesByTotal);
+//		int occurencesByTotal = 100 * occurenceCount0 /total;
+		double expectedIndex = (failsByOccurs);
 		double actualIndex = fTestResultsAnalysis.getCulprit(0).getFailureIndex();
 		assertEquals(expectedIndex, actualIndex, 0.0);
 		
@@ -178,8 +178,8 @@ public class TestResultsAnalysisTest {
 		= new TestResultsAnalyzer().generateAnalysis(fTestResultDescrs, 2, 5);
 		int failureCount5 = fTestResultsAnalysis2.getCulprit(4).getFailureCount();
 		int occurenceCount5 = fTestResultsAnalysis2.getCulprit(4).getOccurenceCount();
-		int tot = fTestResultsAnalysis2.getCulpritCount();
-		double expectedIndex5 = 100*(100*failureCount5/occurenceCount5) + (100*occurenceCount5/tot);
+//		int tot = fTestResultsAnalysis2.getCulpritCount();
+		double expectedIndex5 = (100*failureCount5/occurenceCount5);
 		double actualIndex5 = fTestResultsAnalysis2.getCulprit(4).getFailureIndex();
 		assertEquals(expectedIndex5, actualIndex5, 0.0);	
 	}
