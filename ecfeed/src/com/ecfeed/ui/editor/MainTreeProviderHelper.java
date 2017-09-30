@@ -32,7 +32,7 @@ public class MainTreeProviderHelper {
 			mainTreeProvider.setCurrentNode(nodeToSelect);
 
 		} else {
-			AbstractNode[] nodes = (AbstractNode[]) fNodesToSelect.toArray();
+			AbstractNode[] nodes = fNodesToSelect.toArray(new AbstractNode[fNodesToSelect.size()]);
 			mainTreeProvider.setSelection(nodes);
 		}
 

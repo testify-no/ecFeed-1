@@ -21,7 +21,7 @@ import com.ecfeed.core.model.ModelOperationException;
 
 public class GenericShiftOperation extends AbstractModelOperation {
 
-	private List<? extends AbstractNode> fToBeShifted;
+	private List<AbstractNode> fToBeShifted;
 	private int fShiftSize;
 	private List<? extends AbstractNode> fCollection;
 
@@ -45,7 +45,7 @@ public class GenericShiftOperation extends AbstractModelOperation {
 	@Override
 	public void execute() throws ModelOperationException {
 
-		setNodeToSelect();
+		setNodesToSelect();
 		shiftElements(fCollection, indices(fCollection, fToBeShifted), fShiftSize);
 		markModelUpdated();
 	}
@@ -161,15 +161,10 @@ public class GenericShiftOperation extends AbstractModelOperation {
 		return maxIndexNode;
 	}
 
-	private void setNodeToSelect() {
+	private void setNodesToSelect() {
+		
 
-		if (fToBeShifted.isEmpty()) {
-			return;
-		}
-
-		AbstractNode abstractNode = fToBeShifted.get(0);
-
-		setOneNodeToSelect(abstractNode);
+		setNodesToSelect(fToBeShifted);
 	}
 
 }
