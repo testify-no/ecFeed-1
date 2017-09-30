@@ -47,25 +47,6 @@ public abstract class BasicSection extends SectionPart {
 	private ISectionContext fSectionContext;
 	private ToolBarManager fToolBarManager;
 
-	protected class SelectNodeDoubleClickListener implements IDoubleClickListener {
-
-		private ModelMasterSection fMasterSection;
-
-		public SelectNodeDoubleClickListener(ModelMasterSection masterSection){
-			fMasterSection = masterSection;
-		}
-
-		@Override
-		public void doubleClick(DoubleClickEvent event) {
-			if(event.getSelection() instanceof IStructuredSelection){
-				IStructuredSelection selection = (IStructuredSelection)event.getSelection();
-				if(selection.getFirstElement() instanceof AbstractNode){
-					fMasterSection.selectElement(selection.getFirstElement());
-				}
-			}
-		}
-	}
-
 	public BasicSection(
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext,
@@ -207,4 +188,24 @@ public abstract class BasicSection extends SectionPart {
 	protected IJavaProjectProvider getJavaProjectProvider() {
 		return fJavaProjectProvider;
 	}
+
+	protected class SelectNodeDoubleClickListener implements IDoubleClickListener {
+
+		private ModelMasterSection fMasterSection;
+
+		public SelectNodeDoubleClickListener(ModelMasterSection masterSection) {
+			fMasterSection = masterSection;
+		}
+
+		@Override
+		public void doubleClick(DoubleClickEvent event) {
+			if(event.getSelection() instanceof IStructuredSelection){
+				IStructuredSelection selection = (IStructuredSelection)event.getSelection();
+				if(selection.getFirstElement() instanceof AbstractNode){
+					fMasterSection.selectElement(selection.getFirstElement());
+				}
+			}
+		}
+	}
+
 }
