@@ -172,10 +172,10 @@ public class ConstraintViewer extends TreeViewerSection {
 
 			if (fCurrentConstraint != null) {
 				if (element == fCurrentConstraint.getPremise()) {
-					return getImage("premise_statement.gif");
+					return getImage("premise_statement.png");
 				}
 				else if (element == fCurrentConstraint.getConsequence()) {
-					return getImage("consequence_statement.gif");
+					return getImage("consequence_statement.png");
 				}
 			}
 			return null;
