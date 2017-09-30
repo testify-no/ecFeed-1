@@ -10,6 +10,8 @@
 
 package com.ecfeed.core.adapter.operations;
 
+import java.util.List;
+
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.ITypeAdapterProvider;
 import com.ecfeed.core.adapter.java.Messages;
@@ -50,13 +52,14 @@ public class FactoryRemoveOperation {
 		}
 
 		@Override
-		public AbstractNode getNodeToBeSelectedAfterTheOperation() {
+		public List<AbstractNode> getNodesToSelect() {
 			return null;
 		}
 
 		@Override
-		public void setNodeToBeSelectedAfterTheOperation(AbstractNode abstractNode) {
+		public void setNodesToSelect(List<AbstractNode> nodes) {
 		}
+
 
 	}
 

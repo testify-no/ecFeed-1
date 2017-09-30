@@ -60,7 +60,7 @@ public class GenericOperationRemoveChoice extends BulkOperation {
 			@Override
 			public void execute() throws ModelOperationException {
 
-				setNodeToBeSelectedAfterTheOperation(fTarget);
+				setOneNodeToSelect(fTarget);
 				fTarget.addChoice(fChoice, fOriginalIndex);
 				reverseAdaptParameter();
 				markModelUpdated();
@@ -136,7 +136,7 @@ public class GenericOperationRemoveChoice extends BulkOperation {
 		@Override
 		public void execute() throws ModelOperationException {
 
-			setNodeToBeSelectedAfterTheOperation(fTarget);
+			setOneNodeToSelect(fTarget);
 			fOriginalIndex = fChoice.getIndex();
 			validateOperation();
 			fTarget.removeChoice(fChoice);

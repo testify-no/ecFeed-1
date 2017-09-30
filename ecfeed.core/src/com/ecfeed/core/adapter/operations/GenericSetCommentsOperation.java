@@ -30,7 +30,7 @@ public class GenericSetCommentsOperation extends AbstractModelOperation {
 	@Override
 	public void execute() throws ModelOperationException {
 
-		setNodeToBeSelectedAfterTheOperation(fTarget);
+		setOneNodeToSelect(fTarget);
 		fCurrentComments = fTarget.getDescription() != null ? fTarget.getDescription() : "";
 		fTarget.setDescription(fComments);
 	}

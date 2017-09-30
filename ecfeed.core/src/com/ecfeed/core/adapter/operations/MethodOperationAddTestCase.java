@@ -43,7 +43,7 @@ public class MethodOperationAddTestCase extends AbstractModelOperation {
 	@Override
 	public void execute() throws ModelOperationException {
 
-		setNodeToBeSelectedAfterTheOperation(fMethodNode);
+		setOneNodeToSelect(fMethodNode);
 
 		if(fIndex == -1){
 			fIndex = fMethodNode.getTestCases().size();

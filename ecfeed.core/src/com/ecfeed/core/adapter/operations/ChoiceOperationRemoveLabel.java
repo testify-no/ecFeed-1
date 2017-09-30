@@ -30,7 +30,7 @@ public class ChoiceOperationRemoveLabel extends BulkOperation{
 
 		@Override
 		public void execute() throws ModelOperationException {
-			setNodeToBeSelectedAfterTheOperation(fTarget);
+			setOneNodeToSelect(fTarget);
 			fTarget.removeLabel(fLabel);
 			markModelUpdated();
 		}

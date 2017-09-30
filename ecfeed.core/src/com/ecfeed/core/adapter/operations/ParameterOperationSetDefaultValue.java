@@ -34,7 +34,7 @@ public class ParameterOperationSetDefaultValue extends AbstractModelOperation {
 	@Override
 	public void execute() throws ModelOperationException {
 
-		setNodeToBeSelectedAfterTheOperation(fTarget);
+		setOneNodeToSelect(fTarget);
 		String convertedValue = fTypeAdapter.convert(fNewValue);
 
 		if (convertedValue == null) {

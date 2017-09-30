@@ -99,7 +99,7 @@ public class OperationExecuter {
 				executeWithoutExceptionLogging(operation);
 
 				CachedImplementationStatusResolver.clearCache();
-				fModelUpdateContext.notifyUpdateListeners(operation.getNodeToBeSelectedAfterTheOperation());
+				fModelUpdateContext.notifyUpdateListeners(operation.getNodesToSelect());
 
 				return Status.OK_STATUS;
 				

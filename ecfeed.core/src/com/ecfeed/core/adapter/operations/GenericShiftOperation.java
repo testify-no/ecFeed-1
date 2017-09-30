@@ -45,7 +45,7 @@ public class GenericShiftOperation extends AbstractModelOperation {
 	@Override
 	public void execute() throws ModelOperationException {
 
-		setNodeToBeSelectedAfterTheOperation();
+		setNodeToSelect();
 		shiftElements(fCollection, indices(fCollection, fToBeShifted), fShiftSize);
 		markModelUpdated();
 	}
@@ -161,7 +161,7 @@ public class GenericShiftOperation extends AbstractModelOperation {
 		return maxIndexNode;
 	}
 
-	private void setNodeToBeSelectedAfterTheOperation() {
+	private void setNodeToSelect() {
 
 		if (fToBeShifted.isEmpty()) {
 			return;
@@ -169,7 +169,7 @@ public class GenericShiftOperation extends AbstractModelOperation {
 
 		AbstractNode abstractNode = fToBeShifted.get(0);
 
-		setNodeToBeSelectedAfterTheOperation(abstractNode);
+		setOneNodeToSelect(abstractNode);
 	}
 
 }

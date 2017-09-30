@@ -31,7 +31,7 @@ public class MethodOperationRemoveConstraint extends AbstractModelOperation {
 	@Override
 	public void execute() throws ModelOperationException {
 
-		setNodeToBeSelectedAfterTheOperation(fMethodNode);
+		setOneNodeToSelect(fMethodNode);
 		fIndex = fConstraint.getIndex();
 		fMethodNode.removeConstraint(fConstraint);
 		markModelUpdated();

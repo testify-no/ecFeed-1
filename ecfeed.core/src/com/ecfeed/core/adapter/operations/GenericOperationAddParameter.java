@@ -38,7 +38,7 @@ public class GenericOperationAddParameter extends AbstractModelOperation {
 		@Override
 		public void execute() throws ModelOperationException {
 
-			setNodeToBeSelectedAfterTheOperation(fParametersParentNode);
+			setOneNodeToSelect(fParametersParentNode);
 			fOriginalIndex = fReversedParameter.getIndex();
 			fReversedTarget.removeParameter(fReversedParameter);
 			markModelUpdated();
@@ -66,7 +66,7 @@ public class GenericOperationAddParameter extends AbstractModelOperation {
 	@Override
 	public void execute() throws ModelOperationException {
 
-		setNodeToBeSelectedAfterTheOperation(fParametersParentNode);
+		setOneNodeToSelect(fParametersParentNode);
 		generateUniqueParameterName(fAbstractParameterNode);
 		String parameterName = fAbstractParameterNode.getName();
 

@@ -32,7 +32,7 @@ public class ClassOperationRemoveMethod extends AbstractModelOperation {
 	@Override
 	public void execute() throws ModelOperationException {
 
-		setNodeToBeSelectedAfterTheOperation(fTarget);
+		setOneNodeToSelect(fTarget);
 		fCurrentIndex = fMethod.getIndex();
 
 		if (fTarget.removeMethod(fMethod) == false) {

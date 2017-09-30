@@ -19,11 +19,11 @@ public class ChoiceOperationAddLabels extends BulkOperation {
 	public ChoiceOperationAddLabels(
 			ChoiceNode target, 
 			Collection<String> labels, 
-			AbstractNode nodeToBeSelectedAfterTheOperation,
-			AbstractNode nodeToBeSelectedAfterReverseOperation) {
+			AbstractNode nodeToSelect,
+			AbstractNode nodeToSelectAfterReverseOperation) {
 
 		super(OperationNames.ADD_PARTITION_LABELS, false, 
-				nodeToBeSelectedAfterTheOperation, nodeToBeSelectedAfterReverseOperation);
+				nodeToSelect, nodeToSelectAfterReverseOperation);
 
 		for(String label : labels){
 			if(target.getInheritedLabels().contains(label) == false){

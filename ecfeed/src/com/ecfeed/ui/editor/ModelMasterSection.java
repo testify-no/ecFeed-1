@@ -129,9 +129,9 @@ public class ModelMasterSection extends TreeViewerSection {
 		getTreeViewer().expandToLevel(abstractNode, 1);
 	}
 
-	public List<IModelUpdateListener> createUpdateListeners(AbstractNode nodeToSelectAfterTheOperation) {
+	public List<IModelUpdateListener> createUpdateListeners(List<AbstractNode> nodesToSelectAfterTheOperation) {
 
-		IModelUpdateListener updateListener = new UpdateListener(nodeToSelectAfterTheOperation);
+		IModelUpdateListener updateListener = new UpdateListener(nodesToSelectAfterTheOperation);
 		return Arrays.asList(new IModelUpdateListener[]{updateListener});
 	}
 
@@ -178,10 +178,10 @@ public class ModelMasterSection extends TreeViewerSection {
 
 	private class UpdateListener implements IModelUpdateListener {
 
-		AbstractNode fNodeToSelectAfterTheOperation;
+		List<AbstractNode> fNodesToSelect;
 
-		UpdateListener(AbstractNode nodeToSelectAfterTheOperation) {
-			fNodeToSelectAfterTheOperation = nodeToSelectAfterTheOperation;
+		UpdateListener(List<AbstractNode> nodesToSelectAfterTheOperation) {
+			fNodesToSelect = nodesToSelectAfterTheOperation;
 		}
 
 		@Override
@@ -196,8 +196,8 @@ public class ModelMasterSection extends TreeViewerSection {
 			refresh();
 
 			IMainTreeProvider mainTreeProvider = fMasterDetailsBlock.getMainTreeProvider();
-			mainTreeProvider.expandChildren(fNodeToSelectAfterTheOperation);
-			mainTreeProvider.setCurrentNode(fNodeToSelectAfterTheOperation);
+
+			MainTreeProviderHelper.notifyModelUpdated(mainTreeProvider, fNodesToSelect);
 		}
 	}
 

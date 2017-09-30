@@ -34,7 +34,7 @@ public class TestCaseOperationUpdateTestData extends AbstractModelOperation {
 	@Override
 	public void execute() throws ModelOperationException {
 
-		setNodeToBeSelectedAfterTheOperation(fTarget);
+		setOneNodeToSelect(fTarget);
 
 		if(fNewValue.getParameter() != fTarget.getTestData().get(fIndex).getParameter()){
 			ModelOperationException.report(Messages.TEST_DATA_CATEGORY_MISMATCH_PROBLEM);

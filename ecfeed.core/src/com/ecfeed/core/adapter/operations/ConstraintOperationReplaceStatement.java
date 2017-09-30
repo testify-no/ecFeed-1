@@ -33,7 +33,7 @@ public class ConstraintOperationReplaceStatement extends AbstractModelOperation{
 	@Override
 	public void execute() throws ModelOperationException {
 
-		setNodeToBeSelectedAfterTheOperation(fTarget);
+		setOneNodeToSelect(fTarget);
 		Constraint constraint = fTarget.getConstraint();
 
 		if (constraint.getPremise() == fCurrentStatement) {

@@ -80,13 +80,12 @@ public class ModelOperationManagerTest {
 		}
 
 		@Override
-		public AbstractNode getNodeToBeSelectedAfterTheOperation() {
+		public List<AbstractNode> getNodesToSelect() {
 			return null;
 		}
 
 		@Override
-		public void setNodeToBeSelectedAfterTheOperation(AbstractNode abstractNode) {
-
+		public void setNodesToSelect(List<AbstractNode> nodes) {
 		}
 
 	}

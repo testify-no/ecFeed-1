@@ -42,7 +42,7 @@ public class ParameterOperationSetExpected extends AbstractModelOperation {
 		@Override
 		public void execute() throws ModelOperationException {
 
-			setNodeToBeSelectedAfterTheOperation(fTarget);
+			setOneNodeToSelect(fTarget);
 
 			fTarget.setExpected(!fExpected);
 			if (fTarget.getMethod() != null) { 
@@ -81,7 +81,7 @@ public class ParameterOperationSetExpected extends AbstractModelOperation {
 	@Override
 	public void execute() throws ModelOperationException {
 
-		setNodeToBeSelectedAfterTheOperation(fTarget);
+		setOneNodeToSelect(fTarget);
 
 		fTarget.setExpected(fExpected);
 		String type = fTarget.getType();

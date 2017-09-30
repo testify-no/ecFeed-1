@@ -10,13 +10,13 @@ import com.ecfeed.ui.modelif.IModelUpdateListener;
 
 public abstract class AModelUpdateContext implements IModelUpdateContext {
 
-	protected abstract List<IModelUpdateListener> createUpdateListeners(AbstractNode nodeToSelectAfterTheOperation);
+	protected abstract List<IModelUpdateListener> createUpdateListeners(List<AbstractNode> nodesToSelectAfterTheOperation);
 	protected abstract AbstractFormPart getAbstractFormPart();
 
 	@Override
-	public final void notifyUpdateListeners(AbstractNode nodeToSelectAfterTheOperation) {
+	public final void notifyUpdateListeners(List<AbstractNode> nodesToSelectAfterTheOperation) {
 
-		List<IModelUpdateListener> updateListeners = createUpdateListeners(nodeToSelectAfterTheOperation);
+		List<IModelUpdateListener> updateListeners = createUpdateListeners(nodesToSelectAfterTheOperation);
 
 		if (updateListeners == null) {
 			return;

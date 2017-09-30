@@ -40,7 +40,7 @@ public class MethodParameterOperationSetLinked extends BulkOperation{
 			@Override
 			public void execute() throws ModelOperationException {
 
-				setNodeToBeSelectedAfterTheOperation(fTarget);
+				setOneNodeToSelect(fTarget);
 				MethodNode methodNode = fTarget.getMethod();
 
 				methodNode.replaceTestCases(fOriginalTestCases);
@@ -72,7 +72,7 @@ public class MethodParameterOperationSetLinked extends BulkOperation{
 		@Override
 		public void execute() throws ModelOperationException {
 
-			setNodeToBeSelectedAfterTheOperation(fTarget);
+			setOneNodeToSelect(fTarget);
 
 			MethodNode method = fTarget.getMethod();
 			String newType;

@@ -36,7 +36,7 @@ public class MethodOperationRemoveParameter extends BulkOperation{
 			@Override
 			public void execute() throws ModelOperationException {
 
-				setNodeToBeSelectedAfterTheOperation(getMethodTarget());
+				setOneNodeToSelect(getMethodTarget());
 				getMethodTarget().replaceTestCases(fOriginalTestCases);
 				RemoveMethodParameterOperation.super.reverseOperation().execute();
 			}

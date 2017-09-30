@@ -28,7 +28,7 @@ public class BulkOperation extends AbstractModelOperation {
 	// otherwise after first error the reverse operation is called
 	private final boolean fAtomic;
 	private final List<ICheckOperation> fCheckOperations;
-	private AbstractNode fNodeToBeSelectedAfterReverseOperation;
+	private AbstractNode fNodeToSelectAfterReverseOperation;
 
 	protected interface ICheckOperation {
 		public void check() throws ModelOperationException;
@@ -37,19 +37,19 @@ public class BulkOperation extends AbstractModelOperation {
 	public BulkOperation(
 			String name, 
 			boolean atomic,
-			AbstractNode nodeToBeSelectedAfterTheOperation,
-			AbstractNode nodeToBeSelectedAfterReverseOperation) {
+			AbstractNode nodeToSelect,
+			AbstractNode nodeToSelectAfterReverseOperation) {
 
 		this(name, new ArrayList<IModelOperation>(), atomic, 
-				nodeToBeSelectedAfterTheOperation, nodeToBeSelectedAfterReverseOperation);
+				nodeToSelect, nodeToSelectAfterReverseOperation);
 	}
 
 	public BulkOperation(
 			String name, 
 			List<IModelOperation> operations, 
 			boolean atomic, 
-			AbstractNode nodeToBeSelectedAfterTheOperation,
-			AbstractNode nodeToBeSelectedAfterReverseOperation) {
+			AbstractNode nodeToSelect,
+			AbstractNode nodeToelectAfterReverseOperation) {
 
 		super(name);
 
@@ -58,9 +58,9 @@ public class BulkOperation extends AbstractModelOperation {
 		fCheckOperations = new ArrayList<ICheckOperation>();
 		fAtomic = atomic;
 
-		setNodeToBeSelectedAfterTheOperation(nodeToBeSelectedAfterTheOperation);
-		
-		fNodeToBeSelectedAfterReverseOperation = nodeToBeSelectedAfterReverseOperation;
+		setOneNodeToSelect(nodeToSelect);
+
+		fNodeToSelectAfterReverseOperation = nodeToelectAfterReverseOperation;
 	}
 
 	protected void addOperation(IModelOperation operation) {
@@ -115,7 +115,7 @@ public class BulkOperation extends AbstractModelOperation {
 	public IModelOperation reverseOperation() {
 		return new BulkOperation(
 				"reverse " + getName(), reverseOperations(), 
-				fAtomic, fNodeToBeSelectedAfterReverseOperation, null);
+				fAtomic, fNodeToSelectAfterReverseOperation, null);
 	}
 
 

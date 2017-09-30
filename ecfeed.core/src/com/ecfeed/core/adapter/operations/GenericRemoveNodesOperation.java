@@ -37,13 +37,13 @@ public class GenericRemoveNodesOperation extends BulkOperation {
 			Collection<? extends AbstractNode> nodes, 
 			ITypeAdapterProvider adapterProvider, 
 			boolean validate,
-			AbstractNode nodeToBeSelectedAfterTheOperation,
-			AbstractNode nodeToBeSelectedAfterReverseOperation) {
-		
+			AbstractNode nodeToSelect,
+			AbstractNode nodeToSelectAfterReverseOperation) {
+
 		super(OperationNames.REMOVE_NODES, false,
-				nodeToBeSelectedAfterTheOperation,
-				nodeToBeSelectedAfterReverseOperation);
-		
+				nodeToSelect,
+				nodeToSelectAfterReverseOperation);
+
 		fRemoved = new HashSet<>(nodes);
 		Iterator<AbstractNode> it = fRemoved.iterator();
 		while(it.hasNext()){
@@ -58,7 +58,7 @@ public class GenericRemoveNodesOperation extends BulkOperation {
 		prepareOperations(adapterProvider, validate);
 		return;
 	}
-	
+
 	private void prepareOperations(ITypeAdapterProvider adapterProvider, boolean validate){
 		HashMap<ClassNode, HashMap<String, HashMap<MethodNode, List<String>>>> duplicatesMap = new HashMap<>();
 		HashMap<MethodNode, List<AbstractParameterNode>> parameterMap = new HashMap<>();
@@ -179,8 +179,8 @@ public class GenericRemoveNodesOperation extends BulkOperation {
 		Iterator<MethodNode> methodItr = methods.iterator();
 		while(methodItr.hasNext()){
 			MethodNode method = methodItr.next();
-				addOperation(FactoryRemoveOperation.getRemoveOperation(method, adapterProvider, validate));
-				methodItr.remove();
+			addOperation(FactoryRemoveOperation.getRemoveOperation(method, adapterProvider, validate));
+			methodItr.remove();
 		}
 		// Detect duplicates
 		Iterator<ClassNode> classItr = duplicatesMap.keySet().iterator();
@@ -257,7 +257,7 @@ public class GenericRemoveNodesOperation extends BulkOperation {
 				}
 				if(!duplicatesMap.get(clazz).get(classMethod.getName()).containsKey(classMethod)){
 					duplicatesMap.get(clazz).get(classMethod.getName())
-							.put(classMethod, new ArrayList<String>(classMethod.getParameterTypes()));
+					.put(classMethod, new ArrayList<String>(classMethod.getParameterTypes()));
 				}
 				if(!duplicatesMap.get(clazz).get(classMethod.getName()).containsKey(method)){
 					duplicatesMap.get(clazz).get(classMethod.getName()).put(method, new ArrayList<String>(method.getParameterTypes()));
@@ -267,7 +267,7 @@ public class GenericRemoveNodesOperation extends BulkOperation {
 		}
 		return hasDuplicate;
 	}
-	
+
 	private void eliminateMentioningConstraints(AbstractNode node, HashSet<ConstraintNode> constraints){
 		if(node instanceof ChoiceNode){
 			Iterator<ConstraintNode> itr = constraints.iterator();

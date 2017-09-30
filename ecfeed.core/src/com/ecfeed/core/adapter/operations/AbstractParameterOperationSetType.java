@@ -48,7 +48,7 @@ public class AbstractParameterOperationSetType extends AbstractModelOperation {
 		@Override
 		public void execute() throws ModelOperationException {
 			
-			setNodeToBeSelectedAfterTheOperation(fTarget);
+			setOneNodeToSelect(fTarget);
 			
 			restoreOriginalChoices(fTarget);
 			restoreOriginalValues(fTarget);
@@ -91,7 +91,7 @@ public class AbstractParameterOperationSetType extends AbstractModelOperation {
 	@Override
 	public void execute() throws ModelOperationException {
 		
-		setNodeToBeSelectedAfterTheOperation(fTarget);
+		setOneNodeToSelect(fTarget);
 		
 		fCurrentType = fTarget.getType();
 		getOriginalChoices().clear();

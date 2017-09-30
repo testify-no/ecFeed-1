@@ -59,7 +59,7 @@ public class MethodOperationRemoveTestCase extends AbstractModelOperation {
 	@Override
 	public void execute() throws ModelOperationException {
 
-		setNodeToBeSelectedAfterTheOperation(fMethodNode);
+		setOneNodeToSelect(fMethodNode);
 		fIndex = fTestCase.getIndex();
 		fMethodNode.removeTestCase(fTestCase);
 		markModelUpdated();

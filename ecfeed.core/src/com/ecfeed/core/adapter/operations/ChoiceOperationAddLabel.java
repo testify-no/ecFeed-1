@@ -30,14 +30,14 @@ public class ChoiceOperationAddLabel extends AbstractModelOperation {
 
 		@Override
 		public void execute() throws ModelOperationException {
-			
-			setNodeToBeSelectedAfterTheOperation(fTarget);
+
+			setOneNodeToSelect(fTarget);
 			fTarget.removeLabel(fLabel);
-			
+
 			for(ChoiceNode p : fLabeledDescendants){
 				p.addLabel(fLabel);
 			}
-			
+
 			markModelUpdated();
 		}
 
@@ -50,7 +50,7 @@ public class ChoiceOperationAddLabel extends AbstractModelOperation {
 
 	public ChoiceOperationAddLabel(ChoiceNode target, String label){
 		super(OperationNames.ADD_PARTITION_LABEL);
-		
+
 		fTarget = target;
 		fLabel = label;
 		fLabeledDescendants = target.getLabeledChoices(fLabel);
@@ -58,10 +58,10 @@ public class ChoiceOperationAddLabel extends AbstractModelOperation {
 
 	@Override
 	public void execute() throws ModelOperationException {
-		
-		setNodeToBeSelectedAfterTheOperation(fTarget);
+
+		setOneNodeToSelect(fTarget);
 		fTarget.addLabel(fLabel);
-		
+
 		for(ChoiceNode p : fLabeledDescendants){
 			p.removeLabel(fLabel);
 		}

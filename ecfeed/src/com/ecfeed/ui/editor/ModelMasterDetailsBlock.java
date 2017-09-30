@@ -264,7 +264,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 	public IMainTreeProvider getMainTreeProvider() {
 		return fMainTreeProvider;
 	}
-	
+
 	protected BasicSection getFocusedSection() {
 
 		if (fMasterSection.getViewer().getControl().isFocusControl()) {
@@ -301,14 +301,14 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 			return getPage().getEditor().getUndoContext();
 		}
 
-		protected List<IModelUpdateListener> createUpdateListeners(AbstractNode nodeToSelectAfterTheOperation) {
-			return fMasterSection.createUpdateListeners(nodeToSelectAfterTheOperation);
+		@Override
+		protected List<IModelUpdateListener> createUpdateListeners(List<AbstractNode> nodesToSelectAfterTheOperation) {
+			return fMasterSection.createUpdateListeners(nodesToSelectAfterTheOperation);
 		}
 
 		protected AbstractFormPart getAbstractFormPart() {
 			return fMasterSection.getSourceForm();
 		}
-
 	}
 
 	private class MasterSectionContext implements ISectionContext{
@@ -382,24 +382,30 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 
 		@Override
 		public void setCurrentNode(AbstractNode abstractNode) {
-			
+
 			if (abstractNode == null) {
 				return;
 			}
-			
+
 			fMasterSection.setSelection(new StructuredSelection(abstractNode));
 		}
 
 		@Override
 		public void expandChildren(AbstractNode abstractNode) {
-			
+
 			if (abstractNode == null) {
 				return;
 			}
-			
+
 			fMasterSection.expandChildren(abstractNode);
 		}
-		
+
+		@Override
+		public void setSelection(AbstractNode[] abstractNodes) {
+			fMasterSection.setSelection(new StructuredSelection(abstractNodes));
+
+		}
+
 	}
 
 }

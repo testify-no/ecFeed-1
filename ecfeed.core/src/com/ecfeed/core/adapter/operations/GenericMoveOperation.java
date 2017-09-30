@@ -71,7 +71,7 @@ public class GenericMoveOperation extends BulkOperation {
 			ModelOperationException.report(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
 		}
 
-		setNodeToBeSelectedAfterTheOperation(newParent);
+		setOneNodeToSelect(newParent);
 	}
 
 	protected boolean externalNodes(List<? extends AbstractNode> moved, AbstractNode newParent){

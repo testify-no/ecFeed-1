@@ -30,7 +30,7 @@ public class MethodOperationConvertTo extends AbstractModelOperation {
 	@Override
 	public void execute() throws ModelOperationException {
 
-		setNodeToBeSelectedAfterTheOperation(fTarget);
+		setOneNodeToSelect(fTarget);
 
 		if(fTarget.getClassNode().getMethod(fSource.getName(), fSource.getParameterTypes()) != null){
 			String className = fTarget.getClassNode().getName();

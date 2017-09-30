@@ -130,7 +130,7 @@ public class GenericOperationRename extends AbstractModelOperation {
 	@Override
 	public void execute() throws ModelOperationException{
 
-		setNodeToBeSelectedAfterTheOperation(fTarget);
+		setOneNodeToSelect(fTarget);
 		verifyNameWithRegex();
 		verifyNewName(fNewName);
 		fTarget.setName(fNewName);

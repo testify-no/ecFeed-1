@@ -34,7 +34,7 @@ public class MethodParameterOperationSetLink extends BulkOperation {
 
 			@Override
 			public void execute() throws ModelOperationException {
-				setNodeToBeSelectedAfterTheOperation(fTarget);
+				setOneNodeToSelect(fTarget);
 				fTarget.setLink(fCurrentLink);
 			}
 
@@ -54,7 +54,7 @@ public class MethodParameterOperationSetLink extends BulkOperation {
 		@Override
 		public void execute() throws ModelOperationException {
 
-			setNodeToBeSelectedAfterTheOperation(fTarget);
+			setOneNodeToSelect(fTarget);
 			MethodNode method = fTarget.getMethod();
 			List<String> types = method.getParameterTypes();
 			types.set(fTarget.getIndex(), fNewLink.getType());

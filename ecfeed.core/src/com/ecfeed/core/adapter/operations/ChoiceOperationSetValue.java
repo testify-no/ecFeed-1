@@ -43,7 +43,7 @@ public class ChoiceOperationSetValue extends AbstractModelOperation {
 	@Override
 	public void execute() throws ModelOperationException {
 
-		setNodeToBeSelectedAfterTheOperation(fTarget);
+		setOneNodeToSelect(fTarget);
 
 		String convertedValue = validateChoiceValue(fTarget.getParameter().getType(), fNewValue);
 
@@ -137,7 +137,7 @@ public class ChoiceOperationSetValue extends AbstractModelOperation {
 		@Override
 		public void execute() throws ModelOperationException {
 
-			setNodeToBeSelectedAfterTheOperation(fTarget);
+			setOneNodeToSelect(fTarget);
 			fTarget.setValueString(fOriginalValue);
 			adaptParameter(fTarget.getParameter());
 			markModelUpdated();

@@ -58,7 +58,7 @@ public class GenericOperationAddChoice extends BulkOperation {
 		@Override
 		public void execute() throws ModelOperationException {
 
-			setNodeToBeSelectedAfterTheOperation(fChoicesParentNode);
+			setOneNodeToSelect(fChoicesParentNode);
 			generateUniqueChoiceName(fChoice);
 
 			if(fIndex == -1) {
