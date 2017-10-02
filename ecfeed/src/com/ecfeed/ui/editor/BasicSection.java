@@ -199,19 +199,19 @@ public abstract class BasicSection extends SectionPart {
 
 		@Override
 		public void doubleClick(DoubleClickEvent event) {
-			
+
 			if (!(event.getSelection() instanceof IStructuredSelection)) {
 				return;
 			}
-			
-			
+
+
 			IStructuredSelection selection = (IStructuredSelection)event.getSelection();
-			
+
 			Object firstObject = selection.getFirstElement();
 			if (!(firstObject instanceof AbstractNode)) {
 				return;
 			}
-			
+
 			fMainTreeProvider.setCurrentNode((AbstractNode)firstObject);
 		}
 	}

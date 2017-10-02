@@ -93,7 +93,9 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 			fWebParameterSection = createWebParameterSection();
 		}
 
-		addForm(fChoicesViewer = new ChoicesViewer(this, getModelUpdateContext(), getJavaProjectProvider()));
+		addForm(fChoicesViewer = 
+				new ChoicesViewer(
+						this, getMainTreeProvider(), getModelUpdateContext(), getJavaProjectProvider()));
 
 		getEcFormToolkit().paintBordersFor(getMainComposite());
 	}

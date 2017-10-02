@@ -50,7 +50,7 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 			IJavaProjectProvider javaProjectProvider) {
 		this(mainTreeProvider, choiceInterface, updateContext, javaProjectProvider, null);
 	}
-	
+
 	public ChoiceDetailsPage(
 			IMainTreeProvider mainTreeProvider,
 			ChoiceInterface choiceInterface,
@@ -69,7 +69,10 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 
 		addCommentsSection();
 
-		addViewerSection(fChildrenViewer = new ChoicesViewer(this, getModelUpdateContext(), getJavaProjectProvider()));
+		addViewerSection(fChildrenViewer = 
+				new ChoicesViewer(
+						this, getMainTreeProvider(), getModelUpdateContext(), getJavaProjectProvider()));
+
 		addViewerSection(fLabelsViewer = new ChoiceLabelsViewer(this, getModelUpdateContext(), getJavaProjectProvider()));
 
 		getEcFormToolkit().paintBordersFor(getMainComposite());
