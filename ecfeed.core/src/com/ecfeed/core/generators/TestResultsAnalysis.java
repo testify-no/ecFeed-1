@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import org.apache.commons.math3.distribution.HypergeometricDistribution;
 
 public class TestResultsAnalysis {
 
