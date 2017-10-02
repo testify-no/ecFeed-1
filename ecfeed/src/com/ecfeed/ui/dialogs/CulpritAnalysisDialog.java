@@ -43,42 +43,40 @@ import com.ecfeed.ui.modelif.TestResultsHolder;
 
 public class CulpritAnalysisDialog extends TitleAreaDialog {
 
-	private int n1 = 0;
-	private int n2 = 2;
 	final private int fNumColumn = 5;
 	final private int fMaxNumRow = 31;
-	private int fRecordIndex;
-	private int fTotal;
 	final private int fComboMaxLimit;
-	
+
+	private TestResultsAnalysis fTestResultsAnalysis;
+	private List<TestResultDescription> fTestResultDescrs;
+	private int fN1 = 0;
+	private int fN2 = 2;
+
+	private PagingContainer<Culprit> fPagingContainer;
+	private List<Culprit> fCurrentPage;
+	private int fRecordIndex;
+
 	private DialogObjectToolkit fDialogObjectToolkit;
 	private Table fTable = null;
 	private Button fNextButton;
 	private Button fPrevButton;
 	private Combo fMinCombo;
 	private Combo fMaxCombo;
-	
+
+	private MethodNode fMethodNode; 
 	private TestResultsHolder fTestResultsHolder;
-	private MethodNode fMethodNode;
-	private List<TestResultDescription> fTestResultDescrs; 
-	private TestResultsAnalysis fTestResultsAnalysis;
-	private PagingContainer<Culprit> fPagingContainer;
-	private List<Culprit> fCurrentPage;
-	
 
 	public CulpritAnalysisDialog(MethodNode methodNode, TestResultsHolder testResultsHolder) {
-		
 		super(null);
-		
+
 		fMethodNode = methodNode;
 		fTestResultsHolder = testResultsHolder;
-		fComboMaxLimit = methodNode.getMethodParameterCount();
-		fTestResultDescrs = testResultsHolder.getTestResultDescription();
-				
+		fComboMaxLimit = fMethodNode.getMethodParameterCount();
+		fTestResultDescrs = fTestResultsHolder.getTestResultDescription();
+
 		fTestResultsAnalysis 
-		= new TestResultsAnalyzer().generateAnalysis(fTestResultDescrs, n1, n2);
-		fTotal = fTestResultsAnalysis.getCulpritCount();
-		
+		= new TestResultsAnalyzer().generateAnalysis(fTestResultDescrs, fN1, fN2);
+
 		fPagingContainer = new PagingContainer<Culprit>(fMaxNumRow);
 		fillUpPagingContainer();
 		fCurrentPage = fPagingContainer.getCurrentPage();
@@ -91,15 +89,15 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 
 	@Override
 	public void create() {
-		
+
 		super.create();
-		
+
 		setTitle("Test execution report");	
 	}
 
 	@Override
 	protected boolean isResizable()	{
-		
+
 		return true;
 	}
 
@@ -108,20 +106,60 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 
 		Composite dialogArea = (Composite) super.createDialogArea(parent);
 
-		Composite LabelComposite = (Composite) fDialogObjectToolkit.createGridComposite(dialogArea, 1);
+		Composite labelComposite = (Composite) fDialogObjectToolkit.createGridComposite(dialogArea, 1);
 		final String text = "Select tuple size for combinatoric analysis";
-		createLabel(LabelComposite, text);
+		createLabel(labelComposite, text);
 
-		Composite ComboComposite = (Composite) fDialogObjectToolkit.createGridComposite(dialogArea, 4);
-		createLabel(ComboComposite, "min");
-		fMinCombo = createCombo(ComboComposite, n1, new MinComboSelectionAdapter());
-		createLabel(ComboComposite, "max");
-		fMaxCombo = createCombo(ComboComposite, n2, new MaxComboSelectionAdapter());
+		Composite comboComposite = (Composite) fDialogObjectToolkit.createGridComposite(dialogArea, 4);
+		createCombos(comboComposite);
 
-		Composite TableComposite = (Composite) fDialogObjectToolkit.createGridComposite(dialogArea, 1);
-		fTable = createTableContents(TableComposite, fNumColumn);
+		Composite tableComposite = (Composite) fDialogObjectToolkit.createGridComposite(dialogArea, 1);
+		fTable = createTableContents(tableComposite, fNumColumn);
 
-		Composite ButtonComposite = (Composite) fDialogObjectToolkit.createGridComposite(dialogArea, 2);
+		Composite buttonComposite = (Composite) fDialogObjectToolkit.createGridComposite(dialogArea, 2);
+		createButtons(buttonComposite);
+
+		return dialogArea;
+	}
+
+	public void refillTable() {
+
+		fCurrentPage = fPagingContainer.getCurrentPage();
+		fRecordIndex = fPagingContainer.getFirstRecordIndex();
+		fTable.removeAll();
+		fillTable(fTable);	
+	}
+
+	public void loadNewData() {
+
+		if (fN1 > fN2) {
+			return;
+		}
+		fTestResultsAnalysis = new TestResultsAnalyzer().generateAnalysis(fTestResultDescrs, fN1, fN2);
+
+		fPagingContainer.removeAllRecords();
+		fPagingContainer.initiateCurrentPageNumber(0);
+		fillUpPagingContainer();
+		refillTable();
+		refreshPrevNextButtons();
+	}
+
+	private void fillUpPagingContainer() {
+
+		List<Culprit> culpritList = fTestResultsAnalysis.getCulpritList();
+
+		for (Culprit culprit: culpritList) {
+			fPagingContainer.addItem(culprit);	
+		}
+	}
+
+	public void refreshPrevNextButtons() {
+		fPrevButton.setEnabled(fPagingContainer.hasPreviousPage());
+		fNextButton.setEnabled(fPagingContainer.hasNextPage());		
+	}
+
+	private void createButtons(Composite ButtonComposite) {
+
 		fPrevButton = 
 				fDialogObjectToolkit.createButton(
 						ButtonComposite, "Previous Page", new PrevButtonSelectionAdapter());
@@ -130,32 +168,36 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 						ButtonComposite, "Next Page", new NextButtonSelectionAdapter());
 		fPrevButton.setLayoutData(new GridData(SWT.RIGHT, SWT.RIGHT, true, true));
 		fNextButton.setLayoutData(new GridData(SWT.RIGHT, SWT.RIGHT, false, false));
-		fPrevButton.setEnabled(false);
-		
-		return dialogArea;
-	}
-	
-	private void fillUpPagingContainer() {
-	
-		List<Culprit> culpritList = fTestResultsAnalysis.getCulpritList();
 
-		for (Culprit culprit: culpritList){
-			fPagingContainer.addItem(culprit);	
-		}
+		refreshPrevNextButtons();
+	}
+
+	private void createCombos(Composite comboComposite) {
+
+		createLabel(comboComposite, "min");
+		fMinCombo = createCombo(comboComposite, fN1, new MinComboSelectionAdapter());
+		fMinCombo.select(fN1);
+		createLabel(comboComposite, "max");
+		fMaxCombo = createCombo(comboComposite, fN2, new MaxComboSelectionAdapter());
+		fMaxCombo.setText(Integer.toString(fN2));
 	}
 
 	private Combo createCombo(Composite parentComposite, int defaultValue, SelectionListener selectionListener) {
-		
+
 		Combo c = fDialogObjectToolkit.createCombo(parentComposite, fComboMaxLimit, defaultValue);
-		
-		if (selectionListener != null){
+
+		for (int i = 1; i <= fComboMaxLimit; i++) {
+			c.add(Integer.toString(i));
+		}
+
+		if (selectionListener != null) {
 			c.addSelectionListener(selectionListener);
 		}
 		return c;
 	}
 
 	private void createLabel(Composite parentComposite, String text) {
-		
+
 		fDialogObjectToolkit.createLabel(parentComposite, text);
 	}
 
@@ -179,7 +221,7 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 
 		table.setRedraw(false);
 
-		for(Culprit culprit: fCurrentPage){
+		for(Culprit culprit: fCurrentPage) {
 			createTableItem(table, culprit);
 			fRecordIndex++;
 		}
@@ -190,7 +232,7 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 	private void createTableItem(Table table, Culprit culprit) {
 
 		int c = 0;
-		
+
 		TableItem item = new TableItem(table, SWT.NONE);
 		item.setText(c++, Integer.toString(fRecordIndex+1));
 		item.setText(c++, culprit.getItem().toString());
@@ -199,88 +241,65 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 		item.setText(c++, Integer.toString(culprit.getFailureCount()));
 
 	}
-	
-	public void refillTable() {
-		
-		fCurrentPage = fPagingContainer.getCurrentPage();
-		fRecordIndex = fPagingContainer.getFirstRecordIndex();
-		fTable.removeAll();
-		fillTable(fTable);	
+
+	private void makeColumnResizable(Composite parentComposite, TableColumn[] column) {
+
+		parentComposite.addControlListener(new ColumnResizeListener(parentComposite, column));
 	}
-	
-	public void loadNewData() {
-		
-		if(n1 < n2){
-			fTestResultsAnalysis = new TestResultsAnalyzer().generateAnalysis(fTestResultDescrs, n1, n2);
-			fTotal = fTestResultsAnalysis.getCulpritCount();
-			
-			fPagingContainer.removeAllRecords();
-			fillUpPagingContainer();
-			refillTable();
+
+	private void sortByHeaders(Table table, TableColumn[] column) {
+
+		Listener sortListener = new SortByHeadersListener(table);
+
+		for (int i = 0; i < column.length; i++) {
+			column[i].addListener(SWT.Selection, sortListener);
 		}	
 	}
 
-	private void makeColumnResizable(Composite parentComposite, TableColumn[] column) {
-		
-		parentComposite.addControlListener(new ColumnResizeListener(parentComposite, column));
-	}
-	
-	class NextButtonSelectionAdapter extends SelectionAdapter {
+	private class NextButtonSelectionAdapter extends SelectionAdapter {
 
 		@Override
 		public void widgetSelected(SelectionEvent arg0) {
-			
-			if (fPagingContainer.hasNextPage()) {
-				fPagingContainer.switchToNextPage();
-				refillTable();				
-			}
 
-			if (fRecordIndex == fTotal && fNextButton.isEnabled()){
-				fNextButton.setEnabled(false);
-			}
-
-			if (fRecordIndex > 0 && !fPrevButton.isEnabled()){
-				fPrevButton.setEnabled(true);
-			}
+			if (!fPagingContainer.hasNextPage()) {
+				return;
+			} 
+			fPagingContainer.switchToNextPage();
+			refillTable();	
+			refreshPrevNextButtons();
 		}
 	}
 
-	class PrevButtonSelectionAdapter extends SelectionAdapter {
+	private class PrevButtonSelectionAdapter extends SelectionAdapter {
 
 		@Override
 		public void widgetSelected(SelectionEvent arg0) {
-			
-			if (fPagingContainer.hasPreviousPage()){
-				fPagingContainer.switchToPreviousPage();
-				refillTable();
+
+			if (!fPagingContainer.hasPreviousPage()) {
+				return;
 			}
-			
-			if (fRecordIndex < fTotal && !fNextButton.isEnabled()){
-				fNextButton.setEnabled(true);
-			}
-			
-			if (fRecordIndex == fMaxNumRow && fPrevButton.isEnabled()){
-				fPrevButton.setEnabled(false);
-			}
+
+			fPagingContainer.switchToPreviousPage();
+			refillTable();
+			refreshPrevNextButtons();
 		}
 	}
-	
-	class MinComboSelectionAdapter extends SelectionAdapter {
-		
+	private class MinComboSelectionAdapter extends SelectionAdapter {
+
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			
-			n1 = Integer.parseInt(fMinCombo.getText());
+
+			fN1 = Integer.parseInt(fMinCombo.getText());
 			loadNewData();			
 		}
 	}
-	
-	class MaxComboSelectionAdapter extends SelectionAdapter {
-		
+
+	private class MaxComboSelectionAdapter extends SelectionAdapter {
+
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			
-			n2 = Integer.parseInt(fMaxCombo.getText());
+
+			fN2 = Integer.parseInt(fMaxCombo.getText());
 			loadNewData();		
 		}
 	}
@@ -291,7 +310,6 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 		TableColumn[] fColumn;
 
 		public ColumnResizeListener(Composite parentComposite, TableColumn[] column) {
-			
 			fParentComposite = parentComposite;
 			fColumn = column;
 		}
@@ -309,7 +327,7 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 			}
 
 			Point oldSize = fTable.getSize();
-			
+
 			RegulateTableSize(oldSize, width, area);
 		}
 
@@ -337,32 +355,20 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 		}
 	}
 
-
-	private void sortByHeaders(Table table, TableColumn[] column)
-	{
-
-		Listener sortListener = new SortByHeadersListener(table);
-
-		for (int i = 0; i < column.length; i++) {
-			column[i].addListener(SWT.Selection, sortListener);
-		}	
-	}
-
 	private class SortByHeadersListener implements Listener {
 
 		Table fTable;
 
 		public SortByHeadersListener(Table table) {
-			
 			fTable = table;
 		}
 
 		public void handleEvent(Event e) {
-			
+
 			TableColumn sortColumn = fTable.getSortColumn();
 			TableColumn selectedColumn = (TableColumn) e.widget;
 			int dir = fTable.getSortDirection();
-			
+
 			setSortDir(sortColumn, selectedColumn, dir);
 
 			if (dir == SWT.UP) {
