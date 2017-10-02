@@ -23,58 +23,58 @@ import com.ecfeed.core.generators.TestResultsAnalysis;
 import com.ecfeed.core.generators.TestResultsAnalyzer;
 
 public class PagingContainerTest<RecordType> {
-	
+
 	@Test
 	public void shouldAddItemsToPagingContainer(){
-		
+
 		List<TestResultDescription> testResultDescrs = createtestResultDescrs();
 		TestResultsAnalysis testResultsAnalysis = new TestResultsAnalyzer().generateAnalysis(testResultDescrs, 0, 2);
 		PagingContainer<Culprit> pagingContainer = new PagingContainer<Culprit>(5);
 		List<Culprit> Culprits = testResultsAnalysis.getCulpritList();
-		
+
 		for(Culprit culprit: Culprits)
 		{
 			pagingContainer.addItem(culprit);
 		}
-		
+
 		assertTrue(pagingContainer.getRecordsList().equals(Culprits));
 		assertEquals(pagingContainer.getRecordsList(), Culprits);
 	}
-	
+
 	@Test
 	public void shouldHandleNullItems(){
 		PagingContainer<String> pagingContainer = new PagingContainer<String>(3);
 		List<String> list = new ArrayList<String>();
-		
+
 		for(String item:list)
 		{
 			pagingContainer.addItem(item);
 		}
-		
+
 		pagingContainer.addItem(null);
 		assertTrue(pagingContainer.getRecordsList().isEmpty());	
 	}
-	
+
 	@Test
 	public void shouldReturnCurrentPage(){
 		List<TestResultDescription> testResultDescrs = createtestResultDescrs();
 		TestResultsAnalysis testResultsAnalysis = new TestResultsAnalyzer().generateAnalysis(testResultDescrs, 0, 2);
 		PagingContainer<Culprit> pagingContainer = new PagingContainer<Culprit>(5);
 		List<Culprit> Culprits = testResultsAnalysis.getCulpritList();
-		
+
 		for(Culprit culprit: Culprits)
 		{
 			pagingContainer.addItem(culprit);
 		}
 		assertEquals(pagingContainer.getCurrentPage().size(), 5);
-		
+
 		List<Culprit> firstFiveCulprits = new ArrayList<Culprit>();
 		for(int i = 0; i < 5; i++)
 		{
 			firstFiveCulprits.add(Culprits.get(i));
 		}
 		assertEquals(firstFiveCulprits, pagingContainer.getCurrentPage());
-		
+
 		pagingContainer.switchToNextPage();
 		firstFiveCulprits.clear();
 		for (int i=5; i < 10; i++)
@@ -82,7 +82,7 @@ public class PagingContainerTest<RecordType> {
 			firstFiveCulprits.add(Culprits.get(i));
 		}
 		assertEquals(firstFiveCulprits, pagingContainer.getCurrentPage());
-		
+
 		pagingContainer.switchToPreviousPage();
 		firstFiveCulprits.clear();
 		for (int i=0; i < 5; i++)
@@ -91,7 +91,7 @@ public class PagingContainerTest<RecordType> {
 		}
 		assertEquals(firstFiveCulprits, pagingContainer.getCurrentPage());	
 	}
-	
+
 	@Test
 	public void shouldRemoveAllItems()
 	{
@@ -99,21 +99,21 @@ public class PagingContainerTest<RecordType> {
 		TestResultsAnalysis testResultsAnalysis = new TestResultsAnalyzer().generateAnalysis(testResultDescrs, 0, 2);
 		PagingContainer<Culprit> pagingContainer = new PagingContainer<Culprit>(5);
 		List<Culprit> Culprits = testResultsAnalysis.getCulpritList();
-		
+
 		for (Culprit culprit: Culprits)
 		{
 			pagingContainer.addItem(culprit);
 		}
-		
+
 		assertFalse(pagingContainer.getRecordsList().isEmpty());
 		assertFalse(pagingContainer.getCurrentPage().isEmpty());
-		
+
 		pagingContainer.removeAllRecords();;
 		assertTrue(pagingContainer.getRecordsList().isEmpty());
 		assertTrue(pagingContainer.getCurrentPage().isEmpty());	
 	}
-	
-	
+
+
 	private void addTestResult(
 			String[] testArguments, boolean result, List<TestResultDescription> testResultDescrs) {
 
