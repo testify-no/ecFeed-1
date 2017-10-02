@@ -104,7 +104,7 @@ public class TestResultsAnalysis {
 			int occurences = culprit.getOccurenceCount();
 			int failures = culprit.getFailureCount();
 
-			int failsByOccurs = 100 * failures / occurences;
+			int failsByOccurs = failures / occurences;
 
 			culprit.setFailureIndex(failsByOccurs); 	
 		}
