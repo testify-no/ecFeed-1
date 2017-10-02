@@ -50,7 +50,8 @@ public class MethodsViewer extends TableViewerSection {
 
 
 	public MethodsViewer(
-			ISectionContext sectionContext, 
+			ISectionContext sectionContext,
+			IMainTreeProvider mainTreeProvider,
 			IModelUpdateContext updateContext, 
 			IJavaProjectProvider javaProjectProvider) {
 		super(sectionContext, updateContext, javaProjectProvider, StyleDistributor.getSectionStyle());
@@ -67,6 +68,8 @@ public class MethodsViewer extends TableViewerSection {
 						new ActionSelectionAdapter(
 								new DeleteAction(getViewer(), getModelUpdateContext()), 
 								Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
+
+		addDoubleClickListener(new SelectNodeDoubleClickListener(mainTreeProvider));
 
 		addSelectionChangedListener(new SelectionChangedListener());
 

@@ -82,7 +82,8 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		addCommentsSection();
 
 		addViewerSection(fMethodsSection = 
-				new MethodsViewer(this, getModelUpdateContext(), getJavaProjectProvider()));
+				new MethodsViewer(
+						this, getMainTreeProvider(), getModelUpdateContext(), getJavaProjectProvider()));
 
 		addViewerSection(fGlobalParametersSection = 
 				new GlobalParametersViewer(
