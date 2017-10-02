@@ -18,20 +18,20 @@ import com.ecfeed.core.generators.algorithms.DimensionedString;
 public class Culprit {
 
 	private static class OtherData {
-		public int fFailureIndex;
+		public int fFailureRate;
 		
 		public OtherData()
 		{
-			fFailureIndex = 0;
+			fFailureRate = 0;
 		}
-		public OtherData(int failureIndex)
+		public OtherData(int failureRate)
 		{
-			fFailureIndex = failureIndex;
+			fFailureRate = failureRate;
 		}
 		
 		public OtherData makeClone()
 		{
-			return new Culprit.OtherData(fFailureIndex);
+			return new Culprit.OtherData(fFailureRate);
 		}
 	}
 
@@ -83,7 +83,7 @@ public class Culprit {
 		sb.append(", fails:");
 		sb.append(fFailureCount);
 		sb.append(", failureIndex:");
-		sb.append(fOtherData.fFailureIndex);
+		sb.append(fOtherData.fFailureRate);
 		sb.append(", items:[");
 
 		boolean firstTime = true;
@@ -106,12 +106,12 @@ public class Culprit {
 
 	public static int compareForSort(Culprit culprit1, Culprit culprit2) {
 
-		if (culprit1.fOtherData.fFailureIndex > culprit2.fOtherData.fFailureIndex) 
+		if (culprit1.fOtherData.fFailureRate > culprit2.fOtherData.fFailureRate) 
 		{
 			return -1;
 		}
 
-		if (culprit1.fOtherData.fFailureIndex < culprit2.fOtherData.fFailureIndex) 
+		if (culprit1.fOtherData.fFailureRate < culprit2.fOtherData.fFailureRate) 
 		{
 			return 1;
 		}	
@@ -195,12 +195,12 @@ public class Culprit {
 			return 1;
 		}
 		
-		if (culprit1.fOtherData.fFailureIndex > culprit2.fOtherData.fFailureIndex) 
+		if (culprit1.fOtherData.fFailureRate > culprit2.fOtherData.fFailureRate) 
 		{
 			return -1;
 		}
 
-		if (culprit1.fOtherData.fFailureIndex < culprit2.fOtherData.fFailureIndex) 
+		if (culprit1.fOtherData.fFailureRate < culprit2.fOtherData.fFailureRate) 
 		{
 			return 1;
 		}
@@ -262,11 +262,11 @@ public class Culprit {
 	}
 
 	public int getFailureIndex() {
-		return fOtherData.fFailureIndex;
+		return fOtherData.fFailureRate;
 	}
 
-	public void setFailureIndex(int index) {
-		fOtherData.fFailureIndex = index;
+	public void setFailureRate(int rate) {
+		fOtherData.fFailureRate = rate;
 	}	
 
 	public List<DimensionedString> getItem() {

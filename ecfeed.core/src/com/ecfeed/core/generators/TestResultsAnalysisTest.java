@@ -151,7 +151,7 @@ public class TestResultsAnalysisTest {
 		testresultanalysis.aggregateCulprit(culprit2);
 		testresultanalysis.aggregateCulprit(culprit3);
 		testresultanalysis.aggregateCulprit(culprit4);
-		testresultanalysis.calculateFailureIndexes();
+		testresultanalysis.calculateFailureRates();
 		double expectedIndex2 = (7/21);
 		double expectedIndex1 = (1/3) ;
 		assertEquals(expectedIndex2, culprit2.getFailureIndex(), 0.0);
@@ -167,7 +167,6 @@ public class TestResultsAnalysisTest {
 			
 		int failureCount0 = fTestResultsAnalysis.getCulprit(0).getFailureCount();
 		int occurenceCount0 = fTestResultsAnalysis.getCulprit(0).getOccurenceCount();
-		int total = fTestResultsAnalysis.getCulpritCount();
 		int failsByOccurs = failureCount0 / occurenceCount0;
 		double expectedIndex = (failsByOccurs);
 		double actualIndex = fTestResultsAnalysis.getCulprit(0).getFailureIndex();

@@ -27,7 +27,7 @@ public class TestResultsAnalyzer {
 			processTestResult(testResult, n1, n2);
 		}
 
-		fTestResultAnalysis.calculateFailureIndexes();
+		fTestResultAnalysis.calculateFailureRates();
 		return fTestResultAnalysis;
 	}
 
