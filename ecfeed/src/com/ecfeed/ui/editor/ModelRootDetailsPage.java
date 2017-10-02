@@ -27,7 +27,6 @@ public class ModelRootDetailsPage extends BasicDetailsPage {
 	private ClassViewer fClassesSection;
 	private GlobalParametersViewer fParametersSection;
 	private ModelNameComposite fModelNameComposite;
-
 	private RootInterface fRootInterface;
 	private SingleTextCommentsSection fCommentsSection;
 
@@ -63,9 +62,13 @@ public class ModelRootDetailsPage extends BasicDetailsPage {
 
 		addCommentsSection();
 
-		addViewerSection(fClassesSection = new ClassViewer(this, getModelUpdateContext(), getJavaProjectProvider()));
+		addViewerSection(fClassesSection = 
+				new ClassViewer(
+						this, getMainTreeProvider(), getModelUpdateContext(), getJavaProjectProvider()));
 
-		fParametersSection = new GlobalParametersViewer(this, getModelUpdateContext(), getJavaProjectProvider());
+		fParametersSection = 
+				new GlobalParametersViewer(this, getModelUpdateContext(), getJavaProjectProvider());
+
 		addViewerSection(fParametersSection);
 
 		getEcFormToolkit().paintBordersFor(getMainComposite());

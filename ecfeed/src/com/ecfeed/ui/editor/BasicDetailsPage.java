@@ -112,6 +112,10 @@ implements IDetailsPage, IModelUpdateListener, ISectionContext {
 		getMainSection().setClient(fMainComposite);
 	}
 
+	protected IMainTreeProvider getMainTreeProvider() {
+		return fMainTreeProvider;
+	}
+	
 	protected IJavaProjectProvider getJavaProjectProvider() {
 		return fJavaProjectProvider;
 	}

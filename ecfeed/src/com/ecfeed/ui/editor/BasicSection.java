@@ -191,20 +191,28 @@ public abstract class BasicSection extends SectionPart {
 
 	protected class SelectNodeDoubleClickListener implements IDoubleClickListener {
 
-		private ModelMasterSection fMasterSection;
+		private IMainTreeProvider fMainTreeProvider;
 
-		public SelectNodeDoubleClickListener(ModelMasterSection masterSection) {
-			fMasterSection = masterSection;
+		public SelectNodeDoubleClickListener(IMainTreeProvider mainTreeProvider) {
+			fMainTreeProvider = mainTreeProvider;
 		}
 
 		@Override
 		public void doubleClick(DoubleClickEvent event) {
-			if(event.getSelection() instanceof IStructuredSelection){
-				IStructuredSelection selection = (IStructuredSelection)event.getSelection();
-				if(selection.getFirstElement() instanceof AbstractNode){
-					fMasterSection.selectElement(selection.getFirstElement());
-				}
+			
+			if (!(event.getSelection() instanceof IStructuredSelection)) {
+				return;
 			}
+			
+			
+			IStructuredSelection selection = (IStructuredSelection)event.getSelection();
+			
+			Object firstObject = selection.getFirstElement();
+			if (!(firstObject instanceof AbstractNode)) {
+				return;
+			}
+			
+			fMainTreeProvider.setCurrentNode((AbstractNode)firstObject);
 		}
 	}
 
