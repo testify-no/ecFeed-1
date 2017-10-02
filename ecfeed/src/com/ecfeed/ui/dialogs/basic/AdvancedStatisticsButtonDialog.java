@@ -12,12 +12,10 @@ package com.ecfeed.ui.dialogs.basic;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 import com.ecfeed.core.model.MethodNode;
@@ -28,31 +26,31 @@ import org.eclipse.jface.dialogs.ErrorDialog;
 
 
 public class AdvancedStatisticsButtonDialog extends ErrorDialog {
-	
+
 	private MethodNode fmethodNode;
 	private TestResultsHolder ftestResultsHolder;
-	
+
 	public AdvancedStatisticsButtonDialog(Shell parentShell, String title, String message, IStatus status, int displayMask, MethodNode methodnode, TestResultsHolder testResultsHolder){
-		
+
 		super(parentShell, title, message, status, displayMask);
 		fmethodNode = methodnode;
 		ftestResultsHolder = testResultsHolder;
-		
+
 	}
-	
+
 	@Override
 	protected void createButtonsForButtonBar(Composite parent)
 	{
-		Button adst = createButton(parent, IDialogConstants.OPEN_ID, "advanced statistics", true);
+		Button adst = createButton(parent, IDialogConstants.OPEN_ID, "Advanced statistics", true);
 		adst.addSelectionListener(new AdvancedStatistics(fmethodNode, ftestResultsHolder));
 		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
 		createDetailsButton(parent);
 	}
-	
+
 }
 
 class AdvancedStatistics extends SelectionAdapter {
-	
+
 	MethodNode fmethodNode;
 	TestResultsHolder ftestResultsHolder;
 
@@ -61,11 +59,11 @@ class AdvancedStatistics extends SelectionAdapter {
 		fmethodNode = methodNode;
 		ftestResultsHolder = testResultsHolder;
 	}
-	
+
 	@Override
 	public void widgetSelected(SelectionEvent e)
 	{
 		new CulpritAnalysisDialog(fmethodNode, ftestResultsHolder);
 	}
-	
+
 }
