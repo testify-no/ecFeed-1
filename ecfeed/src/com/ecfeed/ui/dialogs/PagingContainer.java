@@ -26,7 +26,7 @@ public class PagingContainer<RecordType> {
 		fCurrentPage = 0;
 	}
 	
-	public void initiateCurrentPageNumber(int currentPage){
+	public void setCurrentPageIndex(int currentPage){
 		fCurrentPage = currentPage;
 	}
 
