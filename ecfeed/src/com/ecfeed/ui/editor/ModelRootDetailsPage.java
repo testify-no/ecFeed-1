@@ -67,7 +67,8 @@ public class ModelRootDetailsPage extends BasicDetailsPage {
 						this, getMainTreeProvider(), getModelUpdateContext(), getJavaProjectProvider()));
 
 		fParametersSection = 
-				new GlobalParametersViewer(this, getModelUpdateContext(), getJavaProjectProvider());
+				new GlobalParametersViewer(
+						this, getMainTreeProvider(), getModelUpdateContext(), getJavaProjectProvider());
 
 		addViewerSection(fParametersSection);
 

@@ -75,7 +75,7 @@ public class ClassViewer extends TableViewerSection {
 						new DeleteAction(getViewer(), getModelUpdateContext()), Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
 
 		addDoubleClickListener(new SelectNodeDoubleClickListener(mainTreeProvider));
-		
+
 		setActionGrouppingProvider(new MainActionGrouppingProvider(getTableViewer(), getModelUpdateContext(), javaProjectProvider));
 
 		getViewer().addDragSupport(

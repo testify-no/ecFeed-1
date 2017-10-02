@@ -235,10 +235,12 @@ public class MethodParametersViewer extends AbstractParametersViewer {
 	}
 
 	public MethodParametersViewer(
-			ISectionContext sectionContext, 
+			ISectionContext sectionContext,
+			IMainTreeProvider mainTreeProvider,
 			IModelUpdateContext updateContext, 
 			IJavaProjectProvider javaProjectProvider) {
-		super(sectionContext, updateContext, javaProjectProvider, StyleDistributor.getSectionStyle());
+		super(sectionContext, mainTreeProvider, updateContext, 
+				javaProjectProvider, StyleDistributor.getSectionStyle());
 
 		fParameterIf = (MethodParameterInterface)getParameterInterface();
 		getSection().setText("Parameters");

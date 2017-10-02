@@ -28,10 +28,13 @@ public class GlobalParametersViewer extends AbstractParametersViewer {
 	private GlobalParameterInterface fParameterIf;
 
 	public GlobalParametersViewer(
-			ISectionContext sectionContext, 
+			ISectionContext sectionContext,
+			IMainTreeProvider mainTreeProvider,
 			IModelUpdateContext updateContext,
 			IJavaProjectProvider javaProjectProvider) {
-		super(sectionContext, updateContext, javaProjectProvider, StyleDistributor.getSectionStyle());
+
+		super(sectionContext, mainTreeProvider, updateContext, 
+				javaProjectProvider, StyleDistributor.getSectionStyle());
 
 		getSection().setText("Global parameters");
 		getViewer().addDragSupport(DND.DROP_COPY|DND.DROP_MOVE|DND.DROP_LINK, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDragListener(getViewer()));

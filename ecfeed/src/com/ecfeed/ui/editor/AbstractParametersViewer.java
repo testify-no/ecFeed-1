@@ -56,7 +56,8 @@ public abstract class AbstractParametersViewer extends TableViewerSection {
 
 
 	public AbstractParametersViewer(
-			ISectionContext sectionContext, 
+			ISectionContext sectionContext,
+			IMainTreeProvider mainTreeProvider,
 			IModelUpdateContext updateContext,
 			IJavaProjectProvider javaProjectProvider,
 			int STYLE) {
@@ -75,6 +76,8 @@ public abstract class AbstractParametersViewer extends TableViewerSection {
 
 		fNameColumn.setEditingSupport(new ParameterNameEditingSupport());
 		fTypeColumn.setEditingSupport(getParameterTypeEditingSupport());
+
+		addDoubleClickListener(new SelectNodeDoubleClickListener(mainTreeProvider));
 
 		setActionGrouppingProvider(new MainActionGrouppingProvider(getTableViewer(), getModelUpdateContext(), javaProjectProvider));
 		addSelectionChangedListener(new SelectionChangedListener());
@@ -242,7 +245,7 @@ public abstract class AbstractParametersViewer extends TableViewerSection {
 			if (columnViewer == null) {
 				return;
 			}
-			
+
 			if (columnViewer.getControl().isDisposed()) {
 				return;
 			}

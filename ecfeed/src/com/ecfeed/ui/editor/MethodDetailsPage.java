@@ -83,7 +83,8 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		IJavaProjectProvider javaProjectProvider = getJavaProjectProvider();
 
 		addViewerSection(fParemetersSection = 
-				new MethodParametersViewer(this, getModelUpdateContext(), javaProjectProvider));
+				new MethodParametersViewer(
+						this, getMainTreeProvider(), getModelUpdateContext(), javaProjectProvider));
 
 		addViewerSection(fConstraintsSection = 
 				new ConstraintsListViewer(this, getModelUpdateContext(), javaProjectProvider));
