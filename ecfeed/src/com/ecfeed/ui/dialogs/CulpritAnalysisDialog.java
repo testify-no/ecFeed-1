@@ -138,7 +138,7 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 		fTestResultsAnalysis = new TestResultsAnalyzer().generateAnalysis(fTestResultDescrs, fN1, fN2);
 
 		fPagingContainer.removeAllRecords();
-		fPagingContainer.initiateCurrentPageNumber(0);
+		fPagingContainer.setCurrentPageIndex(0);
 		fillUpPagingContainer();
 		refillTable();
 		refreshPrevNextButtons();

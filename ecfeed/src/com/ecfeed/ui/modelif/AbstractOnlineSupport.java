@@ -25,7 +25,6 @@ import org.eclipse.swt.widgets.Shell;
 
 import com.ecfeed.core.adapter.java.ILoaderProvider;
 import com.ecfeed.core.adapter.java.ModelClassLoader;
-import com.ecfeed.core.generators.TestResultDescription;
 import com.ecfeed.core.generators.api.IConstraint;
 import com.ecfeed.core.generators.api.IGenerator;
 import com.ecfeed.core.model.ChoiceNode;
@@ -41,7 +40,7 @@ import com.ecfeed.ui.dialogs.SetupDialogOnline;
 import com.ecfeed.ui.dialogs.basic.ErrorDialog;
 
 public abstract class AbstractOnlineSupport {
-	
+
 
 	public enum Result {
 		OK, CANCELED
@@ -139,11 +138,11 @@ public abstract class AbstractOnlineSupport {
 	}
 
 	protected Result displayParametersDialogAndRunTests() {
-		
+
 		SetupDialogOnline dialog = createSetupDialog(Display.getCurrent()
 				.getActiveShell(), fMethodNode, fFileInfoProvider,
 				fInitialExportTemplate);
-		
+
 
 		if (dialog.open() != IDialogConstants.OK_ID) {
 			return Result.CANCELED;
