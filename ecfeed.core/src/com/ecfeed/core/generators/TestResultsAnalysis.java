@@ -95,7 +95,6 @@ public class TestResultsAnalysis {
 
 		int total = fCulprits.size();
 		int count = 0;
-		HypergeometricDistribution hypergeometricDistr;
 		
 		for (Culprit culprit: fCulprits){
 			count += culprit.getFailureCount();	
@@ -105,20 +104,11 @@ public class TestResultsAnalysis {
 
 			int occurences = culprit.getOccurenceCount();
 			int failures = culprit.getFailureCount();
-			
-//			hypergeometricDistr = new HypergeometricDistribution(total, count, occurences);
-//			double prob = hypergeometricDistr.cumulativeProbability(failures);
-//			culprit.setFailureIndex((int) prob);
 
 			int failsByOccurs = 100 * failures / occurences;
-//			int occurencesByTotal = 100 * occurences / total;
 
-			culprit.setFailureIndex(failsByOccurs); 
-			
+			culprit.setFailureIndex(failsByOccurs); 	
 		}
-		
-		
-
 		Collections.sort(fCulprits, new FailureIndexComparator());
 	}
 	
