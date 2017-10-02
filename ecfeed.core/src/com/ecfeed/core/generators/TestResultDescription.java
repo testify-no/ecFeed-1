@@ -21,11 +21,11 @@ public class TestResultDescription {
 		fTestArguments = testArguments;
 		fResult = result;
 	}
-	
+
 	List<String> getTestArguments() {
 		return fTestArguments;
 	}
-	
+
 	boolean getResult() {
 		return fResult;
 	}

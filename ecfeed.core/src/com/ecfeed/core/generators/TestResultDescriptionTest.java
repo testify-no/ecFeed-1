@@ -18,16 +18,16 @@ import java.util.List;
 import org.junit.Test;
 
 public class TestResultDescriptionTest {
-	
-	
+
+
 	@Test
 	public void shouldReturnTestResult() {
-		
+
 		List<String> testcases = new ArrayList<String>();
 		boolean result = false;
-		
+
 		TestResultDescription testresult = new TestResultDescription(testcases, result);
-		
+
 		assertEquals(testcases, testresult.getTestArguments());
 		assertEquals(result, testresult.getResult());
 	}

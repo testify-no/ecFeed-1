@@ -18,32 +18,31 @@ import com.ecfeed.core.model.ChoiceNode;
 
 
 public class TestResultsHolder {
-	private List<TestResultDescription> testResultDescrs;
+	private List<TestResultDescription> fTestResultDescrs;
 
-	public TestResultsHolder()
-	{
-		testResultDescrs = new ArrayList<TestResultDescription>();
+	public TestResultsHolder(){
+		fTestResultDescrs = new ArrayList<TestResultDescription>();
 	}
 
-	public void addTestResult(List<ChoiceNode> testInput, boolean result)
-	{
-		List<String> fInput = new ArrayList<String>();
+	public void addTestResult(List<ChoiceNode> testInput, boolean result) {
+		
+		List<String> input = new ArrayList<String>();
 
-		for(ChoiceNode node: testInput)
-		{
-			fInput.add(node.getValueString());
+		for (ChoiceNode node: testInput){
+			input.add(node.getValueString());
 		}
-		testResultDescrs.add(new TestResultDescription(fInput, result));
+		
+		fTestResultDescrs.add(new TestResultDescription(input, result));
 	}
 
-	public TestResultDescription getTestResultDescription(int index)
-	{
-		return testResultDescrs.get(index);
+	public TestResultDescription getTestResultDescription(int index) {
+		
+		return fTestResultDescrs.get(index);
 	}	
-	
-	public List<TestResultDescription> getTestResultDescription()
-	{
-		return testResultDescrs;
+
+	public List<TestResultDescription> getTestResultDescription() {
+		
+		return fTestResultDescrs;
 	}
 }
 

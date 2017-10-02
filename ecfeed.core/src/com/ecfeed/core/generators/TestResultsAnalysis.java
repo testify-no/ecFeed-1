@@ -41,6 +41,7 @@ public class TestResultsAnalysis {
 	}
 
 	public List<Culprit> getCulpritList(){
+		
 		return fCulprits;
 	}
 
@@ -67,7 +68,7 @@ public class TestResultsAnalysis {
 				return true;
 			}
 		}
-
+		
 		return false;
 	}
 
@@ -90,48 +91,35 @@ public class TestResultsAnalysis {
 		return sb.toString();
 	}
 
-	public void calculateFailureIndexes() {
+	public void calculateFailureRates() {
 
 		for (Culprit culprit : fCulprits) {
-
 			int occurences = culprit.getOccurenceCount();
 			int failures = culprit.getFailureCount();
 
 			int failsByOccurs = failures / occurences;
 
-			culprit.setFailureIndex(failsByOccurs); 	
+			culprit.setFailureRate(failsByOccurs); 	
 		}
-		Collections.sort(fCulprits, new FailureIndexComparator());
+		Collections.sort(fCulprits, new FailureRateComparator());
 	}
 
 	public void SortColumnInput(String dir, String name)
 	{
-		if (dir == "SWT.UP")
-		{
-			if (name == "Occurences")
-			{
+		if (dir == "SWT.UP"){
+			if (name == "Occurences"){
 				Collections.sort(fCulprits, new OccurenceComparator());
-			}
-			if (name == "Fails")
-			{
+			} if (name == "Fails"){
 				Collections.sort(fCulprits, new FailureComparator());
+			} if (name == "Failure rate"){
+				Collections.sort(fCulprits, new FailureRateComparator());
 			}
-			if (name == "Failure rate")
-			{
-				Collections.sort(fCulprits, new FailureIndexComparator());
-			}
-		}else
-		{
-			if (name == "Occurences")
-			{
+		} else {
+			if (name == "Occurences"){
 				Collections.sort(fCulprits, new OccurenceComparatorDecreasing());
-			}
-			if (name == "Fails")
-			{
+			} if (name == "Fails"){
 				Collections.sort(fCulprits, new FailureComparatorDecreasing());
-			}
-			if (name == "Failure rate")
-			{
+			} if (name == "Failure rate"){
 				Collections.sort(fCulprits, new FailureIndexComparatorDecreasing());
 			}
 		}
@@ -140,8 +128,8 @@ public class TestResultsAnalysis {
 	class FailureComparator implements Comparator<Culprit>{
 
 		@Override
-		public int compare(Culprit culprit1, Culprit culprit2)
-		{
+		public int compare(Culprit culprit1, Culprit culprit2){
+			
 			return Culprit.compareByFailureCountForSort(culprit1, culprit2);
 		}
 	}
@@ -149,13 +137,13 @@ public class TestResultsAnalysis {
 	class OccurenceComparator implements Comparator<Culprit>{
 
 		@Override
-		public int compare(Culprit culprit1, Culprit culprit2)
-		{
+		public int compare(Culprit culprit1, Culprit culprit2){
+			
 			return Culprit.compareByOccurenceCountForSort(culprit1, culprit2);
 		}
 	}
 
-	class FailureIndexComparator implements Comparator<Culprit> {
+	class FailureRateComparator implements Comparator<Culprit> {
 
 		@Override
 		public int compare(Culprit culprit1, Culprit culprit2) {
@@ -167,8 +155,8 @@ public class TestResultsAnalysis {
 	class FailureComparatorDecreasing implements Comparator<Culprit>{
 
 		@Override
-		public int compare(Culprit culprit1, Culprit culprit2)
-		{
+		public int compare(Culprit culprit1, Culprit culprit2){
+			
 			return (Culprit.compareByFailureCountForSort(culprit1, culprit2) )* -1;
 		}
 	}
@@ -176,8 +164,8 @@ public class TestResultsAnalysis {
 	class OccurenceComparatorDecreasing implements Comparator<Culprit>{
 
 		@Override
-		public int compare(Culprit culprit1, Culprit culprit2)
-		{
+		public int compare(Culprit culprit1, Culprit culprit2){
+			
 			return (Culprit.compareByOccurenceCountForSort(culprit1, culprit2)) * -1;
 		}
 	}
