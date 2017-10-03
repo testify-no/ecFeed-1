@@ -107,7 +107,7 @@ public class TestCasesViewerLabelProvider extends LabelProvider implements IColo
 		Map<ChoiceNode, EImplementationStatus> choiceStatusMap = new HashMap<ChoiceNode, EImplementationStatus>();
 		fExecutableTestSuites.clear();
 		fTestCasesStatusMap.clear();
-		for(String testSuite : fMethod.getTestSuites()){
+		for(String testSuite : fMethod.getTestCaseNames()){
 			fExecutableTestSuites.put(testSuite, 0);
 		}
 		if(fStatusResolver.getImplementationStatus(fMethod) != EImplementationStatus.NOT_IMPLEMENTED){

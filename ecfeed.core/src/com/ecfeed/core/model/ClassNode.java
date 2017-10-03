@@ -132,11 +132,13 @@ public class ClassNode extends GlobalParametersParentNode {
 		return fMethods.remove(method);
 	}
 
-	public Set<String> getTestSuites(){
+	public Set<String> getTestCaseNames() {
 		Set<String> suites = new HashSet<String>();
+		
 		for(MethodNode method : getMethods()){
-			suites.addAll(method.getTestSuites());
+			suites.addAll(method.getTestCaseNames());
 		}
+		
 		return suites;
 	}
 

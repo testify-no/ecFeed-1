@@ -189,7 +189,7 @@ public class MethodInterface extends ParametersParentInterface {
 
 	public void renameSuite() {
 		RenameTestSuiteDialog dialog = new RenameTestSuiteDialog(Display
-				.getDefault().getActiveShell(), getOwnNode().getTestSuites());
+				.getDefault().getActiveShell(), getOwnNode().getTestCaseNames());
 		dialog.create();
 		if (dialog.open() == Window.OK) {
 			String oldName = dialog.getRenamedTestSuite();
@@ -413,7 +413,7 @@ public class MethodInterface extends ParametersParentInterface {
 	}
 
 	public Collection<String> getTestSuites() {
-		return getOwnNode().getTestSuites();
+		return getOwnNode().getTestCaseNames();
 	}
 
 	public Collection<TestCaseNode> getTestCases() {

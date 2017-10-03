@@ -84,7 +84,7 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 			fCommentsSection.setInput(testCase);
 
 			getMainSection().setText(testCase.toString());
-			fTestSuiteNameCombo.setItems(testCase.getMethod().getTestSuites().toArray(new String[]{}));
+			fTestSuiteNameCombo.setItems(testCase.getMethod().getTestCaseNames().toArray(new String[]{}));
 			fTestSuiteNameCombo.setText(testCase.getName());
 			fTestDataViewer.setInput(testCase);
 

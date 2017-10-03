@@ -90,7 +90,8 @@ public class MethodDetailsPage extends BasicDetailsPage {
 				new ConstraintsListViewer(this, getModelUpdateContext(), javaProjectProvider));
 
 		addViewerSection(fTestCasesSection = 
-				new TestCasesViewer(this, getModelUpdateContext(), javaProjectProvider));
+				new TestCasesViewer(
+						this, getMainTreeProvider(), getModelUpdateContext(), javaProjectProvider));
 
 		getEcFormToolkit().paintBordersFor(getMainComposite());
 	}

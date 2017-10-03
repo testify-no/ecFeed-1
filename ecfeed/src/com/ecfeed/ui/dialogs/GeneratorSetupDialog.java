@@ -400,7 +400,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		fTestSuiteCombo = testSuiteViewer.getCombo();
 		fTestSuiteCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
 				false, 1, 1));
-		fTestSuiteCombo.setItems(fMethod.getTestSuites().toArray(
+		fTestSuiteCombo.setItems(fMethod.getTestCaseNames().toArray(
 				new String[] {}));
 		fTestSuiteCombo.addModifyListener(new ModifyListener() {
 			@Override

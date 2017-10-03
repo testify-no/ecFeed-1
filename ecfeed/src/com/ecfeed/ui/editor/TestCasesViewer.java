@@ -144,9 +144,11 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	}
 
 	public TestCasesViewer(
-			ISectionContext sectionContext, 
+			ISectionContext sectionContext,
+			IMainTreeProvider mainTreeProvider,
 			IModelUpdateContext updateContext,
 			IJavaProjectProvider javaProjectProvider) {
+		
 		super(sectionContext, updateContext, javaProjectProvider, StyleDistributor.getSectionStyle());
 
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
@@ -179,6 +181,8 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 
 		fExportTestCasesButton = 
 				addButton("Export selected", new ExportTestCasesAdapter());
+
+		addDoubleClickListener(new SelectNodeDoubleClickListener(mainTreeProvider));
 	}
 
 	@Override

@@ -184,7 +184,7 @@ public class AddTestCaseDialog extends TitleAreaDialog implements ITestDataEdito
 		ComboViewer testSuiteViewer = new ComboViewer(composite, SWT.NONE);
 		fTestSuiteCombo = testSuiteViewer.getCombo();
 		fTestSuiteCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		fTestSuiteCombo.setItems(fMethod.getTestSuites().toArray(new String[]{}));
+		fTestSuiteCombo.setItems(fMethod.getTestCaseNames().toArray(new String[]{}));
 		fTestSuiteCombo.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {

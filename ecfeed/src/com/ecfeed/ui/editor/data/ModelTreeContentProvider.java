@@ -42,7 +42,7 @@ public class ModelTreeContentProvider extends TreeNodeContentProvider implements
 			children.addAll(method.getParameters());
 			children.addAll(method.getConstraintNodes());
 
-			for (String testSuite : method.getTestSuites()) {
+			for (String testSuite : method.getTestCaseNames()) {
 				Collection<TestCaseNode> testCases = method.getTestCases(testSuite);
 
 				if(testCases.size() <= CommonConstants.MAX_DISPLAYED_TEST_CASES_PER_SUITE){

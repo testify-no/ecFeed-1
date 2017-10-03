@@ -250,12 +250,15 @@ public class MethodNode extends ParametersParentNode {
 		return testCases;
 	}
 
-	public Set<String> getTestSuites(){
-		Set<String> testSuites = new HashSet<String>();
+	public Set<String> getTestCaseNames() {
+		
+		Set<String> names = new HashSet<String>();
+		
 		for(TestCaseNode testCase : getTestCases()){
-			testSuites.add(testCase.getName());
+			names.add(testCase.getName());
 		}
-		return testSuites;
+		
+		return names;
 	}
 
 	public boolean removeTestCase(TestCaseNode testCase){
