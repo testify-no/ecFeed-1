@@ -43,7 +43,8 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	private MethodInterface fMethodInterface;
 	private AbstractCommentsSection fCommentsSection;
 
-	private final NodePropertyDefs.PropertyId fRunnerPropertyId = NodePropertyDefs.PropertyId.PROPERTY_METHOD_RUNNER;
+	private final NodePropertyDefs.PropertyId fRunnerPropertyId = 
+			NodePropertyDefs.PropertyId.PROPERTY_METHOD_RUNNER;
 
 
 	public MethodDetailsPage(
@@ -87,7 +88,8 @@ public class MethodDetailsPage extends BasicDetailsPage {
 						this, getMainTreeProvider(), getModelUpdateContext(), javaProjectProvider));
 
 		addViewerSection(fConstraintsSection = 
-				new ConstraintsListViewer(this, getModelUpdateContext(), javaProjectProvider));
+				new ConstraintsListViewer(
+						this, getMainTreeProvider(), getModelUpdateContext(), javaProjectProvider));
 
 		addViewerSection(fTestCasesSection = 
 				new TestCasesViewer(

@@ -50,7 +50,8 @@ public class ConstraintsListViewer extends TableViewerSection {
 
 
 	public ConstraintsListViewer(
-			ISectionContext sectionContext, 
+			ISectionContext sectionContext,
+			IMainTreeProvider mainTreeProvider,
 			IModelUpdateContext updateContext, 
 			IJavaProjectProvider javaProjectProvider){
 		super(sectionContext, updateContext, javaProjectProvider, STYLE);
@@ -75,6 +76,8 @@ public class ConstraintsListViewer extends TableViewerSection {
 										getModelUpdateContext()), 
 								Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
 
+		addDoubleClickListener(new SelectNodeDoubleClickListener(mainTreeProvider));
+		
 		setActionGrouppingProvider(new MainActionGrouppingProvider(getTableViewer(), updateContext, javaProjectProvider));
 
 		getViewer().addDragSupport(
