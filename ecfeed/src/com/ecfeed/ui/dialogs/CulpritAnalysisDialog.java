@@ -204,7 +204,7 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 	private Table createTableContents(Composite parentComposite, int ColumnNr) {
 
 		Table table = fDialogObjectToolkit.createTable(parentComposite);
-		String[] ColumnNames = {"Rank", "Tuple", "Failure rate", "Occurences", "Fails"};
+		String[] ColumnNames = {"No.", "Tuple", "Failure rate", "Occurences", "Fails"};
 		TableColumn[] column = fDialogObjectToolkit.addColumn(table, fNumColumn, ColumnNames);
 		fillTable(table);
 
@@ -374,11 +374,13 @@ public class CulpritAnalysisDialog extends TitleAreaDialog {
 			if (dir == SWT.UP) {
 				fTestResultsAnalysis.SortColumnInput("SWT.UP", selectedColumn.getText());		
 				fPagingContainer.removeAllRecords();
+				fPagingContainer.setCurrentPageIndex(0);
 				fillUpPagingContainer();
 				refillTable();		
 			} else {
 				fTestResultsAnalysis.SortColumnInput("SWT.DOWN", selectedColumn.getText());
 				fPagingContainer.removeAllRecords();
+				fPagingContainer.setCurrentPageIndex(0);
 				fillUpPagingContainer();
 				refillTable();
 			}			
