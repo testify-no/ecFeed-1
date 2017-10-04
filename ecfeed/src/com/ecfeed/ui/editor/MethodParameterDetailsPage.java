@@ -279,6 +279,11 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 		public void applyValue() {
 
 			fParameterIf.setExpected(fExpectedCheckbox.getSelection());
+			
+			if (fExpectedCheckbox.isDisposed()) {
+				return;
+			}
+
 			fExpectedCheckbox.setSelection(fParameterIf.isExpected());
 		}
 	}
