@@ -109,6 +109,11 @@ public class ModelTreeLabelDecorator implements ILabelDecorator {
 	}
 
 	private Image fuseImages(Image icon, Image decorator, int x, int y){
+
+		if (ApplicationContext.isApplicationTypeRemoteRap()) {
+			return icon; // TODO
+		}
+
 		ImageData idIcon = (ImageData)icon.getImageData().clone();
 		ImageData idDecorator = decorator.getImageData();
 		if(idIcon.width <= x || idIcon.height <= y){
