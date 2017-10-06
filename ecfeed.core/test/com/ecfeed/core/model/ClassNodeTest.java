@@ -107,12 +107,12 @@ public class ClassNodeTest extends ClassNode {
 		classNode.addMethod(method1);
 		classNode.addMethod(method2);
 
-		assertEquals(4, classNode.getTestSuites().size());
-		assertTrue(classNode.getTestSuites().contains("suite 1"));
-		assertTrue(classNode.getTestSuites().contains("suite 2"));
-		assertTrue(classNode.getTestSuites().contains("suite 3"));
-		assertTrue(classNode.getTestSuites().contains("suite 4"));
-		assertFalse(classNode.getTestSuites().contains("unused test suite"));
+		assertEquals(4, classNode.getTestCaseNames().size());
+		assertTrue(classNode.getTestCaseNames().contains("suite 1"));
+		assertTrue(classNode.getTestCaseNames().contains("suite 2"));
+		assertTrue(classNode.getTestCaseNames().contains("suite 3"));
+		assertTrue(classNode.getTestCaseNames().contains("suite 4"));
+		assertFalse(classNode.getTestCaseNames().contains("unused test suite"));
 	}
 
 	@Test

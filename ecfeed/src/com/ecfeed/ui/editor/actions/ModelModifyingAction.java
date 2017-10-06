@@ -17,17 +17,25 @@ import com.ecfeed.ui.modelif.SelectionInterface;
 
 public class ModelModifyingAction extends ModelSelectionAction {
 
-	private IModelUpdateContext fUPdateContext;
+	private IModelUpdateContext fUPdateContext = null;
 
-	public ModelModifyingAction(String id, String name, ISelectionProvider selectionProvider, IModelUpdateContext updateContext) {
-		super(id, name, selectionProvider);
+	public ModelModifyingAction(ActionId actionId, ISelectionProvider selectionProvider, IModelUpdateContext updateContext) {
+		super(actionId, selectionProvider);
+		setUpdateContext(updateContext);
+	}
+
+	public ModelModifyingAction(ActionId actionId) {
+		super(actionId);
+	}
+	
+	protected void setUpdateContext(IModelUpdateContext updateContext) {
 		fUPdateContext = updateContext;
 	}
 
 	protected IModelUpdateContext getUpdateContext(){
 		return fUPdateContext;
 	}
-	
+
 	protected SelectionInterface getSelectionInterface(){
 		return getSelectionUtils().getSelectionInterface(fUPdateContext);
 	}

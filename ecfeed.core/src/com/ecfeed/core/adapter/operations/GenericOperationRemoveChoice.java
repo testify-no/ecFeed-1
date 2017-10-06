@@ -28,7 +28,7 @@ import com.ecfeed.core.utils.SystemLogger;
 
 public class GenericOperationRemoveChoice extends BulkOperation {
 
-	private class RemoveChoiceOperation extends AbstractModelOperation{
+	private class RemoveChoiceOperation extends AbstractModelOperation {
 
 		private ChoicesParentNode fTarget;
 		private ChoiceNode fChoice;
@@ -59,6 +59,8 @@ public class GenericOperationRemoveChoice extends BulkOperation {
 
 			@Override
 			public void execute() throws ModelOperationException {
+
+				setOneNodeToSelect(fTarget);
 				fTarget.addChoice(fChoice, fOriginalIndex);
 				reverseAdaptParameter();
 				markModelUpdated();
@@ -133,6 +135,8 @@ public class GenericOperationRemoveChoice extends BulkOperation {
 
 		@Override
 		public void execute() throws ModelOperationException {
+
+			setOneNodeToSelect(fTarget);
 			fOriginalIndex = fChoice.getIndex();
 			validateOperation();
 			fTarget.removeChoice(fChoice);
@@ -173,13 +177,21 @@ public class GenericOperationRemoveChoice extends BulkOperation {
 		public IModelOperation reverseOperation() {
 			return new ReverseOperation();
 		}
+
 	}
 
-	public GenericOperationRemoveChoice(ChoicesParentNode target, ChoiceNode choice, ITypeAdapterProvider adapterProvider, boolean validate) {
-		super(OperationNames.REMOVE_PARTITION, true);
+	public GenericOperationRemoveChoice(
+			ChoicesParentNode target, 
+			ChoiceNode choice, 
+			ITypeAdapterProvider adapterProvider, 
+			boolean validate) {
+
+		super(OperationNames.REMOVE_PARTITION, true, target, target);
+
 		addOperation(new RemoveChoiceOperation(target, choice, adapterProvider));
-		if(validate){
-			for(MethodNode method : target.getParameter().getMethods()){
+
+		if (validate) {
+			for (MethodNode method : target.getParameter().getMethods()) {
 				addOperation(new MethodOperationMakeConsistent(method));
 			}
 		}

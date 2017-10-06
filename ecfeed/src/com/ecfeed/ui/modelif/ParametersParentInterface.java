@@ -18,18 +18,18 @@ import com.ecfeed.core.model.ParametersParentNode;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.ui.common.CommonConstants;
 import com.ecfeed.ui.common.Messages;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 
 public abstract class ParametersParentInterface extends AbstractNodeInterface {
 
-	public ParametersParentInterface(IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider) {
-		super(updateContext, fileInfoProvider);
+	public ParametersParentInterface(IModelUpdateContext updateContext, IJavaProjectProvider javaProjectProvider) {
+		super(updateContext, javaProjectProvider);
 	}
 
 	public abstract AbstractParameterNode addNewParameter();
 
 	public boolean addParameter(AbstractParameterNode parameter, int index) {
-		return execute(new GenericOperationAddParameter(getOwnNode(), parameter, index), Messages.DIALOG_CONVERT_METHOD_PROBLEM_TITLE);
+		return getOperationExecuter().execute(new GenericOperationAddParameter(getOwnNode(), parameter, index), Messages.DIALOG_CONVERT_METHOD_PROBLEM_TITLE);
 	}
 
 	protected boolean removeParameters(Collection<? extends AbstractParameterNode> parameters){

@@ -1,6 +1,5 @@
 /*******************************************************************************
  *
- * Copyright (c) 2016 ecFeed AS.                                                
  * All rights reserved. This program and the accompanying materials              
  * are made available under the terms of the Eclipse Public License v1.0         
  * which accompanies this distribution, and is available at                      
@@ -12,7 +11,6 @@ package com.ecfeed.ui.editor;
 
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -20,11 +18,12 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.utils.EcException;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.TestCaseInterface;
@@ -32,7 +31,6 @@ import com.ecfeed.utils.SeleniumHelper;
 
 public class TestCaseDetailsPage extends BasicDetailsPage {
 
-	private IFileInfoProvider fFileInfoProvider;
 	private Combo fTestSuiteNameCombo;
 	private TestDataViewer fTestDataViewer;
 	private Button fExecuteButton;
@@ -42,13 +40,22 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 
 
 	public TestCaseDetailsPage(
-			ModelMasterSection masterSection, 
+			IMainTreeProvider mainTreeProvider,
+			TestCaseInterface testCaseInterface,
 			IModelUpdateContext updateContext, 
-			IFileInfoProvider fileInfoProvider) {
-		super(masterSection, updateContext, fileInfoProvider);
-		fFileInfoProvider = fileInfoProvider;
-		fTestCaseIf = new TestCaseInterface(this, fileInfoProvider);
+			IJavaProjectProvider javaProjectProvider) {
+		this(mainTreeProvider, testCaseInterface, updateContext, javaProjectProvider, null);
 	}
+	
+	public TestCaseDetailsPage(
+			IMainTreeProvider mainTreeProvider,
+			TestCaseInterface testCaseInterface,
+			IModelUpdateContext updateContext, 
+			IJavaProjectProvider javaProjectProvider,
+			EcFormToolkit ecFormToolkit) {
+		super(mainTreeProvider, updateContext, javaProjectProvider, ecFormToolkit);
+		fTestCaseIf = testCaseInterface;
+	}	
 
 	@Override
 	public void createContents(Composite parent) {
@@ -57,7 +64,8 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 
 		addCommentsSection();
 
-		addViewerSection(fTestDataViewer = new TestDataViewer(this, this, fFileInfoProvider));
+		addViewerSection(fTestDataViewer = 
+				new TestDataViewer(this, getModelUpdateContext(), getJavaProjectProvider()));
 	}
 
 	@Override
@@ -76,7 +84,7 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 			fCommentsSection.setInput(testCase);
 
 			getMainSection().setText(testCase.toString());
-			fTestSuiteNameCombo.setItems(testCase.getMethod().getTestSuites().toArray(new String[]{}));
+			fTestSuiteNameCombo.setItems(testCase.getMethod().getTestCaseNames().toArray(new String[]{}));
 			fTestSuiteNameCombo.setText(testCase.getName());
 			fTestDataViewer.setInput(testCase);
 
@@ -86,10 +94,12 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 
 	private void addCommentsSection() {
 
-		if (fFileInfoProvider.isProjectAvailable()) {
-			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fFileInfoProvider));
+		if (ApplicationContext.isProjectAvailable()) {
+			addForm(fCommentsSection = 
+					new SingleTextCommentsSection(this, getModelUpdateContext(), getJavaProjectProvider()));
 		} else {
-			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fFileInfoProvider));
+			addForm(fCommentsSection = 
+					new SingleTextCommentsSection(this, getModelUpdateContext(), getJavaProjectProvider()));
 		}
 	}
 
@@ -101,7 +111,7 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 			return true;
 		}		
 
-		if (!fFileInfoProvider.isProjectAvailable()) {
+		if (!ApplicationContext.isProjectAvailable()) {
 			return false;
 		}
 
@@ -113,28 +123,31 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 	}	
 
 	private void createTestSuiteEdit(Composite parent) {
-		Composite composite = getToolkit().createComposite(parent);
+		Composite composite = getEcFormToolkit().createComposite(parent);
 		composite.setLayout(new GridLayout(3, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
-		getToolkit().createLabel(composite, "Test suite: ");
+		getEcFormToolkit().createLabel(composite, "Test suite: ");
 
 		fTestSuiteNameCombo = new ComboViewer(composite, SWT.NONE).getCombo();
 		fTestSuiteNameCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		fTestSuiteNameCombo.addSelectionListener(new RenameTestCaseAdapter());
 
-		fExecuteButton = getToolkit().createButton(composite, "Execute", SWT.NONE);
-		fExecuteButton.addSelectionListener(new SelectionAdapter() {
+		ButtonClickListener buttonClickListener = new ButtonClickListener() {
+
 			@Override
-			public void widgetSelected(SelectionEvent ev){
+			public void widgetSelected(SelectionEvent ev) {
 				try {
 					fTestCaseIf.executeStaticTest();
 				} catch (EcException e) {
 					ExceptionCatchDialog.open("Can not execute static tests.", e.getMessage());
 				}
 			}
-		});
 
-		getToolkit().paintBordersFor(fTestSuiteNameCombo);
+		};
+
+		fExecuteButton = getEcFormToolkit().createButton(composite, "Execute", buttonClickListener);		
+
+		getEcFormToolkit().paintBordersFor(fTestSuiteNameCombo);
 	}
 
 	@Override
@@ -146,7 +159,7 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 		@Override
 		public void widgetSelected(SelectionEvent e){
 			fTestCaseIf.setName(fTestSuiteNameCombo.getText());
-			fTestSuiteNameCombo.setText(fTestCaseIf.getName());
+			fTestSuiteNameCombo.setText(fTestCaseIf.getNodeName());
 		}
 	}	
 

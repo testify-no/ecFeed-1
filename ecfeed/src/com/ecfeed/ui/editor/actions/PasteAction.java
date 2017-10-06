@@ -11,15 +11,15 @@
 package com.ecfeed.ui.editor.actions;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelectionProvider;
-import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Display;
 
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.ui.common.Messages;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.modelif.AbstractNodeInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.NodeClipboard;
@@ -27,63 +27,57 @@ import com.ecfeed.ui.modelif.NodeInterfaceFactory;
 
 public class PasteAction extends ModelModifyingAction {
 
-	IFileInfoProvider fFileInfoProvider;
-	private TreeViewer fTreeViewer;
-	private int fIndex;
+	private IJavaProjectProvider fJavaProjectProvider;
 
 	public PasteAction(
 			ISelectionProvider selectionProvider, 
 			IModelUpdateContext updateContext,
-			IFileInfoProvider fileInfoProvider) {
-		this(-1, selectionProvider, updateContext, fileInfoProvider);
+			IJavaProjectProvider javaProjectProvider) {
+		super(ActionId.PASTE, selectionProvider, updateContext);
+		fJavaProjectProvider = javaProjectProvider;
 	}
 
-	public PasteAction(
-			int index, 
+	public PasteAction() {
+		super(ActionId.PASTE);
+	}
+
+	public void setContext(
 			ISelectionProvider selectionProvider, 
 			IModelUpdateContext updateContext,
-			IFileInfoProvider fileInfoProvider) {
-		super(GlobalActions.PASTE.getId(), 
-				GlobalActions.PASTE.getDescription(), selectionProvider, updateContext);
-		fIndex = index;
-		fFileInfoProvider = fileInfoProvider;
-	}
+			IJavaProjectProvider javaProjectProvider) {
 
-	public PasteAction(
-			TreeViewer treeViewer, 
-			IModelUpdateContext updateContext,
-			IFileInfoProvider fileInfoProvider) {
-		this(-1, treeViewer, updateContext, fileInfoProvider);
-	}
-
-	public PasteAction(
-			int index, 
-			TreeViewer treeViewer, 
-			IModelUpdateContext updateContext,
-			IFileInfoProvider fileInfoProvider) {
-		this(index, (ISelectionProvider)treeViewer, updateContext, fileInfoProvider);
-		fTreeViewer = treeViewer;
+		setSelectionProvider(selectionProvider);
+		setUpdateContext(updateContext);
+		fJavaProjectProvider = javaProjectProvider;
 	}
 
 	@Override
 	public boolean isEnabled(){
-		if(getSelectedNodes().size() != 1) return false;
+
+		List<AbstractNode> selectedNodes = getSelectedNodes();
+
+		if (selectedNodes == null) {
+			return false;
+		}
+
+		if (getSelectedNodes().size() != 1) {
+			return false;
+		}
+
 		AbstractNodeInterface nodeIf = 
 				NodeInterfaceFactory.getNodeInterface(
 						getSelectedNodes().get(0), 
 						getUpdateContext(), 
-						fFileInfoProvider);
-		if (fIndex != -1){
-			return nodeIf.pasteEnabled(NodeClipboard.getContent(), fIndex);
-		}
+						fJavaProjectProvider);
+
 		return nodeIf.pasteEnabled(NodeClipboard.getContent());
 	}
 
 	@Override
-	public void run(){
+	public void run() {
 		AbstractNode parent = getSelectedNodes().get(0);
 		AbstractNodeInterface parentIf = 
-				NodeInterfaceFactory.getNodeInterface(parent, getUpdateContext(), fFileInfoProvider);
+				NodeInterfaceFactory.getNodeInterface(parent, getUpdateContext(), fJavaProjectProvider);
 
 		Collection<AbstractNode> childrenToAdd = NodeClipboard.getContentCopy();
 		String errorMessage = parentIf.canAddChildren(childrenToAdd);
@@ -94,9 +88,6 @@ public class PasteAction extends ModelModifyingAction {
 		}
 
 		parentIf.addChildren(childrenToAdd);
-		if(fTreeViewer != null){
-			fTreeViewer.expandToLevel(parent, 1);
-		}
 	}
 
 }

@@ -10,23 +10,37 @@
 
 package com.ecfeed.ui.editor.actions;
 
+import java.util.List;
+
 import org.eclipse.jface.viewers.ISelectionProvider;
 
+import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.ui.modelif.NodeClipboard;
 
 public class CopyAction extends ModelSelectionAction {
 
-	public CopyAction(ISelectionProvider selectionProvider){
-		super(GlobalActions.COPY.getId(), GlobalActions.COPY.getDescription(), selectionProvider);
+	public CopyAction(){
+		super(ActionId.COPY);
 	}
 
+	public void setContext(ISelectionProvider selectionProvider) {
+		super.setSelectionProvider(selectionProvider);
+	}
+	
 	@Override
 	public void run() {
 		NodeClipboard.setContent(getSelectedNodes());
 	}
 
 	@Override
-	public boolean isEnabled(){
-		return getSelectedNodes().size() > 0 && isSelectionSingleType();
+	public boolean isEnabled() {
+
+		List<AbstractNode> selectedNodes = getSelectedNodes();
+
+		if (selectedNodes == null) {
+			return false;
+		}
+
+		return selectedNodes.size() > 0 && isSelectionSingleType();
 	}
 }

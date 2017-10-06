@@ -18,11 +18,11 @@ import com.ecfeed.core.model.ModelOperationException;
 public class ModelOperationManager {
 	private List<IModelOperation> fHistory;
 	private int fHistoryIndex = 0;
-	
+
 	public ModelOperationManager(){
 		fHistory = new ArrayList<IModelOperation>();
 	}
-	
+
 	protected void updateHistory(IModelOperation operation){
 		if(fHistory.size() > fHistoryIndex){
 			fHistory = fHistory.subList(0, fHistoryIndex);
@@ -31,19 +31,19 @@ public class ModelOperationManager {
 			//shouldn't happen, but let's protect against it.
 			fHistoryIndex = fHistory.size();
 		}
-		
+
 		fHistory.add(operation);
 		++fHistoryIndex;
 	}
-	
+
 	public boolean undoEnabled(){
 		return fHistoryIndex > 0;
 	}
-	
+
 	public boolean redoEnabled(){
 		return fHistoryIndex < fHistory.size();
 	}
-	
+
 	public void undo() throws ModelOperationException{
 		if(fHistoryIndex > 0){
 			IModelOperation operation = fHistory.get(fHistoryIndex - 1).reverseOperation();
@@ -51,7 +51,7 @@ public class ModelOperationManager {
 			--fHistoryIndex;
 		}
 	}
-	
+
 	public void redo() throws ModelOperationException{
 		if(fHistoryIndex < fHistory.size()){
 			IModelOperation operation = fHistory.get(fHistoryIndex);
@@ -59,7 +59,7 @@ public class ModelOperationManager {
 			++fHistoryIndex;
 		}
 	}
-	
+
 	public void execute(IModelOperation operation) throws ModelOperationException{
 		operation.execute();
 		updateHistory(operation);

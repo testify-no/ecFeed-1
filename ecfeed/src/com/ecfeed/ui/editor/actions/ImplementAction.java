@@ -23,7 +23,7 @@ public class ImplementAction extends ModelModifyingAction {
 	private IModelImplementer fImplementer;
 
 	public ImplementAction(StructuredViewer viewer, IModelUpdateContext context, IModelImplementer implementer) {
-		super("implement", "Implement", viewer, context);
+		super(ActionId.IMPLEMENT, viewer, context);
 		fImplementer = implementer;
 	}
 

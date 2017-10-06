@@ -33,7 +33,7 @@ public class GenericOperationRename extends AbstractModelOperation {
 	private String fOriginalName;
 	private String fNameRegex;
 
-	private class RegexProblemMessageProvider implements IModelVisitor{
+	private class RegexProblemMessageProvider implements IModelVisitor {
 
 		@Override
 		public Object visit(RootNode node) throws Exception {
@@ -76,7 +76,7 @@ public class GenericOperationRename extends AbstractModelOperation {
 		}
 	}
 
-	private class NameRegexProvider implements IModelVisitor{
+	private class NameRegexProvider implements IModelVisitor {
 
 		@Override
 		public Object visit(RootNode node) throws Exception {
@@ -129,6 +129,8 @@ public class GenericOperationRename extends AbstractModelOperation {
 
 	@Override
 	public void execute() throws ModelOperationException{
+
+		setOneNodeToSelect(fTarget);
 		verifyNameWithRegex();
 		verifyNewName(fNewName);
 		fTarget.setName(fNewName);
@@ -179,4 +181,5 @@ public class GenericOperationRename extends AbstractModelOperation {
 		}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
 		return "";
 	}
+
 }

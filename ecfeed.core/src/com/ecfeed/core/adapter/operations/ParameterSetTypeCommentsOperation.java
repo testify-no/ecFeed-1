@@ -28,6 +28,8 @@ public class ParameterSetTypeCommentsOperation extends AbstractModelOperation {
 
 	@Override
 	public void execute() throws ModelOperationException {
+
+		setOneNodeToSelect(fTarget);
 		fCurrentComments = fTarget.getTypeComments() != null ? fTarget.getTypeComments() : "";
 		fTarget.setTypeComments(fComments);
 	}

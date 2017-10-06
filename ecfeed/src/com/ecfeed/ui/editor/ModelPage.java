@@ -15,7 +15,7 @@ import org.eclipse.ui.forms.editor.FormPage;
 
 import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.model.RootNode;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 
 public class ModelPage extends FormPage {
 	private static final String ID = "com.ecfeed.pages.refactored";
@@ -24,10 +24,10 @@ public class ModelPage extends FormPage {
 	private ModelMasterDetailsBlock fBlock;
 	private ModelEditor fEditor;
 
-	public ModelPage(ModelEditor editor, IFileInfoProvider fileInfoProvider) {
+	public ModelPage(ModelEditor editor, IJavaProjectProvider javaProjectProvider) {
 		super(editor, ID, TITLE);
 		fEditor = editor;
-		fBlock = new ModelMasterDetailsBlock(this, fileInfoProvider);
+		fBlock = new ModelMasterDetailsBlock(this, javaProjectProvider);
 	}
 
 	public void commitMasterPart(boolean onSave){

@@ -22,7 +22,7 @@ import org.eclipse.ui.forms.widgets.Section;
 import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.ClassNodeHelper;
 import com.ecfeed.core.model.MethodNode;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.modelif.ClassInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
@@ -49,9 +49,9 @@ public class OtherMethodsViewer extends CheckboxTableViewerSection {
 	public OtherMethodsViewer(
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext, 
-			IFileInfoProvider fileInfoProvider) {
-		super(sectionContext, updateContext, fileInfoProvider, STYLE);
-		fClassIf = new ClassInterface(this, fileInfoProvider);
+			IJavaProjectProvider javaProjectProvider) {
+		super(sectionContext, updateContext, javaProjectProvider, STYLE);
+		fClassIf = new ClassInterface(getModelUpdateContext(), javaProjectProvider);
 		fAddSelectedButton = addButton("Add selected", new AddSelectedAdapter());
 	}
 

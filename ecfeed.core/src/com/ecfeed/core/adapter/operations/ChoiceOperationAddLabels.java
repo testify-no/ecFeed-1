@@ -12,11 +12,19 @@ package com.ecfeed.core.adapter.operations;
 
 import java.util.Collection;
 
+import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ChoiceNode;
 
 public class ChoiceOperationAddLabels extends BulkOperation {
-	public ChoiceOperationAddLabels(ChoiceNode target, Collection<String> labels) {
-		super(OperationNames.ADD_PARTITION_LABELS, false);
+	public ChoiceOperationAddLabels(
+			ChoiceNode target, 
+			Collection<String> labels, 
+			AbstractNode nodeToSelect,
+			AbstractNode nodeToSelectAfterReverseOperation) {
+
+		super(OperationNames.ADD_PARTITION_LABELS, false, 
+				nodeToSelect, nodeToSelectAfterReverseOperation);
+
 		for(String label : labels){
 			if(target.getInheritedLabels().contains(label) == false){
 				addOperation(new ChoiceOperationAddLabel(target, label));

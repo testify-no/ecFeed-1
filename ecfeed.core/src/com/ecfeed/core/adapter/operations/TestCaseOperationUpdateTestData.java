@@ -17,7 +17,7 @@ import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.model.TestCaseNode;
 
 public class TestCaseOperationUpdateTestData extends AbstractModelOperation {
-	
+
 	private ChoiceNode fNewValue;
 	private ChoiceNode fPreviousValue;
 	private int fIndex;
@@ -33,9 +33,13 @@ public class TestCaseOperationUpdateTestData extends AbstractModelOperation {
 
 	@Override
 	public void execute() throws ModelOperationException {
+
+		setOneNodeToSelect(fTarget);
+
 		if(fNewValue.getParameter() != fTarget.getTestData().get(fIndex).getParameter()){
 			ModelOperationException.report(Messages.TEST_DATA_CATEGORY_MISMATCH_PROBLEM);
 		}
+
 		fTarget.getTestData().set(fIndex, fNewValue);
 		markModelUpdated();
 	}

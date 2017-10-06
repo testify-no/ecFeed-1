@@ -39,7 +39,7 @@ public class VersionCheckerAndRegistratorTest {
 		HttpCommunicatorStub httpCommunicatorStub = new HttpCommunicatorStub();
 
 		CurrentReleases currentReleases = 
-				VersionCheckerAndRegistrator.registerAndGetCurrentReleases(httpCommunicatorStub, 1);
+				VersionCheckerAndRegistrator.registerAppAndGetCurrentReleases(httpCommunicatorStub, 1);
 
 		assertEquals(null, currentReleases);
 	}	
@@ -73,7 +73,7 @@ public class VersionCheckerAndRegistratorTest {
 		HttpCommunicatorStub httpCommunicatorStub = new HttpCommunicatorStub();
 
 		CurrentReleases currentReleases = 
-				VersionCheckerAndRegistrator.registerAndGetCurrentReleases(httpCommunicatorStub, 1);
+				VersionCheckerAndRegistrator.registerAppAndGetCurrentReleases(httpCommunicatorStub, 1);
 
 		testEmptyResponse(currentReleases);
 	}
@@ -92,7 +92,7 @@ public class VersionCheckerAndRegistratorTest {
 		HttpCommunicatorStub httpCommunicatorStub = new HttpCommunicatorStub();
 
 		CurrentReleases currentReleases = 
-				VersionCheckerAndRegistrator.registerAndGetCurrentReleases(httpCommunicatorStub, 1);
+				VersionCheckerAndRegistrator.registerAppAndGetCurrentReleases(httpCommunicatorStub, 1);
 
 		testEmptyResponse(currentReleases);
 	}
@@ -111,7 +111,7 @@ public class VersionCheckerAndRegistratorTest {
 		HttpCommunicatorStub httpCommunicatorStub = new HttpCommunicatorStub();
 
 		CurrentReleases currentReleases = 
-				VersionCheckerAndRegistrator.registerAndGetCurrentReleases(httpCommunicatorStub, 1);
+				VersionCheckerAndRegistrator.registerAppAndGetCurrentReleases(httpCommunicatorStub, 1);
 
 		testFullResponse(currentReleases);
 	}	

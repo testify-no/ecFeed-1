@@ -14,14 +14,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.jdt.core.IType;
-import org.eclipse.jdt.ui.JavaUI;
-import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
 import com.ecfeed.android.utils.AndroidBaseRunnerHelper;
 import com.ecfeed.android.utils.AndroidManifestAccessor;
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.operations.ClassOperationAddMethod;
@@ -39,16 +37,15 @@ import com.ecfeed.core.utils.EcException;
 import com.ecfeed.core.utils.PackageClassHelper;
 import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.CommonConstants;
-import com.ecfeed.ui.common.EclipseModelBuilder;
-import com.ecfeed.ui.common.JavaModelAnalyser;
+import com.ecfeed.ui.common.JavaCodeModelBuilder;
+import com.ecfeed.ui.common.ImplementationAdapter;
 import com.ecfeed.ui.common.Messages;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
-import com.ecfeed.ui.dialogs.TestClassSelectionDialog;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 
 public class ClassInterface extends GlobalParametersParentInterface {
 
-	public ClassInterface(IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider) {
-		super(updateContext, fileInfoProvider);
+	public ClassInterface(IModelUpdateContext updateContext, IJavaProjectProvider javaProjectProvider) {
+		super(updateContext, javaProjectProvider);
 	}
 
 	public static String getQualifiedName(ClassNode classNode){
@@ -104,7 +101,7 @@ public class ClassInterface extends GlobalParametersParentInterface {
 			return false;
 		}
 
-		if(getFileInfoProvider().isProjectAvailable() && 
+		if (ApplicationContext.isProjectAvailable() && 
 				getImplementationStatus(getOwnNode()) != EImplementationStatus.NOT_IMPLEMENTED){
 			if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(),
 					Messages.DIALOG_RENAME_IMPLEMENTED_CLASS_TITLE,
@@ -112,7 +109,7 @@ public class ClassInterface extends GlobalParametersParentInterface {
 				return false;
 			}
 		}
-		return execute(FactoryRenameOperation.getRenameOperation(getOwnNode(), newName), Messages.DIALOG_RENAME_CLASS_PROBLEM_TITLE);
+		return getOperationExecuter().execute(FactoryRenameOperation.getRenameOperation(getOwnNode(), newName), Messages.DIALOG_RENAME_CLASS_PROBLEM_TITLE);
 	}
 
 	public boolean setLocalName(String newLocalName){
@@ -134,12 +131,12 @@ public class ClassInterface extends GlobalParametersParentInterface {
 			}
 		}
 		IModelOperation operation = new ClassOperationSetRunOnAndroid(getOwnNode(), runOnAndroid);
-		return execute(operation, Messages.DIALOG_ANDROID_RUNNER_SET_PROBLEM_TITLE);
+		return getOperationExecuter().execute(operation, Messages.DIALOG_ANDROID_RUNNER_SET_PROBLEM_TITLE);
 	}
 
 	public boolean setAndroidBaseRunner(String androidBaseRunner) {
 		IModelOperation operation = new ClassOperationSetAndroidBaseRunner(getOwnNode(), androidBaseRunner);
-		return execute(operation, Messages.DIALOG_ANDROID_RUNNER_SET_PROBLEM_TITLE);
+		return getOperationExecuter().execute(operation, Messages.DIALOG_ANDROID_RUNNER_SET_PROBLEM_TITLE);
 	}
 
 	public MethodNode addNewMethod(){
@@ -156,12 +153,12 @@ public class ClassInterface extends GlobalParametersParentInterface {
 
 	public boolean addMethods(Collection<MethodNode> methods){
 		IModelOperation operation = new ClassOperationAddMethods(getOwnNode(), methods, getOwnNode().getMethods().size());
-		return execute(operation, Messages.DIALOG_ADD_METHODS_PROBLEM_TITLE);
+		return getOperationExecuter().execute(operation, Messages.DIALOG_ADD_METHODS_PROBLEM_TITLE);
 	}
 
 	public boolean addMethod(MethodNode method){
 		IModelOperation operation = new ClassOperationAddMethod(getOwnNode(), method, getOwnNode().getMethods().size());
-		return execute(operation, Messages.DIALOG_ADD_METHOD_PROBLEM_TITLE);
+		return getOperationExecuter().execute(operation, Messages.DIALOG_ADD_METHOD_PROBLEM_TITLE);
 	}
 
 	public boolean removeMethod(MethodNode method){
@@ -169,7 +166,7 @@ public class ClassInterface extends GlobalParametersParentInterface {
 				Messages.DIALOG_REMOVE_METHOD_TITLE,
 				Messages.DIALOG_REMOVE_METHOD_MESSAGE)){
 			IModelOperation operation = new ClassOperationRemoveMethod(getOwnNode(), method);
-			return execute(operation, Messages.DIALOG_REMOVE_METHOD_PROBLEM_TITLE);
+			return getOperationExecuter().execute(operation, Messages.DIALOG_REMOVE_METHOD_PROBLEM_TITLE);
 		}
 		return false;
 	}
@@ -191,7 +188,7 @@ public class ClassInterface extends GlobalParametersParentInterface {
 
 	public static List<MethodNode> getOtherMethods(ClassNode target){
 		List<MethodNode> otherMethods = new ArrayList<MethodNode>();
-		EclipseModelBuilder builder = new EclipseModelBuilder();
+		JavaCodeModelBuilder builder = new JavaCodeModelBuilder();
 		try{
 			ClassNode completeModel = builder.buildClassModel(ClassNodeHelper.getQualifiedName(target), false);
 			for(MethodNode method : completeModel.getMethods()){
@@ -208,14 +205,15 @@ public class ClassInterface extends GlobalParametersParentInterface {
 		return getOtherMethods(getOwnNode());
 	}
 
-	public void reassignClass() {
-		TestClassSelectionDialog dialog = new TestClassSelectionDialog(Display.getDefault().getActiveShell());
+	public void reassignImplementedClass() {
 
-		if (dialog.open() == IDialogConstants.OK_ID) {
-			IType selectedClass = (IType)dialog.getFirstResult();
-			String qualifiedName = selectedClass.getFullyQualifiedName();
-			setQualifiedName(qualifiedName);
+		String qualifiedName = ImplementationAdapter.reassignImplementedClass();
+
+		if (qualifiedName == null) {
+			return;
 		}
+
+		setQualifiedName(qualifiedName);
 	}
 
 	public List<String> createRunnerList(String projectPath) throws EcException {
@@ -228,13 +226,9 @@ public class ClassInterface extends GlobalParametersParentInterface {
 
 	@Override
 	public void goToImplementation(){
-		IType type = JavaModelAnalyser.getIType(getQualifiedName());
-		if(type != null){
-			try{
-				JavaUI.openInEditor(type);
-			}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
-		}
+		ImplementationAdapter.goToClassImplementation(getQualifiedName());
 	}
+
 
 	@Override
 	public ClassNode getOwnNode(){

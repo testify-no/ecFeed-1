@@ -23,7 +23,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
@@ -137,7 +136,7 @@ public class DialogObjectToolkit {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 
-			FileDialog dialog = new FileDialog(EclipseHelper.getActiveShell(), fDialogStyle);
+			EcFileDialog dialog = new EcFileDialog(EclipseHelper.getActiveShell(), fDialogStyle);
 
 			dialog.setFilterExtensions(fFileExtensions);
 

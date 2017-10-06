@@ -53,10 +53,16 @@ public class NodeSelectionUtils {
 	}
 
 	public List<AbstractNode> getSelectedNodes() {
-		List<AbstractNode> result = new ArrayList<>();
+
+		if (fSelectionProvider == null) {
+			return null;
+		}
+
 		IStructuredSelection selection = (IStructuredSelection)fSelectionProvider.getSelection();
-		for(Object o : selection.toList()){
-			if(o instanceof AbstractNode){
+
+		List<AbstractNode> result = new ArrayList<>();
+		for (Object o : selection.toList()) {
+			if (o instanceof AbstractNode) {
 				result.add((AbstractNode)o);
 			}
 		}

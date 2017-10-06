@@ -42,6 +42,7 @@ import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.adapter.IImplementationStatusResolver;
 import com.ecfeed.core.generators.DoubleParameter;
@@ -60,6 +61,7 @@ import com.ecfeed.core.model.ConstraintNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelHelper;
+import com.ecfeed.core.model.ModelSizeHelper;
 import com.ecfeed.core.serialization.export.ExportTemplateFactory;
 import com.ecfeed.core.serialization.export.IExportTemplate;
 import com.ecfeed.core.utils.JavaTypeHelper;
@@ -70,9 +72,10 @@ import com.ecfeed.ui.common.EclipseImplementationStatusResolver;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.ecfeed.ui.common.TreeCheckStateListener;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.TestCasesExportDialog.FileCompositeVisibility;
 import com.ecfeed.ui.dialogs.basic.DialogObjectToolkit;
+import com.ecfeed.ui.dialogs.basic.InfoDialog;
 import com.ecfeed.ui.editor.IValueApplier;
 
 public abstract class GeneratorSetupDialog extends TitleAreaDialog {
@@ -92,7 +95,6 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 	private GeneratorFactory<ChoiceNode> fGeneratorFactory;
 	private boolean fGenerateExecutableContent;
 	private IImplementationStatusResolver fStatusResolver;
-	private IFileInfoProvider fFileInfoProvider;
 	private Combo fExportFormatCombo;
 	private Text fTargetFileText;
 	private int fContent;
@@ -107,15 +109,16 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 	public final static int GENERATOR_SELECTION_COMPOSITE = 1 << 3;
 	public final static int TEST_CASES_EXPORT_COMPOSITE = 1 << 4;
 
-	public GeneratorSetupDialog(
+	protected GeneratorSetupDialog(
 			Shell parentShell, 
 			MethodNode method,
 			boolean generateExecutables, 
-			IFileInfoProvider fileInfoProvider,
+			IJavaProjectProvider javaProjectProvider,
 			ExportTemplateFactory exportTemplateFactory,
 			String targetFile) {
 
 		super(parentShell);
+
 		setHelpAvailable(false);
 		setShellStyle(SWT.BORDER | SWT.RESIZE | SWT.TITLE | SWT.APPLICATION_MODAL);
 
@@ -123,8 +126,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		fGeneratorFactory = new GeneratorFactory<ChoiceNode>();
 		fGenerateExecutableContent = generateExecutables;
 
-		fStatusResolver = new EclipseImplementationStatusResolver(fileInfoProvider);
-		fFileInfoProvider = fileInfoProvider;
+		fStatusResolver = new EclipseImplementationStatusResolver(javaProjectProvider);
 
 		fTargetFile = null;
 
@@ -135,6 +137,22 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		}
 
 		fTargetFile = targetFile;
+	}
+
+	public static boolean canCreate(MethodNode methodNode) {
+
+		if (ApplicationContext.isApplicationTypeLocal()) {
+			return true;
+		}
+
+		String errMessage = ModelSizeHelper.isMethodOkForFreeUse(methodNode);
+
+		if (errMessage == null) {
+			return true;
+		}
+
+		InfoDialog.open(errMessage);
+		return false;
 	}
 
 	protected abstract String getDialogTitle();
@@ -189,8 +207,8 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
-		fOkButton = createButton(parent, IDialogConstants.OK_ID,
-				IDialogConstants.OK_LABEL, true);
+		fOkButton = 
+				createButton(parent, IDialogConstants.OK_ID, DialogHelper.getOkLabel(), true);
 		if (fGenerateExecutableContent) {
 			for (MethodParameterNode parameter : fMethod.getMethodParameters()) {
 				EImplementationStatus parameterStatus = fStatusResolver
@@ -212,8 +230,8 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 			}
 		}
 
-		createButton(parent, IDialogConstants.CANCEL_ID,
-				IDialogConstants.CANCEL_LABEL, false);
+		createButton(
+				parent, IDialogConstants.CANCEL_ID, DialogHelper.getCancelLabel(), false);
 
 		updateOkButtonAndErrorMsg();
 	}
@@ -394,7 +412,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		fTestSuiteCombo = testSuiteViewer.getCombo();
 		fTestSuiteCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
 				false, 1, 1));
-		fTestSuiteCombo.setItems(fMethod.getTestSuites().toArray(
+		fTestSuiteCombo.setItems(fMethod.getTestCaseNames().toArray(
 				new String[] {}));
 		fTestSuiteCombo.addModifyListener(new ModifyListener() {
 			@Override
@@ -515,7 +533,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		if (!onlyExecutable) {
 			return true;
 		}
-		if (!fFileInfoProvider.isProjectAvailable()) {
+		if (!ApplicationContext.isProjectAvailable()) {
 			return true;
 		}
 		EImplementationStatus status = fStatusResolver.getImplementationStatus(choice);

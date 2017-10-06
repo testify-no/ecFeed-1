@@ -13,6 +13,7 @@ package com.ecfeed.ui.editor;
 import java.util.List;
 
 import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -31,10 +32,10 @@ import com.ecfeed.core.model.ModelHelper;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.ecfeed.ui.common.NodeViewerColumnLabelProvider;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.editor.actions.DeleteAction;
-import com.ecfeed.ui.editor.actions.ModelViewerActionProvider;
+import com.ecfeed.ui.editor.actions.MainActionGrouppingProvider;
 import com.ecfeed.ui.modelif.ClassInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.MethodInterface;
@@ -49,28 +50,37 @@ public class MethodsViewer extends TableViewerSection {
 
 
 	public MethodsViewer(
-			ISectionContext sectionContext, 
+			ISectionContext sectionContext,
+			IMainTreeProvider mainTreeProvider,
 			IModelUpdateContext updateContext, 
-			IFileInfoProvider fileInfoProvider) {
-		super(sectionContext, updateContext, fileInfoProvider, StyleDistributor.getSectionStyle());
+			IJavaProjectProvider javaProjectProvider) {
+		super(sectionContext, updateContext, javaProjectProvider, StyleDistributor.getSectionStyle());
 
-		fClassIf = new ClassInterface(this, fileInfoProvider);
-		fMethodIf = new MethodInterface(this, fileInfoProvider);
+		fClassIf = new ClassInterface(getModelUpdateContext(), javaProjectProvider);
+		fMethodIf = new MethodInterface(getModelUpdateContext(), javaProjectProvider);
 
 		fMethodsColumn.setEditingSupport(new MethodNameEditingSupport());
 
 		setText("Methods");
-		addButton("Add new method", new AddNewMethodAdapter());
+		addButton("Add method", new AddNewMethodAdapter());
 		fRemoveSelectedButton = 
 				addButton("Remove selected", 
 						new ActionSelectionAdapter(
-								new DeleteAction(getViewer(), this), 
+								new DeleteAction(getViewer(), getModelUpdateContext()), 
 								Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
 
-		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
+		addDoubleClickListener(new SelectNodeDoubleClickListener(mainTreeProvider));
+
 		addSelectionChangedListener(new SelectionChangedListener());
-		setActionProvider(new ModelViewerActionProvider(getTableViewer(), this, fileInfoProvider));
-		getViewer().addDragSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDragListener(getViewer()));
+
+		setActionGrouppingProvider(
+				new MainActionGrouppingProvider(
+						getTableViewer(), getModelUpdateContext(), javaProjectProvider));
+
+		getViewer().addDragSupport(
+				DND.DROP_COPY|DND.DROP_MOVE, 
+				new Transfer[]{ModelNodesTransfer.getInstance()}, 
+				new ModelNodeDragListener(getViewer()));
 	}
 
 	@Override
@@ -128,7 +138,7 @@ public class MethodsViewer extends TableViewerSection {
 		@Override
 		protected Object getValue(Object element) {
 			fMethodIf.setOwnNode((MethodNode)element);
-			return fMethodIf.getName();
+			return fMethodIf.getNodeName();
 		}
 
 		@Override
@@ -147,24 +157,47 @@ public class MethodsViewer extends TableViewerSection {
 				MethodNode newMethod = fClassIf.addNewMethod();
 				if(newMethod != null){
 					selectElement(newMethod);
-					fMethodsColumn.getViewer().editElement(newMethod, 0);
+					startEditingAddedMethod(newMethod);
 				}
 			} catch (Exception e) {
 				ExceptionCatchDialog.open("Can not add new method", e.getMessage());
 			}
 		}
+
+		private void startEditingAddedMethod(MethodNode newMethod) {
+
+			if (fMethodsColumn == null) {
+				return;
+			}
+
+			ColumnViewer columnViewer = fMethodsColumn.getViewer(); 
+			if (columnViewer == null) {
+				return;
+			}
+
+			if (columnViewer.getControl().isDisposed()) {
+				return;
+			}
+
+			columnViewer.editElement(newMethod, 0);
+		}
 	}
 
-	private class MethodsArgsLabelProvider extends NodeViewerColumnLabelProvider{
+	private class MethodsArgsLabelProvider extends NodeViewerColumnLabelProvider {
+
 		@Override
-		public String getText(Object element){
+		public String getText(Object element) {
+
 			List<String> argTypes = fMethodIf.getArgTypes((MethodNode)element);
 			List<String> argNames = fMethodIf.getArgNames((MethodNode)element);
+
 			List<MethodParameterNode> parameters = ((MethodNode)element).getMethodParameters();
 			String result = "";
-			for(int i = 0; i < argTypes.size(); i++){
+
+			for (int i = 0; i < argTypes.size(); i++) {
 				result += (parameters.get(i).isExpected()?"[e]":"") + ModelHelper.convertToLocalName(argTypes.get(i)) + " " + argNames.get(i);
-				if(i < argTypes.size() - 1){
+
+				if (i < argTypes.size() - 1) {
 					result += ", ";
 				}
 			}

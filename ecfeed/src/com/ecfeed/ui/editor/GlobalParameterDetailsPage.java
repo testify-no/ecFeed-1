@@ -12,37 +12,49 @@ package com.ecfeed.ui.editor;
 
 import org.eclipse.swt.widgets.Composite;
 
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.GlobalParameterNode;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.ecfeed.ui.modelif.GlobalParameterInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class GlobalParameterDetailsPage extends AbstractParameterDetailsPage {
 
-	private IFileInfoProvider fFileInfoProvider;
 	private GlobalParameterInterface fParameterIf;
 	private LinkingMethodsViewer fLinkingMethodsViewer;
 
-	public GlobalParameterDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider) {
-		super(masterSection, updateContext, fileInfoProvider);
-		fFileInfoProvider = fileInfoProvider;
-		getParameterIf();
+	public GlobalParameterDetailsPage(
+			IMainTreeProvider mainTreeProvider,
+			GlobalParameterInterface globalParameterInterface,
+			IModelUpdateContext updateContext, 
+			IJavaProjectProvider javaProjectProvider) {
+
+		this(mainTreeProvider, globalParameterInterface, updateContext, javaProjectProvider, null);
 	}
+
+	public GlobalParameterDetailsPage(
+			IMainTreeProvider mainTreeProvider,
+			GlobalParameterInterface globalParameterInterface,
+			IModelUpdateContext updateContext, 
+			IJavaProjectProvider javaProjectProvider,
+			EcFormToolkit ecFormToolkit) {
+
+		super(mainTreeProvider, updateContext, javaProjectProvider, ecFormToolkit);
+		fParameterIf = globalParameterInterface;
+	}	
 
 	@Override
 	public void createContents(Composite parent){
 		super.createContents(parent);
-		addForm(fLinkingMethodsViewer = new LinkingMethodsViewer(this, this, fFileInfoProvider));
+		addForm(fLinkingMethodsViewer = 
+				new LinkingMethodsViewer(this, getModelUpdateContext(), getJavaProjectProvider()));
 	}
 
 
 	@Override
 	protected AbstractParameterInterface getParameterIf() {
-		if(fParameterIf == null){
-			fParameterIf = new GlobalParameterInterface(this, fFileInfoProvider);
-		}
 		return fParameterIf;
 	}
 
@@ -71,10 +83,10 @@ public class GlobalParameterDetailsPage extends AbstractParameterDetailsPage {
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext) {
 
-		if (fFileInfoProvider.isProjectAvailable()) {
-			return new GlobalParameterCommentsSection(sectionContext, updateContext, fFileInfoProvider);
+		if (ApplicationContext.isProjectAvailable()) {
+			return new GlobalParameterCommentsSection(sectionContext, updateContext, getJavaProjectProvider());
 		} else {
-			return new SingleTextCommentsSection(this, this, fFileInfoProvider);
+			return new SingleTextCommentsSection(this, getModelUpdateContext(), getJavaProjectProvider());
 		}
 	}
 }

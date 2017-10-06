@@ -15,12 +15,12 @@ import com.ecfeed.core.adapter.operations.ConstraintOperationReplaceStatement;
 import com.ecfeed.core.model.AbstractStatement;
 import com.ecfeed.core.model.ConstraintNode;
 import com.ecfeed.ui.common.Messages;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 
 public class ConstraintInterface extends AbstractNodeInterface {
 
-	public ConstraintInterface(IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider) {
-		super(updateContext, fileInfoProvider);
+	public ConstraintInterface(IModelUpdateContext updateContext, IJavaProjectProvider javaProjectProvider) {
+		super(updateContext, javaProjectProvider);
 	}
 
 	@Override
@@ -31,7 +31,7 @@ public class ConstraintInterface extends AbstractNodeInterface {
 	public boolean replaceStatement(AbstractStatement current, AbstractStatement newStatement) {
 		if(current != newStatement){
 			IModelOperation operation = new ConstraintOperationReplaceStatement(getOwnNode(), current, newStatement);
-			return execute(operation, Messages.DIALOG_REMOVE_TEST_CASES_PROBLEM_TITLE);
+			return getOperationExecuter().execute(operation, Messages.DIALOG_REMOVE_TEST_CASES_PROBLEM_TITLE);
 		}
 		return false;
 	}

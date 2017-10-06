@@ -16,18 +16,18 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.NodePropertyDefs;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.common.utils.SwtObjectHelper;
 import com.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 
-	private IFileInfoProvider fFileInfoProvider;
 	private Composite fAttributesComposite;
 	private Text fNameText;
 	private Combo fTypeCombo;
@@ -41,7 +41,7 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 		@Override
 		public void applyValue() {
 			getParameterIf().setName(fNameText.getText());
-			fNameText.setText(getParameterIf().getName());
+			fNameText.setText(getParameterIf().getNodeName());
 		}
 	}	
 
@@ -64,11 +64,22 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 
 	}
 
-	public AbstractParameterDetailsPage(ModelMasterSection masterSection,
-			IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider) {
-		super(masterSection, updateContext, fileInfoProvider);
-		fFileInfoProvider = fileInfoProvider;
+	public AbstractParameterDetailsPage(
+			IMainTreeProvider mainTreeProvider,
+			IModelUpdateContext updateContext, 
+			IJavaProjectProvider javaProjectProvider) {
+
+		this(mainTreeProvider, updateContext, javaProjectProvider, null);
 	}
+
+	public AbstractParameterDetailsPage(
+			IMainTreeProvider mainTreeProvider,
+			IModelUpdateContext updateContext, 
+			IJavaProjectProvider javaProjectProvider,
+			EcFormToolkit ecFormToolkit) {
+
+		super(mainTreeProvider, updateContext, javaProjectProvider, ecFormToolkit);
+	}	
 
 	@Override
 	public void createContents(Composite parent){
@@ -76,13 +87,17 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 
 		createAttributesComposite();
 
-		addForm(fCommentsSection = getCommentsSection(this, this));
+		addForm(fCommentsSection = getCommentsSection(this, getModelUpdateContext()));
 
-		fWebParameterSection = createWebParameterSection();
+		if (ApplicationContext.isApplicationTypeLocal()) {
+			fWebParameterSection = createWebParameterSection();
+		}
 
-		addForm(fChoicesViewer = new ChoicesViewer(this, this, fFileInfoProvider));
+		addForm(fChoicesViewer = 
+				new ChoicesViewer(
+						this, getMainTreeProvider(), getModelUpdateContext(), getJavaProjectProvider()));
 
-		getToolkit().paintBordersFor(getMainComposite());
+		getEcFormToolkit().paintBordersFor(getMainComposite());
 	}
 
 	protected WebParameterSection createWebParameterSection() { 
@@ -133,7 +148,7 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 	}
 
 	protected Composite createAttributesComposite(){
-		FormObjectToolkit formObjectToolkit = getFormObjectToolkit();
+		EcFormToolkit formObjectToolkit = getEcFormToolkit();
 		fAttributesComposite = formObjectToolkit.createGridComposite(getMainComposite(), 3);
 
 
@@ -146,12 +161,12 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 
 		fTypeCombo = formObjectToolkit.createReadWriteGridCombo(fAttributesComposite, new TypeApplier());
 
-		if (fFileInfoProvider.isProjectAvailable()) {
+		if (ApplicationContext.isProjectAvailable()) {
 			fBrowseUserTypeButton = formObjectToolkit.createButton(
 					fAttributesComposite, "Import...", new BrowseTypeSelectionListener());
 		}
 
-		formObjectToolkit.paintBorders(fAttributesComposite);
+		formObjectToolkit.paintBordersFor(fAttributesComposite);
 		return fAttributesComposite;
 	}
 
@@ -172,7 +187,7 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 	protected abstract AbstractCommentsSection getCommentsSection(ISectionContext sectionContext, IModelUpdateContext updateContext);
 
 	protected Button getBrowseUserTypeButton() {
-		if (!fFileInfoProvider.isProjectAvailable()) {
+		if (!ApplicationContext.isProjectAvailable()) {
 			return null;
 		}
 		return fBrowseUserTypeButton;

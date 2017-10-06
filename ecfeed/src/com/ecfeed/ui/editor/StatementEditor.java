@@ -29,25 +29,25 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.ecfeed.core.adapter.java.JavaPrimitiveTypePredicate;
 import com.ecfeed.core.model.AbstractStatement;
-import com.ecfeed.core.model.ChoiceNode;
-import com.ecfeed.core.model.ParameterCondition;
-import com.ecfeed.core.model.RelationStatement;
 import com.ecfeed.core.model.ChoiceCondition;
-import com.ecfeed.core.model.IStatementCondition;
-import com.ecfeed.core.model.LabelCondition;
+import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.ConstraintNode;
 import com.ecfeed.core.model.EStatementOperator;
 import com.ecfeed.core.model.EStatementRelation;
 import com.ecfeed.core.model.ExpectedValueStatement;
 import com.ecfeed.core.model.IRelationalStatement;
+import com.ecfeed.core.model.IStatementCondition;
 import com.ecfeed.core.model.IStatementVisitor;
+import com.ecfeed.core.model.LabelCondition;
 import com.ecfeed.core.model.MethodParameterNode;
+import com.ecfeed.core.model.ParameterCondition;
+import com.ecfeed.core.model.RelationStatement;
 import com.ecfeed.core.model.StatementArray;
 import com.ecfeed.core.model.StatementConditionHelper;
 import com.ecfeed.core.model.StaticStatement;
 import com.ecfeed.core.model.ValueCondition;
 import com.ecfeed.core.utils.SystemLogger;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.ecfeed.ui.modelif.AbstractStatementInterface;
 import com.ecfeed.ui.modelif.ConstraintInterface;
@@ -79,20 +79,22 @@ public class StatementEditor extends Composite {
 
 	private ConstraintNode fConstraint;
 	private ConstraintInterface fConstraintIf;
-	private IFileInfoProvider fFileInfoProvider;
+	private IJavaProjectProvider fJavaProjectProvider;
 
 	public StatementEditor(
-			Composite parent, IFileInfoProvider fileInfoProvider, 
-			StructuredViewer structuredViewer, IModelUpdateContext updateContext) {
+			Composite parent, 
+			IJavaProjectProvider javaProjectProvider, 
+			StructuredViewer structuredViewer, 
+			IModelUpdateContext updateContext) {
 
 		super(parent, SWT.NONE);
-		fFileInfoProvider = fileInfoProvider;
+		fJavaProjectProvider = javaProjectProvider;
 		fStructuredViewer = structuredViewer;
 		fModelUpdateContext = updateContext;
 
 		setLayout(new GridLayout(TOTAL_EDITOR_WIDTH, true));
 		setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
-		fConstraintIf = new ConstraintInterface(updateContext, fFileInfoProvider);
+		fConstraintIf = new ConstraintInterface(updateContext, fJavaProjectProvider);
 
 		createStatementCombo(this);
 		createRelationCombo(this);
@@ -114,7 +116,7 @@ public class StatementEditor extends Composite {
 
 	private void buildEditor(AbstractStatement statement) {
 		try {
-			statement.accept(new EditorBuilder(fFileInfoProvider));
+			statement.accept(new EditorBuilder(fJavaProjectProvider));
 		}catch(Exception e) {
 			SystemLogger.logCatch(e.getMessage());
 		}
@@ -497,8 +499,8 @@ public class StatementEditor extends Composite {
 
 	private class EditorBuilder implements IStatementVisitor {
 
-		public EditorBuilder(IFileInfoProvider fileInfoProvider) {
-			fFileInfoProvider = fileInfoProvider;
+		public EditorBuilder(IJavaProjectProvider javaProjectProvider) {
+			fJavaProjectProvider = javaProjectProvider;
 		}
 
 		@Override

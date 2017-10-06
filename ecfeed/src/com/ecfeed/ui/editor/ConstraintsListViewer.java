@@ -11,6 +11,7 @@
 package com.ecfeed.ui.editor;
 
 import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -30,9 +31,9 @@ import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.ecfeed.ui.common.NodeViewerColumnLabelProvider;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.editor.actions.DeleteAction;
-import com.ecfeed.ui.editor.actions.ModelViewerActionProvider;
+import com.ecfeed.ui.editor.actions.MainActionGrouppingProvider;
 import com.ecfeed.ui.modelif.ConstraintInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.MethodInterface;
@@ -49,18 +50,19 @@ public class ConstraintsListViewer extends TableViewerSection {
 
 
 	public ConstraintsListViewer(
-			ISectionContext sectionContext, 
+			ISectionContext sectionContext,
+			IMainTreeProvider mainTreeProvider,
 			IModelUpdateContext updateContext, 
-			IFileInfoProvider fileInfoProvider){
-		super(sectionContext, updateContext, fileInfoProvider, STYLE);
+			IJavaProjectProvider javaProjectProvider){
+		super(sectionContext, updateContext, javaProjectProvider, STYLE);
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gd.minimumHeight = 250;
 		getSection().setLayoutData(gd);
 
 		getSection().setText("Constraints");
 
-		fMethodInterface = new MethodInterface(this, fileInfoProvider);
-		fConstraintIf = new ConstraintInterface(this, fileInfoProvider);
+		fMethodInterface = new MethodInterface(getModelUpdateContext(), javaProjectProvider);
+		fConstraintIf = new ConstraintInterface(getModelUpdateContext(), javaProjectProvider);
 
 		fNameColumn.setEditingSupport(new ConstraintNameEditingSupport());
 
@@ -69,11 +71,20 @@ public class ConstraintsListViewer extends TableViewerSection {
 				addButton(
 						"Remove selected", 
 						new ActionSelectionAdapter(
-								new DeleteAction(getViewer(), this), Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
+								new DeleteAction(
+										getViewer(), 
+										getModelUpdateContext()), 
+								Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
 
-		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
-		setActionProvider(new ModelViewerActionProvider(getTableViewer(), updateContext, fileInfoProvider));
-		getViewer().addDragSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDragListener(getViewer()));
+		addDoubleClickListener(new SelectNodeDoubleClickListener(mainTreeProvider));
+		
+		setActionGrouppingProvider(new MainActionGrouppingProvider(getTableViewer(), updateContext, javaProjectProvider));
+
+		getViewer().addDragSupport(
+				DND.DROP_COPY|DND.DROP_MOVE, 
+				new Transfer[]{ModelNodesTransfer.getInstance()}, 
+				new ModelNodeDragListener(getViewer()));
+
 		addSelectionChangedListener(new SelectionChangedListener());
 	}
 
@@ -143,10 +154,36 @@ public class ConstraintsListViewer extends TableViewerSection {
 		@Override 
 		public void widgetSelected(SelectionEvent e){
 			ConstraintNode constraint = fMethodInterface.addNewConstraint();
-			if(constraint != null){
-				selectElement(constraint);
-				fNameColumn.getViewer().editElement(constraint, 0);
+			startEditingConstraint(constraint);
+		}
+
+		private void startEditingConstraint(ConstraintNode constraint) {
+
+			if (constraint == null) {
+				return;
 			}
+
+			if (getViewer() == null) {
+				return;
+			}
+
+			if (getViewer().getControl().isDisposed()) {
+				return;
+			}
+
+			selectElement(constraint);
+
+			ColumnViewer columnViewer = fNameColumn.getViewer();
+
+			if (columnViewer == null) {
+				return;
+			}
+
+			if (columnViewer.getControl().isDisposed()) {
+				return;
+			}
+
+			columnViewer.editElement(constraint, 0);
 		}
 	}
 

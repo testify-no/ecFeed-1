@@ -36,7 +36,7 @@ public class ModelNodesTransfer extends ByteArrayTransfer {
 	}
 
 //	@SuppressWarnings("unchecked")
-	protected void javaToNative (Object object, TransferData transferData) {
+	public void javaToNative (Object object, TransferData transferData) {
 //		super.javaToNative(serialize((List<GenericNode>)object), transferData);
 //		
 //		System.out.println("javaToNative: " + object + ", " + transferData);
@@ -52,7 +52,7 @@ public class ModelNodesTransfer extends ByteArrayTransfer {
 	 * 
 	 * @see Transfer#javaToNative
 	 */
-	protected Object nativeToJava(TransferData transferData) {
+	public Object nativeToJava(TransferData transferData) {
 //		if ( !isSupportedType(transferData) || transferData.pValue == 0) return null;
 //		int size = transferData.format * transferData.length / 8;
 //		if (size == 0) return null;

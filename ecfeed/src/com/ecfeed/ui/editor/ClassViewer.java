@@ -12,6 +12,7 @@ package com.ecfeed.ui.editor;
 
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TextCellEditor;
@@ -21,6 +22,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.ClassNodeHelper;
@@ -28,10 +30,10 @@ import com.ecfeed.core.model.RootNode;
 import com.ecfeed.ui.common.ColorConstants;
 import com.ecfeed.ui.common.ColorManager;
 import com.ecfeed.ui.common.Messages;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.editor.actions.DeleteAction;
-import com.ecfeed.ui.editor.actions.ModelViewerActionProvider;
+import com.ecfeed.ui.editor.actions.MainActionGrouppingProvider;
 import com.ecfeed.ui.modelif.ClassInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.ModelNodesTransfer;
@@ -44,8 +46,91 @@ public class ClassViewer extends TableViewerSection {
 	private ClassInterface fClassIf;
 
 	private TableViewerColumn fPackageNameColumn;
-	private IFileInfoProvider fFileInfoProvider;
+	private IJavaProjectProvider fJavaProjectProvider;
 
+
+	public ClassViewer(
+			ISectionContext parent, 
+			IMainTreeProvider mainTreeProvider,
+			IModelUpdateContext updateContext, 
+			IJavaProjectProvider javaProjectProvider) {
+		super(parent, updateContext, javaProjectProvider, StyleDistributor.getSectionStyle());
+
+		fJavaProjectProvider = javaProjectProvider; 
+		fNameColumn.setEditingSupport(new LocalNameEditingSupport());
+		fPackageNameColumn.setEditingSupport(new PackageNameEditingSupport());
+
+		fRootIf = new RootInterface(getModelUpdateContext(), javaProjectProvider);
+		fClassIf = new ClassInterface(getModelUpdateContext(), javaProjectProvider);
+
+		setText("Classes");
+
+		if (ApplicationContext.isProjectAvailable()) {
+			addButton("Add implemented class", new AddImplementedClassAdapter());
+		}
+
+		addButton("Add class", new AddNewClassAdapter());
+		addButton("Remove selected", 
+				new ActionSelectionAdapter(
+						new DeleteAction(getViewer(), getModelUpdateContext()), Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
+
+		addDoubleClickListener(new SelectNodeDoubleClickListener(mainTreeProvider));
+
+		setActionGrouppingProvider(new MainActionGrouppingProvider(getTableViewer(), getModelUpdateContext(), javaProjectProvider));
+
+		getViewer().addDragSupport(
+				DND.DROP_COPY|DND.DROP_MOVE, 
+				new Transfer[]{ModelNodesTransfer.getInstance()}, 
+				new ModelNodeDragListener(getViewer()));
+	}
+
+	@Override
+	protected void createTableColumns(){
+		fNameColumn = addColumn("Class", 150, new ClassViewerColumnLabelProvider(){
+			@Override
+			public String getText(Object element){
+				return ClassInterface.getLocalName((ClassNode)element);
+			}
+		});
+
+		fPackageNameColumn = addColumn("Package", 150, new ClassViewerColumnLabelProvider(){
+			@Override
+			public String getText(Object element){
+				return ClassNodeHelper.getPackageName((ClassNode)element);
+			}
+		});
+	}
+
+	public void setInput(RootNode model){
+		super.setInput(model.getClasses());
+		fRootIf.setOwnNode(model);
+	}
+
+	private ClassInterface classIf(){
+		if(fClassIf == null){
+			fClassIf = new ClassInterface(getModelUpdateContext(), fJavaProjectProvider);
+		}
+		return fClassIf;
+	}
+
+	private void startEditingAddedClass(ClassNode addedClass) {
+
+		if (fNameColumn == null) {
+			return;
+		}
+
+		ColumnViewer columnViewer = fNameColumn.getViewer();
+
+		if (columnViewer == null) {
+			return;
+		}
+
+		if (columnViewer.getControl().isDisposed()) {
+			return;
+		}
+
+		columnViewer.editElement(addedClass, 0);
+	}
 
 	private abstract class ClassNameEditingSupport extends EditingSupport{
 
@@ -89,6 +174,7 @@ public class ClassViewer extends TableViewerSection {
 
 	}
 
+
 	private class PackageNameEditingSupport extends ClassNameEditingSupport{
 
 		@Override
@@ -105,7 +191,6 @@ public class ClassViewer extends TableViewerSection {
 		}
 	}
 
-
 	private class AddImplementedClassAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent ev) {
@@ -113,13 +198,14 @@ public class ClassViewer extends TableViewerSection {
 				ClassNode addedClass = fRootIf.addImplementedClass();
 				if(addedClass != null){
 					selectElement(addedClass);
-					fNameColumn.getViewer().editElement(addedClass, 0);
+					startEditingAddedClass(addedClass);
 				}
 			} catch (Exception e) {
 				ExceptionCatchDialog.open("Can not add implemented class.", e.getMessage());
 			}
 		}
 	}
+
 
 	private class AddNewClassAdapter extends SelectionAdapter {
 		@Override
@@ -128,12 +214,13 @@ public class ClassViewer extends TableViewerSection {
 				ClassNode addedClass = fRootIf.addNewClass();
 				if(addedClass != null){
 					selectElement(addedClass);
-					fNameColumn.getViewer().editElement(addedClass, 0);
+					startEditingAddedClass(addedClass);
 				}
 			} catch (Exception e) {
 				ExceptionCatchDialog.open("Can not create new test class.", e.getMessage());
 			}
 		}
+
 	}
 
 	private class ClassViewerColumnLabelProvider extends ColumnLabelProvider {
@@ -142,7 +229,7 @@ public class ClassViewer extends TableViewerSection {
 			if (!(element instanceof ClassNode)) {
 				return null;
 			}
-			if (!fFileInfoProvider.isProjectAvailable()) {
+			if (!ApplicationContext.isProjectAvailable()) {
 				return null;
 			}
 			if(fRootIf.getImplementationStatus((ClassNode)element) == EImplementationStatus.IMPLEMENTED){
@@ -152,61 +239,4 @@ public class ClassViewer extends TableViewerSection {
 		}
 	}
 
-	public ClassViewer(
-			ISectionContext parent, 
-			IModelUpdateContext updateContext, 
-			IFileInfoProvider fileInfoProvider) {
-		super(parent, updateContext, fileInfoProvider, StyleDistributor.getSectionStyle());
-
-		fFileInfoProvider = fileInfoProvider; 
-		fNameColumn.setEditingSupport(new LocalNameEditingSupport());
-		fPackageNameColumn.setEditingSupport(new PackageNameEditingSupport());
-
-		fRootIf = new RootInterface(this, fileInfoProvider);
-		fClassIf = new ClassInterface(this, fileInfoProvider);
-
-		setText("Classes");
-
-		if (fFileInfoProvider.isProjectAvailable()) {
-			addButton("Add implemented class", new AddImplementedClassAdapter());
-		}
-
-		addButton("New test class", new AddNewClassAdapter());
-		addButton("Remove selected", 
-				new ActionSelectionAdapter(
-						new DeleteAction(getViewer(), this), Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
-
-		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
-		setActionProvider(new ModelViewerActionProvider(getTableViewer(), this, fileInfoProvider));
-		getViewer().addDragSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDragListener(getViewer()));
-	}
-
-	@Override
-	protected void createTableColumns(){
-		fNameColumn = addColumn("Class", 150, new ClassViewerColumnLabelProvider(){
-			@Override
-			public String getText(Object element){
-				return ClassInterface.getLocalName((ClassNode)element);
-			}
-		});
-
-		fPackageNameColumn = addColumn("Package", 150, new ClassViewerColumnLabelProvider(){
-			@Override
-			public String getText(Object element){
-				return ClassNodeHelper.getPackageName((ClassNode)element);
-			}
-		});
-	}
-
-	public void setInput(RootNode model){
-		super.setInput(model.getClasses());
-		fRootIf.setOwnNode(model);
-	}
-
-	private ClassInterface classIf(){
-		if(fClassIf == null){
-			fClassIf = new ClassInterface(this, fFileInfoProvider);
-		}
-		return fClassIf;
-	}
 }

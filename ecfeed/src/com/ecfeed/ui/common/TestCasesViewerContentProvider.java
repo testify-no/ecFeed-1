@@ -31,11 +31,14 @@ public class TestCasesViewerContentProvider extends TreeNodeContentProvider impl
 	}
 
 	@Override
-	public Object[] getElements(Object inputElement){
-		if(inputElement instanceof MethodNode){
-			return ((MethodNode)inputElement).getTestSuites().toArray();
+	public Object[] getElements(Object inputElement) {
+		
+		if (!(inputElement instanceof MethodNode)) {
+			return null;
 		}
-		return null;
+		
+		MethodNode methodNode = (MethodNode)inputElement; 
+		return methodNode.getTestCaseNames().toArray();
 	}
 
 	@Override

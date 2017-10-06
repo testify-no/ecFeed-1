@@ -17,28 +17,54 @@ import org.eclipse.jface.viewers.ISelectionProvider;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.ui.modelif.NodeSelectionUtils;
 
-public abstract class ModelSelectionAction extends NamedAction {
-	
-	private NodeSelectionUtils fSelectionUtils;
+public abstract class ModelSelectionAction extends DescribedAction {
 
-	public ModelSelectionAction(String id, String name, ISelectionProvider selectionProvider){
-		super(id, name);
+	private NodeSelectionUtils fSelectionUtils = null;
+
+	public ModelSelectionAction(ActionId actionId, ISelectionProvider selectionProvider) {
+
+		super(actionId);
+		setSelectionProvider(selectionProvider);
+	}
+
+	public ModelSelectionAction(ActionId actionId) {
+
+		this(actionId, null);
+	}	
+
+	protected void setSelectionProvider(ISelectionProvider selectionProvider) {
 		fSelectionUtils = new NodeSelectionUtils(selectionProvider);
 	}
-	
+
 	protected List<AbstractNode> getSelectedNodes(){
-		return getSelectionUtils().getSelectedNodes();
+
+		if (fSelectionUtils == null) {
+			return null;
+		}
+
+		return fSelectionUtils.getSelectedNodes();
 	}
 
 	protected boolean isSelectionSibling(){
-		return getSelectionUtils().isSelectionSibling();
+
+		if (fSelectionUtils == null) {
+			return false;
+		}
+
+		return fSelectionUtils.isSelectionSibling();
 	}
-	
+
 	protected boolean isSelectionSingleType(){
-		return getSelectionUtils().isSelectionSingleType();
+
+		if (fSelectionUtils == null) {
+			return false;
+		}
+
+		return fSelectionUtils.isSelectionSingleType();
 	}
-	
+
 	protected NodeSelectionUtils getSelectionUtils(){
+
 		return fSelectionUtils;
 	}
 

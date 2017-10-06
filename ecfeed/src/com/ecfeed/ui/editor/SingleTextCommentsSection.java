@@ -16,7 +16,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Text;
 
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.modelif.AbstractNodeInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 
@@ -29,15 +29,15 @@ public class SingleTextCommentsSection extends AbstractCommentsSection {
 	public SingleTextCommentsSection(
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext,
-			IFileInfoProvider fileInfoProvider) {
-		super(sectionContext, updateContext, fileInfoProvider);
+			IJavaProjectProvider javaProjectProvider) {
+		super(sectionContext, updateContext, javaProjectProvider);
 	}
 
 	@Override
 	public Composite createMainControlComposite(Composite parent){
 		//overriding tab folder creation
 
-		fCommentsText = getToolkit().createText(parent, "", TEXT_STYLE);
+		fCommentsText = getEcFormToolkit().createText(parent, "", TEXT_STYLE);
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, false);
 		gd.heightHint = 150;
 		fCommentsText.setLayoutData(gd);

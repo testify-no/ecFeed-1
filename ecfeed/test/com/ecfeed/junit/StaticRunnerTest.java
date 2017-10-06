@@ -135,7 +135,7 @@ public class StaticRunnerTest extends StaticRunner{
 			result = new HashSet<String>(Arrays.asList(((TestSuites)annotation).value()));
 		}
 		else{
-			result = methodModel.getTestSuites();
+			result = methodModel.getTestCaseNames();
 		}
 		return result;
 	}

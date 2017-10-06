@@ -12,10 +12,10 @@ package com.ecfeed.ui.editor.actions;
 
 import com.ecfeed.ui.dialogs.CheckForUpdatesDialog;
 
-public class CheckForUpdatesAction extends NamedAction {
+public class CheckForUpdatesAction extends DescribedAction {
 
 	public CheckForUpdatesAction(){
-		super(GlobalActions.CHECK_FOR_UPDATES.getId(), GlobalActions.CHECK_FOR_UPDATES.getDescription());
+		super(ActionId.CHECK_FOR_UPDATES);
 	}
 
 	@Override

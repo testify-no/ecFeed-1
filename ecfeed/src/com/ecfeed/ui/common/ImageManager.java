@@ -35,6 +35,10 @@ public class ImageManager {
 		}
 		return fInstance;
 	}
+	
+	public static Image getImageFromFile(String file) {
+		return ImageManager.getInstance().getImage(file);
+	}
 
 	public ImageDescriptor getImageDescriptor(String fileName){
 		String path = CommonConstants.ICONS_FOLDER_NAME + "/" + fileName;
@@ -58,4 +62,5 @@ public class ImageManager {
 		fDescriptors = new HashMap<>();
 		fImages = new HashMap<>();
 	}
+	
 }

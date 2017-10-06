@@ -17,7 +17,7 @@ import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.ui.common.JavaDocSupport;
 import com.ecfeed.ui.common.Messages;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
@@ -77,8 +77,8 @@ public abstract class AbstractParameterCommentsSection extends ExportableJavaDoc
 	public AbstractParameterCommentsSection(
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext,
-			IFileInfoProvider fileInfoProvider) {
-		super(sectionContext, updateContext, fileInfoProvider);
+			IJavaProjectProvider javaProjectProvider) {
+		super(sectionContext, updateContext, javaProjectProvider);
 
 		fParameterCommentsTab = addTextTab("Parameter", 0);
 		getTypeCommentsTab().setText("Type");

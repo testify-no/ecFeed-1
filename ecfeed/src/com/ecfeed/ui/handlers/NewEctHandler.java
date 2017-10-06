@@ -16,7 +16,7 @@ import com.ecfeed.core.utils.DiskFileHelper;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.dialogs.basic.NewFileEctDialog;
 import com.ecfeed.ui.dialogs.basic.ReplaceExistingFileDialog;
-import com.ecfeed.utils.EclipseHelper;
+import com.ecfeed.utils.ModelEditorPlatformAdapter;
 import com.ecfeed.utils.EctFileHelper;
 
 
@@ -33,7 +33,7 @@ public class NewEctHandler {
 
 		try {
 			EctFileHelper.createNewFile(pathWithFileName);
-			EclipseHelper.openEditorOnExistingExtFile(pathWithFileName);
+			ModelEditorPlatformAdapter.openEditorOnExistingExtFile(pathWithFileName);
 		} catch (Exception e) {
 			ExceptionCatchDialog.open("Can not open editor.", e.getMessage());
 		}

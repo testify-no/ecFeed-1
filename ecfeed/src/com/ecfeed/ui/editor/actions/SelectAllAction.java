@@ -13,20 +13,20 @@ package com.ecfeed.ui.editor.actions;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 
-public class SelectAllAction extends NamedAction {
+public class SelectAllAction extends DescribedAction {
 
 	private TableViewer fTableViewer;
 	private TreeViewer fTreeViewer;
 	private boolean fSelectRoot;
 
 	public SelectAllAction(TreeViewer viewer, boolean selectRoot){
-		super(GlobalActions.SELECT_ALL.getId(), GlobalActions.SELECT_ALL.getDescription());
+		super(ActionId.SELECT_ALL);
 		fTreeViewer = viewer;
 		fSelectRoot = selectRoot;
 	}
 
 	public SelectAllAction(TableViewer viewer){
-		super(GlobalActions.SELECT_ALL.getId(), GlobalActions.SELECT_ALL.getDescription());
+		super(ActionId.SELECT_ALL);
 		fTableViewer = viewer;
 	}
 

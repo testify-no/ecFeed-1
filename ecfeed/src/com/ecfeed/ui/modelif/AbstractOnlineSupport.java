@@ -34,7 +34,7 @@ import com.ecfeed.core.runner.JavaTestRunner;
 import com.ecfeed.core.runner.RunnerException;
 import com.ecfeed.ui.common.EclipseLoaderProvider;
 import com.ecfeed.ui.common.Messages;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.GeneratorProgressMonitorDialog;
 import com.ecfeed.ui.dialogs.SetupDialogOnline;
 import com.ecfeed.ui.dialogs.basic.ErrorDialog;
@@ -47,7 +47,7 @@ public abstract class AbstractOnlineSupport {
 
 	private MethodNode fMethodNode;
 	private JavaTestRunner fRunner;
-	private IFileInfoProvider fFileInfoProvider;
+	private IJavaProjectProvider fJavaProjectProvider;
 	private String fTargetFile;
 	private String fExportTemplate;
 	private TestRunMode fTestRunMode;
@@ -55,18 +55,21 @@ public abstract class AbstractOnlineSupport {
 
 	public AbstractOnlineSupport(
 			MethodNode methodNode, ITestMethodInvoker testMethodInvoker, 
-			IFileInfoProvider fileInfoProvider) {
-		this(methodNode, testMethodInvoker, fileInfoProvider, false);
+			IJavaProjectProvider javaProjectProvider) {
+		
+		this(methodNode, testMethodInvoker, javaProjectProvider, false);
 	}
 
 	public AbstractOnlineSupport(
-			MethodNode methodNode, ITestMethodInvoker testMethodInvoker,
-			IFileInfoProvider fileInfoProvider,
+			MethodNode methodNode, 
+			ITestMethodInvoker testMethodInvoker,
+			IJavaProjectProvider javaProjectProvider,
 			boolean isExport) {
+		
 		ILoaderProvider loaderProvider = new EclipseLoaderProvider();
 		ModelClassLoader loader = loaderProvider.getLoader(true, null);
 		fRunner = new JavaTestRunner(loader, isExport, testMethodInvoker);
-		fFileInfoProvider = fileInfoProvider;
+		fJavaProjectProvider = javaProjectProvider;
 		fTestRunMode = TestRunModeHelper.getTestRunMode(methodNode);
 		fTestInformer = createTestInformer(isExport);
 
@@ -90,7 +93,7 @@ public abstract class AbstractOnlineSupport {
 
 	protected abstract SetupDialogOnline createSetupDialog(
 			Shell activeShell, MethodNode methodNode,
-			IFileInfoProvider fileInfoProvider);
+			IJavaProjectProvider javaProjectProvider);
 
 	protected abstract void prepareRun() throws InvocationTargetException;
 
@@ -134,7 +137,11 @@ public abstract class AbstractOnlineSupport {
 
 		SetupDialogOnline dialog = 
 				createSetupDialog(
-						Display.getCurrent().getActiveShell(), fMethodNode, fFileInfoProvider);
+						Display.getCurrent().getActiveShell(), fMethodNode, fJavaProjectProvider);
+
+		if (dialog == null) {
+			return Result.CANCELED;
+		}
 
 		if (dialog.open() != IDialogConstants.OK_ID) {
 			return Result.CANCELED;

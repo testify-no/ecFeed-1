@@ -17,7 +17,7 @@ import com.ecfeed.ui.modelif.IModelUpdateContext;
 public class DeleteAction extends ModelModifyingAction {
 
 	public DeleteAction(ISelectionProvider selectionProvider, IModelUpdateContext updateContext) {
-		super(GlobalActions.DELETE.getId(), GlobalActions.DELETE.getDescription(), selectionProvider, updateContext);
+		super(ActionId.DELETE, selectionProvider, updateContext);
 	}
 
 	@Override

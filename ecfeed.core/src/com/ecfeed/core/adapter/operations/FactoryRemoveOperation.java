@@ -10,6 +10,8 @@
 
 package com.ecfeed.core.adapter.operations;
 
+import java.util.List;
+
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.ITypeAdapterProvider;
 import com.ecfeed.core.adapter.java.Messages;
@@ -48,6 +50,17 @@ public class FactoryRemoveOperation {
 		public String getName() {
 			return "";
 		}
+
+		@Override
+		public List<AbstractNode> getNodesToSelect() {
+			return null;
+		}
+
+		@Override
+		public void setNodesToSelect(List<AbstractNode> nodes) {
+		}
+
+
 	}
 
 	private static class RemoveOperationVisitor implements IModelVisitor{

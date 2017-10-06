@@ -23,18 +23,24 @@ public class GenericAddChildrenOperation extends BulkOperation {
 		this(target, children, -1, adapterProvider, validate);
 	}
 
-	public GenericAddChildrenOperation(AbstractNode target, Collection<? extends AbstractNode> children, int index, ITypeAdapterProvider adapterProvider, boolean validate) {
-		super(OperationNames.ADD_CHILDREN, false);
-		for(AbstractNode child : children){
+	public GenericAddChildrenOperation(
+			AbstractNode target, 
+			Collection<? extends AbstractNode> children, 
+			int index, 
+			ITypeAdapterProvider adapterProvider, 
+			boolean validate) {
+
+		super(OperationNames.ADD_CHILDREN, false, target, target);
+
+		for (AbstractNode child : children) {
 			IModelOperation operation;
 			try {
-				if(index != -1){
+				if (index != -1) {
 					operation = (IModelOperation)target.accept(new FactoryAddChildOperation(child, index++, adapterProvider, validate));
-				}
-				else{
+				} else {
 					operation = (IModelOperation)target.accept(new FactoryAddChildOperation(child, adapterProvider, validate));
 				}
-				if(operation != null){
+				if (operation != null) {
 					addOperation(operation);
 				}
 			} catch (Exception e) {SystemLogger.logCatch(e.getMessage());}

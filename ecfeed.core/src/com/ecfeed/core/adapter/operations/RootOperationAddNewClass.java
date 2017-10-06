@@ -36,6 +36,8 @@ public class RootOperationAddNewClass extends AbstractModelOperation {
 
 	@Override
 	public void execute() throws ModelOperationException {
+
+		setOneNodeToSelect(fRootNode);
 		String name = fclassToAdd.getName();
 		if(fAddIndex == -1){
 			fAddIndex = fRootNode.getClasses().size();

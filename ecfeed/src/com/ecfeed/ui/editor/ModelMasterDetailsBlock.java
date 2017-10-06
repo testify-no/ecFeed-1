@@ -16,6 +16,7 @@ import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IActionBars;
@@ -26,11 +27,9 @@ import org.eclipse.ui.forms.AbstractFormPart;
 import org.eclipse.ui.forms.DetailsPart;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.MasterDetailsBlock;
-import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.operations.RedoActionHandler;
 import org.eclipse.ui.operations.UndoActionHandler;
 
-import com.ecfeed.core.adapter.ModelOperationManager;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.ClassNode;
@@ -41,52 +40,278 @@ import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.TestCaseNode;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
+import com.ecfeed.ui.modelif.ChoiceInterface;
+import com.ecfeed.ui.modelif.ClassInterface;
+import com.ecfeed.ui.modelif.ConstraintInterface;
+import com.ecfeed.ui.modelif.GlobalParameterInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.IModelUpdateListener;
+import com.ecfeed.ui.modelif.MethodInterface;
+import com.ecfeed.ui.modelif.MethodParameterInterface;
+import com.ecfeed.ui.modelif.RootInterface;
+import com.ecfeed.ui.modelif.TestCaseInterface;
 
-public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISelectionChangedListener, ISectionContext{
+public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISelectionChangedListener, ISectionContext {
 
 	private ModelMasterSection fMasterSection;
 	private ISectionContext fMasterSectionContext;
 	private ModelPage fPage;
-	private FormToolkit fToolkit;
+	private EcFormToolkit fEcFormToolkit;
 	private ModelUpdateContext fUpdateContext;
-	private IFileInfoProvider fFileInfoProvider;
+	private IJavaProjectProvider fJavaProjectProvider;
 	private UndoActionHandler fUndoActionHandler;
 	private RedoActionHandler fRedoActionHandler;
-	private RootNode fModel; 
+	private RootNode fModel;
+	private MasterSectionMainTreeProvider fMainTreeProvider;
 
-	private class ModelUpdateContext implements IModelUpdateContext{
+	public ModelMasterDetailsBlock(ModelPage modelPage, IJavaProjectProvider javaProjectProvider) {
+		fPage = modelPage;
+		fUpdateContext = new ModelUpdateContext();
+		fJavaProjectProvider = javaProjectProvider;
+		fModel = null;
+	}
 
-		@Override
-		public ModelOperationManager getOperationManager() {
-			return getPage().getEditor().getModelOperationManager();
+	public ModelMasterSection getMasterSection(){
+		return fMasterSection;
+	}
+
+	@Override
+	protected void createMasterPart(IManagedForm managedForm, Composite parent) {
+		try {
+			fModel = getModel();
+		} catch (ModelOperationException e) {
+			ExceptionCatchDialog.open(null, e.getMessage());
+			return;
 		}
 
-		@Override
-		public AbstractFormPart getSourceForm() {
+		fEcFormToolkit = new EcFormToolkit(managedForm.getToolkit(), false); 
+
+		fMasterSection = new ModelMasterSection(this, fJavaProjectProvider);
+		fMasterSection.initialize(managedForm);
+		fMasterSection.addSelectionChangedListener(this);
+		fMasterSection.setInput(fModel);
+
+		if (isInMemFile(fJavaProjectProvider)) {
+			fMasterSection.markDirty();
+		}
+	}
+
+	@Override
+	protected void registerPages(DetailsPart detailsPart) {
+
+		if (fModel == null) {
+			return;
+		}
+
+		fMainTreeProvider = new MasterSectionMainTreeProvider(); 
+
+		detailsPart.registerPage(
+				RootNode.class, 
+				new ModelRootDetailsPage(
+						fMainTreeProvider,
+						new RootInterface(fUpdateContext, fJavaProjectProvider),
+						fUpdateContext, 
+						fJavaProjectProvider));
+
+		detailsPart.registerPage(
+				ClassNode.class, 
+				new ClassDetailsPage(
+						fMainTreeProvider,
+						new ClassInterface(fUpdateContext, fJavaProjectProvider),
+						fUpdateContext, 
+						fJavaProjectProvider));
+
+		detailsPart.registerPage(
+				MethodNode.class, 
+				new MethodDetailsPage(
+						fMainTreeProvider,
+						new MethodInterface(fUpdateContext, fJavaProjectProvider),
+						fUpdateContext, 
+						fJavaProjectProvider));
+
+		detailsPart.registerPage(
+				MethodParameterNode.class, 
+				new MethodParameterDetailsPage(
+						fMainTreeProvider,
+						new MethodParameterInterface(fUpdateContext, fJavaProjectProvider),
+						fUpdateContext, 
+						fJavaProjectProvider));
+
+		detailsPart.registerPage(
+				GlobalParameterNode.class, 
+				new GlobalParameterDetailsPage(
+						fMainTreeProvider,
+						new GlobalParameterInterface(fUpdateContext, fJavaProjectProvider),
+						fUpdateContext, 
+						fJavaProjectProvider));
+
+		detailsPart.registerPage(
+				TestCaseNode.class, 
+				new TestCaseDetailsPage(
+						fMainTreeProvider,
+						new TestCaseInterface(fUpdateContext, fJavaProjectProvider),
+						fUpdateContext, 
+						fJavaProjectProvider));
+
+		detailsPart.registerPage(
+				ConstraintNode.class, 
+				new ConstraintDetailsPage(
+						fMainTreeProvider,
+						new ConstraintInterface(fUpdateContext, fJavaProjectProvider),
+						fUpdateContext, 
+						fJavaProjectProvider));
+
+		detailsPart.registerPage(
+				ChoiceNode.class, 
+				new ChoiceDetailsPage(
+						fMainTreeProvider,
+						new ChoiceInterface(fUpdateContext, fJavaProjectProvider),
+						fUpdateContext, 
+						fJavaProjectProvider));
+
+		selectNode(fModel);
+	}
+
+	@Override
+	protected void createToolBarActions(IManagedForm managedForm) {
+		IActionBars actionBars = getActionBars();
+		IEditorSite editorSite = fPage.getEditorSite();
+		IUndoContext undoContext = fUpdateContext.getUndoContext();
+
+		fUndoActionHandler = new UndoActionHandler(editorSite, undoContext);
+		actionBars.setGlobalActionHandler(ActionFactory.UNDO.getId(), fUndoActionHandler);
+
+		fRedoActionHandler = new RedoActionHandler(editorSite, undoContext);
+		actionBars.setGlobalActionHandler(ActionFactory.REDO.getId(), fRedoActionHandler);
+
+		actionBars.setGlobalActionHandler(
+				ActionFactory.COPY.getId(), new GenericToolbarAction(ActionFactory.COPY.getId()));
+
+		actionBars.setGlobalActionHandler(
+				ActionFactory.CUT.getId(), new GenericToolbarAction(ActionFactory.CUT.getId()));
+
+		actionBars.setGlobalActionHandler(
+				ActionFactory.PASTE.getId(), new GenericToolbarAction(ActionFactory.PASTE.getId()));
+
+		actionBars.setGlobalActionHandler(
+				ActionFactory.DELETE.getId(), new GenericToolbarAction(ActionFactory.DELETE.getId()));
+
+		actionBars.setGlobalActionHandler(
+				ActionFactory.SELECT_ALL.getId(), new GenericToolbarAction(ActionFactory.SELECT_ALL.getId()));
+
+		actionBars.updateActionBars();
+	}
+
+	@Override
+	public void selectionChanged(SelectionChangedEvent event) {
+		detailsPart.selectionChanged(fMasterSection, event.getSelection());
+	}
+
+	@Override
+	public Composite getSectionComposite() {
+		return sashForm;
+	}
+
+	@Override
+	public EcFormToolkit getEcFormToolkit() {
+		return fEcFormToolkit;
+	}
+
+	public void selectNode(AbstractNode node) {
+		fMasterSection.selectElement(node);
+	}
+
+	public BasicDetailsPage getCurrentPage() {
+
+		if (detailsPart == null) {
 			return null;
 		}
 
-		@Override
-		public List<IModelUpdateListener> getUpdateListeners() {
+		try {
+			return (BasicDetailsPage)detailsPart.getCurrentPage();
+		} catch(SWTException e)	{
 			return null;
+		}		
+	}
+
+	public ModelPage getPage(){
+		return fPage;
+	}
+
+	public ISectionContext getMasterSectionContext() {
+
+		if (fMasterSectionContext == null) {
+			fMasterSectionContext = new MasterSectionContext();
 		}
+		return fMasterSectionContext;
+	}
+
+	public void refreshToolBarActions() {
+		IActionBars actionBars = getActionBars();
+
+		actionBars.setGlobalActionHandler(ActionFactory.UNDO.getId(), fUndoActionHandler);
+		actionBars.setGlobalActionHandler(ActionFactory.REDO.getId(), fRedoActionHandler);
+
+		actionBars.updateActionBars();
+	}
+
+	public IModelUpdateContext getModelUpdateContext() {
+		return fUpdateContext;
+	}
+
+	public IMainTreeProvider getMainTreeProvider() {
+		return fMainTreeProvider;
+	}
+
+	protected BasicSection getFocusedSection() {
+
+		if (fMasterSection.getViewer().getControl().isFocusControl()) {
+			return fMasterSection;
+		} else {
+			return getCurrentPage().getFocusedViewerSection();
+		}
+	}
+
+	private boolean isInMemFile(IJavaProjectProvider javaProjectProvider) {
+
+		if (!(javaProjectProvider instanceof ModelEditor)) {
+			return false;
+		}
+
+		ModelEditor modelEditor = (ModelEditor)javaProjectProvider;
+		IEditorInput input = modelEditor.getEditorInput();
+
+		return ModelEditorHelper.isInMemFileInput(input);
+	}
+
+	private RootNode getModel() throws ModelOperationException {
+		return fPage.getModel();
+	}
+
+	private IActionBars getActionBars() {
+		return fPage.getEditorSite().getActionBars();
+	}
+
+	private class ModelUpdateContext extends AModelUpdateContext {
 
 		@Override
 		public IUndoContext getUndoContext() {
 			return getPage().getEditor().getUndoContext();
 		}
+
+		@Override
+		protected List<IModelUpdateListener> createUpdateListeners(List<AbstractNode> nodesToSelectAfterTheOperation) {
+			return fMasterSection.createUpdateListeners(nodesToSelectAfterTheOperation);
+		}
+
+		protected AbstractFormPart getAbstractFormPart() {
+			return fMasterSection.getSourceForm();
+		}
 	}
 
 	private class MasterSectionContext implements ISectionContext{
-
-		@Override
-		public ModelMasterSection getMasterSection() {
-			return null;
-		}
 
 		@Override
 		public Composite getSectionComposite() {
@@ -94,13 +319,14 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 		}
 
 		@Override
-		public FormToolkit getToolkit() {
-			return fToolkit;
+		public EcFormToolkit getEcFormToolkit() { 
+			return fEcFormToolkit;
 		}
 
 	}
 
-	private class GenericToolbarAction extends Action{
+	private class GenericToolbarAction extends Action {
+
 		private final String fActionId;
 
 		public GenericToolbarAction(String id){
@@ -135,156 +361,51 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 		}
 	}
 
-	public ModelMasterDetailsBlock(ModelPage modelPage, IFileInfoProvider fileInfoProvider) {
-		fPage = modelPage;
-		fUpdateContext = new ModelUpdateContext();
-		fFileInfoProvider = fileInfoProvider;
-		fModel = null;
-	}
 
-	public void selectNode(AbstractNode node){
-		fMasterSection.selectElement(node);
-	}
+	private class MasterSectionMainTreeProvider implements IMainTreeProvider {
 
-	@Override
-	public ModelMasterSection getMasterSection(){
-		return fMasterSection;
-	}
-
-	public BasicDetailsPage getCurrentPage(){
-		if(detailsPart == null) {
-			return null;
+		@Override
+		public AbstractNode getCurrentNode() {
+			return (AbstractNode)fMasterSection.getSelectedElement();
 		}
 
-		try {
-			return (BasicDetailsPage)detailsPart.getCurrentPage();
-		} catch(SWTException e)	{
-			return null;
-		}		
-	}
-
-	public ModelPage getPage(){
-		return fPage;
-	}
-
-	@Override
-	public void selectionChanged(SelectionChangedEvent event) {
-		detailsPart.selectionChanged(fMasterSection, event.getSelection());
-	}
-
-	public ISectionContext getMasterSectionContext(){
-		if(fMasterSectionContext == null){
-			fMasterSectionContext = new MasterSectionContext();
-		}
-		return fMasterSectionContext;
-	}
-
-	@Override
-	protected void createMasterPart(IManagedForm managedForm, Composite parent) {
-		try {
-			fModel = getModel();
-		} catch (ModelOperationException e) {
-			ExceptionCatchDialog.open(null, e.getMessage());
-			return;
-		}
-
-		fToolkit = managedForm.getToolkit();
-
-		fMasterSection = new ModelMasterSection(this, fFileInfoProvider);
-		fMasterSection.initialize(managedForm);
-		fMasterSection.addSelectionChangedListener(this);
-		fMasterSection.setInput(fModel);
-
-		if (isInMemFile(fFileInfoProvider)) {
+		@Override
+		public void markDirty() {
 			fMasterSection.markDirty();
+
 		}
-	}
 
-	private boolean isInMemFile(IFileInfoProvider fileInfoProvider) {
-		if (!(fileInfoProvider instanceof ModelEditor)) {
-			return false;
+		@Override
+		public void refresh() {
+			fMasterSection.refresh();
 		}
-		ModelEditor modelEditor = (ModelEditor)fileInfoProvider;
-		IEditorInput input = modelEditor.getEditorInput();
 
-		return ModelEditorHelper.isInMemFileInput(input);
-	}
+		@Override
+		public void setCurrentNode(AbstractNode abstractNode) {
 
-	@Override
-	protected void registerPages(DetailsPart detailsPart) {
-		if (fModel == null) {
-			return;
+			if (abstractNode == null) {
+				return;
+			}
+
+			fMasterSection.setSelection(new StructuredSelection(abstractNode));
 		}
-		detailsPart.registerPage(RootNode.class, new ModelDetailsPage(fMasterSection, fUpdateContext, fPage.getEditor()));
-		detailsPart.registerPage(ClassNode.class, new ClassDetailsPage(fMasterSection, fUpdateContext, fPage.getEditor()));
-		detailsPart.registerPage(MethodNode.class, new MethodDetailsPage(fMasterSection, fUpdateContext, fPage.getEditor()));
-		detailsPart.registerPage(MethodParameterNode.class, new MethodParameterDetailsPage(fMasterSection, fUpdateContext, fPage.getEditor()));
-		detailsPart.registerPage(GlobalParameterNode.class, new GlobalParameterDetailsPage(fMasterSection, fUpdateContext, fPage.getEditor()));
-		detailsPart.registerPage(TestCaseNode.class, new TestCaseDetailsPage(fMasterSection, fUpdateContext, fPage.getEditor()));
-		detailsPart.registerPage(ConstraintNode.class, new ConstraintDetailsPage(fMasterSection, fUpdateContext, fPage.getEditor()));
-		detailsPart.registerPage(ChoiceNode.class, new ChoiceDetailsPage(fMasterSection, fUpdateContext, fPage.getEditor()));
 
-		selectNode(fModel);
-	}
+		@Override
+		public void expandChildren(AbstractNode abstractNode) {
 
-	@Override
-	protected void createToolBarActions(IManagedForm managedForm) {
-		IActionBars actionBars = getActionBars();
-		IEditorSite editorSite = fPage.getEditorSite();
-		IUndoContext undoContext = fUpdateContext.getUndoContext();
+			if (abstractNode == null) {
+				return;
+			}
 
-		fUndoActionHandler = new UndoActionHandler(editorSite, undoContext);
-		actionBars.setGlobalActionHandler(ActionFactory.UNDO.getId(), fUndoActionHandler);
-
-		fRedoActionHandler = new RedoActionHandler(editorSite, undoContext);
-		actionBars.setGlobalActionHandler(ActionFactory.REDO.getId(), fRedoActionHandler);
-
-		actionBars.setGlobalActionHandler(ActionFactory.COPY.getId(), new GenericToolbarAction(ActionFactory.COPY.getId()));
-		actionBars.setGlobalActionHandler(ActionFactory.CUT.getId(), new GenericToolbarAction(ActionFactory.CUT.getId()));
-		actionBars.setGlobalActionHandler(ActionFactory.PASTE.getId(), new GenericToolbarAction(ActionFactory.PASTE.getId()));
-		actionBars.setGlobalActionHandler(ActionFactory.DELETE.getId(), new GenericToolbarAction(ActionFactory.DELETE.getId()));
-		actionBars.setGlobalActionHandler(ActionFactory.SELECT_ALL.getId(), new GenericToolbarAction(ActionFactory.SELECT_ALL.getId()));
-
-		actionBars.updateActionBars();
-	}
-
-	public void refreshToolBarActions() {
-		IActionBars actionBars = getActionBars();
-
-		actionBars.setGlobalActionHandler(ActionFactory.UNDO.getId(), fUndoActionHandler);
-		actionBars.setGlobalActionHandler(ActionFactory.REDO.getId(), fRedoActionHandler);
-
-		actionBars.updateActionBars();
-	}
-
-	private IActionBars getActionBars() {
-		return fPage.getEditorSite().getActionBars();
-	}
-
-	protected BasicSection getFocusedSection(){
-		if(fMasterSection.getViewer().getControl().isFocusControl()){
-			return fMasterSection;
+			fMasterSection.expandChildren(abstractNode);
 		}
-		else{
-			return getCurrentPage().getFocusedViewerSection();
+
+		@Override
+		public void setSelection(AbstractNode[] abstractNodes) {
+			fMasterSection.setSelection(new StructuredSelection(abstractNodes));
+
 		}
+
 	}
 
-	private RootNode getModel() throws ModelOperationException {
-		return fPage.getModel();
-	}
-
-	@Override
-	public Composite getSectionComposite() {
-		return sashForm;
-	}
-
-	@Override
-	public FormToolkit getToolkit() {
-		return fToolkit;
-	}
-
-	public IModelUpdateContext getModelUpdateContext() {
-		return fUpdateContext;
-	}
 }

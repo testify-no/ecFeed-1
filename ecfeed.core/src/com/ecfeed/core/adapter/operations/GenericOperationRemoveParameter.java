@@ -29,6 +29,8 @@ public class GenericOperationRemoveParameter extends AbstractModelOperation{
 
 	@Override
 	public void execute() throws ModelOperationException {
+
+		setOneNodeToSelect(fTarget);
 		fOriginalIndex = fTarget.getParameters().indexOf(fParameter);
 		fTarget.removeParameter(fParameter);
 		markModelUpdated();
@@ -50,4 +52,5 @@ public class GenericOperationRemoveParameter extends AbstractModelOperation{
 	protected int getOriginalIndex(){
 		return fOriginalIndex;
 	}
+
 }

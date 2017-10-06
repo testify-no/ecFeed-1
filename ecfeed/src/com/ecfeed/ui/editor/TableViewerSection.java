@@ -23,7 +23,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 public abstract class TableViewerSection extends ViewerSection {
@@ -31,9 +31,9 @@ public abstract class TableViewerSection extends ViewerSection {
 	public TableViewerSection(
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext, 
-			IFileInfoProvider fileInfoProvider,
+			IJavaProjectProvider javaProjectProvider,
 			int style) {
-		super(sectionContext, updateContext, fileInfoProvider, style);
+		super(sectionContext, updateContext, javaProjectProvider, style);
 	}
 
 	@Override

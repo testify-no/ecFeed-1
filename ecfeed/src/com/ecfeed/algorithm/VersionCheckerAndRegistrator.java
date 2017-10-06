@@ -17,22 +17,41 @@ import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.net.HttpProperty;
 import com.ecfeed.core.net.IHttpCommunicator;
 import com.ecfeed.core.utils.SystemHelper;
+import com.ecfeed.core.utils.SystemLogger;
 
 
 public class VersionCheckerAndRegistrator {
 
-	public static CurrentReleases registerAndGetCurrentReleases(IHttpCommunicator httpComunicator, int timeoutInSeconds) {
+	public static void registerApp(IHttpCommunicator httpCommunicator, int timeoutInSeconds) {
+
+		List<HttpProperty> properties = createHttpProperties();
+
+		try {
+			sendRegisteringRequest(httpCommunicator, properties, timeoutInSeconds);
+		} catch (Exception e) {
+			SystemLogger.logCatch("Can not register application.");
+		}
+	}
+
+	public static CurrentReleases registerAppAndGetCurrentReleases(IHttpCommunicator httpCommunicator, int timeoutInSeconds) {
+
+		List<HttpProperty> properties = createHttpProperties();
+
+		try {
+			return sendAndParseRequest(httpCommunicator, properties, timeoutInSeconds);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	private static List<HttpProperty> createHttpProperties() {
 
 		List<HttpProperty> properties = new ArrayList<HttpProperty>();
 
 		properties.add(createUserAgentProperty());
 		properties.add(createEcIdProperty());
 
-		try {
-			return sendAndParseRequest(httpComunicator, properties, timeoutInSeconds);
-		} catch (Exception e) {
-			return null;
-		}
+		return properties;
 	}
 
 	private static CurrentReleases sendAndParseRequest(
@@ -40,12 +59,20 @@ public class VersionCheckerAndRegistrator {
 			List<HttpProperty> properties,
 			int timeoutInSeconds) throws Exception {
 
-		String url = "http://www.ecfeed.com/get_releases.php";
-
-		String xmlResponse = httpComunicator.sendGetRequest(url, properties, timeoutInSeconds);
+		String xmlResponse = sendRegisteringRequest(httpComunicator, properties, timeoutInSeconds);
 
 		return ReleasesXmlParser.parseXml(xmlResponse);		
 	}
+
+	private static String sendRegisteringRequest(
+			IHttpCommunicator httpComunicator, 
+			List<HttpProperty> properties,
+			int timeoutInSeconds) throws Exception {
+
+		String url = "http://www.ecfeed.com/get_releases.php";
+
+		return httpComunicator.sendGetRequest(url, properties, timeoutInSeconds);
+	}	
 
 	private static HttpProperty createUserAgentProperty() {
 
@@ -55,17 +82,24 @@ public class VersionCheckerAndRegistrator {
 		}
 
 		String operatingSystem;
-		if (ApplicationContext.isStandaloneApplication()) {
+		if (ApplicationContext.isApplicationTypeLocalStandalone()) {
 			operatingSystem = SystemHelper.getOperatingSystemType();
 		} else {
 			operatingSystem = "All";
 		}
 
-		String productType;
-		if (ApplicationContext.isStandaloneApplication()) {
+		String productType = "?";
+
+		if (ApplicationContext.isApplicationTypeLocalStandalone()) {
 			productType = "ES";
-		} else {
+		} 
+
+		if (ApplicationContext.isApplicationTypeLocalPlugin()) {
 			productType = "EP";
+		}
+
+		if (ApplicationContext.isApplicationTypeRemoteRap()) {
+			productType = "ER";
 		}
 
 		return new HttpProperty(

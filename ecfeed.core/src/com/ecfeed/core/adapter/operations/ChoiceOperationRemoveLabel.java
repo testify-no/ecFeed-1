@@ -30,6 +30,7 @@ public class ChoiceOperationRemoveLabel extends BulkOperation{
 
 		@Override
 		public void execute() throws ModelOperationException {
+			setOneNodeToSelect(fTarget);
 			fTarget.removeLabel(fLabel);
 			markModelUpdated();
 		}
@@ -38,14 +39,18 @@ public class ChoiceOperationRemoveLabel extends BulkOperation{
 		public IModelOperation reverseOperation() {
 			return new ChoiceOperationAddLabel(fTarget, fLabel);
 		}
+
 	}
 
 	public ChoiceOperationRemoveLabel(ChoiceNode target, String label) {
-		super(OperationNames.REMOVE_PARTITION_LABEL, true);
+
+		super(OperationNames.REMOVE_PARTITION_LABEL, true, target, target);
 		addOperation(new RemoveLabelOperation(target, label));
-		for(MethodNode method : target.getParameter().getMethods())
-		if(method != null){
-			addOperation(new MethodOperationMakeConsistent(method));
+
+		for (MethodNode method : target.getParameter().getMethods()) {
+			if (method != null) {
+				addOperation(new MethodOperationMakeConsistent(method));
+			}
 		}
 	}
 }
