@@ -43,7 +43,7 @@ public class AdvancedStatisticsButtonDialog extends ErrorDialog {
 	{
 		Button adst = createButton(parent, IDialogConstants.OPEN_ID, "Advanced statistics", true);
 		adst.addSelectionListener(new AdvancedStatistics(fmethodNode, ftestResultsHolder));
-		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
+		createButton(parent, IDialogConstants.OK_ID, "Ok", true);
 		createDetailsButton(parent);
 	}
 
