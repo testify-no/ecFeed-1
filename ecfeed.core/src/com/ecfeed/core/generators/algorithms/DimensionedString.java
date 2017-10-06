@@ -7,21 +7,26 @@
  * http://www.eclipse.org/legal/epl-v10.html 
  *  
  *******************************************************************************/
+package com.ecfeed.core.generators.algorithms;
 
-package com.ecfeed.ui.modelif;
 
+public class DimensionedString extends DimensionedItem<String> {
 
-public class ExportTestInformer extends AbstractTestInformer {
-	
-	public ExportTestInformer()
-	{
-		super(null, null);
+	public DimensionedString(int dimension, String item) {
+		super(dimension, item);
 	}
+	
+	public static int compareForSort(DimensionedString dimItem1, DimensionedString dimItem2) {
 
-	@Override
-	protected void setTestProgressMessage() {
-		String message = "Exported: " + getExecutedTestCases();		
-		fProgressMonitor.subTask(message);
+		if (dimItem1.getDimension() > dimItem2.getDimension()) {
+			return 1;
+		}
+
+		if (dimItem1.getDimension() < dimItem2.getDimension()) {
+			return -1;
+		}
+
+		return dimItem1.fItem.compareTo(dimItem2.fItem);
 	}
 
 }

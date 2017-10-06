@@ -41,11 +41,13 @@ import com.ecfeed.ui.dialogs.basic.ErrorDialog;
 
 public abstract class AbstractOnlineSupport {
 
+
 	public enum Result {
 		OK, CANCELED
 	}
 
 	private MethodNode fMethodNode;
+	private TestResultsHolder ftestResultsHolder;
 	private JavaTestRunner fRunner;
 	private IJavaProjectProvider fJavaProjectProvider;
 	private String fTargetFile;
@@ -55,9 +57,11 @@ public abstract class AbstractOnlineSupport {
 
 	public AbstractOnlineSupport(
 			MethodNode methodNode, ITestMethodInvoker testMethodInvoker, 
+
 			IJavaProjectProvider javaProjectProvider) {
 		
 		this(methodNode, testMethodInvoker, javaProjectProvider, false);
+
 	}
 
 	public AbstractOnlineSupport(
@@ -71,6 +75,8 @@ public abstract class AbstractOnlineSupport {
 		fRunner = new JavaTestRunner(loader, isExport, testMethodInvoker);
 		fJavaProjectProvider = javaProjectProvider;
 		fTestRunMode = TestRunModeHelper.getTestRunMode(methodNode);
+		fMethodNode = methodNode;
+		ftestResultsHolder = new TestResultsHolder();
 		fTestInformer = createTestInformer(isExport);
 
 		setOwnMethodNode(methodNode);
@@ -82,7 +88,7 @@ public abstract class AbstractOnlineSupport {
 			return new ExportTestInformer();
 		}
 
-		return new ExecutionTestInformer();
+		return new ExecutionTestInformer(fMethodNode, ftestResultsHolder);
 	}
 
 	protected TestRunMode getTestRunMode() {
@@ -143,6 +149,7 @@ public abstract class AbstractOnlineSupport {
 			return Result.CANCELED;
 		}
 
+
 		if (dialog.open() != IDialogConstants.OK_ID) {
 			return Result.CANCELED;
 		}
@@ -196,6 +203,7 @@ public abstract class AbstractOnlineSupport {
 		private List<List<ChoiceNode>> fInput;
 		private Collection<IConstraint<ChoiceNode>> fConstraints;
 		private Map<String, Object> fParameters;
+		private boolean resultOk;
 
 		ParametrizedTestRunnable(IGenerator<ChoiceNode> generator,
 				List<List<ChoiceNode>> input,
@@ -223,10 +231,13 @@ public abstract class AbstractOnlineSupport {
 						&& progressMonitor.isCanceled() == false) {
 					try {
 						fTestInformer.setTestProgressMessage();
+						resultOk = true;
 						processTestCase(next);
 					} catch (RunnerException e) {
+						resultOk = false;
 						fTestInformer.incrementFailedTestcases(e.getMessage());
 					}
+					ftestResultsHolder.addTestResult(next, resultOk);
 					progressMonitor.worked(fGenerator.workProgress());
 					fTestInformer.incrementTotalTestcases();
 				}

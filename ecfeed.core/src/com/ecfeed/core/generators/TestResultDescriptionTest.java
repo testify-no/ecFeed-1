@@ -8,20 +8,27 @@
  *  
  *******************************************************************************/
 
-package com.ecfeed.ui.modelif;
+package com.ecfeed.core.generators;
+
+import static org.junit.Assert.assertEquals;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.Test;
+
+public class TestResultDescriptionTest {
 
 
-public class ExportTestInformer extends AbstractTestInformer {
-	
-	public ExportTestInformer()
-	{
-		super(null, null);
+	@Test
+	public void shouldReturnTestResult() {
+
+		List<String> testcases = new ArrayList<String>();
+		boolean result = false;
+
+		TestResultDescription testresult = new TestResultDescription(testcases, result);
+
+		assertEquals(testcases, testresult.getTestArguments());
+		assertEquals(result, testresult.getResult());
 	}
-
-	@Override
-	protected void setTestProgressMessage() {
-		String message = "Exported: " + getExecutedTestCases();		
-		fProgressMonitor.subTask(message);
-	}
-
 }

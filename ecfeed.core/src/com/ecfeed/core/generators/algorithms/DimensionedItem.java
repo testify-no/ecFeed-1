@@ -12,8 +12,8 @@ package com.ecfeed.core.generators.algorithms;
 
 public class DimensionedItem<E> {
 	
-	int fDimension; // e.g. index of method parameter
-	E fItem;
+	protected int fDimension; // e.g. index of method parameter
+	protected E fItem;
 
 	public DimensionedItem(int dimension, E item) {
 		fDimension = dimension;
@@ -37,9 +37,23 @@ public class DimensionedItem<E> {
 
 	@Override
 	public String toString() {
+		StringBuilder sb = new StringBuilder();
 
-		return ("dim:" + fDimension + " item:" + fItem.toString());
+		sb.append("dim:");
+		sb.append(fDimension);
+		sb.append(", item:");
+		sb.append(fItem);
+		//sb.append("]");
+
+		return sb.toString();
 	}
 	
+	public int getDimension() {
+		return fDimension;
+	}
+	
+	public E getItem() {
+		return fItem;
+	}
 
 }

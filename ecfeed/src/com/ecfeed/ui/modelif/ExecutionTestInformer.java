@@ -10,9 +10,16 @@
 
 package com.ecfeed.ui.modelif;
 
+import com.ecfeed.core.model.MethodNode;
 
 public class ExecutionTestInformer extends AbstractTestInformer {
+	
 
+	public ExecutionTestInformer(MethodNode methodNode, TestResultsHolder testResultsHolder)
+	{
+		super(methodNode, testResultsHolder);
+	}
+	
 	@Override
 	protected void setTestProgressMessage() {
 		String message = "Executed: " + getExecutedTestCases() + "  Failed: " + getFailedTestCases();		

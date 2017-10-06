@@ -45,6 +45,8 @@ public class StaticTestExecutionSupport {
 	private IJavaProjectProvider fJavaProjectProvider;
 	private TestRunMode fTestRunMode;
 	private AbstractTestInformer fTestInformer;
+	private TestResultsHolder ftestResultsHolder;
+	private boolean resultOk;
 
 	private class ExecuteRunnable implements IRunnableWithProgress{
 
@@ -72,11 +74,14 @@ public class StaticTestExecutionSupport {
 						if (fTestRunMode == TestRunMode.JUNIT) {
 							fRunner.createTestClassAndMethod(methodNode);
 						}
-
+						
+						resultOk = true;
 						fRunner.runTestCase(testCase.getTestData());
 					} catch (RunnerException e) {
+						resultOk = false;
 						fTestInformer.incrementFailedTestcases(e.getMessage());
 					}
+					ftestResultsHolder.addTestResult(testCase.getTestData(), resultOk);
 					progressMonitor.worked(1);
 					fTestInformer.incrementTotalTestcases();
 				}
@@ -92,14 +97,16 @@ public class StaticTestExecutionSupport {
 			IJavaProjectProvider javaProjectProvider,
 			TestRunMode testRunMode){
 		super();
+		ftestResultsHolder = new TestResultsHolder();
 		ILoaderProvider loaderProvider = new EclipseLoaderProvider();
 		ModelClassLoader loader = loaderProvider.getLoader(true, null);
 		fRunner = new JavaTestRunner(loader, false, testMethodInvoker);
 		fTestCases = testCases;
+		TestCaseNode testCase = fTestCases.iterator().next();
 		fFailedTests = new ArrayList<>();
 		fJavaProjectProvider = javaProjectProvider;
 		fTestRunMode = testRunMode;
-		fTestInformer = new ExecutionTestInformer();
+		fTestInformer = new ExecutionTestInformer(testCase.getMethod(), ftestResultsHolder);
 	}
 
 	public void proceed(){

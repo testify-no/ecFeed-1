@@ -8,20 +8,26 @@
  *  
  *******************************************************************************/
 
-package com.ecfeed.ui.modelif;
+package com.ecfeed.core.generators;
 
+import java.util.List;
 
-public class ExportTestInformer extends AbstractTestInformer {
-	
-	public ExportTestInformer()
-	{
-		super(null, null);
+public class TestResultDescription {
+
+	private List<String> fTestArguments;
+	private boolean fResult;
+
+	public TestResultDescription(List<String> testArguments, boolean result) {
+		fTestArguments = testArguments;
+		fResult = result;
 	}
 
-	@Override
-	protected void setTestProgressMessage() {
-		String message = "Exported: " + getExecutedTestCases();		
-		fProgressMonitor.subTask(message);
+	List<String> getTestArguments() {
+		return fTestArguments;
+	}
+
+	boolean getResult() {
+		return fResult;
 	}
 
 }
