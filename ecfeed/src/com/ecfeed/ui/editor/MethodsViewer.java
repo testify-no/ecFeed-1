@@ -136,7 +136,9 @@ public class MethodsViewer extends TableViewerSection {
 			String newName = (String)value;
 			MethodNode method = (MethodNode)element;
 			fMethodIf.setOwnNode(method);
-			fMethodIf.setName(newName);
+			TypeConverter name = new TypeConverter(newName);
+//			fMethodIf.setName(newName);
+			fMethodIf.setName(name.getReversedName());
 		}
 	}
 

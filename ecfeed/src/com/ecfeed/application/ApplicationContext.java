@@ -20,7 +20,15 @@ public class ApplicationContext {
 
 	static boolean fIsStandaloneApplication = false;
 	static String fExportFileName;
+	static boolean fSimplifiedUI;
+	
+	public static void setSimplifiedUI(boolean value){
+		fSimplifiedUI = value;
+	}
 
+	public static boolean getSimplifiedUI(){
+		return fSimplifiedUI;
+	}
 	public static boolean isStandaloneApplication() {
 
 		return fIsStandaloneApplication;

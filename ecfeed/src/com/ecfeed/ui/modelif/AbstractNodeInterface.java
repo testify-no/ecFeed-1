@@ -18,6 +18,7 @@ import java.util.List;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.widgets.Display;
 
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.ITypeAdapterProvider;
@@ -50,6 +51,7 @@ import com.ecfeed.ui.common.JavaDocSupport;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.dialogs.TextAreaDialog;
+import com.ecfeed.ui.editor.TypeConverter;
 
 public class AbstractNodeInterface extends OperationExecuter {
 
@@ -65,23 +67,23 @@ public class AbstractNodeInterface extends OperationExecuter {
 		fAdapterProvider = new EclipseTypeAdapterProvider();
 	}
 
-	public void setOwnNode(AbstractNode node){
+	public void setOwnNode(AbstractNode node) {
 		fNode = node;
 	}
 
-	public EImplementationStatus getImplementationStatus(AbstractNode node){
+	public EImplementationStatus getImplementationStatus(AbstractNode node) {
 		return fStatusResolver.getImplementationStatus(node);
 	}
 
-	public EImplementationStatus getImplementationStatus(){
+	public EImplementationStatus getImplementationStatus() {
 		return getImplementationStatus(fNode);
 	}
 
-	static public boolean validateName(String name){
+	static public boolean validateName(String name) {
 		return true;
 	}
 
-	public String getName(){
+	public String getName() {
 		return fNode.getName();
 	}
 
@@ -89,15 +91,26 @@ public class AbstractNodeInterface extends OperationExecuter {
 		return fFileInfoProvider;
 	}
 
-	public boolean setName(String newName){
-		if(newName.equals(getName())){
+	public boolean setName(String newName) {
+		if (newName.equals(getName())) {
 			return false;
 		}
 		String problemTitle = "";
-		try{
-			problemTitle = (String)fNode.accept(new RenameParameterProblemTitleProvider());
-		}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
-		return execute(FactoryRenameOperation.getRenameOperation(fNode, newName), problemTitle);
+		try {
+			problemTitle = (String) fNode.accept(new RenameParameterProblemTitleProvider());
+		} catch (Exception e) {
+			SystemLogger.logCatch(e.getMessage());
+		}
+		ApplicationContext.setSimplifiedUI(true);
+		if(ApplicationContext.getSimplifiedUI()){
+			TypeConverter typeConverter = new TypeConverter(newName);
+			newName = typeConverter.convertToValidJaveIdentifier();
+			return execute(FactoryRenameOperation.getRenameOperation(fNode, newName), problemTitle);
+		} else {
+			TypeConverter typeConverter = new TypeConverter(newName);
+			newName = typeConverter.getString();
+			return execute(FactoryRenameOperation.getRenameOperation(fNode, newName), problemTitle);
+		}
 	}
 
 	public boolean setProperty(NodePropertyDefs.PropertyId propertyId, String value) {
@@ -107,20 +120,16 @@ public class AbstractNodeInterface extends OperationExecuter {
 			return false;
 		}
 
-		IModelOperation operation = new AbstractNodeOperationSetProperty(propertyId, value, fNode); 
+		IModelOperation operation = new AbstractNodeOperationSetProperty(propertyId, value, fNode);
 		return execute(operation, Messages.DIALOG_SET_PROPERTY_PROBLEM_TITLE);
-	}	
+	}
 
 	public boolean editComments() {
 
-		TextAreaDialog dialog = 
-				new TextAreaDialog(
-						Display.getCurrent().getActiveShell(),
-						Messages.DIALOG_EDIT_COMMENTS_TITLE, 
-						Messages.DIALOG_EDIT_COMMENTS_MESSAGE, 
-						getComments());
+		TextAreaDialog dialog = new TextAreaDialog(Display.getCurrent().getActiveShell(),
+				Messages.DIALOG_EDIT_COMMENTS_TITLE, Messages.DIALOG_EDIT_COMMENTS_MESSAGE, getComments());
 
-		if(dialog.open() == IDialogConstants.OK_ID){
+		if (dialog.open() == IDialogConstants.OK_ID) {
 			return setComments(dialog.getText());
 		}
 		return false;
@@ -128,7 +137,7 @@ public class AbstractNodeInterface extends OperationExecuter {
 
 	public boolean setComments(String comments) {
 
-		if(comments.equals(getComments())){
+		if (comments.equals(getComments())) {
 			return false;
 		}
 
@@ -136,23 +145,24 @@ public class AbstractNodeInterface extends OperationExecuter {
 	}
 
 	public String getComments() {
-		if(fNode != null && fNode.getDescription() != null){
+		if (fNode != null && fNode.getDescription() != null) {
 			return fNode.getDescription();
 		}
 		return "";
 	}
 
-	public boolean remove(){
-		return execute(FactoryRemoveOperation.getRemoveOperation(fNode, fAdapterProvider, true), Messages.DIALOG_REMOVE_NODE_PROBLEM_TITLE);
+	public boolean remove() {
+		return execute(FactoryRemoveOperation.getRemoveOperation(fNode, fAdapterProvider, true),
+				Messages.DIALOG_REMOVE_NODE_PROBLEM_TITLE);
 	}
 
-	public boolean removeChildren(Collection<? extends AbstractNode> children, String message){
-		if(children == null || children.size() == 0) { 
+	public boolean removeChildren(Collection<? extends AbstractNode> children, String message) {
+		if (children == null || children.size() == 0) {
 			return false;
 		}
 
-		for(AbstractNode node : children){
-			if(node.getParent() != fNode) { 
+		for (AbstractNode node : children) {
+			if (node.getParent() != fNode) {
 				return false;
 			}
 		}
@@ -163,43 +173,45 @@ public class AbstractNodeInterface extends OperationExecuter {
 		return null; // error message if can not
 	}
 
-	public boolean addChildren(Collection<? extends AbstractNode> children){
+	public boolean addChildren(Collection<? extends AbstractNode> children) {
 		IModelOperation operation = new GenericAddChildrenOperation(fNode, children, fAdapterProvider, true);
 		return execute(operation, Messages.DIALOG_ADD_CHILDREN_PROBLEM_TITLE);
 	}
 
-	public boolean addChildren(Collection<? extends AbstractNode> children, int index){
+	public boolean addChildren(Collection<? extends AbstractNode> children, int index) {
 		IModelOperation operation;
-		if(index == -1){
+		if (index == -1) {
 			operation = new GenericAddChildrenOperation(fNode, children, fAdapterProvider, true);
-		}
-		else{
+		} else {
 			operation = new GenericAddChildrenOperation(fNode, children, index, fAdapterProvider, true);
 		}
 		return execute(operation, Messages.DIALOG_ADD_CHILDREN_PROBLEM_TITLE);
 	}
 
-	public boolean pasteEnabled(Collection<? extends AbstractNode> pasted){
+	public boolean pasteEnabled(Collection<? extends AbstractNode> pasted) {
 		return pasteEnabled(pasted, -1);
 	}
 
-	public boolean pasteEnabled(Collection<? extends AbstractNode> pasted, int index){
+	public boolean pasteEnabled(Collection<? extends AbstractNode> pasted, int index) {
 		GenericAddChildrenOperation operation;
-		if(index == -1){
+		if (index == -1) {
 			operation = new GenericAddChildrenOperation(fNode, pasted, fAdapterProvider, true);
-		}else{
+		} else {
 			operation = new GenericAddChildrenOperation(fNode, pasted, index, fAdapterProvider, true);
 		}
 		return operation.enabled();
 	}
 
 	public boolean moveUpDown(boolean up) {
-		try{
-			GenericShiftOperation operation = FactoryShiftOperation.getShiftOperation(Arrays.asList(new AbstractNode[]{fNode}), up);
-			if(operation.getShift() > 0){
+		try {
+			GenericShiftOperation operation = FactoryShiftOperation
+					.getShiftOperation(Arrays.asList(new AbstractNode[] { fNode }), up);
+			if (operation.getShift() > 0) {
 				return executeMoveOperation(operation);
 			}
-		}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
+		} catch (Exception e) {
+			SystemLogger.logCatch(e.getMessage());
+		}
 		return false;
 	}
 
@@ -207,25 +219,25 @@ public class AbstractNodeInterface extends OperationExecuter {
 		return execute(moveOperation, Messages.DIALOG_MOVE_NODE_PROBLEM_TITLE);
 	}
 
-	protected ITypeAdapterProvider getAdapterProvider(){
+	protected ITypeAdapterProvider getAdapterProvider() {
 		return fAdapterProvider;
 	}
 
-	public AbstractNode getOwnNode(){
+	public AbstractNode getOwnNode() {
 		return fNode;
 	}
 
-	public boolean goToImplementationEnabled(){
+	public boolean goToImplementationEnabled() {
 		return getImplementationStatus() != EImplementationStatus.NOT_IMPLEMENTED;
 	}
 
-	public void goToImplementation(){
+	public void goToImplementation() {
 
 	}
 
 	public boolean importJavadocComments() {
 		String comments = JavaDocSupport.importJavadoc(getOwnNode());
-		if(comments != null){
+		if (comments != null) {
 			return setComments(comments);
 		}
 		return false;
@@ -237,7 +249,7 @@ public class AbstractNodeInterface extends OperationExecuter {
 
 	public boolean importAllJavadocComments() {
 		List<IModelOperation> operations = getImportAllJavadocCommentsOperations();
-		if(operations.size() > 0){
+		if (operations.size() > 0) {
 			IModelOperation operation = new BulkOperation(OperationNames.SET_COMMENTS, operations, false);
 			return execute(operation, Messages.DIALOG_SET_COMMENTS_PROBLEM_TITLE);
 		}
@@ -246,33 +258,33 @@ public class AbstractNodeInterface extends OperationExecuter {
 
 	public boolean exportAllComments() {
 		exportCommentsToJavadoc(getComments());
-		for(AbstractNode child : getOwnNode().getChildren()){
-			AbstractNodeInterface nodeIf = 
-					NodeInterfaceFactory.getNodeInterface(child, getUpdateContext(), fFileInfoProvider);
+		for (AbstractNode child : getOwnNode().getChildren()) {
+			AbstractNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(child, getUpdateContext(),
+					fFileInfoProvider);
 			nodeIf.exportAllComments();
 		}
 		return true;
 	}
 
-	protected List<IModelOperation> getImportAllJavadocCommentsOperations(){
+	protected List<IModelOperation> getImportAllJavadocCommentsOperations() {
 		List<IModelOperation> result = new ArrayList<IModelOperation>();
 		String javadoc = JavaDocSupport.importJavadoc(getOwnNode());
-		if(javadoc != null && getComments() != javadoc){
+		if (javadoc != null && getComments() != javadoc) {
 			result.add(new GenericSetCommentsOperation(fNode, javadoc));
 		}
-		for(AbstractNode child : getOwnNode().getChildren()){
-			AbstractNodeInterface childIf = 
-					NodeInterfaceFactory.getNodeInterface(child, getUpdateContext(), fFileInfoProvider);
+		for (AbstractNode child : getOwnNode().getChildren()) {
+			AbstractNodeInterface childIf = NodeInterfaceFactory.getNodeInterface(child, getUpdateContext(),
+					fFileInfoProvider);
 			result.addAll(childIf.getImportAllJavadocCommentsOperations());
 		}
 		return result;
 	}
 
-	public boolean nodeImplementedFullyOrPartially(){
+	public boolean nodeImplementedFullyOrPartially() {
 		return getImplementationStatus() != EImplementationStatus.NOT_IMPLEMENTED;
 	}
 
-	private class RenameParameterProblemTitleProvider implements IModelVisitor{
+	private class RenameParameterProblemTitleProvider implements IModelVisitor {
 
 		@Override
 		public Object visit(RootNode node) throws Exception {

@@ -180,7 +180,9 @@ public class MethodDetailsPage extends BasicDetailsPage {
 
 	private void refreshMethodNameAndSignature(MethodNode methodNode) {
 		getMainSection().setText(MethodNodeHelper.simplifiedToString(methodNode));
-		fMethodNameText.setText(fMethodInterface.getName());
+		TypeConverter tc = new TypeConverter(fMethodInterface.getName());
+//		fMethodNameText.setText(fMethodInterface.getName());
+		fMethodNameText.setText(tc.getReversedName());
 	}
 
 	private void refreshRunnerCombo(MethodNode methodNode) {
@@ -297,7 +299,10 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		@Override
 		public void applyValue() {
 			fMethodInterface.setName(fMethodNameText.getText());
-			fMethodNameText.setText(fMethodInterface.getName());
+			TypeConverter name = new TypeConverter(fMethodInterface.getName());
+//			fMethodInterface.setName(name.getReversedName());
+//			fMethodNameText.setText(fMethodInterface.getName());
+			fMethodNameText.setText(name.getReversedName());
 		}
 	}	
 
