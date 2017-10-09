@@ -10,6 +10,9 @@
 
 package com.ecfeed.ui.modelif;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -295,8 +298,16 @@ public class MethodInterface extends ParametersParentInterface {
 				new BasicExportTemplate(null);
 
 		basicTemplate.setTemplateText(onlineExportSupport.getExportTemplate());
-
-		runExport(methodInvoker.getTestCasesToExport(), basicTemplate, targetFile);
+		
+		FileOutputStream outputStream;
+		try {
+			outputStream = new FileOutputStream(targetFile);
+		} catch (FileNotFoundException e) {
+			ErrorDialog.open(e.getMessage());
+			return;
+		}
+		
+		runExport(methodInvoker.getTestCasesToExport(), basicTemplate, outputStream);
 	}
 
 
@@ -343,20 +354,26 @@ public class MethodInterface extends ParametersParentInterface {
 		ApplicationContext.setExportTargetFile(dialog.getTargetFile());
 		IExportTemplate currentExportTemplate = dialog.getExportTemplate();
 
-		runExport(checkedTestCases, 
-				currentExportTemplate,
-				dialog.getTargetFile());
+		FileOutputStream outputStream;
+		try {
+			outputStream = new FileOutputStream(dialog.getTargetFile());
+		} catch (FileNotFoundException e) {
+			ErrorDialog.open(e.getMessage());
+			return;
+		}
+		
+		runExport(checkedTestCases, currentExportTemplate, outputStream);
 	}
 
 	private void runExport(
 			Collection<TestCaseNode> testCases,
 			IExportTemplate exportTemplate,
-			String targetFile) {
-
+			OutputStream outputStream) {
+		
 		try {
 			TestCasesExporter exporter = new TestCasesExporter(exportTemplate);
 
-			exporter.runExport(getOwnNode(), testCases, targetFile);
+			exporter.runExport(getOwnNode(), testCases, outputStream);
 
 		} catch (Exception e) {
 			ErrorDialog.open(e.getMessage());

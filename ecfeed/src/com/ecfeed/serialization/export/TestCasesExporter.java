@@ -10,7 +10,6 @@
 
 package com.ecfeed.serialization.export;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
@@ -22,8 +21,8 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.TestCaseNode;
-import com.ecfeed.core.serialization.export.TestCasesExportHelper;
 import com.ecfeed.core.serialization.export.IExportTemplate;
+import com.ecfeed.core.serialization.export.TestCasesExportHelper;
 import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.utils.EclipseHelper;
@@ -38,10 +37,10 @@ public class TestCasesExporter {
 		fexportTemplate = exportTemplate;
 	}
 
-	public void runExport(MethodNode method,
-			Collection<TestCaseNode> testCases, String file) throws IOException {
-
-		FileOutputStream outputStream = new FileOutputStream(file);
+	public void runExport(
+			MethodNode method,
+			Collection<TestCaseNode> testCases, 
+			OutputStream outputStream) throws IOException {
 
 		try {
 			runExportWithProgress(method, testCases, outputStream, true);
