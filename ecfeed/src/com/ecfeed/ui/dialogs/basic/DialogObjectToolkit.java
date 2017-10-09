@@ -30,6 +30,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.ui.common.ApplyValueMode;
 import com.ecfeed.ui.common.CommonEditHelper;
@@ -98,7 +99,7 @@ public class DialogObjectToolkit {
 		return CommonEditHelper.createReadOnlyGridCombo(
 				parentComposite, valueApplier, applyValueMode);
 	}
-	
+
 	public static Combo createCombo(Composite parent, int maxLimit, int defaultValue)
 	{
 		final Combo combo = new Combo(parent, SWT.VERTICAL | SWT.DROP_DOWN | SWT.BORDER | SWT.READ_ONLY);
@@ -110,32 +111,32 @@ public class DialogObjectToolkit {
 		return CommonEditHelper.createReadOnlyGridCombo(
 				parentComposite, valueApplier, ApplyValueMode.ON_SELECTION_AND_FOCUS_LOST);
 	}
-	
+
 	public static Table createTable(Composite parent)
 	{
 		TableViewer viewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL| SWT.V_SCROLL | SWT.FULL_SELECTION| SWT.BORDER | SWT.TOP);
-		
+
 		final Table table = viewer.getTable();
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 		viewer.setContentProvider(ArrayContentProvider.getInstance());
-		
+
 		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
 		viewer.getControl().setLayoutData(gridData);
 		return table;
 	}
-	
+
 	public GridData createTableGrid()
 	{
 		GridData gridData = new GridData();
-        gridData.verticalAlignment = GridData.CENTER;
-        gridData.horizontalSpan = 2;
-        gridData.heightHint=500;
-        gridData.grabExcessHorizontalSpace = true;
-        gridData.grabExcessVerticalSpace = false;
-        gridData.horizontalAlignment = GridData.CENTER;
-        return gridData;
-		
+		gridData.verticalAlignment = GridData.CENTER;
+		gridData.horizontalSpan = 2;
+		gridData.heightHint=500;
+		gridData.grabExcessHorizontalSpace = true;
+		gridData.grabExcessVerticalSpace = false;
+		gridData.horizontalAlignment = GridData.CENTER;
+		return gridData;
+
 	}
 	public static TableColumn[] addColumn(Table table, int ColumnNr, String[] name){
 		TableColumn[] column = new TableColumn[ColumnNr];
@@ -146,7 +147,7 @@ public class DialogObjectToolkit {
 			column[i].setResizable(true);
 			column[i].setMoveable(true);
 		}
-		
+
 		return column;
 	}
 
@@ -234,7 +235,9 @@ public class DialogObjectToolkit {
 					new DialogObjectToolkit.BrowseButtonClickListener(
 							SWT.SAVE, extensionsFilter, fTargetFileText);
 
-			fGridButton = createBrowseButton(fChildComposite, fBrowseButtonClickListener);
+			if (ApplicationContext.isApplicationTypeLocal()) {
+				fGridButton = createBrowseButton(fChildComposite, fBrowseButtonClickListener);
+			}
 		}
 
 		public Text getTextField() {
@@ -297,11 +300,11 @@ public class DialogObjectToolkit {
 				fButton.addSelectionListener(fSelectionListener);
 			}
 		}
-		
+
 		public void setLayoutData(GridData gridData){
 			fButton.setLayoutData(gridData);
 		}
-		
+
 		public void setEnabled(boolean value){
 			fButton.setEnabled(value);
 		}
