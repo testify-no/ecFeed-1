@@ -10,11 +10,6 @@
 
 package com.ecfeed.ui.modelif;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -58,7 +53,6 @@ import com.ecfeed.core.serialization.export.IExportTemplate;
 import com.ecfeed.core.utils.EcException;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.StringHelper;
-import com.ecfeed.serialization.export.TestCasesExporter;
 import com.ecfeed.ui.common.CommonConstants;
 import com.ecfeed.ui.common.EclipseTypeAdapterProvider;
 import com.ecfeed.ui.common.EclipseTypeHelper;
@@ -73,13 +67,9 @@ import com.ecfeed.ui.dialogs.SelectCompatibleMethodDialog;
 import com.ecfeed.ui.dialogs.TestCasesExportDialog;
 import com.ecfeed.ui.dialogs.TestCasesExportDialog.FileCompositeVisibility;
 import com.ecfeed.ui.dialogs.basic.ErrorDialog;
-import com.ecfeed.ui.dialogs.basic.InfoDialog;
 import com.ecfeed.utils.SeleniumHelper;
-import com.testify.ecfeed.rap.application.DownloadManager;
 
 public class MethodInterface extends ParametersParentInterface {
-
-	private final String EXPORT_FINISHED = "Export finished.";
 
 	private IJavaProjectProvider fJavaProjectProvider;
 	private ITypeAdapterProvider fAdapterProvider;
@@ -306,7 +296,7 @@ public class MethodInterface extends ParametersParentInterface {
 
 		Collection<TestCaseNode> testCases = methodInvoker.getTestCasesToExport();
 
-		runExport(testCases, basicTemplate, targetFile);
+		TestCasesExportHelper.runExport(getOwnNode(), testCases, basicTemplate, targetFile);
 	}
 
 	public void executeStaticTests(Collection<TestCaseNode> testCases,
@@ -352,69 +342,7 @@ public class MethodInterface extends ParametersParentInterface {
 		ApplicationContext.setExportTargetFile(dialog.getTargetFile());
 		IExportTemplate currentExportTemplate = dialog.getExportTemplate();
 
-		runExport(checkedTestCases, currentExportTemplate, dialog.getTargetFile());
-	}
-
-	private OutputStream createOutputStream(String targetFile) {
-
-		OutputStream outputStream;
-		try {
-			if (ApplicationContext.isApplicationTypeLocal()) {
-				outputStream = new FileOutputStream(targetFile);
-			} else {
-				outputStream = new ByteArrayOutputStream();
-			}
-		} catch (FileNotFoundException e) {
-			ErrorDialog.open(e.getMessage());
-			return null;
-		}
-
-		return outputStream;
-	}
-
-	private void closeOutputStream(OutputStream outputStream) {
-		try {
-			outputStream.close();
-		} catch (IOException e) {
-			ErrorDialog.open(e.getMessage());
-		}
-	}
-
-	private void runExport(
-			Collection<TestCaseNode> testCases, 
-			IExportTemplate exportTemplate, 
-			String targetFile) {
-
-		OutputStream outputStream = createOutputStream(targetFile);
-
-		try {
-			runExportToStream(testCases, exportTemplate, outputStream);
-
-			if (ApplicationContext.isApplicationTypeRemoteRap()) {
-				DownloadManager.downloadFile(targetFile, outputStream.toString());
-			}
-
-		} finally {
-			closeOutputStream(outputStream);
-		}
-
-		InfoDialog.open(EXPORT_FINISHED);
-	}
-
-	private void runExportToStream(
-			Collection<TestCaseNode> testCases,
-			IExportTemplate exportTemplate,
-			OutputStream outputStream) {
-
-		try {
-			TestCasesExporter exporter = new TestCasesExporter(exportTemplate);
-
-			exporter.runExportToStream(getOwnNode(), testCases, outputStream);
-
-		} catch (Exception e) {
-			ErrorDialog.open(e.getMessage());
-			return;
-		}
+		TestCasesExportHelper.runExport(getOwnNode(), checkedTestCases, currentExportTemplate, dialog.getTargetFile());
 	}
 
 	private boolean isValidClassConfiguration(ClassNode classNode) {
