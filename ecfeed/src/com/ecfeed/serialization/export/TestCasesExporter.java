@@ -37,16 +37,12 @@ public class TestCasesExporter {
 		fexportTemplate = exportTemplate;
 	}
 
-	public void runExport(
+	public void runExportToStream(
 			MethodNode method,
 			Collection<TestCaseNode> testCases, 
 			OutputStream outputStream) throws IOException {
 
-		try {
 			runExportWithProgress(method, testCases, outputStream, true);
-		} finally {
-			outputStream.close();
-		}
 	}
 
 	public void runExportWithProgress(MethodNode method,
