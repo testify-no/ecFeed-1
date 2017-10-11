@@ -23,14 +23,14 @@ public class UniqueStringHelper  {
 
 		StringBuilder builder = new StringBuilder();
 
-		builder.append(new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(currentDate));
-		builder.append(".");
+		builder.append(new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(currentDate));
+		builder.append("-");
 
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(currentDate);
 		long milliseconds = calendar.get(Calendar.MILLISECOND);
 		builder.append(milliseconds);
-		builder.append(".");
+		builder.append("-");
 
 		Random rand = new Random();
 		String randomStr = Integer.toString(rand.nextInt(99999));
