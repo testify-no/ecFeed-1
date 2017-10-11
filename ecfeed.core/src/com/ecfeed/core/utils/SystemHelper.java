@@ -73,6 +73,11 @@ public class SystemHelper {
 	}
 
 	public static String getFormattedLocalHostName() {
+
+		if (getLocalHostName() == null) {
+			return "UNKNOWN";
+		}
+
 		return StringHelper.removeFromPostfix(".", getLocalHostName());
 	}
 
