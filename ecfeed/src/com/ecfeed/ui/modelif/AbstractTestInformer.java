@@ -33,11 +33,16 @@ public abstract class AbstractTestInformer {
 	private List<Status> fUnsuccesfullExecutionStatuses;
 	private MethodNode fmethodNode;
 	private TestResultsHolder ftestResultsHolder;
+	private String fBeginMessage;
 	
-	public AbstractTestInformer(MethodNode methodNode, TestResultsHolder testResultsHolder){
+	public AbstractTestInformer(
+			MethodNode methodNode, 
+			TestResultsHolder testResultsHolder,
+			String beginMessage) {
 		fmethodNode = methodNode;
 		ftestResultsHolder = testResultsHolder;
 		fUnsuccesfullExecutionStatuses = new ArrayList<>();
+		fBeginMessage = beginMessage;
 	}
 
 	protected abstract void setTestProgressMessage();
@@ -56,7 +61,7 @@ public abstract class AbstractTestInformer {
 
 	protected void beginTestExecution(int totalWork) {
 		fTotalWork = totalWork;
-		fProgressMonitor.beginTask(Messages.EXECUTING_TEST_WITH_PARAMETERS, totalWork);
+		fProgressMonitor.beginTask(fBeginMessage, totalWork);
 	}
 
 	protected void incrementTotalTestcases(){
