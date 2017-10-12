@@ -16,22 +16,30 @@ import org.eclipse.swt.widgets.Shell;
 import com.ecfeed.core.generators.api.IGenerator;
 
 public class GeneratorProgressMonitorDialog extends ProgressMonitorDialog {
-	
+
 	private IGenerator<?> fGenerator;
+	private boolean fWasCancel;
 
 	public GeneratorProgressMonitorDialog(Shell parent, IGenerator<?> generator) {
 		super(parent);
 		this.fGenerator = generator;
+		fWasCancel = false;
 	}
 
 	public void setGenerator(IGenerator<?> fGenerator) {
 		this.fGenerator = fGenerator;
+		fWasCancel = false;
 	}
-	
+
+	public boolean wasCancel() {
+		return fWasCancel;
+	}
+
 	@Override
 	protected void cancelPressed() {
 		fGenerator.cancel();
 		super.cancelPressed();
+		fWasCancel = true;
 	}
 
 }
