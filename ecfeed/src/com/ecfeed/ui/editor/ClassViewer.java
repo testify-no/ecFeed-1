@@ -76,7 +76,7 @@ public class ClassViewer extends TableViewerSection {
 
 		addDoubleClickListener(new SelectNodeDoubleClickListener(mainTreeProvider));
 
-		setActionGrouppingProvider(new MainActionGrouppingProvider(getTableViewer(), getModelUpdateContext(), javaProjectProvider));
+		registerContextMenuAndKeyShortcuts(new MainActionGrouppingProvider(getTableViewer(), getModelUpdateContext(), javaProjectProvider));
 
 		getViewer().addDragSupport(
 				DND.DROP_COPY|DND.DROP_MOVE, 

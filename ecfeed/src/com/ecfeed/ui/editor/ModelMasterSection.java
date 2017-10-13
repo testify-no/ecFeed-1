@@ -66,7 +66,7 @@ public class ModelMasterSection extends TreeViewerSection {
 						javaProjectProvider, 
 						false);
 
-		setActionGrouppingProvider(modelViewerActionProvider);		
+		registerContextMenuAndKeyShortcuts(modelViewerActionProvider);		
 
 		getTreeViewer().addDragSupport(
 				DND.DROP_COPY|DND.DROP_MOVE|DND.DROP_LINK,

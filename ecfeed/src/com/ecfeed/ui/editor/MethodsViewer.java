@@ -73,7 +73,7 @@ public class MethodsViewer extends TableViewerSection {
 
 		addSelectionChangedListener(new SelectionChangedListener());
 
-		setActionGrouppingProvider(
+		registerContextMenuAndKeyShortcuts(
 				new MainActionGrouppingProvider(
 						getTableViewer(), getModelUpdateContext(), javaProjectProvider));
 

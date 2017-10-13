@@ -108,9 +108,9 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 	}
 
 	@Override
-	protected void setActionGrouppingProvider(IActionGrouppingProvider actionProvider) {
+	protected void registerContextMenuAndKeyShortcuts(IActionGrouppingProvider actionProvider) {
 
-		super.setActionGrouppingProvider(actionProvider);
+		super.registerContextMenuAndKeyShortcuts(actionProvider);
 
 		Control viewerControl = fViewer.getControl();
 

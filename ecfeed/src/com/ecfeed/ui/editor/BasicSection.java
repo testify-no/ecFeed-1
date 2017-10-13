@@ -154,7 +154,7 @@ public abstract class BasicSection extends SectionPart {
 		return null;
 	}
 
-	protected void setActionGrouppingProvider(IActionGrouppingProvider provider){
+	protected void registerContextMenuAndKeyShortcuts(IActionGrouppingProvider provider){
 		fActionGroupingProvider = provider;
 	}
 

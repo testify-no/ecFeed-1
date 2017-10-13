@@ -278,7 +278,7 @@ public class ChoicesViewer extends TableViewerSection {
 
 		addDoubleClickListener(new SelectNodeDoubleClickListener(mainTreeProvider));
 		fActionGroupingProvider = new MainActionGrouppingProvider(getTableViewer(), getModelUpdateContext(), javaProjectProvider);
-		setActionGrouppingProvider(fActionGroupingProvider);
+		registerContextMenuAndKeyShortcuts(fActionGroupingProvider);
 		fDragListener = new ModelNodeDragListener(getViewer());
 		fDropListener = new ModelNodeDropListener(getViewer(), getModelUpdateContext(), javaProjectProvider);
 		getViewer().addDragSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, fDragListener);
@@ -328,9 +328,9 @@ public class ChoicesViewer extends TableViewerSection {
 		fDragListener.setEnabled(enabled);
 		fDropListener.setEnabled(enabled);
 		if(enabled){
-			setActionGrouppingProvider(fActionGroupingProvider);
+			registerContextMenuAndKeyShortcuts(fActionGroupingProvider);
 		}else{
-			setActionGrouppingProvider(null);
+			registerContextMenuAndKeyShortcuts(null);
 		}
 	}
 

@@ -78,7 +78,7 @@ public class ConstraintsListViewer extends TableViewerSection {
 
 		addDoubleClickListener(new SelectNodeDoubleClickListener(mainTreeProvider));
 		
-		setActionGrouppingProvider(new MainActionGrouppingProvider(getTableViewer(), updateContext, javaProjectProvider));
+		registerContextMenuAndKeyShortcuts(new MainActionGrouppingProvider(getTableViewer(), updateContext, javaProjectProvider));
 
 		getViewer().addDragSupport(
 				DND.DROP_COPY|DND.DROP_MOVE, 
