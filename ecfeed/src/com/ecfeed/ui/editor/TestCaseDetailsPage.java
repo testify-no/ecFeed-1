@@ -18,7 +18,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
-import com.ecfeed.application.ApplicationContext;
+import com.ecfeed.application.SessionContext;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.TestCaseNode;
@@ -94,7 +94,7 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 
 	private void addCommentsSection() {
 
-		if (ApplicationContext.isProjectAvailable()) {
+		if (SessionContext.isProjectAvailable()) {
 			addForm(fCommentsSection = 
 					new SingleTextCommentsSection(this, getModelUpdateContext(), getJavaProjectProvider()));
 		} else {
@@ -111,7 +111,7 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 			return true;
 		}		
 
-		if (!ApplicationContext.isProjectAvailable()) {
+		if (!SessionContext.isProjectAvailable()) {
 			return false;
 		}
 

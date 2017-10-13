@@ -19,7 +19,7 @@ import org.eclipse.swt.widgets.Display;
 
 import com.ecfeed.android.utils.AndroidBaseRunnerHelper;
 import com.ecfeed.android.utils.AndroidManifestAccessor;
-import com.ecfeed.application.ApplicationContext;
+import com.ecfeed.application.SessionContext;
 import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.operations.ClassOperationAddMethod;
@@ -101,7 +101,7 @@ public class ClassInterface extends GlobalParametersParentInterface {
 			return false;
 		}
 
-		if (ApplicationContext.isProjectAvailable() && 
+		if (SessionContext.isProjectAvailable() && 
 				getImplementationStatus(getOwnNode()) != EImplementationStatus.NOT_IMPLEMENTED){
 			if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(),
 					Messages.DIALOG_RENAME_IMPLEMENTED_CLASS_TITLE,

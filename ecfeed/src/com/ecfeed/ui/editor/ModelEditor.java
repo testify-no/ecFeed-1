@@ -30,7 +30,7 @@ import org.eclipse.ui.IPersistableElement;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.editor.FormEditor;
 
-import com.ecfeed.application.ApplicationContext;
+import com.ecfeed.application.SessionContext;
 import com.ecfeed.core.adapter.ModelOperationManager;
 import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.model.ModelVersionDistributor;
@@ -119,7 +119,7 @@ public class ModelEditor extends FormEditor
 	}
 
 	private InputStream getInitialInputStream(IEditorInput input) throws ModelOperationException {
-		if (ApplicationContext.isProjectAvailable()) {
+		if (SessionContext.isProjectAvailable()) {
 			return ModelEditorPlatformAdapter.getInitialInputStreamForIDE(input);
 		} else {
 			return ModelEditorHelper.getInitialInputStreamForRCP(input);
@@ -178,7 +178,7 @@ public class ModelEditor extends FormEditor
 			return;
 		}
 
-		if (ApplicationContext.isProjectAvailable()) {
+		if (SessionContext.isProjectAvailable()) {
 			doSaveForIDE();
 		} else {
 			doSaveForRCP();
@@ -274,7 +274,7 @@ public class ModelEditor extends FormEditor
 
 		Pair<IEditorInput, String> editorProperties = null;
 		
-		if (ApplicationContext.isProjectAvailable()) {
+		if (SessionContext.isProjectAvailable()) {
 			editorProperties = ModelEditorPlatformAdapter.getEditorFilePropertiesForIde(fileWithPath);
 		} else {
 			editorProperties = ModelEditorPlatformAdapter.getEditorFilePropertiesForRcp(fileWithPath);

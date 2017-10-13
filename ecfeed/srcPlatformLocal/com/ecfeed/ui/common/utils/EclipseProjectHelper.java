@@ -17,7 +17,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.QualifiedName;
 
 import com.ecfeed.android.external.IProjectHelper;
-import com.ecfeed.application.ApplicationContext;
+import com.ecfeed.application.SessionContext;
 import com.ecfeed.core.utils.DiskFileHelper;
 import com.ecfeed.core.utils.EcException;
 import com.ecfeed.core.utils.ExceptionHelper;
@@ -49,7 +49,7 @@ public class EclipseProjectHelper implements IProjectHelper {
 
 	@Override
 	public String getProjectPath() {
-		if (!ApplicationContext.isProjectAvailable()) {
+		if (!SessionContext.isProjectAvailable()) {
 			return null;
 		}
 
@@ -60,7 +60,7 @@ public class EclipseProjectHelper implements IProjectHelper {
 
 	@Override
 	public String getReferencedProjectPath() {
-		if (!ApplicationContext.isProjectAvailable()) {
+		if (!SessionContext.isProjectAvailable()) {
 			return null;
 		}
 		IProject testingProject = (IProject)fJavaProjectProvider.getProject();
@@ -70,7 +70,7 @@ public class EclipseProjectHelper implements IProjectHelper {
 	}
 
 	public String getProjectPath(IProject project) {
-		if (!ApplicationContext.isProjectAvailable()) {
+		if (!SessionContext.isProjectAvailable()) {
 			return null;
 		}
 		return project.getLocation().toOSString();
@@ -110,7 +110,7 @@ public class EclipseProjectHelper implements IProjectHelper {
 
 	private boolean isDevelopmentHook(String hookName) {
 
-		if (!ApplicationContext.isProjectAvailable()) {
+		if (!SessionContext.isProjectAvailable()) {
 			return false;
 		}
 		String projectPath = null;
@@ -130,7 +130,7 @@ public class EclipseProjectHelper implements IProjectHelper {
 
 	@Override
 	public String getApkPathAndName() {
-		if (!ApplicationContext.isProjectAvailable()) {
+		if (!SessionContext.isProjectAvailable()) {
 			return null;
 		}
 		IProject project = (IProject)fJavaProjectProvider.getProject();
@@ -139,7 +139,7 @@ public class EclipseProjectHelper implements IProjectHelper {
 
 	@Override
 	public String getReferencedApkPathAndName() {
-		if (!ApplicationContext.isProjectAvailable()) {
+		if (!SessionContext.isProjectAvailable()) {
 			return null;
 		}
 		IProject testingProject = (IProject)fJavaProjectProvider.getProject();
@@ -177,7 +177,7 @@ public class EclipseProjectHelper implements IProjectHelper {
 	}
 
 	private boolean calculateFlagIsAndroidProject() throws EcException {
-		if (!ApplicationContext.isProjectAvailable()) {
+		if (!SessionContext.isProjectAvailable()) {
 			return false;
 		}
 		IProject project = (IProject)fJavaProjectProvider.getProject();

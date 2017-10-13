@@ -18,7 +18,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
-import com.ecfeed.application.ApplicationContext;
+import com.ecfeed.application.SessionContext;
 import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.MethodNode;
@@ -214,7 +214,7 @@ public class ModelMasterMenuListener extends ViewerMenuListener {
 			return true;
 		}
 
-		if (ApplicationContext.isApplicationTypeLocalStandalone()) {
+		if (SessionContext.isApplicationTypeLocalStandalone()) {
 			return false;
 		}
 

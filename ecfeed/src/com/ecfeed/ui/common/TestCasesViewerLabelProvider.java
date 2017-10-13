@@ -18,7 +18,7 @@ import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Color;
 
-import com.ecfeed.application.ApplicationContext;
+import com.ecfeed.application.SessionContext;
 import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.adapter.IImplementationStatusResolver;
 import com.ecfeed.core.model.ChoiceNode;
@@ -98,7 +98,7 @@ public class TestCasesViewerLabelProvider extends LabelProvider implements IColo
 	}
 
 	public void refresh(){
-		if (ApplicationContext.isProjectAvailable()) {
+		if (SessionContext.isProjectAvailable()) {
 			updateExecutableTable();
 		}
 	}

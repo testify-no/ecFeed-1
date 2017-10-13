@@ -23,7 +23,7 @@ import org.eclipse.swt.widgets.Shell;
 
 import com.ecfeed.android.external.TestMethodInvokerExt;
 import com.ecfeed.android.utils.AndroidBaseRunnerHelper;
-import com.ecfeed.application.ApplicationContext;
+import com.ecfeed.application.SessionContext;
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.ITypeAdapterProvider;
 import com.ecfeed.core.adapter.operations.MethodOperationAddConstraint;
@@ -273,7 +273,7 @@ public class MethodInterface extends ParametersParentInterface {
 						getOwnNode(), 
 						methodInvoker, 
 						javaProjectProvider, 
-						ApplicationContext.getExportTargetFile());
+						SessionContext.getExportTargetFile());
 
 		AbstractOnlineSupport.Result result = onlineExportSupport.proceed();
 
@@ -287,7 +287,7 @@ public class MethodInterface extends ParametersParentInterface {
 		}
 
 		String targetFile = onlineExportSupport.getTargetFile();
-		ApplicationContext.setExportTargetFile(targetFile);
+		SessionContext.setExportTargetFile(targetFile);
 
 		IExportTemplate basicTemplate = 
 				new BasicExportTemplate(null);
@@ -331,7 +331,7 @@ public class MethodInterface extends ParametersParentInterface {
 						FileCompositeVisibility.VISIBLE, 
 						exportTemplateFactory,
 						exportTemplate,
-						ApplicationContext.getExportTargetFile(),
+						SessionContext.getExportTargetFile(),
 						getOwnNode().getParametersCount(),
 						checkedTestCases);
 
@@ -339,7 +339,7 @@ public class MethodInterface extends ParametersParentInterface {
 			return;
 		}
 
-		ApplicationContext.setExportTargetFile(dialog.getTargetFile());
+		SessionContext.setExportTargetFile(dialog.getTargetFile());
 		IExportTemplate currentExportTemplate = dialog.getExportTemplate();
 
 		TestCasesExportHelper.runExport(getOwnNode(), checkedTestCases, currentExportTemplate, dialog.getTargetFile());

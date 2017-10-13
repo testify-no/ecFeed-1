@@ -17,7 +17,7 @@ import java.util.Set;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.widgets.Control;
 
-import com.ecfeed.application.ApplicationContext;
+import com.ecfeed.application.SessionContext;
 import com.ecfeed.ui.editor.actions.ActionId;
 import com.ecfeed.ui.editor.actions.DescribedAction;
 import com.ecfeed.ui.editor.actions.IActionGrouppingProvider;
@@ -57,7 +57,7 @@ public class KeyRegistrator {
 		addKeyListener(ActionId.MOVE_UP);
 		addKeyListener(ActionId.MOVE_DOWN);
 
-		if (!ApplicationContext.isProjectAvailable()) {
+		if (!SessionContext.isProjectAvailable()) {
 			addActionsForStandaloneApp();
 		}
 	}

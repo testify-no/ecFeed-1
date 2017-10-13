@@ -22,7 +22,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Display;
 
-import com.ecfeed.application.ApplicationContext;
+import com.ecfeed.application.SessionContext;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.ClassNode;
@@ -66,7 +66,7 @@ public class ModelTreeLabelDecorator implements ILabelDecorator {
 					new DecorationProvider(
 							fUpdateContext, 
 							fJavaProjectProvider, 
-							ApplicationContext.isProjectAvailable()));
+							SessionContext.isProjectAvailable()));
 
 			List<Image> all = new ArrayList<Image>(decorations);
 			all.add(0, image);
@@ -110,7 +110,7 @@ public class ModelTreeLabelDecorator implements ILabelDecorator {
 
 	private Image fuseImages(Image icon, Image decorator, int x, int y){
 
-		if (ApplicationContext.isApplicationTypeRemoteRap()) {
+		if (SessionContext.isApplicationTypeRemoteRap()) {
 			return icon; // TODO
 		}
 

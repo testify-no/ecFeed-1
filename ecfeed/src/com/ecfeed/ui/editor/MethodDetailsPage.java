@@ -16,7 +16,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
-import com.ecfeed.application.ApplicationContext;
+import com.ecfeed.application.SessionContext;
 import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.MethodNode;
@@ -74,7 +74,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		createMethodNameWidgets();
 		createTestAndExportButtons();
 
-		if (ApplicationContext.isApplicationTypeLocal()) {
+		if (SessionContext.isApplicationTypeLocal()) {
 			createRunnerCombo();
 			createRunnerSection();
 		}
@@ -106,7 +106,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 
 	private void addCommentsSection() {
 
-		if (ApplicationContext.isProjectAvailable()) {
+		if (SessionContext.isProjectAvailable()) {
 			addForm(fCommentsSection = 
 					new ExportableJavaDocCommentsSection(this, getModelUpdateContext(), getJavaProjectProvider()));
 		} else {
@@ -118,7 +118,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	private void createMethodNameWidgets() {
 		int gridColumns = 2;
 
-		if (ApplicationContext.isProjectAvailable()) {
+		if (SessionContext.isProjectAvailable()) {
 			++gridColumns;
 		}
 
@@ -129,7 +129,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		fMethodNameText = getEcFormToolkit().createGridText(gridComposite,
 				new MethodNameApplier());
 
-		if (ApplicationContext.isProjectAvailable()) {
+		if (SessionContext.isProjectAvailable()) {
 			fBrowseButton = getEcFormToolkit().createButton(gridComposite,
 					"Browse...", new ReassignAdapter());
 		}
@@ -144,7 +144,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 
 		EcFormToolkit formObjectToolkit = getEcFormToolkit();
 
-		if (ApplicationContext.isApplicationTypeLocal()) {
+		if (SessionContext.isApplicationTypeLocal()) {
 			fTestOnlineButton = 
 					formObjectToolkit.createButton(
 							childComposite, "Test online...", new OnlineTestAdapter());
@@ -248,7 +248,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		}
 
 		EImplementationStatus methodImplementationStatus = null;
-		if (ApplicationContext.isProjectAvailable()) {
+		if (SessionContext.isProjectAvailable()) {
 			methodImplementationStatus = fMethodInterface.getImplementationStatus();
 		}
 
@@ -271,7 +271,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	}
 
 	private void refreshBrowseButton(MethodNode methodNode) {
-		if (!ApplicationContext.isProjectAvailable()) {
+		if (!SessionContext.isProjectAvailable()) {
 			return;
 		}
 
@@ -294,7 +294,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 			return true;
 		}		
 
-		if (ApplicationContext.isProjectAvailable()) {
+		if (SessionContext.isProjectAvailable()) {
 			return methodStatus != EImplementationStatus.NOT_IMPLEMENTED;
 		}
 

@@ -16,12 +16,12 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 
-import com.ecfeed.application.ApplicationContext;
+import com.ecfeed.application.SessionContext;
 
 public class Application implements IApplication {
 
 	public Object start(IApplicationContext context) {
-		ApplicationContext.setApplicationTypeLocalStandalone();
+		SessionContext.setApplicationTypeLocalStandalone();
 
 		Display display = PlatformUI.createDisplay();
 		try {

@@ -26,7 +26,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import com.ecfeed.android.utils.AndroidBaseRunnerHelper;
-import com.ecfeed.application.ApplicationContext;
+import com.ecfeed.application.SessionContext;
 import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ClassNode;
@@ -89,7 +89,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 				new GlobalParametersViewer(
 						this, getMainTreeProvider(), getModelUpdateContext(), getJavaProjectProvider()));
 
-		if (ApplicationContext.isProjectAvailable()) {
+		if (SessionContext.isProjectAvailable()) {
 			addViewerSection(fOtherMethodsSection = 
 					new OtherMethodsViewer(this, getModelUpdateContext(), getJavaProjectProvider()));
 		}
@@ -105,7 +105,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 
 	private void addCommentsSection() {
 
-		if (ApplicationContext.isProjectAvailable()) {
+		if (SessionContext.isProjectAvailable()) {
 			addForm(fCommentsSection = 
 					new ExportableJavaDocCommentsSection(this, getModelUpdateContext(), getJavaProjectProvider()));
 		} else {
@@ -143,7 +143,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 
 		formObjectToolkit.createLabel(composite, "Class name");
 		fClassNameText = formObjectToolkit.createGridText(composite, new ClassNameApplier());
-		if (ApplicationContext.isProjectAvailable()) {
+		if (SessionContext.isProjectAvailable()) {
 			formObjectToolkit.createButton(composite, "Browse...", new BrowseClassesSelectionListener());
 		}
 
@@ -241,7 +241,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	}
 
 	private void refreshOtherMethodsSection(ClassNode classNode) {
-		if (!ApplicationContext.isProjectAvailable()) {
+		if (!SessionContext.isProjectAvailable()) {
 			return;
 		}
 

@@ -26,7 +26,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Tree;
 
-import com.ecfeed.application.ApplicationContext;
+import com.ecfeed.application.SessionContext;
 import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.TestCaseNode;
@@ -174,7 +174,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 						"Remove selected", 
 						new RemoveSelectedAdapter(Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
 
-		if (ApplicationContext.isApplicationTypeLocal()) {
+		if (SessionContext.isApplicationTypeLocal()) {
 			fExecuteSelectedButton = 
 					addButton("Execute selected", new ExecuteStaticTestAdapter());
 		}
@@ -297,7 +297,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 			return true;
 		}
 
-		if (!ApplicationContext.isProjectAvailable()) {
+		if (!SessionContext.isProjectAvailable()) {
 			return false;
 		}
 

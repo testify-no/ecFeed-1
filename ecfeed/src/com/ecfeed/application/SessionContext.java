@@ -23,7 +23,7 @@ import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.ui.editor.ModelEditorHelper;
 
 
-public class ApplicationContext {
+public class SessionContext {
 
 	private enum ApplicationType {
 		LOCAL_PLUGIN,

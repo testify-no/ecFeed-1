@@ -30,7 +30,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 
-import com.ecfeed.application.ApplicationContext;
+import com.ecfeed.application.SessionContext;
 import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.ui.common.ApplyValueMode;
 import com.ecfeed.ui.common.CommonEditHelper;
@@ -235,7 +235,7 @@ public class DialogObjectToolkit {
 					new DialogObjectToolkit.BrowseButtonClickListener(
 							SWT.SAVE, extensionsFilter, fTargetFileText);
 
-			if (ApplicationContext.isApplicationTypeLocal()) {
+			if (SessionContext.isApplicationTypeLocal()) {
 				fGridButton = createBrowseButton(fChildComposite, fBrowseButtonClickListener);
 			}
 		}

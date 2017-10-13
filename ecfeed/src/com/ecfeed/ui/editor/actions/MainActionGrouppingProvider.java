@@ -15,7 +15,7 @@ import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 
-import com.ecfeed.application.ApplicationContext;
+import com.ecfeed.application.SessionContext;
 import com.ecfeed.core.adapter.IModelImplementer;
 import com.ecfeed.ui.common.EclipseModelImplementer;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
@@ -39,7 +39,7 @@ public class MainActionGrouppingProvider extends BasicActionGrouppingProvider {
 
 		addEditActions(viewer, viewer, context, javaProjectProvider);
 
-		if (javaProjectProvider != null && ApplicationContext.isProjectAvailable()){
+		if (javaProjectProvider != null && SessionContext.isProjectAvailable()){
 			addImplementationActions(viewer, context, javaProjectProvider);
 		}
 
@@ -57,7 +57,7 @@ public class MainActionGrouppingProvider extends BasicActionGrouppingProvider {
 
 		addEditActions(viewer, viewer, context, javaProjectProvider);
 
-		if (javaProjectProvider != null && ApplicationContext.isProjectAvailable()) {
+		if (javaProjectProvider != null && SessionContext.isProjectAvailable()) {
 			addImplementationActions(viewer, context, javaProjectProvider);
 		}
 
@@ -118,7 +118,7 @@ public class MainActionGrouppingProvider extends BasicActionGrouppingProvider {
 
 		addAction(INFO_GROUP, ActionFactory.getAboutAction());
 
-		if (ApplicationContext.isApplicationTypeLocal()) {
+		if (SessionContext.isApplicationTypeLocal()) {
 			addAction(INFO_GROUP, new CheckForUpdatesAction());
 		}
 	}

@@ -22,7 +22,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
-import com.ecfeed.application.ApplicationContext;
+import com.ecfeed.application.SessionContext;
 import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.GlobalParameterNode;
@@ -141,7 +141,7 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 			}
 			fLinkCombo.setEnabled(fParameterIf.isLinked());
 
-			if (ApplicationContext.isProjectAvailable()) {
+			if (SessionContext.isProjectAvailable()) {
 				getBrowseUserTypeButton().setEnabled(!fParameterIf.isLinked());
 			}
 			getChoicesViewer().setReplaceButtonEnabled(isReplaceButtonEnabled());
@@ -174,7 +174,7 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 
 	private boolean isReplaceButtonEnabledForUserType() {
 
-		if (ApplicationContext.isApplicationTypeLocalStandalone()) {
+		if (SessionContext.isApplicationTypeLocalStandalone()) {
 			return false;
 		} 
 
@@ -249,7 +249,7 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 	protected AbstractCommentsSection getCommentsSection(
 			ISectionContext sectionContext, IModelUpdateContext updateContext) {
 
-		if (ApplicationContext.isProjectAvailable()) {
+		if (SessionContext.isProjectAvailable()) {
 			return new MethodParameterCommentsSection(sectionContext, updateContext, getJavaProjectProvider());
 		} else {
 			return new SingleTextCommentsSection(this, getModelUpdateContext(), getJavaProjectProvider());

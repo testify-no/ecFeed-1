@@ -33,7 +33,7 @@ import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.Section;
 
-import com.ecfeed.application.ApplicationContext;
+import com.ecfeed.application.SessionContext;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.core.utils.SystemHelper;
@@ -324,7 +324,7 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 
 	private boolean isLabelEditionInTextField() {
 		if (SystemHelper.isOperatingSystemLinux()) {
-			if (ApplicationContext.isProjectAvailable()) {
+			if (SessionContext.isProjectAvailable()) {
 				return false;
 			}
 			return true;			
