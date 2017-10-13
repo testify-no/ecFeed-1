@@ -104,6 +104,8 @@ public class ActionDescriptionProvider {
 
 	public static final String ABOUT_ACTION_NAME = "About ecFeed...";
 	public static final String CHECK_FOR_UPDATES_ACTION_NAME = "Check for updates...";
+	
+	private static final char SPACE = ' ';
 
 	private static class ActionDescription {
 
@@ -333,7 +335,7 @@ public class ActionDescriptionProvider {
 						EXPAND_COLLAPSE_ACTION_NAME, 
 						EXPAND_COLLAPSE_ACTION_SHORTCUT, 
 						EXPAND_COLLAPSE_ACTION_SHORTCUT,
-						SWT.SPACE,
+						SPACE,
 						SWT.NONE,
 						SWT.NONE,
 						null));
