@@ -333,7 +333,7 @@ public class ActionDescriptionProvider {
 						EXPAND_COLLAPSE_ACTION_NAME, 
 						EXPAND_COLLAPSE_ACTION_SHORTCUT, 
 						EXPAND_COLLAPSE_ACTION_SHORTCUT,
-						SWT.NONE,
+						SWT.SPACE,
 						SWT.NONE,
 						SWT.NONE,
 						null));

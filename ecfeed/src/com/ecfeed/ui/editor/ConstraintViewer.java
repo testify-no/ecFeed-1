@@ -57,7 +57,7 @@ public class ConstraintViewer extends TreeViewerSection {
 			IModelUpdateContext updateContext, 
 			IJavaProjectProvider javaProjectProvider) {
 
-		super(sectionContext, updateContext, javaProjectProvider, STYLE);
+		super(sectionContext, updateContext, javaProjectProvider, STYLE, false);
 		getSection().setText("Constraint editor");
 
 		fAddStatementButton = addButton("Add statement", new AddStatementAdapter());

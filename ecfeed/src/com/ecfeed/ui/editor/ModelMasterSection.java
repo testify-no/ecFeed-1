@@ -50,10 +50,12 @@ public class ModelMasterSection extends TreeViewerSection {
 
 
 	public ModelMasterSection(ModelMasterDetailsBlock parentBlock, IJavaProjectProvider javaProjectProvider) {
+		
 		super(parentBlock.getMasterSectionContext(), 
 				parentBlock.getModelUpdateContext(), 
 				javaProjectProvider, 
-				StyleDistributor.getSectionStyle());
+				StyleDistributor.getSectionStyle(), 
+				true);
 
 		fMasterDetailsBlock = parentBlock;
 

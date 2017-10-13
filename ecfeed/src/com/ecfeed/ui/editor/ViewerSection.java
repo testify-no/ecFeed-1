@@ -51,6 +51,7 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 	private Composite fViewerComposite;
 	private Menu fMenu;
 	private KeyRegistrator fKeyRegistrator = null;
+	private boolean fHasExpandableTreeViewerControl = false;
 
 	protected abstract void createViewerColumns();
 	protected abstract StructuredViewer createViewer(Composite viewerComposite, int style);
@@ -62,9 +63,12 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext, 
 			IJavaProjectProvider javaProjectProvider, 
-			int style) {
+			int style, 
+			boolean hasExpandableTreeViewerControl) {
+
 		super(sectionContext, updateContext, javaProjectProvider, style);
 		fSelectedElements = new ArrayList<>();
+		fHasExpandableTreeViewerControl = hasExpandableTreeViewerControl;
 	}
 
 	@Override
@@ -111,7 +115,7 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 		Control viewerControl = fViewer.getControl();
 
 		configureContextMenu(viewerControl);
-		registerKeyShortcuts(viewerControl, actionProvider);
+		registerKeyShortcuts(viewerControl, fHasExpandableTreeViewerControl, actionProvider);
 	}
 
 
@@ -220,9 +224,11 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 	}
 
 	private void registerKeyShortcuts(
-			Control viewerControl, IActionGrouppingProvider actionProvider) {
+			Control viewerControl,
+			boolean isExpandableTreeControl,
+			IActionGrouppingProvider actionProvider) {
 
-		fKeyRegistrator = new KeyRegistrator(viewerControl, actionProvider);
+		fKeyRegistrator = new KeyRegistrator(viewerControl, isExpandableTreeControl, actionProvider);
 
 		if (actionProvider != null) {
 			fKeyRegistrator.registerKeyListeners();

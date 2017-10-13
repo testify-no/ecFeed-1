@@ -12,16 +12,11 @@ package com.ecfeed.ui.editor;
 
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
 
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
-import com.ecfeed.ui.editor.actions.ActionDescriptionProvider;
-import com.ecfeed.ui.editor.actions.ActionId;
-import com.ecfeed.ui.editor.actions.IActionGrouppingProvider;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
-import com.ecfeed.utils.SwtHelper;
 
 public abstract class TreeViewerSection extends ViewerSection {
 
@@ -29,8 +24,10 @@ public abstract class TreeViewerSection extends ViewerSection {
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext,
 			IJavaProjectProvider javaProjectProvider,
-			int style) {
-		super(sectionContext, updateContext, javaProjectProvider, style);
+			int style,
+			boolean hasExpandableTreeViewerControl) {
+		
+		super(sectionContext, updateContext, javaProjectProvider, style, hasExpandableTreeViewerControl);
 	}
 
 	@Override
@@ -57,17 +54,4 @@ public abstract class TreeViewerSection extends ViewerSection {
 		return (TreeViewer)getViewer();
 	}
 
-	@Override
-	protected void setActionGrouppingProvider(IActionGrouppingProvider provider){
-		super.setActionGrouppingProvider(provider);
-
-		String strActionId = ActionDescriptionProvider.getInstance().getStrId(ActionId.EXPAND_COLLAPSE);
-
-		if (provider.getAction(strActionId) != null){
-			createKeyListener(
-					SwtHelper.getSpaceCode(), 
-					SWT.NONE, 
-					provider.getAction(strActionId));
-		}
-	}
 }
