@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Collection;
 
-import com.ecfeed.application.SessionContext;
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.application.SessionDataStore;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.TestCaseNode;
@@ -53,7 +53,7 @@ public class ExportHelper {
 		try {
 			runExportToStream(methodNode, testCases, exportTemplate, outputStream);
 
-			if (SessionContext.isApplicationTypeRemoteRap()) {
+			if (ApplicationContext.isApplicationTypeRemoteRap()) {
 				DownloadManager.downloadFile(targetFile, outputStream.toString());
 			}
 
@@ -85,7 +85,7 @@ public class ExportHelper {
 
 		OutputStream outputStream;
 		try {
-			if (SessionContext.isApplicationTypeLocal()) {
+			if (ApplicationContext.isApplicationTypeLocal()) {
 				outputStream = new FileOutputStream(targetFile);
 			} else {
 				outputStream = new ByteArrayOutputStream();

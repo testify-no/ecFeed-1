@@ -13,7 +13,7 @@ package com.ecfeed.algorithm;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ecfeed.application.SessionContext;
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.net.HttpProperty;
 import com.ecfeed.core.net.IHttpCommunicator;
 import com.ecfeed.core.utils.SystemHelper;
@@ -76,13 +76,13 @@ public class VersionCheckerAndRegistrator {
 
 	private static HttpProperty createUserAgentProperty() {
 
-		String ecFeedVersion = SessionContext.getEcFeedVersion();
+		String ecFeedVersion = ApplicationContext.getEcFeedVersion();
 		if (ecFeedVersion == null) {
 			ecFeedVersion = "unknownVersion";
 		}
 
 		String operatingSystem;
-		if (SessionContext.isApplicationTypeLocalStandalone()) {
+		if (ApplicationContext.isApplicationTypeLocalStandalone()) {
 			operatingSystem = SystemHelper.getOperatingSystemType();
 		} else {
 			operatingSystem = "All";
@@ -90,15 +90,15 @@ public class VersionCheckerAndRegistrator {
 
 		String productType = "?";
 
-		if (SessionContext.isApplicationTypeLocalStandalone()) {
+		if (ApplicationContext.isApplicationTypeLocalStandalone()) {
 			productType = "ES";
 		} 
 
-		if (SessionContext.isApplicationTypeLocalPlugin()) {
+		if (ApplicationContext.isApplicationTypeLocalPlugin()) {
 			productType = "EP";
 		}
 
-		if (SessionContext.isApplicationTypeRemoteRap()) {
+		if (ApplicationContext.isApplicationTypeRemoteRap()) {
 			productType = "ER";
 		}
 

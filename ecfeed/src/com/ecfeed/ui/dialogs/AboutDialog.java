@@ -13,7 +13,7 @@ package com.ecfeed.ui.dialogs;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
-import com.ecfeed.application.SessionContext;
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.utils.StringHelper;
 
 public class AboutDialog {
@@ -22,7 +22,7 @@ public class AboutDialog {
 
 		String[] dialogButtonLabels;
 
-		if (SessionContext.isApplicationTypeLocal()) {
+		if (ApplicationContext.isApplicationTypeLocal()) {
 			dialogButtonLabels = new String[] { "Ok", "Check for updates..." };
 		} else {
 			dialogButtonLabels = new String[] { "Ok" };
@@ -51,9 +51,9 @@ public class AboutDialog {
 
 		stringBuilder.append(
 				"     ecFeed for Eclipse, version " + 
-						SessionContext.getEcFeedVersion() + "\n");
+						ApplicationContext.getEcFeedVersion() + "\n");
 
-		String rapVersion = SessionContext.getRapVersion();
+		String rapVersion = ApplicationContext.getRapVersion();
 
 		if (!StringHelper.isNullOrEmpty(rapVersion)) {
 			stringBuilder.append("     "); 

@@ -15,7 +15,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IFormPart;
 
-import com.ecfeed.application.SessionContext;
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
@@ -83,7 +83,7 @@ public class ModelRootDetailsPage extends BasicDetailsPage {
 
 	private void addCommentsSection() {
 
-		if (SessionContext.isProjectAvailable()) {
+		if (ApplicationContext.isProjectAvailable()) {
 			addForm(fCommentsSection = new ExportableSingleTextCommentsSection(this, getModelUpdateContext(), getJavaProjectProvider()));
 		} else {
 			addForm(fCommentsSection = new SingleTextCommentsSection(this, getModelUpdateContext(), getJavaProjectProvider()));

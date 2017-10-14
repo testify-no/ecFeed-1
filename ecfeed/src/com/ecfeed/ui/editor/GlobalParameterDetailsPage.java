@@ -12,7 +12,7 @@ package com.ecfeed.ui.editor;
 
 import org.eclipse.swt.widgets.Composite;
 
-import com.ecfeed.application.SessionContext;
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.GlobalParameterNode;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
@@ -83,7 +83,7 @@ public class GlobalParameterDetailsPage extends AbstractParameterDetailsPage {
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext) {
 
-		if (SessionContext.isProjectAvailable()) {
+		if (ApplicationContext.isProjectAvailable()) {
 			return new GlobalParameterCommentsSection(sectionContext, updateContext, getJavaProjectProvider());
 		} else {
 			return new SingleTextCommentsSection(this, getModelUpdateContext(), getJavaProjectProvider());

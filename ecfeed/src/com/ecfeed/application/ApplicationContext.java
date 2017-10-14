@@ -20,7 +20,7 @@ import org.osgi.framework.Constants;
 import com.ecfeed.core.utils.StringHelper;
 
 
-public class SessionContext {
+public class ApplicationContext {
 
 	private enum ApplicationType {
 		LOCAL_PLUGIN,

@@ -20,7 +20,7 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.ui.part.FileEditorInput;
 
-import com.ecfeed.application.SessionContext;
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 
@@ -35,7 +35,7 @@ public class JavaProjectProvider implements IJavaProjectProvider {
 	@Override
 	public Object getProject() { 
 
-		if (!SessionContext.isProjectAvailable()) {
+		if (!ApplicationContext.isProjectAvailable()) {
 			return null;
 		}
 
@@ -51,7 +51,7 @@ public class JavaProjectProvider implements IJavaProjectProvider {
 	@Override
 	public Object getPackageFragmentRoot() {
 
-		if (!SessionContext.isProjectAvailable()) {
+		if (!ApplicationContext.isProjectAvailable()) {
 			return null;
 		}		
 		try {

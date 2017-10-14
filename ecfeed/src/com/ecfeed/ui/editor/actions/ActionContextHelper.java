@@ -13,7 +13,7 @@ package com.ecfeed.ui.editor.actions;
 import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.core.commands.operations.ObjectUndoContext;
 
-import com.ecfeed.application.SessionContext;
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.ui.editor.ModelEditorHelper;
 
 
@@ -27,7 +27,7 @@ public class ActionContextHelper {
 
 	public static IUndoContext getUndoContext() {
 
-		if (SessionContext.isApplicationTypeLocal()) {
+		if (ApplicationContext.isApplicationTypeLocal()) {
 			return ModelEditorHelper.getActiveModelEditor().getUndoContext();
 		}
 

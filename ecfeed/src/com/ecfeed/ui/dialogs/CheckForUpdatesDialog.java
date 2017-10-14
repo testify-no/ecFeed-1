@@ -25,7 +25,7 @@ import org.eclipse.swt.widgets.Label;
 
 import com.ecfeed.algorithm.CurrentReleases;
 import com.ecfeed.algorithm.VersionCheckerAndRegistrator;
-import com.ecfeed.application.SessionContext;
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.application.ApplicationPreferences;
 import com.ecfeed.application.ApplicationVersion;
 import com.ecfeed.core.utils.StringHelper;
@@ -78,7 +78,7 @@ public class CheckForUpdatesDialog extends TitleAreaDialog {
 				VersionCheckerAndRegistrator.registerAppAndGetCurrentReleases(httpCommunicator, timeoutInSeconds);
 
 		if (!shouldOpenConditionalDialog(
-				SessionContext.getEcFeedVersion(),
+				ApplicationContext.getEcFeedVersion(),
 				currentReleases,
 				ApplicationPreferences.getPreferenceAutomaticallyCheckForUpdates(),
 				ApplicationPreferences.getPreferenceCheckBetaVersions(),
@@ -203,7 +203,7 @@ public class CheckForUpdatesDialog extends TitleAreaDialog {
 			return false;
 		}
 
-		String softwareVersion = SessionContext.getEcFeedVersion();
+		String softwareVersion = ApplicationContext.getEcFeedVersion();
 
 		int result = softwareVersion.compareTo(releaseVersion);
 
@@ -227,7 +227,7 @@ public class CheckForUpdatesDialog extends TitleAreaDialog {
 
 		StringBuilder sb = new StringBuilder();
 
-		sb.append("You currently use ecFeed version " + SessionContext.getEcFeedVersion() + "\n");
+		sb.append("You currently use ecFeed version " + ApplicationContext.getEcFeedVersion() + "\n");
 		sb.append("\n");
 
 		if (StringHelper.isNullOrEmpty(fCurrentReleases.versionStandard)) {
@@ -255,7 +255,7 @@ public class CheckForUpdatesDialog extends TitleAreaDialog {
 
 	private String createDownloadInstructions() {
 
-		if (SessionContext.isApplicationTypeLocalStandalone()) {
+		if (ApplicationContext.isApplicationTypeLocalStandalone()) {
 			return "You can download the new version from:\nhttp://ecfeed.com/index.php/download/\n";
 		}
 

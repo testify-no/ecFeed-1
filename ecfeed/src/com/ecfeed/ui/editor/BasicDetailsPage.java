@@ -33,7 +33,7 @@ import org.eclipse.ui.forms.IFormPart;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.widgets.Section;
 
-import com.ecfeed.application.SessionContext;
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.adapter.IModelImplementer;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.ui.common.EclipseModelImplementer;
@@ -141,7 +141,7 @@ implements IDetailsPage, IModelUpdateListener, ISectionContext {
 
 	protected void addToolbarActions(){
 
-		if (SessionContext.isProjectAvailable()) {
+		if (ApplicationContext.isProjectAvailable()) {
 			if(fImplementer.implementable(getNodeType())){
 				getToolBarManager().add(new GoToImplementationToolbarAction());
 				getToolBarManager().add(new ImplementToolbarAction());

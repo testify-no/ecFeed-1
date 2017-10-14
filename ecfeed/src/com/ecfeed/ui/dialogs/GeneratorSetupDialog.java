@@ -42,7 +42,7 @@ import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 
-import com.ecfeed.application.SessionContext;
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.adapter.IImplementationStatusResolver;
 import com.ecfeed.core.generators.DoubleParameter;
@@ -141,7 +141,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 
 	public static boolean canCreate(MethodNode methodNode) {
 
-		if (SessionContext.isApplicationTypeLocal()) {
+		if (ApplicationContext.isApplicationTypeLocal()) {
 			return true;
 		}
 
@@ -203,7 +203,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 
 	private String getTargetFileStr() {
 
-		if (SessionContext.isApplicationTypeLocal()) {
+		if (ApplicationContext.isApplicationTypeLocal()) {
 			return getLocatTargetFileWithDialog();
 		}
 
@@ -557,7 +557,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		if (!onlyExecutable) {
 			return true;
 		}
-		if (!SessionContext.isProjectAvailable()) {
+		if (!ApplicationContext.isProjectAvailable()) {
 			return true;
 		}
 		EImplementationStatus status = fStatusResolver.getImplementationStatus(choice);
@@ -576,7 +576,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 			return true;
 		}
 
-		if (SessionContext.isApplicationTypeRemoteRap()) {
+		if (ApplicationContext.isApplicationTypeRemoteRap()) {
 			return true;
 		}
 
@@ -618,7 +618,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 
 		createExportTemplateCombo(parentComposite);
 
-		if (SessionContext.isApplicationTypeLocal()) {
+		if (ApplicationContext.isApplicationTypeLocal()) {
 			createFileSelectionComposite(parentComposite);
 		}
 	}

@@ -22,7 +22,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 
-import com.ecfeed.application.SessionContext;
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.ClassNodeHelper;
@@ -65,7 +65,7 @@ public class ClassViewer extends TableViewerSection {
 
 		setText("Classes");
 
-		if (SessionContext.isProjectAvailable()) {
+		if (ApplicationContext.isProjectAvailable()) {
 			addButton("Add implemented class", new AddImplementedClassAdapter());
 		}
 
@@ -229,7 +229,7 @@ public class ClassViewer extends TableViewerSection {
 			if (!(element instanceof ClassNode)) {
 				return null;
 			}
-			if (!SessionContext.isProjectAvailable()) {
+			if (!ApplicationContext.isProjectAvailable()) {
 				return null;
 			}
 			if(fRootIf.getImplementationStatus((ClassNode)element) == EImplementationStatus.IMPLEMENTED){
