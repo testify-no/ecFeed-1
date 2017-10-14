@@ -31,14 +31,35 @@ public class SessionContext {
 		REMOTE_RAP
 	}
 
-	static ApplicationType fApplicationType = ApplicationType.LOCAL_PLUGIN;
-	static String fExportFileName;
-	static String fMainBundleName = "com.ecfeed";
-	static private ObjectUndoContext fRapObjectUndoContext = null;
+	private static final String ATTRIBUTE_BUNDLE_NAME = "SDS_BUNDLE_NAME";
+
+	private static ApplicationType fApplicationType = getInitialApplicationType();
+	private static String fExportFileName;
+	private static String fMainBundleName = getInitialBundleName();
+	private static ObjectUndoContext fRapObjectUndoContext = null;
+
+
+	private static ApplicationType getInitialApplicationType() {
+
+		ApplicationType applicationType = ApplicationType.LOCAL_PLUGIN;
+		SessionDataStore.setAttribute("SDS_APPLICATION_TYPE", applicationType);
+		return applicationType;
+	}
+
+	private static ApplicationType getApplicationType() {
+
+		fApplicationType = (ApplicationType)SessionDataStore.getAttribute("SDS_APPLICATION_TYPE");
+		return fApplicationType;
+	}
+
+	private static void setApplicationType(ApplicationType applicationType) {
+		fApplicationType = applicationType;
+		SessionDataStore.setAttribute("SDS_APPLICATION_TYPE", applicationType);
+	}
 
 	public static boolean isApplicationTypeLocalStandalone() {
 
-		if (fApplicationType == ApplicationType.LOCAL_STANDALONE) {
+		if (getApplicationType() == ApplicationType.LOCAL_STANDALONE) {
 			return true;
 		}
 
@@ -47,7 +68,7 @@ public class SessionContext {
 
 	public static boolean isApplicationTypeLocalPlugin() {
 
-		if (fApplicationType == ApplicationType.LOCAL_PLUGIN) {
+		if (getApplicationType() == ApplicationType.LOCAL_PLUGIN) {
 			return true;
 		}
 
@@ -70,7 +91,7 @@ public class SessionContext {
 
 	public static boolean isApplicationTypeRemoteRap() {
 
-		if (fApplicationType == ApplicationType.REMOTE_RAP) {
+		if (getApplicationType() == ApplicationType.REMOTE_RAP) {
 			return true;
 		}
 
@@ -88,19 +109,30 @@ public class SessionContext {
 
 	public static void setApplicationTypeLocalStandalone() {
 
-		fApplicationType = ApplicationType.LOCAL_STANDALONE;
+		setApplicationType(ApplicationType.LOCAL_STANDALONE);
 	}
 
 	public static void setApplicationTypeRemoteRap() {
 
-		fApplicationType = ApplicationType.REMOTE_RAP;
+		setApplicationType(ApplicationType.REMOTE_RAP);
 	}	
 
+	private static String getInitialBundleName() {
+
+		String value = "com.ecfeed";
+		SessionDataStore.setAttribute(ATTRIBUTE_BUNDLE_NAME, value);
+		return value;
+	}
+
 	public static void setMainBundleName(String mainBundleName) {
+
+		SessionDataStore.setAttribute(ATTRIBUTE_BUNDLE_NAME, mainBundleName);
 		fMainBundleName = mainBundleName;
 	}
 
 	public static String getMainBundleName() {
+
+		fMainBundleName = (String)SessionDataStore.getAttribute(ATTRIBUTE_BUNDLE_NAME);
 		return fMainBundleName;
 	}
 
