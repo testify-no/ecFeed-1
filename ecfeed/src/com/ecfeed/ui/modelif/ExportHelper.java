@@ -18,6 +18,7 @@ import java.io.OutputStream;
 import java.util.Collection;
 
 import com.ecfeed.application.SessionContext;
+import com.ecfeed.application.SessionDataStore;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.serialization.export.IExportTemplate;
@@ -29,18 +30,18 @@ import com.testify.ecfeed.rap.application.DownloadManager;
 public class ExportHelper {
 
 	private static final String EXPORT_FINISHED = "Export finished.";
-	private static String fExportFileName;	
+	private static final String ATTRIBUTE_EXPORT_FILE_NAME = "SDS_EXPORT_FILE_NAME";
 
 	public static void setExportTargetFile(String exportFileName) {
 
-		fExportFileName = exportFileName;
+		SessionDataStore.setAttribute(ATTRIBUTE_EXPORT_FILE_NAME, exportFileName);
 	}
 
 	public static String getExportTargetFile() {
 
-		return fExportFileName;
+		return (String)SessionDataStore.getAttribute(ATTRIBUTE_EXPORT_FILE_NAME);
 	}
-	
+
 	public static void runExport(
 			MethodNode methodNode,
 			Collection<TestCaseNode> testCases, 

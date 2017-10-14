@@ -23,7 +23,6 @@ import org.eclipse.swt.widgets.Shell;
 
 import com.ecfeed.android.external.TestMethodInvokerExt;
 import com.ecfeed.android.utils.AndroidBaseRunnerHelper;
-import com.ecfeed.application.SessionContext;
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.ITypeAdapterProvider;
 import com.ecfeed.core.adapter.operations.MethodOperationAddConstraint;
