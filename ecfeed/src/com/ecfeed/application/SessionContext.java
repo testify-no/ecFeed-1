@@ -28,27 +28,16 @@ public class SessionContext {
 		REMOTE_RAP
 	}
 
-	private static final String ATTRIBUTE_BUNDLE_NAME = "SDS_BUNDLE_NAME";
-
-	private static ApplicationType fApplicationType = getInitialApplicationType();
-	private static String fMainBundleName = getInitialBundleName();
-
-	private static ApplicationType getInitialApplicationType() {
-
-		ApplicationType applicationType = ApplicationType.LOCAL_PLUGIN;
-		SessionDataStore.setAttribute("SDS_APPLICATION_TYPE", applicationType);
-		return applicationType;
-	}
+	private static ApplicationType fApplicationType = ApplicationType.LOCAL_PLUGIN;
+	private static String fMainBundleName = "com.ecfeed";
 
 	private static ApplicationType getApplicationType() {
 
-		fApplicationType = (ApplicationType)SessionDataStore.getAttribute("SDS_APPLICATION_TYPE");
 		return fApplicationType;
 	}
 
 	private static void setApplicationType(ApplicationType applicationType) {
 		fApplicationType = applicationType;
-		SessionDataStore.setAttribute("SDS_APPLICATION_TYPE", applicationType);
 	}
 
 	public static boolean isApplicationTypeLocalStandalone() {
@@ -111,22 +100,13 @@ public class SessionContext {
 		setApplicationType(ApplicationType.REMOTE_RAP);
 	}	
 
-	private static String getInitialBundleName() {
-
-		String value = "com.ecfeed";
-		SessionDataStore.setAttribute(ATTRIBUTE_BUNDLE_NAME, value);
-		return value;
-	}
-
 	public static void setMainBundleName(String mainBundleName) {
 
-		SessionDataStore.setAttribute(ATTRIBUTE_BUNDLE_NAME, mainBundleName);
 		fMainBundleName = mainBundleName;
 	}
 
 	public static String getMainBundleName() {
 
-		fMainBundleName = (String)SessionDataStore.getAttribute(ATTRIBUTE_BUNDLE_NAME);
 		return fMainBundleName;
 	}
 
