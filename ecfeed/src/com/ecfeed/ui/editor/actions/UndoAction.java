@@ -15,7 +15,6 @@ import org.eclipse.core.commands.operations.IOperationHistory;
 import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.core.commands.operations.OperationHistoryFactory;
 
-import com.ecfeed.application.SessionContext;
 import com.ecfeed.core.utils.SystemLogger;
 
 public class UndoAction extends DescribedAction {
@@ -27,7 +26,7 @@ public class UndoAction extends DescribedAction {
 	@Override
 	public void run() {
 		IOperationHistory operationHistory = OperationHistoryFactory.getOperationHistory();
-		IUndoContext undoContext = SessionContext.getUndoContext();
+		IUndoContext undoContext = ActionContextHelper.getUndoContext();
 
 
 		try {

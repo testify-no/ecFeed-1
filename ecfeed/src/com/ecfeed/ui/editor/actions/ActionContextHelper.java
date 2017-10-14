@@ -10,29 +10,29 @@
 
 package com.ecfeed.ui.editor.actions;
 
-import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.commands.operations.IOperationHistory;
 import org.eclipse.core.commands.operations.IUndoContext;
-import org.eclipse.core.commands.operations.OperationHistoryFactory;
+import org.eclipse.core.commands.operations.ObjectUndoContext;
 
-import com.ecfeed.core.utils.SystemLogger;
+import com.ecfeed.application.SessionContext;
+import com.ecfeed.ui.editor.ModelEditorHelper;
 
-public class RedoAction extends DescribedAction {
 
-	public RedoAction() {
-		super(ActionId.REDO);
+public class ActionContextHelper {
+
+	private static ObjectUndoContext fRapObjectUndoContext = null;
+
+	public static void setRapUndoContextObject(Object obj) {
+		fRapObjectUndoContext = new ObjectUndoContext(obj);
 	}
 
-	@Override
-	public void run() {
-		IOperationHistory operationHistory = OperationHistoryFactory.getOperationHistory();
-		IUndoContext undoContext = ActionContextHelper.getUndoContext();
+	public static IUndoContext getUndoContext() {
 
-		try {
-			operationHistory.redo(undoContext, null, null);
-		} catch (ExecutionException e) {
-			SystemLogger.logCatch("Can not undo operation.");
+		if (SessionContext.isApplicationTypeLocal()) {
+			return ModelEditorHelper.getActiveModelEditor().getUndoContext();
 		}
+
+		return fRapObjectUndoContext;
 	}
 
 }
+

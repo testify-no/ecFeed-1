@@ -12,15 +12,12 @@ package com.ecfeed.application;
 
 import java.util.Dictionary;
 
-import org.eclipse.core.commands.operations.IUndoContext;
-import org.eclipse.core.commands.operations.ObjectUndoContext;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.ui.PlatformUI;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
 
 import com.ecfeed.core.utils.StringHelper;
-import com.ecfeed.ui.editor.ModelEditorHelper;
 
 
 public class SessionContext {
@@ -35,8 +32,6 @@ public class SessionContext {
 
 	private static ApplicationType fApplicationType = getInitialApplicationType();
 	private static String fMainBundleName = getInitialBundleName();
-	private static ObjectUndoContext fRapObjectUndoContext = null;
-
 
 	private static ApplicationType getInitialApplicationType() {
 
@@ -156,17 +151,5 @@ public class SessionContext {
 		return version;
 	}
 
-	public static void setRapUndoContextObject(Object obj) {
-		fRapObjectUndoContext = new ObjectUndoContext(obj);
-	}
-
-	public static IUndoContext getUndoContext() {
-
-		if (isApplicationTypeLocal()) {
-			return ModelEditorHelper.getActiveModelEditor().getUndoContext();
-		}
-
-		return fRapObjectUndoContext;
-	}
 
 }
