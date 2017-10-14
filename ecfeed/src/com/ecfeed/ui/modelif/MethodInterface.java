@@ -273,7 +273,7 @@ public class MethodInterface extends ParametersParentInterface {
 						getOwnNode(), 
 						methodInvoker, 
 						javaProjectProvider, 
-						SessionContext.getExportTargetFile());
+						ExportHelper.getExportTargetFile());
 
 		AbstractOnlineSupport.Result result = onlineExportSupport.proceed();
 
@@ -287,7 +287,7 @@ public class MethodInterface extends ParametersParentInterface {
 		}
 
 		String targetFile = onlineExportSupport.getTargetFile();
-		SessionContext.setExportTargetFile(targetFile);
+		ExportHelper.setExportTargetFile(targetFile);
 
 		IExportTemplate basicTemplate = 
 				new BasicExportTemplate(null);
@@ -296,7 +296,7 @@ public class MethodInterface extends ParametersParentInterface {
 
 		Collection<TestCaseNode> testCases = methodInvoker.getTestCasesToExport();
 
-		TestCasesExportHelper.runExport(getOwnNode(), testCases, basicTemplate, targetFile);
+		ExportHelper.runExport(getOwnNode(), testCases, basicTemplate, targetFile);
 	}
 
 	public void executeStaticTests(Collection<TestCaseNode> testCases,
@@ -331,7 +331,7 @@ public class MethodInterface extends ParametersParentInterface {
 						FileCompositeVisibility.VISIBLE, 
 						exportTemplateFactory,
 						exportTemplate,
-						SessionContext.getExportTargetFile(),
+						ExportHelper.getExportTargetFile(),
 						getOwnNode().getParametersCount(),
 						checkedTestCases);
 
@@ -339,10 +339,10 @@ public class MethodInterface extends ParametersParentInterface {
 			return;
 		}
 
-		SessionContext.setExportTargetFile(dialog.getTargetFile());
+		ExportHelper.setExportTargetFile(dialog.getTargetFile());
 		IExportTemplate currentExportTemplate = dialog.getExportTemplate();
 
-		TestCasesExportHelper.runExport(getOwnNode(), checkedTestCases, currentExportTemplate, dialog.getTargetFile());
+		ExportHelper.runExport(getOwnNode(), checkedTestCases, currentExportTemplate, dialog.getTargetFile());
 	}
 
 	private boolean isValidClassConfiguration(ClassNode classNode) {

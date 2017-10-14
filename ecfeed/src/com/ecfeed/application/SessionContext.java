@@ -34,7 +34,6 @@ public class SessionContext {
 	private static final String ATTRIBUTE_BUNDLE_NAME = "SDS_BUNDLE_NAME";
 
 	private static ApplicationType fApplicationType = getInitialApplicationType();
-	private static String fExportFileName;
 	private static String fMainBundleName = getInitialBundleName();
 	private static ObjectUndoContext fRapObjectUndoContext = null;
 
@@ -141,16 +140,6 @@ public class SessionContext {
 		Bundle bundle = Platform.getBundle( PlatformUI.PLUGIN_ID );
 		Dictionary<String, String> headers = bundle.getHeaders();
 		return headers.get( Constants.BUNDLE_VERSION );
-	}
-
-	public static void setExportTargetFile(String exportFileName) {
-
-		fExportFileName = exportFileName;
-	}
-
-	public static String getExportTargetFile() {
-
-		return fExportFileName;
 	}
 
 	public static String getEcFeedVersion() {

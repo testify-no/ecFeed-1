@@ -26,10 +26,21 @@ import com.ecfeed.ui.dialogs.basic.ErrorDialog;
 import com.ecfeed.ui.dialogs.basic.InfoDialog;
 import com.testify.ecfeed.rap.application.DownloadManager;
 
-public class TestCasesExportHelper {
+public class ExportHelper {
 
 	private static final String EXPORT_FINISHED = "Export finished.";
+	private static String fExportFileName;	
 
+	public static void setExportTargetFile(String exportFileName) {
+
+		fExportFileName = exportFileName;
+	}
+
+	public static String getExportTargetFile() {
+
+		return fExportFileName;
+	}
+	
 	public static void runExport(
 			MethodNode methodNode,
 			Collection<TestCaseNode> testCases, 
