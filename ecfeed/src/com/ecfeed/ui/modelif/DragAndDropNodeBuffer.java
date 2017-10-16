@@ -14,29 +14,40 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.ecfeed.application.SessionDataStore;
 import com.ecfeed.core.model.AbstractNode;
+import com.ecfeed.core.utils.SessionAttributes;
 
 public class DragAndDropNodeBuffer {
 
-	private static List<AbstractNode> fDraggedNodes;
-
-	public static void setDraggedNodes(List<AbstractNode>nodes) {
-		fDraggedNodes = nodes;
-		removeDuplicatedChildren(fDraggedNodes);
+	public static void setDraggedNodes(List<AbstractNode> nodes) {
+		removeDuplicatedChildren(nodes);
+		SessionDataStore.set(SessionAttributes.SA_DRAG_AND_DROP_NODE_BUFFER, nodes);
 	}
 
 	public static List<AbstractNode> getDraggedNodes() {
-		return fDraggedNodes;
+
+		@SuppressWarnings("unchecked")
+		List<AbstractNode> nodes 
+		= (List<AbstractNode>) SessionDataStore.get(SessionAttributes.SA_DRAG_AND_DROP_NODE_BUFFER);
+
+		if (nodes == null) {
+			return new ArrayList<AbstractNode>();
+		}
+		return nodes;
 	}
 
 	public static List<AbstractNode> getDraggedNodesCopy() {
 
 		List<AbstractNode> result = new ArrayList<>();
+		List<AbstractNode> draggedNodes = getDraggedNodes();
 
-		if (fDraggedNodes != null) {
-			for (AbstractNode node : fDraggedNodes) {
-				result.add(node.makeClone());
-			}
+		if (draggedNodes == null) {
+			return result;
+		}
+
+		for (AbstractNode node : draggedNodes) {
+			result.add(node.makeClone());
 		}
 
 		return result;
@@ -44,9 +55,8 @@ public class DragAndDropNodeBuffer {
 
 	public static void clear() {
 
-		if(fDraggedNodes != null){
-			fDraggedNodes.clear();
-		}
+		List<AbstractNode> nodes = new ArrayList<AbstractNode>();
+		setDraggedNodes(nodes);
 	}
 
 	private static void removeDuplicatedChildren(List<AbstractNode> nodes) {
