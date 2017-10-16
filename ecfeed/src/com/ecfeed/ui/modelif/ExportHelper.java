@@ -22,24 +22,25 @@ import com.ecfeed.application.SessionDataStore;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.serialization.export.IExportTemplate;
+import com.ecfeed.core.utils.SessionAttributes;
 import com.ecfeed.serialization.export.TestCasesExporter;
 import com.ecfeed.ui.dialogs.basic.ErrorDialog;
 import com.ecfeed.ui.dialogs.basic.InfoDialog;
 import com.testify.ecfeed.rap.application.DownloadManager;
 
+
 public class ExportHelper {
 
 	private static final String EXPORT_FINISHED = "Export finished.";
-	private static final String ATTRIBUTE_EXPORT_FILE_NAME = "SDS_EXPORT_FILE_NAME";
 
 	public static void setExportTargetFile(String exportFileName) {
 
-		SessionDataStore.setAttribute(ATTRIBUTE_EXPORT_FILE_NAME, exportFileName);
+		SessionDataStore.set(SessionAttributes.SA_EXPORT_FILE_NAME, exportFileName);
 	}
 
 	public static String getExportTargetFile() {
 
-		return (String)SessionDataStore.getAttribute(ATTRIBUTE_EXPORT_FILE_NAME);
+		return (String)SessionDataStore.get(SessionAttributes.SA_EXPORT_FILE_NAME);
 	}
 
 	public static void runExport(

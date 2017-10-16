@@ -14,47 +14,69 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.ecfeed.application.SessionDataStore;
 import com.ecfeed.core.model.AbstractNode;
+import com.ecfeed.core.utils.SessionAttributes;
 
-public class NodeClipboard{
+public class NodeClipboard {
 
-	private static List<AbstractNode> fClipboardNodes = new ArrayList<>();
+	@SuppressWarnings("unchecked")
+	public static List<AbstractNode> getContent() {
 
-	public static List<AbstractNode> getContent(){
-		return fClipboardNodes;
+		List<AbstractNode> content = 
+				(List<AbstractNode>)SessionDataStore.get(SessionAttributes.SA_CLIPBOARD_NODES);
+
+		if (content != null) {
+			return content;
+		}
+
+		return new ArrayList<AbstractNode>();
 	}
 
-	public static List<AbstractNode> getContentCopy(){
+	public static List<AbstractNode> getContentCopy() {
+
+		List<AbstractNode> clipboardNodes = getContent();
 		List<AbstractNode> copy = new ArrayList<AbstractNode>();
-		for(AbstractNode node : fClipboardNodes){
+
+		for (AbstractNode node : clipboardNodes) {
 			copy.add(node.makeClone());
 		}
+
 		return copy;
 	}
 
 	public static void setContent(AbstractNode node){
-		fClipboardNodes.clear();
-		fClipboardNodes.add(node.makeClone());
+
+		List<AbstractNode> nodes = new ArrayList<AbstractNode>();
+		nodes.add(node.makeClone());
+		setContent(nodes);
 	}
 
-	public static void setContent(List<AbstractNode> nodes){
+	public static void setContent(List<AbstractNode> oldNodes){
 
-		fClipboardNodes.clear();
-		for(AbstractNode node : nodes){
-			if(isPredecessorInCollection(node, nodes) == false){
-				fClipboardNodes.add(node.makeClone());
+		List<AbstractNode> newNodes = new ArrayList<AbstractNode>();
+
+		for (AbstractNode node : oldNodes) {
+			if (isPredecessorInCollection(node, oldNodes) == false) {
+				newNodes.add(node.makeClone());
 			}
 		}
+
+		SessionDataStore.set(SessionAttributes.SA_CLIPBOARD_NODES, newNodes);
 	}
 
 	private static boolean isPredecessorInCollection(AbstractNode node, Collection<AbstractNode> nodes) {
+
 		AbstractNode predecessor = node.getParent();
-		while(predecessor != null){
-			if(nodes.contains(predecessor)){
+
+		while (predecessor != null) {
+			if (nodes.contains(predecessor)) {
 				return true;
 			}
+
 			predecessor = predecessor.getParent();
 		}
+
 		return false;
 	}
 }

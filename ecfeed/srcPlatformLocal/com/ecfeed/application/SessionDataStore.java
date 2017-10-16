@@ -18,11 +18,11 @@ public class SessionDataStore {
 
 		private static Map<String, Object> fAttributes = new HashMap<String, Object>();
 		
-		public static Object getAttribute(String name) {
+		public static Object get(String name) {
 			return fAttributes.get(name);
 		}
 		
-		public static void setAttribute(String name, Object value) {
+		public static void set(String name, Object value) {
 			fAttributes.put(name, value);
 		}
 		
