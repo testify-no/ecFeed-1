@@ -20,6 +20,9 @@ import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.runner.ITestMethodInvoker;
 
+import static com.ecfeed.core.utils.CommonConstants.DEFAULT_NEW_TEST_SUITE_NAME;
+
+
 public class ExportTestMethodInvoker implements ITestMethodInvoker {
 
 	MethodNode fMethodNode;
@@ -57,7 +60,7 @@ public class ExportTestMethodInvoker implements ITestMethodInvoker {
 			choiceNodes.add(new ChoiceNode(methodParameterNode.getName(), arguments[cnt].toString()));
 		}
 
-		TestCaseNode testCaseNode = new TestCaseNode("name", choiceNodes); 
+		TestCaseNode testCaseNode = new TestCaseNode(DEFAULT_NEW_TEST_SUITE_NAME, choiceNodes); 
 		testCaseNode.setParent(fMethodNode);
 
 		return testCaseNode;

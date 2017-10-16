@@ -18,9 +18,11 @@ import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.TestCaseNode;
+import com.ecfeed.core.utils.CommonConstants;
 import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.core.utils.StringHolder;
+
 
 public abstract class AbstractExportTemplate implements IExportTemplate {
 
@@ -180,7 +182,9 @@ public abstract class AbstractExportTemplate implements IExportTemplate {
 			choiceNodes.add(getRandomChoiceNode(methodNode, parameterName, randomGenerator));
 		}
 
-		TestCaseNode testCaseNode = new TestCaseNode("testCase" + testCaseNumber, choiceNodes);
+		TestCaseNode testCaseNode = 
+				new TestCaseNode(CommonConstants.DEFAULT_NEW_TEST_SUITE_NAME, choiceNodes);
+
 		testCaseNode.setParent(methodNode);
 
 		return testCaseNode;

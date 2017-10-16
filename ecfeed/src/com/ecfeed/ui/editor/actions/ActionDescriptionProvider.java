@@ -36,10 +36,6 @@ public class ActionDescriptionProvider {
 	private static final String EXPAND_ACTION_ID = "expand";
 	private static final String COLLAPSE_ACTION_ID = "collapse";
 	private static final String EXPAND_COLLAPSE_ACTION_ID = "expand/collapse";
-	private static final String JAVADOC_EXPORT_ACTION_ID = "javadoc.export";
-	private static final String JAVADOC_IMPORT_ACTION_ID = "javadoc.import";
-	private static final String JAVADOC_EXPORT_TYPE_ACTION_ID = "javadoc.exportType";
-	private static final String JAVADOC_IMPORT_TYPE_ACTION_ID = "javadoc.importType";
 	private static final String SAVE_ACTION_ID = "save";
 	private static final String ABOUT_ACTION_ID = "about";
 	private static final String CHECK_FOR_UPDATES_ACTION_ID = "checkForUpdates";
@@ -94,11 +90,6 @@ public class ActionDescriptionProvider {
 
 	private static final String EXPAND_COLLAPSE_ACTION_NAME = "Expand/Collapse";
 	private static final String EXPAND_COLLAPSE_ACTION_SHORTCUT = "Space";
-
-	private static final String JAVADOC_EXPORT_ACTION_NAME = "Export javadoc";
-	private static final String JAVADOC_IMPORT_ACTION_NAME = "Import javadoc";
-	private static final String JAVADOC_EXPORT_TYPE_ACTION_NAME = "javadoc.exportType";
-	private static final String JAVADOC_IMPORT_TYPE_ACTION_NAME = "javadoc.importType";
 
 	private static final String SAVE_ACTION_NAME = "Save";
 	private static final String SAVE_ACTION_SHORTCUT = "Ctrl+S";
@@ -511,6 +502,4 @@ public class ActionDescriptionProvider {
 	}
 
 }
-
-
 

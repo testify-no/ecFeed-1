@@ -24,7 +24,6 @@ public class CommonConstants {
 	public static final String DEFAULT_NEW_METHOD_NAME = "testMethod";
 	public static final String DEFAULT_NEW_PARAMETER_NAME = "arg";
 	public static final String DEFAULT_USER_TYPE_NAME = "default.UserType";
-	public static final String DEFAULT_NEW_TEST_SUITE_NAME = "default suite";
 	public static final String DEFAULT_NEW_CONSTRAINT_NAME = "constraint";
 	public static final String DEFAULT_NEW_PARTITION_NAME = "choice";
 	public static final String DEFAULT_NEW_PARTITION_LABEL = "label";
