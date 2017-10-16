@@ -14,18 +14,16 @@ import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.swt.dnd.DragSourceEvent;
 import org.eclipse.swt.dnd.DragSourceListener;
 
-import com.ecfeed.ui.modelif.NodeDnDBuffer;
+import com.ecfeed.ui.modelif.DragAndDropNodeBuffer;
 import com.ecfeed.ui.modelif.NodeSelectionUtils;
 
 public class ModelNodeDragListener implements DragSourceListener {
 
 	private NodeSelectionUtils fSelectionToolbox;
-	private NodeDnDBuffer fDnDBuffer;
 	private boolean fEnabled;
 
 	public ModelNodeDragListener(ISelectionProvider selectionProvider){
 		fSelectionToolbox = new NodeSelectionUtils(selectionProvider);
-		fDnDBuffer = NodeDnDBuffer.getInstance();
 		fEnabled = true;
 	}
 
@@ -35,7 +33,7 @@ public class ModelNodeDragListener implements DragSourceListener {
 			event.doit = false;
 		}
 		else{
-			fDnDBuffer.setDraggedNodes(fSelectionToolbox.getSelectedNodes());
+			DragAndDropNodeBuffer.setDraggedNodes(fSelectionToolbox.getSelectedNodes());
 		}
 	}
 
@@ -45,7 +43,7 @@ public class ModelNodeDragListener implements DragSourceListener {
 
 	@Override
 	public void dragFinished(DragSourceEvent event) {
-		fDnDBuffer.clear();
+		DragAndDropNodeBuffer.clear();
 	}
 
 	public void setEnabled(boolean enabled){

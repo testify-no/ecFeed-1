@@ -16,51 +16,53 @@ import java.util.List;
 
 import com.ecfeed.core.model.AbstractNode;
 
-public class NodeDnDBuffer {
+public class DragAndDropNodeBuffer {
 
-	private static NodeDnDBuffer fInstance = new NodeDnDBuffer();
-	
-	private List<AbstractNode> fDraggedNodes;
-	
-	public static NodeDnDBuffer getInstance(){
-		return fInstance;
-	}
-	
-	public void setDraggedNodes(List<AbstractNode>nodes){
+	private static List<AbstractNode> fDraggedNodes;
+
+	public static void setDraggedNodes(List<AbstractNode>nodes) {
 		fDraggedNodes = nodes;
 		removeDuplicatedChildren(fDraggedNodes);
 	}
-	
-	public List<AbstractNode> getDraggedNodes(){
+
+	public static List<AbstractNode> getDraggedNodes() {
 		return fDraggedNodes;
 	}
-	
-	public List<AbstractNode> getDraggedNodesCopy(){
+
+	public static List<AbstractNode> getDraggedNodesCopy() {
+
 		List<AbstractNode> result = new ArrayList<>();
-		if(fDraggedNodes != null){
-			for(AbstractNode node : fDraggedNodes){
+
+		if (fDraggedNodes != null) {
+			for (AbstractNode node : fDraggedNodes) {
 				result.add(node.makeClone());
 			}
 		}
+
 		return result;
 	}
 
-	public void clear() {
+	public static void clear() {
+
 		if(fDraggedNodes != null){
 			fDraggedNodes.clear();
 		}
 	}
 
-	private void removeDuplicatedChildren(List<AbstractNode> nodes) {
+	private static void removeDuplicatedChildren(List<AbstractNode> nodes) {
+
 		Iterator<AbstractNode> it = nodes.iterator();
-		while(it.hasNext()){
+
+		while (it.hasNext()) {
 			AbstractNode node = it.next();
 			AbstractNode parent = node.getParent();
-			while(parent != null){
-				if(nodes.contains(parent)){
+
+			while (parent != null) {
+				if (nodes.contains(parent)) {
 					it.remove();
 					break;
 				}
+
 				parent = parent.getParent();
 			}
 		}
