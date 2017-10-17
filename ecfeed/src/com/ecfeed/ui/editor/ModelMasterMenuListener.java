@@ -113,7 +113,7 @@ public class ModelMasterMenuListener extends ViewerMenuListener {
 			return actionName;
 		}
 
-		final String shortcut = ActionDescriptionProvider.getInstance().getShortcut(ActionId.INSERT);
+		final String shortcut = ActionDescriptionProvider.getApplicationInstance().getShortcut(ActionId.INSERT);
 
 		if (SystemHelper.isOperatingSystemMacOs()) {
 			return actionName + "   (" + shortcut + ")";

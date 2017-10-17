@@ -144,17 +144,17 @@ public class ActionDescriptionProvider {
 
 	}
 
-	private static ActionDescriptionProvider fActionDescriptionProvider = null;
+	private static ActionDescriptionProvider fApplicationInstance = null;
 
 	private List<ActionDescription> fActionDescriptions;
 
-	public static ActionDescriptionProvider getInstance() {
+	public static ActionDescriptionProvider getApplicationInstance() {
 
-		if (fActionDescriptionProvider == null) {
-			fActionDescriptionProvider = new ActionDescriptionProvider();
+		if (fApplicationInstance == null) {
+			fApplicationInstance = new ActionDescriptionProvider();
 		}
 
-		return fActionDescriptionProvider;
+		return fApplicationInstance;
 	}
 
 	private static ImageDescriptor getImageDescriptor(String imageFilePath) {

@@ -29,7 +29,7 @@ public class DescribedAction extends Action {
 
 		fActionId = actionId;
 
-		ActionDescriptionProvider actionDescriptionProvider = ActionDescriptionProvider.getInstance();
+		ActionDescriptionProvider actionDescriptionProvider = ActionDescriptionProvider.getApplicationInstance();
 
 		setId(actionDescriptionProvider.getStrId(actionId));
 		setText(actionDescriptionProvider.getDescriptionWithShortcut(actionId));
