@@ -18,24 +18,43 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 
+import com.ecfeed.application.SessionDataStore;
+import com.ecfeed.core.utils.SessionAttributes;
+
 public class ColorManager {
 
-	@SuppressWarnings("rawtypes")
-	protected static Map fColorTable = new HashMap(10);
+	private static Map<RGB, Color> getSessionInstance() {
 
-	@SuppressWarnings("rawtypes")
-	public static void dispose() {
-		Iterator e = fColorTable.values().iterator();
-		while (e.hasNext())
-			 ((Color) e.next()).dispose();
+		@SuppressWarnings("unchecked")
+		Map<RGB, Color> sessionInstance = (Map<RGB, Color>)SessionDataStore.get(
+				SessionAttributes.SA_COLOR_MANAGER);
+
+		if (sessionInstance == null) {
+			sessionInstance = new HashMap<RGB, Color>();
+			SessionDataStore.set(SessionAttributes.SA_COLOR_MANAGER, sessionInstance);
+		}
+
+		return sessionInstance;
 	}
-	@SuppressWarnings("unchecked")
+
+	public static void dispose() {
+
+		Iterator<Color> e = getSessionInstance().values().iterator();
+
+		while (e.hasNext()) {
+			((Color) e.next()).dispose();
+		}
+	}
+
 	public static Color getColor(RGB rgb) {
-		Color color = (Color) fColorTable.get(rgb);
+
+		Color color = (Color) getSessionInstance().get(rgb);
+
 		if (color == null) {
 			color = new Color(Display.getCurrent(), rgb);
-			fColorTable.put(rgb, color);
+			getSessionInstance().put(rgb, color);
 		}
+
 		return color;
 	}
 }

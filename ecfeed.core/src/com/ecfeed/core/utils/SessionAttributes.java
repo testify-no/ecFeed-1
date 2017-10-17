@@ -7,4 +7,5 @@ public class SessionAttributes {
 	public static final String SA_DRAG_AND_DROP_NODE_BUFFER = "SA_DRAG_AND_DROP_NODE_BUFFER";
 	public static final String SA_RAP_UNDO_CONTEXT = "SA_RAP_UNDO_CONTEXT";
 	public static final String SA_IMAGE_MANAGER = "SA_IMAGE_MANAGER";
+	public static final String SA_COLOR_MANAGER = "SA_COLOR_MANAGER";
 }
