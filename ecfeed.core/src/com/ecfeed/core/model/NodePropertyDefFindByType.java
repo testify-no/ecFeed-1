@@ -26,18 +26,18 @@ public class NodePropertyDefFindByType {
 	private static final String CSS_SELECTOR = "CSS selector";
 	private static final String XPATH = "Xpath";
 
-	private static String[] valuesForStandardSet = new String[] { UNMAPPED, ID, CLASS_NAME, TAG_NAME, NAME, LINK_TEXT, PARTIAL_LINK_TEXT, CSS_SELECTOR, XPATH }; 
+	private static final String[] valuesForStandardSet = new String[] { UNMAPPED, ID, CLASS_NAME, TAG_NAME, NAME, LINK_TEXT, PARTIAL_LINK_TEXT, CSS_SELECTOR, XPATH }; 
 
-	private static NodePropertyValueSet STANDARD_VALUE_SET_WITH_DEFAULT_UNMAPPED = 
+	private static final NodePropertyValueSet STANDARD_VALUE_SET_WITH_DEFAULT_UNMAPPED = 
 			new NodePropertyValueSet(UNMAPPED, valuesForStandardSet);
 
-	private static NodePropertyValueSet STANDARD_VALUE_SET_WITH_DEFAULT_ID = 
+	private static final NodePropertyValueSet STANDARD_VALUE_SET_WITH_DEFAULT_ID = 
 			new NodePropertyValueSet(ID, valuesForStandardSet);
 
-	private static NodePropertyValueSet VALUE_SET_FOR_RADIO = 
+	private static final NodePropertyValueSet VALUE_SET_FOR_RADIO = 
 			new NodePropertyValueSet(NAME, new String[] {NAME});
 
-	public static NodePropertyDef findByTypeOfElement = 
+	public static final NodePropertyDef findByTypeOfElement = 
 			new NodePropertyDef(
 					"wbFindByType", JavaTypeHelper.TYPE_NAME_STRING, STANDARD_VALUE_SET_WITH_DEFAULT_UNMAPPED);
 
