@@ -27,10 +27,9 @@ import com.ecfeed.algorithm.CurrentReleases;
 import com.ecfeed.algorithm.VersionCheckerAndRegistrator;
 import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.application.ApplicationPreferences;
-import com.ecfeed.application.ApplicationVersion;
 import com.ecfeed.application.ApplicationVersionHelper;
-import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.core.net.IHttpCommunicator;
+import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.net.HttpCommunicatorWithProgress;
 import com.ecfeed.net.HttpCommunicatorWithoutProgress;
 import com.ecfeed.ui.dialogs.basic.DialogObjectToolkit;
@@ -369,6 +368,6 @@ public class CheckForUpdatesDialog extends TitleAreaDialog {
 
 	private static boolean isThisNewerVersion(String version, String versionToCompare) {
 
-		return ApplicationVersion.isThisNewerVersion(version, versionToCompare);
+		return ApplicationVersionHelper.isThisNewerVersion(version, versionToCompare);
 	}
 }
