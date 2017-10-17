@@ -17,9 +17,9 @@ import com.ecfeed.core.utils.StringHelper;
 
 public class StatementConditionHelper {
 
-	private static String TYPE_INFO_CHOICE = "choice";
-	private static String TYPE_INFO_PARAMETER = "parameter";
-	private static String TYPE_INFO_LABEL = "label";
+	private static final String TYPE_INFO_CHOICE = "choice";
+	private static final String TYPE_INFO_PARAMETER = "parameter";
+	private static final String TYPE_INFO_LABEL = "label";
 
 	public static ChoiceNode getChoiceForMethodParameter(List<ChoiceNode> choices, MethodParameterNode methodParameterNode) {
 
