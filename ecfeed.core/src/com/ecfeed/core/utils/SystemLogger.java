@@ -25,6 +25,11 @@ public class SystemLogger {
 	private static boolean fFirstLogError = true;
 
 	public static void setLogToFileAndOutput() {
+
+		if (ApplicationContext.isApplicationTypeRemoteRap()) {
+			return;
+		}
+
 		fLogToFile = true;
 	}
 
