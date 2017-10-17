@@ -182,7 +182,7 @@ public class ConstraintViewer extends TreeViewerSection {
 		}
 
 		private Image getImage(String file) {
-			return ImageManager.getInstance().getImage(file);
+			return ImageManager.getSessionInstance().getImage(file);
 		}
 	}
 

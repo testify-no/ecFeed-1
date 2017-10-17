@@ -289,7 +289,7 @@ implements IDetailsPage, IModelUpdateListener, ISectionContext {
 	}
 
 	protected ImageDescriptor getIconDescription(String fileName) {
-		return ImageManager.getInstance().getImageDescriptor(fileName);
+		return ImageManager.getSessionInstance().getImageDescriptor(fileName);
 	}
 
 	abstract protected Class<? extends AbstractNode> getNodeType();

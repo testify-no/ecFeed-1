@@ -163,7 +163,7 @@ public abstract class BasicSection extends SectionPart {
 	}
 
 	protected ImageDescriptor getIconDescription(String fileName) {
-		return ImageManager.getInstance().getImageDescriptor(fileName);
+		return ImageManager.getSessionInstance().getImageDescriptor(fileName);
 	}
 
 	public void setVisible(boolean visible) {
