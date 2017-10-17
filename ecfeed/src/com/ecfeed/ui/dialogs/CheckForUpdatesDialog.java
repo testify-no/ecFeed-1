@@ -28,6 +28,7 @@ import com.ecfeed.algorithm.VersionCheckerAndRegistrator;
 import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.application.ApplicationPreferences;
 import com.ecfeed.application.ApplicationVersion;
+import com.ecfeed.application.ApplicationVersionHelper;
 import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.core.net.IHttpCommunicator;
 import com.ecfeed.net.HttpCommunicatorWithProgress;
@@ -78,7 +79,7 @@ public class CheckForUpdatesDialog extends TitleAreaDialog {
 				VersionCheckerAndRegistrator.registerAppAndGetCurrentReleases(httpCommunicator, timeoutInSeconds);
 
 		if (!shouldOpenConditionalDialog(
-				ApplicationContext.getEcFeedVersion(),
+				ApplicationVersionHelper.getEcFeedVersion(),
 				currentReleases,
 				ApplicationPreferences.getPreferenceAutomaticallyCheckForUpdates(),
 				ApplicationPreferences.getPreferenceCheckBetaVersions(),
@@ -203,7 +204,7 @@ public class CheckForUpdatesDialog extends TitleAreaDialog {
 			return false;
 		}
 
-		String softwareVersion = ApplicationContext.getEcFeedVersion();
+		String softwareVersion = ApplicationVersionHelper.getEcFeedVersion();
 
 		int result = softwareVersion.compareTo(releaseVersion);
 
@@ -227,7 +228,7 @@ public class CheckForUpdatesDialog extends TitleAreaDialog {
 
 		StringBuilder sb = new StringBuilder();
 
-		sb.append("You currently use ecFeed version " + ApplicationContext.getEcFeedVersion() + "\n");
+		sb.append("You currently use ecFeed version " + ApplicationVersionHelper.getEcFeedVersion() + "\n");
 		sb.append("\n");
 
 		if (StringHelper.isNullOrEmpty(fCurrentReleases.versionStandard)) {

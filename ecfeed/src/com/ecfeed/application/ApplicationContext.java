@@ -10,14 +10,6 @@
 
 package com.ecfeed.application;
 
-import java.util.Dictionary;
-
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.ui.PlatformUI;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.Constants;
-
-import com.ecfeed.core.utils.StringHelper;
 
 
 public class ApplicationContext {
@@ -29,7 +21,6 @@ public class ApplicationContext {
 	}
 
 	private static ApplicationType fApplicationType = ApplicationType.LOCAL_PLUGIN;
-	private static String fMainBundleName = "com.ecfeed";
 
 	private static ApplicationType getApplicationType() {
 
@@ -99,37 +90,5 @@ public class ApplicationContext {
 
 		setApplicationType(ApplicationType.REMOTE_RAP);
 	}	
-
-	public static void setMainBundleName(String mainBundleName) {
-
-		fMainBundleName = mainBundleName;
-	}
-
-	public static String getMainBundleName() {
-
-		return fMainBundleName;
-	}
-
-	public static String getRapVersion() {
-
-		Bundle bundle = Platform.getBundle( PlatformUI.PLUGIN_ID );
-		Dictionary<String, String> headers = bundle.getHeaders();
-		return headers.get( Constants.BUNDLE_VERSION );
-	}
-
-	public static String getEcFeedVersion() {
-
-		Bundle bundle = Platform.getBundle(getMainBundleName());
-
-		if (bundle == null) {
-			return null;
-		}
-
-		String version = bundle.getVersion().toString();
-		version = StringHelper.removeFromPostfix(".qualifier", version);
-
-		return version;
-	}
-
 
 }
