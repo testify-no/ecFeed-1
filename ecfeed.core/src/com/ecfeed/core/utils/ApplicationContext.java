@@ -8,8 +8,7 @@
  *  
  *******************************************************************************/
 
-package com.ecfeed.application;
-
+package com.ecfeed.core.utils;
 
 
 public class ApplicationContext {

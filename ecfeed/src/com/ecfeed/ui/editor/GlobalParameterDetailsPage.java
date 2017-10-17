@@ -12,9 +12,9 @@ package com.ecfeed.ui.editor;
 
 import org.eclipse.swt.widgets.Composite;
 
-import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.GlobalParameterNode;
+import com.ecfeed.core.utils.ApplicationContext;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.ecfeed.ui.modelif.GlobalParameterInterface;

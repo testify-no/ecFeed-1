@@ -13,10 +13,10 @@ package com.ecfeed.algorithm;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.application.ApplicationVersionHelper;
 import com.ecfeed.core.net.HttpProperty;
 import com.ecfeed.core.net.IHttpCommunicator;
+import com.ecfeed.core.utils.ApplicationContext;
 import com.ecfeed.core.utils.SystemHelper;
 import com.ecfeed.core.utils.SystemLogger;
 

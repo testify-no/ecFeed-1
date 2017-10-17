@@ -13,8 +13,8 @@ package com.ecfeed.ui.dialogs;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
-import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.application.ApplicationVersionHelper;
+import com.ecfeed.core.utils.ApplicationContext;
 import com.ecfeed.core.utils.StringHelper;
 
 public class AboutDialog {

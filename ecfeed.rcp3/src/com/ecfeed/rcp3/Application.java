@@ -16,7 +16,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 
-import com.ecfeed.application.ApplicationContext;
+import com.ecfeed.core.utils.ApplicationContext;
 
 public class Application implements IApplication {
 

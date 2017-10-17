@@ -19,7 +19,6 @@ import org.eclipse.swt.widgets.Display;
 
 import com.ecfeed.android.utils.AndroidBaseRunnerHelper;
 import com.ecfeed.android.utils.AndroidManifestAccessor;
-import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.operations.ClassOperationAddMethod;
@@ -33,6 +32,7 @@ import com.ecfeed.core.model.ClassNodeHelper;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.ModelHelper;
 import com.ecfeed.core.model.ModelOperationException;
+import com.ecfeed.core.utils.ApplicationContext;
 import com.ecfeed.core.utils.EcException;
 import com.ecfeed.core.utils.PackageClassHelper;
 import com.ecfeed.core.utils.SystemLogger;

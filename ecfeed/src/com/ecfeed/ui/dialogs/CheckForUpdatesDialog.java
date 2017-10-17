@@ -25,10 +25,10 @@ import org.eclipse.swt.widgets.Label;
 
 import com.ecfeed.algorithm.CurrentReleases;
 import com.ecfeed.algorithm.VersionCheckerAndRegistrator;
-import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.application.ApplicationPreferences;
 import com.ecfeed.application.ApplicationVersionHelper;
 import com.ecfeed.core.net.IHttpCommunicator;
+import com.ecfeed.core.utils.ApplicationContext;
 import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.net.HttpCommunicatorWithProgress;
 import com.ecfeed.net.HttpCommunicatorWithoutProgress;
