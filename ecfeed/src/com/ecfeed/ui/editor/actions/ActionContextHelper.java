@@ -14,15 +14,23 @@ import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.core.commands.operations.ObjectUndoContext;
 
 import com.ecfeed.application.ApplicationContext;
+import com.ecfeed.application.SessionDataStore;
+import com.ecfeed.core.utils.SessionAttributes;
 import com.ecfeed.ui.editor.ModelEditorHelper;
 
 
 public class ActionContextHelper {
 
-	private static ObjectUndoContext fRapObjectUndoContext = null;
+	public static void setOnceRapUndoContextObject(Object obj) {
 
-	public static void setRapUndoContextObject(Object obj) {
-		fRapObjectUndoContext = new ObjectUndoContext(obj);
+		ObjectUndoContext objectUndoContext = getRapUndoContext();
+
+		if (objectUndoContext != null) {
+			return;
+		}
+
+		ObjectUndoContext rapObjectUndoContext = new ObjectUndoContext(obj);
+		SessionDataStore.set(SessionAttributes.SA_RAP_UNDO_CONTEXT, rapObjectUndoContext);
 	}
 
 	public static IUndoContext getUndoContext() {
@@ -31,8 +39,12 @@ public class ActionContextHelper {
 			return ModelEditorHelper.getActiveModelEditor().getUndoContext();
 		}
 
-		return fRapObjectUndoContext;
+		return getRapUndoContext();
 	}
 
+	private static ObjectUndoContext getRapUndoContext() {
+
+		return (ObjectUndoContext)SessionDataStore.get(SessionAttributes.SA_RAP_UNDO_CONTEXT);
+	}
 }
 
