@@ -20,16 +20,12 @@ import com.ecfeed.core.model.LabelCondition;
 
 public class Constraint implements IConstraint<ChoiceNode> {
 
-	private final int fId;
-	private static int fLastId = 0;
-
 	private AbstractStatement fPremise;
 	private AbstractStatement fConsequence;
 
 
 	public Constraint(AbstractStatement premise, AbstractStatement consequence) {
 
-		fId = fLastId++;
 		fPremise = premise;
 		fConsequence = consequence;
 	}
@@ -45,7 +41,7 @@ public class Constraint implements IConstraint<ChoiceNode> {
 			return true;
 		}
 
-		if(fConsequence == null) {
+		if (fConsequence == null) {
 			return false;
 		}
 
@@ -80,33 +76,17 @@ public class Constraint implements IConstraint<ChoiceNode> {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-
-		if (!(obj instanceof Constraint)) {
-			return false;
-		}
-
-		if (fId == ((Constraint)obj).getId()) {
-			return true;
-		}
-
-		return false;
-	}
-
-	@Override
 	public boolean mentions(int dimension) {
+
 		if (fPremise.mentions(dimension)) {
 			return true;
 		}
+
 		if (fConsequence.mentions(dimension)) {
 			return true;
-		}		
+		}
+
 		return false;
-	}
-
-	public int getId(){
-
-		return fId;
 	}
 
 	public AbstractStatement getPremise() {
@@ -149,6 +129,7 @@ public class Constraint implements IConstraint<ChoiceNode> {
 		if (fPremise.mentionsParameterAndOrderRelation(parameter)) {
 			return true;
 		}
+
 		if (fConsequence.mentionsParameterAndOrderRelation(parameter)) {
 			return true;
 		}
@@ -166,7 +147,7 @@ public class Constraint implements IConstraint<ChoiceNode> {
 
 	public boolean updateRefrences(MethodNode method) {
 
-		if(fPremise.updateReferences(method) && fConsequence.updateReferences(method)) {
+		if (fPremise.updateReferences(method) && fConsequence.updateReferences(method)) {
 			return true;
 		}
 
@@ -176,13 +157,12 @@ public class Constraint implements IConstraint<ChoiceNode> {
 	@SuppressWarnings("unchecked")
 	public Set<ChoiceNode> getReferencedChoices() {
 
-		try{
+		try {
 			Set<ChoiceNode> referenced = (Set<ChoiceNode>)fPremise.accept(new ReferencedChoicesProvider());
 			referenced.addAll((Set<ChoiceNode>)fConsequence.accept(new ReferencedChoicesProvider()));
 
 			return referenced;
-		}
-		catch(Exception e){
+		} catch(Exception e) {
 			return new HashSet<ChoiceNode>();
 		}
 	}
@@ -190,13 +170,12 @@ public class Constraint implements IConstraint<ChoiceNode> {
 	@SuppressWarnings("unchecked")
 	public Set<AbstractParameterNode> getReferencedParameters() {
 
-		try{
+		try {
 			Set<AbstractParameterNode> referenced = (Set<AbstractParameterNode>)fPremise.accept(new ReferencedParametersProvider());
 			referenced.addAll((Set<AbstractParameterNode>)fConsequence.accept(new ReferencedParametersProvider()));
 
 			return referenced;
-		}
-		catch(Exception e){
+		} catch(Exception e) {
 			return new HashSet<AbstractParameterNode>();
 		}
 	}
@@ -204,13 +183,12 @@ public class Constraint implements IConstraint<ChoiceNode> {
 	@SuppressWarnings("unchecked")
 	public Set<String> getReferencedLabels(MethodParameterNode parameter) {
 
-		try{
+		try {
 			Set<String> referenced = (Set<String>)fPremise.accept(new ReferencedLabelsProvider(parameter));
 			referenced.addAll((Set<String>)fConsequence.accept(new ReferencedLabelsProvider(parameter)));
 
 			return referenced;
-		}
-		catch(Exception e){
+		} catch(Exception e) {
 			return new HashSet<String>();
 		}
 	}
@@ -241,7 +219,7 @@ public class Constraint implements IConstraint<ChoiceNode> {
 
 			Set<ChoiceNode> set = new HashSet<ChoiceNode>();
 
-			for(AbstractStatement s : statement.getStatements()) {
+			for (AbstractStatement s : statement.getStatements()) {
 				set.addAll((Set<ChoiceNode>)s.accept(this));
 			}
 
@@ -253,7 +231,7 @@ public class Constraint implements IConstraint<ChoiceNode> {
 
 			Set<ChoiceNode> result = new HashSet<>();
 
-			if(statement.isParameterPrimitive()){
+			if (statement.isParameterPrimitive()) {
 				result.add(statement.getCondition());
 			}
 
