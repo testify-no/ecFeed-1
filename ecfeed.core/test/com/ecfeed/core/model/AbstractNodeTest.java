@@ -58,7 +58,7 @@ public class AbstractNodeTest{
 		AbstractNode node1 = new AbstractNodeImpl("name");
 		AbstractNode node2 = new AbstractNodeImpl("name");
 
-		assertNotEquals(node1.getId(), node2.getId());
+		assertNotEquals(node1, node2);
 	}
 
 	@Test
