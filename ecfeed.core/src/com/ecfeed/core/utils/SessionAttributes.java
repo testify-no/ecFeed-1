@@ -10,4 +10,5 @@ public class SessionAttributes {
 	public static final String SA_COLOR_MANAGER = "SA_COLOR_MANAGER";
 	public static final String SA_ACTION_FACTORY = "SA_ACTION_FACTORY";
 	public static final String SA_CONSOLE_MANAGER = "SA_CONSOLE_MANAGER";
+	public static final String SA_RAP_MODEL_UPDATE_CONTEXT = "SA_RAP_MODEL_UPDATE_CONTEXT";
 }
