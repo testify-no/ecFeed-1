@@ -13,24 +13,21 @@ package com.ecfeed.core.utils;
 
 public class EcException extends Exception {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -2866617803127770757L;
 
 	private EcException(String message) {
 		super(message);
 	}
-	
+
 	private EcException(String message, Throwable chainedThrowable) {
 		super(message, chainedThrowable);
 	}	
-	
+
 	public static void report(String message) throws EcException {
 		SystemLogger.logThrow(message);
 		throw new EcException(message);
 	}	
-	
+
 	public static void report(String message, Throwable throwable) throws EcException {
 		SystemLogger.logThrow(message);
 		throw new EcException(message, throwable);
