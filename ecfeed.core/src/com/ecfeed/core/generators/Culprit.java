@@ -13,8 +13,6 @@ package com.ecfeed.core.generators;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ecfeed.core.generators.algorithms.DimensionedString;
-
 public class Culprit {
 
 	private static class OtherData {

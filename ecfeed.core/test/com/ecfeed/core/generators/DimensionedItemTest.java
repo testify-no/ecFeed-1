@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html 
  *  
  *******************************************************************************/
-package com.ecfeed.core.generators.algorithms;
+package com.ecfeed.core.generators;
 
 import static org.junit.Assert.*;
 

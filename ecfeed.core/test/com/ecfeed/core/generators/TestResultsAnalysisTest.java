@@ -17,8 +17,6 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.ecfeed.core.generators.algorithms.DimensionedString;
-
 public class TestResultsAnalysisTest {
 
 	@Test

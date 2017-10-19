@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import com.ecfeed.core.generators.algorithms.DimensionedString;
 import com.ecfeed.core.generators.algorithms.Tuples;
 
 public class TestResultsAnalyzer {
