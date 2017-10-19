@@ -8,7 +8,7 @@
  *  
  *******************************************************************************/
 
-package com.ecfeed.ui.dialogs;
+package com.ecfeed.ui.common.utils;
 
 import java.util.ArrayList;
 import java.util.List;
