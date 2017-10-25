@@ -47,7 +47,6 @@ public class EditorStyleChecker implements IModelVisitor{
 				return errorDescription;
 			}
 		}
-
 		return null;
 	}
 
@@ -77,8 +76,10 @@ public class EditorStyleChecker implements IModelVisitor{
 
 		ClassNode parent = node.getClassNode();
 
-		DuplicatedMethodsChecker duplicateChecker = new DuplicatedMethodsChecker(parent.getMethods());
-		ErrorDescription errorDescription = duplicateChecker.checkForDuplicateMethods();
+		DuplicatedMethodsChecker duplicateChecker =
+				new DuplicatedMethodsChecker(parent.getMethods());
+		ErrorDescription errorDescription =
+				duplicateChecker.checkForDuplicateMethods();
 		if (errorDescription != null) {
 			return errorDescription;
 		}	
@@ -144,7 +145,7 @@ public class EditorStyleChecker implements IModelVisitor{
 		DUPLICATE_CLASS_NAME, DUPLICATE_METHOD_NAME;	
 	}
 
-	public static class DuplicatedMethodsChecker{
+	public static class DuplicatedMethodsChecker {
 		private List<MethodNode> fMethods;
 
 		public DuplicatedMethodsChecker(List<MethodNode> methods) {
@@ -162,7 +163,7 @@ public class EditorStyleChecker implements IModelVisitor{
 			});
 
 			for (int i = 0; i < fMethods.size() - 1; i++) {
-				if (areMethodNamesEqual(fMethods.get(i), fMethods.get(i + 1))){
+				if (areMethodNamesEqual(fMethods.get(i), fMethods.get(i + 1))) {
 					if (areParameterTypesEqual(fMethods.get(i).getParameterTypes(), 
 							fMethods.get(i + 1).getParameterTypes())) {
 						return new ErrorDescription(fMethods.get(i), fMethods.get(i +1), 
@@ -174,7 +175,7 @@ public class EditorStyleChecker implements IModelVisitor{
 		}
 
 		private boolean areMethodNamesEqual(MethodNode methodNode, MethodNode methodNode2) {
-			if(methodNode.getName().equals(methodNode2.getName())){
+			if (methodNode.getName().equals(methodNode2.getName())){
 				return true;
 			}
 			return false;
@@ -195,7 +196,8 @@ public class EditorStyleChecker implements IModelVisitor{
 					return true;
 				}
 
-				if (!Collections.disjoint(parameterTypes, numericList) && !Collections.disjoint(parameterTypes2, numericList)) {
+				if (!Collections.disjoint(parameterTypes, numericList) &&
+						!Collections.disjoint(parameterTypes2, numericList)) {
 					return true;	
 				}
 			}
@@ -215,14 +217,15 @@ public class EditorStyleChecker implements IModelVisitor{
 
 			Pair<ClassNode, ClassNode> duplicates = getFirstPairOfDuplicates();
 			if (duplicates != null) {
-				return new ErrorDescription(duplicates.getFirst(), duplicates.getSecond(), CheckErrorCode.DUPLICATE_CLASS_NAME);
+				return new ErrorDescription(duplicates.getFirst(), duplicates.getSecond(), 
+						CheckErrorCode.DUPLICATE_CLASS_NAME);
 			}
 			return null;
 		}
 
 		private Pair<ClassNode, ClassNode> getFirstPairOfDuplicates() {
 
-			Collections.sort(fClasses, new Comparator<ClassNode>(){
+			Collections.sort(fClasses, new Comparator<ClassNode>() {
 
 				@Override
 				public int compare(ClassNode node1, ClassNode node2){
@@ -230,9 +233,10 @@ public class EditorStyleChecker implements IModelVisitor{
 				}
 			});
 
-			for(int index = 0; index < fClasses.size() - 1; index++) {
-				if(fClasses.get(index).getName().equals(fClasses.get(index + 1).getName())){
-					Pair<ClassNode, ClassNode> duplicatedpairs = new Pair<ClassNode, ClassNode>(fClasses.get(index), fClasses.get(index + 1));
+			for (int index = 0; index < fClasses.size() - 1; index++) {
+				if (fClasses.get(index).getName().equals(fClasses.get(index + 1).getName())) {
+					Pair<ClassNode, ClassNode> duplicatedpairs = 
+							new Pair<ClassNode, ClassNode>(fClasses.get(index), fClasses.get(index + 1));
 					return duplicatedpairs;
 				}
 			}
