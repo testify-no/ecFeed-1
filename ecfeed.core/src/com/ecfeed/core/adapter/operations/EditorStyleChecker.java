@@ -10,12 +10,10 @@
 
 package com.ecfeed.core.adapter.operations;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
 
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ChoiceNode;
@@ -27,28 +25,29 @@ import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.TestCaseNode;
+import com.ecfeed.core.utils.Pair;
 
 public class EditorStyleChecker implements IModelVisitor{
 
 	@Override
 	public Object visit(RootNode rootNode) throws Exception {
-		
-		DuplicateChecker duplicateChecker = new DuplicateChecker(rootNode.getClasses(), null);
-		
+
+		DuplicatedClassesChecker duplicateChecker = new DuplicatedClassesChecker(rootNode.getClasses());
+
 		ErrorDescription errorDescription = duplicateChecker.checkForDuplicateClasses();
 		if (errorDescription != null) {
 			return errorDescription;
 		}
 
 		List<ClassNode> classesInRootNode = rootNode.getClasses();
-		
+
 		for (ClassNode classNode: classesInRootNode) {
 			errorDescription = (ErrorDescription) classNode.accept(this);
 			if (errorDescription != null) {
 				return errorDescription;
 			}
 		}
-		
+
 		return null;
 	}
 
@@ -56,8 +55,8 @@ public class EditorStyleChecker implements IModelVisitor{
 	public Object visit(ClassNode node) throws Exception {
 
 		RootNode root = node.getRoot();
-		
-		DuplicateChecker duplicateChecker = new DuplicateChecker(root.getClasses(), null);
+
+		DuplicatedClassesChecker duplicateChecker = new DuplicatedClassesChecker(root.getClasses());
 		ErrorDescription errorDescription = duplicateChecker.checkForDuplicateClasses();
 		if (errorDescription != null) {
 			return errorDescription;
@@ -75,15 +74,15 @@ public class EditorStyleChecker implements IModelVisitor{
 
 	@Override
 	public Object visit(MethodNode node) throws Exception {
-		
+
 		ClassNode parent = node.getClassNode();
-		
-		DuplicateChecker duplicateChecker = new DuplicateChecker(null, parent.getMethods());
+
+		DuplicatedMethodsChecker duplicateChecker = new DuplicatedMethodsChecker(parent.getMethods());
 		ErrorDescription errorDescription = duplicateChecker.checkForDuplicateMethods();
 		if (errorDescription != null) {
 			return errorDescription;
 		}	
-		
+
 		return null;
 	}
 
@@ -112,23 +111,28 @@ public class EditorStyleChecker implements IModelVisitor{
 		return null;
 	}
 
-	// XMQX - static qualifier added
+
 	public static class ErrorDescription {
 		private AbstractNode fNode;
+		private AbstractNode fDuplicateNode;
 		private CheckErrorCode fErrorCode;
 
-		// XMQX - we have to add another node fDuplicateNode to generate the message so that
-		// duplicate nodes are easy to find
 		public ErrorDescription(
 				AbstractNode node, 
-				// AbstractNode duplicateNode,
+				AbstractNode duplicateNode,
 				CheckErrorCode errorCode) {
+
 			fNode = node;
+			fDuplicateNode = duplicateNode;
 			fErrorCode = errorCode;
 		}
 
 		public CheckErrorCode getErrorCode() {
 			return fErrorCode;
+		}
+
+		public AbstractNode getDuplicatedNode() {
+			return fDuplicateNode;
 		}
 
 		public AbstractNode getErrorNode() {
@@ -140,145 +144,99 @@ public class EditorStyleChecker implements IModelVisitor{
 		DUPLICATE_CLASS_NAME, DUPLICATE_METHOD_NAME;	
 	}
 
-	// XMQX - this class has two responsibilities - divide into two separate classes + maybe plus a helper class
-	// XMQX - static qualifier added
-	public static class DuplicateChecker {
-
-		private List<ClassNode> fClasses;
+	public static class DuplicatedMethodsChecker{
 		private List<MethodNode> fMethods;
 
-		public DuplicateChecker(List<ClassNode> classes, List<MethodNode> methods) {
-			fClasses = classes;
+		public DuplicatedMethodsChecker(List<MethodNode> methods) {
 			fMethods = methods;
-		}
-
-		public ErrorDescription checkForDuplicateClasses() {
-			List<String> classNameList = makeClassNamesList();
-			List<String> duplicatedNames = new ArrayList<String>();
-
-			// XMQX - I would to sth. like this
-			
-			// Pair<ClassNode, ClassNode> duplicates = getFirstPairOfDuplicates(fClasses)
-			// if (duplicates != null) {
-			//      return new ErrorDescription(duplicates.getFirst(), duplicates.getSecond(), CheckErrorCode.DUPLICATE_CLASS_NAME);
-		    // }
-			
-			if (hasDuplicate(classNameList)) { // XMQX - this is not necessary, 
-				// it is enough to check if duplicatedNames.isEmpty()
-				
-				duplicatedNames = getDuplicate(classNameList);
-
-				for (ClassNode cl: fClasses) {
-					if (cl.getName().equals(duplicatedNames.get(0))) {
-						return new ErrorDescription(cl, CheckErrorCode.DUPLICATE_CLASS_NAME);
-					}
-				}
-			}
-			return null;
 		}
 
 		public ErrorDescription checkForDuplicateMethods() {
 
-			// XMQX - avoid nested if/for/it etc.
-			// extract if (fMethods.get(i).. to a method e.g. compareTwoMethods(m1,m2);
-			
-			// XMQX -- nearly square complexity of this algorithm can be avoided
-			// using sort + compare neighbours - but Ok this could be because 
-			// there are not so many methods in the class
-			for (int i = 0; i < fMethods.size()-1; i++) {
-				for (int j = i+1; j < fMethods.size(); j++) {
-					if (fMethods.get(i).getName().equals(fMethods.get(j).getName())) {
-						// XMQX - too long line - around 100 is ok
-						if (compareParametersTypes(fMethods.get(i).getParameterTypes(), fMethods.get(j).getParameterTypes())) {
-							
-							// XMQX - this will be: ErrorDescription(fMethods.get(i), fMethods.get(j), CheckErrorCode.DUPLICATE_METHOD_NAME);
-							return new ErrorDescription(fMethods.get(i), CheckErrorCode.DUPLICATE_METHOD_NAME);
-						}
+			Collections.sort(fMethods, new Comparator<MethodNode>() {
+
+				@Override
+				public int compare(MethodNode node1, MethodNode node2) {
+					return node1.getName().compareTo(node2.getName());
+				}
+			});
+
+			for (int i = 0; i < fMethods.size() - 1; i++) {
+				if (areMethodNamesEqual(fMethods.get(i), fMethods.get(i + 1))){
+					if (areParameterTypesEqual(fMethods.get(i).getParameterTypes(), 
+							fMethods.get(i + 1).getParameterTypes())) {
+						return new ErrorDescription(fMethods.get(i), fMethods.get(i +1), 
+								CheckErrorCode.DUPLICATE_METHOD_NAME);
 					}
 				}
 			}
 			return null;
 		}
 
-		// XMQX rename to areParameterTypesEqual - this is an exception which 
-		// refers only to boolean methods - use are... or is... 
-		private boolean compareParametersTypes(List<String> parameterTypes, List<String> parameterTypes2) {
-
-			// XMQX - check obvious cases as early as possible (before creating the list)
-			// if (parameterTypes.size() == parameterTypes2.size()) {
-			//		return false;
-			// }
-			
-			
-			List<String> numericList = Arrays.asList("int", "double", "float", "long", "short", "byte");
-
-			// XMQX - this should generate an exception (also move it to the first place in the method)
-			if (parameterTypes == null && parameterTypes2 == null) {
+		private boolean areMethodNamesEqual(MethodNode methodNode, MethodNode methodNode2) {
+			if(methodNode.getName().equals(methodNode2.getName())){
 				return true;
 			}
-			
+			return false;
+		}
+
+		private boolean areParameterTypesEqual(List<String> parameterTypes, List<String> parameterTypes2) {
+
+			if (parameterTypes.size() != parameterTypes2.size()) {
+				return false;
+			}
+
+			List<String> numericList = Arrays.asList("int", "double", "float", "long", "short", "byte");			
+
 			if (parameterTypes.size() == parameterTypes2.size()) {
-				
-				// MQMX - i think, we should not sort the parameters, just compare if 
-				// the first parameteters match in both methods (eg. the one is int and another float etc.)
-				// then the next and so on
 				Collections.sort(parameterTypes);
 				Collections.sort(parameterTypes2);
 				if (parameterTypes.equals(parameterTypes2)) {
 					return true;
 				}
 
-				// XMQX
 				if (!Collections.disjoint(parameterTypes, numericList) && !Collections.disjoint(parameterTypes2, numericList)) {
 					return true;	
 				}
 			}
-			
 			return false;
 		}
+	}
+	public static class DuplicatedClassesChecker {
 
-		private List<String> makeClassNamesList() {
-			
-			List<String> classNames = new ArrayList<String>();
-			for (ClassNode cl: fClasses) {
-				classNames.add(cl.getName());
-			}
-			
-			return classNames;
+		private List<ClassNode> fClasses;
+
+
+		public DuplicatedClassesChecker(List<ClassNode> classes) {
+			fClasses = classes;
 		}
 
-		
-		// XMQX - it is not necessary to get all the duplicates - just the first pair
-		private List<String> getDuplicate(List<String> list) {
+		public ErrorDescription checkForDuplicateClasses() {
 
-			final List<String> duplicatedNames = new ArrayList<String>();
-			
-			Set<String> set = new HashSet<String>(){
+			Pair<ClassNode, ClassNode> duplicates = getFirstPairOfDuplicates();
+			if (duplicates != null) {
+				return new ErrorDescription(duplicates.getFirst(), duplicates.getSecond(), CheckErrorCode.DUPLICATE_CLASS_NAME);
+			}
+			return null;
+		}
 
-				private static final long serialVersionUID = 5714004217588411946L;
+		private Pair<ClassNode, ClassNode> getFirstPairOfDuplicates() {
+
+			Collections.sort(fClasses, new Comparator<ClassNode>(){
 
 				@Override
-				public boolean add(String name){
-					if (contains(name)) {
-						duplicatedNames.add(name);
-					}
-					return super.add(name);
+				public int compare(ClassNode node1, ClassNode node2){
+					return node1.getName().compareTo(node2.getName());
 				}
-			};
+			});
 
-			for (String name: list) {
-				set.add(name);
+			for(int index = 0; index < fClasses.size() - 1; index++) {
+				if(fClasses.get(index).getName().equals(fClasses.get(index + 1).getName())){
+					Pair<ClassNode, ClassNode> duplicatedpairs = new Pair<ClassNode, ClassNode>(fClasses.get(index), fClasses.get(index + 1));
+					return duplicatedpairs;
+				}
 			}
-
-			return duplicatedNames;
-		}
-
-		private boolean hasDuplicate(List<String> list) {
-
-			if (getDuplicate(list).isEmpty()) {
-				return false;	
-			}
-			return true;	
+			return null;
 		}
 	}
 }
