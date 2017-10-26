@@ -346,6 +346,30 @@ public class ActionDescriptionProvider {
 						getImageDescriptor("icons/help.gif")));
 
 		fActionDescriptions.add(
+				new ActionDescription(
+						ActionId.IMPORT_MODEL,
+						"importModel", 
+						"Import model",
+						null, 
+						null,
+						SWT.NONE,
+						SWT.NONE,
+						SWT.NONE,
+						getImageDescriptor("icons/help.gif")));
+
+		fActionDescriptions.add(
+				new ActionDescription(
+						ActionId.EXPORT_MODEL,
+						"exportModel", 
+						"Export model",
+						null, 
+						null,
+						SWT.NONE,
+						SWT.NONE,
+						SWT.NONE,
+						getImageDescriptor("icons/help.gif")));
+
+		fActionDescriptions.add(
 				new ActionDescriptionShort(
 						ActionId.CHECK_FOR_UPDATES,
 						CHECK_FOR_UPDATES_ACTION_ID, 

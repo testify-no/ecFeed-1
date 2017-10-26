@@ -20,6 +20,8 @@ import com.ecfeed.ui.modelif.IModelUpdateContext;
 public class ActionFactory {
 
 	private AboutAction fAboutAction = null;
+	private ImportModelAction fImportModelAction = null;
+	private ExportModelAction fExportModelAction = null;
 	private SaveAction fSaveAction = null;
 	private UndoAction fUndoAction = null;
 	private RedoAction fRedoAction = null;
@@ -50,7 +52,29 @@ public class ActionFactory {
 
 		return actionFactory.fAboutAction;
 	}
+	
+	public static ImportModelAction getImportModelAction() {
 
+		ActionFactory actionFactory = getSessionInstance();
+
+		if (actionFactory.fImportModelAction == null) {
+			actionFactory.fImportModelAction = new ImportModelAction();
+		}
+
+		return actionFactory.fImportModelAction;
+	}
+	
+	public static ExportModelAction getExportModelAction() {
+
+		ActionFactory actionFactory = getSessionInstance();
+
+		if (actionFactory.fExportModelAction == null) {
+			actionFactory.fExportModelAction = new ExportModelAction();
+		}
+
+		return actionFactory.fExportModelAction;
+	}	
+	
 	public static SaveAction getSaveAction() {
 
 		ActionFactory actionFactory = getSessionInstance();
