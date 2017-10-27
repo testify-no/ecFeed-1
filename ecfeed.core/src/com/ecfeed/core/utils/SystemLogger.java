@@ -114,6 +114,10 @@ public class SystemLogger {
 		}
 	}
 
+	public static void logTimedLine(String line) {
+		logLine(TimeStringHelper.getTimeLongString() + " - " + line); 
+	}
+
 	public static <T> void logListOfElements(String message, List<T> list) {
 
 		StringBuilder sb = new StringBuilder();

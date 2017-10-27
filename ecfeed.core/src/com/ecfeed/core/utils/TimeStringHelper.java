@@ -15,23 +15,32 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 
-public class UniqueStringHelper  {
+public class TimeStringHelper  {
 
-	public static String getQuasiUniqueString() {
+	public static String getTimeLongString() {
 
 		Date currentDate = new Date();
 
 		StringBuilder builder = new StringBuilder();
 
-		builder.append(new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(currentDate));
+		builder.append(new SimpleDateFormat("yyyy:MM:dd HH:mm:ss").format(currentDate));
 		builder.append("-");
 
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(currentDate);
 		long milliseconds = calendar.get(Calendar.MILLISECOND);
 		builder.append(milliseconds);
-		builder.append("-");
 
+		return builder.toString(); 
+	}
+	
+	public static String getQuasiUniqueString() {
+
+		StringBuilder builder = new StringBuilder();
+
+		builder.append(getTimeLongString());
+
+		builder.append("-");
 		Random rand = new Random();
 		String randomStr = Integer.toString(rand.nextInt(99999));
 		randomStr = StringHelper.insertZerosToLength(randomStr, 5);
