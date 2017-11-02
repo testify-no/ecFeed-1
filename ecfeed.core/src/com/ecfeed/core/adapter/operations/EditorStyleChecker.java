@@ -111,7 +111,13 @@ public class EditorStyleChecker implements IModelVisitor{
 	public Object visit(ChoiceNode node) throws Exception {
 		return null;
 	}
-
+	
+	public static ErrorDescription canSwitchToSimpleModel(RootNode rootNode) throws Exception {
+		
+		ErrorDescription errorDescription = (ErrorDescription) rootNode.accept(new EditorStyleChecker());
+		
+		return errorDescription;
+	}
 
 	public static class ErrorDescription {
 		private AbstractNode fNode;
@@ -126,6 +132,11 @@ public class EditorStyleChecker implements IModelVisitor{
 			fNode = node;
 			fDuplicateNode = duplicateNode;
 			fErrorCode = errorCode;
+		}
+		
+		public String createErrorMessage() {
+			//TODO create a better error message.
+			return fErrorCode + " " + fNode + " " + "is a duplicate of " + fDuplicateNode + " ";
 		}
 
 		public CheckErrorCode getErrorCode() {
