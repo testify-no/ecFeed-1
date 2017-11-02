@@ -11,13 +11,18 @@
 package com.ecfeed.ui.editor;
 
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IFormPart;
 
+import com.ecfeed.core.adapter.operations.EditorStyleChecker;
+import com.ecfeed.core.adapter.operations.EditorStyleChecker.ErrorDescription;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.RootNode;
+import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.dialogs.basic.ErrorDialog;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.RootInterface;
 
@@ -76,12 +81,36 @@ public class ModelDetailsPage extends BasicDetailsPage {
 
 		FormObjectToolkit formObjectToolkit = getFormObjectToolkit();
 		Composite composite = formObjectToolkit.createGridComposite(parent, 2);		
+		
+		formObjectToolkit.createButton(composite, "Switch edit mode",
+				new SwitchEditModeButtonSelectionAdapter());
 
 		formObjectToolkit.createLabel(composite, "Model name");
 		fModelNameText = formObjectToolkit.createGridText(composite, new ModelNameApplier());
 		formObjectToolkit.paintBorders(composite);
 	}
-
+	
+	class SwitchEditModeButtonSelectionAdapter extends ButtonClickListener {
+		
+		@Override
+		public void widgetSelected(SelectionEvent arg0)
+		{
+			RootNode rootNode = fRootIf.getOwnNode();
+		
+			try {
+				ErrorDescription errorDescription = EditorStyleChecker.canSwitchToSimpleModel(rootNode);
+				
+				if (errorDescription != null) {
+					String message = errorDescription.createErrorMessage();
+					ErrorDialog.open(message);
+				}	
+				
+			} catch (Exception e) {
+				SystemLogger.logCatch(e.getMessage());
+			}
+		}
+	}
+	
 	@Override
 	public void refresh() {
 		super.refresh();
