@@ -53,12 +53,12 @@ public class ActionDescriptionProvider {
 	private static final String PASTE_ACTION_MAC_SHORTCUT = "Cmd+V";
 
 	private static final String INSERT_ACTION_NAME = "Insert";
-	private static final String INSERT_ACTION_SHORTCUT = "Ctrl+I";
-	private static final String INSERT_ACTION_MAC_SHORTCUT = "Cmd+I";
+	private static final String INSERT_ACTION_SHORTCUT = "Ins";
+	private static final String INSERT_ACTION_MAC_SHORTCUT = "Ins";
 
 	private static final String DELETE_ACTION_NAME = "Delete";
-	private static final String DELETE_ACTION_SHORTCUT = "Ctrl+D";
-	private static final String DELETE_ACTION_MAC_SHORTCUT = "Cmd+D";
+	private static final String DELETE_ACTION_SHORTCUT = "Del";
+	private static final String DELETE_ACTION_MAC_SHORTCUT = "Del";
 
 	private static final String SELECT_ALL_ACTION_NAME = "Select All";
 	private static final String SELECT_ALL_ACTION_SHORTCUT = "Ctrl+A";
@@ -207,9 +207,9 @@ public class ActionDescriptionProvider {
 						INSERT_ACTION_NAME, 
 						INSERT_ACTION_SHORTCUT, 
 						INSERT_ACTION_MAC_SHORTCUT, 
-						'i',
-						SWT.CTRL,
-						SWT.COMMAND,
+						SWT.INSERT,
+						SWT.NONE,
+						SWT.NONE,
 						null));
 
 		fActionDescriptions.add(
@@ -219,9 +219,9 @@ public class ActionDescriptionProvider {
 						DELETE_ACTION_NAME, 
 						DELETE_ACTION_SHORTCUT, 
 						DELETE_ACTION_MAC_SHORTCUT, 
-						'd',
-						SWT.CTRL,
-						SWT.COMMAND,
+						SWT.DEL,
+						SWT.NONE,
+						SWT.NONE,
 						null));
 
 		fActionDescriptions.add(

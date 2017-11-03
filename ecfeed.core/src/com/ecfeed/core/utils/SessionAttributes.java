@@ -11,4 +11,5 @@ public class SessionAttributes {
 	public static final String SA_ACTION_FACTORY = "SA_ACTION_FACTORY";
 	public static final String SA_CONSOLE_MANAGER = "SA_CONSOLE_MANAGER";
 	public static final String SA_RAP_MODEL_UPDATE_CONTEXT = "SA_RAP_MODEL_UPDATE_CONTEXT";
+	public static final String SA_DELETE_ACTION_START_TIME = "SA_DELETE_ACTION_START_TIME";
 }
