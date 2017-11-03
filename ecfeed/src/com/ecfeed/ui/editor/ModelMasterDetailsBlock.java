@@ -86,7 +86,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 			return;
 		}
 
-		fEcFormToolkit = new EcFormToolkit(managedForm.getToolkit(), false); 
+		fEcFormToolkit = new EcFormToolkit(managedForm.getToolkit()); 
 
 		fMasterSection = new ModelMasterSection(this, fJavaProjectProvider);
 		fMasterSection.initialize(managedForm);

@@ -31,11 +31,9 @@ import com.ecfeed.ui.common.CommonEditHelper;
 public class EcFormToolkit {
 
 	private FormToolkitAdapter fFormToolkitAdapter = null;
-	private boolean fIsRap;
 
-	public EcFormToolkit(FormToolkit formToolkit, boolean isRap) {
+	public EcFormToolkit(FormToolkit formToolkit) {
 		fFormToolkitAdapter = new FormToolkitAdapter(formToolkit);
-		fIsRap = isRap;
 	}
 
 	public FormToolkit getEclipseToolkit() {
@@ -62,10 +60,7 @@ public class EcFormToolkit {
 
 		Composite composite = fFormToolkitAdapter.createComposite(parentComposite);
 		composite.setLayout(new GridLayout(countOfColumns, false));
-		
-		if (!fIsRap) {
-			composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
-		}
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 
 		return composite;
 	}
