@@ -20,7 +20,7 @@ import org.eclipse.swt.widgets.Shell;
 
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.ui.dialogs.CulpritAnalysisDialog;
-import com.ecfeed.ui.modelif.TestResultsHolder;
+import com.ecfeed.ui.dialogs.TestResultsHolder;
 
 import org.eclipse.jface.dialogs.ErrorDialog;
 

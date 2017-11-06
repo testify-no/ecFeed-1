@@ -8,7 +8,7 @@
  *  
  *******************************************************************************/
 
-package com.ecfeed.ui.modelif;
+package com.ecfeed.ui.dialogs;
 
 import java.util.ArrayList;
 import java.util.List;

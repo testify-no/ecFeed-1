@@ -12,6 +12,7 @@ package com.ecfeed.ui.modelif;
 
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.ui.common.Messages;
+import com.ecfeed.ui.dialogs.TestResultsHolder;
 
 public class ExecutionTestInformer extends AbstractTestInformer {
 	
