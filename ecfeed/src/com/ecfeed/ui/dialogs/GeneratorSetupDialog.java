@@ -226,6 +226,11 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 	}
 
 	private String getTargetFileForRap() {
+		
+		if (fExportTemplate == null) {
+			return fMethod.getName(); 
+		}
+		
 		return fMethod.getName() + "." + fExportTemplate.getFileExtension();
 	}
 
