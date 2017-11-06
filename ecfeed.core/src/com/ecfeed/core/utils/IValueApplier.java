@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html 
  *  
  *******************************************************************************/
-package com.ecfeed.ui.editor;
+package com.ecfeed.core.utils;
 
 
 public interface IValueApplier {

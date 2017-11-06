@@ -65,6 +65,7 @@ import com.ecfeed.core.serialization.export.ExportTemplateFactory;
 import com.ecfeed.core.serialization.export.IExportTemplate;
 import com.ecfeed.core.utils.ApplicationContext;
 import com.ecfeed.core.utils.CommonConstants;
+import com.ecfeed.core.utils.IValueApplier;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.StringHolder;
 import com.ecfeed.ui.common.ApplyValueMode;
@@ -76,7 +77,6 @@ import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.TestCasesExportDialog.FileCompositeVisibility;
 import com.ecfeed.ui.dialogs.basic.DialogObjectToolkit;
 import com.ecfeed.ui.dialogs.basic.InfoDialog;
-import com.ecfeed.ui.editor.IValueApplier;
 
 public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 	private Combo fTestSuiteCombo;

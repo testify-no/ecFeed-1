@@ -18,6 +18,7 @@ import org.eclipse.ui.forms.IFormPart;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.utils.ApplicationContext;
+import com.ecfeed.core.utils.IValueApplier;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.RootInterface;
