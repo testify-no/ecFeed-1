@@ -22,8 +22,8 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.runner.RunnerException;
 import com.ecfeed.ui.common.Messages;
+import com.ecfeed.ui.dialogs.AdvancedStatisticsButtonDialog;
 import com.ecfeed.ui.dialogs.TestResultsHolder;
-import com.ecfeed.ui.dialogs.basic.AdvancedStatisticsButtonDialog;
 import com.ecfeed.ui.plugin.Activator;
 
 public abstract class AbstractTestInformer {

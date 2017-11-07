@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html 
  *  
  *******************************************************************************/
-package com.ecfeed.ui.dialogs.basic;
+package com.ecfeed.ui.dialogs;
 
 
 import org.eclipse.core.runtime.IStatus;
@@ -19,8 +19,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 
 import com.ecfeed.core.model.MethodNode;
-import com.ecfeed.ui.dialogs.CulpritAnalysisDialog;
-import com.ecfeed.ui.dialogs.TestResultsHolder;
 
 import org.eclipse.jface.dialogs.ErrorDialog;
 
