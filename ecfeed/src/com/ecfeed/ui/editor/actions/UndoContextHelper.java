@@ -19,7 +19,7 @@ import com.ecfeed.core.utils.SessionAttributes;
 import com.ecfeed.ui.editor.ModelEditorHelper;
 
 
-public class ActionContextHelper {
+public class UndoContextHelper {
 
 	public static void setOnceRapUndoContextObject(Object obj) {
 

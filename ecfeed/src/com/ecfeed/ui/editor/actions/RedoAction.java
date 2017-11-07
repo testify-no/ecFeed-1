@@ -26,7 +26,7 @@ public class RedoAction extends DescribedAction {
 	@Override
 	public void run() {
 		IOperationHistory operationHistory = OperationHistoryFactory.getOperationHistory();
-		IUndoContext undoContext = ActionContextHelper.getUndoContext();
+		IUndoContext undoContext = UndoContextHelper.getUndoContext();
 
 		try {
 			operationHistory.redo(undoContext, null, null);
