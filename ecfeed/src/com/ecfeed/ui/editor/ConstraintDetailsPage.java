@@ -25,6 +25,7 @@ import com.ecfeed.core.model.ConstraintNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.utils.ApplicationContext;
 import com.ecfeed.ui.common.AbstractSelectionAdapter;
+import com.ecfeed.ui.common.FocusLostListener;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.modelif.ConstraintInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
