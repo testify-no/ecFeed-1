@@ -10,6 +10,8 @@
 
 package com.ecfeed.ui.editor;
 
+import com.ecfeed.ui.common.AbstractSelectionAdapter;
+
 public abstract class ButtonClickListener extends AbstractSelectionAdapter {
 
 }

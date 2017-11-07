@@ -8,7 +8,7 @@
  *  
  *******************************************************************************/
 
-package com.ecfeed.ui.editor;
+package com.ecfeed.ui.common;
 
 public abstract class ComboSelectionListener extends AbstractSelectionAdapter {
 

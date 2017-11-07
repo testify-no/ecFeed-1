@@ -27,6 +27,7 @@ import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.utils.ApplicationContext;
 import com.ecfeed.core.utils.IValueApplier;
 import com.ecfeed.core.utils.JavaTypeHelper;
+import com.ecfeed.ui.common.ComboSelectionListener;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.ecfeed.ui.modelif.ChoiceInterface;

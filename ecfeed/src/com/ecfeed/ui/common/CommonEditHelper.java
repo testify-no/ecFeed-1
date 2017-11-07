@@ -17,8 +17,6 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
 import com.ecfeed.core.utils.IValueApplier;
-import com.ecfeed.ui.editor.AbstractSelectionAdapter;
-import com.ecfeed.ui.editor.ComboSelectionListener;
 import com.ecfeed.ui.editor.FocusLostListener;
 
 public class CommonEditHelper {
