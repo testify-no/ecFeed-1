@@ -64,7 +64,8 @@ public class ModelMasterSection extends TreeViewerSection {
 						getTreeViewer(), 
 						getModelUpdateContext(), 
 						javaProjectProvider, 
-						false);
+						false,
+						new EditorSaveWorker());
 
 		registerContextMenuAndKeyShortcuts(modelViewerActionProvider);		
 

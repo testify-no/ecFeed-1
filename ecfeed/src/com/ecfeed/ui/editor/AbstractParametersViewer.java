@@ -79,7 +79,12 @@ public abstract class AbstractParametersViewer extends TableViewerSection {
 
 		addDoubleClickListener(new SelectNodeDoubleClickListener(mainTreeProvider));
 
-		registerContextMenuAndKeyShortcuts(new MainActionGrouppingProvider(getTableViewer(), getModelUpdateContext(), javaProjectProvider));
+		registerContextMenuAndKeyShortcuts(
+				new MainActionGrouppingProvider(getTableViewer(), 
+						getModelUpdateContext(), 
+						javaProjectProvider,
+						new EditorSaveWorker()));
+
 		addSelectionChangedListener(new SelectionChangedListener());
 	}
 

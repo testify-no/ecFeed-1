@@ -8,35 +8,15 @@
  *  
  *******************************************************************************/
 
-package com.ecfeed.ui.editor.actions;
+package com.ecfeed.ui.editor;
 
-import com.ecfeed.core.utils.ApplicationContext;
 import com.ecfeed.core.utils.IWorker;
 
-public class SaveAction extends DescribedAction {
-
-	private IWorker fSaveWorker;
-
-	public SaveAction(IWorker saveWorker) {
-		super(ActionId.SAVE);
-		fSaveWorker = saveWorker;
-	}
+public class EditorSaveWorker implements IWorker {
 
 	@Override
-	public void run() {
-
-		fSaveWorker.doWork();
+	public void doWork() {
+		
+		ModelEditorHelper.saveActiveEditor();
 	}
-
-	@Override
-	public boolean isEnabled() {
-
-		if (ApplicationContext.isApplicationTypeLocal()) {
-			return true;
-		}
-
-		return false;
-	}
-
 }
-

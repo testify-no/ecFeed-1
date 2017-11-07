@@ -13,6 +13,7 @@ package com.ecfeed.ui.editor.actions;
 import org.eclipse.jface.viewers.ISelectionProvider;
 
 import com.ecfeed.application.SessionDataStore;
+import com.ecfeed.core.utils.IWorker;
 import com.ecfeed.core.utils.SessionAttributes;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
@@ -75,12 +76,12 @@ public class ActionFactory {
 		return actionFactory.fExportModelAction;
 	}	
 	
-	public static SaveAction getSaveAction() {
+	public static SaveAction getSaveAction(IWorker saveWorker) {
 
 		ActionFactory actionFactory = getSessionInstance();
 
 		if (actionFactory.fSaveAction == null) {
-			actionFactory.fSaveAction = new SaveAction();
+			actionFactory.fSaveAction = new SaveAction(saveWorker);
 		}
 
 		return actionFactory.fSaveAction;

@@ -17,6 +17,7 @@ import org.eclipse.jface.viewers.TreeViewer;
 
 import com.ecfeed.core.adapter.IModelImplementer;
 import com.ecfeed.core.utils.ApplicationContext;
+import com.ecfeed.core.utils.IWorker;
 import com.ecfeed.ui.common.EclipseModelImplementer;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
@@ -35,9 +36,10 @@ public class MainActionGrouppingProvider extends BasicActionGrouppingProvider {
 			TreeViewer viewer, 
 			IModelUpdateContext context, 
 			IJavaProjectProvider javaProjectProvider,
-			boolean selectRoot) {
+			boolean selectRoot,
+			IWorker saveWorker) {
 
-		addEditActions(viewer, viewer, context, javaProjectProvider);
+		addEditActions(viewer, viewer, context, javaProjectProvider, saveWorker);
 
 		if (javaProjectProvider != null && ApplicationContext.isProjectAvailable()){
 			addImplementationActions(viewer, context, javaProjectProvider);
@@ -53,9 +55,10 @@ public class MainActionGrouppingProvider extends BasicActionGrouppingProvider {
 	public MainActionGrouppingProvider(
 			TableViewer viewer, 
 			IModelUpdateContext context, 
-			IJavaProjectProvider javaProjectProvider) {
+			IJavaProjectProvider javaProjectProvider,
+			IWorker saveWorker) {
 
-		addEditActions(viewer, viewer, context, javaProjectProvider);
+		addEditActions(viewer, viewer, context, javaProjectProvider, saveWorker);
 
 		if (javaProjectProvider != null && ApplicationContext.isProjectAvailable()) {
 			addImplementationActions(viewer, context, javaProjectProvider);
@@ -69,7 +72,8 @@ public class MainActionGrouppingProvider extends BasicActionGrouppingProvider {
 			ISelectionProvider selectionProvider,
 			StructuredViewer structuredViewer,
 			IModelUpdateContext context,
-			IJavaProjectProvider javaProjectProvider) {
+			IJavaProjectProvider javaProjectProvider,
+			IWorker saveWorker) {
 
 		DeleteAction deleteAction = new DeleteAction(selectionProvider, context);
 		addAction(EDIT_GROUP, ActionFactory.getCopyAction());
@@ -79,12 +83,12 @@ public class MainActionGrouppingProvider extends BasicActionGrouppingProvider {
 		addAction(EDIT_GROUP, new InsertAction(selectionProvider, structuredViewer, context, javaProjectProvider)); 
 		addAction(EDIT_GROUP, deleteAction);
 
-		addBasicEditActions();
+		addBasicEditActions(saveWorker);
 	}
 
-	private void addBasicEditActions() {
+	private void addBasicEditActions(IWorker saveWorker) {
 
-		addAction(EDIT_GROUP, ActionFactory.getSaveAction());
+		addAction(EDIT_GROUP, ActionFactory.getSaveAction(saveWorker));
 		addAction(EDIT_GROUP, ActionFactory.getUndoAction());
 		addAction(EDIT_GROUP, ActionFactory.getRedoAction());
 	}

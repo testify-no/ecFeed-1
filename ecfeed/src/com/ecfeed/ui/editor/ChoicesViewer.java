@@ -272,12 +272,18 @@ public class ChoicesViewer extends TableViewerSection {
 								new DeleteAction(
 										getViewer(), 
 										getModelUpdateContext()), 
-										Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
+								Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
 
 		fReplaceWithDefaultButton = addButton("Reset with default", new ReplaceWithDefaultAdapter());
 
 		addDoubleClickListener(new SelectNodeDoubleClickListener(mainTreeProvider));
-		fActionGroupingProvider = new MainActionGrouppingProvider(getTableViewer(), getModelUpdateContext(), javaProjectProvider);
+		fActionGroupingProvider = 
+				new MainActionGrouppingProvider(
+						getTableViewer(), 
+						getModelUpdateContext(), 
+						javaProjectProvider,
+						new EditorSaveWorker());
+
 		registerContextMenuAndKeyShortcuts(fActionGroupingProvider);
 		fDragListener = new ModelNodeDragListener(getViewer());
 		fDropListener = new ModelNodeDropListener(getViewer(), getModelUpdateContext(), javaProjectProvider);

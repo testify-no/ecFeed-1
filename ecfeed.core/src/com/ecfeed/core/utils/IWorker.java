@@ -7,36 +7,11 @@
  * http://www.eclipse.org/legal/epl-v10.html 
  *  
  *******************************************************************************/
+package com.ecfeed.core.utils;
 
-package com.ecfeed.ui.editor.actions;
 
-import com.ecfeed.core.utils.ApplicationContext;
-import com.ecfeed.core.utils.IWorker;
-
-public class SaveAction extends DescribedAction {
-
-	private IWorker fSaveWorker;
-
-	public SaveAction(IWorker saveWorker) {
-		super(ActionId.SAVE);
-		fSaveWorker = saveWorker;
-	}
-
-	@Override
-	public void run() {
-
-		fSaveWorker.doWork();
-	}
-
-	@Override
-	public boolean isEnabled() {
-
-		if (ApplicationContext.isApplicationTypeLocal()) {
-			return true;
-		}
-
-		return false;
-	}
+public interface IWorker {
+	
+	void doWork();
 
 }
-
