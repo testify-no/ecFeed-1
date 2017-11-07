@@ -8,7 +8,7 @@
  *  
  *******************************************************************************/
 
-package com.ecfeed.ui.editor.actions;
+package com.ecfeed.context;
 
 import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.core.commands.operations.ObjectUndoContext;
@@ -23,7 +23,7 @@ public class UndoContextHelper {
 
 	public static void setOnceRapUndoContextObject(Object obj) {
 
-		ObjectUndoContext objectUndoContext = getRapUndoContext();
+		ObjectUndoContext objectUndoContext = getRapContextFromDataStore();
 
 		if (objectUndoContext != null) {
 			return;
@@ -39,10 +39,10 @@ public class UndoContextHelper {
 			return ModelEditorHelper.getActiveModelEditor().getUndoContext();
 		}
 
-		return getRapUndoContext();
+		return getRapContextFromDataStore();
 	}
 
-	private static ObjectUndoContext getRapUndoContext() {
+	private static ObjectUndoContext getRapContextFromDataStore() {
 
 		return (ObjectUndoContext)SessionDataStore.get(SessionAttributes.SA_RAP_UNDO_CONTEXT);
 	}

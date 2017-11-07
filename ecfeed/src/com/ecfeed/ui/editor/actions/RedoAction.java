@@ -15,6 +15,7 @@ import org.eclipse.core.commands.operations.IOperationHistory;
 import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.core.commands.operations.OperationHistoryFactory;
 
+import com.ecfeed.context.UndoContextHelper;
 import com.ecfeed.core.utils.SystemLogger;
 
 public class RedoAction extends DescribedAction {
