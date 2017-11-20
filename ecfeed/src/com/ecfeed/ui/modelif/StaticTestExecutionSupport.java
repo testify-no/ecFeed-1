@@ -40,6 +40,7 @@ import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 public class StaticTestExecutionSupport {
 
 	private Collection<TestCaseNode> fTestCases;
+	private ModelClassLoader fModelClassLoader;
 	private JavaTestRunner fRunner;
 	private List<TestCaseNode> fFailedTests;
 	private IJavaProjectProvider fJavaProjectProvider;
@@ -99,8 +100,8 @@ public class StaticTestExecutionSupport {
 		super();
 		ftestResultsHolder = new TestResultsHolder();
 		ILoaderProvider loaderProvider = new EclipseLoaderProvider();
-		ModelClassLoader loader = loaderProvider.getLoader(true, null);
-		fRunner = new JavaTestRunner(loader, false, testMethodInvoker);
+		fModelClassLoader = loaderProvider.getLoader(true, null);
+		fRunner = new JavaTestRunner(fModelClassLoader, false, testMethodInvoker);
 		fTestCases = testCases;
 		TestCaseNode testCase = fTestCases.iterator().next();
 		fFailedTests = new ArrayList<>();
@@ -109,7 +110,20 @@ public class StaticTestExecutionSupport {
 		fTestInformer = new ExecutionTestInformer(testCase.getMethod(), ftestResultsHolder);
 	}
 
-	public void proceed(){
+	public void proceed() {
+
+		Thread currentThread = Thread.currentThread(); 
+		ClassLoader previousClassLoader = currentThread.getContextClassLoader();
+
+		try {
+			currentThread.setContextClassLoader(fModelClassLoader);
+			proceedInternal();
+		} finally {
+			currentThread.setContextClassLoader(previousClassLoader);
+		}
+	}
+
+	private void proceedInternal(){
 		PrintStream currentOut = System.out;
 		ConsoleManager.prepareOutput();
 
