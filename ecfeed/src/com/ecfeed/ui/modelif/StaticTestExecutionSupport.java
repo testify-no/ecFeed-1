@@ -39,6 +39,7 @@ import com.ecfeed.ui.common.utils.IFileInfoProvider;
 public class StaticTestExecutionSupport {
 
 	private Collection<TestCaseNode> fTestCases;
+	private ModelClassLoader fModelClassLoader;
 	private JavaTestRunner fRunner;
 	private List<TestCaseNode> fFailedTests;
 	private IFileInfoProvider fFileInfoProvider;
@@ -92,8 +93,8 @@ public class StaticTestExecutionSupport {
 			TestRunMode testRunMode){
 		super();
 		ILoaderProvider loaderProvider = new EclipseLoaderProvider();
-		ModelClassLoader loader = loaderProvider.getLoader(true, null);
-		fRunner = new JavaTestRunner(loader, false, testMethodInvoker);
+		fModelClassLoader = loaderProvider.getLoader(true, null);
+		fRunner = new JavaTestRunner(fModelClassLoader, false, testMethodInvoker);
 		fTestCases = testCases;
 		fFailedTests = new ArrayList<>();
 		fFileInfoProvider = fileInfoProvider;
@@ -101,7 +102,20 @@ public class StaticTestExecutionSupport {
 		fTestInformer = new ExecutionTestInformer();
 	}
 
-	public void proceed(){
+	public void proceed() {
+
+		Thread currentThread = Thread.currentThread(); 
+		ClassLoader previousClassLoader = currentThread.getContextClassLoader();
+
+		try {
+			currentThread.setContextClassLoader(fModelClassLoader);
+			proceedInternal();
+		} finally {
+			currentThread.setContextClassLoader(previousClassLoader);
+		}
+	}
+
+	private void proceedInternal(){
 		PrintStream currentOut = System.out;
 		ConsoleManager.displayConsole();
 		ConsoleManager.redirectSystemOutputToStream(ConsoleManager.getOutputStream());

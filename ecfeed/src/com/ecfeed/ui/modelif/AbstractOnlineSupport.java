@@ -46,6 +46,7 @@ public abstract class AbstractOnlineSupport {
 	}
 
 	private MethodNode fMethodNode;
+	private ModelClassLoader fModelClassLoader;
 	private JavaTestRunner fRunner;
 	private IFileInfoProvider fFileInfoProvider;
 	private String fTargetFile;
@@ -64,8 +65,8 @@ public abstract class AbstractOnlineSupport {
 			IFileInfoProvider fileInfoProvider,
 			boolean isExport) {
 		ILoaderProvider loaderProvider = new EclipseLoaderProvider();
-		ModelClassLoader loader = loaderProvider.getLoader(true, null);
-		fRunner = new JavaTestRunner(loader, isExport, testMethodInvoker);
+		fModelClassLoader = loaderProvider.getLoader(true, null);
+		fRunner = new JavaTestRunner(fModelClassLoader, isExport, testMethodInvoker);
 		fFileInfoProvider = fileInfoProvider;
 		fTestRunMode = TestRunModeHelper.getTestRunMode(methodNode);
 		fTestInformer = createTestInformer(isExport);
@@ -101,7 +102,20 @@ public abstract class AbstractOnlineSupport {
 	protected abstract void displayRunSummary();
 
 	public Result proceed() {
-		return run();
+
+		Thread currentThread = Thread.currentThread(); 
+		ClassLoader previousClassLoader = currentThread.getContextClassLoader();
+
+		Result result = Result.CANCELED;
+
+		try {
+			currentThread.setContextClassLoader(fModelClassLoader);
+			result = run();
+		} finally {
+			currentThread.setContextClassLoader(previousClassLoader);
+		}
+
+		return result;
 	}
 
 	private void setOwnMethodNode(MethodNode methodNode) {
