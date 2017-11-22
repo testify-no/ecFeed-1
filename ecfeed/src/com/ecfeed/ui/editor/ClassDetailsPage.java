@@ -26,6 +26,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import com.ecfeed.android.utils.AndroidBaseRunnerHelper;
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ClassNode;
@@ -47,6 +48,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	private Text fPackageNameText;
 	private Button fRunOnAndroidCheckbox;
 	private Label fAndroidBaseRunnerLabel;
+	private Label fPackageNameLabel;
 	private Combo fAndroidBaseRunnerCombo;	
 	private ClassInterface fClassIf;
 	private GlobalParametersViewer fGlobalParametersSection;
@@ -114,18 +116,30 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
 		FormObjectToolkit formObjectToolkit = getFormObjectToolkit(); 
-
-
-		formObjectToolkit.createLabel(composite, "Package name");
-		fPackageNameText = formObjectToolkit.createGridText(composite, new PackageNameApplier());
-		formObjectToolkit.createEmptyLabel(composite);
-
-
+		
 		formObjectToolkit.createLabel(composite, "Class name");
 		fClassNameText = formObjectToolkit.createGridText(composite, new ClassNameApplier());
 		if (fFileInfoProvider.isProjectAvailable()) {
 			formObjectToolkit.createButton(composite, "Browse...", new BrowseClassesSelectionListener());
 		}
+		formObjectToolkit.createEmptyLabel(composite);
+
+		
+		fPackageNameLabel = formObjectToolkit.createLabel(composite, "Package name");
+		fPackageNameText = formObjectToolkit.createGridText(composite, new PackageNameApplier());
+//		formObjectToolkit.createEmptyLabel(composite);
+		if (ApplicationContext.getSimplifiedUI()) {
+			fPackageNameLabel.setVisible(false);
+			fPackageNameText.setVisible(false);	
+		} else {
+			fPackageNameLabel.setVisible(true);
+			fPackageNameText.setVisible(true);	
+		}
+		
+		
+		
+
+		
 
 		formObjectToolkit.paintBorders(composite);
 	}
@@ -203,8 +217,15 @@ public class ClassDetailsPage extends BasicDetailsPage {
 			//			String title = fClassIf.getQualifiedName() + " [" + fClassIf.getImplementationStatus() + "]";
 			getMainSection().setText(title);
 			fClassNameText.setText(fClassIf.getLocalName());
+			
+			if(ApplicationContext.getSimplifiedUI()){
+				fPackageNameText.setVisible(false);
+				fPackageNameLabel.setVisible(false);
+			} else {
+				fPackageNameLabel.setVisible(true);
+				fPackageNameText.setVisible(true);
+			}
 			fPackageNameText.setText(fClassIf.getPackageName());
-
 			if (fIsAndroidProject) {
 				refreshAndroid();
 			}
@@ -308,7 +329,11 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		@Override
 		public void applyValue() {
 			fClassIf.setPackageName(fPackageNameText.getText());
-			fPackageNameText.setText(fClassIf.getPackageName());
+			if(ApplicationContext.getSimplifiedUI()){
+				fPackageNameText.setVisible(false);
+			} else {
+				fPackageNameText.setText(fClassIf.getPackageName());
+			}
 		}
 	}	
 
