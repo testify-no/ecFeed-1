@@ -16,6 +16,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IFormPart;
 
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.adapter.operations.EditorStyleChecker;
 import com.ecfeed.core.adapter.operations.EditorStyleChecker.ErrorDescription;
 import com.ecfeed.core.model.AbstractNode;
@@ -84,6 +85,7 @@ public class ModelDetailsPage extends BasicDetailsPage {
 		
 		formObjectToolkit.createButton(composite, "Switch edit mode",
 				new SwitchEditModeButtonSelectionAdapter());
+		formObjectToolkit.createEmptyLabel(composite);
 
 		formObjectToolkit.createLabel(composite, "Model name");
 		fModelNameText = formObjectToolkit.createGridText(composite, new ModelNameApplier());
@@ -101,9 +103,20 @@ public class ModelDetailsPage extends BasicDetailsPage {
 				ErrorDescription errorDescription = EditorStyleChecker.canSwitchToSimpleModel(rootNode);
 				
 				if (errorDescription != null) {
+					ApplicationContext.setSimplifiedUI(false);
+					refresh();
 					String message = errorDescription.createErrorMessage();
 					ErrorDialog.open(message);
-				}	
+				} else {
+					if(ApplicationContext.getSimplifiedUI()){
+						ApplicationContext.setSimplifiedUI(false);
+						refresh();
+					} else {
+						ApplicationContext.setSimplifiedUI(true);
+						refresh();
+					}
+				}
+				System.out.println(ApplicationContext.getSimplifiedUI());
 				
 			} catch (Exception e) {
 				SystemLogger.logCatch(e.getMessage());
@@ -121,6 +134,7 @@ public class ModelDetailsPage extends BasicDetailsPage {
 			fClassesSection.setInput(selectedRoot);
 			fParametersSection.setInput(selectedRoot);
 			fCommentsSection.setInput(selectedRoot);
+			
 		}
 	}
 
