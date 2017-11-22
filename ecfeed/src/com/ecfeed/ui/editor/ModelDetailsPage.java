@@ -90,6 +90,8 @@ public class ModelDetailsPage extends BasicDetailsPage {
 		formObjectToolkit.createLabel(composite, "Model name");
 		fModelNameText = formObjectToolkit.createGridText(composite, new ModelNameApplier());
 		formObjectToolkit.paintBorders(composite);
+		formObjectToolkit.createEmptyLabel(composite);
+
 	}
 	
 	class SwitchEditModeButtonSelectionAdapter extends ButtonClickListener {
@@ -104,22 +106,25 @@ public class ModelDetailsPage extends BasicDetailsPage {
 				
 				if (errorDescription != null) {
 					ApplicationContext.setSimplifiedUI(false);
-					refresh();
 					String message = errorDescription.createErrorMessage();
 					ErrorDialog.open(message);
 				} else {
-					if(ApplicationContext.getSimplifiedUI()){
-						ApplicationContext.setSimplifiedUI(false);
-						refresh();
-					} else {
-						ApplicationContext.setSimplifiedUI(true);
-						refresh();
-					}
+					modifyModeView();
 				}
-				System.out.println(ApplicationContext.getSimplifiedUI());
 				
 			} catch (Exception e) {
 				SystemLogger.logCatch(e.getMessage());
+			}
+			
+			refresh();
+		}
+
+		private void modifyModeView() {
+			
+			if (ApplicationContext.getSimplifiedUI()) {
+				ApplicationContext.setSimplifiedUI(false);
+			} else {
+				ApplicationContext.setSimplifiedUI(true);
 			}
 		}
 	}

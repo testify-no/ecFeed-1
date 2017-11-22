@@ -122,19 +122,11 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		if (fFileInfoProvider.isProjectAvailable()) {
 			formObjectToolkit.createButton(composite, "Browse...", new BrowseClassesSelectionListener());
 		}
-		formObjectToolkit.createEmptyLabel(composite);
-
 		
 		fPackageNameLabel = formObjectToolkit.createLabel(composite, "Package name");
 		fPackageNameText = formObjectToolkit.createGridText(composite, new PackageNameApplier());
-//		formObjectToolkit.createEmptyLabel(composite);
-		if (ApplicationContext.getSimplifiedUI()) {
-			fPackageNameLabel.setVisible(false);
-			fPackageNameText.setVisible(false);	
-		} else {
-			fPackageNameLabel.setVisible(true);
-			fPackageNameText.setVisible(true);	
-		}
+		controlPackageNameDisplay();
+		formObjectToolkit.createEmptyLabel(composite);
 		
 		
 		
@@ -142,6 +134,17 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		
 
 		formObjectToolkit.paintBorders(composite);
+	}
+
+	private void controlPackageNameDisplay() {
+		
+		if (ApplicationContext.getSimplifiedUI()) {
+			fPackageNameLabel.setVisible(false);
+			fPackageNameText.setVisible(false);	
+		} else {
+			fPackageNameLabel.setVisible(true);
+			fPackageNameText.setVisible(true);	
+		}	
 	}
 
 	private void initAndFillAndroidComposite(Composite composite) {
@@ -217,15 +220,9 @@ public class ClassDetailsPage extends BasicDetailsPage {
 			//			String title = fClassIf.getQualifiedName() + " [" + fClassIf.getImplementationStatus() + "]";
 			getMainSection().setText(title);
 			fClassNameText.setText(fClassIf.getLocalName());
-			
-			if(ApplicationContext.getSimplifiedUI()){
-				fPackageNameText.setVisible(false);
-				fPackageNameLabel.setVisible(false);
-			} else {
-				fPackageNameLabel.setVisible(true);
-				fPackageNameText.setVisible(true);
-			}
+			controlPackageNameDisplay();
 			fPackageNameText.setText(fClassIf.getPackageName());
+			
 			if (fIsAndroidProject) {
 				refreshAndroid();
 			}
