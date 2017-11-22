@@ -105,6 +105,7 @@ public class ClassViewer extends TableViewerSection {
 			String packageName = (String)value;
 			renameClass(target, ClassInterface.getQualifiedName(packageName, localName));
 		}
+
 	}
 
 
@@ -162,9 +163,9 @@ public class ClassViewer extends TableViewerSection {
 
 		fFileInfoProvider = fileInfoProvider; 
 		fNameColumn.setEditingSupport(new LocalNameEditingSupport());
-		if(!ApplicationContext.getSimplifiedUI()){
+//		if(!ApplicationContext.getSimplifiedUI()){
 			fPackageNameColumn.setEditingSupport(new PackageNameEditingSupport());
-		}
+//		}
 
 		fRootIf = new RootInterface(this, fileInfoProvider);
 		fClassIf = new ClassInterface(this, fileInfoProvider);
@@ -193,23 +194,32 @@ public class ClassViewer extends TableViewerSection {
 				return ClassInterface.getLocalName((ClassNode)element);
 			}
 		});
-		
-		if(!ApplicationContext.getSimplifiedUI()){
-			fPackageNameColumn = addColumn("Package", 150, new ClassViewerColumnLabelProvider(){
-				@Override
-				public String getText(Object element){
-					return ClassNodeHelper.getPackageName((ClassNode)element);
-				}
 
-			});
+		fPackageNameColumn = addColumn("Package", 150, new ClassViewerColumnLabelProvider(){
+			@Override
+			public String getText(Object element){
+				return ClassNodeHelper.getPackageName((ClassNode)element);
+			}
+		});
+		refresh();
+
+	}
+
+	@Override
+	public void refresh(){
+		super.refresh();
+		int width = fNameColumn.getColumn().getWidth();
+		if(ApplicationContext.getSimplifiedUI()){
+			fPackageNameColumn.getColumn().setWidth(0);
+		} else {
+			fPackageNameColumn.getColumn().setWidth(width);
 		}
-		
-		
 	}
 
 	public void setInput(RootNode model){
 		super.setInput(model.getClasses());
 		fRootIf.setOwnNode(model);
+		refresh();
 	}
 
 	private ClassInterface classIf(){
