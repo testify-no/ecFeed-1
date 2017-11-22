@@ -65,6 +65,7 @@ public abstract class AbstractOnlineSupport {
 			boolean isExport) {
 		ILoaderProvider loaderProvider = new EclipseLoaderProvider();
 		ModelClassLoader loader = loaderProvider.getLoader(true, null);
+		Thread.currentThread().setContextClassLoader(loader);
 		fRunner = new JavaTestRunner(loader, isExport, testMethodInvoker);
 		fFileInfoProvider = fileInfoProvider;
 		fTestRunMode = TestRunModeHelper.getTestRunMode(methodNode);
