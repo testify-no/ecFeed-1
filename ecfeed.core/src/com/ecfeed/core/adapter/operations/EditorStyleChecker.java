@@ -174,10 +174,14 @@ public class EditorStyleChecker implements IModelVisitor{
 			});
 
 			for (int i = 0; i < fMethods.size() - 1; i++) {
-				if (areMethodNamesEqual(fMethods.get(i), fMethods.get(i + 1))) {
-					if (areParameterTypesEqual(fMethods.get(i).getParameterTypes(), 
-							fMethods.get(i + 1).getParameterTypes())) {
-						return new ErrorDescription(fMethods.get(i), fMethods.get(i +1), 
+				MethodNode methodNode1 = fMethods.get(i);
+				MethodNode methodNode2 = fMethods.get(i + 1);
+				List<String> method1ParameterTypes = fMethods.get(i).getParameterTypes();
+				List<String> method2ParameterTypes = fMethods.get(i).getParameterTypes();
+
+				if (areMethodNamesEqual(methodNode1, methodNode2)) {
+					if (areParameterTypesEqual(method1ParameterTypes, method2ParameterTypes)) {
+						return new ErrorDescription(methodNode1, methodNode2, 
 								CheckErrorCode.DUPLICATE_METHOD_NAME);
 					}
 				}
@@ -186,7 +190,7 @@ public class EditorStyleChecker implements IModelVisitor{
 		}
 
 		private boolean areMethodNamesEqual(MethodNode methodNode, MethodNode methodNode2) {
-			if (methodNode.getName().equals(methodNode2.getName())){
+			if (methodNode.getName().equals(methodNode2.getName())) {
 				return true;
 			}
 			return false;
@@ -239,7 +243,7 @@ public class EditorStyleChecker implements IModelVisitor{
 			Collections.sort(fClasses, new Comparator<ClassNode>() {
 
 				@Override
-				public int compare(ClassNode node1, ClassNode node2){
+				public int compare(ClassNode node1, ClassNode node2) {
 					return node1.getName().compareTo(node2.getName());
 				}
 			});
