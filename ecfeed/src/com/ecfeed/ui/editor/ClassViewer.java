@@ -163,9 +163,7 @@ public class ClassViewer extends TableViewerSection {
 
 		fFileInfoProvider = fileInfoProvider; 
 		fNameColumn.setEditingSupport(new LocalNameEditingSupport());
-//		if(!ApplicationContext.getSimplifiedUI()){
-			fPackageNameColumn.setEditingSupport(new PackageNameEditingSupport());
-//		}
+		fPackageNameColumn.setEditingSupport(new PackageNameEditingSupport());
 
 		fRootIf = new RootInterface(this, fileInfoProvider);
 		fClassIf = new ClassInterface(this, fileInfoProvider);
