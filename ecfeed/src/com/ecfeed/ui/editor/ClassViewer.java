@@ -21,6 +21,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.ClassNodeHelper;
@@ -98,6 +99,7 @@ public class ClassViewer extends TableViewerSection {
 
 		@Override
 		protected void setValue(Object element, Object value) {
+
 			ClassNode target = (ClassNode)element;
 			String localName = ClassInterface.getLocalName(target);
 			String packageName = (String)value;
@@ -160,7 +162,9 @@ public class ClassViewer extends TableViewerSection {
 
 		fFileInfoProvider = fileInfoProvider; 
 		fNameColumn.setEditingSupport(new LocalNameEditingSupport());
-		fPackageNameColumn.setEditingSupport(new PackageNameEditingSupport());
+		if(!ApplicationContext.getSimplifiedUI()){
+			fPackageNameColumn.setEditingSupport(new PackageNameEditingSupport());
+		}
 
 		fRootIf = new RootInterface(this, fileInfoProvider);
 		fClassIf = new ClassInterface(this, fileInfoProvider);
@@ -189,13 +193,18 @@ public class ClassViewer extends TableViewerSection {
 				return ClassInterface.getLocalName((ClassNode)element);
 			}
 		});
+		
+		if(!ApplicationContext.getSimplifiedUI()){
+			fPackageNameColumn = addColumn("Package", 150, new ClassViewerColumnLabelProvider(){
+				@Override
+				public String getText(Object element){
+					return ClassNodeHelper.getPackageName((ClassNode)element);
+				}
 
-		fPackageNameColumn = addColumn("Package", 150, new ClassViewerColumnLabelProvider(){
-			@Override
-			public String getText(Object element){
-				return ClassNodeHelper.getPackageName((ClassNode)element);
-			}
-		});
+			});
+		}
+		
+		
 	}
 
 	public void setInput(RootNode model){
