@@ -28,9 +28,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 
+import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.serialization.export.ExportTemplateFactory;
 import com.ecfeed.core.serialization.export.IExportTemplate;
+import com.ecfeed.core.utils.ApplicationContext;
 import com.ecfeed.core.utils.DiskFileHelper;
 import com.ecfeed.core.utils.IValueApplier;
 import com.ecfeed.core.utils.StringHelper;
@@ -57,6 +59,7 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 	DialogObjectToolkit.FileSelectionComposite fExportFileSelectionComposite;
 	private Text fTargetFileTextField;
 	private String fTargetFile;
+	private MethodNode fMethodNode;
 	private FileCompositeVisibility fFileCompositeVisibility;
 	private Combo fExportFormatCombo;
 	private ExportTemplateFactory fExportTemplateFactory;
@@ -71,7 +74,7 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 			ExportTemplateFactory exportTemplateFactory,
 			IExportTemplate exportTemplate,
 			String targetFile,
-			int methodParametersCount,
+			MethodNode methodNode,
 			Collection<TestCaseNode> testCaseNodes) {
 
 		super(EclipseHelper.getActiveShell());
@@ -83,12 +86,18 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		fExportTemplateFactory = exportTemplateFactory;
 		fExportTemplate = exportTemplate;
 		fTargetFile = targetFile;
+		fMethodNode = methodNode;
 		fTestCaseNodes = testCaseNodes;
 	}
 
 	@Override
 	public void create() {
 		super.create();
+
+		if (ApplicationContext.isApplicationTypeRemoteRap()) {
+			setOkEnabled(true);
+			return;
+		}
 
 		if (fFileCompositeVisibility == FileCompositeVisibility.VISIBLE) {
 
@@ -123,7 +132,8 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 
 		createPreviewTextComposite(childComposite);
 
-		if (fFileCompositeVisibility == FileCompositeVisibility.VISIBLE) {
+		if (ApplicationContext.isApplicationTypeLocal() 
+				&& (fFileCompositeVisibility == FileCompositeVisibility.VISIBLE)) {
 			createTargetFileComposite(childComposite);
 		}
 
@@ -148,9 +158,12 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 			return;
 		}
 
-		fTargetFile = fTargetFileTextField.getText();
-		if (!canOverwriteFile(fTargetFile)) {
-			return;
+		if (fTargetFileTextField != null) {
+
+			fTargetFile = fTargetFileTextField.getText();
+			if (!canOverwriteFile(fTargetFile)) {
+				return;
+			}
 		}
 
 		super.okPressed();
@@ -278,7 +291,7 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 	private void createTargetFileComposite(Composite parent) {
 		final String TARGET_FILE = "Target file";
 
-		fExportFileSelectionComposite =  
+		fExportFileSelectionComposite =
 				DialogObjectToolkit.createFileSelectionComposite(
 						parent, TARGET_FILE, getExportFileExtensions(), new FileTextModifyListener());
 
@@ -298,7 +311,8 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 	}
 
 	private void setFocusedControl() {
-		if (fFileCompositeVisibility == FileCompositeVisibility.VISIBLE) {
+		if (ApplicationContext.isApplicationTypeLocal() && 
+				fFileCompositeVisibility == FileCompositeVisibility.VISIBLE) {
 			fTargetFileTextField.setFocus();
 		} else {
 			fTemplateTextField.setFocus();
@@ -324,10 +338,22 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 	}
 
 	public String getTargetFile() {
+
+		if (ApplicationContext.isApplicationTypeRemoteRap()) {
+			return fMethodNode.getName();
+		}
+
 		return fTargetFile;
 	}
 
 	private void updateStatus() {
+
+		if (ApplicationContext.isApplicationTypeRemoteRap()) {
+			setMessage(null);
+			setOkEnabled(true);
+			return;
+		}
+
 		if (fTargetFileTextField == null || fTargetFileTextField.getText().isEmpty()) {
 			setDialogMessageSelectFile();
 
@@ -346,6 +372,7 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 	}
 
 	private void setOkEnabled(boolean enabled) {
+
 		Button okButton = getButton(IDialogConstants.OK_ID);
 
 		if (okButton == null) {

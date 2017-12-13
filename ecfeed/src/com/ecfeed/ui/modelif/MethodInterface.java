@@ -331,7 +331,7 @@ public class MethodInterface extends ParametersParentInterface {
 						exportTemplateFactory,
 						exportTemplate,
 						ExportHelper.getExportTargetFile(),
-						getOwnNode().getParametersCount(),
+						getOwnNode(),
 						checkedTestCases);
 
 		if (dialog.open() != IDialogConstants.OK_ID) {
