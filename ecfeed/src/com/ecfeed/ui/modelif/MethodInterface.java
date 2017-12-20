@@ -441,7 +441,7 @@ public class MethodInterface extends ParametersParentInterface {
 	}
 
 	public void openCoverageDialog(Object[] checkedElements,
-			Object[] grayedElements, IFileInfoProvider fileInfoProvider) {
+			Object[] grayedElements, IFileInfoProvider fileInfoProvider) throws InterruptedException {
 		Shell activeShell = Display.getDefault().getActiveShell();
 		new CalculateCoverageDialog(activeShell, getOwnNode(), checkedElements,
 				grayedElements, fileInfoProvider).open();
