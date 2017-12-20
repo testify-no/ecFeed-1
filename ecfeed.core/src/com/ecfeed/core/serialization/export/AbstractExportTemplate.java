@@ -113,7 +113,10 @@ public abstract class AbstractExportTemplate implements IExportTemplate {
 		stringBuilder.append(TestCasesExportHelper.generateSection(fMethodNode, fFooterTemplate.get()));
 		stringBuilder.append("\n");
 
-		return stringBuilder.toString();
+		String result = stringBuilder.toString();
+		result = TestCasesExportHelper.evaluateMinWidthOperators(result);
+
+		return result;
 	}
 
 	private void appendPreviewOfTestCases(
@@ -130,6 +133,7 @@ public abstract class AbstractExportTemplate implements IExportTemplate {
 
 			inOutStringBuilder.append("\n");
 		}
+
 	}
 
 	private List<TestCaseNode> createPreviewTestCasesSample(Collection<TestCaseNode> selectedTestCases) {
