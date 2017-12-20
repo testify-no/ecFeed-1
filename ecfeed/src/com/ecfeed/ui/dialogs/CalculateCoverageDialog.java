@@ -155,7 +155,7 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 			MethodNode method, 
 			Object[] checked, 
 			Object[] grayed,
-			IJavaProjectProvider javaProjectProvider) {
+			IJavaProjectProvider javaProjectProvider) throws InterruptedException {
 
 		super(parentShell);
 		setHelpAvailable(false);
@@ -163,7 +163,13 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 
 		fJavaProjectProvider = javaProjectProvider;
 		fMethod = method;
-		fCalculator = new CoverageCalculator(fMethod.getMethodParameters());
+
+		try {
+			fCalculator = new CoverageCalculator(fMethod.getMethodParameters());
+		} catch (InterruptedException e) {
+			this.close();
+			throw e;
+		}
 
 		fStatusResolver = new EclipseImplementationStatusResolver(javaProjectProvider);
 		fInitChecked = checked;

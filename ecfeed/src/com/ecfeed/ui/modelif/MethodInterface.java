@@ -420,7 +420,7 @@ public class MethodInterface extends ParametersParentInterface {
 	public void openCoverageDialog(
 			Object[] checkedElements, 
 			Object[] grayedElements, 
-			IJavaProjectProvider javaProjectProvider) {
+			IJavaProjectProvider javaProjectProvider) throws InterruptedException {
 
 		Shell activeShell = Display.getDefault().getActiveShell();
 		new CalculateCoverageDialog(activeShell, getOwnNode(), checkedElements,

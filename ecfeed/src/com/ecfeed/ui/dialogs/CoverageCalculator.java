@@ -45,8 +45,8 @@ public class CoverageCalculator {
 	private List<List<ChoiceNode>> fCurrentlyChangedCases;
 	// If user added test cases = true; else we are substracting tuples;
 	private boolean fAddingFlag;
-	
-	
+
+
 	/*
 	 * Introducing OrderedChoice to differentiate between equal choices in different parameters
 	 * (Occuring when two parameters link the same global parameter)
@@ -54,12 +54,12 @@ public class CoverageCalculator {
 	private class OrderedChoice{
 		int fIndex;
 		ChoiceNode fChoice;
-		
+
 		public OrderedChoice(int index, ChoiceNode choice){
 			fIndex = index;
 			fChoice = choice;
 		}
-		
+
 		@Override
 		public int hashCode(){
 			int hash = 7;
@@ -67,7 +67,7 @@ public class CoverageCalculator {
 			hash = 31 * hash + (fChoice == null ? 0 : fChoice.hashCode());
 			return hash;
 		}
-		
+
 		@Override
 		public boolean equals(Object obj){
 			if((obj == null) || (obj.getClass() != this.getClass())) return false;
@@ -75,7 +75,52 @@ public class CoverageCalculator {
 			return ((choice.fIndex == this.fIndex) && choice.fChoice.equals(this.fChoice));
 		}
 	}
-	
+
+
+	private class CalculatorInitRunnable implements IRunnableWithProgress {
+
+		private boolean fIsCanceled = false;
+
+		@Override
+		public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+
+			fInput = prepareInput();
+			N = fInput.size();
+			fTuplesCovered = new int[N];
+			fTotalWork = new int[N];
+			fResults = new double[N];
+			fCurrentlyChangedCases = new ArrayList<>();
+
+			fTuples = new ArrayList<Map<List<OrderedChoice>, Integer>>();
+			fExpectedChoices = prepareExpectedChoices();
+
+			createDummyProgress(monitor);
+
+			for (int index = 0; index < fTotalWork.length; index++) {
+
+				fTotalWork[index] = calculateTotalTuples(fInput, index + 1, 100);
+				fTuples.add(new HashMap<List<OrderedChoice>, Integer>());
+
+				if (monitor.isCanceled()) {
+					fIsCanceled = true;
+					break;
+				}
+			}
+
+			monitor.done();
+		}
+
+		private void createDummyProgress(IProgressMonitor monitor) {
+			monitor.beginTask("Initializing Coverage calculator", 5);
+			monitor.worked(1);
+		}
+
+		public boolean isCanceled() {
+			return fIsCanceled;
+		}
+
+	}
+
 	private class CalculatorRunnable implements IRunnableWithProgress {
 		private boolean isCanceled;
 		// if true - add occurences, else substract them
@@ -125,9 +170,29 @@ public class CoverageCalculator {
 		}
 	}
 
-	public CoverageCalculator(List<MethodParameterNode> parameters) {
+	public CoverageCalculator(List<MethodParameterNode> parameters) throws InterruptedException {
+
 		fParameters = parameters;
-		initialize();
+		initalizeWithProgressDialog();
+	}
+
+	private void initalizeWithProgressDialog() throws InterruptedException {
+
+		ProgressMonitorDialog progressDialog = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
+		CalculatorInitRunnable runnable = new CalculatorInitRunnable();
+		progressDialog.open();
+		try {
+			progressDialog.run(true, true, runnable);
+		} catch (InvocationTargetException | InterruptedException e) {
+			MessageDialog.openError(
+					Display.getDefault().getActiveShell(), 
+					"Exception", 
+					"Invocation: " + e.getCause());
+		}
+
+		if (runnable.isCanceled()) {
+			throw new InterruptedException("Operation cancelled.");
+		}
 	}
 
 	public boolean calculateCoverage() {
@@ -155,7 +220,10 @@ public class CoverageCalculator {
 				}
 
 			} catch (InvocationTargetException e) {
-				MessageDialog.openError(Display.getDefault().getActiveShell(), "Exception", "Invocation: " + e.getCause());
+				MessageDialog.openError(
+						Display.getDefault().getActiveShell(), 
+						"Exception", 
+						"Invocation: " + e.getCause());
 				return false;
 			} catch (InterruptedException e) {
 				MessageDialog.openError(Display.getDefault().getActiveShell(), "Exception", "Interrupted: " + e.getMessage());
@@ -165,17 +233,17 @@ public class CoverageCalculator {
 		}
 
 	}
-	
+
 	public void resetResults() {
 		for (int i = 0; i < fResults.length; i++) {
 			fResults[i] = 0;
 		}
 	}	
-	
+
 	public double[] getCoverage(){
 		return fResults;
 	}
-	
+
 	public void setCurrentChangedCases(Collection<TestCaseNode> testCases, boolean isAdding) {
 		fAddingFlag = isAdding;
 		if (testCases == null)
@@ -183,24 +251,7 @@ public class CoverageCalculator {
 		else
 			fCurrentlyChangedCases = prepareCasesToAdd(testCases);
 	}
-	
-	private void initialize() {
-		fInput = prepareInput();
-		N = fInput.size();
-		fTuplesCovered = new int[N];
-		fTotalWork = new int[N];
-		fResults = new double[N];
-		fCurrentlyChangedCases = new ArrayList<>();
 
-		fTuples = new ArrayList<Map<List<OrderedChoice>, Integer>>();
-		fExpectedChoices = prepareExpectedChoices();
-
-		for (int n = 0; n < fTotalWork.length; n++) {
-			fTotalWork[n] = calculateTotalTuples(fInput, n + 1, 100);
-			fTuples.add(new HashMap<List<OrderedChoice>, Integer>());
-		}
-	}
-	
 	private static void addTuplesToMap(Map<List<OrderedChoice>, Integer> map, List<OrderedChoice> tuple) {
 		if (!map.containsKey(tuple)) {
 			map.put(tuple, 1);
@@ -249,7 +300,7 @@ public class CoverageCalculator {
 		}
 		return input;
 	}
-	
+
 	private Map<Integer, ChoiceNode> prepareExpectedChoices() {
 		int n = 0;
 		Map<Integer, ChoiceNode> expected = new HashMap<>();
@@ -258,7 +309,7 @@ public class CoverageCalculator {
 				ChoiceNode p = new ChoiceNode("", cnode.getDefaultValue());
 				p.setParent(cnode);
 				expected.put(n, p);
-//				expected.put(n, cnode.getDefaultValueChoice());
+				//				expected.put(n, cnode.getDefaultValueChoice());
 			}
 			n++;
 		}
@@ -295,7 +346,7 @@ public class CoverageCalculator {
 
 	private int calculateTotalTuples(List<List<ChoiceNode>> input, int n, int coverage) {
 		int totalWork = 0;
-		
+
 		Tuples<List<ChoiceNode>> tuples = new Tuples<List<ChoiceNode>>(input, n);
 		while (tuples.hasNext()) {
 			long combinations = 1;
@@ -307,7 +358,7 @@ public class CoverageCalculator {
 		}
 		return (int) Math.ceil(((double) (coverage * totalWork)) / 100);
 	}
-	
+
 	private List<OrderedChoice> convertToOrdered(List<ChoiceNode> choices){
 		ArrayList<OrderedChoice> ordered = new ArrayList<>();
 		int i = 0;

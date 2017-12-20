@@ -137,6 +137,8 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 		public void widgetSelected(SelectionEvent ev) {
 			try {
 				fMethodIf.openCoverageDialog(getCheckedElements(), getGrayedElements(), fJavaProjectProvider);
+			} catch (InterruptedException e) {
+				return;
 			} catch (Exception e) {
 				ExceptionCatchDialog.open("Can not calculate coverage.", e.getMessage());
 			}
