@@ -32,6 +32,10 @@ public class ClassNodeHelper {
 
 		return classNode.getName();
 	}
+	
+	public static String simpleModeName(ClassNode node) {
+		return getLocalName(node);
+	}
 
 	public static boolean validateNewMethodSignature(ClassNode parent, String methodName, List<String> argTypes) {
 
