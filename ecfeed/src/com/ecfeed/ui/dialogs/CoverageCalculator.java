@@ -27,6 +27,7 @@ import com.ecfeed.core.generators.algorithms.Tuples;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.TestCaseNode;
+import com.ecfeed.core.utils.BooleanHolder;
 
 public class CoverageCalculator {
 
@@ -96,15 +97,26 @@ public class CoverageCalculator {
 
 			createDummyProgress(monitor);
 
+			BooleanHolder isSubCanceled = new BooleanHolder(false);
+
 			for (int index = 0; index < fTotalWork.length; index++) {
 
-				fTotalWork[index] = calculateTotalTuples(fInput, index + 1, 100);
+				fTotalWork[index] = 
+						calculateTotalTuples(
+								fInput, index + 1, fTotalWork.length, 100, monitor, isSubCanceled);
+
+				if (isSubCanceled.get()) {
+					fIsCanceled = true;
+					break;
+				}
+
 				fTuples.add(new HashMap<List<OrderedChoice>, Integer>());
 
 				if (monitor.isCanceled()) {
 					fIsCanceled = true;
 					break;
 				}
+
 			}
 
 			monitor.done();
@@ -344,11 +356,31 @@ public class CoverageCalculator {
 		return cases;
 	}
 
-	private int calculateTotalTuples(List<List<ChoiceNode>> input, int n, int coverage) {
+	private int calculateTotalTuples(
+			List<List<ChoiceNode>> input, 
+			int n, 
+			int total,
+			int coverage, 
+			IProgressMonitor monitor,
+			BooleanHolder isSubCanceled) {
+
 		int totalWork = 0;
+		int cnt = 0;
 
 		Tuples<List<ChoiceNode>> tuples = new Tuples<List<ChoiceNode>>(input, n);
+
 		while (tuples.hasNext()) {
+
+			cnt++;
+			if (cnt%64 == 0) {
+				monitor.subTask("Calculating totals - pass:" + n + " of:" + total + ", item:" + cnt);
+
+				if (monitor.isCanceled()) {
+					isSubCanceled.set(true);
+					return 0;
+				}
+			}
+
 			long combinations = 1;
 			List<List<ChoiceNode>> tuple = tuples.next();
 			for (List<ChoiceNode> parameter : tuple) {
@@ -356,6 +388,7 @@ public class CoverageCalculator {
 			}
 			totalWork += combinations;
 		}
+
 		return (int) Math.ceil(((double) (coverage * totalWork)) / 100);
 	}
 
