@@ -61,95 +61,6 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 	private CoverageTreeViewerListener fCheckStateListener;
 	private IImplementationStatusResolver fStatusResolver;
 
-	private class CoverageTreeViewerListener extends TreeCheckStateListener {
-		// saved tree state
-		Object fTreeState[];
-
-		public CoverageTreeViewerListener(CheckboxTreeViewer treeViewer) {
-
-			super(treeViewer);
-			fTreeState = new Object[0];
-		}
-
-		@Override
-		public void checkStateChanged(CheckStateChangedEvent event) {
-
-			super.checkStateChanged(event);
-
-			Object element = event.getElement();
-			boolean checked = event.getChecked();
-			Set<TestCaseNode> checkedTestCases;
-
-			if(fTestCasesViewer.getCheckedElements().length == 0){
-				checkedTestCases = null;
-			} else {
-				checkedTestCases = getCheckedTestCases(element, checked);
-			}
-
-			applyCheckedTestCases(checkedTestCases, checked);
-		}
-
-		public void applyCheckedTestCases(Collection<TestCaseNode> checkedTestCases, boolean checked) {
-
-			fCalculator.setCurrentChangedCases(checkedTestCases, checked);
-
-			if (fCalculator.calculateCoverage()) {
-				fTreeState = getViewer().getCheckedElements();
-				fillCoverageTableRows();
-			} else {
-				revertLastTreeChange();
-			}
-		}
-
-		private Set<TestCaseNode> getCheckedTestCases(Object element, boolean checked) {
-
-			Set<TestCaseNode> testCases = new HashSet<>();
-
-			if (checked) {
-				// TestSuite
-				if (element instanceof String) {
-					String testSuiteName = (String) element;
-					testCases.addAll(fMethod.getTestCases(testSuiteName));
-				}
-				// TestCaseNode
-				else {
-					testCases.add((TestCaseNode) element);
-				}
-			}
-			// if action is deselection
-			else {
-				// TestSuite
-				if (element instanceof String) {
-					String testSuiteName = (String) element;
-
-					// if test suite was grayed add all test cases of that suite
-					// that were checked
-					for (Object tcase : fTreeState) {
-						if (testSuiteName.equals(getContentProvider().getParent(tcase))) {
-							testCases.add((TestCaseNode) tcase);
-						}
-					}
-					// if parent has no children shown in the tree, but they all
-					// are implicitly selected
-					if (testCases.isEmpty()) {
-						testCases.addAll(fMethod.getTestCases(testSuiteName));
-					}
-				}
-				// TestCaseNode
-				else {
-					testCases.add((TestCaseNode) element);
-				}
-			}
-			return testCases;
-		}
-
-		private void revertLastTreeChange() {
-
-			getViewer().setCheckedElements(fTreeState);
-		}
-
-	}
-
 	public CalculateCoverageDialog (
 			Shell parentShell, 
 			MethodNode method, 
@@ -340,4 +251,94 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 	private int getN(){
 		return fMethod.getParameters().size();
 	}
+
+	private class CoverageTreeViewerListener extends TreeCheckStateListener {
+		// saved tree state
+		Object fTreeState[];
+
+		public CoverageTreeViewerListener(CheckboxTreeViewer treeViewer) {
+
+			super(treeViewer);
+			fTreeState = new Object[0];
+		}
+
+		@Override
+		public void checkStateChanged(CheckStateChangedEvent event) {
+
+			super.checkStateChanged(event);
+
+			Object element = event.getElement();
+			boolean checked = event.getChecked();
+			Set<TestCaseNode> checkedTestCases;
+
+			if(fTestCasesViewer.getCheckedElements().length == 0){
+				checkedTestCases = null;
+			} else {
+				checkedTestCases = getCheckedTestCases(element, checked);
+			}
+
+			applyCheckedTestCases(checkedTestCases, checked);
+		}
+
+		public void applyCheckedTestCases(Collection<TestCaseNode> checkedTestCases, boolean checked) {
+
+			fCalculator.setCurrentChangedCases(checkedTestCases, checked);
+
+			if (fCalculator.calculateCoverage()) {
+				fTreeState = getViewer().getCheckedElements();
+				fillCoverageTableRows();
+			} else {
+				revertLastTreeChange();
+			}
+		}
+
+		private Set<TestCaseNode> getCheckedTestCases(Object element, boolean checked) {
+
+			Set<TestCaseNode> testCases = new HashSet<>();
+
+			if (checked) {
+				// TestSuite
+				if (element instanceof String) {
+					String testSuiteName = (String) element;
+					testCases.addAll(fMethod.getTestCases(testSuiteName));
+				}
+				// TestCaseNode
+				else {
+					testCases.add((TestCaseNode) element);
+				}
+			}
+			// if action is deselection
+			else {
+				// TestSuite
+				if (element instanceof String) {
+					String testSuiteName = (String) element;
+
+					// if test suite was grayed add all test cases of that suite
+					// that were checked
+					for (Object tcase : fTreeState) {
+						if (testSuiteName.equals(getContentProvider().getParent(tcase))) {
+							testCases.add((TestCaseNode) tcase);
+						}
+					}
+					// if parent has no children shown in the tree, but they all
+					// are implicitly selected
+					if (testCases.isEmpty()) {
+						testCases.addAll(fMethod.getTestCases(testSuiteName));
+					}
+				}
+				// TestCaseNode
+				else {
+					testCases.add((TestCaseNode) element);
+				}
+			}
+			return testCases;
+		}
+
+		private void revertLastTreeChange() {
+
+			getViewer().setCheckedElements(fTreeState);
+		}
+
+	}
+
 }
