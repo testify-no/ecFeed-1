@@ -10,9 +10,11 @@
 
 package com.ecfeed.ui.dialogs;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -20,19 +22,17 @@ import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -41,6 +41,9 @@ import org.eclipse.swt.widgets.Tree;
 import com.ecfeed.core.adapter.IImplementationStatusResolver;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.TestCaseNode;
+import com.ecfeed.core.utils.IValueApplier;
+import com.ecfeed.core.utils.StringHelper;
+import com.ecfeed.ui.common.ApplyValueMode;
 import com.ecfeed.ui.common.EclipseImplementationStatusResolver;
 import com.ecfeed.ui.common.TestCasesViewerContentProvider;
 import com.ecfeed.ui.common.TestCasesViewerLabelProvider;
@@ -52,14 +55,14 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 
 	public static final String DIALOG_CALCULATE_COVERAGE_MESSAGE = "Select test cases to include in evaluation.";
 	public static final String DIALOG_CALCULATE_COVERAGE_TITLE = "Calculate n-wise coverage";
-	private static final int INITIAL_N_MAX = 5;
-	private static final int INITIAL_N_MIN = 1;
+	private static final Integer INITIAL_N_MAX = 5;
+	private static final Integer INITIAL_N_MIN = 1;
 
 	private CoverageCalculator fCalculator;
 	private MethodNode fMethod;
 	private IJavaProjectProvider fJavaProjectProvider;
 	private int fNMax;
-	private Spinner NMaxSpinner;
+	private Combo NMaxCombo;
 
 	//Initial state of the tree viewer
 	private final Object[] fInitChecked;
@@ -178,32 +181,52 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 
 		DialogObjectToolkit.createLabel(composite, "N max ");
 
-		NMaxSpinner = new Spinner(composite, SWT.BORDER | SWT.RIGHT);
+		NMaxCombo = DialogObjectToolkit.createReadOnlyGridCombo(
+				composite, 
+				new NMaxComboValueApplier(), 
+				ApplyValueMode.ON_SELECTION_ONLY);
 
-		NMaxSpinner.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-		NMaxSpinner.setValues(fNMax, INITIAL_N_MIN, fMethod.getParametersCount(), 0, 1, 1);
 
-		NMaxSpinner.addModifyListener(new ModifyListener() {
+		NMaxCombo.setItems(getAvailableNMaxValues());
+		NMaxCombo.setText(INITIAL_N_MAX.toString());
+	}
 
-			@Override
-			public void modifyText(ModifyEvent e) {
+	private String[] getAvailableNMaxValues() {
 
-				int newNMax = NMaxSpinner.getSelection();
+		List<String> availableValues = new ArrayList<String>();
 
-				try {
-					fCalculator.initialize(newNMax);
-				} catch (InterruptedException e1) {
-					NMaxSpinner.setSelection(INITIAL_N_MIN);
-					return;
-				}
+		Integer parametersCount = fMethod.getParametersCount();
 
-				fNMax = newNMax;
-				selectTestCasesAndRecalculate(
-						fTestCasesViewer, 
-						fTestCasesViewer.getCheckedElements(), 
-						fTestCasesViewer.getGrayedElements());
+		for (Integer parameter = 1; parameter <= parametersCount; parameter++) {
+			availableValues.add(parameter.toString());
+		}
+
+		String[] arr = availableValues.toArray(new String[availableValues.size()]);
+		return arr;
+	}
+
+	private class NMaxComboValueApplier implements IValueApplier {
+
+		@Override
+		public void applyValue() {
+
+			String comboText = NMaxCombo.getText();
+			int newNMax = StringHelper.convertToInteger(comboText);
+
+			try {
+				fCalculator.initialize(newNMax);
+			} catch (InterruptedException e1) {
+				NMaxCombo.setText((new Integer(INITIAL_N_MIN)).toString());
+				return;
 			}
-		});
+
+			fNMax = newNMax;
+			selectTestCasesAndRecalculate(
+					fTestCasesViewer, 
+					fTestCasesViewer.getCheckedElements(), 
+					fTestCasesViewer.getGrayedElements());
+		}
+
 	}
 
 	private void createTestCaseViewer(Composite parent) {
@@ -333,7 +356,7 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 				fillCoverageTableRows();
 			} else {
 				revertLastTreeChange();
-				NMaxSpinner.setSelection(INITIAL_N_MIN);
+				NMaxCombo.setText(INITIAL_N_MIN.toString());
 			}
 		}
 
