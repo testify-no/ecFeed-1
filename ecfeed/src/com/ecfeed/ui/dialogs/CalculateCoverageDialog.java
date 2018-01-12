@@ -53,11 +53,13 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 	public static final String DIALOG_CALCULATE_COVERAGE_MESSAGE = "Select test cases to include in evaluation.";
 	public static final String DIALOG_CALCULATE_COVERAGE_TITLE = "Calculate n-wise coverage";
 	private static final int INITIAL_N_MAX = 5;
+	private static final int INITIAL_N_MIN = 1;
 
 	private CoverageCalculator fCalculator;
 	private MethodNode fMethod;
 	private IJavaProjectProvider fJavaProjectProvider;
 	private int fNMax;
+	private Spinner NMaxSpinner;
 
 	//Initial state of the tree viewer
 	private final Object[] fInitChecked;
@@ -176,22 +178,22 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 
 		DialogObjectToolkit.createLabel(composite, "N max ");
 
-		final Spinner spinner = new Spinner(composite, SWT.BORDER | SWT.RIGHT);
+		NMaxSpinner = new Spinner(composite, SWT.BORDER | SWT.RIGHT);
 
-		spinner.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-		spinner.setValues(fNMax, 1, fMethod.getParametersCount(), 0, 1, 1);
+		NMaxSpinner.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+		NMaxSpinner.setValues(fNMax, INITIAL_N_MIN, fMethod.getParametersCount(), 0, 1, 1);
 
-		spinner.addModifyListener(new ModifyListener() {
+		NMaxSpinner.addModifyListener(new ModifyListener() {
 
 			@Override
 			public void modifyText(ModifyEvent e) {
 
-				int newNMax = spinner.getSelection();
+				int newNMax = NMaxSpinner.getSelection();
 
 				try {
 					fCalculator.initialize(newNMax);
 				} catch (InterruptedException e1) {
-					spinner.setSelection(fNMax);
+					NMaxSpinner.setSelection(INITIAL_N_MIN);
 					return;
 				}
 
@@ -331,6 +333,7 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 				fillCoverageTableRows();
 			} else {
 				revertLastTreeChange();
+				NMaxSpinner.setSelection(INITIAL_N_MIN);
 			}
 		}
 

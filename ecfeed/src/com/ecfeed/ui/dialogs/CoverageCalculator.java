@@ -28,6 +28,7 @@ import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.utils.BooleanHolder;
+import com.ecfeed.core.utils.IntegerHolder;
 
 public class CoverageCalculator {
 
@@ -87,9 +88,11 @@ public class CoverageCalculator {
 
 		try {
 			CalculatorRunnable runnable = new CalculatorRunnable();
+			
 			progressDialog.open();
 			progressDialog.run(true, true, runnable);
-			if (runnable.isCanceled) {
+			
+			if (runnable.getIsCancelled()) {
 				return false;
 			} else {
 				fCurrentlyChangedCases.clear();
@@ -239,7 +242,7 @@ public class CoverageCalculator {
 			int total,
 			int coverage, 
 			IProgressMonitor monitor,
-			BooleanHolder isSubCanceled) {
+			BooleanHolder isSubCancelled) {
 
 		int totalWork = 0;
 		int cnt = 0;
@@ -253,7 +256,7 @@ public class CoverageCalculator {
 				monitor.subTask("Calculating totals - pass:" + n + " of:" + total + ", item:" + cnt);
 
 				if (monitor.isCanceled()) {
-					isSubCanceled.set(true);
+					isSubCancelled.set(true);
 					return 0;
 				}
 			}
@@ -298,15 +301,15 @@ public class CoverageCalculator {
 
 			createDummyProgress(monitor);
 
-			BooleanHolder isSubCanceled = new BooleanHolder(false);
+			BooleanHolder isSubCancelled = new BooleanHolder(false);
 
 			for (int index = 0; index < fTotalWork.length; index++) {
 
 				fTotalWork[index] = 
 						calculateTotalTuples(
-								fInput, index + 1, fTotalWork.length, 100, monitor, isSubCanceled);
+								fInput, index + 1, fTotalWork.length, 100, monitor, isSubCancelled);
 
-				if (isSubCanceled.get()) {
+				if (isSubCancelled.get()) {
 					fIsCanceled = true;
 					break;
 				}
@@ -335,52 +338,116 @@ public class CoverageCalculator {
 	}
 
 	private class CalculatorRunnable implements IRunnableWithProgress {
-		private boolean isCanceled;
+		
+		private boolean fIsCanceled;
 		// if true - add occurences, else substract them
-
+		
 		@Override
 		public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+			
 			int n = 0;
+			IntegerHolder cnt = new IntegerHolder(0);
+			BooleanHolder isSubCancelled = new BooleanHolder(false);
+			
 			List<Map<List<OrderedChoice>, Integer>> coveredTuples = new ArrayList<>();
 
 			monitor.beginTask("Calculating Coverage", fCurrentlyChangedCases.size() * fNMax);
 
 			while (!monitor.isCanceled() && n < fNMax) {
+				
 				Map<List<OrderedChoice>, Integer> mapForN = new HashMap<>();
 
 				ArrayList<List<OrderedChoice>> convertedCases = new ArrayList<>();
-				for(List<ChoiceNode> tcase: fCurrentlyChangedCases){
-					convertedCases.add(convertToOrdered(tcase));
-				}
-				for (List<OrderedChoice> converted: convertedCases) {
-					if (monitor.isCanceled()){
+				
+				for (List<ChoiceNode> tcase: fCurrentlyChangedCases) {
+					
+					displaySubTaskMessage(n, cnt, isSubCancelled, monitor);
+					if (isSubCancelled.get()) {
+						fIsCanceled = true;
 						break;
 					}
+					
+					convertedCases.add(convertToOrdered(tcase));
+				}
+				
+				for (List<OrderedChoice> converted: convertedCases) {
+					
+					displaySubTaskMessage(n, cnt, isSubCancelled, monitor);
+					if (isSubCancelled.get()) {
+						fIsCanceled = true;
+						break;
+					}
+					
 					Tuples<OrderedChoice> tuples = new Tuples<OrderedChoice>(converted, n + 1);
+					
 					for (List<OrderedChoice> pnode : tuples.getAll()) {
+						
+						displaySubTaskMessage(n, cnt, isSubCancelled, monitor);
+						if (isSubCancelled.get()) {
+							fIsCanceled = true;
+							break;
+						}
+						
 						addTuplesToMap(mapForN, pnode);
 					}
+					
 					monitor.worked(1);
 				}
+				
 				if (!monitor.isCanceled()) {
+					
+					displaySubTaskMessage(n, cnt, isSubCancelled, monitor);
+					if (isSubCancelled.get()) {
+						fIsCanceled = true;
+						break;
+					}
+					
 					coveredTuples.add(mapForN);
 					n++;
 				}
 			}
 
 			n = 0;
-			if (!monitor.isCanceled()) {
+			if (!fIsCanceled) {
 				for (Map<List<OrderedChoice>, Integer> map : coveredTuples) {
+					
+					displaySubTaskMessage(n, cnt, isSubCancelled, monitor);
+					if (isSubCancelled.get()) {
+						fIsCanceled = true;
+						break;
+					}
+					
 					mergeOccurrenceMaps(fTuples.get(n), map, fAddingFlag);
 					fTuplesCovered[n] = fTuples.get(n).size();
 					fResults[n] = (((double) fTuplesCovered[n]) / ((double) fTotalWork[n])) * 100;
 					n++;
 				}
-			} else {
-				isCanceled = true;
 			}
+			
 			monitor.done();
 		}
+		
+		public boolean getIsCancelled() {
+			return fIsCanceled;
+		}
+		
+		private void displaySubTaskMessage(
+				int pass, IntegerHolder cnt, BooleanHolder isSubCancelled, IProgressMonitor monitor) {
+
+			cnt.increment();
+
+			if (cnt.get()%64 != 0) {
+				return;
+			}
+			
+			monitor.subTask("Calculating coverage - pass:" + pass + " , item:" + cnt.get());
+
+			if (monitor.isCanceled()) {
+				isSubCancelled.set(true);
+				return;
+			}
+		}
+		
 	}
 
 	/*
