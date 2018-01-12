@@ -20,6 +20,8 @@ import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -30,6 +32,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -43,15 +46,18 @@ import com.ecfeed.ui.common.TestCasesViewerContentProvider;
 import com.ecfeed.ui.common.TestCasesViewerLabelProvider;
 import com.ecfeed.ui.common.TreeCheckStateListener;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
+import com.ecfeed.ui.dialogs.basic.DialogObjectToolkit;
 
 public class CalculateCoverageDialog extends TitleAreaDialog {
 
 	public static final String DIALOG_CALCULATE_COVERAGE_MESSAGE = "Select test cases to include in evaluation.";
 	public static final String DIALOG_CALCULATE_COVERAGE_TITLE = "Calculate n-wise coverage";
+	private static final int INITIAL_N_MAX = 5;
 
 	private CoverageCalculator fCalculator;
 	private MethodNode fMethod;
-	IJavaProjectProvider fJavaProjectProvider;
+	private IJavaProjectProvider fJavaProjectProvider;
+	private int fNMax;
 
 	//Initial state of the tree viewer
 	private final Object[] fInitChecked;
@@ -75,8 +81,10 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 		fJavaProjectProvider = javaProjectProvider;
 		fMethod = method;
 
+		fNMax = Math.min(fMethod.getParametersCount(), INITIAL_N_MAX); 
+
 		try {
-			fCalculator = new CoverageCalculator(fMethod.getMethodParameters());
+			fCalculator = new CoverageCalculator(fMethod.getMethodParameters(), fNMax);
 		} catch (InterruptedException e) {
 			this.close();
 			throw e;
@@ -90,7 +98,7 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 	@Override
 	public Point getInitialSize() {
 
-		return new Point(600, 800);
+		return new Point(600, 750);
 	}
 
 	@Override
@@ -113,11 +121,11 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 		mainContainer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		createTestCaseComposite(mainContainer);
+		createMaxNComposite(mainContainer);
 		createCoverageTableWithMargins(mainContainer);
 
-		setInitialSelection(fTestCasesViewer, fInitChecked, fInitGrayed);
+		selectTestCasesAndRecalculate(fTestCasesViewer, fInitChecked, fInitGrayed);
 
-		//Draw bar graph. Possible change for a timer with slight delay if tests prove current solution insufficient in some cases.
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
@@ -128,7 +136,7 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 		return area;
 	}
 
-	private void setInitialSelection(CheckboxTreeViewer viewer, Object[] checked, Object[] grayed) {
+	private void selectTestCasesAndRecalculate(CheckboxTreeViewer viewer, Object[] checked, Object[] grayed) {
 
 		viewer.setCheckedElements(checked);
 		viewer.setGrayedElements(grayed);
@@ -144,7 +152,7 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 			}
 		}
 
-		fCheckStateListener.applyCheckedTestCases(testCases, true);
+		fCheckStateListener.recalculateAndShowTestCases(testCases, true);
 	}
 
 	private void createTestCaseComposite(Composite parent) {
@@ -160,6 +168,40 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 		selectTestCasesLabel.setText(DIALOG_CALCULATE_COVERAGE_MESSAGE);
 
 		createTestCaseViewer(composite);
+	}
+
+	private void createMaxNComposite(Composite parent) {
+
+		Composite composite = DialogObjectToolkit.createGridComposite(parent, 2);
+
+		DialogObjectToolkit.createLabel(composite, "N max ");
+
+		final Spinner spinner = new Spinner(composite, SWT.BORDER | SWT.RIGHT);
+
+		spinner.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+		spinner.setValues(fNMax, 1, fMethod.getParametersCount(), 0, 1, 1);
+
+		spinner.addModifyListener(new ModifyListener() {
+
+			@Override
+			public void modifyText(ModifyEvent e) {
+
+				int newNMax = spinner.getSelection();
+
+				try {
+					fCalculator.initialize(newNMax);
+				} catch (InterruptedException e1) {
+					spinner.setSelection(fNMax);
+					return;
+				}
+
+				fNMax = newNMax;
+				selectTestCasesAndRecalculate(
+						fTestCasesViewer, 
+						fTestCasesViewer.getCheckedElements(), 
+						fTestCasesViewer.getGrayedElements());
+			}
+		});
 	}
 
 	private void createTestCaseViewer(Composite parent) {
@@ -183,8 +225,6 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 		Composite compositeAligningMargins = new Composite(parent, SWT.FILL);
 
 		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
-		gridData.minimumWidth = 100;
-		gridData.minimumHeight = 150;
 
 		compositeAligningMargins.setLayout(new GridLayout(1, false));
 		compositeAligningMargins.setLayoutData(gridData);
@@ -198,7 +238,7 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 
 		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gridData.minimumWidth = 100;
-		gridData.minimumHeight = 150;
+		gridData.minimumHeight = 100;
 
 		composite.setLayout(new FillLayout());
 		composite.setLayoutData(gridData);
@@ -206,23 +246,29 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 		fCoverageTable = new Table(composite, SWT.BORDER);
 		createColumns(fCoverageTable);
 
-		for (int index = 0; index < getN(); index++) {
+		initializeCoverageTableItems();
+		fillCoverageTableRows();	    
+	}
+
+	private void initializeCoverageTableItems() {
+
+		fCoverageTable.clearAll();
+
+		for (int index = 0; index < fNMax; index++) {
 			TableItem tableItem = new TableItem(fCoverageTable, SWT.NONE);
 			tableItem.setText(new String[] { "", "" });
 		}
-
-		fillCoverageTableRows();	    
 	}
 
 	private void fillCoverageTableRows() {
 
 		double[] coverage = fCalculator.getCoverage();
 
-		if (getN() != coverage.length) {
+		if (fNMax != coverage.length) {
 			return;
 		}
 
-		for (int n = 0; n < getN(); n++) {
+		for (int n = 0; n < fNMax; n++) {
 			TableItem tableItem = fCoverageTable.getItem(n);
 			fillTableItem(tableItem, n, coverage[n]);
 		}
@@ -231,7 +277,6 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 	private void fillTableItem(TableItem tableItem, int n, double coverage) {
 
 		tableItem.setText(0, new Integer(n+1).toString());
-
 		tableItem.setText(1, String.format( "%.2f", coverage ));
 	}
 
@@ -246,10 +291,6 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 		columnCoverage.setWidth(280);
 
 		table.setHeaderVisible(true);
-	}
-
-	private int getN(){
-		return fMethod.getParameters().size();
 	}
 
 	private class CoverageTreeViewerListener extends TreeCheckStateListener {
@@ -277,15 +318,16 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 				checkedTestCases = getCheckedTestCases(element, checked);
 			}
 
-			applyCheckedTestCases(checkedTestCases, checked);
+			recalculateAndShowTestCases(checkedTestCases, checked);
 		}
 
-		public void applyCheckedTestCases(Collection<TestCaseNode> checkedTestCases, boolean checked) {
+		public void recalculateAndShowTestCases(Collection<TestCaseNode> testCases, boolean checked) {
 
-			fCalculator.setCurrentChangedCases(checkedTestCases, checked);
+			fCalculator.setCurrentChangedCases(testCases, checked);
 
 			if (fCalculator.calculateCoverage()) {
 				fTreeState = getViewer().getCheckedElements();
+				initializeCoverageTableItems();
 				fillCoverageTableRows();
 			} else {
 				revertLastTreeChange();

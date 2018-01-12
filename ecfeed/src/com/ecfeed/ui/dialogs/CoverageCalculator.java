@@ -48,13 +48,19 @@ public class CoverageCalculator {
 	private boolean fAddingFlag;
 
 
-	public CoverageCalculator(List<MethodParameterNode> parameters) throws InterruptedException {
+	public CoverageCalculator(List<MethodParameterNode> parameters, int NMax) throws InterruptedException {
 
 		fParameters = parameters;
+		initialize(NMax);
+	}
+
+	public void initialize(int NMax) throws InterruptedException {
+		fNMax = NMax;
 		initalizeWithProgressDialog();
 	}
 
 	public void setCurrentChangedCases(Collection<TestCaseNode> testCases, boolean isAdding) {
+
 		fAddingFlag = isAdding;
 		if (testCases == null)
 			fCurrentlyChangedCases = null;
@@ -71,44 +77,46 @@ public class CoverageCalculator {
 				tupleMap.clear();
 			}
 			// set results to zero
-			resetResults();
+			resetCoverageResults();
 			fCurrentlyChangedCases = new ArrayList<>();
 			return true;
-		} else {
-			ProgressMonitorDialog progressDialog = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
-			try {
-				CalculatorRunnable runnable = new CalculatorRunnable();
-				progressDialog.open();
-				progressDialog.run(true, true, runnable);
-				if (runnable.isCanceled) {
-					return false;
-				} else {
-					fCurrentlyChangedCases.clear();
-					return true;
-				}
+		} 
 
-			} catch (InvocationTargetException e) {
-				MessageDialog.openError(
-						Display.getDefault().getActiveShell(), 
-						"Exception", 
-						"Invocation: " + e.getCause());
+		ProgressMonitorDialog progressDialog = 
+				new ProgressMonitorDialog(Display.getDefault().getActiveShell());
+
+		try {
+			CalculatorRunnable runnable = new CalculatorRunnable();
+			progressDialog.open();
+			progressDialog.run(true, true, runnable);
+			if (runnable.isCanceled) {
 				return false;
-			} catch (InterruptedException e) {
-				MessageDialog.openError(Display.getDefault().getActiveShell(), "Exception", "Interrupted: " + e.getMessage());
-				e.printStackTrace();
-				return false;
+			} else {
+				fCurrentlyChangedCases.clear();
+				return true;
 			}
+
+		} catch (InvocationTargetException e) {
+			MessageDialog.openError(
+					Display.getDefault().getActiveShell(), 
+					"Exception", 
+					"Invocation: " + e.getCause());
+			return false;
+		} catch (InterruptedException e) {
+			MessageDialog.openError(Display.getDefault().getActiveShell(), "Exception", "Interrupted: " + e.getMessage());
+			e.printStackTrace();
+			return false;
 		}
 
 	}
 
-	public void resetResults() {
+	public void resetCoverageResults() {
 		for (int i = 0; i < fResults.length; i++) {
 			fResults[i] = 0;
 		}
 	}	
 
-	public double[] getCoverage(){
+	public double[] getCoverage() {
 		return fResults;
 	}
 
@@ -116,6 +124,7 @@ public class CoverageCalculator {
 
 		ProgressMonitorDialog progressDialog = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
 		CalculatorInitRunnable runnable = new CalculatorInitRunnable();
+
 		progressDialog.open();
 		try {
 			progressDialog.run(true, true, runnable);
@@ -165,6 +174,7 @@ public class CoverageCalculator {
 	}
 
 	private List<List<ChoiceNode>> prepareInput() {
+
 		List<List<ChoiceNode>> input = new ArrayList<List<ChoiceNode>>();
 		for (MethodParameterNode cnode : fParameters) {
 			List<ChoiceNode> parameter = new ArrayList<ChoiceNode>();
@@ -278,7 +288,6 @@ public class CoverageCalculator {
 		public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
 			fInput = prepareInput();
-			fNMax = fInput.size();
 			fTuplesCovered = new int[fNMax];
 			fTotalWork = new int[fNMax];
 			fResults = new double[fNMax];
