@@ -24,6 +24,7 @@ import com.ecfeed.core.generators.algorithms.IAlgorithm;
 import com.ecfeed.core.generators.api.GeneratorException;
 import com.ecfeed.core.generators.api.IConstraint;
 import com.ecfeed.core.generators.api.IGenerator;
+import com.ecfeed.core.utils.EvaluationResult;
 
 public class GeneratorTestUtils{
 	private static class Constraint implements IConstraint<String>{
@@ -34,13 +35,13 @@ public class GeneratorTestUtils{
 		}
 
 		@Override
-		public boolean evaluate(List<String> values) {
+		public EvaluationResult evaluate(List<String> values) {
 			for(String value : values){
 				if(fRestrictedValues.contains(value)){
-					return false;
+					return EvaluationResult.FALSE;
 				}
 			}
-			return true;
+			return EvaluationResult.TRUE;
 		}
 
 		@Override public String toString(){
