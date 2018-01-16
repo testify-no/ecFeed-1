@@ -17,6 +17,7 @@ import java.util.List;
 import com.ecfeed.core.generators.api.GeneratorException;
 import com.ecfeed.core.generators.api.IConstraint;
 import com.ecfeed.core.generators.api.IGeneratorProgressMonitor;
+import com.ecfeed.core.utils.EvaluationResult;
 
 public abstract class AbstractAlgorithm<E> implements IAlgorithm<E> {
 
@@ -120,19 +121,19 @@ public abstract class AbstractAlgorithm<E> implements IAlgorithm<E> {
 		return representation;
 	}
 
-	protected boolean checkConstraints(List<E> test) {
+	protected EvaluationResult checkConstraints(List<E> test) {
 
 		if (test == null) { 
-			return true;
+			return EvaluationResult.TRUE;
 		}
 
 		for(IConstraint<E> constraint : fConstraints) {
-			if(constraint.evaluate(test) == false) {
-				return false;
+			if(constraint.evaluate(test) == EvaluationResult.FALSE) {
+				return EvaluationResult.FALSE;
 			}
 		}
 
-		return true;
+		return EvaluationResult.TRUE;
 	}
 
 	protected boolean isDimensionMentionedInConstraints(int dimension) {

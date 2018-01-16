@@ -17,6 +17,7 @@ import java.util.Set;
 import com.ecfeed.core.generators.api.IConstraint;
 import com.ecfeed.core.model.ChoiceCondition;
 import com.ecfeed.core.model.LabelCondition;
+import com.ecfeed.core.utils.EvaluationResult;
 
 public class Constraint implements IConstraint<ChoiceNode> {
 
@@ -35,25 +36,25 @@ public class Constraint implements IConstraint<ChoiceNode> {
 	}
 
 	@Override
-	public boolean evaluate(List<ChoiceNode> values) {
+	public EvaluationResult evaluate(List<ChoiceNode> values) {
 
 		if (fPremise == null) { 
-			return true;
+			return EvaluationResult.TRUE;
 		}
 
 		if (!fPremise.evaluate(values)) {
-			return true;
+			return EvaluationResult.TRUE;
 		}
 
 		if(fConsequence == null) {
-			return false;
+			return EvaluationResult.FALSE;
 		}
 
 		if (fConsequence.evaluate(values)) {
-			return true;
+			return EvaluationResult.TRUE;
 		}
 
-		return false;
+		return EvaluationResult.FALSE;
 	}
 
 	@Override

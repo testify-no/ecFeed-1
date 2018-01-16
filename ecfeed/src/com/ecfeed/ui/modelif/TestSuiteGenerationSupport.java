@@ -29,6 +29,7 @@ import com.ecfeed.core.generators.api.IGenerator;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
+import com.ecfeed.core.utils.EvaluationResult;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.dialogs.GeneratorProgressMonitorDialog;
 import com.ecfeed.ui.dialogs.SetupDialogGenerateTestSuite;
@@ -46,8 +47,8 @@ public class TestSuiteGenerationSupport {
 	private class ExpectedValueReplacer implements IConstraint<ChoiceNode>{
 
 		@Override
-		public boolean evaluate(List<ChoiceNode> values) {
-			return true;
+		public EvaluationResult evaluate(List<ChoiceNode> values) {
+			return EvaluationResult.TRUE;
 		}
 
 		@Override

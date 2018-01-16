@@ -24,6 +24,7 @@ import com.ecfeed.core.generators.algorithms.IAlgorithm;
 import com.ecfeed.core.generators.api.GeneratorException;
 import com.ecfeed.core.generators.api.IConstraint;
 import com.ecfeed.core.generators.testutils.GeneratorTestUtils;
+import com.ecfeed.core.utils.EvaluationResult;
 import com.google.common.collect.Sets;
 
 public class CartesianProductTest {
@@ -108,7 +109,7 @@ public class CartesianProductTest {
 		for (List<String> vector : input) {
 			boolean valid = true;
 			for (IConstraint<String> constraint : constraints) {
-				if (constraint.evaluate(vector) == false) {
+				if (constraint.evaluate(vector) == EvaluationResult.FALSE) {
 					valid = false;
 					break;
 				}

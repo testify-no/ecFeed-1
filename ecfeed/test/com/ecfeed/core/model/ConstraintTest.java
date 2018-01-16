@@ -25,6 +25,7 @@ import com.ecfeed.core.model.Constraint;
 import com.ecfeed.core.model.EStatementRelation;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.StaticStatement;
+import com.ecfeed.core.utils.EvaluationResult;
 
 public class ConstraintTest {
 	@Test
@@ -33,10 +34,10 @@ public class ConstraintTest {
 		AbstractStatement falseStatement = new StaticStatement(false); 
 		List<ChoiceNode> values = new ArrayList<ChoiceNode>();
 
-		assertTrue(new Constraint(falseStatement, falseStatement).evaluate(values));
-		assertTrue(new Constraint(falseStatement, trueStatement).evaluate(values));
-		assertTrue(new Constraint(trueStatement, trueStatement).evaluate(values));
-		assertFalse(new Constraint(trueStatement, falseStatement).evaluate(values));
+		assertTrue(new Constraint(falseStatement, falseStatement).evaluate(values) == EvaluationResult.TRUE);
+		assertTrue(new Constraint(falseStatement, trueStatement).evaluate(values) == EvaluationResult.TRUE);
+		assertTrue(new Constraint(trueStatement, trueStatement).evaluate(values) == EvaluationResult.TRUE);
+		assertTrue(new Constraint(trueStatement, falseStatement).evaluate(values) == EvaluationResult.FALSE);
 	}
 
 	@Test
