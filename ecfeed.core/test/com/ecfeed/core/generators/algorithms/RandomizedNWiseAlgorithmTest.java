@@ -30,6 +30,7 @@ import com.ecfeed.core.generators.algorithms.RandomizedNWiseAlgorithm;
 import com.ecfeed.core.generators.algorithms.Tuples;
 import com.ecfeed.core.generators.api.GeneratorException;
 import com.ecfeed.core.generators.api.IConstraint;
+import com.ecfeed.core.utils.EvaluationResult;
 
 public class RandomizedNWiseAlgorithmTest {
 	private final Collection<IConstraint<Integer>> EMPTY_CONSTRAINTS = new HashSet<IConstraint<Integer>>();
@@ -102,8 +103,8 @@ public class RandomizedNWiseAlgorithmTest {
 		IConstraint<Integer> myConstraint = new IConstraint<Integer>() {
 
 			@Override
-			public boolean evaluate(List<Integer> values) {
-				return !(values.get(0) == 1 && values.get(1) == 1);
+			public EvaluationResult evaluate(List<Integer> values) {
+				return EvaluationResult.convertFromBoolean(!(values.get(0) == 1 && values.get(1) == 1));
 			}
 
 			@Override

@@ -25,6 +25,7 @@ import com.ecfeed.core.generators.DimensionedItem;
 import com.ecfeed.core.generators.api.GeneratorException;
 import com.ecfeed.core.generators.api.IConstraint;
 import com.ecfeed.core.generators.api.IGeneratorProgressMonitor;
+import com.ecfeed.core.utils.EvaluationResult;
 import com.ecfeed.core.utils.SystemLogger;
 
 public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
@@ -153,7 +154,7 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 
 		List<E> test = createOneTest(getInput(), nTuple, partialTuple);
 
-		if (checkConstraints(test)) {
+		if (checkConstraints(test) == EvaluationResult.TRUE) {
 			return true;
 		}
 
@@ -288,7 +289,7 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 				bests.add(improvedTest.get(dim));
 				for (E feature : input) {
 					improvedTest.set(dim, feature);
-					if (checkConstraints(improvedTest)) {
+					if (checkConstraints(improvedTest) == EvaluationResult.TRUE) {
 						coverage = getCoverage(improvedTest);
 
 						if (coverage >= bestCov) {
@@ -362,7 +363,7 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 		do {
 			test = createOneTest(paramsWithChoices, nTuple);
 
-			if (checkConstraints(test)) {
+			if (checkConstraints(test) == EvaluationResult.TRUE) {
 				return test;
 			}
 
@@ -515,10 +516,10 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 		if (vector == null)
 			return true;
 		for (IConstraint<E> constraint : getConstraints()) {
-			boolean value = false;
+			EvaluationResult value = EvaluationResult.FALSE;
 			try {
 				value = constraint.evaluate(vector);
-				if (value == false) {
+				if (value == EvaluationResult.FALSE) {
 					return false;
 				}
 			} catch (NullPointerException e) {

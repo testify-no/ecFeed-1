@@ -17,6 +17,7 @@ import java.util.List;
 import com.ecfeed.core.generators.api.GeneratorException;
 import com.ecfeed.core.generators.api.IConstraint;
 import com.ecfeed.core.generators.api.IGeneratorProgressMonitor;
+import com.ecfeed.core.utils.EvaluationResult;
 
 public class CartesianProductAlgorithm<E> extends AbstractAlgorithm<E>{
 	private boolean fInitialized;
@@ -55,7 +56,7 @@ public class CartesianProductAlgorithm<E> extends AbstractAlgorithm<E>{
 		List<Integer> nextElement = representation(last);
 		while((nextElement = incrementVector(nextElement)) != null){
 			List<E> instance = instance(nextElement);
-			if(checkConstraints(instance)){
+			if (checkConstraints(instance) == EvaluationResult.TRUE) {
 				progress(1);
 				return instance;
 			}

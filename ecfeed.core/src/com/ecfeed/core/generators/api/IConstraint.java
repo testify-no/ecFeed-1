@@ -12,6 +12,8 @@ package com.ecfeed.core.generators.api;
 
 import java.util.List;
 
+import com.ecfeed.core.utils.EvaluationResult;
+
 
 /*
  * Constraints can be adapting or evaluating. The adapting constraints
@@ -24,7 +26,7 @@ import java.util.List;
  * if the vector fulfills the constraint condition.
  */
 public interface IConstraint<E> {
-	public boolean evaluate(List<E> values);
+	public EvaluationResult evaluate(List<E> values);
 	public boolean adapt(List<E> values);
 	public boolean mentions(int dimension);
 }

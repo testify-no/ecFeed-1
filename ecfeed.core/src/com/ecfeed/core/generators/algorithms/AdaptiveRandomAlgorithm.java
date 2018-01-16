@@ -20,6 +20,7 @@ import java.util.Set;
 import com.ecfeed.core.generators.api.GeneratorException;
 import com.ecfeed.core.generators.api.IConstraint;
 import com.ecfeed.core.generators.api.IGeneratorProgressMonitor;
+import com.ecfeed.core.utils.EvaluationResult;
 
 public class AdaptiveRandomAlgorithm<E> extends AbstractAlgorithm<E> implements IAlgorithm<E> {
 
@@ -40,8 +41,8 @@ public class AdaptiveRandomAlgorithm<E> extends AbstractAlgorithm<E> implements 
 		}
 
 		@Override
-		public boolean evaluate(List<E> values) {
-			return !fBlackList.contains(values);
+		public EvaluationResult evaluate(List<E> values) {
+			return EvaluationResult.convertFromBoolean(!fBlackList.contains(values));
 		}
 
 		@Override
