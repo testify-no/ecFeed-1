@@ -12,6 +12,7 @@ package com.ecfeed.core.model;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+//import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,5 +88,32 @@ public class ConstraintTest {
 		assertFalse(new Constraint(notMentioningStatement, notMentioningStatement).mentions(choice));
 
 	}
+
+	//	@Test
+	//	public void testTupleWithNulls() {
+	//		
+	//		MethodParameterNode parameter1 = new MethodParameterNode("parameter1", "type", "0", false);
+	//		
+	//		AbstractStatement premise = 
+	//				RelationStatement.createStatementWithValueCondition(
+	//						parameter1, EStatementRelation.EQUAL, "A");
+	//		
+	//		
+	//		MethodParameterNode parameter2 = new MethodParameterNode("parameter2", "type", "0", false);
+	//		
+	//		AbstractStatement consequence = 
+	//				RelationStatement.createStatementWithValueCondition(
+	//						parameter2, EStatementRelation.EQUAL, "C");
+	//
+	//		Constraint constraint = new Constraint(premise, consequence);
+	//		
+	//		List<ChoiceNode> values = new ArrayList<ChoiceNode>();
+	//		values.add(null);
+	//		values.add(null);
+	//		
+	//		EvaluationResult evaluationResult = constraint.evaluate(values);
+	//
+	//		assertEquals(EvaluationResult.INSUFFICIENT_DATA, evaluationResult);
+	//	}
 
 }

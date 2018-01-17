@@ -12,6 +12,8 @@ package com.ecfeed.core.model;
 
 import java.util.List;
 
+import com.ecfeed.core.utils.EvaluationResult;
+
 public class ExpectedValueStatement extends AbstractStatement implements IRelationalStatement{
 
 	MethodParameterNode fParameter;
@@ -35,8 +37,8 @@ public class ExpectedValueStatement extends AbstractStatement implements IRelati
 	}
 
 	@Override
-	public boolean evaluate(List<ChoiceNode> values) {
-		return true;
+	public EvaluationResult evaluate(List<ChoiceNode> values) {
+		return EvaluationResult.TRUE;
 	}
 
 	@Override

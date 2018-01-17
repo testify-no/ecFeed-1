@@ -12,8 +12,10 @@ package com.ecfeed.core.model;
 
 import java.util.List;
 
+import com.ecfeed.core.utils.EvaluationResult;
+
 public interface IStatement{
-	public boolean evaluate(List<ChoiceNode> values);
+	public EvaluationResult evaluate(List<ChoiceNode> values);
 	public boolean adapt(List<ChoiceNode> values);
 	public boolean compare(IStatement statement);
 	public Object accept(IStatementVisitor visitor) throws Exception;
