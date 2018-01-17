@@ -12,9 +12,11 @@ package com.ecfeed.core.model;
 
 import java.util.List;
 
+import com.ecfeed.core.utils.EvaluationResult;
+
 public interface IStatementCondition {
 	public Object getCondition();
-	public boolean evaluate(List<ChoiceNode> values);
+	public EvaluationResult evaluate(List<ChoiceNode> values);
 	public boolean adapt(List<ChoiceNode> values);
 	public IStatementCondition getCopy();
 	public boolean updateReferences(MethodNode methodNode);

@@ -12,6 +12,7 @@ package com.ecfeed.core.model;
 
 import java.util.List;
 
+import com.ecfeed.core.utils.EvaluationResult;
 import com.ecfeed.core.utils.SystemLogger;
 
 public class RelationStatement extends AbstractStatement implements IRelationalStatement{
@@ -73,14 +74,14 @@ public class RelationStatement extends AbstractStatement implements IRelationalS
 	}
 
 	@Override
+	public EvaluationResult evaluate(List<ChoiceNode> values) {
 
-	public boolean evaluate(List<ChoiceNode> values) {
-		boolean result;
+		EvaluationResult result;
 		try {
 			result = fRightCondition.evaluate(values);
 		} catch (Exception e) {
 			SystemLogger.logCatch(e.getMessage());
-			return false;
+			return EvaluationResult.FALSE;
 		}
 
 		return result;

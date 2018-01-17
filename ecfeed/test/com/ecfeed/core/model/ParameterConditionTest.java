@@ -18,6 +18,7 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.ecfeed.core.utils.EvaluationResult;
 import com.ecfeed.core.utils.JavaTypeHelper;
 
 public class ParameterConditionTest {
@@ -46,12 +47,12 @@ public class ParameterConditionTest {
 		ChoiceNode leftChoiceNode = new ChoiceNode("Label" + leftChoiceValue, leftChoiceValue);
 		ChoiceNode rightChoiceNode = new ChoiceNode("Label" + rightChoiceValue, rightChoiceValue);
 
-		boolean result = statement.evaluate(createList(leftChoiceNode, rightChoiceNode));
+		EvaluationResult result = statement.evaluate(createList(leftChoiceNode, rightChoiceNode));
 
 		if (assertResult == AssertType.TRUE) {
-			assertEquals(true, result);
+			assertEquals(EvaluationResult.TRUE, result);
 		} else {
-			assertEquals(false, result);
+			assertEquals(EvaluationResult.FALSE, result);
 		}
 	}
 

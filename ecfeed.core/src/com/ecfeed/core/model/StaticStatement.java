@@ -12,25 +12,53 @@ package com.ecfeed.core.model;
 
 import java.util.List;
 
+import com.ecfeed.core.utils.EvaluationResult;
+
 public class StaticStatement extends AbstractStatement {
 
 	public static final String STATIC_STATEMENT_TRUE_VALUE = "true";
 	public static final String STATIC_STATEMENT_FALSE_VALUE = "false";
+	public static final String STATIC_STATEMENT_NULL_VALUE = "null";
 
-	private boolean fValue;
+	private EvaluationResult fValue;
 
-	public StaticStatement(boolean value){
+	public StaticStatement(EvaluationResult value) {
 		fValue = value;
 	}
 
+	public StaticStatement(boolean value) {
+
+		if (value) {
+			fValue = EvaluationResult.TRUE;
+		} else {
+			fValue = EvaluationResult.FALSE;
+		}
+	}
+
 	@Override
-	public boolean evaluate(List<ChoiceNode> values) {
+	public EvaluationResult evaluate(List<ChoiceNode> values) {
 		return fValue;
 	}
 
 	@Override
-	public String toString(){
-		return fValue?STATIC_STATEMENT_TRUE_VALUE:STATIC_STATEMENT_FALSE_VALUE;
+	public String toString() {
+
+		return convertToString(fValue);
+	}
+
+	public static String convertToString(EvaluationResult result) {
+
+		switch(result) {
+
+		case TRUE:
+			return STATIC_STATEMENT_TRUE_VALUE;
+		case FALSE:
+			return STATIC_STATEMENT_FALSE_VALUE;
+		case INSUFFICIENT_DATA:
+			return STATIC_STATEMENT_NULL_VALUE;
+		}
+
+		return STATIC_STATEMENT_NULL_VALUE;
 	}
 
 	@Override
@@ -63,15 +91,15 @@ public class StaticStatement extends AbstractStatement {
 	}
 
 	public String getLeftOperandName(){
-		return fValue?STATIC_STATEMENT_TRUE_VALUE:STATIC_STATEMENT_FALSE_VALUE;
+		return toString();
 	}
 
-	public boolean getValue(){
+	public EvaluationResult getValue(){
 		return fValue;
 	}
 
 	public void setValue(boolean value) {
-		fValue = value;
+		fValue = EvaluationResult.convertFromBoolean(value);
 	}
 
 }

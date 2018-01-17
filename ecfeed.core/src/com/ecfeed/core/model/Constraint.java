@@ -42,7 +42,7 @@ public class Constraint implements IConstraint<ChoiceNode> {
 			return EvaluationResult.TRUE;
 		}
 
-		if (!fPremise.evaluate(values)) {
+		if (fPremise.evaluate(values) == EvaluationResult.FALSE) {
 			return EvaluationResult.TRUE;
 		}
 
@@ -50,7 +50,7 @@ public class Constraint implements IConstraint<ChoiceNode> {
 			return EvaluationResult.FALSE;
 		}
 
-		if (fConsequence.evaluate(values)) {
+		if (fConsequence.evaluate(values) == EvaluationResult.TRUE) {
 			return EvaluationResult.TRUE;
 		}
 
@@ -64,7 +64,7 @@ public class Constraint implements IConstraint<ChoiceNode> {
 			return true;
 		}
 
-		if (fPremise.evaluate(values) == true) {
+		if (fPremise.evaluate(values) == EvaluationResult.TRUE) {
 			return fConsequence.adapt(values);
 		}
 
