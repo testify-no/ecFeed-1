@@ -63,9 +63,9 @@ public class XomStatementBuilder implements IStatementVisitor {
 
 		Element targetStatementElement = new Element(CONSTRAINT_STATIC_STATEMENT_NODE_NAME);
 		String attrName = STATEMENT_STATIC_VALUE_ATTRIBUTE_NAME;
-		String attrValue = statement.getValue()?STATIC_STATEMENT_TRUE_VALUE:
 
-			STATIC_STATEMENT_FALSE_VALUE;
+		String attrValue = StaticStatement.convertToString(statement.getValue());
+
 		XomBuilder.encodeAndAddAttribute(
 				targetStatementElement, new Attribute(attrName, attrValue), fWhiteCharConverter);
 

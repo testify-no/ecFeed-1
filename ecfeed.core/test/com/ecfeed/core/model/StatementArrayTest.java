@@ -28,6 +28,7 @@ import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.StatementArray;
 import com.ecfeed.core.model.StaticStatement;
+import com.ecfeed.core.utils.EvaluationResult;
 
 public class StatementArrayTest {
 
@@ -81,20 +82,20 @@ public class StatementArrayTest {
 		List<ChoiceNode> bothFulfill = new ArrayList<ChoiceNode>();
 		bothFulfill.add(fChoice11);
 		bothFulfill.add(fChoice21);
-		assertTrue(arrayOr.evaluate(bothFulfill));
-		assertTrue(arrayAnd.evaluate(bothFulfill));
+		assertTrue(arrayOr.evaluate(bothFulfill) == EvaluationResult.TRUE);
+		assertTrue(arrayAnd.evaluate(bothFulfill) == EvaluationResult.TRUE);
 
 		List<ChoiceNode> oneFulfills = new ArrayList<ChoiceNode>();
 		oneFulfills.add(fChoice12);
 		oneFulfills.add(fChoice21);
-		assertTrue(arrayOr.evaluate(oneFulfills));
-		assertFalse(arrayAnd.evaluate(oneFulfills));
+		assertTrue(arrayOr.evaluate(oneFulfills) == EvaluationResult.TRUE);
+		assertTrue(arrayAnd.evaluate(oneFulfills) == EvaluationResult.FALSE);
 
 		List<ChoiceNode> noneFulfills = new ArrayList<ChoiceNode>();
 		noneFulfills.add(fChoice12);
 		noneFulfills.add(fChoice22);
-		assertFalse(arrayOr.evaluate(noneFulfills));
-		assertFalse(arrayAnd.evaluate(noneFulfills));
+		assertTrue(arrayOr.evaluate(noneFulfills) == EvaluationResult.FALSE);
+		assertTrue(arrayAnd.evaluate(noneFulfills) == EvaluationResult.FALSE);
 	}
 
 	@Test

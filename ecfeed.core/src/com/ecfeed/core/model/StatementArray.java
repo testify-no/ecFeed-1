@@ -13,6 +13,8 @@ package com.ecfeed.core.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ecfeed.core.utils.EvaluationResult;
+
 public class StatementArray extends AbstractStatement {
 
 	private EStatementOperator fOperator;
@@ -67,29 +69,29 @@ public class StatementArray extends AbstractStatement {
 	}
 
 	@Override
-	public boolean evaluate(List<ChoiceNode> values) {
+	public EvaluationResult evaluate(List<ChoiceNode> values) {
 
 		if (fStatements.size() == 0) {
-			return false;
+			return EvaluationResult.FALSE;
 		}
 
 		switch (fOperator) {
 		case AND:
 			for (IStatement statement : fStatements) {
-				if (statement.evaluate(values) == false) {
-					return false;
+				if (statement.evaluate(values) == EvaluationResult.FALSE) {
+					return EvaluationResult.FALSE;
 				}
 			}
-			return true;
+			return EvaluationResult.TRUE;
 		case OR:
 			for (IStatement statement : fStatements) {
-				if (statement.evaluate(values) == true) {
-					return true;
+				if (statement.evaluate(values) == EvaluationResult.TRUE) {
+					return EvaluationResult.TRUE;
 				}
 			}
-			return false;
+			return EvaluationResult.FALSE;
 		}
-		return false;
+		return EvaluationResult.FALSE;
 	}
 
 	@Override

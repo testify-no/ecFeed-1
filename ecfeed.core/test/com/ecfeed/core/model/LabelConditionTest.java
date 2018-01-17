@@ -25,6 +25,7 @@ import com.ecfeed.core.model.RelationStatement;
 import com.ecfeed.core.model.EStatementRelation;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
+import com.ecfeed.core.utils.EvaluationResult;
 import com.ecfeed.core.utils.JavaTypeHelper;
 
 public class LabelConditionTest {
@@ -99,43 +100,46 @@ public class LabelConditionTest {
 				RelationStatement.createStatementWithLabelCondition(c1, EStatementRelation.NOT_EQUAL, "p11");
 
 		//Check that all pEqual statements evaluates to true for all vectors
-		assertTrue(pEqual.evaluate(pq));
-		assertTrue(pEqual.evaluate(p1q));
-		assertTrue(pEqual.evaluate(p2q));
-		assertTrue(pEqual.evaluate(p11q));
-		assertTrue(pEqual.evaluate(p21q));
+		assertTrue(pEqual.evaluate(pq) == EvaluationResult.TRUE);
+		assertTrue(pEqual.evaluate(p1q) == EvaluationResult.TRUE);
+		assertTrue(pEqual.evaluate(p2q) == EvaluationResult.TRUE);
+		assertTrue(pEqual.evaluate(p11q) == EvaluationResult.TRUE);
+		assertTrue(pEqual.evaluate(p21q) == EvaluationResult.TRUE);
+
 		//Check that all pNotEqual statements evaluates to true for all vectors
-		assertFalse(pNotEqual.evaluate(pq));
-		assertFalse(pNotEqual.evaluate(p1q));
-		assertFalse(pNotEqual.evaluate(p11q));
-		assertFalse(pNotEqual.evaluate(p2q));
-		assertFalse(pNotEqual.evaluate(p21q));
+		assertTrue(pNotEqual.evaluate(pq) == EvaluationResult.FALSE);
+		assertTrue(pNotEqual.evaluate(p1q) == EvaluationResult.FALSE);
+		assertTrue(pNotEqual.evaluate(p11q) == EvaluationResult.FALSE);
+		assertTrue(pNotEqual.evaluate(p2q) == EvaluationResult.FALSE);
+		assertTrue(pNotEqual.evaluate(p21q) == EvaluationResult.FALSE);
 
 		//Check that p1qEqual evaluates to true only for vectors with p1 and deriving
-		assertFalse(p1Equal.evaluate(pq));
-		assertTrue(p1Equal.evaluate(p1q));
-		assertFalse(p1Equal.evaluate(p2q));
-		assertTrue(p1Equal.evaluate(p11q));
-		assertFalse(p1Equal.evaluate(p21q));
+		assertTrue(p1Equal.evaluate(pq) == EvaluationResult.FALSE);
+		assertTrue(p1Equal.evaluate(p1q) == EvaluationResult.TRUE);
+		assertTrue(p1Equal.evaluate(p2q) == EvaluationResult.FALSE);
+		assertTrue(p1Equal.evaluate(p11q) == EvaluationResult.TRUE);
+		assertTrue(p1Equal.evaluate(p21q) == EvaluationResult.FALSE);
+
 		//Check that p1qNotEqual evaluates to false for vectors with p1 and deriving
-		assertTrue(p1NotEqual.evaluate(pq));
-		assertFalse(p1NotEqual.evaluate(p1q));
-		assertTrue(p1NotEqual.evaluate(p2q));
-		assertFalse(p1NotEqual.evaluate(p11q));
-		assertTrue(p1NotEqual.evaluate(p21q));
+		assertTrue(p1NotEqual.evaluate(pq) == EvaluationResult.TRUE);
+		assertTrue(p1NotEqual.evaluate(p1q) == EvaluationResult.FALSE);
+		assertTrue(p1NotEqual.evaluate(p2q) == EvaluationResult.TRUE);
+		assertTrue(p1NotEqual.evaluate(p11q) == EvaluationResult.FALSE);
+		assertTrue(p1NotEqual.evaluate(p21q) == EvaluationResult.TRUE);
 
 		//Check that p11qEqual evaluates to true only for vectors with p11
-		assertFalse(p11Equal.evaluate(pq));
-		assertFalse(p11Equal.evaluate(p1q));
-		assertFalse(p11Equal.evaluate(p2q));
-		assertTrue(p11Equal.evaluate(p11q));
-		assertFalse(p11Equal.evaluate(p21q));
+		assertTrue(p11Equal.evaluate(pq) == EvaluationResult.FALSE);
+		assertTrue(p11Equal.evaluate(p1q) == EvaluationResult.FALSE);
+		assertTrue(p11Equal.evaluate(p2q) == EvaluationResult.FALSE);
+		assertTrue(p11Equal.evaluate(p11q) == EvaluationResult.TRUE);
+		assertTrue(p11Equal.evaluate(p21q) == EvaluationResult.FALSE);
+
 		//Check that p11qNotEqual evaluates to false for vectors with p11
-		assertTrue(p11NotEqual.evaluate(pq));
-		assertTrue(p11NotEqual.evaluate(p1q));
-		assertTrue(p11NotEqual.evaluate(p2q));
-		assertFalse(p11NotEqual.evaluate(p11q));
-		assertTrue(p11NotEqual.evaluate(p21q));
+		assertTrue(p11NotEqual.evaluate(pq) == EvaluationResult.TRUE);
+		assertTrue(p11NotEqual.evaluate(p1q) == EvaluationResult.TRUE);
+		assertTrue(p11NotEqual.evaluate(p2q) == EvaluationResult.TRUE);
+		assertTrue(p11NotEqual.evaluate(p11q) == EvaluationResult.FALSE);
+		assertTrue(p11NotEqual.evaluate(p21q) == EvaluationResult.TRUE);
 	}
 
 	@Test

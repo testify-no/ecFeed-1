@@ -18,6 +18,7 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.ecfeed.core.utils.EvaluationResult;
 import com.ecfeed.core.utils.JavaTypeHelper;
 
 public class ValueConditionTest {
@@ -43,12 +44,12 @@ public class ValueConditionTest {
 
 		ChoiceNode choiceNode = new ChoiceNode("Label" + choiceValue, choiceValue);
 
-		boolean result = statement.evaluate(createList(choiceNode));
+		EvaluationResult result = statement.evaluate(createList(choiceNode));
 
 		if (assertResult == AssertType.TRUE) {
-			assertEquals(true, result);
+			assertEquals(EvaluationResult.TRUE, result);
 		} else {
-			assertEquals(false, result);
+			assertEquals(EvaluationResult.FALSE, result);
 		}
 	}
 
