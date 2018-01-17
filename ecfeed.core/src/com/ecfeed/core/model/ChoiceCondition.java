@@ -31,7 +31,13 @@ public class ChoiceCondition implements IStatementCondition {
 	@Override
 	public EvaluationResult evaluate(List<ChoiceNode> choices) {
 
-		ChoiceNode choice = StatementConditionHelper.getChoiceForMethodParameter(choices, fParentRelationStatement.getLeftParameter());
+		ChoiceNode choice = 
+				StatementConditionHelper.getChoiceForMethodParameter(
+						choices, fParentRelationStatement.getLeftParameter());
+		
+		if (choice == null) {
+			return EvaluationResult.INSUFFICIENT_DATA;
+		}
 
 		return evaluateChoice(choice);
 	}

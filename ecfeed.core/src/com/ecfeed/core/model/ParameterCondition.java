@@ -32,12 +32,12 @@ public class ParameterCondition implements IStatementCondition {
 
 		String leftChoiceStr = getChoiceString(choices, fParentRelationStatement.getLeftParameter());
 		if (leftChoiceStr == null) {
-			return EvaluationResult.FALSE;
+			return EvaluationResult.INSUFFICIENT_DATA;
 		}
 
 		String rightChoiceStr = getChoiceString(choices, fRightParameterNode);
 		if (rightChoiceStr == null) {
-			return EvaluationResult.FALSE;
+			return EvaluationResult.INSUFFICIENT_DATA;
 		}
 
 		String substituteType = 

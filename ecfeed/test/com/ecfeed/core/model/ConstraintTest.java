@@ -89,31 +89,122 @@ public class ConstraintTest {
 
 	}
 
-	//	@Test
-	//	public void testTupleWithNulls() {
-	//		
-	//		MethodParameterNode parameter1 = new MethodParameterNode("parameter1", "type", "0", false);
-	//		
-	//		AbstractStatement premise = 
-	//				RelationStatement.createStatementWithValueCondition(
-	//						parameter1, EStatementRelation.EQUAL, "A");
-	//		
-	//		
-	//		MethodParameterNode parameter2 = new MethodParameterNode("parameter2", "type", "0", false);
-	//		
-	//		AbstractStatement consequence = 
-	//				RelationStatement.createStatementWithValueCondition(
-	//						parameter2, EStatementRelation.EQUAL, "C");
-	//
-	//		Constraint constraint = new Constraint(premise, consequence);
-	//		
-	//		List<ChoiceNode> values = new ArrayList<ChoiceNode>();
-	//		values.add(null);
-	//		values.add(null);
-	//		
-	//		EvaluationResult evaluationResult = constraint.evaluate(values);
-	//
-	//		assertEquals(EvaluationResult.INSUFFICIENT_DATA, evaluationResult);
-	//	}
+	@Test
+	public void testTupleWithNullsForValueCondition() {
+
+		AbstractStatement premise = createPremiseWithValueCondition();
+		AbstractStatement consequence = createConsequenceWithValueCondition();
+
+		Constraint constraint = new Constraint(premise, consequence);
+
+		ChoiceNode choice1 = new ChoiceNode("choice1", "value1");
+		ChoiceNode choice2 = new ChoiceNode("choice2", "value2");
+
+		evaluateConstraintWithNullValues(constraint, choice1, choice2);			
+	}
+
+	@Test
+	public void testTupleWithNullsForChoiceCondition() {
+
+		ChoiceNode choice1 = new ChoiceNode("choice1", "value1");
+		ChoiceNode choice2 = new ChoiceNode("choice2", "value2");
+
+		AbstractStatement premise = createPremiseWithChoiceCondition(choice1);
+		AbstractStatement consequence = createConsequenceWithChoiceCondition(choice2);
+
+		Constraint constraint = new Constraint(premise, consequence);
+
+		evaluateConstraintWithNullValues(constraint, choice1, choice2);			
+	}
+
+
+	@Test
+	public void testTupleWithNullsForParameterCondition() {
+
+		MethodParameterNode parameter1 = new MethodParameterNode("parameter1", "type", "0", false);
+		MethodParameterNode parameter2 = new MethodParameterNode("parameter2", "type", "0", false);
+
+		AbstractStatement premise = createStatementWithParameterCondition(parameter1, parameter2);
+		AbstractStatement consequence = createStatementWithParameterCondition(parameter1, parameter2);
+
+		Constraint constraint = new Constraint(premise, consequence);
+
+		ChoiceNode choice1 = new ChoiceNode("choice1", "value1");
+		ChoiceNode choice2 = new ChoiceNode("choice2", "value2");
+
+		evaluateConstraintWithNullValues(constraint, choice1, choice2);			
+	}
+
+	private void evaluateConstraintWithNullValues(Constraint constraint, ChoiceNode choice1, ChoiceNode choice2) {
+
+		List<ChoiceNode> values = new ArrayList<ChoiceNode>();
+		values.add(null);
+		values.add(null);
+		assertTrue(constraint.evaluate(values) == EvaluationResult.INSUFFICIENT_DATA);
+
+		values.clear();
+		values.add(choice1);
+		values.add(null);
+		assertTrue(constraint.evaluate(values) == EvaluationResult.INSUFFICIENT_DATA);
+
+		values.clear();
+		values.add(null);
+		values.add(choice2);
+		assertTrue(constraint.evaluate(values) == EvaluationResult.INSUFFICIENT_DATA);
+	}
+
+	private AbstractStatement createPremiseWithValueCondition() {
+
+		MethodParameterNode parameter1 = new MethodParameterNode("parameter1", "type", "0", false);
+
+		AbstractStatement premise = 
+				RelationStatement.createStatementWithValueCondition(
+						parameter1, EStatementRelation.EQUAL, "A");
+
+		return premise;
+	}
+
+	private AbstractStatement createConsequenceWithValueCondition() {
+
+		MethodParameterNode parameter2 = new MethodParameterNode("parameter2", "type", "0", false);
+
+		AbstractStatement consequence = 
+				RelationStatement.createStatementWithValueCondition(
+						parameter2, EStatementRelation.EQUAL, "C");
+
+		return consequence;
+	}
+
+	private AbstractStatement createPremiseWithChoiceCondition(ChoiceNode choiceNode) {
+
+		MethodParameterNode parameter1 = new MethodParameterNode("parameter1", "type", "0", false);
+
+		AbstractStatement premise = 
+				RelationStatement.createStatementWithChoiceCondition(
+						parameter1, EStatementRelation.EQUAL, choiceNode);
+
+		return premise;
+	}
+
+	private AbstractStatement createConsequenceWithChoiceCondition(ChoiceNode choiceNode) {
+
+		MethodParameterNode parameter2 = new MethodParameterNode("parameter2", "type", "0", false);
+
+		AbstractStatement consequence = 
+				RelationStatement.createStatementWithChoiceCondition(
+						parameter2, EStatementRelation.EQUAL, choiceNode);
+
+		return consequence;
+	}
+
+	private AbstractStatement createStatementWithParameterCondition(
+			MethodParameterNode parameter1, MethodParameterNode parameter2) {
+
+		AbstractStatement premise = 
+				RelationStatement.createStatementWithParameterCondition(
+						parameter1, EStatementRelation.EQUAL, parameter2);
+
+		return premise;
+	}
 
 }
