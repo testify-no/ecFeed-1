@@ -37,17 +37,29 @@ public class Constraint implements IConstraint<ChoiceNode> {
 		if (fPremise == null) { 
 			return EvaluationResult.TRUE;
 		}
+		
+		EvaluationResult premiseEvaluationResult = fPremise.evaluate(values); 
 
-		if (fPremise.evaluate(values) == EvaluationResult.FALSE) {
+		if (premiseEvaluationResult == EvaluationResult.FALSE) {
 			return EvaluationResult.TRUE;
+		}
+		
+		if (premiseEvaluationResult == EvaluationResult.INSUFFICIENT_DATA) {
+			return EvaluationResult.INSUFFICIENT_DATA;
 		}
 
 		if (fConsequence == null) {
 			return EvaluationResult.FALSE;
 		}
 
-		if (fConsequence.evaluate(values) == EvaluationResult.TRUE) {
+		EvaluationResult consequenceEvaluationResult = fConsequence.evaluate(values);
+		
+		if (consequenceEvaluationResult == EvaluationResult.TRUE) {
 			return EvaluationResult.TRUE;
+		}
+		
+		if (consequenceEvaluationResult == EvaluationResult.INSUFFICIENT_DATA) {
+			return EvaluationResult.INSUFFICIENT_DATA;
 		}
 
 		return EvaluationResult.FALSE;
