@@ -14,6 +14,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 //import static org.junit.Assert.assertEquals;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -116,8 +117,7 @@ public class ConstraintTest {
 
 		evaluateConstraintWithNullValues(constraint, choice1, choice2);			
 	}
-
-
+	
 	@Test
 	public void testTupleWithNullsForParameterCondition() {
 
@@ -135,6 +135,44 @@ public class ConstraintTest {
 		evaluateConstraintWithNullValues(constraint, choice1, choice2);			
 	}
 
+	
+	@Test
+	public void testTupleWithNullConsequenceForChoiceCondition() {
+
+		MethodParameterNode parameter1 = new MethodParameterNode("parameter1", "type", "0", false);
+		ChoiceNode choice11 = new ChoiceNode("choice11", "value11");
+		ChoiceNode choice12 = new ChoiceNode("choice12", "value12");
+		choice11.setParent(parameter1);
+		choice12.setParent(parameter1);
+
+		AbstractStatement premise = 
+				RelationStatement.createStatementWithChoiceCondition(
+						parameter1, EStatementRelation.EQUAL, choice11);
+
+		
+		MethodParameterNode parameter2 = new MethodParameterNode("parameter2", "type", "0", false);
+		ChoiceNode choice2 = new ChoiceNode("choice2", "value2");
+		choice2.setParent(parameter2);
+		
+		AbstractStatement consequence = 
+				RelationStatement.createStatementWithChoiceCondition(
+						parameter2, EStatementRelation.EQUAL, choice2);
+
+		MethodNode methodNode = new MethodNode("methodNode");
+		methodNode.addParameter(parameter1);
+		methodNode.addParameter(parameter2);
+		parameter1.setParent(methodNode);
+		parameter2.setParent(methodNode);
+		
+		Constraint constraint = new Constraint(premise, consequence);
+
+		List<ChoiceNode> values = new ArrayList<ChoiceNode>();
+		values.add(choice12);
+		values.add(null);
+		assertTrue(constraint.evaluate(values) == EvaluationResult.TRUE);
+	}
+	
+	
 	private void evaluateConstraintWithNullValues(Constraint constraint, ChoiceNode choice1, ChoiceNode choice2) {
 
 		List<ChoiceNode> values = new ArrayList<ChoiceNode>();
