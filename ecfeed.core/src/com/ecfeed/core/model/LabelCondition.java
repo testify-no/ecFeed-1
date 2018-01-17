@@ -28,10 +28,11 @@ public class LabelCondition implements IStatementCondition {
 	public EvaluationResult evaluate(List<ChoiceNode> choices) {
 
 		ChoiceNode choice = 
-				StatementConditionHelper.getChoiceForMethodParameter(choices, fParentRelationStatement.getLeftParameter());
+				StatementConditionHelper.getChoiceForMethodParameter(
+						choices, fParentRelationStatement.getLeftParameter());
 
 		if (choice == null) {
-			return EvaluationResult.FALSE;
+			return EvaluationResult.INSUFFICIENT_DATA;
 		}
 
 		return evaluateContainsLabel(choice);

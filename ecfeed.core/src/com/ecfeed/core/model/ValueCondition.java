@@ -32,7 +32,8 @@ public class ValueCondition implements IStatementCondition {
 	public EvaluationResult evaluate(List<ChoiceNode> choices) {
 
 		String substituteType = 
-				JavaTypeHelper.getSubstituteType(fParentRelationStatement.getLeftParameter().getType(), JavaTypeHelper.getStringTypeName());
+				JavaTypeHelper.getSubstituteType(
+						fParentRelationStatement.getLeftParameter().getType(), JavaTypeHelper.getStringTypeName());
 
 		if (substituteType == null) {
 			return EvaluationResult.FALSE;
@@ -40,7 +41,7 @@ public class ValueCondition implements IStatementCondition {
 
 		String leftChoiceStr = getChoiceString(choices, fParentRelationStatement.getLeftParameter());
 		if (leftChoiceStr == null) {
-			return EvaluationResult.FALSE;
+			return EvaluationResult.INSUFFICIENT_DATA;
 		}
 
 		EStatementRelation relation = fParentRelationStatement.getRelation();
