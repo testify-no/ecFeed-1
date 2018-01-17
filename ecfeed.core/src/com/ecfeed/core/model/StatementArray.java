@@ -76,22 +76,61 @@ public class StatementArray extends AbstractStatement {
 		}
 
 		switch (fOperator) {
+
 		case AND:
-			for (IStatement statement : fStatements) {
-				if (statement.evaluate(values) == EvaluationResult.FALSE) {
-					return EvaluationResult.FALSE;
-				}
-			}
-			return EvaluationResult.TRUE;
+			return evaluateForAndOperator(values);
 		case OR:
-			for (IStatement statement : fStatements) {
-				if (statement.evaluate(values) == EvaluationResult.TRUE) {
-					return EvaluationResult.TRUE;
-				}
-			}
-			return EvaluationResult.FALSE;
+			return evaluateForOrOperator(values);
 		}
 		return EvaluationResult.FALSE;
+	}
+
+	private EvaluationResult evaluateForOrOperator(List<ChoiceNode> values) {
+
+		boolean insufficient_data = false;
+
+		for (IStatement statement : fStatements) {
+
+			EvaluationResult evaluationResult = statement.evaluate(values);
+
+			if (evaluationResult == EvaluationResult.TRUE) {
+				return EvaluationResult.TRUE;
+			}
+
+			if (evaluationResult == EvaluationResult.INSUFFICIENT_DATA) {
+				insufficient_data = true;
+			}			
+		}
+
+		if (insufficient_data) {
+			return EvaluationResult.INSUFFICIENT_DATA;
+		}
+
+		return EvaluationResult.FALSE;
+	}
+
+	private EvaluationResult evaluateForAndOperator(List<ChoiceNode> values) {
+
+		boolean insufficient_data = false;
+
+		for (IStatement statement : fStatements) {
+
+			EvaluationResult evaluationResult = statement.evaluate(values);
+
+			if (evaluationResult == EvaluationResult.FALSE) {
+				return EvaluationResult.FALSE;
+			}
+
+			if (evaluationResult == EvaluationResult.INSUFFICIENT_DATA) {
+				insufficient_data = true;
+			}
+		}
+
+		if (insufficient_data) {
+			return EvaluationResult.INSUFFICIENT_DATA;
+		}
+
+		return EvaluationResult.TRUE;
 	}
 
 	@Override
