@@ -11,7 +11,6 @@
 package com.ecfeed.core.model;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -20,11 +19,6 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.ecfeed.core.model.ChoiceNode;
-import com.ecfeed.core.model.RelationStatement;
-import com.ecfeed.core.model.EStatementRelation;
-import com.ecfeed.core.model.MethodNode;
-import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.utils.EvaluationResult;
 import com.ecfeed.core.utils.JavaTypeHelper;
 
