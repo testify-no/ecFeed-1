@@ -103,7 +103,22 @@ public class RandomizedNWiseAlgorithmTest {
 
 			@Override
 			public EvaluationResult evaluate(List<Integer> values) {
-				return EvaluationResult.convertFromBoolean(!(values.get(0) == 1 && values.get(1) == 1));
+				return checkValues(values);
+			}
+
+			private EvaluationResult checkValues(List<Integer> values) {
+
+				Integer value0 = values.get(0);
+				if (value0 == null) {
+					return EvaluationResult.INSUFFICIENT_DATA;
+				}
+
+				Integer value1 = values.get(1);
+				if (value1 == null) {
+					return EvaluationResult.INSUFFICIENT_DATA;
+				}
+
+				return EvaluationResult.convertFromBoolean(!(value0 == 1 && value1 == 1));
 			}
 
 			@Override
