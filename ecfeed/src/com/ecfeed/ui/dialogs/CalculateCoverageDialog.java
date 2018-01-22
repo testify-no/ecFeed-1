@@ -188,7 +188,10 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 
 
 		NMaxCombo.setItems(getAvailableNMaxValues());
-		NMaxCombo.setText(INITIAL_N_MAX.toString());
+		
+		Integer initialValue = Math.min(INITIAL_N_MAX, fMethod.getParametersCount()); 
+		
+		NMaxCombo.setText(initialValue.toString());
 	}
 
 	private String[] getAvailableNMaxValues() {
