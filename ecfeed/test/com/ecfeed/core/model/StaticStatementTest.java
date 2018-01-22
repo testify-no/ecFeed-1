@@ -19,28 +19,29 @@ import org.junit.Test;
 
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.StaticStatement;
+import com.ecfeed.core.utils.EvaluationResult;
 
 public class StaticStatementTest {
 
 	@Test
 	public void testEvaluate() {
 		List<ChoiceNode> list = new ArrayList<ChoiceNode>();
-		
+
 		StaticStatement trueStatement = new StaticStatement(true);
-		assertTrue(trueStatement.evaluate(list));
+		assertTrue(trueStatement.evaluate(list) == EvaluationResult.TRUE);
 		StaticStatement falseStatement = new StaticStatement(false);
-		assertFalse(falseStatement.evaluate(list));
+		assertTrue(falseStatement.evaluate(list) == EvaluationResult.FALSE);
 	}
 
 	@Test
 	public void testSetValue() {
 		List<ChoiceNode> list = new ArrayList<ChoiceNode>();
-		
+
 		StaticStatement statement = new StaticStatement(true);
-		assertTrue(statement.evaluate(list));
-		
+		assertTrue(statement.evaluate(list) == EvaluationResult.TRUE);
+
 		statement.setValue(false);
-		assertFalse(statement.evaluate(list));
+		assertTrue(statement.evaluate(list) == EvaluationResult.FALSE);
 	}
 
 	@Test
@@ -49,7 +50,7 @@ public class StaticStatementTest {
 		StaticStatement true2 = new StaticStatement(true);
 		StaticStatement false1 = new StaticStatement(false);
 		StaticStatement false2 = new StaticStatement(false);
-		
+
 		assertTrue(true1.compare(true2));
 		assertTrue(false1.compare(false2));
 		assertFalse(true1.compare(false1));

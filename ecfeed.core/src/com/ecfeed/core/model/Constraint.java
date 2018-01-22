@@ -17,6 +17,7 @@ import java.util.Set;
 import com.ecfeed.core.generators.api.IConstraint;
 import com.ecfeed.core.model.ChoiceCondition;
 import com.ecfeed.core.model.LabelCondition;
+import com.ecfeed.core.utils.EvaluationResult;
 
 public class Constraint implements IConstraint<ChoiceNode> {
 
@@ -35,25 +36,37 @@ public class Constraint implements IConstraint<ChoiceNode> {
 	}
 
 	@Override
-	public boolean evaluate(List<ChoiceNode> values) {
+	public EvaluationResult evaluate(List<ChoiceNode> values) {
 
 		if (fPremise == null) { 
-			return true;
+			return EvaluationResult.TRUE;
 		}
+		
+		EvaluationResult premiseEvaluationResult = fPremise.evaluate(values); 
 
-		if (!fPremise.evaluate(values)) {
-			return true;
+		if (premiseEvaluationResult == EvaluationResult.FALSE) {
+			return EvaluationResult.TRUE;
+		}
+		
+		if (premiseEvaluationResult == EvaluationResult.INSUFFICIENT_DATA) {
+			return EvaluationResult.INSUFFICIENT_DATA;
 		}
 
 		if(fConsequence == null) {
-			return false;
+			return EvaluationResult.FALSE;
 		}
 
-		if (fConsequence.evaluate(values)) {
-			return true;
+		EvaluationResult consequenceEvaluationResult = fConsequence.evaluate(values);
+		
+		if (consequenceEvaluationResult == EvaluationResult.TRUE) {
+			return EvaluationResult.TRUE;
+		}
+		
+		if (consequenceEvaluationResult == EvaluationResult.INSUFFICIENT_DATA) {
+			return EvaluationResult.INSUFFICIENT_DATA;
 		}
 
-		return false;
+		return EvaluationResult.FALSE;
 	}
 
 	@Override
@@ -63,7 +76,7 @@ public class Constraint implements IConstraint<ChoiceNode> {
 			return true;
 		}
 
-		if (fPremise.evaluate(values) == true) {
+		if (fPremise.evaluate(values) == EvaluationResult.TRUE) {
 			return fConsequence.adapt(values);
 		}
 

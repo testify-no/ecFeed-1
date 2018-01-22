@@ -14,9 +14,9 @@ import static com.ecfeed.core.serialization.ect.SerializationConstants.CONSTRAIN
 import static com.ecfeed.core.serialization.ect.SerializationConstants.CONSTRAINT_EXPECTED_STATEMENT_NODE_NAME;
 import static com.ecfeed.core.serialization.ect.SerializationConstants.CONSTRAINT_LABEL_STATEMENT_NODE_NAME;
 import static com.ecfeed.core.serialization.ect.SerializationConstants.CONSTRAINT_PARAMETER_STATEMENT_NODE_NAME;
-import static com.ecfeed.core.serialization.ect.SerializationConstants.CONSTRAINT_VALUE_STATEMENT_NODE_NAME;
 import static com.ecfeed.core.serialization.ect.SerializationConstants.CONSTRAINT_STATEMENT_ARRAY_NODE_NAME;
 import static com.ecfeed.core.serialization.ect.SerializationConstants.CONSTRAINT_STATIC_STATEMENT_NODE_NAME;
+import static com.ecfeed.core.serialization.ect.SerializationConstants.CONSTRAINT_VALUE_STATEMENT_NODE_NAME;
 import static com.ecfeed.core.serialization.ect.SerializationConstants.STATEMENT_EXPECTED_VALUE_ATTRIBUTE_NAME;
 import static com.ecfeed.core.serialization.ect.SerializationConstants.STATEMENT_LABEL_ATTRIBUTE_NAME;
 import static com.ecfeed.core.serialization.ect.SerializationConstants.STATEMENT_OPERATOR_AND_ATTRIBUTE_VALUE;
@@ -26,8 +26,6 @@ import static com.ecfeed.core.serialization.ect.SerializationConstants.STATEMENT
 import static com.ecfeed.core.serialization.ect.SerializationConstants.STATEMENT_RIGHT_PARAMETER_ATTRIBUTE_NAME;
 import static com.ecfeed.core.serialization.ect.SerializationConstants.STATEMENT_RIGHT_VALUE_ATTRIBUTE_NAME;
 import static com.ecfeed.core.serialization.ect.SerializationConstants.STATEMENT_STATIC_VALUE_ATTRIBUTE_NAME;
-import static com.ecfeed.core.serialization.ect.SerializationConstants.STATIC_STATEMENT_FALSE_VALUE;
-import static com.ecfeed.core.serialization.ect.SerializationConstants.STATIC_STATEMENT_TRUE_VALUE;
 import nu.xom.Attribute;
 import nu.xom.Element;
 
@@ -63,9 +61,9 @@ public class XomStatementBuilder implements IStatementVisitor {
 
 		Element targetStatementElement = new Element(CONSTRAINT_STATIC_STATEMENT_NODE_NAME);
 		String attrName = STATEMENT_STATIC_VALUE_ATTRIBUTE_NAME;
-		String attrValue = statement.getValue()?STATIC_STATEMENT_TRUE_VALUE:
 
-			STATIC_STATEMENT_FALSE_VALUE;
+		String attrValue = StaticStatement.convertToString(statement.getValue());
+
 		XomBuilder.encodeAndAddAttribute(
 				targetStatementElement, new Attribute(attrName, attrValue), fWhiteCharConverter);
 

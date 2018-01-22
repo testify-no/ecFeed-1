@@ -24,6 +24,7 @@ import javax.management.RuntimeErrorException;
 import com.ecfeed.core.generators.api.GeneratorException;
 import com.ecfeed.core.generators.api.IConstraint;
 import com.ecfeed.core.generators.api.IGeneratorProgressMonitor;
+import com.ecfeed.core.utils.EvaluationResult;
 import com.ecfeed.core.utils.SystemLogger;
 
 public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
@@ -152,7 +153,7 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 
 		List<E> test = createOneTest(getInput(), nTuple, partialTuple);
 
-		if (checkConstraints(test)) {
+		if (checkConstraints(test) == EvaluationResult.TRUE) {
 			return true;
 		}
 
@@ -287,7 +288,7 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 				bests.add(improvedTest.get(dim));
 				for (E feature : input) {
 					improvedTest.set(dim, feature);
-					if (checkConstraints(improvedTest)) {
+					if (checkConstraints(improvedTest) == EvaluationResult.TRUE) {
 						coverage = getCoverage(improvedTest);
 
 						if (coverage >= bestCov) {
@@ -361,7 +362,7 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 		do {
 			test = createOneTest(paramsWithChoices, nTuple);
 
-			if (checkConstraints(test)) {
+			if (checkConstraints(test) == EvaluationResult.TRUE) {
 				return test;
 			}
 
@@ -444,6 +445,7 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 		allNTuples.put(null, unevaluableNTuples);
 
 		for (List<Integer> comb : allCombs) {
+
 			List<List<DimensionedItem<E>>> tempIn = new ArrayList<>();
 			for (int i = 0; i < comb.size(); i++) {
 				List<DimensionedItem<E>> values = new ArrayList<>();
@@ -456,6 +458,7 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 			cartAlg.initialize(tempIn, new HashSet<IConstraint<DimensionedItem<E>>>(), getGeneratorProgressMonitor());
 			List<DimensionedItem<E>> tuple = null;
 			while ((tuple = cartAlg.getNext()) != null) {
+
 				// Generate a full tuple from this nTuple to make sure that it
 				// is consistent with the constraints
 				List<E> fullTuple = new ArrayList<>();
@@ -464,11 +467,13 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 				for (DimensionedItem<E> var : tuple)
 					fullTuple.set(var.fDimension, var.fItem);
 
-				Boolean check = checkConstraintsOnExtendedNTuple(fullTuple);
-				if (check == null)
+				EvaluationResult check = checkConstraintsOnExtendedNTuple(fullTuple);
+
+				if (check == EvaluationResult.INSUFFICIENT_DATA) {
 					unevaluableNTuples.add(tuple);
-				else if (check)
+				} else if (check == EvaluationResult.TRUE) {
 					validNTuple.add(tuple);
+				}
 			}
 		}
 
@@ -508,24 +513,29 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 	 * accessing some of the indices with a null value, the constraints cannot
 	 * be evaluated and the method returns null; otherwise it returns false.
 	 */
-	protected Boolean checkConstraintsOnExtendedNTuple(List<E> vector) {
+	protected EvaluationResult checkConstraintsOnExtendedNTuple(List<E> vector) {
 
-		boolean hasNull = false;
-		if (vector == null)
-			return true;
+		if (vector == null) {
+			return EvaluationResult.TRUE;
+		}
+
+		boolean insufficientData = false;
+
 		for (IConstraint<E> constraint : getConstraints()) {
-			boolean value = false;
-			try {
-				value = constraint.evaluate(vector);
-				if (value == false) {
-					return false;
-				}
-			} catch (NullPointerException e) {
-				hasNull = true;
+
+			EvaluationResult value = constraint.evaluate(vector);
+			if (value == EvaluationResult.FALSE) {
+				return EvaluationResult.FALSE;
+			}
+
+			if (value == EvaluationResult.INSUFFICIENT_DATA) {
+				insufficientData = true;
 			}
 		}
-		if (hasNull)
-			return null;
-		return true;
+
+		if (insufficientData)
+			return EvaluationResult.INSUFFICIENT_DATA;
+
+		return EvaluationResult.TRUE;
 	}
 }

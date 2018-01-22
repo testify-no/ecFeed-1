@@ -28,6 +28,7 @@ import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.StatementArray;
 import com.ecfeed.core.model.StaticStatement;
+import com.ecfeed.core.utils.EvaluationResult;
 
 public class StatementArrayTest {
 
@@ -81,21 +82,108 @@ public class StatementArrayTest {
 		List<ChoiceNode> bothFulfill = new ArrayList<ChoiceNode>();
 		bothFulfill.add(fChoice11);
 		bothFulfill.add(fChoice21);
-		assertTrue(arrayOr.evaluate(bothFulfill));
-		assertTrue(arrayAnd.evaluate(bothFulfill));
+		assertTrue(arrayOr.evaluate(bothFulfill) == EvaluationResult.TRUE);
+		assertTrue(arrayAnd.evaluate(bothFulfill) == EvaluationResult.TRUE);
 
 		List<ChoiceNode> oneFulfills = new ArrayList<ChoiceNode>();
 		oneFulfills.add(fChoice12);
 		oneFulfills.add(fChoice21);
-		assertTrue(arrayOr.evaluate(oneFulfills));
-		assertFalse(arrayAnd.evaluate(oneFulfills));
+		assertTrue(arrayOr.evaluate(oneFulfills) == EvaluationResult.TRUE);
+		assertTrue(arrayAnd.evaluate(oneFulfills) == EvaluationResult.FALSE);
 
 		List<ChoiceNode> noneFulfills = new ArrayList<ChoiceNode>();
 		noneFulfills.add(fChoice12);
 		noneFulfills.add(fChoice22);
-		assertFalse(arrayOr.evaluate(noneFulfills));
-		assertFalse(arrayAnd.evaluate(noneFulfills));
+		assertTrue(arrayOr.evaluate(noneFulfills) == EvaluationResult.FALSE);
+		assertTrue(arrayAnd.evaluate(noneFulfills) == EvaluationResult.FALSE);
 	}
+
+	@Test
+	public void testEvaluateAndStatementsWithNulls() {
+		StatementArray arrayAnd = new StatementArray(EStatementOperator.AND);
+
+		RelationStatement statement1 = 
+				RelationStatement.createStatementWithChoiceCondition(
+						fParameter1, EStatementRelation.EQUAL, fChoice11);
+
+		arrayAnd.addStatement(statement1);
+
+
+		RelationStatement statement2 = 
+				RelationStatement.createStatementWithChoiceCondition(
+						fParameter2, EStatementRelation.EQUAL, fChoice21);
+
+		arrayAnd.addStatement(statement2);
+
+		List<ChoiceNode> values0 = new ArrayList<ChoiceNode>();
+		values0.add(null);
+		values0.add(null);
+		assertTrue(arrayAnd.evaluate(values0) == EvaluationResult.INSUFFICIENT_DATA);
+
+		List<ChoiceNode> values1A = new ArrayList<ChoiceNode>();
+		values1A.add(null);
+		values1A.add(fChoice21);
+		assertTrue(arrayAnd.evaluate(values1A) == EvaluationResult.INSUFFICIENT_DATA);
+
+		List<ChoiceNode> values1B = new ArrayList<ChoiceNode>();
+		values1B.add(fChoice11);
+		values1B.add(null);
+		assertTrue(arrayAnd.evaluate(values1B) == EvaluationResult.INSUFFICIENT_DATA);
+
+		List<ChoiceNode> values2A = new ArrayList<ChoiceNode>();
+		values2A.add(null);
+		values2A.add(fChoice22);
+		assertTrue(arrayAnd.evaluate(values2A) == EvaluationResult.FALSE);
+
+		List<ChoiceNode> values2B = new ArrayList<ChoiceNode>();
+		values2B.add(fChoice12);
+		values2B.add(null);
+		assertTrue(arrayAnd.evaluate(values2B) == EvaluationResult.FALSE);
+	}
+
+	@Test
+	public void testEvaluateOrStatementsWithNulls() {
+		StatementArray arrayAnd = new StatementArray(EStatementOperator.OR);
+
+		RelationStatement statement1 = 
+				RelationStatement.createStatementWithChoiceCondition(
+						fParameter1, EStatementRelation.EQUAL, fChoice11);
+
+		arrayAnd.addStatement(statement1);
+
+
+		RelationStatement statement2 = 
+				RelationStatement.createStatementWithChoiceCondition(
+						fParameter2, EStatementRelation.EQUAL, fChoice21);
+
+		arrayAnd.addStatement(statement2);
+
+		List<ChoiceNode> values0 = new ArrayList<ChoiceNode>();
+		values0.add(null);
+		values0.add(null);
+		assertTrue(arrayAnd.evaluate(values0) == EvaluationResult.INSUFFICIENT_DATA);
+
+		List<ChoiceNode> values1A = new ArrayList<ChoiceNode>();
+		values1A.add(null);
+		values1A.add(fChoice21);
+		assertTrue(arrayAnd.evaluate(values1A) == EvaluationResult.TRUE);
+
+		List<ChoiceNode> values1B = new ArrayList<ChoiceNode>();
+		values1B.add(fChoice11);
+		values1B.add(null);
+		assertTrue(arrayAnd.evaluate(values1B) == EvaluationResult.TRUE);
+
+		List<ChoiceNode> values2A = new ArrayList<ChoiceNode>();
+		values2A.add(null);
+		values2A.add(fChoice22);
+		assertTrue(arrayAnd.evaluate(values2A) == EvaluationResult.INSUFFICIENT_DATA);
+
+		List<ChoiceNode> values2B = new ArrayList<ChoiceNode>();
+		values2B.add(fChoice12);
+		values2B.add(null);
+		assertTrue(arrayAnd.evaluate(values2B) == EvaluationResult.INSUFFICIENT_DATA);
+	}
+
 
 	@Test
 	public void testGetChildren() {

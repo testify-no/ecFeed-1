@@ -13,6 +13,7 @@ package com.ecfeed.core.model;
 import java.util.List;
 import java.util.Set;
 
+import com.ecfeed.core.utils.EvaluationResult;
 import com.ecfeed.core.utils.JavaTypeHelper;
 
 public class ConstraintNode extends AbstractNode{
@@ -63,11 +64,13 @@ public class ConstraintNode extends AbstractNode{
 		setParent(method);
 	}
 
-	public boolean evaluate(List<ChoiceNode> values) {
+	public EvaluationResult evaluate(List<ChoiceNode> values) {
+		
 		if (fConstraint != null) {
 			return fConstraint.evaluate(values);
 		}
-		return false;
+		
+		return EvaluationResult.FALSE;
 	}
 
 	public boolean mentions(ChoiceNode choice) {
