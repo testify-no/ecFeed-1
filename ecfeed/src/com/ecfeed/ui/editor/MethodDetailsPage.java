@@ -22,6 +22,7 @@ import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodNodeHelper;
 import com.ecfeed.core.model.NodePropertyDefs;
+import com.ecfeed.core.utils.IValueApplier;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.modelif.IModelUpdateContext;

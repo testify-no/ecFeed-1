@@ -28,12 +28,12 @@ import com.ecfeed.algorithm.VersionCheckerAndRegistrator;
 import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.application.ApplicationPreferences;
 import com.ecfeed.application.ApplicationVersion;
+import com.ecfeed.core.utils.IValueApplier;
 import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.core.net.IHttpCommunicator;
 import com.ecfeed.net.HttpCommunicatorWithProgress;
 import com.ecfeed.net.HttpCommunicatorWithoutProgress;
 import com.ecfeed.ui.dialogs.basic.DialogObjectToolkit;
-import com.ecfeed.ui.editor.IValueApplier;
 
 public class CheckForUpdatesDialog extends TitleAreaDialog {
 

@@ -28,6 +28,7 @@ import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.GlobalParameterNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelHelper;
+import com.ecfeed.core.utils.IValueApplier;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.common.utils.SwtObjectHelper;

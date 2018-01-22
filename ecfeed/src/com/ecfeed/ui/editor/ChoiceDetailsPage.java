@@ -25,6 +25,7 @@ import org.eclipse.swt.widgets.Text;
 import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ChoiceNode;
+import com.ecfeed.core.utils.IValueApplier;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.modelif.AbstractParameterInterface;

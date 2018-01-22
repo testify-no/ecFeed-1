@@ -24,6 +24,7 @@ import org.eclipse.swt.widgets.TypedListener;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
+import com.ecfeed.core.utils.IValueApplier;
 import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.ui.common.ApplyValueMode;
 import com.ecfeed.ui.common.CommonEditHelper;

@@ -20,6 +20,7 @@ import org.eclipse.swt.widgets.Text;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.NodePropertyDefs;
 import com.ecfeed.core.utils.BooleanHelper;
+import com.ecfeed.core.utils.IValueApplier;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.common.utils.SwtObjectHelper;
 import com.ecfeed.ui.dialogs.basic.FileOpenDialog;

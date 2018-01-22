@@ -22,6 +22,7 @@ import com.ecfeed.core.model.NodePropertyDefFindByType;
 import com.ecfeed.core.model.NodePropertyDefs;
 import com.ecfeed.core.model.NodePropertyValueSet;
 import com.ecfeed.core.utils.BooleanHelper;
+import com.ecfeed.core.utils.IValueApplier;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.common.utils.SwtObjectHelper;
 import com.ecfeed.ui.modelif.AbstractParameterInterface;
