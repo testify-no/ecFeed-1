@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ecfeed.core.adapter.java.ModelClassLoader;
-import com.ecfeed.core.generators.api.GeneratorException;
 import com.ecfeed.core.generators.api.IGenerator;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.runner.Messages;
@@ -26,24 +25,51 @@ public class JavaRuntimeMethod extends AbstractFrameworkMethod{
 
 	IGenerator<ChoiceNode> fGenerator;
 
-	public JavaRuntimeMethod(Method method, IGenerator<ChoiceNode> initializedGenerator, ModelClassLoader loader) throws RunnerException{
+	public JavaRuntimeMethod(
+			Method method, 
+			IGenerator<ChoiceNode> initializedGenerator, 
+			ModelClassLoader loader) throws RunnerException {
+
 		super(method, loader);
 		fGenerator = initializedGenerator;
 	}
 
 	@Override
-	public Object invokeExplosively(Object target, Object... p) throws Throwable{
-		List<ChoiceNode> next = new ArrayList<>();
-		try {
-			while((next = fGenerator.next()) !=null){
-				super.invoke(target, next);
+	public Object invokeExplosively(Object target, Object... p) throws Throwable {
+
+		boolean wasError = false;
+		StringBuilder stringBuilder = JavaMethodHelper.createFailedTestsStringBuilder();
+		List<ChoiceNode> listOfChoices = new ArrayList<>();
+
+		for (;;) {
+
+			try {
+				listOfChoices = fGenerator.next();
+
+			} catch (Exception e){
+				RunnerException.report(Messages.RUNNER_EXCEPTION(e.getMessage()));
 			}
-		} catch (GeneratorException e) {
-			RunnerException.report(Messages.RUNNER_EXCEPTION(e.getMessage()));
-		} catch (Throwable e){
-			String message = getName() + "(" + next.toString() + "): " + e.getMessage();
-			EcException.report(message, e);
+
+			if (listOfChoices == null) {
+				break;
+			}
+
+			try {
+				super.invoke(target, listOfChoices);
+
+			} catch (Throwable e) {
+
+				wasError = true;
+				JavaMethodHelper.appendExceptionMessage(getName(), listOfChoices, e, stringBuilder);
+			}
+
 		}
+
+		if (wasError) {
+			EcException.report(stringBuilder.toString());
+		}
+
 		return null;
 	}
+
 }
