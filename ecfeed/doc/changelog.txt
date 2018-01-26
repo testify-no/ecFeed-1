@@ -7,6 +7,11 @@
 #                                                                                  
 #-------------------------------------------------------------------------------
 
+Version 1.12.6
+ - bugfixes (pairwise generator)
+ - jUnit runner doesn't stop after first failure
+ - configurable coverage measurement
+
 Version 1.12.4
  - remove default choices from parameters
  - fixed comments section in RCP
