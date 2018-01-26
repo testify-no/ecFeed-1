@@ -14,12 +14,13 @@ import java.util.List;
 
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.runner.java.TestMethodInvokerHelper;
+import com.ecfeed.core.utils.StringHelper;
 
 public class JavaMethodHelper {
 
-	public static StringBuilder createFailedTestsStringBuilder() {
+	public static void appendFailedTestsMessage(StringBuilder stringBuilder) {
 
-		return new StringBuilder("\n\nThe following test cases failed:\n");
+		stringBuilder.append("\n\nThe following test cases failed:\n\n");
 	}
 
 	public static void appendExceptionMessage(
@@ -35,7 +36,7 @@ public class JavaMethodHelper {
 				methodName, argumentsDescription, exceptionMessage);
 
 		stringBuilder.append(message);
-		stringBuilder.append("\n");
+		stringBuilder.append("\n\n");
 	}
 
 	private static String getExceptionMessage(Throwable e) {
@@ -47,5 +48,20 @@ public class JavaMethodHelper {
 		}
 
 		return exceptionMessage;
+	}
+
+	public static void addTestStatistics(int total, int failed, StringBuilder stringBuilder) {
+
+		String summary = new String("Total:"  + total + " Failed:" + failed);
+		String separator = StringHelper.createString("=", summary.length());
+
+		stringBuilder.append(separator);
+		stringBuilder.append("\n");
+
+		stringBuilder.append(summary);
+		stringBuilder.append("\n");
+
+		stringBuilder.append(separator);
+		stringBuilder.append("\n");
 	}
 }

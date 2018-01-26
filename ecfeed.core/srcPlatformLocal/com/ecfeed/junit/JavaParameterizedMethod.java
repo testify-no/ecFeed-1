@@ -29,17 +29,24 @@ public class JavaParameterizedMethod extends AbstractFrameworkMethod {
 	@Override
 	public Object invokeExplosively(Object target, Object... parameters) throws Throwable{
 
-		boolean wasError = false;
-		StringBuilder stringBuilder = JavaMethodHelper.createFailedTestsStringBuilder();
+		int totalTestCaseCounter = 0;
+		int failedTestCaseCounter = 0;
+		StringBuilder stringBuilder = new StringBuilder();
 
 		for (TestCaseNode testCase : fTestCases) {
+
+			totalTestCaseCounter++;
 
 			try {
 				super.invoke(target, testCase.getTestData());
 
 			} catch (Throwable e) {
 
-				wasError = true;
+				if (failedTestCaseCounter == 0) {
+					JavaMethodHelper.appendFailedTestsMessage(stringBuilder);
+				}
+
+				failedTestCaseCounter++;
 				JavaMethodHelper.appendExceptionMessage(
 						testCase.getMethod().getName(),
 						testCase.getTestData(),
@@ -48,7 +55,9 @@ public class JavaParameterizedMethod extends AbstractFrameworkMethod {
 			}
 		}
 
-		if (wasError) {
+		JavaMethodHelper.addTestStatistics(totalTestCaseCounter, failedTestCaseCounter, stringBuilder);
+
+		if (failedTestCaseCounter > 0) {
 			EcException.report(stringBuilder.toString());
 		}
 

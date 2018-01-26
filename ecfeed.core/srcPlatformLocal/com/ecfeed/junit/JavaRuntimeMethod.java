@@ -37,8 +37,9 @@ public class JavaRuntimeMethod extends AbstractFrameworkMethod{
 	@Override
 	public Object invokeExplosively(Object target, Object... p) throws Throwable {
 
-		boolean wasError = false;
-		StringBuilder stringBuilder = JavaMethodHelper.createFailedTestsStringBuilder();
+		int totalTestCaseCounter = 0;
+		int failedTestCaseCounter = 0;
+		StringBuilder stringBuilder = new StringBuilder();
 		List<ChoiceNode> listOfChoices = new ArrayList<>();
 
 		for (;;) {
@@ -54,18 +55,26 @@ public class JavaRuntimeMethod extends AbstractFrameworkMethod{
 				break;
 			}
 
+			totalTestCaseCounter++;
+
 			try {
 				super.invoke(target, listOfChoices);
 
 			} catch (Throwable e) {
 
-				wasError = true;
+				if (failedTestCaseCounter == 0) {
+					JavaMethodHelper.appendFailedTestsMessage(stringBuilder);
+				}
+
+				failedTestCaseCounter++;
 				JavaMethodHelper.appendExceptionMessage(getName(), listOfChoices, e, stringBuilder);
 			}
 
 		}
 
-		if (wasError) {
+		JavaMethodHelper.addTestStatistics(totalTestCaseCounter, failedTestCaseCounter, stringBuilder);
+
+		if (failedTestCaseCounter > 0) {
 			EcException.report(stringBuilder.toString());
 		}
 
