@@ -15,7 +15,6 @@ import java.util.Collection;
 
 import com.ecfeed.core.adapter.java.ModelClassLoader;
 import com.ecfeed.core.model.TestCaseNode;
-import com.ecfeed.core.runner.Messages;
 import com.ecfeed.core.utils.EcException;
 
 public class JavaParameterizedMethod extends AbstractFrameworkMethod {
@@ -29,13 +28,31 @@ public class JavaParameterizedMethod extends AbstractFrameworkMethod {
 
 	@Override
 	public Object invokeExplosively(Object target, Object... parameters) throws Throwable{
-		for(TestCaseNode testCase : fTestCases){
-			try{
+
+		boolean wasError = false;
+		StringBuilder stringBuilder = JavaMethodHelper.createFailedTestsStringBuilder();
+
+		for (TestCaseNode testCase : fTestCases) {
+
+			try {
 				super.invoke(target, testCase.getTestData());
-			}catch (Throwable e){
-				EcException.report(Messages.RUNNER_EXCEPTION(e.getMessage()), e);
+
+			} catch (Throwable e) {
+
+				wasError = true;
+				JavaMethodHelper.appendExceptionMessage(
+						testCase.getMethod().getName(),
+						testCase.getTestData(),
+						e, 
+						stringBuilder);
 			}
 		}
+
+		if (wasError) {
+			EcException.report(stringBuilder.toString());
+		}
+
 		return null;
 	}
+
 }
