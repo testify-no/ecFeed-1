@@ -35,6 +35,7 @@ public class OtherMethodsViewer extends CheckboxTableViewerSection {
 	private Button fAddSelectedButton;
 	private ClassInterface fClassIf;
 
+
 	private class AddSelectedAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent ev){
@@ -58,7 +59,10 @@ public class OtherMethodsViewer extends CheckboxTableViewerSection {
 	public void setInput(ClassNode classNode){
 		fClassIf.setOwnNode(classNode);
 		setText("Other methods in " + ClassNodeHelper.getLocalName(classNode));
+
 		super.setInput(fClassIf.getOtherMethods());
+
+
 	}
 
 	public int getItemsCount(){

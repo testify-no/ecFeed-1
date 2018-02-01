@@ -50,6 +50,7 @@ import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.ClassNode;
+import com.ecfeed.core.model.ClassNodeHelper;
 import com.ecfeed.core.model.ConstraintNode;
 import com.ecfeed.core.model.GlobalParameterNode;
 import com.ecfeed.core.model.IModelVisitor;
@@ -94,14 +95,25 @@ public class ModelMasterSection extends TreeViewerSection{
 
 	private class ModelWrapper{
 		private final RootNode fModel;
+		//		private final RootNode fSimpleModel;
 
 		public ModelWrapper(RootNode model){
 			fModel = model;
+			//			fSimpleModel = null;
 		}
+
+		//		public ModelWrapper(RootNode model, RootNode simpleModel){
+		//			fModel = model;
+		//			fSimpleModel = simpleModel;
+		//		}
 
 		public RootNode getModel(){
 			return fModel;
 		}
+
+		//		public RootNode getSimpleModel(){
+		//			return fSimpleModel;
+		//		}
 	}
 
 	private class UpdateListener implements IModelUpdateListener{
@@ -186,17 +198,31 @@ public class ModelMasterSection extends TreeViewerSection{
 
 			@Override
 			public Object visit(ClassNode node) throws Exception {
-				return node.toString();
+				if(ApplicationContext.getSimplifiedUI()) {
+					return ClassNodeHelper.simpleModeName(node);
+				} else {
+					return node.toString();
+				}
 			}
 
 			@Override
 			public Object visit(MethodNode node) throws Exception {
-				return MethodNodeHelper.simplifiedToString(node);
+
+				if(ApplicationContext.getSimplifiedUI()) {
+					return MethodNodeHelper.simplifiedToSimpleModeString(node);
+				} else {
+					return MethodNodeHelper.simplifiedToString(node);
+				}
 			}
 
 			@Override
 			public Object visit(MethodParameterNode node) throws Exception {
-				String result = ModelHelper.convertParameterToSimplifiedString(node);
+				String result;
+				if(ApplicationContext.getSimplifiedUI()){
+					result = ModelHelper.convertParameterToSimpleModeString(node);
+				} else {
+					result = ModelHelper.convertParameterToSimplifiedString(node);
+				}
 				if(node.isLinked()){
 					result += "[LINKED]->" + node.getLink().getQualifiedName();
 				}
@@ -205,7 +231,13 @@ public class ModelMasterSection extends TreeViewerSection{
 
 			@Override
 			public Object visit(GlobalParameterNode node) throws Exception {
-				return ModelHelper.convertParameterToSimplifiedString(node);
+				String result;
+				if(ApplicationContext.getSimplifiedUI()){
+					result = ModelHelper.convertParameterToSimpleModeString(node);
+				} else {
+					result = ModelHelper.convertParameterToSimplifiedString(node);
+				}
+				return result;
 			}
 
 			@Override
@@ -520,7 +552,7 @@ public class ModelMasterSection extends TreeViewerSection{
 			if (ApplicationContext.isStandaloneApplication()) {
 				return actionName;
 			}
-			
+
 			return ActionHelper.addShortcut(actionName, shortcut);
 		}
 
@@ -716,6 +748,7 @@ public class ModelMasterSection extends TreeViewerSection{
 	}
 
 	public void setInput(RootNode model){
+
 		setInput(new ModelWrapper(model));
 		collapseGlobalParameters();
 	}

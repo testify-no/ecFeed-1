@@ -28,7 +28,10 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.model.AbstractParameterNode;
+import com.ecfeed.core.model.MethodNodeHelper;
+import com.ecfeed.core.model.ModelHelper;
 import com.ecfeed.core.model.ParametersParentNode;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.NodeNameColumnLabelProvider;
@@ -85,7 +88,13 @@ public abstract class AbstractParametersViewer extends TableViewerSection {
 		fTypeColumn = addColumn("Type", 150, new NodeViewerColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
-				return ((AbstractParameterNode)element).getType();
+				if(ApplicationContext.getSimplifiedUI()) {
+					String type = ((AbstractParameterNode)element).getType();
+					String simplifiedType = ModelHelper.convertTypeToSimpleMode(type);
+					return simplifiedType;
+				} else {
+					return ((AbstractParameterNode)element).getType();
+				}
 			}
 		});
 	}

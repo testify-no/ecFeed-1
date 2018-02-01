@@ -35,12 +35,14 @@ public class ModelDetailsPage extends BasicDetailsPage {
 	private RootInterface fRootIf;
 	private SingleTextCommentsSection fCommentsSection;
 	private IFileInfoProvider fFileInfoProvider;
+	private ModelMasterSection fMasterSection;
 
 	public ModelDetailsPage(
 			ModelMasterSection masterSection, 
 			IModelUpdateContext updateContext, 
 			IFileInfoProvider fileInforProvider) {
 		super(masterSection, updateContext, fileInforProvider);
+		fMasterSection = masterSection;
 		fFileInfoProvider = fileInforProvider;
 		fRootIf = new RootInterface(this, fFileInfoProvider);
 	}
@@ -53,7 +55,7 @@ public class ModelDetailsPage extends BasicDetailsPage {
 		createModelNameEdit(getMainComposite());
 
 		addCommentsSection();
-
+		
 		addViewerSection(fClassesSection = new ClassViewer(this, this, fFileInfoProvider));
 
 		fParametersSection = new GlobalParametersViewer(this, this, fFileInfoProvider);
@@ -99,9 +101,9 @@ public class ModelDetailsPage extends BasicDetailsPage {
 		@Override
 		public void widgetSelected(SelectionEvent arg0)
 		{
-			RootNode rootNode = fRootIf.getOwnNode();
 		
 			try {
+				RootNode rootNode = fRootIf.getOwnNode();
 				ErrorDescription errorDescription = EditorStyleChecker.canSwitchToSimpleModel(rootNode);
 				
 				if (errorDescription != null) {
@@ -117,6 +119,7 @@ public class ModelDetailsPage extends BasicDetailsPage {
 			}
 			
 			refresh();
+			fMasterSection.refresh();
 		}
 
 		private void modifyModeView() {
@@ -139,7 +142,6 @@ public class ModelDetailsPage extends BasicDetailsPage {
 			fClassesSection.setInput(selectedRoot);
 			fParametersSection.setInput(selectedRoot);
 			fCommentsSection.setInput(selectedRoot);
-			
 		}
 	}
 

@@ -19,6 +19,7 @@ import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.widgets.Display;
 
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.operations.AbstractParameterOperationSetType;
 import com.ecfeed.core.adapter.operations.BulkOperation;
@@ -26,6 +27,7 @@ import com.ecfeed.core.adapter.operations.ParameterSetTypeCommentsOperation;
 import com.ecfeed.core.adapter.operations.ReplaceChoicesOperation;
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ChoiceNode;
+import com.ecfeed.core.model.ModelHelper;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.EclipseModelBuilder;
@@ -47,7 +49,12 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 	}
 
 	public String getType() {
-		return getOwnNode().getType();
+		if(ApplicationContext.getSimplifiedUI())
+		{
+			return ModelHelper.convertTypeToSimpleMode(getOwnNode().getType());
+		} else {
+			return getOwnNode().getType();
+		}
 	}
 
 	public String getTypeComments() {
@@ -150,7 +157,12 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 	}
 
 	protected IModelOperation setTypeOperation(String type) {
-		return new AbstractParameterOperationSetType(getOwnNode(), type, getAdapterProvider());
+		if(ApplicationContext.getSimplifiedUI()){
+			String newType = ModelHelper.convertTypeToSimpleMode(type);
+			return new AbstractParameterOperationSetType(getOwnNode(), newType, getAdapterProvider());
+		} else {
+			return new AbstractParameterOperationSetType(getOwnNode(), type, getAdapterProvider());
+		}
 	}
 
 	public boolean importTypeJavadocComments() {

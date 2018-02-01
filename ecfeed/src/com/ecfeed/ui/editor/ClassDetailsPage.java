@@ -127,12 +127,6 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		fPackageNameText = formObjectToolkit.createGridText(composite, new PackageNameApplier());
 		controlPackageNameDisplay();
 		formObjectToolkit.createEmptyLabel(composite);
-		
-		
-		
-
-		
-
 		formObjectToolkit.paintBorders(composite);
 	}
 

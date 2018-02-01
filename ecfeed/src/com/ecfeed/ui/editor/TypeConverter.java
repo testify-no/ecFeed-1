@@ -77,10 +77,7 @@ public class TypeConverter {
 	
 	public static void main(String[] args){
 		TypeConverter tc = new TypeConverter("3");
-		System.out.println(tc.convertToValidJaveIdentifier());
-		
-		
-		
+		System.out.println(tc.convertToValidJaveIdentifier());	
 	}
 
 }

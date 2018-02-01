@@ -24,6 +24,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
@@ -165,12 +166,24 @@ public class MethodsViewer extends TableViewerSection {
 			List<MethodParameterNode> parameters = ((MethodNode)element).getMethodParameters();
 			String result = "";
 			for(int i = 0; i < argTypes.size(); i++){
-				result += (parameters.get(i).isExpected()?"[e]":"") + ModelHelper.convertToLocalName(argTypes.get(i)) + " " + argNames.get(i);
+				String type = getParametersType(argTypes.get(i));
+			
+				result += (parameters.get(i).isExpected()?"[e]":"") + ModelHelper.convertToLocalName(type) + " " + argNames.get(i);
 				if(i < argTypes.size() - 1){
 					result += ", ";
 				}
 			}
 			return result;
+		}
+
+		private String getParametersType(String parType) {
+			String type;
+			if(ApplicationContext.getSimplifiedUI()){
+				type = ModelHelper.convertTypeToSimpleMode(parType);
+			} else {
+				type = parType;
+			}
+			return type;
 		}
 	}
 

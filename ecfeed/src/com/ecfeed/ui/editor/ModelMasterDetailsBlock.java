@@ -193,7 +193,12 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 		fMasterSection = new ModelMasterSection(this, fFileInfoProvider);
 		fMasterSection.initialize(managedForm);
 		fMasterSection.addSelectionChangedListener(this);
+//		for(AbstractNode child: fModel.getChildren()){
+//			String[] names = child.getName().split("\\.");
+//			child.setName(names[names.length-1]);
+//		}
 		fMasterSection.setInput(fModel);
+		
 
 		if (isInMemFile(fFileInfoProvider)) {
 			fMasterSection.markDirty();
