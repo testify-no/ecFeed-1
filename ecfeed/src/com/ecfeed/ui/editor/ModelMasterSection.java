@@ -36,7 +36,6 @@ import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
@@ -308,17 +307,25 @@ public class ModelMasterSection extends TreeViewerSection{
 
 			@Override
 			public Object visit(RootNode node) throws Exception {
-				return Arrays.asList(new Image[]{implementationStatusDecoration(node)});
+				return createDecorationList(node);
+			}
+
+			private List<Image> createDecorationList(AbstractNode abstractNode) {
+
+				List<Image> images = new ArrayList<Image>();
+				images.add(implementationStatusDecoration(abstractNode));
+
+				return images;
 			}
 
 			@Override
 			public Object visit(ClassNode node) throws Exception {
-				return Arrays.asList(new Image[]{implementationStatusDecoration(node)});
+				return createDecorationList(node);
 			}
 
 			@Override
 			public Object visit(MethodNode node) throws Exception {
-				return Arrays.asList(new Image[]{implementationStatusDecoration(node)});
+				return createDecorationList(node);
 			}
 
 			@Override
@@ -344,12 +351,12 @@ public class ModelMasterSection extends TreeViewerSection{
 
 			@Override
 			public Object visit(TestCaseNode node) throws Exception {
-				return Arrays.asList(new Image[]{implementationStatusDecoration(node)});
+				return createDecorationList(node);
 			}
 
 			@Override
 			public Object visit(ConstraintNode node) throws Exception {
-				return Arrays.asList(new Image[]{implementationStatusDecoration(node)});
+				return createDecorationList(node);
 			}
 
 			@Override
@@ -363,17 +370,22 @@ public class ModelMasterSection extends TreeViewerSection{
 			}
 
 			private Image implementationStatusDecoration(AbstractNode node) {
+
 				if (!fIsProjectAvailable) {
 					return null;
 				}
 
-				switch (fNodeInterface.getImplementationStatus(node)){
+				switch (fNodeInterface.getImplementationStatus(node)) {
+
 				case IMPLEMENTED:
 					return getImageFromFile("implemented.png");
+
 				case PARTIALLY_IMPLEMENTED:
 					return getImageFromFile("partially_implemented.png");
+
 				case NOT_IMPLEMENTED:
 					return getImageFromFile("unimplemented.png");
+
 				case IRRELEVANT:
 				default:
 					return null;
@@ -388,30 +400,40 @@ public class ModelMasterSection extends TreeViewerSection{
 		@SuppressWarnings("unchecked")
 		@Override
 		public Image decorateImage(Image image, Object element) {
-			if(!(element instanceof AbstractNode)){
-				return image;
-			}
 
-			try {
-				List<Image> decorations = (List<Image>)((AbstractNode)element).accept(
-						new DecorationProvider(fFileInfoProvider, fFileInfoProvider.isProjectAvailable()));
-				List<Image> all = new ArrayList<Image>(decorations);
-				all.add(0, image);
-				if(fFusedImages.containsKey(all) == false){
-					Image decorated = new Image(Display.getCurrent(), image.getImageData());
-					for(Image decoration : decorations){
-						if(decoration != null){
-							decorated = fuseImages(decorated, decoration, 0, 0);
-						}
-					}
-					fFusedImages.put(decorations, decorated);
-				}
-				return fFusedImages.get(decorations);
-			} catch(Exception e) {
-				SystemLogger.logCatch(e.getMessage());
-			}
 			return image;
+
+			//			if(!(element instanceof AbstractNode)){
+			//				return image;
+			//			}
+			//
+			//			try {
+			//				List<Image> decorations = 
+			//						(List<Image>)((AbstractNode)element).accept(
+			//								new DecorationProvider(
+			//										fFileInfoProvider, 
+			//										fFileInfoProvider.isProjectAvailable()));
+			//				
+			//				List<Image> all = new ArrayList<Image>(decorations);
+			//				all.add(0, image);
+			//				
+			//				if (fFusedImages.containsKey(all) == false) {
+			//					System.out.println("decorateImage, newImageCounter:" + (newImageCounter++));
+			//					Image decorated = new Image(Display.getCurrent(), image.getImageData());
+			//					for(Image decoration : decorations){
+			//						if(decoration != null){
+			//							decorated = fuseImages(decorated, decoration, 0, 0);
+			//						}
+			//					}
+			//					fFusedImages.put(decorations, decorated);
+			//				}
+			//				return fFusedImages.get(decorations);
+			//			} catch(Exception e) {
+			//				SystemLogger.logCatch(e.getMessage());
+			//			}
+			//			return image;
 		}
+
 
 		@Override
 		public String decorateText(String text, Object element) {
@@ -436,31 +458,35 @@ public class ModelMasterSection extends TreeViewerSection{
 		}
 
 		private Image fuseImages(Image icon, Image decorator, int x, int y){
-			ImageData idIcon = (ImageData)icon.getImageData().clone();
-			ImageData idDecorator = decorator.getImageData();
-			if(idIcon.width <= x || idIcon.height <= y){
-				return icon;
-			}
-			int rbw = (idDecorator.width + x > idIcon.width) ? (idDecorator.width + x - idIcon.width) : idDecorator.width;
-			int rbh = (idDecorator.height + y > idIcon.height) ? (idDecorator.height + y - idIcon.height) : idDecorator.height;
 
-			int indexa = y*idIcon.scanlinePad + x;
-			int indexb = 0;
+			return decorator;
 
-			for(int row = 0; row < rbh; row ++){
-				for(int col = 0; col < rbw; col++){
-					if(idDecorator.alphaData[indexb] < 0){
-						idIcon.alphaData[indexa] = (byte)-1;
-						idIcon.data[4*indexa]=idDecorator.data[4*indexb];
-						idIcon.data[4*indexa+1]=idDecorator.data[4*indexb+1];
-						idIcon.data[4*indexa+2]=idDecorator.data[4*indexb+2];
-					}
-					indexa += 1;
-					indexb += 1;
-				}
-				indexa += x;
-			}
-			return new Image(Display.getDefault(), idIcon);
+			//			ImageData idIcon = (ImageData)icon.getImageData().clone();
+			//			ImageData idDecorator = decorator.getImageData();
+			//			if(idIcon.width <= x || idIcon.height <= y){
+			//				return icon;
+			//			}
+			//			int rbw = (idDecorator.width + x > idIcon.width) ? (idDecorator.width + x - idIcon.width) : idDecorator.width;
+			//			int rbh = (idDecorator.height + y > idIcon.height) ? (idDecorator.height + y - idIcon.height) : idDecorator.height;
+			//
+			//			int indexa = y*idIcon.scanlinePad + x;
+			//			int indexb = 0;
+			//
+			//			for(int row = 0; row < rbh; row ++){
+			//				for(int col = 0; col < rbw; col++){
+			//					if(idDecorator.alphaData[indexb] < 0){
+			//						idIcon.alphaData[indexa] = (byte)-1;
+			//						idIcon.data[4*indexa]=idDecorator.data[4*indexb];
+			//						idIcon.data[4*indexa+1]=idDecorator.data[4*indexb+1];
+			//						idIcon.data[4*indexa+2]=idDecorator.data[4*indexb+2];
+			//					}
+			//					indexa += 1;
+			//					indexb += 1;
+			//				}
+			//				indexa += x;
+			//			}
+			//			System.out.println("fuseImages, newImageCounter:" + (newImageCounter++));
+			//			return new Image(Display.getDefault(), idIcon);
 		}
 	}
 
@@ -520,10 +546,10 @@ public class ModelMasterSection extends TreeViewerSection{
 			if (ApplicationContext.isStandaloneApplication()) {
 				return actionName;
 			}
-			
+
 			return ActionHelper.addShortcut(actionName, shortcut);
 		}
-		
+
 		private void addActionsForMethod(AbstractNode abstractNode) {
 
 			if (!(abstractNode instanceof MethodNode)) {
