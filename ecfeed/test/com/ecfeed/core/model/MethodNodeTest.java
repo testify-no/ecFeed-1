@@ -62,8 +62,8 @@ public class MethodNodeTest {
 	@Test
 	public void testAddConstraint(){
 		MethodNode method = new MethodNode("name");
-		Constraint constraint1 = new Constraint(new StaticStatement(true), new StaticStatement(false));
-		Constraint constraint2 = new Constraint(new StaticStatement(true), new StaticStatement(false));
+		Constraint constraint1 = new Constraint(new String(), new StaticStatement(true), new StaticStatement(false));
+		Constraint constraint2 = new Constraint(new String(), new StaticStatement(true), new StaticStatement(false));
 		ConstraintNode constraintNode1 = new ConstraintNode("name1", constraint1);
 		ConstraintNode constraintNode2 = new ConstraintNode("name2", constraint2);
 		assertEquals(0, method.getConstraintNodes().size());
@@ -135,7 +135,7 @@ public class MethodNodeTest {
 		MethodNode method = new MethodNode("name");
 		TestCaseNode testCase = new TestCaseNode("test case", new ArrayList<ChoiceNode>());
 		ConstraintNode constraint = new ConstraintNode("constraint",
-				new Constraint(new StaticStatement(false), new StaticStatement(false)));
+				new Constraint(new String(), new StaticStatement(false), new StaticStatement(false)));
 		MethodParameterNode parameter = new MethodParameterNode("parameter", "type", "0", false);
 		MethodParameterNode expCat = new MethodParameterNode("expCat", "type", "0", true);
 
@@ -469,10 +469,13 @@ public class MethodNodeTest {
 		ChoiceNode choice = new ChoiceNode("choice", "value");
 		Constraint mentioningConstraint = 
 				new Constraint(
+						new String(),
 						RelationStatement.createStatementWithChoiceCondition(
-								parameter, EStatementRelation.EQUAL, choice), new StaticStatement(false));
+								parameter, EStatementRelation.EQUAL, choice), 
+								new StaticStatement(false));
 
-		Constraint notMentioningConstraint = new Constraint(new StaticStatement(false), new StaticStatement(false));
+		Constraint notMentioningConstraint = 
+				new Constraint(new String(), new StaticStatement(false), new StaticStatement(false));
 		ConstraintNode mentioningConstraintNode = new ConstraintNode("constraint", mentioningConstraint);
 		ConstraintNode notMentioningConstraintNode = new ConstraintNode("constraint", notMentioningConstraint);
 		List<ChoiceNode> mentioningTestData = new ArrayList<ChoiceNode>();
@@ -545,8 +548,8 @@ public class MethodNodeTest {
 		MethodNode m1 = new MethodNode("m");
 		MethodNode m2 = new MethodNode("m");
 
-		ConstraintNode c1 = new ConstraintNode("c", new Constraint(new StaticStatement(true), new StaticStatement(true)));
-		ConstraintNode c2 = new ConstraintNode("c", new Constraint(new StaticStatement(true), new StaticStatement(true)));
+		ConstraintNode c1 = new ConstraintNode("c", new Constraint("c", new StaticStatement(true), new StaticStatement(true)));
+		ConstraintNode c2 = new ConstraintNode("c", new Constraint("c", new StaticStatement(true), new StaticStatement(true)));
 
 		m1.addConstraint(c1);
 		assertFalse(m1.isMatch(m2));

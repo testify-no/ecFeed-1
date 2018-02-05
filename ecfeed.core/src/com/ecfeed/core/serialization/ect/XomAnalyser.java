@@ -431,7 +431,7 @@ public abstract class XomAnalyser {
 			ParserException.report(Messages.MALFORMED_CONSTRAINT_NODE_DEFINITION(method.getName(), name));
 		}
 
-		ConstraintNode targetConstraint = new ConstraintNode(name, new Constraint(premise, consequence));
+		ConstraintNode targetConstraint = new ConstraintNode(name, new Constraint(name, premise, consequence));
 
 		targetConstraint.setDescription(parseComments(element));
 
@@ -647,10 +647,10 @@ public abstract class XomAnalyser {
 	}
 
 	protected static List<Element> getIterableChildren(Element element, String name) {
-		
+
 		List<Element> elements = getIterableChildren(element);
 		Iterator<Element> it = elements.iterator();
-		
+
 		while (it.hasNext()) {
 			if (it.next().getLocalName().equals(name) == false) {
 				it.remove();
@@ -658,23 +658,23 @@ public abstract class XomAnalyser {
 		}
 		return elements;
 	}
-	
+
 	protected static List<Element> getIterableChildren(Element element, String[] names) {
-		
+
 		List<String> listOfNames = Arrays.asList(names);
-		
+
 		List<Element> elements = getIterableChildren(element);
 		Iterator<Element> it = elements.iterator();
-		
+
 		while (it.hasNext()) {
 			if (!listOfNames.contains(it.next().getLocalName())) {
 				it.remove();
 			}
 		}
-		
+
 		return elements;
 	}
-	
+
 	protected String getElementName(Element element) throws ParserException {
 		String name = element.getAttributeValue(SerializationConstants.NODE_NAME_ATTRIBUTE);
 		if (name == null) {

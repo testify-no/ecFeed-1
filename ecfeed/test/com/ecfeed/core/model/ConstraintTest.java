@@ -36,10 +36,10 @@ public class ConstraintTest {
 		AbstractStatement falseStatement = new StaticStatement(false); 
 		List<ChoiceNode> values = new ArrayList<ChoiceNode>();
 
-		assertTrue(new Constraint(falseStatement, falseStatement).evaluate(values) == EvaluationResult.TRUE);
-		assertTrue(new Constraint(falseStatement, trueStatement).evaluate(values) == EvaluationResult.TRUE);
-		assertTrue(new Constraint(trueStatement, trueStatement).evaluate(values) == EvaluationResult.TRUE);
-		assertTrue(new Constraint(trueStatement, falseStatement).evaluate(values) == EvaluationResult.FALSE);
+		assertTrue(new Constraint(new String(), falseStatement, falseStatement).evaluate(values) == EvaluationResult.TRUE);
+		assertTrue(new Constraint(new String(), falseStatement, trueStatement).evaluate(values) == EvaluationResult.TRUE);
+		assertTrue(new Constraint(new String(), trueStatement, trueStatement).evaluate(values) == EvaluationResult.TRUE);
+		assertTrue(new Constraint(new String(), trueStatement, falseStatement).evaluate(values) == EvaluationResult.FALSE);
 	}
 
 	@Test
@@ -48,7 +48,7 @@ public class ConstraintTest {
 		AbstractStatement statement2 = new StaticStatement(false); 
 		AbstractStatement statement3 = new StaticStatement(false);
 
-		Constraint constraint = new Constraint(statement1, statement2);
+		Constraint constraint = new Constraint(new String(), statement1, statement2);
 		assertTrue(constraint.getPremise().equals(statement1));
 		constraint.setPremise(statement3);
 		assertTrue(constraint.getPremise().equals(statement3));
@@ -60,7 +60,7 @@ public class ConstraintTest {
 		AbstractStatement statement2 = new StaticStatement(false); 
 		AbstractStatement statement3 = new StaticStatement(false);
 
-		Constraint constraint = new Constraint(statement1, statement2);
+		Constraint constraint = new Constraint(new String(), statement1, statement2);
 		assertTrue(constraint.getConsequence().equals(statement2));
 		constraint.setConsequence(statement3);
 		assertTrue(constraint.getConsequence().equals(statement3));
@@ -76,17 +76,17 @@ public class ConstraintTest {
 				RelationStatement.createStatementWithChoiceCondition(parameter, EStatementRelation.EQUAL, choice);
 		AbstractStatement notMentioningStatement = new StaticStatement(false);
 
-		assertTrue(new Constraint(mentioningStatement, notMentioningStatement).mentions(parameter));
-		assertTrue(new Constraint(mentioningStatement, notMentioningStatement).mentions(choice));
+		assertTrue(new Constraint(new String(), mentioningStatement, notMentioningStatement).mentions(parameter));
+		assertTrue(new Constraint(new String(), mentioningStatement, notMentioningStatement).mentions(choice));
 
-		assertTrue(new Constraint(notMentioningStatement, mentioningStatement).mentions(parameter));
-		assertTrue(new Constraint(notMentioningStatement, mentioningStatement).mentions(choice));
+		assertTrue(new Constraint(new String(), notMentioningStatement, mentioningStatement).mentions(parameter));
+		assertTrue(new Constraint(new String(), notMentioningStatement, mentioningStatement).mentions(choice));
 
-		assertTrue(new Constraint(mentioningStatement, mentioningStatement).mentions(parameter));
-		assertTrue(new Constraint(mentioningStatement, mentioningStatement).mentions(choice));
+		assertTrue(new Constraint(new String(), mentioningStatement, mentioningStatement).mentions(parameter));
+		assertTrue(new Constraint(new String(), mentioningStatement, mentioningStatement).mentions(choice));
 
-		assertFalse(new Constraint(notMentioningStatement, notMentioningStatement).mentions(parameter));
-		assertFalse(new Constraint(notMentioningStatement, notMentioningStatement).mentions(choice));
+		assertFalse(new Constraint(new String(), notMentioningStatement, notMentioningStatement).mentions(parameter));
+		assertFalse(new Constraint(new String(), notMentioningStatement, notMentioningStatement).mentions(choice));
 
 	}
 
@@ -96,7 +96,7 @@ public class ConstraintTest {
 		AbstractStatement premise = createPremiseWithValueCondition();
 		AbstractStatement consequence = createConsequenceWithValueCondition();
 
-		Constraint constraint = new Constraint(premise, consequence);
+		Constraint constraint = new Constraint(new String(), premise, consequence);
 
 		ChoiceNode choice1 = new ChoiceNode("choice1", "value1");
 		ChoiceNode choice2 = new ChoiceNode("choice2", "value2");
@@ -113,11 +113,11 @@ public class ConstraintTest {
 		AbstractStatement premise = createPremiseWithChoiceCondition(choice1);
 		AbstractStatement consequence = createConsequenceWithChoiceCondition(choice2);
 
-		Constraint constraint = new Constraint(premise, consequence);
+		Constraint constraint = new Constraint(new String(), premise, consequence);
 
 		evaluateConstraintWithNullValues(constraint, choice1, choice2);			
 	}
-	
+
 	@Test
 	public void testTupleWithNullsForParameterCondition() {
 
@@ -127,7 +127,7 @@ public class ConstraintTest {
 		AbstractStatement premise = createStatementWithParameterCondition(parameter1, parameter2);
 		AbstractStatement consequence = createStatementWithParameterCondition(parameter1, parameter2);
 
-		Constraint constraint = new Constraint(premise, consequence);
+		Constraint constraint = new Constraint(new String(), premise, consequence);
 
 		ChoiceNode choice1 = new ChoiceNode("choice1", "value1");
 		ChoiceNode choice2 = new ChoiceNode("choice2", "value2");
@@ -135,7 +135,7 @@ public class ConstraintTest {
 		evaluateConstraintWithNullValues(constraint, choice1, choice2);			
 	}
 
-	
+
 	@Test
 	public void testTupleWithNullConsequenceForChoiceCondition() {
 
@@ -149,11 +149,11 @@ public class ConstraintTest {
 				RelationStatement.createStatementWithChoiceCondition(
 						parameter1, EStatementRelation.EQUAL, choice11);
 
-		
+
 		MethodParameterNode parameter2 = new MethodParameterNode("parameter2", "type", "0", false);
 		ChoiceNode choice2 = new ChoiceNode("choice2", "value2");
 		choice2.setParent(parameter2);
-		
+
 		AbstractStatement consequence = 
 				RelationStatement.createStatementWithChoiceCondition(
 						parameter2, EStatementRelation.EQUAL, choice2);
@@ -163,16 +163,16 @@ public class ConstraintTest {
 		methodNode.addParameter(parameter2);
 		parameter1.setParent(methodNode);
 		parameter2.setParent(methodNode);
-		
-		Constraint constraint = new Constraint(premise, consequence);
+
+		Constraint constraint = new Constraint(new String(), premise, consequence);
 
 		List<ChoiceNode> values = new ArrayList<ChoiceNode>();
 		values.add(choice12);
 		values.add(null);
 		assertTrue(constraint.evaluate(values) == EvaluationResult.TRUE);
 	}
-	
-	
+
+
 	private void evaluateConstraintWithNullValues(Constraint constraint, ChoiceNode choice1, ChoiceNode choice2) {
 
 		List<ChoiceNode> values = new ArrayList<ChoiceNode>();

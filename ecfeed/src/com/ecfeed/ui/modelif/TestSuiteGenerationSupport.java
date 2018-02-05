@@ -66,6 +66,11 @@ public class TestSuiteGenerationSupport {
 		public boolean mentions(int dimension) {
 			return false;
 		}
+
+		@Override
+		public String getName() {
+			return new String();
+		}
 	}
 
 	private class GeneratorRunnable implements IRunnableWithProgress{

@@ -206,10 +206,11 @@ public class RandomModelGenerator {
 		return targetTestCaseNode;
 	}
 
-	public ConstraintNode generateConstraint(MethodNode method){
+	public ConstraintNode generateConstraint(MethodNode method) {
+
 		String name = generateString(REGEX_CONSTRAINT_NODE_NAME);
 
-		Constraint constraint = new Constraint(generatePremise(method), generateConsequence(method));
+		Constraint constraint = new Constraint(name, generatePremise(method), generateConsequence(method));
 
 		return new ConstraintNode(name, constraint);
 	}

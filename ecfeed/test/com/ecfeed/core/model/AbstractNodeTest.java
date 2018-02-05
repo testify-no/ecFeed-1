@@ -114,7 +114,10 @@ public class AbstractNodeTest{
 		MethodParameterNode parameter = new MethodParameterNode("name1", "type", "0", false);
 		MethodParameterNode expCat = new MethodParameterNode("name2", "type", "0", true);
 		expCat.setDefaultValueString("0");
-		ConstraintNode constraint = new ConstraintNode("name", new Constraint(new StaticStatement(true), new StaticStatement(false)));
+		ConstraintNode constraint = 
+				new ConstraintNode(
+						"name", 
+						new Constraint("name", new StaticStatement(true), new StaticStatement(false)));
 		TestCaseNode testCase = new TestCaseNode("name", new ArrayList<ChoiceNode>());
 		ChoiceNode choice = new ChoiceNode("name", "0");
 
@@ -171,7 +174,8 @@ public class AbstractNodeTest{
 		MethodParameterNode parameter = new MethodParameterNode("name1", "type", "0", false);
 		MethodParameterNode expCat = new MethodParameterNode("name2", "type", "0", true);
 		expCat.setDefaultValueString("0");
-		ConstraintNode constraint = new ConstraintNode("name", new Constraint(new StaticStatement(true), new StaticStatement(false)));
+		ConstraintNode constraint = 
+				new ConstraintNode("name", new Constraint("name", new StaticStatement(true), new StaticStatement(false)));
 		TestCaseNode testCase = new TestCaseNode("name", new ArrayList<ChoiceNode>());
 		ChoiceNode choice = new ChoiceNode("name", "0");
 
@@ -201,7 +205,7 @@ public class AbstractNodeTest{
 		MethodParameterNode parameter = new MethodParameterNode("parameter", "type", "0", false);
 		MethodParameterNode expCat = new MethodParameterNode("expCat", "type", "0", true);
 		expCat.setDefaultValueString("0");
-		ConstraintNode constraint = new ConstraintNode("constraint", new Constraint(new StaticStatement(true), new StaticStatement(false)));
+		ConstraintNode constraint = new ConstraintNode("constraint", new Constraint("constraint", new StaticStatement(true), new StaticStatement(false)));
 		TestCaseNode testCase = new TestCaseNode("testCase", new ArrayList<ChoiceNode>());
 		ChoiceNode p = new ChoiceNode("p", "0");
 		ChoiceNode p1 = new ChoiceNode("p1", "0");

@@ -58,6 +58,11 @@ public class GeneratorTestUtils{
 			return false;
 		}
 
+		@Override
+		public String getName() {
+			return new String();
+		}
+
 	}
 
 	private static final String[] VARIABLE_NAMES = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", 

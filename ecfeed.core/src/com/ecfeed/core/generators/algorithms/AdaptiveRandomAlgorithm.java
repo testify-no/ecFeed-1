@@ -62,6 +62,11 @@ public class AdaptiveRandomAlgorithm<E> extends AbstractAlgorithm<E> implements 
 		public boolean mentions(int dimension) {
 			return false;
 		}
+
+		@Override
+		public String getName() {
+			return new String();
+		}
 	}
 
 	public AdaptiveRandomAlgorithm(int depth, int candidatesSize, 

@@ -15,22 +15,23 @@ import java.util.List;
 import java.util.Set;
 
 import com.ecfeed.core.generators.api.IConstraint;
-import com.ecfeed.core.model.ChoiceCondition;
-import com.ecfeed.core.model.LabelCondition;
 import com.ecfeed.core.utils.EvaluationResult;
 
 public class Constraint implements IConstraint<ChoiceNode> {
 
+
 	private final int fId;
 	private static int fLastId = 0;
 
+	private String fName;
 	private AbstractStatement fPremise;
 	private AbstractStatement fConsequence;
 
 
-	public Constraint(AbstractStatement premise, AbstractStatement consequence) {
+	public Constraint(String name, AbstractStatement premise, AbstractStatement consequence) {
 
 		fId = fLastId++;
+		fName = name;
 		fPremise = premise;
 		fConsequence = consequence;
 	}
@@ -41,13 +42,13 @@ public class Constraint implements IConstraint<ChoiceNode> {
 		if (fPremise == null) { 
 			return EvaluationResult.TRUE;
 		}
-		
+
 		EvaluationResult premiseEvaluationResult = fPremise.evaluate(values); 
 
 		if (premiseEvaluationResult == EvaluationResult.FALSE) {
 			return EvaluationResult.TRUE;
 		}
-		
+
 		if (premiseEvaluationResult == EvaluationResult.INSUFFICIENT_DATA) {
 			return EvaluationResult.INSUFFICIENT_DATA;
 		}
@@ -57,11 +58,11 @@ public class Constraint implements IConstraint<ChoiceNode> {
 		}
 
 		EvaluationResult consequenceEvaluationResult = fConsequence.evaluate(values);
-		
+
 		if (consequenceEvaluationResult == EvaluationResult.TRUE) {
 			return EvaluationResult.TRUE;
 		}
-		
+
 		if (consequenceEvaluationResult == EvaluationResult.INSUFFICIENT_DATA) {
 			return EvaluationResult.INSUFFICIENT_DATA;
 		}
@@ -115,6 +116,11 @@ public class Constraint implements IConstraint<ChoiceNode> {
 			return true;
 		}		
 		return false;
+	}
+
+	@Override
+	public String getName() {
+		return fName;
 	}
 
 	public int getId(){
@@ -174,7 +180,7 @@ public class Constraint implements IConstraint<ChoiceNode> {
 		AbstractStatement premise = fPremise.getCopy();
 		AbstractStatement consequence = fConsequence.getCopy();
 
-		return new Constraint(premise, consequence);
+		return new Constraint(fName, premise, consequence);
 	}
 
 	public boolean updateRefrences(MethodNode method) {
