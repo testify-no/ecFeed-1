@@ -7,6 +7,9 @@
 #                                                                                  
 #-------------------------------------------------------------------------------
 
+Version 1.12.8
+ - hot bugfixes (pairwise generator, image file handlers leaks)
+ 
 Version 1.12.6
  - bugfixes (pairwise generator)
  - jUnit runner doesn't stop after first failure
