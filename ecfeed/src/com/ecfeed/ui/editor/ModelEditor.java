@@ -65,6 +65,7 @@ import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.utils.EclipseHelper;
+import com.ecfeed.utils.Sleak;
 
 public class ModelEditor extends FormEditor implements IFileInfoProvider{
 
@@ -161,10 +162,28 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 	public ModelEditor() {
 		super();
 
+		createResourceProfilerDialog();
+
 		ResourceChangeReporter listener = new ResourceChangeReporter();
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(listener, IResourceChangeEvent.POST_CHANGE);
 		fModelManager = new ModelOperationManager();
 		fUndoContext = new ObjectUndoContext(fModelManager);
+	}
+
+	private void createResourceProfilerDialog() {
+
+		//		In order to run the profiler:
+		//		- In Eclipse open Run/Debug configuration which should be run/debugged.
+		//		- Go to "Tracing" tab.
+		//		- Check "Enable tracing"
+		//		- In the left window select org.eclipse.ui plugin
+		//		- Put the check in the checkbox on before plugin name.
+		//		- While org.eclipse.ui is selected, in the right window, on the list click checkboxes labelled: debug, trace/graphics
+		//		- Click Run/Debug
+		//		- As a result of this configuration the constructor: public Display (DeviceData data) should be called.
+		//
+		//		Sleak sleak = new Sleak();
+		//		sleak.open();
 	}
 
 	public RootNode getModel() throws ModelOperationException{
