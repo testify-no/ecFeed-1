@@ -85,14 +85,14 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 			List<DimensionedItem<E>> nTuple = fRemainingTuples.iterator().next();
 			fRemainingTuples.remove(nTuple);
 
-			boolean canGenerate = canGenerateTest(nTuple);
-
-			//			String message = canGenerate ? "CAN GENERATE: " : "CAN NOT GENERATE: ";
-			//			debugPrintTuple(message, nTuple);
-
-			if (!canGenerate) {
-				continue;
-			}
+//			boolean canGenerate = canGenerateTest(nTuple);
+//
+//			//			String message = canGenerate ? "CAN GENERATE: " : "CAN NOT GENERATE: ";
+//			//			debugPrintTuple(message, nTuple);
+//
+//			if (!canGenerate) {
+//				continue;
+//			}
 
 			List<E> randomTest = generateRandomTest(nTuple);
 
