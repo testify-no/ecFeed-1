@@ -62,6 +62,7 @@ public class TestCasesExportHelperTest {
 		testCase.setParent(method);
 
 		String result = TestCasesExportHelper.generateTestCaseString(sequenceIndex, testCase, template);
+		result = TestCasesExportHelper.evaluateMinWidthOperators(result);
 		assertEquals(expectedResult, result);
 	}
 
@@ -140,63 +141,62 @@ public class TestCasesExportHelperTest {
 		performTest("%suite", "default");
 	}
 
-	// TODO - ENABLE AND CORRECT TESTS 
-	//	@Test
-	//	public void shouldExpandAlphanumericToMinWidth() {
-	//		performTest("(x).min_width(5)", "x    ");
-	//	}
+		@Test
+		public void shouldExpandAlphanumericToMinWidth() {
+			performTest("(x).min_width(5)", "x    ");
+		}
 
-	//	@Test
-	//	public void shouldExpandSpaceToMinWidth() {
-	//		performTest("( ).min_width(2)", "  ");
-	//	}
-	//
+		@Test
+		public void shouldExpandSpaceToMinWidth() {
+			performTest("( ).min_width(2)", "  ");
+		}
+	
 	@Test
 	public void shouldIgnoreInvalidWidthParameter() {
 		performTest("(Q).min_width(C)", "(Q).min_width(C)");
 	}	
 
-	//	@Test
-	//	public void shouldConvertMultipleMinWidthOperators() {
-	//		performTest("| (arg).min_width(7) | (arg0).min_width(7) |", 
-	//				"| arg     | arg0    |");
-	//	}
+		@Test
+		public void shouldConvertMultipleMinWidthOperators() {
+			performTest("| (arg).min_width(7) | (arg0).min_width(7) |", 
+					"| arg     | arg0    |");
+		}
 
-	//	@Test
-	//	public void shouldConvertMultipleMinWidthOperators2() {
-	//		performTest("| (arg).min_width(3) | (arg0).min_width(4) |", 
-	//				"| arg | arg0 |");
-	//	}	
+		@Test
+		public void shouldConvertMultipleMinWidthOperators2() {
+			performTest("| (arg).min_width(3) | (arg0).min_width(4) |", 
+					"| arg | arg0 |");
+		}	
 
-	//	@Test
-	//	public void shouldExpandSpaceNegativeInteger() {
-	//		performTest("(-5).min_width(3)", "-5 ");
-	//	}	
+		@Test
+		public void shouldExpandSpaceNegativeInteger() {
+			performTest("(-5).min_width(3)", "-5 ");
+		}	
 
-	//	@Test
-	//	public void shouldExpandToLeft() {
-	//		performTest("(X).min_width(3,LEFT)", "X  ");
-	//	}
+		@Test
+		public void shouldExpandToLeft() {
+			performTest("(X).min_width(3,LEFT)", "X  ");
+		}
 
-	//	@Test
-	//	public void shouldExpandToLeftWithBlanks() {
-	//		performTest("(X).min_width(   3   ,   LEFT   )", "X  ");
-	//	}	
+		@Test
+		public void shouldExpandToLeftWithBlanks() {
+			performTest("(X).min_width(   3   ,   LEFT   )", "X  ");
+		}	
 
 
-	//	@Test
-	//	public void shouldExpandToRight() {
-	//		performTest("(X).min_width(3,RIGHT)", "  X");
-	//	}	
+		@Test
+		public void shouldExpandToRight() {
+			performTest("(X).min_width(3,RIGHT)", "  X");
+		}	
 
-	//	@Test
-	//	public void shouldExpandToCenter() {
-	//		performTest("(X).min_width(3,CENTER)", " X ");
-	//	}	
+		@Test
+		public void shouldExpandToCenter() {
+			performTest("(X).min_width(3,CENTER)", " X ");
+		}	
 
-	//	@Test
-	//	public void shouldExpandToCenterOnTwo() {
-	//		performTest("(X).min_width(2,CENTER)", "X ");
-	//	}	
+		@Test
+		public void shouldExpandToCenterOnTwo() {
+			performTest("(X).min_width(2,CENTER)", "X ");
+		}	
 
 }
