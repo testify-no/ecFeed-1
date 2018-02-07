@@ -86,6 +86,7 @@ public class ModelMasterSection extends TreeViewerSection{
 	private final ModelMasterDetailsBlock fMasterDetailsBlock;
 	private IModelUpdateListener fUpdateListener;
 	private IFileInfoProvider fFileInfoProvider;
+	ModelLabelDecorator fModelLabelDecorator;
 
 	private class ModelWrapper{
 		private final RootNode fModel;
@@ -476,6 +477,7 @@ public class ModelMasterSection extends TreeViewerSection{
 		super(parentBlock.getMasterSectionContext(), parentBlock.getModelUpdateContext(), fileInfoProvider, StyleDistributor.getSectionStyle());
 		fMasterDetailsBlock = parentBlock;
 		fFileInfoProvider = fileInfoProvider;
+		fModelLabelDecorator.setFileInfoProvider(fileInfoProvider);
 
 		boolean includeDeleteAction = false;
 		if (ApplicationContext.isStandaloneApplication()) {
@@ -601,11 +603,9 @@ public class ModelMasterSection extends TreeViewerSection{
 
 	@Override
 	protected IBaseLabelProvider createViewerLabelProvider() {
-		return new DecoratingLabelProvider(
-				new ModelLabelProvider(), 
-				new ModelLabelDecorator(
-						fFileInfoProvider,
-						ModelMasterSection.this));
+		
+		fModelLabelDecorator = new ModelLabelDecorator(ModelMasterSection.this);
+		return new DecoratingLabelProvider(new ModelLabelProvider(), fModelLabelDecorator);
 	}
 
 	@Override

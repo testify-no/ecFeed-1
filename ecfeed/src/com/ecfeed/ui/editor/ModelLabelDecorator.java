@@ -43,12 +43,15 @@ public class ModelLabelDecorator implements ILabelDecorator {
 	ModelMasterSection fModelMasterSection;
 
 	public ModelLabelDecorator(
-			IFileInfoProvider fileInfoProvider, 
 			ModelMasterSection modelMasterSection) {
-
-		fFileInfoProvider = fileInfoProvider;
+		
 		fFusedImages = new HashMap<List<Image>, Image>();
 		fModelMasterSection = modelMasterSection;
+	}
+	
+	public void setFileInfoProvider(IFileInfoProvider fileInfoProvider) {
+		
+		fFileInfoProvider = fileInfoProvider;
 	}
 
 	@SuppressWarnings("unchecked")
