@@ -145,8 +145,9 @@ public class TestCasesExportHelper {
 
 	public static String evaluateMinWidthOperators(String template) {
 
-		final String MIN_WIDTH_OPERATOR_PATTERN = "\\(.*\\).min_width\\([^\\)]+\\)";
-
+		final String MIN_WIDTH_OPERATOR_PATTERN = 
+				"\\(\\s*\\-?\\w*\\s*\\)\\.min_width((\\(\\s*\\-?\\d*\\s*\\))|(\\(\\s*\\d+\\s*\\,\\s*\\w*\\s*\\)))";
+		
 		String result = template;
 		Matcher matcher = Pattern.compile(MIN_WIDTH_OPERATOR_PATTERN).matcher(template);
 
