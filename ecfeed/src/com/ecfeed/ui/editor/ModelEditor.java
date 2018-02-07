@@ -65,7 +65,7 @@ import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.utils.EclipseHelper;
-import com.ecfeed.utils.Sleak;
+//import com.ecfeed.utils.Sleak;
 
 public class ModelEditor extends FormEditor implements IFileInfoProvider{
 
