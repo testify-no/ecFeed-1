@@ -98,39 +98,28 @@ public class ModelLabelDecoratorHelper  {
 
 	private static Image createDecoratedImage(Image imageToDecorate, List<Image> decorators) {
 
-		Image decoratedImage = new Image(Display.getCurrent(), imageToDecorate.getImageData());
+		ImageData newImageData = (ImageData)imageToDecorate.getImageData().clone();
 
 		for (Image decorator : decorators) {
 
 			if (decorator != null) {
-				decoratedImage = aplyOneDecorator(decoratedImage, decorator);
+				aplyOneDecorator(newImageData, decorator);
 			}
 		}
 
-		return decoratedImage;
+		return new Image(Display.getCurrent(), newImageData);
 	}
 
-	private static List<Image> createDecoratedImageKey(Image image, List<Image> decorators) {
-
-		List<Image> imageKey = new ArrayList<Image>(decorators);
-		imageKey.add(0, image);
-
-		return imageKey;
-	}
-
-	private static Image aplyOneDecorator(
-			Image imageToDecorate, 
+	private static void aplyOneDecorator(
+			ImageData inOutImageToDecorateData, 
 			Image decorator) {
 
-		ImageData imageToDecorateData = (ImageData)imageToDecorate.getImageData().clone();
 		ImageData decoratorData = decorator.getImageData();
 
-		int maxCol = calculateMaxCol(imageToDecorateData, decoratorData);
-		int maxRow = calculateMaxRow(imageToDecorateData, decoratorData);
+		int maxCol = calculateMaxCol(inOutImageToDecorateData, decoratorData);
+		int maxRow = calculateMaxRow(inOutImageToDecorateData, decoratorData);
 
-		decorateImageData(imageToDecorateData, decoratorData, maxCol, maxRow);
-
-		return new Image(Display.getDefault(), imageToDecorateData);
+		decorateImageData(inOutImageToDecorateData, decoratorData, maxCol, maxRow);
 	}
 
 	private static void decorateImageData(
@@ -166,6 +155,14 @@ public class ModelLabelDecoratorHelper  {
 			inOutImageData.data[4 * imageIndex + 1] = decoratorData.data[4 * decoratorIndex + 1];
 			inOutImageData.data[4 * imageIndex + 2] = decoratorData.data[4 * decoratorIndex + 2];
 		}
+	}
+
+	private static List<Image> createDecoratedImageKey(Image image, List<Image> decorators) {
+
+		List<Image> imageKey = new ArrayList<Image>(decorators);
+		imageKey.add(0, image);
+
+		return imageKey;
 	}
 
 	private static int calculateMaxRow(ImageData imageToDecorateData, ImageData decoratorData) {
