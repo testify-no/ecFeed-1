@@ -56,15 +56,7 @@ public class ModelLabelDecorator implements ILabelDecorator {
 			return imageToDecorate;
 		}
 
-		List<Image> decorations = 
-				getDecorationsForNode(
-						(AbstractNode)element, fModelMasterSection, fFileInfoProvider);
-
-		if (decorations == null) {
-			return imageToDecorate;
-		}
-
-		return getOrCreateDecoratedImage(imageToDecorate, decorations, fDecoratedImages);
+		return decorateImageOfAbstractNode(imageToDecorate, (AbstractNode)element);
 	}
 
 	@Override
@@ -94,135 +86,152 @@ public class ModelLabelDecorator implements ILabelDecorator {
 		fFileInfoProvider = fileInfoProvider;
 	}
 
-	private static Image createDecoratedImage(Image imageToDecorate, List<Image> decorations) {
+	private Image decorateImageOfAbstractNode(Image imageToDecorate, AbstractNode abstractNode) {
 
-		Image decoratedImage = new Image(Display.getCurrent(), imageToDecorate.getImageData());
+		List<Image> decorations = 
+				ModelImageDecorationHelper.getDecorationsForNode(
+						abstractNode, fModelMasterSection, fFileInfoProvider);
 
-		for (Image decoration : decorations) {
+		if (decorations == null) {
+			return imageToDecorate;
+		}
 
-			if (decoration != null) {
-				decoratedImage = aplyOneDecoration(decoratedImage, decoration);
+		return ModelImageDecorationHelper.getOrCreateDecoratedImage(imageToDecorate, decorations, fDecoratedImages);
+	}
+
+	private static class ModelImageDecorationHelper {
+
+		private static Image createDecoratedImage(Image imageToDecorate, List<Image> decorations) {
+
+			Image decoratedImage = new Image(Display.getCurrent(), imageToDecorate.getImageData());
+
+			for (Image decoration : decorations) {
+
+				if (decoration != null) {
+					decoratedImage = aplyOneDecoration(decoratedImage, decoration);
+				}
+			}
+
+			return decoratedImage;
+		}
+
+		private static List<Image> createDecoratedImageKey(Image image, List<Image> decorations) {
+
+			List<Image> fusedImagesKey = new ArrayList<Image>(decorations);
+			fusedImagesKey.add(0, image);
+
+			return fusedImagesKey;
+		}
+
+		@SuppressWarnings("unchecked")
+		private static List<Image> getDecorationsForNode(
+				AbstractNode abstractNode, 
+				ModelMasterSection modelMasterSection,
+				IFileInfoProvider fileInfoProvider) {
+
+			Object result = null;
+
+			try {
+				result =
+						abstractNode.accept(
+								new DecorationImageListProvider(
+										fileInfoProvider, 
+										fileInfoProvider.isProjectAvailable(),
+										modelMasterSection));
+			} catch (Exception e) {
+				SystemLogger.logCatch(e.getMessage());
+				return null;
+			}
+
+			return (List<Image>)result;
+		}
+
+		private static Image getOrCreateDecoratedImage(
+				Image imageToDecorate, 
+				List<Image> decorations, 
+				Map<List<Image>, Image> decoratedImages) {
+
+			List<Image> decoratedImageKey = createDecoratedImageKey(imageToDecorate, decorations);
+
+			if (decoratedImages.containsKey(decoratedImageKey)) {
+				return decoratedImages.get(decorations);
+			}
+
+			Image decoratedImage = ModelImageDecorationHelper.createDecoratedImage(imageToDecorate, decorations);
+
+			decoratedImages.put(decorations, decoratedImage);
+
+			return decoratedImage;
+		}
+
+		private static Image aplyOneDecoration(
+				Image imageToDecorate, 
+				Image decorator) {
+
+			ImageData imageToDecorateData = (ImageData)imageToDecorate.getImageData().clone();
+			ImageData decoratorData = decorator.getImageData();
+
+			int maxCol = calculateMaxCol(imageToDecorateData, decoratorData);
+			int maxRow = calculateMaxRow(imageToDecorateData, decoratorData);
+
+			decorateImageData(imageToDecorateData, decoratorData, maxCol, maxRow);
+
+			return new Image(Display.getDefault(), imageToDecorateData);
+		}
+
+		private static void decorateImageData(
+				ImageData inOutImageData, 
+				ImageData decoratorData, 
+				int maxCol,
+				int maxRow) {
+
+			int imageIndex = 0;
+			int decoratorIndex = 0;
+
+			for(int row = 0; row < maxRow; row ++){
+				for(int col = 0; col < maxCol; col++){
+
+					decorateOnePixel(inOutImageData, decoratorData, imageIndex, decoratorIndex);
+					imageIndex += 1;
+					decoratorIndex += 1;
+				}
 			}
 		}
 
-		return decoratedImage;
-	}
+		private static void decorateOnePixel(
+				ImageData inOutImageData,
+				ImageData decoratorData, 
+				int imageIndex, 
+				int decoratorIndex) {
 
-	private static List<Image> createDecoratedImageKey(Image image, List<Image> decorations) {
+			if (decoratorData.alphaData[decoratorIndex] < 0) {
 
-		List<Image> fusedImagesKey = new ArrayList<Image>(decorations);
-		fusedImagesKey.add(0, image);
+				inOutImageData.alphaData[imageIndex] = (byte)-1;
 
-		return fusedImagesKey;
-	}
-
-	@SuppressWarnings("unchecked")
-	private static List<Image> getDecorationsForNode(
-			AbstractNode abstractNode, 
-			ModelMasterSection modelMasterSection,
-			IFileInfoProvider fileInfoProvider) {
-
-		Object result = null;
-
-		try {
-			result =
-					abstractNode.accept(
-							new DecorationImageListProvider(
-									fileInfoProvider, 
-									fileInfoProvider.isProjectAvailable(),
-									modelMasterSection));
-		} catch (Exception e) {
-			SystemLogger.logCatch(e.getMessage());
-			return null;
-		}
-
-		return (List<Image>)result;
-	}
-
-	private static Image getOrCreateDecoratedImage(
-			Image imageToDecorate, 
-			List<Image> decorations, 
-			Map<List<Image>, Image> decoratedImages) {
-
-		List<Image> decoratedImageKey = createDecoratedImageKey(imageToDecorate, decorations);
-
-		if (decoratedImages.containsKey(decoratedImageKey)) {
-			return decoratedImages.get(decorations);
-		}
-
-		Image decoratedImage = createDecoratedImage(imageToDecorate, decorations);
-		decoratedImages.put(decorations, decoratedImage);
-
-		return decoratedImage;
-	}
-
-	private static Image aplyOneDecoration(
-			Image imageToDecorate, 
-			Image decorator) {
-
-		ImageData imageToDecorateData = (ImageData)imageToDecorate.getImageData().clone();
-		ImageData decoratorData = decorator.getImageData();
-
-		int maxCol = calculateMaxCol(imageToDecorateData, decoratorData);
-		int maxRow = calculateMaxRow(imageToDecorateData, decoratorData);
-
-		decorateImageData(imageToDecorateData, decoratorData, maxCol, maxRow);
-
-		return new Image(Display.getDefault(), imageToDecorateData);
-	}
-
-	private static void decorateImageData(
-			ImageData inOutImageData, 
-			ImageData decoratorData, 
-			int maxCol,
-			int maxRow) {
-
-		int imageIndex = 0;
-		int decoratorIndex = 0;
-
-		for(int row = 0; row < maxRow; row ++){
-			for(int col = 0; col < maxCol; col++){
-
-				decorateOnePixel(inOutImageData, decoratorData, imageIndex, decoratorIndex);
-				imageIndex += 1;
-				decoratorIndex += 1;
+				inOutImageData.data[4 * imageIndex] = decoratorData.data[4 * decoratorIndex];
+				inOutImageData.data[4 * imageIndex + 1] = decoratorData.data[4 * decoratorIndex + 1];
+				inOutImageData.data[4 * imageIndex + 2] = decoratorData.data[4 * decoratorIndex + 2];
 			}
 		}
-	}
 
-	private static void decorateOnePixel(
-			ImageData inOutImageData,
-			ImageData decoratorData, 
-			int imageIndex, 
-			int decoratorIndex) {
+		private static int calculateMaxRow(ImageData imageToDecorateData, ImageData decoratorData) {
 
-		if (decoratorData.alphaData[decoratorIndex] < 0) {
-
-			inOutImageData.alphaData[imageIndex] = (byte)-1;
-
-			inOutImageData.data[4 * imageIndex] = decoratorData.data[4 * decoratorIndex];
-			inOutImageData.data[4 * imageIndex + 1] = decoratorData.data[4 * decoratorIndex + 1];
-			inOutImageData.data[4 * imageIndex + 2] = decoratorData.data[4 * decoratorIndex + 2];
-		}
-	}
-
-	private static int calculateMaxRow(ImageData imageToDecorateData, ImageData decoratorData) {
-
-		return calculateMaxSize(imageToDecorateData.height, decoratorData.height);
-	}
-
-	private static int calculateMaxCol(ImageData imageToDecorateData, ImageData decoratorData) {
-
-		return calculateMaxSize(imageToDecorateData.width, decoratorData.width);
-	}
-
-	private static int calculateMaxSize(int imageToDecorateDataSize, int decoratorDataSize) {
-
-		if (decoratorDataSize > imageToDecorateDataSize) { 
-			return decoratorDataSize - imageToDecorateDataSize; 
+			return calculateMaxSize(imageToDecorateData.height, decoratorData.height);
 		}
 
-		return decoratorDataSize;
+		private static int calculateMaxCol(ImageData imageToDecorateData, ImageData decoratorData) {
+
+			return calculateMaxSize(imageToDecorateData.width, decoratorData.width);
+		}
+
+		private static int calculateMaxSize(int imageToDecorateDataSize, int decoratorDataSize) {
+
+			if (decoratorDataSize > imageToDecorateDataSize) { 
+				return decoratorDataSize - imageToDecorateDataSize; 
+			}
+
+			return decoratorDataSize;
+		}
 
 	}
 
