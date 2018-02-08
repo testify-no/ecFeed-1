@@ -23,15 +23,15 @@ import com.ecfeed.ui.common.utils.IFileInfoProvider;
 
 public class ModelLabelDecorator implements ILabelDecorator {
 
-	Map<List<Image>, Image> fDecoratedImages;
 	IFileInfoProvider fFileInfoProvider;
 	ModelMasterSection fModelMasterSection;
+	Map<List<Image>, Image> fDecoratedImagesCache;
 
 	public ModelLabelDecorator(
 			ModelMasterSection modelMasterSection) {
 
-		fDecoratedImages = new HashMap<List<Image>, Image>();
 		fModelMasterSection = modelMasterSection;
+		fDecoratedImagesCache = new HashMap<List<Image>, Image>();
 	}
 
 	@Override
@@ -46,7 +46,7 @@ public class ModelLabelDecorator implements ILabelDecorator {
 				(AbstractNode)element, 
 				fModelMasterSection, 
 				fFileInfoProvider, 
-				fDecoratedImages);
+				fDecoratedImagesCache);
 	}
 
 	@Override

@@ -40,7 +40,7 @@ public class ModelLabelDecoratorHelper  {
 			AbstractNode abstractNode,
 			ModelMasterSection modelMasterSection,
 			IFileInfoProvider fileInfoProvider,
-			Map<List<Image>, Image> decoratedImages) {
+			Map<List<Image>, Image> decoratedImagesCache) {
 
 		List<Image> decorators = 
 				ModelLabelDecoratorHelper.getDecoratorsForNode(
@@ -51,7 +51,7 @@ public class ModelLabelDecoratorHelper  {
 		}
 
 		return ModelLabelDecoratorHelper.getOrCreateDecoratedImage(
-				imageToDecorate, decorators, decoratedImages);
+				imageToDecorate, decorators, decoratedImagesCache);
 	}
 
 
@@ -81,19 +81,18 @@ public class ModelLabelDecoratorHelper  {
 	private static Image getOrCreateDecoratedImage(
 			Image imageToDecorate, 
 			List<Image> decorators, 
-			Map<List<Image>, Image> decoratedImages) {
+			Map<List<Image>, Image> decoratedImagesCache) {
 
 		List<Image> decoratedImageKey = createDecoratedImageKey(imageToDecorate, decorators);
 
-		if (decoratedImages.containsKey(decoratedImageKey)) {
-			return decoratedImages.get(decorators);
+		if (decoratedImagesCache.containsKey(decoratedImageKey)) {
+			return decoratedImagesCache.get(decoratedImageKey);
 		}
 
-		Image decoratedImage = createDecoratedImage(imageToDecorate, decorators);
+		Image newDecoratedImage = createDecoratedImage(imageToDecorate, decorators);
+		decoratedImagesCache.put(decoratedImageKey, newDecoratedImage);
 
-		decoratedImages.put(decorators, decoratedImage);
-
-		return decoratedImage;
+		return newDecoratedImage;
 	}
 
 	private static Image createDecoratedImage(Image imageToDecorate, List<Image> decorators) {
