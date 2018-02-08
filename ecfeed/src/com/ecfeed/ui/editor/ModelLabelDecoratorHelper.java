@@ -42,21 +42,21 @@ public class ModelLabelDecoratorHelper  {
 			IFileInfoProvider fileInfoProvider,
 			Map<List<Image>, Image> decoratedImages) {
 
-		List<Image> decorations = 
-				ModelLabelDecoratorHelper.getDecorationsForNode(
+		List<Image> decorators = 
+				ModelLabelDecoratorHelper.getDecoratorsForNode(
 						abstractNode, modelMasterSection, fileInfoProvider);
 
-		if (decorations == null) {
+		if (decorators == null) {
 			return imageToDecorate;
 		}
 
 		return ModelLabelDecoratorHelper.getOrCreateDecoratedImage(
-				imageToDecorate, decorations, decoratedImages);
+				imageToDecorate, decorators, decoratedImages);
 	}
 
 
 	@SuppressWarnings("unchecked")
-	private static List<Image> getDecorationsForNode(
+	private static List<Image> getDecoratorsForNode(
 			AbstractNode abstractNode, 
 			ModelMasterSection modelMasterSection,
 			IFileInfoProvider fileInfoProvider) {
@@ -66,7 +66,7 @@ public class ModelLabelDecoratorHelper  {
 		try {
 			result =
 					abstractNode.accept(
-							new DecorationImageListProvider(
+							new DecoratorImageListProvider(
 									fileInfoProvider, 
 									fileInfoProvider.isProjectAvailable(),
 									modelMasterSection));
@@ -80,45 +80,45 @@ public class ModelLabelDecoratorHelper  {
 
 	private static Image getOrCreateDecoratedImage(
 			Image imageToDecorate, 
-			List<Image> decorations, 
+			List<Image> decorators, 
 			Map<List<Image>, Image> decoratedImages) {
 
-		List<Image> decoratedImageKey = createDecoratedImageKey(imageToDecorate, decorations);
+		List<Image> decoratedImageKey = createDecoratedImageKey(imageToDecorate, decorators);
 
 		if (decoratedImages.containsKey(decoratedImageKey)) {
-			return decoratedImages.get(decorations);
+			return decoratedImages.get(decorators);
 		}
 
-		Image decoratedImage = createDecoratedImage(imageToDecorate, decorations);
+		Image decoratedImage = createDecoratedImage(imageToDecorate, decorators);
 
-		decoratedImages.put(decorations, decoratedImage);
+		decoratedImages.put(decorators, decoratedImage);
 
 		return decoratedImage;
 	}
 
-	private static Image createDecoratedImage(Image imageToDecorate, List<Image> decorations) {
+	private static Image createDecoratedImage(Image imageToDecorate, List<Image> decorators) {
 
 		Image decoratedImage = new Image(Display.getCurrent(), imageToDecorate.getImageData());
 
-		for (Image decoration : decorations) {
+		for (Image decorator : decorators) {
 
-			if (decoration != null) {
-				decoratedImage = aplyOneDecoration(decoratedImage, decoration);
+			if (decorator != null) {
+				decoratedImage = aplyOneDecorator(decoratedImage, decorator);
 			}
 		}
 
 		return decoratedImage;
 	}
 
-	private static List<Image> createDecoratedImageKey(Image image, List<Image> decorations) {
+	private static List<Image> createDecoratedImageKey(Image image, List<Image> decorators) {
 
-		List<Image> fusedImagesKey = new ArrayList<Image>(decorations);
-		fusedImagesKey.add(0, image);
+		List<Image> imageKey = new ArrayList<Image>(decorators);
+		imageKey.add(0, image);
 
-		return fusedImagesKey;
+		return imageKey;
 	}
 
-	private static Image aplyOneDecoration(
+	private static Image aplyOneDecorator(
 			Image imageToDecorate, 
 			Image decorator) {
 
@@ -187,13 +187,13 @@ public class ModelLabelDecoratorHelper  {
 		return decoratorDataSize;
 	}
 
-	private static class DecorationImageListProvider implements IModelVisitor {
+	private static class DecoratorImageListProvider implements IModelVisitor {
 
 		AbstractNodeInterface fNodeInterface;
 		boolean fIsProjectAvailable;
 		ModelMasterSection fModelMasterSection;
 
-		public DecorationImageListProvider(
+		public DecoratorImageListProvider(
 				IFileInfoProvider fileInfoProvider, 
 				boolean isProjectAvailable, 
 				ModelMasterSection modelMasterSection) {
@@ -207,89 +207,89 @@ public class ModelLabelDecoratorHelper  {
 		@Override
 		public Object visit(RootNode node) throws Exception {
 
-			return createDecorationList(node, fNodeInterface, fIsProjectAvailable);
+			return createDecoratorList(node, fNodeInterface, fIsProjectAvailable);
 		}
 
 		@Override
 		public Object visit(ClassNode node) throws Exception {
 
-			return createDecorationList(node, fNodeInterface, fIsProjectAvailable);
+			return createDecoratorList(node, fNodeInterface, fIsProjectAvailable);
 		}
 
 		@Override
 		public Object visit(MethodNode node) throws Exception {
 
-			return createDecorationList(node, fNodeInterface, fIsProjectAvailable);
+			return createDecoratorList(node, fNodeInterface, fIsProjectAvailable);
 		}
 
 		@Override
 		public Object visit(MethodParameterNode node) throws Exception {
 
-			List<Image> decorations = new ArrayList<Image>();
+			List<Image> decorators = new ArrayList<Image>();
 
-			decorations.add(getDecorationsForImplementationStatus(node, fNodeInterface, fIsProjectAvailable));
+			decorators.add(getDecoratorForImplementationStatus(node, fNodeInterface, fIsProjectAvailable));
 
 			if (node.isExpected()) {
-				decorations.add(getImageFromManager("expected.png"));
+				decorators.add(getImageFromManager("expected.png"));
 			}
 
 			if (node.isLinked()) {
-				decorations.add(getImageFromManager("linked.png"));
+				decorators.add(getImageFromManager("linked.png"));
 			}
 
-			return decorations;
+			return decorators;
 		}
 
 		@Override
 		public Object visit(GlobalParameterNode node) throws Exception {
 
-			List<Image> decorations = new ArrayList<Image>();
+			List<Image> decorators = new ArrayList<Image>();
 
-			decorations.add(getDecorationsForImplementationStatus(node, fNodeInterface, fIsProjectAvailable));
-			decorations.add(getImageFromManager("global.png"));
+			decorators.add(getDecoratorForImplementationStatus(node, fNodeInterface, fIsProjectAvailable));
+			decorators.add(getImageFromManager("global.png"));
 
-			return decorations;
+			return decorators;
 		}
 
 		@Override
 		public Object visit(TestCaseNode node) throws Exception {
 
-			return createDecorationList(node, fNodeInterface, fIsProjectAvailable);
+			return createDecoratorList(node, fNodeInterface, fIsProjectAvailable);
 		}
 
 		@Override
 		public Object visit(ConstraintNode node) throws Exception {
 
-			return createDecorationList(node, fNodeInterface, fIsProjectAvailable);
+			return createDecoratorList(node, fNodeInterface, fIsProjectAvailable);
 		}
 
 		@Override
 		public Object visit(ChoiceNode node) throws Exception {
 
-			List<Image> decorations = new ArrayList<Image>();
+			List<Image> decorators = new ArrayList<Image>();
 
-			decorations.add(getDecorationsForImplementationStatus(node, fNodeInterface, fIsProjectAvailable));
+			decorators.add(getDecoratorForImplementationStatus(node, fNodeInterface, fIsProjectAvailable));
 
 			if(node.isAbstract()){
-				decorations.add(getImageFromManager("abstract.png"));
+				decorators.add(getImageFromManager("abstract.png"));
 			}
 
-			return decorations;
+			return decorators;
 		}
 
-		private List<Image> createDecorationList(
+		private List<Image> createDecoratorList(
 				AbstractNode abstractNode,
 				AbstractNodeInterface nodeInterface,
 				boolean isProjectAvailable) {
 
 			List<Image> images = new ArrayList<Image>();
 
-			images.add(getDecorationsForImplementationStatus(abstractNode, nodeInterface, isProjectAvailable));
+			images.add(getDecoratorForImplementationStatus(abstractNode, nodeInterface, isProjectAvailable));
 
 			return images;
 		}
 
-		private static Image getDecorationsForImplementationStatus(
+		private static Image getDecoratorForImplementationStatus(
 				AbstractNode node, 
 				AbstractNodeInterface nodeInterface, 
 				boolean isProjectAvailable) {
