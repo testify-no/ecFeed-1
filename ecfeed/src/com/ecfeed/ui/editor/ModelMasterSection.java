@@ -76,6 +76,7 @@ import com.ecfeed.ui.editor.actions.ModelViewerActionProvider;
 import com.ecfeed.ui.editor.actions.TestOnlineAction;
 import com.ecfeed.ui.modelif.AbstractNodeInterface;
 import com.ecfeed.ui.modelif.AbstractParameterInterface;
+import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.IModelUpdateListener;
 import com.ecfeed.ui.modelif.MethodInterface;
 import com.ecfeed.ui.modelif.ModelNodesTransfer;
@@ -90,6 +91,7 @@ public class ModelMasterSection extends TreeViewerSection{
 	private final ModelMasterDetailsBlock fMasterDetailsBlock;
 	private IModelUpdateListener fUpdateListener;
 	private IFileInfoProvider fFileInfoProvider;
+	ModelLabelDecorator fModelLabelDecorator;
 
 	private class ModelWrapper{
 		private final RootNode fModel;
@@ -292,204 +294,6 @@ public class ModelMasterSection extends TreeViewerSection{
 		}
 	}
 
-	private class ModelLabelDecorator implements ILabelDecorator {
-
-		Map<List<Image>, Image> fFusedImages;
-
-		private class DecorationProvider implements IModelVisitor{
-			AbstractNodeInterface fNodeInterface;
-			boolean fIsProjectAvailable;
-
-			public DecorationProvider(IFileInfoProvider fileInfoProvider, boolean isProjectAvailable){
-				fNodeInterface = new AbstractNodeInterface(ModelMasterSection.this, fileInfoProvider);
-				fIsProjectAvailable = isProjectAvailable;
-			}
-
-			@Override
-			public Object visit(RootNode node) throws Exception {
-				return createDecorationList(node);
-			}
-
-			private List<Image> createDecorationList(AbstractNode abstractNode) {
-
-				List<Image> images = new ArrayList<Image>();
-				images.add(implementationStatusDecoration(abstractNode));
-
-				return images;
-			}
-
-			@Override
-			public Object visit(ClassNode node) throws Exception {
-				return createDecorationList(node);
-			}
-
-			@Override
-			public Object visit(MethodNode node) throws Exception {
-				return createDecorationList(node);
-			}
-
-			@Override
-			public Object visit(MethodParameterNode node) throws Exception {
-				List<Image> decorations = new ArrayList<Image>();
-				decorations.add(implementationStatusDecoration(node));
-				if(node.isExpected()){
-					decorations.add(getImageFromFile("expected.png"));
-				}
-				if(node.isLinked()){
-					decorations.add(getImageFromFile("linked.png"));
-				}
-				return decorations;
-			}
-
-			@Override
-			public Object visit(GlobalParameterNode node) throws Exception {
-				List<Image> decorations = new ArrayList<Image>();
-				decorations.add(implementationStatusDecoration(node));
-				decorations.add(getImageFromFile("global.png"));
-				return decorations;
-			}
-
-			@Override
-			public Object visit(TestCaseNode node) throws Exception {
-				return createDecorationList(node);
-			}
-
-			@Override
-			public Object visit(ConstraintNode node) throws Exception {
-				return createDecorationList(node);
-			}
-
-			@Override
-			public Object visit(ChoiceNode node) throws Exception {
-				List<Image> decorations = new ArrayList<Image>();
-				decorations.add(implementationStatusDecoration(node));
-				if(node.isAbstract()){
-					decorations.add(getImageFromFile("abstract.png"));
-				}
-				return decorations;
-			}
-
-			private Image implementationStatusDecoration(AbstractNode node) {
-
-				if (!fIsProjectAvailable) {
-					return null;
-				}
-
-				switch (fNodeInterface.getImplementationStatus(node)) {
-
-				case IMPLEMENTED:
-					return getImageFromFile("implemented.png");
-
-				case PARTIALLY_IMPLEMENTED:
-					return getImageFromFile("partially_implemented.png");
-
-				case NOT_IMPLEMENTED:
-					return getImageFromFile("unimplemented.png");
-
-				case IRRELEVANT:
-				default:
-					return null;
-				}
-			}
-		}
-
-		public ModelLabelDecorator() {
-			fFusedImages = new HashMap<List<Image>, Image>();
-		}
-
-		@SuppressWarnings("unchecked")
-		@Override
-		public Image decorateImage(Image image, Object element) {
-
-			return image;
-
-			//			if(!(element instanceof AbstractNode)){
-			//				return image;
-			//			}
-			//
-			//			try {
-			//				List<Image> decorations = 
-			//						(List<Image>)((AbstractNode)element).accept(
-			//								new DecorationProvider(
-			//										fFileInfoProvider, 
-			//										fFileInfoProvider.isProjectAvailable()));
-			//				
-			//				List<Image> all = new ArrayList<Image>(decorations);
-			//				all.add(0, image);
-			//				
-			//				if (fFusedImages.containsKey(all) == false) {
-			//					System.out.println("decorateImage, newImageCounter:" + (newImageCounter++));
-			//					Image decorated = new Image(Display.getCurrent(), image.getImageData());
-			//					for(Image decoration : decorations){
-			//						if(decoration != null){
-			//							decorated = fuseImages(decorated, decoration, 0, 0);
-			//						}
-			//					}
-			//					fFusedImages.put(decorations, decorated);
-			//				}
-			//				return fFusedImages.get(decorations);
-			//			} catch(Exception e) {
-			//				SystemLogger.logCatch(e.getMessage());
-			//			}
-			//			return image;
-		}
-
-
-		@Override
-		public String decorateText(String text, Object element) {
-			return text;
-		}
-
-		@Override
-		public void addListener(ILabelProviderListener listener) {
-		}
-
-		@Override
-		public void dispose() {
-		}
-
-		@Override
-		public boolean isLabelProperty(Object element, String property) {
-			return false;
-		}
-
-		@Override
-		public void removeListener(ILabelProviderListener listener) {
-		}
-
-		private Image fuseImages(Image icon, Image decorator, int x, int y){
-
-			return decorator;
-
-			//			ImageData idIcon = (ImageData)icon.getImageData().clone();
-			//			ImageData idDecorator = decorator.getImageData();
-			//			if(idIcon.width <= x || idIcon.height <= y){
-			//				return icon;
-			//			}
-			//			int rbw = (idDecorator.width + x > idIcon.width) ? (idDecorator.width + x - idIcon.width) : idDecorator.width;
-			//			int rbh = (idDecorator.height + y > idIcon.height) ? (idDecorator.height + y - idIcon.height) : idDecorator.height;
-			//
-			//			int indexa = y*idIcon.scanlinePad + x;
-			//			int indexb = 0;
-			//
-			//			for(int row = 0; row < rbh; row ++){
-			//				for(int col = 0; col < rbw; col++){
-			//					if(idDecorator.alphaData[indexb] < 0){
-			//						idIcon.alphaData[indexa] = (byte)-1;
-			//						idIcon.data[4*indexa]=idDecorator.data[4*indexb];
-			//						idIcon.data[4*indexa+1]=idDecorator.data[4*indexb+1];
-			//						idIcon.data[4*indexa+2]=idDecorator.data[4*indexb+2];
-			//					}
-			//					indexa += 1;
-			//					indexb += 1;
-			//				}
-			//				indexa += x;
-			//			}
-			//			System.out.println("fuseImages, newImageCounter:" + (newImageCounter++));
-			//			return new Image(Display.getDefault(), idIcon);
-		}
-	}
-
 	protected class MasterViewerMenuListener extends ViewerMenuListener{
 		public MasterViewerMenuListener(Menu menu) {
 			super(menu);
@@ -678,6 +482,7 @@ public class ModelMasterSection extends TreeViewerSection{
 		super(parentBlock.getMasterSectionContext(), parentBlock.getModelUpdateContext(), fileInfoProvider, StyleDistributor.getSectionStyle());
 		fMasterDetailsBlock = parentBlock;
 		fFileInfoProvider = fileInfoProvider;
+		fModelLabelDecorator.setFileInfoProvider(fileInfoProvider);
 
 		boolean includeDeleteAction = false;
 		if (ApplicationContext.isStandaloneApplication()) {
@@ -803,7 +608,9 @@ public class ModelMasterSection extends TreeViewerSection{
 
 	@Override
 	protected IBaseLabelProvider createViewerLabelProvider() {
-		return new DecoratingLabelProvider(new ModelLabelProvider(), new ModelLabelDecorator());
+
+		fModelLabelDecorator = new ModelLabelDecorator(ModelMasterSection.this);
+		return new DecoratingLabelProvider(new ModelLabelProvider(), fModelLabelDecorator);
 	}
 
 	@Override
@@ -825,7 +632,68 @@ public class ModelMasterSection extends TreeViewerSection{
 		}
 	}
 
-	private Image getImageFromFile(String file) {
+	private static Image getImageFromFile(String file) {
 		return ImageManager.getInstance().getImage(file);
 	}
+
+	private static class ModelLabelDecorator implements ILabelDecorator {
+
+		IFileInfoProvider fFileInfoProvider;
+		IModelUpdateContext fModelUpdateContext;
+		Map<List<Image>, Image> fDecoratedImagesCache;
+
+		public ModelLabelDecorator(IModelUpdateContext modelUpdateContext) {
+
+			fModelUpdateContext = modelUpdateContext;
+			fDecoratedImagesCache = new HashMap<List<Image>, Image>();
+		}
+
+		@Override
+		public Image decorateImage(Image imageToDecorate, Object element) {
+
+			if (!(element instanceof AbstractNode)) {
+				return imageToDecorate;
+			}
+
+			AbstractNode abstractNode = (AbstractNode)element;
+
+			return ModelLabelDecoratorHelper.decorateImageOfAbstractNode(
+					imageToDecorate, 
+					abstractNode,
+					fDecoratedImagesCache,
+					fModelUpdateContext, 
+					fFileInfoProvider);
+		}
+
+		@Override
+		public String decorateText(String text, Object element) {
+
+			return text;
+		}
+
+		@Override
+		public void addListener(ILabelProviderListener listener) {
+		}
+
+		@Override
+		public void dispose() {
+		}
+
+		@Override
+		public boolean isLabelProperty(Object element, String property) {
+
+			return false;
+		}
+
+		@Override
+		public void removeListener(ILabelProviderListener listener) {
+		}
+
+		public void setFileInfoProvider(IFileInfoProvider fileInfoProvider) {
+
+			fFileInfoProvider = fileInfoProvider;
+		}
+
+	}
+
 }

@@ -79,7 +79,7 @@ public void open () {
 }
 
 void refreshLabel () {
-	int colors = 0, cursors = 0, fonts = 0, gcs = 0, images = 0, regions = 0;
+	int colors = 0, cursors = 0, fonts = 0, gcs = 0, images = 0/*, regions = 0*/;
 	for (int i=0; i<objects.length; i++) {
 		Object object = objects [i];
 		if (object instanceof Color) colors++;
@@ -87,7 +87,7 @@ void refreshLabel () {
 		if (object instanceof Font) fonts++;
 		if (object instanceof GC) gcs++;
 		if (object instanceof Image) images++;
-		if (object instanceof Region) regions++;
+		//if (object instanceof Region) regions++;
 	}
 	String string = "";
 	if (colors != 0) string += colors + " Color(s)\n";
@@ -234,7 +234,7 @@ void refreshAll () {
 
 void layout () {
 	Rectangle rect = shell.getClientArea ();
-	String [] strings = new String [objects.length];
+//	String [] strings = new String [objects.length];
 	int width = 0;
 	String [] items = list.getItems ();
 	GC gc = new GC (list);
