@@ -13,7 +13,9 @@ package com.ecfeed.ui.editor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.IOperationHistory;
@@ -24,6 +26,8 @@ import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.viewers.DecoratingLabelProvider;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.IContentProvider;
+import org.eclipse.jface.viewers.ILabelDecorator;
+import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TreeNodeContentProvider;
@@ -72,6 +76,7 @@ import com.ecfeed.ui.editor.actions.ModelViewerActionProvider;
 import com.ecfeed.ui.editor.actions.TestOnlineAction;
 import com.ecfeed.ui.modelif.AbstractNodeInterface;
 import com.ecfeed.ui.modelif.AbstractParameterInterface;
+import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.IModelUpdateListener;
 import com.ecfeed.ui.modelif.MethodInterface;
 import com.ecfeed.ui.modelif.ModelNodesTransfer;
@@ -603,7 +608,7 @@ public class ModelMasterSection extends TreeViewerSection{
 
 	@Override
 	protected IBaseLabelProvider createViewerLabelProvider() {
-		
+
 		fModelLabelDecorator = new ModelLabelDecorator(ModelMasterSection.this);
 		return new DecoratingLabelProvider(new ModelLabelProvider(), fModelLabelDecorator);
 	}
@@ -630,4 +635,65 @@ public class ModelMasterSection extends TreeViewerSection{
 	private static Image getImageFromFile(String file) {
 		return ImageManager.getInstance().getImage(file);
 	}
+
+	private static class ModelLabelDecorator implements ILabelDecorator {
+
+		IFileInfoProvider fFileInfoProvider;
+		IModelUpdateContext fModelUpdateContext;
+		Map<List<Image>, Image> fDecoratedImagesCache;
+
+		public ModelLabelDecorator(IModelUpdateContext modelUpdateContext) {
+
+			fModelUpdateContext = modelUpdateContext;
+			fDecoratedImagesCache = new HashMap<List<Image>, Image>();
+		}
+
+		@Override
+		public Image decorateImage(Image imageToDecorate, Object element) {
+
+			if (!(element instanceof AbstractNode)) {
+				return imageToDecorate;
+			}
+
+			AbstractNode abstractNode = (AbstractNode)element;
+
+			return ModelLabelDecoratorHelper.decorateImageOfAbstractNode(
+					imageToDecorate, 
+					abstractNode,
+					fDecoratedImagesCache,
+					fModelUpdateContext, 
+					fFileInfoProvider);
+		}
+
+		@Override
+		public String decorateText(String text, Object element) {
+
+			return text;
+		}
+
+		@Override
+		public void addListener(ILabelProviderListener listener) {
+		}
+
+		@Override
+		public void dispose() {
+		}
+
+		@Override
+		public boolean isLabelProperty(Object element, String property) {
+
+			return false;
+		}
+
+		@Override
+		public void removeListener(ILabelProviderListener listener) {
+		}
+
+		public void setFileInfoProvider(IFileInfoProvider fileInfoProvider) {
+
+			fFileInfoProvider = fileInfoProvider;
+		}
+
+	}
+
 }

@@ -39,9 +39,9 @@ public class ModelLabelDecoratorHelper  {
 	public static Image decorateImageOfAbstractNode(
 			Image imageToDecorate, 
 			AbstractNode abstractNode,
+			Map<List<Image>, Image> decoratedImagesCache,
 			IModelUpdateContext modelUpdateContext,
-			IFileInfoProvider fileInfoProvider,
-			Map<List<Image>, Image> decoratedImagesCache) {
+			IFileInfoProvider fileInfoProvider) {
 
 		List<Image> decorators = 
 				ModelLabelDecoratorHelper.getDecoratorsForNode(
