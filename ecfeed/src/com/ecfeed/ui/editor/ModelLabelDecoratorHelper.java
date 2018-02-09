@@ -36,6 +36,8 @@ import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class ModelLabelDecoratorHelper  {
 
+	static int fImageCreationCounter = 0;
+
 	public static Image decorateImageOfAbstractNode(
 			Image imageToDecorate, 
 			AbstractNode abstractNode,
@@ -53,6 +55,31 @@ public class ModelLabelDecoratorHelper  {
 
 		return ModelLabelDecoratorHelper.getOrCreateDecoratedImage(
 				imageToDecorate, decorators, decoratedImagesCache);
+	}
+
+	public static Image getOrCreateDecoratedImage(
+			Image imageToDecorate, 
+			List<Image> decorators, 
+			Map<List<Image>, Image> decoratedImagesCache) {
+
+		List<Image> decoratedImageKey = createDecoratedImageKey(imageToDecorate, decorators);
+
+		if (decoratedImagesCache.containsKey(decoratedImageKey)) {
+			return decoratedImagesCache.get(decoratedImageKey);
+		}
+
+		Image newDecoratedImage = createDecoratedImage(imageToDecorate, decorators);
+		decoratedImagesCache.put(decoratedImageKey, newDecoratedImage);
+
+		return newDecoratedImage;
+	}
+
+	public static void resetImageCreationCounter() {
+		fImageCreationCounter = 0;
+	}
+
+	public static int getImageCreationCounter() {
+		return fImageCreationCounter;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -78,23 +105,6 @@ public class ModelLabelDecoratorHelper  {
 		return (List<Image>)result;
 	}
 
-	private static Image getOrCreateDecoratedImage(
-			Image imageToDecorate, 
-			List<Image> decorators, 
-			Map<List<Image>, Image> decoratedImagesCache) {
-
-		List<Image> decoratedImageKey = createDecoratedImageKey(imageToDecorate, decorators);
-
-		if (decoratedImagesCache.containsKey(decoratedImageKey)) {
-			return decoratedImagesCache.get(decoratedImageKey);
-		}
-
-		Image newDecoratedImage = createDecoratedImage(imageToDecorate, decorators);
-		decoratedImagesCache.put(decoratedImageKey, newDecoratedImage);
-
-		return newDecoratedImage;
-	}
-
 	private static Image createDecoratedImage(Image imageToDecorate, List<Image> decorators) {
 
 		ImageData newImageData = (ImageData)imageToDecorate.getImageData().clone();
@@ -106,6 +116,7 @@ public class ModelLabelDecoratorHelper  {
 			}
 		}
 
+		fImageCreationCounter++;
 		return new Image(Display.getCurrent(), newImageData);
 	}
 
