@@ -32,19 +32,20 @@ import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.ImageManager;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.modelif.AbstractNodeInterface;
+import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class ModelLabelDecoratorHelper  {
 
 	public static Image decorateImageOfAbstractNode(
 			Image imageToDecorate, 
 			AbstractNode abstractNode,
-			ModelMasterSection modelMasterSection,
+			IModelUpdateContext modelUpdateContext,
 			IFileInfoProvider fileInfoProvider,
 			Map<List<Image>, Image> decoratedImagesCache) {
 
 		List<Image> decorators = 
 				ModelLabelDecoratorHelper.getDecoratorsForNode(
-						abstractNode, modelMasterSection, fileInfoProvider);
+						abstractNode, modelUpdateContext, fileInfoProvider);
 
 		if (decorators == null) {
 			return imageToDecorate;
@@ -54,11 +55,10 @@ public class ModelLabelDecoratorHelper  {
 				imageToDecorate, decorators, decoratedImagesCache);
 	}
 
-
 	@SuppressWarnings("unchecked")
 	private static List<Image> getDecoratorsForNode(
 			AbstractNode abstractNode, 
-			ModelMasterSection modelMasterSection,
+			IModelUpdateContext modelUpdateContext,
 			IFileInfoProvider fileInfoProvider) {
 
 		Object result = null;
@@ -69,7 +69,7 @@ public class ModelLabelDecoratorHelper  {
 							new DecoratorImageListProvider(
 									fileInfoProvider, 
 									fileInfoProvider.isProjectAvailable(),
-									modelMasterSection));
+									modelUpdateContext));
 		} catch (Exception e) {
 			SystemLogger.logCatch(e.getMessage());
 			return null;
@@ -187,17 +187,15 @@ public class ModelLabelDecoratorHelper  {
 
 		AbstractNodeInterface fNodeInterface;
 		boolean fIsProjectAvailable;
-		ModelMasterSection fModelMasterSection;
 
 		public DecoratorImageListProvider(
 				IFileInfoProvider fileInfoProvider, 
 				boolean isProjectAvailable, 
-				ModelMasterSection modelMasterSection) {
+				IModelUpdateContext modelUpdateContext) {
 
 			fIsProjectAvailable = isProjectAvailable;
-			fModelMasterSection = modelMasterSection;
 
-			fNodeInterface = new AbstractNodeInterface(fModelMasterSection, fileInfoProvider);
+			fNodeInterface = new AbstractNodeInterface(modelUpdateContext, fileInfoProvider);
 		}
 
 		@Override

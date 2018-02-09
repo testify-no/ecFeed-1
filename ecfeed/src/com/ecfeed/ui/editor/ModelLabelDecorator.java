@@ -20,17 +20,17 @@ import org.eclipse.swt.graphics.Image;
 
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class ModelLabelDecorator implements ILabelDecorator {
 
 	IFileInfoProvider fFileInfoProvider;
-	ModelMasterSection fModelMasterSection;
+	IModelUpdateContext fModelUpdateContext;
 	Map<List<Image>, Image> fDecoratedImagesCache;
 
-	public ModelLabelDecorator(
-			ModelMasterSection modelMasterSection) {
+	public ModelLabelDecorator(IModelUpdateContext modelUpdateContext) {
 
-		fModelMasterSection = modelMasterSection;
+		fModelUpdateContext = modelUpdateContext;
 		fDecoratedImagesCache = new HashMap<List<Image>, Image>();
 	}
 
@@ -44,7 +44,7 @@ public class ModelLabelDecorator implements ILabelDecorator {
 		return ModelLabelDecoratorHelper.decorateImageOfAbstractNode(
 				imageToDecorate, 
 				(AbstractNode)element, 
-				fModelMasterSection, 
+				fModelUpdateContext, 
 				fFileInfoProvider, 
 				fDecoratedImagesCache);
 	}
