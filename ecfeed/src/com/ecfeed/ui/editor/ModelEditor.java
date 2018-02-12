@@ -44,6 +44,7 @@ import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.utils.EclipseHelper;
 import com.ecfeed.utils.ModelEditorPlatformAdapter;
+import com.ecfeed.utils.Sleak;
 
 public class ModelEditor extends FormEditor 
 {
@@ -68,6 +69,8 @@ public class ModelEditor extends FormEditor
 				return fModelPage;
 			}
 		};
+
+		createResourceProfilerDialog();
 
 		ResourceChangeReporter.registerResourceChangeListener(modelPageProvider);
 
@@ -105,6 +108,22 @@ public class ModelEditor extends FormEditor
 		}
 
 		setGlobalShellForDialogsIfNull();
+	}
+
+	private void createResourceProfilerDialog() {
+
+		//		In order to run the profiler:
+		//		- In Eclipse open Run/Debug configuration which should be run/debugged.
+		//		- Go to "Tracing" tab.
+		//		- Check "Enable tracing"
+		//		- In the left window select org.eclipse.ui plugin
+		//		- Put the check in the checkbox on before plugin name.
+		//		- While org.eclipse.ui is selected, in the right window, on the list click checkboxes labelled: debug, trace/graphics
+		//		- Click Run/Debug
+		//		- As a result of this configuration the constructor: public Display (DeviceData data) should be called.
+		//
+				Sleak sleak = new Sleak();
+				sleak.open();
 	}
 
 	private RootNode createModel() throws ModelOperationException {
@@ -186,13 +205,13 @@ public class ModelEditor extends FormEditor
 	}
 
 	public void doSaveForIDE() {
-		
+
 		OutputStream outputStream = 
 				ModelEditorPlatformAdapter.createOutputStreamForIdeFileSave(getEditorInput());
-		
+
 		saveModelToStream(outputStream);
 	}
-	
+
 	public void doSaveForRCP() {
 		String fileName = 
 				ModelEditorPlatformAdapter.getFileNameFromEditorInput(getEditorInput());
@@ -273,7 +292,7 @@ public class ModelEditor extends FormEditor
 	public void setEditorFile(String fileWithPath) {
 
 		Pair<IEditorInput, String> editorProperties = null;
-		
+
 		if (ApplicationContext.isProjectAvailable()) {
 			editorProperties = ModelEditorPlatformAdapter.getEditorFilePropertiesForIde(fileWithPath);
 		} else {
