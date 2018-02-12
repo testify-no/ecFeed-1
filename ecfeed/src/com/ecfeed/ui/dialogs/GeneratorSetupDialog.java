@@ -190,12 +190,16 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 	@Override
 	public void okPressed() {
 
-		String targetFileStr = getTargetFileStr();
-		if (targetFileStr ==  null) {
-			return;
+		if (isContentFlagOn(TEST_CASES_EXPORT_COMPOSITE)) {
+
+			String targetFileStr = getTargetFileStr();
+			if (targetFileStr ==  null) {
+				return;
+			}
+
+			fTargetFileStr = targetFileStr;
 		}
 
-		fTargetFileStr = targetFileStr;
 		saveAlgorithmInput();
 		saveConstraints();
 		super.okPressed();
@@ -226,11 +230,11 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 	}
 
 	private String getTargetFileForRap() {
-		
+
 		if (fExportTemplate == null) {
 			return fMethod.getName(); 
 		}
-		
+
 		return fMethod.getName() + "." + fExportTemplate.getFileExtension();
 	}
 
