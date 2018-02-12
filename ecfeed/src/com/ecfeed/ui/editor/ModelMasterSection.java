@@ -96,7 +96,6 @@ public class ModelMasterSection extends TreeViewerSection {
 		showCheckForUpdatesDialogWhenPossible();
 	}
 
-	// XYX	
 	@Override
 	protected IContentProvider createViewerContentProvider() {
 		return new ModelTreeContentProvider();

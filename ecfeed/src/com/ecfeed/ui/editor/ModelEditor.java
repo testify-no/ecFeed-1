@@ -44,7 +44,7 @@ import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.utils.EclipseHelper;
 import com.ecfeed.utils.ModelEditorPlatformAdapter;
-import com.ecfeed.utils.Sleak;
+//import com.ecfeed.utils.Sleak;
 
 public class ModelEditor extends FormEditor 
 {
@@ -122,8 +122,8 @@ public class ModelEditor extends FormEditor
 		//		- Click Run/Debug
 		//		- As a result of this configuration the constructor: public Display (DeviceData data) should be called.
 		//
-				Sleak sleak = new Sleak();
-				sleak.open();
+		//		Sleak sleak = new Sleak();
+		//		sleak.open();
 	}
 
 	private RootNode createModel() throws ModelOperationException {
