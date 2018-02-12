@@ -10,8 +10,6 @@
 
 package com.ecfeed.ui.editor.data;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,30 +17,15 @@ import java.util.Map;
 import org.eclipse.jface.viewers.ILabelDecorator;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.ImageData;
-import org.eclipse.swt.widgets.Display;
 
 import com.ecfeed.core.model.AbstractNode;
-import com.ecfeed.core.model.ChoiceNode;
-import com.ecfeed.core.model.ClassNode;
-import com.ecfeed.core.model.ConstraintNode;
-import com.ecfeed.core.model.GlobalParameterNode;
-import com.ecfeed.core.model.IModelVisitor;
-import com.ecfeed.core.model.MethodNode;
-import com.ecfeed.core.model.MethodParameterNode;
-import com.ecfeed.core.model.RootNode;
-import com.ecfeed.core.model.TestCaseNode;
-import com.ecfeed.core.utils.ApplicationContext;
-import com.ecfeed.core.utils.SystemLogger;
-import com.ecfeed.ui.common.ImageManager;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
-import com.ecfeed.ui.modelif.AbstractNodeInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class ModelTreeLabelDecorator implements ILabelDecorator {
 
 	private IJavaProjectProvider fJavaProjectProvider;
-	private Map<List<Image>, Image> fFusedImages;
+	private Map<List<Image>, Image> fDecoratedImagesCache;
 	IModelUpdateContext fUpdateContext;
 
 	public ModelTreeLabelDecorator(
@@ -51,43 +34,29 @@ public class ModelTreeLabelDecorator implements ILabelDecorator {
 
 		fUpdateContext = updateContext;
 		fJavaProjectProvider = javaProjectProvider;
-		fFusedImages = new HashMap<List<Image>, Image>();
+		fDecoratedImagesCache = new HashMap<List<Image>, Image>();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public Image decorateImage(Image image, Object element) {
-		if(!(element instanceof AbstractNode)){
-			return image;
+	public Image decorateImage(Image imageToDecorate, Object element) {
+
+		if (!(element instanceof AbstractNode)) {
+			return imageToDecorate;
 		}
 
-		try {
-			List<Image> decorations = (List<Image>)((AbstractNode)element).accept(
-					new DecorationProvider(
-							fUpdateContext, 
-							fJavaProjectProvider, 
-							ApplicationContext.isProjectAvailable()));
+		AbstractNode abstractNode = (AbstractNode)element;
 
-			List<Image> all = new ArrayList<Image>(decorations);
-			all.add(0, image);
-			if(fFusedImages.containsKey(all) == false){
-				Image decorated = new Image(Display.getCurrent(), image.getImageData());
-				for(Image decoration : decorations){
-					if(decoration != null){
-						decorated = fuseImages(decorated, decoration, 0, 0);
-					}
-				}
-				fFusedImages.put(decorations, decorated);
-			}
-			return fFusedImages.get(decorations);
-		} catch(Exception e) {
-			SystemLogger.logCatch(e.getMessage());
-		}
-		return image;
+		return ModelTreeLabelDecoratorHelper.decorateImageOfAbstractNode(
+				imageToDecorate, 
+				abstractNode,
+				fDecoratedImagesCache,
+				fUpdateContext, 
+				fJavaProjectProvider);
 	}
 
 	@Override
 	public String decorateText(String text, Object element) {
+
 		return text;
 	}
 
@@ -101,133 +70,12 @@ public class ModelTreeLabelDecorator implements ILabelDecorator {
 
 	@Override
 	public boolean isLabelProperty(Object element, String property) {
+
 		return false;
 	}
 
 	@Override
 	public void removeListener(ILabelProviderListener listener) {
-	}
-
-	private Image fuseImages(Image icon, Image decorator, int x, int y){
-
-		if (ApplicationContext.isApplicationTypeRemoteRap()) {
-			return icon; // TODO
-		}
-
-		ImageData idIcon = (ImageData)icon.getImageData().clone();
-		ImageData idDecorator = decorator.getImageData();
-		if(idIcon.width <= x || idIcon.height <= y){
-			return icon;
-		}
-		int rbw = (idDecorator.width + x > idIcon.width) ? (idDecorator.width + x - idIcon.width) : idDecorator.width;
-		int rbh = (idDecorator.height + y > idIcon.height) ? (idDecorator.height + y - idIcon.height) : idDecorator.height;
-
-		int indexa = y*idIcon.scanlinePad + x;
-		int indexb = 0;
-
-		for(int row = 0; row < rbh; row ++){
-			for(int col = 0; col < rbw; col++){
-				if(idDecorator.alphaData[indexb] < 0){
-					idIcon.alphaData[indexa] = (byte)-1;
-					idIcon.data[4*indexa]=idDecorator.data[4*indexb];
-					idIcon.data[4*indexa+1]=idDecorator.data[4*indexb+1];
-					idIcon.data[4*indexa+2]=idDecorator.data[4*indexb+2];
-				}
-				indexa += 1;
-				indexb += 1;
-			}
-			indexa += x;
-		}
-		return new Image(Display.getDefault(), idIcon);
-	}
-
-	private class DecorationProvider implements IModelVisitor{
-
-		AbstractNodeInterface fNodeInterface;
-		boolean fIsProjectAvailable;
-
-		public DecorationProvider(
-				IModelUpdateContext updateContext, 
-				IJavaProjectProvider javaProjectProvider, 
-				boolean isProjectAvailable) {
-
-			fNodeInterface = new AbstractNodeInterface(updateContext, javaProjectProvider);
-			fIsProjectAvailable = isProjectAvailable;
-		}
-
-		@Override
-		public Object visit(RootNode node) throws Exception {
-			return Arrays.asList(new Image[]{implementationStatusDecoration(node)});
-		}
-
-		@Override
-		public Object visit(ClassNode node) throws Exception {
-			return Arrays.asList(new Image[]{implementationStatusDecoration(node)});
-		}
-
-		@Override
-		public Object visit(MethodNode node) throws Exception {
-			return Arrays.asList(new Image[]{implementationStatusDecoration(node)});
-		}
-
-		@Override
-		public Object visit(MethodParameterNode node) throws Exception {
-			List<Image> decorations = new ArrayList<Image>();
-			decorations.add(implementationStatusDecoration(node));
-			if(node.isExpected()){
-				decorations.add(ImageManager.getImageFromFile("expected.png"));
-			}
-			if(node.isLinked()){
-				decorations.add(ImageManager.getImageFromFile("linked.png"));
-			}
-			return decorations;
-		}
-
-		@Override
-		public Object visit(GlobalParameterNode node) throws Exception {
-			List<Image> decorations = new ArrayList<Image>();
-			decorations.add(implementationStatusDecoration(node));
-			decorations.add(ImageManager.getImageFromFile("global.png"));
-			return decorations;
-		}
-
-		@Override
-		public Object visit(TestCaseNode node) throws Exception {
-			return Arrays.asList(new Image[]{implementationStatusDecoration(node)});
-		}
-
-		@Override
-		public Object visit(ConstraintNode node) throws Exception {
-			return Arrays.asList(new Image[]{implementationStatusDecoration(node)});
-		}
-
-		@Override
-		public Object visit(ChoiceNode node) throws Exception {
-			List<Image> decorations = new ArrayList<Image>();
-			decorations.add(implementationStatusDecoration(node));
-			if(node.isAbstract()){
-				decorations.add(ImageManager.getImageFromFile("abstract.png"));
-			}
-			return decorations;
-		}
-
-		private Image implementationStatusDecoration(AbstractNode node) {
-			if (!fIsProjectAvailable) {
-				return null;
-			}
-
-			switch (fNodeInterface.getImplementationStatus(node)){
-			case IMPLEMENTED:
-				return ImageManager.getImageFromFile("implemented.png");
-			case PARTIALLY_IMPLEMENTED:
-				return ImageManager.getImageFromFile("partially_implemented.png");
-			case NOT_IMPLEMENTED:
-				return ImageManager.getImageFromFile("unimplemented.png");
-			case IRRELEVANT:
-			default:
-				return null;
-			}
-		}
 	}
 
 }
