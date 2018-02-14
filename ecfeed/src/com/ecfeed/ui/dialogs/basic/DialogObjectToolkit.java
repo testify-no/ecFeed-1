@@ -67,6 +67,23 @@ public class DialogObjectToolkit {
 		return templateText;
 	}
 
+	public static Text createTooltipText(Composite parentGridComposite, String tooltipText) {
+
+		int textStyle = SWT.BORDER | SWT.READ_ONLY | SWT.MULTI | SWT.WRAP | SWT.V_SCROLL;
+
+		Text textWidget = new Text(parentGridComposite, textStyle); 
+
+		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
+		textWidget.setLayoutData(gridData);
+
+		if (tooltipText != null) {
+			textWidget.setText(tooltipText);
+		}
+
+		return textWidget;
+	}
+
+
 	public static Label createLabel(Composite parent, String text) {
 
 		Label label = new Label(parent, SWT.NONE);
