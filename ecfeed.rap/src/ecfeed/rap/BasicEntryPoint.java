@@ -6,7 +6,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
-import com.ecfeed.core.utils.StringHelper;
+//import com.ecfeed.core.utils.StringHelper;
 
 
 public class BasicEntryPoint extends AbstractEntryPoint {
@@ -28,5 +28,11 @@ public class BasicEntryPoint extends AbstractEntryPoint {
         }
         button.setText(buttonText);
     }
+
+	public static class StringHelper {
+		public static final boolean isNullOrEmpty(String buttonText) {
+			return buttonText==null || buttonText==""; 
+		}
+	}
 
 }

@@ -1,0 +1,24 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: com.ecfeed; singleton:=true
+Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,org.eclipse.co
+ re.resources,org.eclipse.ui.ide,org.junit,org.eclipse.jface.text,org.
+ eclipse.ui.editors,org.eclipse.ui.forms,org.eclipse.ui.console,org.ec
+ lipse.e4.core.di,ecfeed.core,org.eclipse.swt
+Bundle-ManifestVersion: 2
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-ActivationPolicy: lazy
+Bundle-Vendor: ecFeed AS
+Import-Package: org.eclipse.core.filesystem,org.eclipse.jdt.core,org.e
+ clipse.jdt.core.dom,org.eclipse.jdt.core.dom.rewrite,org.eclipse.jdt.
+ ui,org.eclipse.jface.text,org.eclipse.jface.text.presentation,org.ecl
+ ipse.jface.text.rules,org.eclipse.jface.text.source,org.eclipse.ui.ed
+ itors.text,org.eclipse.ui.forms
+Export-Package: com.ecfeed.android.external,com.ecfeed.android.utils,c
+ om.ecfeed.application,com.ecfeed.ui.common.utils,com.ecfeed.ui.dialog
+ s.basic,com.ecfeed.ui.editor,com.ecfeed.ui.editor.actions,com.ecfeed.
+ ui.handlers,com.ecfeed.utils
+Bundle-Name: ecFeed
+Bundle-Version: 1.12.5.201802130957
+Bundle-ClassPath: lib/xom-1.2.10.jar,ecfeed.jar
+Bundle-Activator: com.ecfeed.ui.plugin.Activator
+

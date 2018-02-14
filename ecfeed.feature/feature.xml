@@ -462,13 +462,6 @@ If the Library as you received it specifies that a proxy can decide whether futu
          version="0.0.0"/>
 
    <plugin
-         id="com.ecfeed.android"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="ecfeed.core"
          download-size="0"
          install-size="0"

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="ecFeed" uid="com.ecfeed.rcp3.product" id="ecfeed.rcp3.product" application="ecfeed.rcp3.application" useFeatures="false" includeLaunchers="true">
+<product name="ecFeed" uid="com.ecfeed.rcp3.product" id="com.ecfeed.rcp3.product" application="ecfeed.rcp3.application" version="1.0.0" useFeatures="true" includeLaunchers="true">
 
    <configIni use="default">
    </configIni>
@@ -14,7 +14,6 @@
    <windowImages i16="/ecfeed.rcp3/icons/ecfeed-icon-16.png" i32="/ecfeed.rcp3/icons/alt_window_32.gif" i48="/ecfeed.rcp3/icons/ecfeed-icon-48.png" i64="/ecfeed.rcp3/icons/ecfeed-icon-64.png" i128="/ecfeed.rcp3/icons/ecfeed-icon-128.png" i256="/ecfeed.rcp3/icons/ecfeed-icon-256.png"/>
 
    <launcher>
-      <solaris/>
       <win useIco="false">
          <bmp/>
       </win>
@@ -163,6 +162,21 @@
       <plugin id="org.w3c.dom.smil"/>
       <plugin id="org.w3c.dom.svg"/>
    </plugins>
+
+   <features>
+      <feature id="org.eclipse.rcp"/>
+      <feature id="org.eclipse.equinox.p2.extras.feature"/>
+      <feature id="org.eclipse.emf.ecore"/>
+      <feature id="org.eclipse.ecf.filetransfer.httpclient4.feature"/>
+      <feature id="org.eclipse.ecf.core.ssl.feature"/>
+      <feature id="org.eclipse.ecf.filetransfer.httpclient4.ssl.feature"/>
+      <feature id="org.eclipse.ecf.filetransfer.ssl.feature"/>
+      <feature id="org.eclipse.emf.common"/>
+      <feature id="org.eclipse.equinox.p2.core.feature"/>
+      <feature id="org.eclipse.ecf.core.feature"/>
+      <feature id="org.eclipse.e4.rcp"/>
+      <feature id="org.eclipse.ecf.filetransfer.feature"/>
+   </features>
 
    <configurations>
       <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="0" />

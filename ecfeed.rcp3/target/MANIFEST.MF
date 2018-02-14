@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: ecfeed.rcp3;singleton:=true
+Bundle-Name: Rcp3
+Bundle-Version: 1.0.0
+Require-Bundle: org.eclipse.core.runtime,org.eclipse.ui,org.eclipse.ui
+ .forms,org.eclipse.ui.ide,org.eclipse.ui.workbench,org.eclipse.core.f
+ ilesystem,com.ecfeed,org.eclipse.jdt.core,org.eclipse.core.resources,
+ org.eclipse.swt,org.eclipse.jface
+Bundle-ManifestVersion: 2
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Import-Package: com.ecfeed.core.utils
+

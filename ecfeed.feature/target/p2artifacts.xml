@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<?artifactRepository version='1.1.0'?>
+<artifacts size='1'>
+  <artifact classifier='org.eclipse.update.feature' id='com.ecfeed' version='1.12.4.201802130957'>
+    <properties size='6'>
+      <property name='artifact.size' value='11779'/>
+      <property name='download.size' value='11779'/>
+      <property name='maven-groupId' value='com.ecfeed'/>
+      <property name='maven-artifactId' value='com.ecfeed'/>
+      <property name='maven-version' value='1.12.4-SNAPSHOT'/>
+      <property name='download.contentType' value='application/zip'/>
+    </properties>
+  </artifact>
+</artifacts>
