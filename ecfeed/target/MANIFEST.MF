@@ -18,7 +18,7 @@ Export-Package: com.ecfeed.android.external,com.ecfeed.android.utils,c
  s.basic,com.ecfeed.ui.editor,com.ecfeed.ui.editor.actions,com.ecfeed.
  ui.handlers,com.ecfeed.utils
 Bundle-Name: ecFeed
-Bundle-Version: 1.12.5.201802130957
+Bundle-Version: 1.12.5.201802141157
 Bundle-ClassPath: lib/xom-1.2.10.jar,ecfeed.jar
 Bundle-Activator: com.ecfeed.ui.plugin.Activator
 

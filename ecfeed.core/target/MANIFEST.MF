@@ -9,7 +9,7 @@ Export-Package: com.ecfeed.core.adapter,com.ecfeed.core.adapter.java,c
  tils,com.ecfeed.core.utils,com.ecfeed.junit,com.ecfeed.junit.annotati
  ons
 Bundle-Name: Core
-Bundle-Version: 1.0.1.201802130957
+Bundle-Version: 1.0.1.201802141157
 Bundle-ClassPath: lib/xom-1.2.10.jar,.,lib/selenium-server-standalone-
  3.0.1.jar
 Bundle-ManifestVersion: 2

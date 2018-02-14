@@ -2,7 +2,7 @@
 <feature
       id="com.ecfeed"
       label="ecFeed"
-      version="1.12.4.201802130957"
+      version="1.12.4.201802141157"
       provider-name="ecFeed AS">
 
    <description url="https://github.com/testify-no/ecFeed">
@@ -459,13 +459,13 @@ If the Library as you received it specifies that a proxy can decide whether futu
          id="com.ecfeed"
          download-size="1241"
          install-size="1946"
-         version="1.12.5.201802130957"/>
+         version="1.12.5.201802141157"/>
 
    <plugin
          id="ecfeed.core"
          download-size="19605"
          install-size="23364"
-         version="1.0.1.201802130957"
+         version="1.0.1.201802141157"
          unpack="false"/>
 
 </feature>
