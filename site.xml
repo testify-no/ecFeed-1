@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/com.ecfeed_1.12.4.201802151138.jar" id="com.ecfeed" version="1.12.4.201802151138">
+      <category name="ecfeed"/>
+   </feature>
+   <category-def name="ecfeed" label="meh">
+      <description>
+         something
+      </description>
+   </category-def>
+</site>

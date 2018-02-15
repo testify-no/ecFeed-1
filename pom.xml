@@ -10,11 +10,11 @@
   <modules>
     <module>ecfeed</module>
     <module>ecfeed.core</module>
-	<module>ecfeed.feature</module>
-	<module>ecfeed.rap</module>
-	<module>ecfeed.rcp3</module>
-	<module>ecfeed.rcp3.product</module>
-	<module>ecfeed.eclipse-update-site</module>
+	  <module>ecfeed.feature</module>
+	  <module>ecfeed.rap</module>
+	  <module>ecfeed.rcp3</module>
+	  <module>ecfeed.rcp3.product</module>
+	  <module>ecfeed.eclipse-update-site</module>
   </modules>
   
   <build>
