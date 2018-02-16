@@ -33,7 +33,10 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.ui.forms.AbstractFormPart;
 import org.eclipse.ui.forms.SectionPart;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.forms.widgets.Section;
 
+import com.ecfeed.application.ApplicationContext;
+import com.ecfeed.application.SectionDecorationsHolder;
 import com.ecfeed.core.adapter.ModelOperationManager;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.ui.common.ImageManager;
@@ -80,7 +83,23 @@ public abstract class BasicSection extends SectionPart implements IModelUpdateCo
 		fUpdateContext = updateContext;
 		fFileInfoProvider = fileInfoProvider;
 
+		saveSectionDecorationsInApplicationContext();
 		createContent();
+	}
+
+	private void saveSectionDecorationsInApplicationContext() {
+
+		Section section = getSection();
+
+		SectionDecorationsHolder sessionDecorationsHolder = ApplicationContext.getSessionDecorationsHolder();
+
+		sessionDecorationsHolder.setDecorations(
+				section.getBackground(),
+				section.getForeground(),
+				section.getTitleBarBackground(),
+				section.getTitleBarBorderColor(),
+				section.getTitleBarForeground(),
+				section.getFont());
 	}
 
 	@Override

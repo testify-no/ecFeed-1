@@ -20,6 +20,7 @@ public class ApplicationContext {
 
 	static boolean fIsStandaloneApplication = false;
 	static String fExportFileName;
+	static SectionDecorationsHolder fSectionDecorationsHolder = new SectionDecorationsHolder();
 
 	public static boolean isStandaloneApplication() {
 
@@ -55,4 +56,7 @@ public class ApplicationContext {
 		return version;
 	}
 
+	public static SectionDecorationsHolder getSessionDecorationsHolder() {
+		return fSectionDecorationsHolder;
+	}
 }

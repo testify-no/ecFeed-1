@@ -118,7 +118,8 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 	@Override
 	public void createContents(Composite parent) {
 		parent.setLayout(new FillLayout());
-		fMainSection = getToolkit().createSection(parent, StyleDistributor.getSectionStyle());
+		fMainSection = MainDetailsSection.create(parent, StyleDistributor.getSectionStyle(), getToolkit());
+
 		Composite textClient = createTextClientComposite();
 		fMainSection.setTextClient(textClient);
 
