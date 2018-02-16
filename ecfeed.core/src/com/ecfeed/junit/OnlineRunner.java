@@ -68,7 +68,7 @@ public class OnlineRunner extends AbstractJUnitRunner {
 					RunnerException.report(Messages.GENERATOR_INITIALIZATION_PROBLEM(e.getMessage()));
 				}
 
-				frameworkMethods.add(new JavaRuntimeMethod(frameworkMethod.getMethod(), generator, getLoader()));
+				frameworkMethods.add(new OnlineRunnerMethod(frameworkMethod.getMethod(), generator, getLoader()));
 			}
 		}
 
