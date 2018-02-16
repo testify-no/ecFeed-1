@@ -63,7 +63,7 @@ public class StaticRunner extends AbstractJUnitRunner {
 		Method method = frameworkMethod.getMethod();
 		Collection<TestCaseNode> testCases = getTestCases(methodNode, getTestSuites(frameworkMethod));
 
-		frameworkMethods.add(new JavaParameterizedMethod(method, testCases, getLoader()));
+		frameworkMethods.add(new StaticRunnerMethod(method, testCases, getLoader()));
 	}
 
 	protected Set<String> getTestSuites(FrameworkMethod method) throws RunnerException{

@@ -11,54 +11,34 @@
 package com.ecfeed.junit;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
 import com.ecfeed.core.adapter.java.ModelClassLoader;
-import com.ecfeed.core.generators.api.IGenerator;
-import com.ecfeed.core.model.ChoiceNode;
-import com.ecfeed.core.runner.Messages;
-import com.ecfeed.core.runner.RunnerException;
+import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.utils.EcException;
 
-public class JavaRuntimeMethod extends AbstractFrameworkMethod{
+public class StaticRunnerMethod extends AbstractFrameworkMethod {
 
-	IGenerator<ChoiceNode> fGenerator;
+	private Collection<TestCaseNode> fTestCases;
 
-	public JavaRuntimeMethod(
-			Method method, 
-			IGenerator<ChoiceNode> initializedGenerator, 
-			ModelClassLoader loader) throws RunnerException {
-
+	public StaticRunnerMethod(Method method, Collection<TestCaseNode> testCases, ModelClassLoader loader) {
 		super(method, loader);
-		fGenerator = initializedGenerator;
+		fTestCases = testCases;
 	}
 
 	@Override
-	public Object invokeExplosively(Object target, Object... p) throws Throwable {
+	public Object invokeExplosively(Object target, Object... parameters) throws Throwable{
 
 		int totalTestCaseCounter = 0;
 		int failedTestCaseCounter = 0;
 		StringBuilder stringBuilder = new StringBuilder();
-		List<ChoiceNode> listOfChoices = new ArrayList<>();
 
-		for (;;) {
-
-			try {
-				listOfChoices = fGenerator.next();
-
-			} catch (Exception e){
-				RunnerException.report(Messages.RUNNER_EXCEPTION(e.getMessage()));
-			}
-
-			if (listOfChoices == null) {
-				break;
-			}
+		for (TestCaseNode testCase : fTestCases) {
 
 			totalTestCaseCounter++;
 
 			try {
-				super.invoke(target, listOfChoices);
+				super.invoke(target, testCase.getTestData());
 
 			} catch (Throwable e) {
 
@@ -67,9 +47,12 @@ public class JavaRuntimeMethod extends AbstractFrameworkMethod{
 				}
 
 				failedTestCaseCounter++;
-				JavaMethodHelper.appendExceptionMessage(getName(), listOfChoices, e, stringBuilder);
+				JavaMethodHelper.appendExceptionMessage(
+						testCase.getMethod().getName(),
+						testCase.getTestData(),
+						e, 
+						stringBuilder);
 			}
-
 		}
 
 		JavaMethodHelper.addTestStatistics(totalTestCaseCounter, failedTestCaseCounter, stringBuilder);
