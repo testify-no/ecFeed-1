@@ -52,6 +52,15 @@ public class StringHelper {
 		return str.trim().isEmpty();
 	}
 
+	public static String cutToMaxSize(String stringToCut, int maxSize) {
+		
+		if (stringToCut.length() <= maxSize) {
+			return stringToCut;
+		}
+
+		return stringToCut.substring(0, maxSize);
+	}
+	
 	public static String removeToPrefix(String prefix, String fromStr) {
 
 		int index = fromStr.indexOf(prefix);
@@ -472,6 +481,6 @@ public class StringHelper {
 		formatter.close();
 
 		return result;
-	}	
-
+	}
+	
 }

@@ -99,7 +99,13 @@ implements IDetailsPage, IModelUpdateListener, ISectionContext {
 	public void createContents(Composite parent) {
 
 		parent.setLayout(new FillLayout());
-		fMainSection = getEcFormToolkit().createSection(parent, StyleDistributor.getSectionStyle());
+		
+		fMainSection = 
+				MainDetailsSection.create(
+						parent, 
+						StyleDistributor.getSectionStyle(), 
+						getEcFormToolkit().getEclipseToolkit());
+
 		Composite textClient = createTextClientComposite();
 		fMainSection.setTextClient(textClient);
 

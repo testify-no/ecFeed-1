@@ -35,6 +35,7 @@ public class ApplicationContext {
 	static String fExportFileName;
 	static String fMainBundleName = "com.ecfeed";
 	static private ObjectUndoContext fRapObjectUndoContext = null;
+	static SectionDecorationsHolder fSectionDecorationsHolder = new SectionDecorationsHolder();
 
 	public static boolean isApplicationTypeLocalStandalone() {
 
@@ -146,6 +147,10 @@ public class ApplicationContext {
 		}
 
 		return fRapObjectUndoContext;
+	}
+
+	public static SectionDecorationsHolder getSessionDecorationsHolder() {
+		return fSectionDecorationsHolder;
 	}
 
 }
