@@ -9,6 +9,5 @@
   </parent>
   
   <artifactId>ecfeed.rap</artifactId>
-	  <version>1.0.0</version>
   <packaging>eclipse-plugin</packaging>
 </project>

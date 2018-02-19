@@ -11,7 +11,7 @@
 	<!--<relativePath>../ecFeed/pom.xml</relativePath>-->
   </parent>
   
-  <groupId>com.ecfeed</groupId>
+  
   <artifactId>ecfeed.rcp3.product</artifactId>
   <!-- version defaults to the same value as the parent -->
   <!--version>1.0.0-SNAPSHOT</version-->
