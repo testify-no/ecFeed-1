@@ -14,6 +14,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
@@ -25,23 +26,28 @@ import com.ecfeed.utils.EclipseHelper;
 
 public class TooltipController {
 
-	String fTooltipTitle;
-	String fTooltipMessage = new String();
-	Shell fShell;
-	Timer fTimer;
-	TooltipView fTooltipView;
+	private String fTooltipTitle;
+	private String fTooltipMessage = new String();
+	private Shell fShell;
+	private Timer fTimer;
+	private TooltipView fTooltipView;
+	private Control fSourceControl;
 
-	public TooltipController(Widget widget, String tooltipTitle) {
 
+	public TooltipController(Control sourceControl, String tooltipTitle) {
+
+		fSourceControl = sourceControl;
 		fTooltipTitle = tooltipTitle;
+
 		fShell = EclipseHelper.getActiveShell();
 		fTimer = null;
 		fTooltipView = null;
 
-		addMouseListeners(widget);
+		addMouseListeners(sourceControl);
 	}
 
 	public void setTooltipMessage(String tooltipMessage) {
+
 		fTooltipMessage = tooltipMessage;
 	}
 
@@ -164,7 +170,8 @@ public class TooltipController {
 							new TooltipView(
 									fShell,
 									fTooltipTitle,
-									fTooltipMessage, 
+									fTooltipMessage,
+									fSourceControl,
 									new TooltipAreaMouseEnterNotifier(),
 									new TooltipAreaMouseExitNotifier());
 

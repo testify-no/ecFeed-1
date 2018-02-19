@@ -11,7 +11,10 @@
 package com.ecfeed.ui.dialogs.basic;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
@@ -26,11 +29,12 @@ public class TooltipView {
 	public TooltipView(
 			Shell parentShell,
 			String tooltipTitle,
-			String tooltipText, 
+			String tooltipText,
+			Control sourceControl,
 			INotifier mouseEnterNotifier,
 			INotifier mouseExitNotifier) {
 
-		fShell = createShell(parentShell, tooltipTitle);
+		fShell = createShell(parentShell, sourceControl, tooltipTitle);
 		createTextWidget(fShell, tooltipText, mouseEnterNotifier, mouseExitNotifier);
 	}
 
@@ -49,15 +53,32 @@ public class TooltipView {
 
 	private static Shell createShell(
 			Shell parentShell, 
+			Control sourceControl,
 			String tooltipTitle) {
 
 		Shell shell = new Shell(parentShell, SWT.RESIZE);
 
 		shell.setText(tooltipTitle);
-		shell.setSize(450, 300);
 		shell.setLayout(new GridLayout(1, true));
 
+		positionShell(shell, sourceControl);
+
 		return shell;
+	}
+
+	private static void positionShell(Shell shell, Control sourceControl) {
+
+		Rectangle sourceBounds = sourceControl.getBounds(); 
+		Point sourceLocation = sourceControl.toDisplay(sourceBounds.x,	sourceBounds.y);
+
+		final int xShift = -10;
+		final int yShift = 10;
+
+		shell.setLocation(
+				sourceLocation.x + xShift,
+				sourceLocation.y + sourceBounds.height + yShift);
+
+		shell.setSize(450, 300);
 	}
 
 	private static void createTextWidget(
