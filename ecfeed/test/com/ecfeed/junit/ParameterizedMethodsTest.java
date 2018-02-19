@@ -32,7 +32,7 @@ import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.runner.java.JUnitTestMethodInvoker;
 import com.ecfeed.junit.AndroidParameterizedMethod;
-import com.ecfeed.junit.StaticRunnerMethod;
+import com.ecfeed.junit.StaticRunnerMethodLg;
 
 public class ParameterizedMethodsTest {
 
@@ -141,7 +141,7 @@ public class ParameterizedMethodsTest {
 			ModelClassLoader loader) {
 
 		if (isAndroidTest) {
-			return new StaticRunnerMethod(methodUnterTest, testCases, loader);
+			return new StaticRunnerMethodLg(methodUnterTest, testCases, loader);
 		} else {
 			return new AndroidParameterizedMethod(className, methodUnterTest, testCases, loader, new JUnitTestMethodInvoker());
 		}

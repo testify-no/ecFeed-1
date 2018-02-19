@@ -1,9 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Model name="StaticRunnerTest" version="1">
-    <Class name="com.ecfeed.junit.StaticRunnerTest$TestClass" runOnAndroid="false">
-        <Method name="noArgsTestFunction"/>
+<Model name="StaticRunnerLgTest" version="2">
+    <Class name="com.ecfeed.junit.StaticRunnerLgTest$TestClass">
+        <Properties>
+            <Property name="runOnAndroid" type="boolean" value="false"/>
+        </Properties>
+        <Method name="noArgsTestFunction">
+            <Properties>
+                <Property name="methodRunner" type="String" value="Java Runner"/>
+                <Property name="wbMapBrowserToParam" type="boolean" value="false"/>
+                <Property name="wbBrowser" type="String" value="Chrome"/>
+                <Property name="wbMapStartUrlToParam" type="boolean" value="false"/>
+            </Properties>
+        </Method>
         <Method name="noTestSuitesTestFunction">
+            <Properties>
+                <Property name="methodRunner" type="String" value="Java Runner"/>
+                <Property name="wbMapBrowserToParam" type="boolean" value="false"/>
+                <Property name="wbBrowser" type="String" value="Chrome"/>
+                <Property name="wbMapStartUrlToParam" type="boolean" value="false"/>
+            </Properties>
             <Parameter name="arg1" type="int" isExpected="false" expected="" linked="false">
+                <Properties>
+                    <Property name="wbIsOptional" type="boolean" value="false"/>
+                </Properties>
                 <Comments>
                     <TypeComments/>
                 </Comments>
@@ -14,6 +33,9 @@
                 <Choice name="max" value="2147483647"/>
             </Parameter>
             <Parameter name="arg2" type="int" isExpected="false" expected="" linked="false">
+                <Properties>
+                    <Property name="wbIsOptional" type="boolean" value="false"/>
+                </Properties>
                 <Comments>
                     <TypeComments/>
                 </Comments>
@@ -137,7 +159,16 @@
             </TestCase>
         </Method>
         <Method name="testSuitesFunction">
+            <Properties>
+                <Property name="methodRunner" type="String" value="Java Runner"/>
+                <Property name="wbMapBrowserToParam" type="boolean" value="false"/>
+                <Property name="wbBrowser" type="String" value="Chrome"/>
+                <Property name="wbMapStartUrlToParam" type="boolean" value="false"/>
+            </Properties>
             <Parameter name="arg1" type="int" isExpected="false" expected="" linked="false">
+                <Properties>
+                    <Property name="wbIsOptional" type="boolean" value="false"/>
+                </Properties>
                 <Comments>
                     <TypeComments/>
                 </Comments>
@@ -148,6 +179,9 @@
                 <Choice name="max" value="2147483647"/>
             </Parameter>
             <Parameter name="arg2" type="int" isExpected="false" expected="" linked="false">
+                <Properties>
+                    <Property name="wbIsOptional" type="boolean" value="false"/>
+                </Properties>
                 <Comments>
                     <TypeComments/>
                 </Comments>

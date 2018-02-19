@@ -17,11 +17,11 @@ import com.ecfeed.core.adapter.java.ModelClassLoader;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.utils.EcException;
 
-public class StaticRunnerMethod extends AbstractFrameworkMethod {
+public class StaticRunnerMethodLg extends AbstractFrameworkMethod {
 
 	private Collection<TestCaseNode> fTestCases;
 
-	public StaticRunnerMethod(Method method, Collection<TestCaseNode> testCases, ModelClassLoader loader) {
+	public StaticRunnerMethodLg(Method method, Collection<TestCaseNode> testCases, ModelClassLoader loader) {
 		super(method, loader);
 		fTestCases = testCases;
 	}

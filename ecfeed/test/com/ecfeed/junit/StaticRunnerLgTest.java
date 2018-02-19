@@ -38,21 +38,21 @@ import com.ecfeed.core.runner.RunnerException;
 import com.ecfeed.core.serialization.IModelParser;
 import com.ecfeed.core.serialization.ParserException;
 import com.ecfeed.core.serialization.ect.EctParser;
-import com.ecfeed.junit.StaticRunner;
+import com.ecfeed.junit.StaticRunnerLg;
 import com.ecfeed.junit.annotations.EcModel;
 import com.ecfeed.junit.annotations.TestSuites;
 
-public class StaticRunnerTest extends StaticRunner{
-	public StaticRunnerTest() throws InitializationError {
-		super(StaticRunnerTest.class);
+public class StaticRunnerLgTest extends StaticRunnerLg{
+	public StaticRunnerLgTest() throws InitializationError {
+		super(StaticRunnerLgTest.class);
 	}
 
-	protected final static String MODEL_PATH = "test/com/ecfeed/junit/StaticRunnerTest.ect";
+	protected final static String MODEL_PATH = "test/com/ecfeed/junit/StaticRunnerLgTest.ect";
 	protected final static String TEST_SUITES[] = {"Test Suite 1", "Test Suite 2"};
 	
 	protected static Set<List<Integer>> fExecutedTestCases;
 	
-	@RunWith(StaticRunner.class)
+	@RunWith(StaticRunnerLg.class)
 	@EcModel(MODEL_PATH)
 	public static class TestClass{
 		@Test
@@ -87,7 +87,7 @@ public class StaticRunnerTest extends StaticRunner{
 	@Test
 	public void frameworkMethodsTest(){
 		try {
-			StaticRunner runner = new StaticRunner(TestClass.class);
+			StaticRunnerLg runner = new StaticRunnerLg(TestClass.class);
 			List<FrameworkMethod> methods = runner.computeTestMethods();
 			RootNode model = getModel(MODEL_PATH);
 			TestClass target = new TestClass();

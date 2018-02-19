@@ -14,7 +14,7 @@ package com.ecfeed.junit;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import com.ecfeed.junit.annotations.EcModel;
-@RunWith(StaticRunner.class)
+@RunWith(StaticRunnerLg.class)
 @EcModel("test/com/ecfeed/junit/testModel.ect")
 public class StaticTestClass {
 
