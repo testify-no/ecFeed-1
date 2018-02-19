@@ -30,9 +30,9 @@ import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.runner.RunnerException;
 import com.ecfeed.junit.annotations.TestSuites;
 
-public class StaticRunner extends AbstractJUnitRunner {
+public class StaticRunnerLg extends AbstractJUnitRunner {
 
-	public StaticRunner(Class<?> klass) throws InitializationError {
+	public StaticRunnerLg(Class<?> klass) throws InitializationError {
 		super(klass);
 	}
 
@@ -63,7 +63,7 @@ public class StaticRunner extends AbstractJUnitRunner {
 		Method method = frameworkMethod.getMethod();
 		Collection<TestCaseNode> testCases = getTestCases(methodNode, getTestSuites(frameworkMethod));
 
-		frameworkMethods.add(new StaticRunnerMethod(method, testCases, getLoader()));
+		frameworkMethods.add(new StaticRunnerMethodLg(method, testCases, getLoader()));
 	}
 
 	protected Set<String> getTestSuites(FrameworkMethod method) throws RunnerException{
