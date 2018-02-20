@@ -24,10 +24,10 @@ import org.junit.runner.RunWith;
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.ModelOperationManager;
 import com.ecfeed.core.model.ModelOperationException;
-import com.ecfeed.junit.StaticRunnerLg;
+import com.ecfeed.junit.CollectiveStaticRunner;
 import com.ecfeed.junit.annotations.EcModel;
 
-@RunWith(StaticRunnerLg.class)
+@RunWith(CollectiveStaticRunner.class)
 @EcModel("test/com.ecfeed.adapter.ect")
 public class ModelOperationManagerTest {
 	

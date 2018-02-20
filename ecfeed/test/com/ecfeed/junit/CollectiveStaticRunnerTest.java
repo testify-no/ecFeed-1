@@ -38,21 +38,21 @@ import com.ecfeed.core.runner.RunnerException;
 import com.ecfeed.core.serialization.IModelParser;
 import com.ecfeed.core.serialization.ParserException;
 import com.ecfeed.core.serialization.ect.EctParser;
-import com.ecfeed.junit.StaticRunnerLg;
+import com.ecfeed.junit.CollectiveStaticRunner;
 import com.ecfeed.junit.annotations.EcModel;
 import com.ecfeed.junit.annotations.TestSuites;
 
-public class StaticRunnerLgTest extends StaticRunnerLg{
-	public StaticRunnerLgTest() throws InitializationError {
-		super(StaticRunnerLgTest.class);
+public class CollectiveStaticRunnerTest extends CollectiveStaticRunner{
+	public CollectiveStaticRunnerTest() throws InitializationError {
+		super(CollectiveStaticRunnerTest.class);
 	}
 
-	protected final static String MODEL_PATH = "test/com/ecfeed/junit/StaticRunnerLgTest.ect";
+	protected final static String MODEL_PATH = "test/com/ecfeed/junit/CollectiveStaticRunnerTest.ect";
 	protected final static String TEST_SUITES[] = {"Test Suite 1", "Test Suite 2"};
 	
 	protected static Set<List<Integer>> fExecutedTestCases;
 	
-	@RunWith(StaticRunnerLg.class)
+	@RunWith(CollectiveStaticRunner.class)
 	@EcModel(MODEL_PATH)
 	public static class TestClass{
 		@Test
@@ -87,7 +87,7 @@ public class StaticRunnerLgTest extends StaticRunnerLg{
 	@Test
 	public void frameworkMethodsTest(){
 		try {
-			StaticRunnerLg runner = new StaticRunnerLg(TestClass.class);
+			CollectiveStaticRunner runner = new CollectiveStaticRunner(TestClass.class);
 			List<FrameworkMethod> methods = runner.computeTestMethods();
 			RootNode model = getModel(MODEL_PATH);
 			TestClass target = new TestClass();
