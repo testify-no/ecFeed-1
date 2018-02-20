@@ -45,7 +45,7 @@ import com.ecfeed.junit.annotations.EcModel;
 import com.ecfeed.junit.annotations.Generator;
 import com.ecfeed.junit.annotations.GeneratorParameter;
 
-public class OnlineRunnerTest extends StaticRunnerLgTest{
+public class OnlineRunnerTest extends CollectiveStaticRunnerTest{
 
 	public OnlineRunnerTest() throws InitializationError {
 		super();
