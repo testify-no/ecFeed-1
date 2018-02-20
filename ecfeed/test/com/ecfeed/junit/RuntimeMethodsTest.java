@@ -33,7 +33,8 @@ import com.ecfeed.core.runner.RunnerException;
 import com.ecfeed.core.runner.java.JUnitTestMethodInvoker;
 import com.ecfeed.junit.AbstractFrameworkMethod;
 import com.ecfeed.junit.AndroidRuntimeMethod;
-import com.ecfeed.junit.JavaRuntimeMethod;
+import com.ecfeed.junit.CollectiveOnlineRunnerMethod;
+
 
 public class RuntimeMethodsTest {
 
@@ -90,7 +91,7 @@ public class RuntimeMethodsTest {
 			IGenerator<ChoiceNode> generator) throws RunnerException {
 
 		if (isAndroidTest) { 
-			return new JavaRuntimeMethod(
+			return new CollectiveOnlineRunnerMethod(
 					methodUnterTest, 
 					generator, 
 					new ModelClassLoader(new URL[]{}, this.getClass().getClassLoader()));

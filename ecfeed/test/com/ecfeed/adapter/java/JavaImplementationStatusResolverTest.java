@@ -35,7 +35,7 @@ import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.testutils.ETypeName;
 import com.ecfeed.core.testutils.RandomModelGenerator;
-import com.ecfeed.junit.OnlineRunner;
+import com.ecfeed.junit.CollectiveOnlineRunner;
 import com.ecfeed.junit.annotations.Constraints;
 import com.ecfeed.junit.annotations.EcModel;
 import com.ecfeed.junit.annotations.Generator;
@@ -43,7 +43,7 @@ import com.ecfeed.junit.annotations.expected;
 import com.ecfeed.ui.common.JavaCodeModelBuilder;
 
 
-@RunWith(OnlineRunner.class)
+@RunWith(CollectiveOnlineRunner.class)
 @EcModel("test/com/ecfeed/adapter/java/JavaImplementationStatusResolverTest.ect")
 @Constraints(Constraints.ALL)
 @Generator(CartesianProductGenerator.class)

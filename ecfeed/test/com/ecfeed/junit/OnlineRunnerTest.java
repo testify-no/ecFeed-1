@@ -39,7 +39,7 @@ import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.runner.RunnerException;
-import com.ecfeed.junit.OnlineRunner;
+import com.ecfeed.junit.CollectiveOnlineRunner;
 import com.ecfeed.junit.annotations.Constraints;
 import com.ecfeed.junit.annotations.EcModel;
 import com.ecfeed.junit.annotations.Generator;
@@ -93,7 +93,7 @@ public class OnlineRunnerTest extends CollectiveStaticRunnerTest{
 		return nTuples;
 	}
 
-	@RunWith(OnlineRunner.class)
+	@RunWith(CollectiveOnlineRunner.class)
 	@Generator(NWiseGenerator.class)
 	@GeneratorParameter(name = "N", value = "2")
 	@EcModel(MODEL_PATH)
@@ -104,7 +104,7 @@ public class OnlineRunnerTest extends CollectiveStaticRunnerTest{
 		}
 	}
 
-	@RunWith(OnlineRunner.class)
+	@RunWith(CollectiveOnlineRunner.class)
 	@Generator(NWiseGenerator.class)
 	@GeneratorParameter(name = "N", value = "2")
 	@EcModel(MODEL_PATH)
@@ -117,7 +117,7 @@ public class OnlineRunnerTest extends CollectiveStaticRunnerTest{
 		}
 	}
 
-	@RunWith(OnlineRunner.class)
+	@RunWith(CollectiveOnlineRunner.class)
 	@Generator(CartesianProductGenerator.class)
 	@EcModel(MODEL_PATH)
 	@Constraints(Constraints.ALL)
@@ -128,7 +128,7 @@ public class OnlineRunnerTest extends CollectiveStaticRunnerTest{
 		}
 	}
 
-	@RunWith(OnlineRunner.class)
+	@RunWith(CollectiveOnlineRunner.class)
 	@Generator(CartesianProductGenerator.class)
 	@EcModel(MODEL_PATH)
 	@Constraints(Constraints.ALL)
@@ -140,7 +140,7 @@ public class OnlineRunnerTest extends CollectiveStaticRunnerTest{
 		}
 	}
 
-	@RunWith(OnlineRunner.class)
+	@RunWith(CollectiveOnlineRunner.class)
 	@Generator(CartesianProductGenerator.class)
 	@EcModel(MODEL_PATH)
 	public static class NoConstraintsTestClass{
@@ -159,7 +159,7 @@ public class OnlineRunnerTest extends CollectiveStaticRunnerTest{
 	public void testGlobalGenerator() {
 		try{
 			Class<GlobalGeneratorTestClass> testClass = GlobalGeneratorTestClass.class;
-			OnlineRunner runner = new OnlineRunner(testClass);
+			CollectiveOnlineRunner runner = new CollectiveOnlineRunner(testClass);
 			for(FrameworkMethod method : runner.computeTestMethods()){
 				List<List<ChoiceNode>> input = referenceInput(getModel(MODEL_PATH), method);
 				Set<List<String>> referenceResult = computeReferenceResult(referenceNWiseGenerator(input, EMPTY_CONSTRAINTS, 2));
@@ -177,7 +177,7 @@ public class OnlineRunnerTest extends CollectiveStaticRunnerTest{
 	public void testOverridenParameters(){
 		try{
 			Class<OverridenGeneratorParameterTestClass> testClass = OverridenGeneratorParameterTestClass.class;
-			OnlineRunner runner = new OnlineRunner(testClass);
+			CollectiveOnlineRunner runner = new CollectiveOnlineRunner(testClass);
 			for(FrameworkMethod method : runner.computeTestMethods()){
 				List<List<ChoiceNode>> input = referenceInput(getModel(MODEL_PATH), method);
 				Set<List<String>> referenceResult = computeReferenceResult(referenceNWiseGenerator(input, EMPTY_CONSTRAINTS, 3));
@@ -196,7 +196,7 @@ public class OnlineRunnerTest extends CollectiveStaticRunnerTest{
 	public void testGlobalConstraints(){
 		try{
 			Class<GlobalConstraintsTestClass> testClass = GlobalConstraintsTestClass.class;
-			OnlineRunner runner = new OnlineRunner(testClass);
+			CollectiveOnlineRunner runner = new CollectiveOnlineRunner(testClass);
 			for(FrameworkMethod method : runner.computeTestMethods()){
 				List<List<ChoiceNode>> input = referenceInput(runner.getModel(), method);
 				Collection<IConstraint<ChoiceNode>> constraints = getConstraints(runner.getModel(), method);
@@ -214,7 +214,7 @@ public class OnlineRunnerTest extends CollectiveStaticRunnerTest{
 	public void testOverridenConstraints(){
 		try{
 			Class<OverridenConstraintsTestClass> testClass = OverridenConstraintsTestClass.class;
-			OnlineRunner runner = new OnlineRunner(testClass);
+			CollectiveOnlineRunner runner = new CollectiveOnlineRunner(testClass);
 			for(FrameworkMethod method : runner.computeTestMethods()){
 				List<List<ChoiceNode>> input = referenceInput(runner.getModel(), method);
 				Collection<IConstraint<ChoiceNode>> constraints = getConstraints(runner.getModel(), method,
@@ -233,7 +233,7 @@ public class OnlineRunnerTest extends CollectiveStaticRunnerTest{
 	public void testNoConstraints(){
 		try{
 			Class<NoConstraintsTestClass> testClass = NoConstraintsTestClass.class;
-			OnlineRunner runner = new OnlineRunner(testClass);
+			CollectiveOnlineRunner runner = new CollectiveOnlineRunner(testClass);
 			for(FrameworkMethod method : runner.computeTestMethods()){
 				List<List<ChoiceNode>> input = referenceInput(runner.getModel(), method);
 				Collection<IConstraint<ChoiceNode>> constraints = EMPTY_CONSTRAINTS;
