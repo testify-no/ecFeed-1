@@ -45,14 +45,14 @@ import com.ecfeed.junit.annotations.EcModel;
 import com.ecfeed.junit.annotations.Generator;
 import com.ecfeed.junit.annotations.GeneratorParameter;
 
-public class OnlineRunnerTest extends CollectiveStaticRunnerTest{
+public class CollectiveOnlineRunnerTest extends CollectiveStaticRunnerTest{
 
-	public OnlineRunnerTest() throws InitializationError {
+	public CollectiveOnlineRunnerTest() throws InitializationError {
 		super();
 		fExecuted = new HashSet<List<String>>();
 	}
 
-	protected final static String MODEL_PATH = "test/com/ecfeed/junit/OnlineRunnerTest.ect";
+	protected final static String MODEL_PATH = "test/com/ecfeed/junit/CollectiveOnlineRunnerTest.ect";
 
 	protected final static String OVERRIDING_CONSTRAINT_NAME = "constraint";
 
