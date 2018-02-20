@@ -27,8 +27,8 @@ import com.ecfeed.junit.annotations.GeneratorParameterValues;
 @RunWith(CollectiveOnlineRunner.class)
 @Generator(CartesianProductGenerator.class)
 @Constraints("constraint")
-@EcModel("test/com/ecfeed/junit/OnlineRunnerTest.ect")
-public class OnlineRunnerTestClass {
+@EcModel("test/com/ecfeed/junit/CollectiveOnlineRunnerTest.ect")
+public class CollectiveOnlineRunnerTestClass {
 
 	@Test
 	@Generator(NWiseGenerator.class)
