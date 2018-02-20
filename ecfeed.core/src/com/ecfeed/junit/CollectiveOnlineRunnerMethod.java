@@ -21,11 +21,11 @@ import com.ecfeed.core.runner.Messages;
 import com.ecfeed.core.runner.RunnerException;
 import com.ecfeed.core.utils.EcException;
 
-public class OnlineRunnerMethod extends AbstractFrameworkMethod{
+public class CollectiveOnlineRunnerMethod extends AbstractFrameworkMethod{
 
 	IGenerator<ChoiceNode> fGenerator;
 
-	public OnlineRunnerMethod(
+	public CollectiveOnlineRunnerMethod(
 			Method method, 
 			IGenerator<ChoiceNode> initializedGenerator, 
 			ModelClassLoader loader) throws RunnerException {

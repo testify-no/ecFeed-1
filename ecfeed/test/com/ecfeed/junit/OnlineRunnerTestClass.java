@@ -16,7 +16,7 @@ import org.junit.runner.RunWith;
 import com.ecfeed.core.generators.CartesianProductGenerator;
 import com.ecfeed.core.generators.NWiseGenerator;
 import com.ecfeed.core.generators.RandomGenerator;
-import com.ecfeed.junit.OnlineRunner;
+import com.ecfeed.junit.CollectiveOnlineRunner;
 import com.ecfeed.junit.annotations.Constraints;
 import com.ecfeed.junit.annotations.EcModel;
 import com.ecfeed.junit.annotations.Generator;
@@ -24,7 +24,7 @@ import com.ecfeed.junit.annotations.GeneratorParameter;
 import com.ecfeed.junit.annotations.GeneratorParameterNames;
 import com.ecfeed.junit.annotations.GeneratorParameterValues;
 
-@RunWith(OnlineRunner.class)
+@RunWith(CollectiveOnlineRunner.class)
 @Generator(CartesianProductGenerator.class)
 @Constraints("constraint")
 @EcModel("test/com/ecfeed/junit/OnlineRunnerTest.ect")
