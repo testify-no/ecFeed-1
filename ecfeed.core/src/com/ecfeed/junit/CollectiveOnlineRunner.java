@@ -40,9 +40,9 @@ import com.ecfeed.junit.annotations.GeneratorParameter;
 import com.ecfeed.junit.annotations.GeneratorParameterNames;
 import com.ecfeed.junit.annotations.GeneratorParameterValues;
 
-public class OnlineRunner extends AbstractJUnitRunner {
+public class CollectiveOnlineRunner extends AbstractJUnitRunner {
 
-	public OnlineRunner(Class<?> klass) throws InitializationError {
+	public CollectiveOnlineRunner(Class<?> klass) throws InitializationError {
 		super(klass);
 	}
 
@@ -68,7 +68,7 @@ public class OnlineRunner extends AbstractJUnitRunner {
 					RunnerException.report(Messages.GENERATOR_INITIALIZATION_PROBLEM(e.getMessage()));
 				}
 
-				frameworkMethods.add(new OnlineRunnerMethod(frameworkMethod.getMethod(), generator, getLoader()));
+				frameworkMethods.add(new CollectiveOnlineRunnerMethod(frameworkMethod.getMethod(), generator, getLoader()));
 			}
 		}
 

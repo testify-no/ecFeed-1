@@ -33,7 +33,7 @@ import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelVersionDistributor;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.TestCaseNode;
-import com.ecfeed.junit.OnlineRunner;
+import com.ecfeed.junit.CollectiveOnlineRunner;
 import com.ecfeed.junit.annotations.Constraints;
 import com.ecfeed.junit.annotations.EcModel;
 import com.ecfeed.junit.annotations.Generator;
@@ -43,7 +43,7 @@ import com.ecfeed.testutils.RandomModelGenerator;
 import com.ecfeed.ui.common.EclipseModelBuilder;
 
 
-@RunWith(OnlineRunner.class)
+@RunWith(CollectiveOnlineRunner.class)
 @EcModel("test/com.ecfeed.adapter.java.ect")
 @Constraints(Constraints.ALL)
 @Generator(CartesianProductGenerator.class)

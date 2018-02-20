@@ -16,12 +16,12 @@ import org.junit.runner.RunWith;
 
 import com.ecfeed.core.generators.CartesianProductGenerator;
 import com.ecfeed.core.utils.JavaLanguageHelper;
-import com.ecfeed.junit.OnlineRunner;
+import com.ecfeed.junit.CollectiveOnlineRunner;
 import com.ecfeed.junit.annotations.Constraints;
 import com.ecfeed.junit.annotations.EcModel;
 import com.ecfeed.junit.annotations.Generator;
 
-@RunWith(OnlineRunner.class)
+@RunWith(CollectiveOnlineRunner.class)
 @EcModel("test/com.ecfeed.adapter.java.ect")
 @Generator(CartesianProductGenerator.class)
 @Constraints(Constraints.ALL)
