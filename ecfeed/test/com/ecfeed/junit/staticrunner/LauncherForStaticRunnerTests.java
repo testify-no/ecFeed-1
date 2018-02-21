@@ -13,6 +13,10 @@ public class LauncherForStaticRunnerTests {
 	private static StringBuilder fLog;
 	
 	public static void appendToLog(String message) {
+		
+		if (fLog == null) {
+			fLog = new StringBuilder();
+		}
 		fLog.append(message);
 	}
 	
