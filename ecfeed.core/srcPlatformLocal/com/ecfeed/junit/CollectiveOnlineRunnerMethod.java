@@ -23,7 +23,7 @@ import com.ecfeed.core.utils.EcException;
 
 public class CollectiveOnlineRunnerMethod extends AbstractFrameworkMethod{
 
-	IGenerator<ChoiceNode> fGenerator;
+	IGenerator<ChoiceNode> fInitializedGenerator;
 
 	public CollectiveOnlineRunnerMethod(
 			Method method, 
@@ -31,7 +31,7 @@ public class CollectiveOnlineRunnerMethod extends AbstractFrameworkMethod{
 			ModelClassLoader loader) throws RunnerException {
 
 		super(method, loader);
-		fGenerator = initializedGenerator;
+		fInitializedGenerator = initializedGenerator;
 	}
 
 	@Override
@@ -45,7 +45,7 @@ public class CollectiveOnlineRunnerMethod extends AbstractFrameworkMethod{
 		for (;;) {
 
 			try {
-				listOfChoices = fGenerator.next();
+				listOfChoices = fInitializedGenerator.next();
 
 			} catch (Exception e){
 				RunnerException.report(Messages.RUNNER_EXCEPTION(e.getMessage()));
