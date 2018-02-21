@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.junit.Test;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 
@@ -47,115 +46,124 @@ public class CollectiveOnlineRunner extends AbstractJUnitRunner {
 	}
 
 	@Override
-	protected List<FrameworkMethod> generateTestMethods() throws RunnerException {
-		List<FrameworkMethod> frameworkMethods = new ArrayList<FrameworkMethod>();
-		for(FrameworkMethod frameworkMethod : getTestClass().getAnnotatedMethods(Test.class)){
-			if(frameworkMethod.getMethod().getParameterTypes().length == 0){
-				//standard jUnit test
-				frameworkMethods.add(frameworkMethod);
-			} else{
-				MethodNode methodNode = getMethodModel(getModel(), frameworkMethod);
-				if(methodNode == null){
-					continue;
-				}
-				IGenerator<ChoiceNode> generator = getGenerator(frameworkMethod);
-				List<List<ChoiceNode>> input = getInput(methodNode);
-				Collection<IConstraint<ChoiceNode>> constraints = getConstraints(frameworkMethod, methodNode);
-				Map<String, Object> parameters = getGeneratorParameters(generator, frameworkMethod);
-				try {
-					generator.initialize(input, constraints, parameters, null);
-				} catch (GeneratorException e) {
-					RunnerException.report(Messages.GENERATOR_INITIALIZATION_PROBLEM(e.getMessage()));
-				}
+	protected void addMethodsForOneCustomMethod(
+			FrameworkMethod frameworkMethod,
+			MethodNode methodNode, 
+			List<FrameworkMethod> inOutFrameworkMethods) throws RunnerException {
 
-				frameworkMethods.add(new CollectiveOnlineRunnerMethod(frameworkMethod.getMethod(), generator, getLoader()));
-			}
+		IGenerator<ChoiceNode> generator = getGenerator(frameworkMethod);
+		List<List<ChoiceNode>> input = getInput(methodNode);
+
+		Collection<IConstraint<ChoiceNode>> constraints = getConstraints(frameworkMethod, methodNode);
+		Map<String, Object> parameters = getGeneratorParameters(generator, frameworkMethod);
+
+		try {
+			generator.initialize(input, constraints, parameters, null);
+		} catch (GeneratorException e) {
+			RunnerException.report(Messages.GENERATOR_INITIALIZATION_PROBLEM(e.getMessage()));
 		}
 
-		return frameworkMethods;
+		inOutFrameworkMethods.add(new CollectiveOnlineRunnerMethod(frameworkMethod.getMethod(), generator, getLoader()));
 	}
 
 	protected Collection<IConstraint<ChoiceNode>> getConstraints(
 			FrameworkMethod method, MethodNode methodModel) {
-		Collection<String> constraintsNames = constraintsNames(method);
+
+		Collection<String> constraintsNames = getConstraintsNames(method);
 		Collection<IConstraint<ChoiceNode>> constraints = new HashSet<IConstraint<ChoiceNode>>();
 
-		if(constraintsNames != null){
-			if(constraintsNames.contains(Constraints.ALL)){
-				constraintsNames = methodModel.getConstraintsNames();
-			}
-			else if(constraintsNames.contains(Constraints.NONE)){
-				constraintsNames.clear();
-			}
+		if (constraintsNames == null) {
+			return constraints;
+		}
 
-			for(String name : constraintsNames){
-				constraints.addAll(methodModel.getConstraints(name));
-			}
+		if (constraintsNames.contains(Constraints.ALL)) {
+			constraintsNames = methodModel.getConstraintsNames();
+		} else if (constraintsNames.contains(Constraints.NONE)) {
+			constraintsNames.clear();
+		}
+
+		for (String name : constraintsNames) {
+			constraints.addAll(methodModel.getConstraints(name));
 		}
 
 		return constraints;
 	}
 
 	protected List<List<ChoiceNode>> getInput(MethodNode methodModel) {
+
 		List<List<ChoiceNode>> result = new ArrayList<List<ChoiceNode>>();
-		for(MethodParameterNode parameter : methodModel.getMethodParameters()){
-			if(parameter.isExpected()){
+
+		for (MethodParameterNode parameter : methodModel.getMethodParameters()) {
+			if (parameter.isExpected()) {
 				ChoiceNode choice = new ChoiceNode("expected", parameter.getDefaultValue());
 				choice.setParent(parameter);
 				result.add(Arrays.asList(new ChoiceNode[]{choice}));
-			}
-			else{
+			} else {
 				result.add(parameter.getLeafChoices());
 			}
 		}
+
 		return result;
 	}
 
 	protected IGenerator<ChoiceNode> getGenerator(FrameworkMethod method) throws RunnerException {
+
 		IGenerator<ChoiceNode> generator = getGenerator(method.getAnnotations());
-		if(generator == null){
+
+		if (generator == null) {
 			generator = getGenerator(getTestClass().getAnnotations());
 		}
-		if(generator == null){
+
+		if (generator == null) {
 			RunnerException.report(Messages.NO_VALID_GENERATOR(method.getName()));
 		}
+
 		return generator;
 	}
 
-	protected Set<String> constraintsNames(FrameworkMethod method) {
+	protected Set<String> getConstraintsNames(FrameworkMethod method) {
+
 		Set<String> names = constraintsNames(method.getAnnotations());
-		if(names == null){
+
+		if (names == null) {
 			names = constraintsNames(getTestClass().getAnnotations());
 		}
+
 		return names;
 	}
 
 	private Map<String, Object> getGeneratorParameters(
 			IGenerator<ChoiceNode> generator, FrameworkMethod method) throws RunnerException {
+
 		List<IGeneratorParameter> parameters = generator.parameters();
 		Map<String, Object> result = new HashMap<String, Object>();
-		Map<String, String>	parsedParameters = parseParameters(method.getAnnotations());{
-			if(parsedParameters.size() == 0){
-				parsedParameters = parseParameters(getTestClass().getAnnotations());
-			}
+		Map<String, String>	parsedParameters = parseParameters(method.getAnnotations());
+
+		if (parsedParameters.size() == 0) {
+			parsedParameters = parseParameters(getTestClass().getAnnotations());
 		}
-		for(IGeneratorParameter parameter : parameters){
+
+		for (IGeneratorParameter parameter : parameters) {
+
 			Object value = getParameterValue(parameter, parsedParameters);
-			if(value == null && parameter.isRequired()){
+
+			if (value == null && parameter.isRequired()) {
 				RunnerException.report(Messages.MISSING_REQUIRED_PARAMETER(parameter.getName()));
-			}
-			else if(value != null){
+			} else if (value != null) {
 				result.put(parameter.getName(), value);
 			}
 		}
+
 		return result;
 	}
 
 	private Object getParameterValue(IGeneratorParameter parameter,
 			Map<String, String> parsedParameters) throws RunnerException {
+
 		String valueString = parsedParameters.get(parameter.getName());
-		if(valueString != null){
-			try{
+
+		if (valueString != null) {
+			try {
 				switch (parameter.getType()) {
 				case BOOLEAN:
 					return Boolean.parseBoolean(valueString);
@@ -171,6 +179,7 @@ public class CollectiveOnlineRunner extends AbstractJUnitRunner {
 				RunnerException.report(Messages.WRONG_PARAMETER_TYPE(parameter.getName(), e.getMessage()));
 			}
 		}
+
 		return null;
 	}
 
