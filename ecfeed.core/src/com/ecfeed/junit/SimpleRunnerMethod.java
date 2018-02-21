@@ -21,6 +21,7 @@ public class SimpleRunnerMethod extends AbstractFrameworkMethod {
 	private List<ChoiceNode> fListOfChoices;
 
 	public SimpleRunnerMethod(Method method, List<ChoiceNode> listOfChoiceNodes, ModelClassLoader loader) {
+
 		super(method, loader);
 		fListOfChoices = listOfChoiceNodes;
 	}
@@ -30,7 +31,31 @@ public class SimpleRunnerMethod extends AbstractFrameworkMethod {
 
 		super.invoke(target, fListOfChoices);
 		return null;
+	}
 
+	@Override
+	public String getName() {
+
+		return super.getName() + "[ " + createParametersDescription(fListOfChoices) + " ]";
+	}
+
+	private String createParametersDescription(List<ChoiceNode> fListOfChoices) {
+
+		StringBuilder stringBuilder = new StringBuilder();
+		boolean firstTime = true;
+
+		for (ChoiceNode choiceNode : fListOfChoices) {
+
+			if (!firstTime) {
+				stringBuilder.append(", ");
+			}
+
+			firstTime = false;
+
+			stringBuilder.append(choiceNode.toStringWithParenthesis());
+		}
+
+		return stringBuilder.toString();
 	}
 
 }
