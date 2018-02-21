@@ -19,9 +19,9 @@ import com.ecfeed.core.generators.api.IGenerator;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.runner.RunnerException;
 
-public class CollectiveOnlineRunner extends AbstractOnlineRunner {
+public class OnlineRunner extends AbstractOnlineRunner {
 
-	public CollectiveOnlineRunner(Class<?> klass) throws InitializationError {
+	public OnlineRunner(Class<?> klass) throws InitializationError {
 		super(klass);
 	}
 
