@@ -49,9 +49,9 @@ public class CollectiveStaticRunnerTest extends CollectiveStaticRunner{
 
 	protected final static String MODEL_PATH = "test/com/ecfeed/junit/CollectiveStaticRunnerTest.ect";
 	protected final static String TEST_SUITES[] = {"Test Suite 1", "Test Suite 2"};
-	
+
 	protected static Set<List<Integer>> fExecutedTestCases;
-	
+
 	@RunWith(CollectiveStaticRunner.class)
 	@EcModel(MODEL_PATH)
 	public static class TestClass{
@@ -61,7 +61,7 @@ public class CollectiveStaticRunnerTest extends CollectiveStaticRunner{
 				fExecutedTestCases.add(new ArrayList<Integer>());
 			}
 		}
-		
+
 		@Test
 		public void noTestSuitesTestFunction(int arg1, int arg2){
 			List<Integer> args = new ArrayList<Integer>();
@@ -71,7 +71,7 @@ public class CollectiveStaticRunnerTest extends CollectiveStaticRunner{
 				fExecutedTestCases.add(args);
 			}
 		}
-		
+
 		@Test
 		@TestSuites({"Test Suite 1", "Test Suite 2"})
 		public void testSuitesFunction(int arg1, int arg2){
@@ -139,7 +139,7 @@ public class CollectiveStaticRunnerTest extends CollectiveStaticRunner{
 		}
 		return result;
 	}
-	
+
 	private void addTestCaseResult(TestCaseNode testCase,
 			Set<List<Integer>> target) {
 		List<Integer> result = new ArrayList<Integer>();
@@ -149,7 +149,7 @@ public class CollectiveStaticRunnerTest extends CollectiveStaticRunner{
 		target.add(result);
 	}
 
-	private Collection<TestCaseNode> getTestCases(MethodNode methodModel,
+	protected Collection<TestCaseNode> getTestCases(MethodNode methodModel,
 			Set<String> testSuites) {
 		Collection<TestCaseNode> testCases = new HashSet<TestCaseNode>();
 		if(testSuites.size() == 0){
