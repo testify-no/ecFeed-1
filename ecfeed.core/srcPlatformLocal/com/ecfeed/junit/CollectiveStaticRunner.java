@@ -36,7 +36,7 @@ public class CollectiveStaticRunner extends AbstractStaticRunner {
 		Method method = frameworkMethod.getMethod();
 		Collection<TestCaseNode> testCases = getTestCases(methodNode, getTestSuites(frameworkMethod));
 
-		inOutFrameworkMethods.add(new CollectiveStaticRunnerMethod(method, testCases, getLoader()));
+		inOutFrameworkMethods.add(new StaticRunnerMethod(method, testCases, getLoader()));
 	}
 
 //	protected Set<String> getTestSuites(FrameworkMethod method) throws RunnerException{
