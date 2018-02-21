@@ -47,7 +47,7 @@ public abstract class AbstractOnlineRunner extends AbstractJUnitRunner {
 
 	protected abstract void addFrameworkMethods(
 			FrameworkMethod frameworkMethod,
-			IGenerator<ChoiceNode> generator,
+			IGenerator<ChoiceNode> initializedGenerator,
 			List<FrameworkMethod> inOutFrameworkMethods) throws RunnerException;
 
 	@Override

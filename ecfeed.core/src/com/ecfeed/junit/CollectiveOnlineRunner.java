@@ -27,10 +27,14 @@ public class CollectiveOnlineRunner extends AbstractOnlineRunner {
 
 	protected void addFrameworkMethods(
 			FrameworkMethod frameworkMethod,
-			IGenerator<ChoiceNode> generator,
+			IGenerator<ChoiceNode> initializedGenerator,
 			List<FrameworkMethod> inOutFrameworkMethods) throws RunnerException {
 
-		inOutFrameworkMethods.add(new CollectiveOnlineRunnerMethod(frameworkMethod.getMethod(), generator, getLoader()));
+		inOutFrameworkMethods.add(
+				new CollectiveOnlineRunnerMethod(
+						frameworkMethod.getMethod(), 
+						initializedGenerator, 
+						getLoader()));
 	}
 
 }
