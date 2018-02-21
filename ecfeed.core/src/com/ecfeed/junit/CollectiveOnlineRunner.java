@@ -67,7 +67,8 @@ public class CollectiveOnlineRunner extends AbstractJUnitRunner {
 	}
 
 	protected Collection<IConstraint<ChoiceNode>> getConstraints(
-			FrameworkMethod method, MethodNode methodModel) {
+			FrameworkMethod method, 
+			MethodNode methodModel) {
 
 		Collection<String> constraintsNames = getConstraintsNames(method);
 		Collection<IConstraint<ChoiceNode>> constraints = new HashSet<IConstraint<ChoiceNode>>();
@@ -94,6 +95,7 @@ public class CollectiveOnlineRunner extends AbstractJUnitRunner {
 		List<List<ChoiceNode>> result = new ArrayList<List<ChoiceNode>>();
 
 		for (MethodParameterNode parameter : methodModel.getMethodParameters()) {
+
 			if (parameter.isExpected()) {
 				ChoiceNode choice = new ChoiceNode("expected", parameter.getDefaultValue());
 				choice.setParent(parameter);
@@ -133,7 +135,8 @@ public class CollectiveOnlineRunner extends AbstractJUnitRunner {
 	}
 
 	private Map<String, Object> getGeneratorParameters(
-			IGenerator<ChoiceNode> generator, FrameworkMethod method) throws RunnerException {
+			IGenerator<ChoiceNode> generator, 
+			FrameworkMethod method) throws RunnerException {
 
 		List<IGeneratorParameter> parameters = generator.parameters();
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -157,7 +160,8 @@ public class CollectiveOnlineRunner extends AbstractJUnitRunner {
 		return result;
 	}
 
-	private Object getParameterValue(IGeneratorParameter parameter,
+	private Object getParameterValue(
+			IGeneratorParameter parameter,
 			Map<String, String> parsedParameters) throws RunnerException {
 
 		String valueString = parsedParameters.get(parameter.getName());
@@ -185,9 +189,12 @@ public class CollectiveOnlineRunner extends AbstractJUnitRunner {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private IGenerator<ChoiceNode> getGenerator(Annotation[] annotations) throws RunnerException{
+
 		IGenerator<ChoiceNode> generator = null;
-		for(Annotation annotation : annotations){
-			if(annotation instanceof Generator){
+
+		for (Annotation annotation : annotations) {
+
+			if (annotation instanceof Generator) {
 				try {
 					Class<? extends IGenerator> generatorClass = ((Generator)annotation).value();
 					generatorClass.getTypeParameters();
@@ -202,43 +209,49 @@ public class CollectiveOnlineRunner extends AbstractJUnitRunner {
 	}
 
 	private Map<String, String> parseParameters(Annotation[] annotations) throws RunnerException {
+
 		Map<String, String> result = new HashMap<String, String>();
 
 		String[] parameterNames = null;
 		String[] parameterValues = null;
-		for(Annotation annotation : annotations){
-			if(annotation instanceof GeneratorParameter){
+
+		for (Annotation annotation : annotations) {
+			if (annotation instanceof GeneratorParameter) {
 				GeneratorParameter parameter = (GeneratorParameter)annotation;
 				result.put(parameter.name(), parameter.value());
-			}
-			else if(annotation instanceof GeneratorParameterNames){
+			} else if (annotation instanceof GeneratorParameterNames) {
 				parameterNames = ((GeneratorParameterNames)annotation).value();
-			}
-			else if(annotation instanceof GeneratorParameterValues){
+			} else if(annotation instanceof GeneratorParameterValues) {
 				parameterValues = ((GeneratorParameterValues)annotation).value();
 			}
 		}
-		if(parameterNames != null && parameterValues != null){
-			if(parameterNames.length != parameterValues.length){
+
+		if (parameterNames != null && parameterValues != null) {
+
+			if (parameterNames.length != parameterValues.length) {
 				RunnerException.report(Messages.PARAMETERS_ANNOTATION_LENGTH_ERROR);
 			}
-			for(int i = 0; i < parameterNames.length; i++){
+
+			for (int i = 0; i < parameterNames.length; i++) {
 				result.put(parameterNames[i], parameterValues[i]);
 			}
-		}
-		else if(parameterNames != null || parameterValues != null){
+		} else if (parameterNames != null || parameterValues != null) {
+
 			RunnerException.report(Messages.MISSING_PARAMETERS_ANNOTATION);
 		}
+
 		return result;
 	}
 
 	private Set<String> constraintsNames(Annotation[] annotations) {
-		for(Annotation annotation : annotations){
-			if(annotation instanceof Constraints){
+
+		for (Annotation annotation : annotations) {
+			if (annotation instanceof Constraints) {
 				String[] constraints = ((Constraints)annotation).value();
 				return new HashSet<String>(Arrays.asList(constraints));
 			}
 		}
 		return null;
 	}
+
 }
