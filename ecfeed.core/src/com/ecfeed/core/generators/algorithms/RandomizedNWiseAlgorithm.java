@@ -85,15 +85,6 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 			List<DimensionedItem<E>> nTuple = fRemainingTuples.iterator().next();
 			fRemainingTuples.remove(nTuple);
 
-//			boolean canGenerate = canGenerateTest(nTuple);
-//
-//			//			String message = canGenerate ? "CAN GENERATE: " : "CAN NOT GENERATE: ";
-//			//			debugPrintTuple(message, nTuple);
-//
-//			if (!canGenerate) {
-//				continue;
-//			}
-
 			List<E> randomTest = generateRandomTest(nTuple);
 
 			if (randomTest != null) {
@@ -107,121 +98,11 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 				progress(cov);
 				return improvedTest;
 			} else {
-				// GeneratorException.report("Cannot generate test for " +
-				// toString(nTuple));
-				System.out.println("Cannot generate test for" + toString(nTuple) + "!!! " + fRemainingTuples.size());
+				//System.out.println("Cannot generate test for" + toString(nTuple) + "!!! " + fRemainingTuples.size());
 				if (!fPotentiallyRemainingTuples.contains(nTuple))
 					fRemainingTuples.add(nTuple);
 			}
 		}
-	}
-
-	private boolean canGenerateTest(List<DimensionedItem<E>> nTuple) throws GeneratorException {
-
-		List<Integer> dimensions = createDimensionsByConstraints(nTuple);
-
-		if (dimensions.size() == 0) {
-			return true;
-		}
-
-		IterableTestSubinput<E> inputValuesList = new IterableTestSubinput<E>(getInput(), dimensions);
-
-		for (List<E> partialValues : inputValuesList ) {
-
-			if (canGenerateTestForPartialValues(partialValues, dimensions, nTuple)) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	private List<Integer> createDimensionsByConstraints(List<DimensionedItem<E>> nTuple) {
-
-		List<Integer> dimensionsToCheck = getDimensionsToCheck(nTuple);
-
-		List<Integer> selectedDimensions = 
-				getDimensionsMentionedInConstraints(dimensionsToCheck);
-
-		return selectedDimensions;
-	}
-
-	private boolean canGenerateTestForPartialValues(
-			List<E> partialValues, List<Integer> selectedDimensions, List<DimensionedItem<E>> nTuple) {
-
-		List<DimensionedItem<E>> partialTuple = createInputTuple(partialValues, selectedDimensions);
-
-		List<E> test = createOneTest(getInput(), nTuple, partialTuple);
-
-		if (checkConstraints(test) == EvaluationResult.TRUE) {
-			return true;
-		}
-
-		return false;
-	}
-
-	private List<DimensionedItem<E>> createInputTuple(List<E> input, List<Integer> dimensions) {
-
-		int inputSize = input.size();
-
-		if (inputSize != dimensions.size()) {
-			return null;
-		}
-
-		List<DimensionedItem<E>> result = new ArrayList<DimensionedItem<E>>();
-
-		for (int index = 0; index < inputSize; index++) {
-			DimensionedItem<E> item = new DimensionedItem<E>(dimensions.get(index), input.get(index));
-			result.add(item);
-		}
-
-		return result;
-	}
-
-	private List<Integer> getDimensionsToCheck(List<DimensionedItem<E>> nTuple) {
-
-		List<Integer> result = new ArrayList<Integer>();
-		int maxDimension = getInput().size();
-
-		for (int dimension = 0; dimension < maxDimension; dimension++) {
-			if (tupleContainsIndex(nTuple, dimension)) {
-				continue;
-			}
-
-			result.add(dimension);
-		}
-
-		return result;
-	}
-
-	private boolean tupleContainsIndex(List<DimensionedItem<E>> nTuple, int dimension) {
-
-		for (DimensionedItem<E> variable : nTuple) {
-			if (variable.fDimension == dimension) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	private List<Integer> getDimensionsMentionedInConstraints(List<Integer> dimensions) {
-
-		List<Integer> dimensionsMentionedInContstraints = new ArrayList<Integer>();
-
-		for (Integer dimension : dimensions) {
-			if (isDimensionMentionedInConstraints(dimension))
-				dimensionsMentionedInContstraints.add(dimension);
-		}
-
-		return dimensionsMentionedInContstraints;
-	}
-
-	private String toString(List<DimensionedItem<E>> nTuple) {
-		String str = "< ";
-		for (DimensionedItem<E> var : nTuple)
-			str += "(" + var.fDimension + ", " + var.fItem + ") ";
-		return str + ">";
 	}
 
 	/*
@@ -392,14 +273,6 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 		List<E> result = createRandomTest(tInput);
 		return plugInTupleIntoList(tuple, result);
 	}
-
-	private List<E> createOneTest(
-			List<List<E>> tInput, List<DimensionedItem<E>> tuple1, List<DimensionedItem<E>> tuple2) {
-
-		List<E> result = createRandomTest(tInput);
-		result = plugInTupleIntoList(tuple1, result);
-		return plugInTupleIntoList(tuple2, result);
-	}	
 
 	private List<E> createRandomTest(List<List<E>> tInput) {
 
