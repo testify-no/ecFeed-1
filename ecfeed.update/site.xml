@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/com.ecfeed_1.10.1.201608011525.jar" id="com.ecfeed" version="1.10.1.201608011525">
+      <category name="ecfeed"/>
+   </feature>
+   <feature url="features/com.ecfeed_1.10.2.201609192357.jar" id="com.ecfeed" version="1.10.2.201609192357">
+      <category name="ecfeed"/>
+   </feature>
+   <feature url="features/com.ecfeed_1.10.2.201609200120.jar" id="com.ecfeed" version="1.10.2.201609200120">
+      <category name="ecfeed"/>
+   </feature>
+   <feature url="features/com.ecfeed_1.11.0.201701251025.jar" id="com.ecfeed" version="1.11.0.201701251025">
+      <category name="ecfeed"/>
+   </feature>
+   <feature url="features/com.ecfeed_1.12.4.201706231609.jar" id="com.ecfeed" version="1.12.4.201706231609">
+      <category name="ecfeed"/>
+   </feature>
+   <category-def name="ecfeed" label="ecFeed"/>
+</site>
