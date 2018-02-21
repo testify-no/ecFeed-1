@@ -10,9 +10,7 @@
 
 package com.ecfeed.junit;
 
-import java.lang.reflect.Method;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.runners.model.FrameworkMethod;
@@ -50,11 +48,8 @@ public class StaticRunner extends AbstractStaticRunner {
 			TestCaseNode testCaseNode,
 			List<FrameworkMethod> outFrameworkMethods) {
 
-		Collection<TestCaseNode> oneTestCaseList = new LinkedList<TestCaseNode>();
-		oneTestCaseList.add(testCaseNode);
-
-		Method method = frameworkMethod.getMethod();
-		outFrameworkMethods.add(new StaticRunnerMethod(method, oneTestCaseList, getLoader()));
+		outFrameworkMethods.add(
+				new SimpleRunnerMethod(frameworkMethod.getMethod(), testCaseNode.getTestData(), getLoader()));
 	}	
 
 //	protected Set<String> getTestSuites(FrameworkMethod method) throws RunnerException{
