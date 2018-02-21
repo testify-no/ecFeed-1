@@ -46,17 +46,15 @@ public abstract class AbstractJUnitRunner extends BlockJUnit4ClassRunner {
 	private RootNode fModel;
 	private ILoaderProvider fLoaderProvider;
 	private JavaImplementationStatusResolver fImplementationStatusResolver;
-	
-	private class JUnitLoaderProvider implements ILoaderProvider{
-		@Override
-		public ModelClassLoader getLoader(boolean create, ClassLoader parent) {
-			return new ModelClassLoader(new URL[]{}, this.getClass().getClassLoader());
-		}
-	}
-	
+
 	public AbstractJUnitRunner(Class<?> klass) throws InitializationError {
 		super(klass);
 	}
+
+	protected abstract void addMethodsForOneCustomMethod(
+			FrameworkMethod frameworkMethod,
+			MethodNode methodNode,
+			List<FrameworkMethod> outFrameworkMethods) throws RunnerException;
 
 	@Override
 	public List<FrameworkMethod> computeTestMethods(){
@@ -71,95 +69,167 @@ public abstract class AbstractJUnitRunner extends BlockJUnit4ClassRunner {
 		return fTestMethods;
 	}
 
-	protected abstract List<FrameworkMethod> generateTestMethods() throws RunnerException;
-
 	@Override
 	protected void validateTestMethods(List<Throwable> errors){
 		validatePublicVoidMethods(Test.class, false, errors);
 	}
 
-	protected RootNode getModel() throws RunnerException{
-		if(fModel == null){
+	protected RootNode getModel() throws RunnerException {
+
+		if (fModel == null) {
 			fModel = createModel();
 		}
+
 		return fModel;
 	}
 
 	protected MethodNode getMethodModel(RootNode rootNode, FrameworkMethod method) throws RunnerException {
+
 		String methodName = method.getName();
 		String parentClassName = method.getMethod().getDeclaringClass().getName();
 		ClassNode classModel = rootNode.getClassModel(parentClassName);
+
 		if(classModel == null){
 			RunnerException.report(Messages.CLASS_NOT_FOUND_IN_THE_MODEL(parentClassName));
 		}
+
 		return classModel.getMethod(methodName, getParameterTypes(method.getMethod().getParameterTypes()));
 	}
-	
-	protected EImplementationStatus implementationStatus(AbstractNode node){
+
+	protected EImplementationStatus getImplementationStatus(AbstractNode node){
+
 		return getImplementationStatusResolver().getImplementationStatus(node);
 	}
-	
+
 	protected ILoaderProvider getLoaderProvider(){
+
 		if(fLoaderProvider == null){
 			fLoaderProvider = new JUnitLoaderProvider();
 		}
+
 		return fLoaderProvider;
 	}
-	
+
 	protected ModelClassLoader getLoader(){
+
 		return getLoaderProvider().getLoader(true, this.getClass().getClassLoader());
 	}
-	
+
 	protected JavaImplementationStatusResolver getImplementationStatusResolver() {
-		if(fImplementationStatusResolver == null){
+
+		if (fImplementationStatusResolver == null) {
 			fImplementationStatusResolver = new JavaImplementationStatusResolver(getLoaderProvider());
 		}
+
 		return fImplementationStatusResolver;
 	}
 
+	protected List<FrameworkMethod> getAnnotatedMethods(Class<?> theClass) {
+
+		return getTestClass().getAnnotatedMethods(Test.class);
+	}
+
+	private void addMethodsForOneAnnotatedMethod(
+			FrameworkMethod frameworkMethod,
+			List<FrameworkMethod> inOutFrameworkMethods) throws RunnerException {
+
+		if (isStandardJunitMethod(frameworkMethod)) {
+			inOutFrameworkMethods.add(frameworkMethod);
+			return;
+		} 
+
+		MethodNode methodNode = getMethodModel(getModel(), frameworkMethod);
+		if (methodNode == null) {
+			return;
+		}
+
+		addMethodsForOneCustomMethod(frameworkMethod, methodNode, inOutFrameworkMethods);
+	}
+
+	private List<FrameworkMethod> generateTestMethods() throws RunnerException {
+
+		List<FrameworkMethod> frameworkMethods = new ArrayList<FrameworkMethod>();
+
+		for (FrameworkMethod frameworkMethod : getAnnotatedMethods(Test.class)) {
+			addMethodsForOneAnnotatedMethod(frameworkMethod, frameworkMethods);
+		}
+
+		return frameworkMethods;
+	}
+
+	private static boolean isStandardJunitMethod(FrameworkMethod frameworkMethod) {
+
+		return frameworkMethod.getMethod().getParameterTypes().length == 0;
+	}
+
 	private RootNode createModel() throws RunnerException {
+
 		IModelParser parser = new EctParser();
 		String ectFilePath = getEctFilePath();
 		InputStream istream;
+
 		try {
 			istream = new FileInputStream(new File(ectFilePath));
 			return parser.parseModel(istream);
+
 		} catch (FileNotFoundException e) {
 			RunnerException.report(Messages.CANNOT_FIND_MODEL);
 			return null;
+
 		} catch (ParserException e) {
 			RunnerException.report(Messages.CANNOT_PARSE_MODEL(e.getMessage()));
 			return null;
+
 		}
 	}
 
-	private void validatePublicVoidMethods(Class<? extends Annotation> annotation, boolean isStatic, List<Throwable> errors) {
+	private void validatePublicVoidMethods(
+			Class<? extends Annotation> annotation, 
+			boolean isStatic, List<Throwable> errors) {
+
 		List<FrameworkMethod> methods = getTestClass().getAnnotatedMethods(annotation);
+
 		for(FrameworkMethod method : methods){
 			method.validatePublicVoid(isStatic, errors);
 		}
 	}
 
 	private String getEctFilePath() throws RunnerException {
+
 		TestClass testClass = getTestClass();
-		for(Annotation annotation : testClass.getAnnotations()){
-			if(annotation.annotationType().equals(EcModel.class)){
+
+		for (Annotation annotation : testClass.getAnnotations()) {
+			if (annotation.annotationType().equals(EcModel.class)) {
 				return ((EcModel)annotation).value();
 			}
 		}
+
 		RunnerException.report(Messages.CANNOT_FIND_MODEL);
 		return null;
 	}
-	
+
 	private ArrayList<String> getParameterTypes(Class<?>[] parameterTypes) {
+
 		ArrayList<String> result = new ArrayList<String>();
-		for(Class<?> parameter : parameterTypes){
+
+		for (Class<?> parameter : parameterTypes) {
+
 			if (parameter.isEnum()) {
 				result.add(parameter.getCanonicalName());	
 			} else {
 				result.add(parameter.getSimpleName());
 			}
 		}
+
 		return result;
 	}
+
+	private class JUnitLoaderProvider implements ILoaderProvider {
+
+		@Override
+		public ModelClassLoader getLoader(boolean create, ClassLoader parent) {
+			return new ModelClassLoader(new URL[]{}, this.getClass().getClassLoader());
+		}
+	}
+
 }
