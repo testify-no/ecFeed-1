@@ -29,7 +29,6 @@ public class LauncherForOnlineRunnerTests {
 		Result result = jUnitCore.run(OnlineRunnerTest1.class);
 
 		assertTrue(result.wasSuccessful());
-		System.out.println(fLog.toString().trim());
 		assertTrue(StringHelper.isEqual("B F(1,1) A B F(1,2) A B F(2,1) A B F(2,2) A", fLog.toString().trim()));
 	}
 
@@ -42,7 +41,6 @@ public class LauncherForOnlineRunnerTests {
 		Result result = jUnitCore.run(OnlineRunnerTest2.class);
 
 		assertTrue(result.wasSuccessful());
-		System.out.println(fLog.toString().trim());
 		assertTrue(StringHelper.isEqual("B F(1,1) A B F(1,2) A B F(2,1) A B F(2,2) A", fLog.toString().trim()));
 	}	
 
