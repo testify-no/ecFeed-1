@@ -90,7 +90,7 @@ public class StaticRunner extends AbstractJUnitRunner {
 			result = new HashSet<String>(Arrays.asList(((TestSuites)annotation).value()));
 		}
 		else{
-			result = getMethodModel(getModel(), method).getTestSuites();
+			result = getMethodModel(getModel(), method).getTestCaseNames();
 		}
 		return result;
 	}
