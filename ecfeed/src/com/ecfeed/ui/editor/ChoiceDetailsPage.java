@@ -18,6 +18,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
@@ -25,14 +26,17 @@ import org.eclipse.swt.widgets.Text;
 import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ChoiceNode;
+import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.utils.IValueApplier;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.ui.common.ComboSelectionListener;
 import com.ecfeed.ui.common.FocusLostListener;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
+import com.ecfeed.ui.common.utils.SwtObjectHelper;
 import com.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.ecfeed.ui.modelif.ChoiceInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
+import com.ecfeed.ui.modelif.MethodParameterInterface;
 
 public class ChoiceDetailsPage extends BasicDetailsPage {
 
@@ -41,6 +45,7 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 	private Composite fAttributesComposite;
 	private Text fNameText;
 	private Combo fValueCombo;
+
 
 	private ChoiceInterface fChoiceIf;
 	private AbstractCommentsSection fCommentsSection;
@@ -100,9 +105,24 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 			fCommentsSection.setInput(selectedChoice);
 			fChildrenViewer.setInput(selectedChoice);
 			fLabelsViewer.setInput(selectedChoice);
-			fNameText.setText(selectedChoice.getName());
+
+			//
+			if(getSelectedElement() instanceof MethodParameterNode){
+				MethodParameterNode parameter = (MethodParameterNode)getSelectedElement();
+				fExpectedCheckbox.setSelection(parameter.isExpected());
+				fExpectedCheckbox.setEnabled(expectedCheckboxEnabled());
+			}
+
+
+			//
+
+			fNameText.setText(selectedChoice.getName()+"q");
 			refreshValueEditor(selectedChoice);
 		}
+	}
+
+	private boolean expectedCheckboxEnabled(){
+		return fParameterIf.isLinked() == false || fParameterIf.isUserType();
 	}
 
 	private void addCommentsSection() {
@@ -168,8 +188,42 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		getEcFormToolkit().createLabel(fAttributesComposite, "Name");
 		fNameText = getEcFormToolkit().createGridText(fAttributesComposite, new NameApplier());
 
+		//<<<<<<< HEAD
+		//		getEcFormToolkit().createLabel(fAttributesComposite, "Value");
+		//		getEcFormToolkit().paintBordersFor(fAttributesComposite);
+		//=======
+		//		fExpectedCheckbox = 
+		//				getFormObjectToolkit().createGridCheckBox(
+		//						fAttributesComposite, "Randomize value", new ExpectedApplier());
+		//		SwtObjectHelper.setHorizontalSpan(fExpectedCheckbox, 3);
+		//		//TODO 3
+		//		//add randomize button
+		//		
+		//		getEcFormToolkit().createLabel(fAttributesComposite, "Value");
+		//		getEcFormToolkit().paintBorders(fAttributesComposite);
+		//>>>>>>> 5f4cd85... Add randomize choice button.
+
+		fExpectedCheckbox = 
+				getEcFormToolkit().createGridCheckBox(
+						fAttributesComposite, "Randomize value", new ExpectedApplier());
+		SwtObjectHelper.setHorizontalSpan(fExpectedCheckbox, 3);
+		//TODO 3
+		//add randomize button
+
 		getEcFormToolkit().createLabel(fAttributesComposite, "Value");
 		getEcFormToolkit().paintBordersFor(fAttributesComposite);
+
+	}
+	private Button fExpectedCheckbox;
+	private MethodParameterInterface fParameterIf;
+
+	private class ExpectedApplier implements IValueApplier {
+
+		@Override
+		public void applyValue() {
+			fParameterIf.setExpected(fExpectedCheckbox.getSelection());
+			fExpectedCheckbox.setSelection(fParameterIf.isExpected());
+		}
 	}
 
 	@Override
