@@ -236,7 +236,7 @@ public class CollectiveOnlineRunnerTest extends CollectiveStaticRunnerTest{
 			CollectiveOnlineRunner runner = new CollectiveOnlineRunner(testClass);
 			for(FrameworkMethod method : runner.computeTestMethods()){
 				List<List<ChoiceNode>> input = referenceInput(runner.getModel(), method);
-				Collection<IConstraint<ChoiceNode>> constraints = EMPTY_CONSTRAINTS;
+				Collection<IConstraint<ChoiceNode>> constraints = getConstraints(runner.getModel(), method);
 				Set<List<String>> referenceResult = computeReferenceResult(referenceCartesianGenerator(input, constraints));
 				method.invokeExplosively(testClass.newInstance(), (Object[])null);
 				assertEquals(referenceResult, fExecuted);
