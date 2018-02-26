@@ -24,11 +24,13 @@ public class ChoiceNode extends ChoicesParentNode{
 	private ChoicesParentNode fParent;
 	private String fValueString;
 	private Set<String> fLabels;
-
+	private boolean fIsRandomizeValue; //randomizeValue
+	
 	public ChoiceNode(String name, String value) {
 		super(name);
 		fValueString = value;
 		fLabels = new LinkedHashSet<String>();
+		fIsRandomizeValue = false;
 	}
 	
 	
@@ -86,6 +88,9 @@ public class ChoiceNode extends ChoicesParentNode{
 		for(String label : fLabels){
 			copy.addLabel(label);
 		}
+		
+		copy.setRandomizeValue(fIsRandomizeValue);
+		
 		return copy;
 	}
 
@@ -100,6 +105,14 @@ public class ChoiceNode extends ChoicesParentNode{
 		return getName();
 	}
 
+	public void setRandomizeValue(boolean choice) {
+		fIsRandomizeValue = choice;
+	}
+	
+	public boolean isRandomizeValue() {
+		return fIsRandomizeValue;
+	}
+	
 	public void setParent(ChoicesParentNode parent){
 		super.setParent(parent);
 		fParent = parent;
