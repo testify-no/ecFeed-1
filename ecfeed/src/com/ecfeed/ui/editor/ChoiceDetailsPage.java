@@ -26,7 +26,6 @@ import org.eclipse.swt.widgets.Text;
 
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ChoiceNode;
-import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.common.utils.SwtObjectHelper;
@@ -43,11 +42,11 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 	private Composite fAttributesComposite;
 	private Text fNameText;
 	private Combo fValueCombo;
-
-	
 	private ChoiceInterface fChoiceIf;
 	private AbstractCommentsSection fCommentsSection;
-
+	
+	private Button fExpectedCheckbox;
+	private boolean fIsRandomizedChecked = false;
 	
 	public ChoiceDetailsPage(
 			ModelMasterSection masterSection, 
@@ -91,25 +90,16 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 			fCommentsSection.setInput(selectedChoice);
 			fChildrenViewer.setInput(selectedChoice);
 			fLabelsViewer.setInput(selectedChoice);
+
 			
-			//
-			if(getSelectedElement() instanceof MethodParameterNode){
-				MethodParameterNode parameter = (MethodParameterNode)getSelectedElement();
-				fExpectedCheckbox.setSelection(parameter.isExpected());
-				fExpectedCheckbox.setEnabled(expectedCheckboxEnabled());
-			}
+			//fExpectedCheckbox.setEnabled(true);
+				
 			
-			
-			//
-			
-			fNameText.setText(selectedChoice.getName()+"q");
+			fNameText.setText(selectedChoice.getName());
 			refreshValueEditor(selectedChoice);
 		}
 	}
 	
-	private boolean expectedCheckboxEnabled(){
-		return fParameterIf.isLinked() == false || fParameterIf.isUserType();
-	}
 
 	private void addCommentsSection() {
 
@@ -148,6 +138,18 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		} else {
 			fValueCombo.setEnabled(true);
 		}
+		
+		
+		fIsRandomizedChecked = choiceNode.isRandomizeValue();
+		fExpectedCheckbox.setSelection(fIsRandomizedChecked);
+		//choiceNode.setIsRandomizedButtonChecked(fIsRandomizedChecked);
+
+		
+		//fIsRandomizedChecked = choiceNode.getIsRandomizedButtonChecked();
+		//fExpectedCheckbox.setSelection(fIsRandomizedChecked);
+		
+		//fExpectedCheckbox.setSelection(parameter.isExpected());
+		//fExpectedCheckbox.setEnabled(expectedCheckboxEnabled());
 
 		fAttributesComposite.layout();
 	}
@@ -185,15 +187,30 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		getFormObjectToolkit().createLabel(fAttributesComposite, "Value");
 		getFormObjectToolkit().paintBorders(fAttributesComposite);
 	}
-	private Button fExpectedCheckbox;
-	private MethodParameterInterface fParameterIf;
 	
 	private class ExpectedApplier implements IValueApplier {
 
 		@Override
 		public void applyValue() {
-			fParameterIf.setExpected(fExpectedCheckbox.getSelection());
-			fExpectedCheckbox.setSelection(fParameterIf.isExpected());
+		//	fParameterIf.setExpected(fExpectedCheckbox.getSelection());
+		//	fExpectedCheckbox.setSelection(fParameterIf.isExpected());
+			
+			//	private MethodParameterInterface fParameterIf;
+		//	fExpectedCheckbox.setSelection(fParameterIf.isExpected());
+			
+			//.setIsRandomizeButtonChecked(fExpectedCheckbox.getSelection());
+			
+			fIsRandomizedChecked = !fIsRandomizedChecked;
+			fExpectedCheckbox.setSelection(fIsRandomizedChecked);
+			
+		//	fParameterIf.setExpected(fExpectedCheckbox.getSelection());
+			//fExpectedCheckbox.setSelection(fParameterIf.isExpected());
+			
+		
+			//fChoiceIf.set
+			//fIsRandomizedChecked = fExpectedCheckbox.getSelection();
+			//fExpectedCheckbox.setSelection(fIsRandomizedChecked);
+		//	fExpectedCheckbox.setSelection(fIsRandomizedChecked);
 		}
 	}
 	
@@ -207,7 +224,7 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		@Override
 		public void applyValue() {
 			fChoiceIf.setName(fNameText.getText());
-			fNameText.setText(fChoiceIf.getName()+"q");
+			fNameText.setText(fChoiceIf.getName());
 		}
 	}
 	
