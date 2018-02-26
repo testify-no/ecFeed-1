@@ -73,23 +73,39 @@ public abstract class AbstractOnlineRunner extends AbstractJUnitRunner {
 
 	private Collection<IConstraint<ChoiceNode>> getConstraints(
 			FrameworkMethod method, 
-			MethodNode methodModel) {
+			MethodNode methodNode) {
 
 		Collection<String> constraintsNames = getConstraintsNames(method);
+
+		if (constraintsNames == null || constraintsNames.contains(Constraints.ALL)) {
+			return getAllConstraints(methodNode);
+		}
+
+		if (constraintsNames.contains(Constraints.NONE)) {
+			return getEmptyConstraints();
+		}
+
+		return getConstraintsForNames(constraintsNames, methodNode);
+	}
+
+	private Collection<IConstraint<ChoiceNode>> getEmptyConstraints() {
+		return new HashSet<IConstraint<ChoiceNode>>();
+	}
+
+	private Collection<IConstraint<ChoiceNode>> getAllConstraints(MethodNode methodNode) {
+
+		Collection<String> constraintsNames = methodNode.getConstraintsNames();
+		return getConstraintsForNames(constraintsNames, methodNode);
+	}
+
+	private Collection<IConstraint<ChoiceNode>> getConstraintsForNames(
+			Collection<String> constraintsNames,
+			MethodNode methodNode) {
+
 		Collection<IConstraint<ChoiceNode>> constraints = new HashSet<IConstraint<ChoiceNode>>();
 
-		if (constraintsNames == null) {
-			return constraints;
-		}
-
-		if (constraintsNames.contains(Constraints.ALL)) {
-			constraintsNames = methodModel.getConstraintsNames();
-		} else if (constraintsNames.contains(Constraints.NONE)) {
-			constraintsNames.clear();
-		}
-
 		for (String name : constraintsNames) {
-			constraints.addAll(methodModel.getConstraints(name));
+			constraints.addAll(methodNode.getConstraints(name));
 		}
 
 		return constraints;
