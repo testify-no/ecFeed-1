@@ -46,7 +46,7 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 	private ChoiceInterface fChoiceIf;
 	private AbstractCommentsSection fCommentsSection;
 	
-	private Button fExpectedCheckbox;
+	private Button fRandomizeCheckbox;
 	
 	public ChoiceDetailsPage(
 			ModelMasterSection masterSection, 
@@ -137,8 +137,8 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		}
 		
 		
-		fExpectedCheckbox.setSelection(choiceNode.isRandomizeValue());
-		fExpectedCheckbox.setEnabled(isRandomizeCheckboxEnabled());
+		fRandomizeCheckbox.setSelection(choiceNode.isRandomizeValue());
+		fRandomizeCheckbox.setEnabled(isRandomizeCheckboxEnabled());
 
 
 		fAttributesComposite.layout();
@@ -181,21 +181,21 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		getFormObjectToolkit().createLabel(fAttributesComposite, "Name");
 		fNameText = getFormObjectToolkit().createGridText(fAttributesComposite, new NameApplier());
 
-		fExpectedCheckbox = 
+		fRandomizeCheckbox = 
 				getFormObjectToolkit().createGridCheckBox(
-						fAttributesComposite, "Randomize value", new ExpectedApplier());
-		SwtObjectHelper.setHorizontalSpan(fExpectedCheckbox, 3);
+						fAttributesComposite, "Randomize value", new RandomizedApplier());
+		SwtObjectHelper.setHorizontalSpan(fRandomizeCheckbox, 3);
 		
 		getFormObjectToolkit().createLabel(fAttributesComposite, "Value");
 		getFormObjectToolkit().paintBorders(fAttributesComposite);
 	}
 	
-	private class ExpectedApplier implements IValueApplier {
+	private class RandomizedApplier implements IValueApplier {
 
 		@Override
 		public void applyValue() {
-			fChoiceIf.setRandomize(fExpectedCheckbox.getSelection());
-			fExpectedCheckbox.setSelection(fChoiceIf.isRandomize());
+			fChoiceIf.setRandomize(fRandomizeCheckbox.getSelection());
+			fRandomizeCheckbox.setSelection(fChoiceIf.isRandomize());
 		}
 	}
 	

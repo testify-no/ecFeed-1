@@ -60,6 +60,7 @@ public class ChoicesViewer extends TableViewerSection {
 	private boolean fChoiceViewerEnabled;
 
 	private TableViewerColumn fNameColumn;
+	private TableViewerColumn fRandomizedColumn;
 	private TableViewerColumn fValueColumn;
 
 	private ChoiceNameEditingSupport fNameEditingSupport;
@@ -160,7 +161,7 @@ public class ChoicesViewer extends TableViewerSection {
 		protected boolean canEdit(Object element) {
 			return fEnabled && (((ChoiceNode)element).isAbstract() == false);
 		}
-
+		
 		@Override
 		protected Object getValue(Object element) {
 			return ((ChoiceNode)element).getValueString();
@@ -195,6 +196,17 @@ public class ChoicesViewer extends TableViewerSection {
 		}
 	}
 
+	private class RandomizedValueLabelProdiver extends ColumnLabelProvider {
+		@Override
+		public String getText(Object element){
+			if(element instanceof ChoiceNode){
+				ChoiceNode choice = (ChoiceNode)element;
+				return choice.getRandomizeValue();
+			}
+			return "";
+		}
+	}
+	
 	private class AddChoiceAdapter extends SelectionAdapter{
 
 		@Override
@@ -296,8 +308,56 @@ public class ChoicesViewer extends TableViewerSection {
 	@Override
 	protected void createTableColumns() {
 		fNameColumn = addColumn("Name", 150, new NodeNameColumnLabelProvider());
+		fRandomizedColumn = addColumn("Randomized", 250, new RandomizedValueLabelProdiver());
+		fRandomizedColumn.setEditingSupport(new RandomizeValueEditingSupport());		
 		fValueColumn = addColumn("Value", 150, new ChoiceValueLabelProvider());
 	}
+	
+	
+	//TODO 555 editing support
+	private class RandomizeValueEditingSupport extends EditingSupport {
+
+		private final String[] EDITOR_ITEMS = {"YES", "NO"};
+		private ComboBoxCellEditor fCellEditor;
+
+		public RandomizeValueEditingSupport() {
+			super(getTableViewer());
+		}
+
+		@Override
+		protected CellEditor getCellEditor(Object element) {
+			if(fCellEditor == null){
+				fCellEditor = new ComboBoxCellEditor(getTable(), EDITOR_ITEMS, SWT.READ_ONLY);
+				fCellEditor.setActivationStyle(ComboBoxCellEditor.DROP_DOWN_ON_MOUSE_ACTIVATION);
+			}
+			return fCellEditor;
+		}
+
+		@Override
+		protected Object getValue(Object element) {
+			ChoiceNode node = (ChoiceNode)element;
+			return (node.isRandomizeValue() ? 0 : 1);
+		}
+
+		@Override
+		protected void setValue(Object element, Object value) {
+			ChoiceNode node = (ChoiceNode)element;
+			boolean expected = ((int)value == 0) ? true : false;
+			fParentIf.setOwnNode(node);
+			node.setRandomizeValue(expected);
+			fCellEditor.setFocus();
+		}
+
+		@Override
+		protected boolean canEdit(Object element) {
+			if (element instanceof ChoiceNode) {
+				ChoiceNode choiceNode = (ChoiceNode) element;
+				return choiceNode.isCorrectableToBeRandomizedType();
+			}
+			return false;
+		}
+	}
+
 
 	public void setEditEnabled(boolean enabled) {
 		fChoiceViewerEnabled = enabled;
