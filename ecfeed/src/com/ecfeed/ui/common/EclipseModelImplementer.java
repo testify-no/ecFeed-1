@@ -147,7 +147,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 				implementChoicesDefinitions(unimplementedChoices(choiceNode.getLeafChoices()));
 			}
 			else{
-				if(implementable(choiceNode) && getImplementationStatus(choiceNode) != EImplementationStatus.IMPLEMENTED){
+				if(isImplementableNode(choiceNode) && getImplementationStatus(choiceNode) != EImplementationStatus.IMPLEMENTED){
 					implementChoicesDefinitions(Arrays.asList(new ChoiceNode[]{choiceNode}));
 				}
 			}
@@ -216,7 +216,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 
 	@Override
 	protected void implementChoiceDefinition(ChoiceNode node) throws CoreException, EcException {
-		if(implementable(node) && getImplementationStatus(node) != EImplementationStatus.IMPLEMENTED){
+		if(isImplementableNode(node) && getImplementationStatus(node) != EImplementationStatus.IMPLEMENTED){
 			implementChoicesDefinitions(Arrays.asList(new ChoiceNode[]{node}));
 		}
 	}
@@ -273,7 +273,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 	}
 
 	@Override
-	protected boolean implementable(ClassNode node) throws EcException{
+	protected boolean isImplementableNode(ClassNode node) throws EcException{
 		if(!androidCodeImplemented(node)) {
 			return true;
 		}
@@ -284,7 +284,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 	}
 
 	@Override
-	protected boolean implementable(MethodNode node) throws EcException{
+	protected boolean isImplementableNode(MethodNode node) throws EcException{
 		ClassNode classNode = node.getClassNode();
 		if(!androidCodeImplemented(classNode)) {
 			return true;
@@ -296,7 +296,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 	}
 
 	@Override
-	protected boolean implementable(MethodParameterNode node){
+	protected boolean isImplementableNode(MethodParameterNode node){
 		if(parameterDefinitionImplemented(node)){
 			return hasImplementableNode(node.getChoices());
 		}
@@ -304,7 +304,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 	}
 
 	@Override
-	protected boolean implementable(GlobalParameterNode node){
+	protected boolean isImplementableNode(GlobalParameterNode node){
 		if(parameterDefinitionImplemented(node)){
 			return hasImplementableNode(node.getChoices());
 		}
@@ -312,7 +312,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 	}
 
 	@Override
-	protected boolean implementable(ChoiceNode node) {
+	protected boolean isImplementableNode(ChoiceNode node) {
 		
 		if (node.isAbstract()) {
 			return hasImplementableNode(node.getChoices());
@@ -598,7 +598,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 	private List<ChoiceNode> unimplementedChoices(List<ChoiceNode> choices){
 		List<ChoiceNode> unimplemented = new ArrayList<>();
 		for(ChoiceNode choice : choices){
-			if(implementable(choice) && getImplementationStatus(choice) != EImplementationStatus.IMPLEMENTED){
+			if(isImplementableNode(choice) && getImplementationStatus(choice) != EImplementationStatus.IMPLEMENTED){
 				unimplemented.add(choice);
 			}
 		}

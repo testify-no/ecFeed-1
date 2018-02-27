@@ -36,32 +36,32 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 	private class ImplementableVisitor implements IModelVisitor{
 		@Override
 		public Object visit(RootNode node) throws Exception {
-			return implementable(node);
+			return isImplementableNode(node);
 		}
 
 		@Override
 		public Object visit(ClassNode node) throws Exception {
-			return implementable(node);
+			return isImplementableNode(node);
 		}
 
 		@Override
 		public Object visit(MethodNode node) throws Exception {
-			return implementable(node);
+			return isImplementableNode(node);
 		}
 
 		@Override
 		public Object visit(MethodParameterNode node) throws Exception {
-			return implementable(node);
+			return isImplementableNode(node);
 		}
 
 		@Override
 		public Object visit(GlobalParameterNode node) throws Exception {
-			return implementable(node);
+			return isImplementableNode(node);
 		}
 
 		@Override
 		public Object visit(TestCaseNode node) throws Exception {
-			return implementable(node);
+			return isImplementableNode(node);
 		}
 
 		@Override
@@ -71,7 +71,7 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 
 		@Override
 		public Object visit(ChoiceNode node) throws Exception {
-			return implementable(node);
+			return isImplementableNode(node);
 		}
 	}
 
@@ -169,7 +169,7 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 
 	private void implementRootGlobalParameters(RootNode rootNode) throws Exception {
 		for(GlobalParameterNode parameter : rootNode.getGlobalParameters()){
-			if(implementable(parameter) && getImplementationStatus(parameter) != EImplementationStatus.IMPLEMENTED){
+			if(isImplementableNode(parameter) && getImplementationStatus(parameter) != EImplementationStatus.IMPLEMENTED){
 				implement(parameter);
 			}
 		}
@@ -179,7 +179,7 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 		StrgList errorMessages = new StrgList();
 
 		for(ClassNode classNode : rootNode.getClasses()){
-			if(implementable(classNode) && getImplementationStatus(classNode) != EImplementationStatus.IMPLEMENTED){
+			if(isImplementableNode(classNode) && getImplementationStatus(classNode) != EImplementationStatus.IMPLEMENTED){
 
 				try {
 					implement(classNode);
@@ -196,7 +196,7 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 
 	protected boolean implement(ClassNode classNode) throws Exception{
 		for(GlobalParameterNode parameter : classNode.getGlobalParameters()){
-			if(implementable(parameter) && getImplementationStatus(parameter) != EImplementationStatus.IMPLEMENTED){
+			if(isImplementableNode(parameter) && getImplementationStatus(parameter) != EImplementationStatus.IMPLEMENTED){
 				implement(parameter);
 			}
 		}
@@ -212,7 +212,7 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 		StrgList errorMessages = new StrgList();
 
 		for(MethodNode method : classNode.getMethods()){
-			if(implementable(method) && getImplementationStatus(method) != EImplementationStatus.IMPLEMENTED){
+			if(isImplementableNode(method) && getImplementationStatus(method) != EImplementationStatus.IMPLEMENTED){
 
 				try {
 					implement(method);
@@ -229,12 +229,12 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 
 	protected boolean implement(MethodNode methodNode) throws Exception{
 		for(MethodParameterNode parameter : methodNode.getMethodParameters()){
-			if(implementable(parameter) && getImplementationStatus(parameter) != EImplementationStatus.IMPLEMENTED){
+			if(isImplementableNode(parameter) && getImplementationStatus(parameter) != EImplementationStatus.IMPLEMENTED){
 				implement(parameter);
 			}
 		}
 		for(TestCaseNode testCase : methodNode.getTestCases()){
-			if(implementable(testCase) && getImplementationStatus(testCase) != EImplementationStatus.IMPLEMENTED){
+			if(isImplementableNode(testCase) && getImplementationStatus(testCase) != EImplementationStatus.IMPLEMENTED){
 				implement(testCase);
 			}
 		}
@@ -249,7 +249,7 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 			implementParameterDefinition(parameterNode);
 		}
 		for(ChoiceNode choice : parameterNode.getLeafChoices()){
-			if(implementable(choice) && getImplementationStatus(choice) != EImplementationStatus.IMPLEMENTED){
+			if(isImplementableNode(choice) && getImplementationStatus(choice) != EImplementationStatus.IMPLEMENTED){
 				implement(choice);
 				CachedImplementationStatusResolver.clearCache(choice);
 			}
@@ -259,7 +259,7 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 
 	protected boolean implement(TestCaseNode testCaseNode) throws Exception{
 		for(ChoiceNode choice : testCaseNode.getTestData()){
-			if(implementable(choice) && getImplementationStatus(choice) != EImplementationStatus.IMPLEMENTED){
+			if(isImplementableNode(choice) && getImplementationStatus(choice) != EImplementationStatus.IMPLEMENTED){
 				implement(choice);
 			}
 		}
@@ -276,44 +276,44 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 		}
 		if(choiceNode.isAbstract()){
 			for(ChoiceNode leaf : choiceNode.getLeafChoices()){
-				if(implementable(leaf) && getImplementationStatus(leaf) != EImplementationStatus.IMPLEMENTED){
+				if(isImplementableNode(leaf) && getImplementationStatus(leaf) != EImplementationStatus.IMPLEMENTED){
 					implement(leaf);
 				}
 			}
 		}
 		else{
-			if(implementable(choiceNode) && getImplementationStatus(choiceNode) != EImplementationStatus.IMPLEMENTED){
+			if(isImplementableNode(choiceNode) && getImplementationStatus(choiceNode) != EImplementationStatus.IMPLEMENTED){
 				implementChoiceDefinition(choiceNode);
 			}
 		}
 		return true;
 	}
 
-	protected boolean implementable(RootNode node){
+	protected boolean isImplementableNode(RootNode node){
 		return hasImplementableNode(node.getClasses());
 	}
 
-	protected boolean implementable(ClassNode node) throws EcException {
+	protected boolean isImplementableNode(ClassNode node) throws EcException {
 		return hasImplementableNode(node.getMethods());
 	}
 
-	protected boolean implementable(MethodNode node) throws EcException {
+	protected boolean isImplementableNode(MethodNode node) throws EcException {
 		return hasImplementableNode(node.getParameters()) || hasImplementableNode(node.getTestCases());
 	}
 
-	protected boolean implementable(MethodParameterNode node){
+	protected boolean isImplementableNode(MethodParameterNode node){
 		return hasImplementableNode(node.getChoices());
 	}
 
-	protected boolean implementable(GlobalParameterNode node){
+	protected boolean isImplementableNode(GlobalParameterNode node){
 		return hasImplementableNode(node.getChoices());
 	}
 
-	protected boolean implementable(ChoiceNode node){
+	protected boolean isImplementableNode(ChoiceNode node){
 		return hasImplementableNode(node.getChoices());
 	}
 
-	protected boolean implementable(TestCaseNode node){
+	protected boolean isImplementableNode(TestCaseNode node){
 		return hasImplementableNode(node.getTestData());
 	}
 
