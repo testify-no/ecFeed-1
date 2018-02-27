@@ -46,6 +46,8 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 	private ChoiceInterface fChoiceIf;
 	private AbstractCommentsSection fCommentsSection;
 	private Button fExpectedCheckbox;
+	private Button fRandomizeCheckbox;
+	private MethodParameterInterface fParameterIf;
 
 	public ChoiceDetailsPage(
 			IMainTreeProvider mainTreeProvider,
@@ -149,11 +151,8 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		} else {
 			fValueCombo.setEnabled(true);
 		}
-
-
-		fExpectedCheckbox.setSelection(choiceNode.isRandomizeValue());
-		fExpectedCheckbox.setEnabled(isRandomizeCheckboxEnabled());
-
+		fRandomizeCheckbox.setSelection(choiceNode.isRandomizeValue());
+		fRandomizeCheckbox.setEnabled(isRandomizeCheckboxEnabled());
 
 		fAttributesComposite.layout();
 	}
@@ -194,23 +193,22 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		getEcFormToolkit().createLabel(fAttributesComposite, "Name");
 		fNameText = getEcFormToolkit().createGridText(fAttributesComposite, new NameApplier());
 
-		fExpectedCheckbox = 
+		fRandomizeCheckbox = 
 				getEcFormToolkit().createGridCheckBox(
-						fAttributesComposite, "Randomize value", new ExpectedApplier());
-		SwtObjectHelper.setHorizontalSpan(fExpectedCheckbox, 3);
+						fAttributesComposite, "Randomize value", new RandomizedApplier());
+		SwtObjectHelper.setHorizontalSpan(fRandomizeCheckbox, 3);
 
 		getEcFormToolkit().createLabel(fAttributesComposite, "Value");
 		getEcFormToolkit().paintBordersFor(fAttributesComposite);
 	}
 
-	private MethodParameterInterface fParameterIf;
+	private class RandomizedApplier implements IValueApplier {
 
-	private class ExpectedApplier implements IValueApplier {
 
 		@Override
 		public void applyValue() {
-			fChoiceIf.setRandomize(fExpectedCheckbox.getSelection());
-			fExpectedCheckbox.setSelection(fChoiceIf.isRandomize());
+			fChoiceIf.setRandomize(fRandomizeCheckbox.getSelection());
+			fRandomizeCheckbox.setSelection(fChoiceIf.isRandomize());
 		}
 	}
 
