@@ -47,7 +47,6 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 	private AbstractCommentsSection fCommentsSection;
 	
 	private Button fExpectedCheckbox;
-	private boolean fIsRandomizedChecked = false;
 	
 	public ChoiceDetailsPage(
 			ModelMasterSection masterSection, 
@@ -116,7 +115,7 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		int style = SWT.DROP_DOWN;
 		if(AbstractParameterInterface.isBoolean(type)){
 			style |= SWT.READ_ONLY;
-		}
+		}		
 		fValueCombo = new ComboViewer(fAttributesComposite, style).getCombo();
 		fValueCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		Set<String> items = new LinkedHashSet<String>(AbstractParameterInterface.getSpecialValues(type));
@@ -147,7 +146,12 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 	
 	private boolean isRandomizeCheckboxEnabled() {
 		String typeName = fChoiceIf.getParameter().getType();
-		return isCorrectableType(typeName);
+		return !isChoiceNodeAbstract() && isCorrectableType(typeName);
+	}
+	
+	private boolean isChoiceNodeAbstract() {
+		ChoiceNode choiceNode = getSelectedChoice();
+		return choiceNode!=null && choiceNode.isAbstract();
 	}
 	
 	private boolean isCorrectableType(String typeName) {
