@@ -48,7 +48,7 @@ public class ImplementAction extends ModelModifyingAction {
 
 		for (AbstractNode node : getSelectedNodes()) {
 
-			if (!fImplementer.implementable(node)) {
+			if (!fImplementer.isImplementable(node)) {
 				continue;
 			}
 

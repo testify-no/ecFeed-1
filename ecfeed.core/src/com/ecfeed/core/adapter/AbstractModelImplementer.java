@@ -126,7 +126,7 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 	}
 
 	@Override
-	public boolean implementable(Class<? extends AbstractNode> type){
+	public boolean isImplementable(Class<? extends AbstractNode> type){
 		if(type.equals(RootNode.class) ||
 				(type.equals(ClassNode.class))||
 				(type.equals(MethodNode.class))||
@@ -141,7 +141,7 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 	}
 
 	@Override
-	public boolean implementable(AbstractNode node) {
+	public boolean isImplementable(AbstractNode node) {
 		try{
 			return (boolean)node.accept(fImplementableVisitor);
 		}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
@@ -150,7 +150,7 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 
 	@Override
 	public boolean implement(AbstractNode node) throws Exception {
-		if(implementable(node)){
+		if(isImplementable(node)){
 			return (boolean)node.accept(fNodeImplementerVisitor);
 		}
 		return false;
@@ -319,7 +319,7 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 
 	protected boolean hasImplementableNode(List<? extends AbstractNode> nodes){
 		for(AbstractNode node : nodes){
-			if(implementable(node)){
+			if(isImplementable(node)){
 				return true;
 			}
 		}
