@@ -40,19 +40,23 @@ public class ImplementAction extends ModelModifyingAction {
 	}
 
 	@Override
-	public boolean isEnabled(){
+	public boolean isEnabled() {
 		return !allImplementableNodesImplemented();
 	}
 
 	private boolean allImplementableNodesImplemented() {
-		for(AbstractNode node : getSelectedNodes()){
-			if(!fImplementer.implementable(node)) {
+
+		for (AbstractNode node : getSelectedNodes()) {
+
+			if (!fImplementer.implementable(node)) {
 				continue;
 			}
-			if (fImplementer.getImplementationStatus(node) != EImplementationStatus.IMPLEMENTED){
+
+			if (fImplementer.getImplementationStatus(node) != EImplementationStatus.IMPLEMENTED) {
 				return false;
 			}
 		}
+
 		return true;
 	}
 }

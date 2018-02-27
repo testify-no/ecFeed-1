@@ -29,6 +29,7 @@ import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
@@ -311,42 +312,79 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 	}
 
 	@Override
-	protected boolean implementable(ChoiceNode node){
-		if(node.isAbstract()){
+	protected boolean implementable(ChoiceNode node) {
+		
+		if (node.isAbstract()) {
 			return hasImplementableNode(node.getChoices());
 		}
-		if(parameterDefinitionImplemented(node.getParameter())){
-			try{
-				IType type = getJavaProject().findType(node.getParameter().getType());
-				if(type.isEnum() == false){
-					return false;
-				}
-				boolean hasConstructor = false;
-				boolean hasParameterlessConstructor = false;
-				for(IMethod constructor : type.getMethods()){
-					if(constructor.isConstructor() == false){
-						continue;
-					}
-					hasConstructor = true;
-					if(constructor.getNumberOfParameters() == 0){
-						hasParameterlessConstructor = true;
-					}
-				}
-				if(hasConstructor && (hasParameterlessConstructor == false)){
-					return false;
-				}
-			}
-			catch(CoreException e){
-				return false;
-			}
+		
+		if (parameterDefinitionImplemented(node.getParameter())) {
+			return isChoiceImplementable(node);
 		}
-		else{
-			if(parameterDefinitionImplementable(node.getParameter()) == false){
-				return false;
-			}
+
+		if (!parameterDefinitionImplementable(node.getParameter())) {
+			return false;
 		}
 
 		return JavaLanguageHelper.isValidJavaIdentifier(node.getValueString());
+	}
+
+	private boolean isChoiceImplementable(ChoiceNode node) {
+		
+		try{
+			String stParameterType = node.getParameter().getType();
+			IType parameterType = getJavaProject().findType(stParameterType);
+			
+			if (!parameterType.isEnum()) {
+				return false;
+			}
+			
+			if (hasConstructor(parameterType) && (!hasParameterlessConstructor(parameterType))) {
+				return false;
+			}
+			
+			return JavaLanguageHelper.isValidJavaIdentifier(node.getValueString());
+			
+		} catch(CoreException e) {
+			
+			return false;
+		}
+	}
+
+	private static boolean hasConstructor(IType parameterType) throws JavaModelException {
+		
+		for (IMethod method : parameterType.getMethods()) {
+			if (method.isConstructor()) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	private static boolean hasParameterlessConstructor(IType parameterType) throws JavaModelException {
+		
+		for (IMethod method : parameterType.getMethods()) {
+			
+			if (isParameterlessConstructor(method)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	private static boolean isParameterlessConstructor(IMethod method) throws JavaModelException {
+		
+		if (!method.isConstructor()) {
+			return false;
+		}
+		
+		if (method.getNumberOfParameters() != 0) {
+			return false;
+		}
+		
+		return true;
 	}
 
 	@Override

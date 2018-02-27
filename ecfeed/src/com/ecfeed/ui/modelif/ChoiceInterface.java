@@ -141,12 +141,14 @@ public class ChoiceInterface extends ChoicesParentInterface {
 	@Override
 	public boolean goToImplementationEnabled(){
 		
-		if(JavaTypeHelper.isJavaType(getOwnNode().getParameter().getType())){
+		if (JavaTypeHelper.isJavaType(getOwnNode().getParameter().getType())) {
 			return false;
 		}
-		if(getOwnNode().isAbstract()) {
+		
+		if (getOwnNode().isAbstract()) {
 			return false;
 		}
+		
 		return super.goToImplementationEnabled();
 	}
 

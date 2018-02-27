@@ -37,11 +37,15 @@ public class GoToImplementationAction extends ModelSelectionAction {
 	}
 
 	@Override
-	public boolean isEnabled(){
-		if(getSelectedNodes().size() != 1){
+	public boolean isEnabled() {
+
+		if (getSelectedNodes().size() != 1) {
 			return false;
 		}
-		AbstractNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(getSelectedNodes().get(0), null, fFileInfoProvider);
+
+		AbstractNodeInterface nodeIf = 
+				NodeInterfaceFactory.getNodeInterface(getSelectedNodes().get(0), null, fFileInfoProvider);
+
 		return nodeIf.goToImplementationEnabled();
 	}
 
