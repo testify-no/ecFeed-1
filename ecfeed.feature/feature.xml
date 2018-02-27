@@ -2,16 +2,40 @@
 <feature
       id="com.ecfeed"
       label="ecFeed"
-      version="1.12.8.qualifier"
+      version="1.12.9.qualifier"
       provider-name="ecFeed AS">
 
    <description url="https://github.com/testify-no/ecFeed">
       Test data generator and jUnit test execution framework based
 on Equivalence Class model.
 Changelog:
+
+Version 1.12.9
+ - image decorators are back
+ - improved jUnit runner reporting
+ - jUnit online runner uses all constraints by default
+ - hover text on details page title bar 
+Version 1.12.8
+ - hot bugfixes (pairwise generator, image file handlers leaks)
+Version 1.12.6
+ - bugfixes (pairwise generator)
+ - jUnit runner doesn&apos;t stop after first failure
+ - configurable coverage measurement
+Version 1.12.4
+ - remove default choices from parameters
+ - fixed comments section in RCP
+ - little improvements in menus
+ - fixed dependencies problems reported from eclipse marketplace
+Version 1.12.2
+ - bugfixes
+Version 1.12.0
+ - Extended constraints (&lt;, &lt;=, &gt;, &gt;= relations, comparing values of two parameters of the same type, compare a parameter to a value)
+ - Simplified export of test cases to cucumber&apos;s feature files (with a perspective to easily add more formats in the future)
+ - Check for updates on startup
+
 Version 1.11.0
- - Web runner
- - added node properties (implementation detail)
+- Web runner
+- added node properties (implementation detail)
 Version 1.10.3
 - more bugfixes about global parameters
 - fixed label editor for standalone version
