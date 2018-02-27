@@ -24,7 +24,7 @@ public class ChoiceNode extends ChoicesParentNode{
 	private ChoicesParentNode fParent;
 	private String fValueString;
 	private Set<String> fLabels;
-	private boolean fIsRandomizeValue; //randomizeValue
+	private boolean fIsRandomizeValue;
 	
 	public ChoiceNode(String name, String value) {
 		super(name);
@@ -32,12 +32,6 @@ public class ChoiceNode extends ChoicesParentNode{
 		fLabels = new LinkedHashSet<String>();
 		fIsRandomizeValue = false;
 	}
-	
-	
-	//TODO
-	//insert some fields (for service random choice/value buttons)
-	//TODO 2
-	//add add checkbox-button in model (next to choice list with parameters e.g. min/max value)
 
 	@Override
 	public AbstractParameterNode getParameter() {
