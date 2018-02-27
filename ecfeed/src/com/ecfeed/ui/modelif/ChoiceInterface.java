@@ -54,6 +54,14 @@ public class ChoiceInterface extends ChoicesParentInterface {
 		
 		return getOwnNode().getValueString();
 	}
+	
+	public void setRandomize(boolean choice) {
+		getOwnNode().setRandomizeValue(choice);
+	}
+	
+	public boolean isRandomize() {
+		return getOwnNode().isRandomizeValue();
+	}
 
 	@Override
 	public AbstractParameterNode getParameter() {
