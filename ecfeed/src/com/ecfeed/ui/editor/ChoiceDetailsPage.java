@@ -13,6 +13,7 @@ package com.ecfeed.ui.editor;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import org.eclipse.core.commands.IParameter;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
@@ -47,7 +48,7 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 	private AbstractCommentsSection fCommentsSection;
 	private Button fExpectedCheckbox;
 	private boolean fIsRandomizedChecked = false;
-	
+
 	public ChoiceDetailsPage(
 			IMainTreeProvider mainTreeProvider,
 			ChoiceInterface choiceInterface,
@@ -110,10 +111,9 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 				fExpectedCheckbox.setEnabled(expectedCheckboxEnabled());
 			}
 
-
 			//
+			fNameText.setText(selectedChoice.getName());
 
-			fNameText.setText(selectedChoice.getName()+"q");
 			refreshValueEditor(selectedChoice);
 		}
 	}
@@ -159,20 +159,22 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		} else {
 			fValueCombo.setEnabled(true);
 		}
-		
-		
-		fIsRandomizedChecked = choiceNode.isRandomizeValue();
-		fExpectedCheckbox.setSelection(fIsRandomizedChecked);
-		//choiceNode.setIsRandomizedButtonChecked(fIsRandomizedChecked);
 
-		
-		//fIsRandomizedChecked = choiceNode.getIsRandomizedButtonChecked();
-		//fExpectedCheckbox.setSelection(fIsRandomizedChecked);
-		
-		//fExpectedCheckbox.setSelection(parameter.isExpected());
-		//fExpectedCheckbox.setEnabled(expectedCheckboxEnabled());
+
+		fExpectedCheckbox.setSelection(choiceNode.isRandomizeValue());
+		fExpectedCheckbox.setEnabled(isRandomizeCheckboxEnabled());
+
 
 		fAttributesComposite.layout();
+	}
+
+	private boolean isRandomizeCheckboxEnabled() {
+		String typeName = fChoiceIf.getParameter().getType();
+		return isCorrectableType(typeName);
+	}
+
+	private boolean isCorrectableType(String typeName) {
+		return JavaTypeHelper.isNumericTypeName(typeName) || JavaTypeHelper.isStringTypeName(typeName);
 	}
 
 	private void setValueComboText(ChoiceNode choiceNode) {
@@ -197,31 +199,13 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		getEcFormToolkit().createLabel(fAttributesComposite, "Name");
 		fNameText = getEcFormToolkit().createGridText(fAttributesComposite, new NameApplier());
 
-		//<<<<<<< HEAD
-		//		getEcFormToolkit().createLabel(fAttributesComposite, "Value");
-		//		getEcFormToolkit().paintBordersFor(fAttributesComposite);
-		//=======
-		//		fExpectedCheckbox = 
-		//				getFormObjectToolkit().createGridCheckBox(
-		//						fAttributesComposite, "Randomize value", new ExpectedApplier());
-		//		SwtObjectHelper.setHorizontalSpan(fExpectedCheckbox, 3);
-		//		//TODO 3
-		//		//add randomize button
-		//		
-		//		getEcFormToolkit().createLabel(fAttributesComposite, "Value");
-		//		getEcFormToolkit().paintBorders(fAttributesComposite);
-		//>>>>>>> 5f4cd85... Add randomize choice button.
-
 		fExpectedCheckbox = 
 				getEcFormToolkit().createGridCheckBox(
 						fAttributesComposite, "Randomize value", new ExpectedApplier());
 		SwtObjectHelper.setHorizontalSpan(fExpectedCheckbox, 3);
-		//TODO 3
-		//add randomize button
 
 		getEcFormToolkit().createLabel(fAttributesComposite, "Value");
 		getEcFormToolkit().paintBordersFor(fAttributesComposite);
-
 	}
 
 	private MethodParameterInterface fParameterIf;
@@ -230,25 +214,8 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 
 		@Override
 		public void applyValue() {
-		//	fParameterIf.setExpected(fExpectedCheckbox.getSelection());
-		//	fExpectedCheckbox.setSelection(fParameterIf.isExpected());
-			
-			//	private MethodParameterInterface fParameterIf;
-		//	fExpectedCheckbox.setSelection(fParameterIf.isExpected());
-			
-			//.setIsRandomizeButtonChecked(fExpectedCheckbox.getSelection());
-			
-			fIsRandomizedChecked = !fIsRandomizedChecked;
-			fExpectedCheckbox.setSelection(fIsRandomizedChecked);
-			
-		//	fParameterIf.setExpected(fExpectedCheckbox.getSelection());
-			//fExpectedCheckbox.setSelection(fParameterIf.isExpected());
-			
-		
-			//fChoiceIf.set
-			//fIsRandomizedChecked = fExpectedCheckbox.getSelection();
-			//fExpectedCheckbox.setSelection(fIsRandomizedChecked);
-		//	fExpectedCheckbox.setSelection(fIsRandomizedChecked);
+			fChoiceIf.setRandomize(fExpectedCheckbox.getSelection());
+			fExpectedCheckbox.setSelection(fChoiceIf.isRandomize());
 		}
 	}
 
