@@ -338,6 +338,62 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 			return result;
 		}
 	}
+	
+	//TODO refactor
+	public class ITypeRandomizedAdapter {
+	//	ITypeAdapter iTypeAdapter;
+		String type;
+		public String convert(String value, boolean isRandomized) {
+			if (!isRandomized) {
+				return getAdapter(type).convert(value);
+			}
+			else {
+				ITypeAdapter adapter = getAdapter(type);
+				if(isValueCorrectness(""));
+			}
+			return null;
+		}
+		
+		boolean isValueCorrectness(String value) {
+			//match regex
+			//
+			String[] values = value.split(":");
+			if (values.length == 2) // 2 values 
+			{
+				// is correctness values[0]
+			}
+			return false;
+			
+		}
+		
+		public ITypeAdapter getAdapter(String type){
+			if(JavaTypeHelper.isJavaType(type) == false){
+				type = USER_TYPE;
+			}
+			switch(type){
+			case JavaTypeHelper.TYPE_NAME_BOOLEAN:
+				return new BooleanTypeAdapter();
+			case JavaTypeHelper.TYPE_NAME_BYTE:
+				return new ByteTypeAdapter();
+			case JavaTypeHelper.TYPE_NAME_CHAR:
+				return new CharTypeAdapter();
+			case JavaTypeHelper.TYPE_NAME_DOUBLE:
+				return new DoubleTypeAdapter();
+			case JavaTypeHelper.TYPE_NAME_FLOAT:
+				return new FloatTypeAdapter();
+			case JavaTypeHelper.TYPE_NAME_INT:
+				return new IntTypeAdapter();
+			case JavaTypeHelper.TYPE_NAME_LONG:
+				return new LongTypeAdapter();
+			case JavaTypeHelper.TYPE_NAME_SHORT:
+				return new ShortTypeAdapter();
+			case JavaTypeHelper.TYPE_NAME_STRING:
+				return new StringTypeAdapter();
+			default:
+				return new UserTypeTypeAdapter(type);
+			}
+		}
+	}
 
 	public ITypeAdapter getAdapter(String type){
 		if(JavaTypeHelper.isJavaType(type) == false){
