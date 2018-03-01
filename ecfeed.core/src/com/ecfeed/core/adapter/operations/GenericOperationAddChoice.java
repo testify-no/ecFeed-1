@@ -95,6 +95,7 @@ public class GenericOperationAddChoice extends BulkOperation {
 			return new GenericOperationRemoveChoice(fChoicesParentNode, fChoice, fAdapterProvider, false);
 		}
 
+		//TODO 13
 		private void validateChoiceValue(ChoiceNode choice) throws ModelOperationException {
 
 			if (choice.isAbstract() == false) {
@@ -104,7 +105,7 @@ public class GenericOperationAddChoice extends BulkOperation {
 				String newValue = adapter.convert(choice.getValueString());
 
 				if(newValue == null){
-					ModelOperationException.report(Messages.PARTITION_VALUE_PROBLEM(choice.getValueString()));
+					ModelOperationException.report(Messages.PARTITION_VALUE_PROBLEM(choice.getValueString()+"W"));
 				}
 			}
 			else {
