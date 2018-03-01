@@ -31,13 +31,22 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
+import org.eclipse.jdt.core.dom.BodyDeclaration;
+import org.eclipse.jdt.core.dom.ChildListPropertyDescriptor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.EnumConstantDeclaration;
 import org.eclipse.jdt.core.dom.EnumDeclaration;
+import org.eclipse.jdt.core.dom.ImportDeclaration;
+import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.text.edits.MalformedTreeException;
 import org.eclipse.text.edits.TextEdit;
+import org.eclipse.text.edits.UndoEdit;
+import org.w3c.dom.NodeList;
 
 import com.ecfeed.android.external.AndroidMethodImplementerExt;
 import com.ecfeed.android.external.AndroidUserClassImplementerExt;
@@ -96,7 +105,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 		}
 		else{
 			List<ChoiceNode> unimplemented = unimplementedChoices(parameterNode.getLeafChoices());
-			implementChoicesDefinitions(unimplemented);
+			implementChoiceNodes(unimplemented);
 			for(ChoiceNode choice : unimplemented){
 				CachedImplementationStatusResolver.clearCache(choice);
 			}
@@ -132,27 +141,45 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 	}
 
 	@Override
-	protected boolean implement(ChoiceNode choiceNode) throws CoreException, EcException{
+	protected boolean implement(ChoiceNode choiceNode) throws CoreException, EcException {
+
 		AbstractParameterNode parameter = choiceNode.getParameter();
-		if(parameterDefinitionImplemented(parameter) == false){
-			if(parameterDefinitionImplementable(parameter)){
-				implementParameterDefinition(parameter, new HashSet<String>(Arrays.asList(new String[]{choiceNode.getValueString()})));
-			}
-			else{
-				return false;
-			}
+
+		if (!parameterDefinitionImplemented(parameter)) {
+			return implementParameterWithChildChoice(parameter, choiceNode);
 		}
-		else{
-			if(choiceNode.isAbstract()){
-				implementChoicesDefinitions(unimplementedChoices(choiceNode.getLeafChoices()));
-			}
-			else{
-				if(isImplementableNode(choiceNode) && getImplementationStatus(choiceNode) != EImplementationStatus.IMPLEMENTED){
-					implementChoicesDefinitions(Arrays.asList(new ChoiceNode[]{choiceNode}));
-				}
-			}
-		}
+
+		implementChoiceWithChildren(choiceNode);
 		return true;
+	}
+
+	private boolean implementParameterWithChildChoice(
+			AbstractParameterNode parameter,
+			ChoiceNode choiceNode) throws CoreException, EcException {
+
+		if (parameterDefinitionImplementable(parameter)) {
+			implementParameterDefinition(
+					parameter, 
+					new HashSet<String>(Arrays.asList(new String[]{choiceNode.getValueString()})));
+
+			return true;
+		}
+
+		return false;
+	}
+
+	private void implementChoiceWithChildren(ChoiceNode choiceNode) throws CoreException, EcException {
+
+		if (choiceNode.isAbstract()) {
+			implementChoiceNodes(unimplementedChoices(choiceNode.getLeafChoices()));
+			return;
+		}
+
+		if (isImplementableNode(choiceNode) 
+				&& getImplementationStatus(choiceNode) != EImplementationStatus.IMPLEMENTED) {
+
+			implementChoiceNodes(Arrays.asList(new ChoiceNode[]{choiceNode}));
+		}
 	}
 
 	@Override
@@ -210,66 +237,176 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 				EclipsePackageFragmentGetter.getPackageFragment(packageName, fFileInfoProvider);
 		ICompilationUnit unit = packageFragment.getCompilationUnit(unitName);
 		unit.createType(enumDefinitionContent(node, fields), null, false, null);
-		unit.becomeWorkingCopy(null);
-		unit.commitWorkingCopy(true, null);
+		setWorkingCopy(unit);
 	}
 
 	@Override
 	protected void implementChoiceDefinition(ChoiceNode node) throws CoreException, EcException {
-		if(isImplementableNode(node) && getImplementationStatus(node) != EImplementationStatus.IMPLEMENTED){
-			implementChoicesDefinitions(Arrays.asList(new ChoiceNode[]{node}));
+
+		if (isImplementableNode(node) && getImplementationStatus(node) != EImplementationStatus.IMPLEMENTED) {
+			implementChoiceNodes(Arrays.asList(new ChoiceNode[]{node}));
 		}
 	}
 
-	protected void implementChoicesDefinitions(List<ChoiceNode> nodes) throws CoreException, EcException {
+	private void implementChoiceNodes(List<ChoiceNode> choiceNodes) throws CoreException, EcException {
+
+		try {
+			test1();
+		} catch (MalformedTreeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadLocationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		refreshWorkspace();
-		AbstractParameterNode parent = getParameter(nodes);
-		if(parent == null){
+
+		AbstractParameterNode parent = getParameter(choiceNodes);
+		if (parent == null) {
 			return;
 		}
-		String typeName = parent.getType();
-		if(parameterDefinitionImplemented(parent) == false){
+
+		if (!parameterDefinitionImplemented(parent)) {
 			implementParameterDefinition(parent);
 		}
-		IType enumType = getJavaProject().findType(typeName);
-		ICompilationUnit iUnit = enumType.getCompilationUnit();
-		CompilationUnit unit = getCompilationUnit(enumType);
 
-		addEnumItems(unit, typeName, nodes, enumType);
+		String enumTypeName = parent.getType();		
+		IType enumType = getJavaProject().findType(enumTypeName);
+		ICompilationUnit compilationUnit = enumType.getCompilationUnit();
+
+		addEnumItemsFromChoiceNodes(choiceNodes, enumType, enumTypeName);
+
+		refresh(enumType, compilationUnit);
+	}
+
+	private void test1() throws MalformedTreeException, BadLocationException {
+		
+		Document document = new Document("public enum Enum1 { V1(\"V1\"); Enum1(String value) {} }");
+		ASTParser parser = ASTParser.newParser(AST.JLS3);
+		parser.setSource(document.get().toCharArray());
+		CompilationUnit compilationUnit = (CompilationUnit) parser.createAST(null);
+		// XYX
+
+		EnumDeclaration foundEnumDeclaration = null;
+		
+		for (Object object : compilationUnit.types()) {
+			AbstractTypeDeclaration abstractTypeDeclaration = (AbstractTypeDeclaration)object;
+			if (abstractTypeDeclaration.getName().toString().equals("Enum1") && abstractTypeDeclaration instanceof EnumDeclaration) {
+				foundEnumDeclaration = (EnumDeclaration)abstractTypeDeclaration;
+			}
+		}
+		
+		List<EnumConstantDeclaration> enumConstantDeclarations = foundEnumDeclaration.enumConstants();
+		EnumConstantDeclaration foundEnumConstantDeclaration = null;
+		
+		for (EnumConstantDeclaration enumConstantDeclaration : enumConstantDeclarations) {
+			foundEnumConstantDeclaration = enumConstantDeclaration;
+		}
+		
+		System.out.println("enumConstantDeclaration:" + foundEnumConstantDeclaration);
+
+		@SuppressWarnings("unchecked")
+		//org.eclipse.jdt.core.dom.ASTNode.NodeList childListPropertyDescriptor = 
+		List childListPropertyDescriptors =
+				(List)foundEnumConstantDeclaration.getStructuralProperty(
+						EnumConstantDeclaration.ARGUMENTS_PROPERTY);
+		
+		ASTNode foundAstNode = null;
+		for (Object descriptor : childListPropertyDescriptors) {
+			foundAstNode = (ASTNode)descriptor;
+		}
+
+		System.out.println("ASTNode:" + foundAstNode);
+		
+//		new ASTNode
+		
+//		Class<?> enclosingClass = childListPropertyDescriptor.getClass().getEnclosingClass();
+//		if (enclosingClass != null) {
+//		  System.out.println(enclosingClass.getName());
+//		} else {
+//		  System.out.println(getClass().getName());
+//		}		
+		
+		System.out.println("XYX 2 childListPropertyDescriptor: " + childListPropertyDescriptors);
+		
+		System.out.println("XYX 10");
+		
+//		List<BodyDeclaration> bodyDeclarations = enumDeclaration.bodyDeclarations();
+//		
+//		for (BodyDeclaration bodyDeclaration : bodyDeclarations) {
+//			System.out.println("body declaration:" + bodyDeclaration);
+//		}
+//		
+//		List<BodyDeclaration> modifiers = enumDeclaration.modifiers();
+//
+//		for (BodyDeclaration bodyDeclaration : modifiers) {
+//			System.out.println("body declaration:" + bodyDeclaration);
+//		}
+//		
+//		System.out.println("XYX");
+//		
+//		compilationUnit.recordModifications();
+//		AST ast = compilationUnit.getAST();
+//		ImportDeclaration id = ast.newImportDeclaration();
+//		id.setName(ast.newName(new String[] {"java", "util", "Set"}));
+//		compilationUnit.imports().add(id); // add import declaration at end
+//		TextEdit edits = compilationUnit.rewrite(document, null);
+//		UndoEdit undo = edits.apply(document);		
+	}
+	
+	private void refresh(IType enumType, ICompilationUnit iUnit) throws CoreException, JavaModelException {
 
 		enumType.getResource().refreshLocal(IResource.DEPTH_ONE, null);
-		iUnit.becomeWorkingCopy(null);
-		iUnit.commitWorkingCopy(true, null);
+		setWorkingCopy(iUnit);
 		refreshWorkspace();
 	}
 
-	@SuppressWarnings("unchecked")
-	private void addEnumItems(
-			CompilationUnit unit,
-			String typeName, 
-			List<ChoiceNode> nodes,
-			IType enumType) throws CoreException {
+	private void setWorkingCopy(ICompilationUnit compilationUnit) throws JavaModelException {
 
-		EnumDeclaration enumDeclaration = getEnumDeclaration(unit, typeName);
-		if (enumDeclaration == null){
+		compilationUnit.becomeWorkingCopy(null);
+		compilationUnit.commitWorkingCopy(true, null);
+	}
+	
+	private void addEnumItemsFromChoiceNodes(
+			List<ChoiceNode> choiceNodes,
+			IType enumType,
+			String enumTypeName) throws CoreException {
+
+		CompilationUnit compilationUnit = getCompilationUnit(enumType);
+
+		EnumDeclaration enumDeclaration = getEnumDeclaration(compilationUnit, enumTypeName); // XYX
+		if (enumDeclaration == null) {
 			return;
 		}
 
-		List<String> enumItemNames = new ArrayList<String>();
+		addChoicesToEnum(choiceNodes, enumDeclaration, compilationUnit);
 
+		saveChanges(compilationUnit, enumType.getResource().getLocation());
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void addChoicesToEnum(
+			List<ChoiceNode> nodes,
+			EnumDeclaration enumDeclaration,
+			CompilationUnit compilationUnit) {
+		
+		EnumConstantDeclaration enumConstant = compilationUnit.getAST().newEnumConstantDeclaration();
+		List<String> enumItemNames = new ArrayList<String>();
+		
 		for (ChoiceNode node : nodes) {
-			EnumConstantDeclaration constant = unit.getAST().newEnumConstantDeclaration();
+			
 			String enumItemName = node.getValueString();
 
 			if (enumItemNames.contains(enumItemName)) {
 				continue;
 			}
-			constant.setName(unit.getAST().newSimpleName(enumItemName));
-			enumDeclaration.enumConstants().add(constant);
+			
+			enumConstant.setName(compilationUnit.getAST().newSimpleName(enumItemName));
+//			enumConstant.setProperty(propertyName, data);
+			enumDeclaration.enumConstants().add(enumConstant);
 			enumItemNames.add(enumItemName);
 		}
-
-		saveChanges(unit, enumType.getResource().getLocation());
 	}
 
 	@Override
@@ -312,79 +449,62 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 	}
 
 	@Override
-	protected boolean isImplementableNode(ChoiceNode node) {
-		
-		if (node.isAbstract()) {
-			return hasImplementableNode(node.getChoices());
-		}
-		
-		if (parameterDefinitionImplemented(node.getParameter())) {
-			return isChoiceImplementable(node);
+	protected boolean isImplementableNode(ChoiceNode choiceNode) {
+
+		if (choiceNode.getName().equals("V2")) {
+			System.out.println("XYX - V2");
 		}
 
-		if (!parameterDefinitionImplementable(node.getParameter())) {
+		if (choiceNode.isAbstract()) {
+			return hasImplementableNode(choiceNode.getChoices());
+		}
+
+		if (parameterDefinitionImplemented(choiceNode.getParameter())) {
+			return isChoiceImplementable(choiceNode);
+		}
+
+		if (!parameterDefinitionImplementable(choiceNode.getParameter())) {
 			return false;
 		}
 
-		return JavaLanguageHelper.isValidJavaIdentifier(node.getValueString());
+		return JavaLanguageHelper.isValidJavaIdentifier(choiceNode.getValueString());
 	}
 
 	private boolean isChoiceImplementable(ChoiceNode node) {
-		
+
 		try{
 			String stParameterType = node.getParameter().getType();
 			IType parameterType = getJavaProject().findType(stParameterType);
-			
+
 			if (!parameterType.isEnum()) {
 				return false;
 			}
-			
-			if (hasConstructor(parameterType) && (!hasParameterlessConstructor(parameterType))) {
+
+			if (!hasImplementableConstructor(parameterType)) {
 				return false;
 			}
-			
+
 			return JavaLanguageHelper.isValidJavaIdentifier(node.getValueString());
-			
+
 		} catch(CoreException e) {
-			
+
 			return false;
 		}
 	}
 
-	private static boolean hasConstructor(IType parameterType) throws JavaModelException {
-		
-		for (IMethod method : parameterType.getMethods()) {
-			if (method.isConstructor()) {
-				return true;
-			}
+	private static boolean hasImplementableConstructor(IType parameterType) throws JavaModelException {
+
+		JavaModelAnalyser.ClassConstructorsType classConstructorsType = 
+				JavaModelAnalyser.analyzeConstructors(parameterType);
+
+		if (classConstructorsType == JavaModelAnalyser.ClassConstructorsType.NO_CONSTRUCTOR
+				|| classConstructorsType == JavaModelAnalyser.ClassConstructorsType.CONSTRUCTOR_WITHOUT_PARAMETERS
+				|| classConstructorsType == JavaModelAnalyser.ClassConstructorsType.CONSTRUCTOR_WITH_STRING_ONLY) {
+
+			return true;
 		}
-		
+
 		return false;
-	}
-	
-	private static boolean hasParameterlessConstructor(IType parameterType) throws JavaModelException {
-		
-		for (IMethod method : parameterType.getMethods()) {
-			
-			if (isParameterlessConstructor(method)) {
-				return true;
-			}
-		}
-		
-		return false;
-	}
-	
-	private static boolean isParameterlessConstructor(IMethod method) throws JavaModelException {
-		
-		if (!method.isConstructor()) {
-			return false;
-		}
-		
-		if (method.getNumberOfParameters() != 0) {
-			return false;
-		}
-		
-		return true;
 	}
 
 	@Override
