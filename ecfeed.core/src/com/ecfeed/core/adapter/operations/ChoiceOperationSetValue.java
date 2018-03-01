@@ -22,6 +22,7 @@ import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.SystemLogger;
+//import com.ecfeed.core.utils.ValueFieldHelper;
 
 public class ChoiceOperationSetValue extends AbstractModelOperation {
 
@@ -72,19 +73,35 @@ public class ChoiceOperationSetValue extends AbstractModelOperation {
 		return new ReverseOperation();
 	}
 
-	@Override
-	public String toString() {
+	//	private String validateChoiceValue(String type, String value) {
+	//
+	//		if (value.length() > AdapterConstants.MAX_PARTITION_VALUE_STRING_LENGTH) {
+	//			return null;
+	//		}
+	//
+	//		return fAdapterProvider.getAdapter(type).convert(value);
+	//	}
 
-		return "setValue[" + fTarget + "](" + fNewValue + ")";
-	}
-
-	private String validateChoiceValue(String type, String value) {
-
+	private String validateChoiceValue(String type, String value) throws ModelOperationException {
 		if (value.length() > AdapterConstants.MAX_PARTITION_VALUE_STRING_LENGTH) {
 			return null;
 		}
 
-		return fAdapterProvider.getAdapter(type).convert(value);
+		if(!fTarget.isRandomizeValue()) {
+			return fAdapterProvider.getAdapter(type).convert(value);
+		}
+		else {
+
+			return fAdapterProvider.getAdapter(type).convert(value);
+			//			return ValueFieldHelper.adapt(type, value, fTarget.isRandomizeValue(), fAdapterProvider);
+
+			//fAdapterProvider;
+			//			/return "nothing";
+		}
+
+		//fTarget.isRandomizeValue()
+
+
 	}
 
 
@@ -157,6 +174,12 @@ public class ChoiceOperationSetValue extends AbstractModelOperation {
 			return new ChoiceOperationSetValue(fTarget, fNewValue, fAdapterProvider);
 		}
 
+	}
+
+
+	@Override
+	public String toString(){
+		return "setValue[" + fTarget + "](" + fNewValue + ")";
 	}
 
 }
