@@ -21,7 +21,7 @@ import com.ecfeed.core.adapter.operations.RootOperationAddNewClass;
 import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.RootNodeHelper;
-import com.ecfeed.ui.common.CommonConstants;
+import com.ecfeed.core.utils.CommonConstants;
 import com.ecfeed.ui.common.ImplementationAdapter;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;

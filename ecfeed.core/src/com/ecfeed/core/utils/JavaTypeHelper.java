@@ -32,6 +32,8 @@ public class JavaTypeHelper {
 	private static final String VALUE_REPRESENTATION_MIN = "MIN_VALUE";
 	public static final String VALUE_REPRESENTATION_POSITIVE_INF = "POSITIVE_INFINITY";
 	public static final String VALUE_REPRESENTATION_NEGATIVE_INF = "NEGATIVE_INFINITY";
+	
+	public static final String DEFAULT_EXPECTED_ENUM_VALUE = "VALUE";	
 
 
 	private static final String[] SUPPORTED_PRIMITIVE_TYPES = new String[]{

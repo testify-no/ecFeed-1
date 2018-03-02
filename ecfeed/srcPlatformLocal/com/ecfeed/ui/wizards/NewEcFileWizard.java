@@ -31,9 +31,9 @@ import org.eclipse.ui.part.FileEditorInput;
 import com.ecfeed.core.model.ModelVersionDistributor;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.serialization.ect.EctSerializer;
+import com.ecfeed.core.utils.CommonConstants;
 import com.ecfeed.core.utils.DiskFileHelper;
 import com.ecfeed.core.utils.StringHelper;
-import com.ecfeed.ui.common.CommonConstants;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.dialogs.DialogHelper;
 

@@ -24,9 +24,9 @@ import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelOperationException;
+import com.ecfeed.core.utils.CommonConstants;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.SystemLogger;
-import com.ecfeed.ui.common.CommonConstants;
 import com.ecfeed.ui.common.EclipseTypeHelper;
 import com.ecfeed.ui.common.Messages;
 

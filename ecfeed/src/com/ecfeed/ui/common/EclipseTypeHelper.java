@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.ecfeed.core.utils.CommonConstants;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.ui.common.JavaCodeEnumHelper;
 

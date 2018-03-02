@@ -23,8 +23,8 @@ import com.ecfeed.core.adapter.java.ChoiceValueParser;
 import com.ecfeed.core.adapter.java.ModelClassLoader;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.MethodParameterNode;
+import com.ecfeed.core.utils.CommonConstants;
 import com.ecfeed.junit.AbstractFrameworkMethod;
-import com.ecfeed.ui.common.CommonConstants;
 
 public class AbstractFrameworkMethodTest {
 

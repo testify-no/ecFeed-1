@@ -22,6 +22,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 
 import com.ecfeed.application.SessionDataStore;
+import com.ecfeed.core.utils.CommonConstants;
 import com.ecfeed.core.utils.SessionAttributes;
 
 public class ImageManager {
