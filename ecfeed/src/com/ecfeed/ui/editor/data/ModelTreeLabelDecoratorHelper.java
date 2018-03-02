@@ -57,7 +57,7 @@ public class ModelTreeLabelDecoratorHelper  {
 					abstractNode,
 					decoratedImagesCache,
 					modelUpdateContext,
-					fileInfoProvider);
+					javaProjectProvider);
 		} catch (Exception e) {
 
 			if (!fErrorReported) {
@@ -74,7 +74,7 @@ public class ModelTreeLabelDecoratorHelper  {
 			AbstractNode abstractNode,
 			Map<List<Image>, Image> decoratedImagesCache,
 			IModelUpdateContext modelUpdateContext,
-			IFileInfoProvider fileInfoProvider) {
+			IJavaProjectProvider javaProjectProvider) {
 
 		List<Image> decorators = 
 				ModelTreeLabelDecoratorHelper.getDecoratorsForNode(
