@@ -58,6 +58,18 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider {
 		public boolean isNullAllowed() {
 			return false;
 		}
+
+		@Override
+		public Object generateValue(String range) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public String generateValueAsString(String range) {
+			// TODO Auto-generated method stub
+			return null;
+		}
 	}
 
 	private class StringTypeAdapter implements ITypeAdapter {
@@ -78,6 +90,18 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider {
 		@Override
 		public boolean isNullAllowed() {
 			return true;
+		}
+
+		@Override
+		public Object generateValue(String range) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public String generateValueAsString(String range) {
+			// TODO Auto-generated method stub
+			return null;
 		}
 	}
 
@@ -111,6 +135,18 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider {
 		@Override
 		public boolean isNullAllowed() {
 			return true;
+		}
+
+		@Override
+		public Object generateValue(String range) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public String generateValueAsString(String range) {
+			// TODO Auto-generated method stub
+			return null;
 		}
 	}
 
@@ -148,6 +184,18 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider {
 		@Override
 		public boolean isNullAllowed() {
 			return false;
+		}
+
+		@Override
+		public Object generateValue(String range) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public String generateValueAsString(String range) {
+			// TODO Auto-generated method stub
+			return null;
 		}
 	}
 
@@ -218,6 +266,18 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider {
 			}
 			return result;
 		}
+
+		@Override
+		public Object generateValue(String range) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public String generateValueAsString(String range) {
+			// TODO Auto-generated method stub
+			return null;
+		}
 	}
 
 	private class DoubleTypeAdapter extends FloatingPointTypeAdapter {
@@ -232,6 +292,18 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider {
 				}
 			}
 			return result;
+		}
+
+		@Override
+		public Object generateValue(String range) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public String generateValueAsString(String range) {
+			// TODO Auto-generated method stub
+			return null;
 		}
 	}
 
@@ -255,6 +327,18 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider {
 			}
 			return result;
 		}
+
+		@Override
+		public Object generateValue(String range) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public String generateValueAsString(String range) {
+			// TODO Auto-generated method stub
+			return null;
+		}
 	}
 
 	private class IntTypeAdapter extends NumericTypeAdapter {
@@ -275,6 +359,18 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider {
 			}
 			return result;
 		}
+
+		@Override
+		public Object generateValue(String range) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public String generateValueAsString(String range) {
+			// TODO Auto-generated method stub
+			return null;
+		}
 	}
 
 	private class LongTypeAdapter extends NumericTypeAdapter {
@@ -289,6 +385,18 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider {
 				}
 			}
 			return result;
+		}
+
+		@Override
+		public Object generateValue(String range) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public String generateValueAsString(String range) {
+			// TODO Auto-generated method stub
+			return null;
 		}
 	}
 
@@ -311,6 +419,18 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider {
 				}
 			}
 			return result;
+		}
+
+		@Override
+		public Object generateValue(String range) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public String generateValueAsString(String range) {
+			// TODO Auto-generated method stub
+			return null;
 		}
 	}
 	

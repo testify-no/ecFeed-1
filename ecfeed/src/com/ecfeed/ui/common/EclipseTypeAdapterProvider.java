@@ -56,7 +56,7 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 			JavaTypeHelper.TYPE_NAME_INT
 	};
 
-	private class BooleanTypeAdapter implements ITypeAdapter{
+	private class BooleanTypeAdapter implements ITypeAdapter<Boolean>{
 		@Override
 		public boolean compatible(String type){
 			return Arrays.asList(TYPES_CONVERTABLE_TO_BOOLEAN).contains(type);
@@ -81,9 +81,20 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 		public boolean isNullAllowed() {
 			return false;
 		}
+
+		@Override
+		public Boolean generateValue(String range) {
+			return null;
+		}
+
+		@Override
+		public String generateValueAsString(String range) {
+			return String.valueOf(generateValue(range));
+		}
+
 	}
 
-	private class StringTypeAdapter implements ITypeAdapter{
+	private class StringTypeAdapter implements ITypeAdapter<String>{
 		@Override
 		public boolean compatible(String type){
 			return Arrays.asList(TYPES_CONVERTABLE_TO_STRING).contains(type);
@@ -102,13 +113,27 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 		public boolean isNullAllowed() {
 			return true;
 		}
+
+		@Override
+		public String generateValue(String range) {
+			return null;
+		}
+
+		@Override
+		public String generateValueAsString(String range) {
+			return String.valueOf(generateValue(range));
+		}
 	}
 
-	private class UserTypeAdapter implements ITypeAdapter{
+	//<<<<<<< HEAD
+	//	private class UserTypeAdapter implements ITypeAdapter{
+	//=======
+	private class UserTypeTypeAdapter<T extends Enum<T>> implements ITypeAdapter<T> {
+		//>>>>>>> c10bced... Prepare edit range values.
 
 		private String fType;
 
-		public UserTypeAdapter(String type){
+		public UserTypeTypeAdapter(String type){
 			fType = type;
 		}
 
@@ -135,9 +160,20 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 		public boolean isNullAllowed() {
 			return true;
 		}
+
+		@Override
+		public T generateValue(String range) {
+			return null;
+		}
+
+		@Override
+		public String generateValueAsString(String range) {
+			return String.valueOf(generateValue(range));
+		}
+
 	}
 
-	private class CharTypeAdapter implements ITypeAdapter{
+	private class CharTypeAdapter implements ITypeAdapter<Character>{
 		@Override
 		public boolean compatible(String type){
 			return Arrays.asList(TYPES_CONVERTABLE_TO_CHAR).contains(type);
@@ -174,9 +210,19 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 		public boolean isNullAllowed() {
 			return false;
 		}
+
+		@Override
+		public Character generateValue(String range) {
+			return null;
+		}
+
+		@Override
+		public String generateValueAsString(String range) {
+			return String.valueOf(generateValue(range));
+		}
 	}
 
-	private abstract class NumericTypeAdapter implements ITypeAdapter{
+	private abstract class NumericTypeAdapter<T extends Number> implements ITypeAdapter<T>{
 
 		private String[] NUMERIC_SPECIAL_VALUES = new String[]{
 				CommonConstants.MAX_VALUE_STRING_REPRESENTATION,
@@ -202,9 +248,13 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 		public boolean isNullAllowed() {
 			return false;
 		}
+		@Override
+		public String generateValueAsString(String range) {
+			return String.valueOf(generateValue(range));
+		}
 	}
 
-	private abstract class FloatingPointTypeAdapter extends NumericTypeAdapter{
+	private abstract class FloatingPointTypeAdapter<T extends Number> extends NumericTypeAdapter<T>{
 		private String[] FLOATING_POINT_SPECIAL_VALUES = new String[]{
 				CommonConstants.POSITIVE_INFINITY_STRING_REPRESENTATION,
 				CommonConstants.NEGATIVE_INFINITY_STRING_REPRESENTATION
@@ -230,7 +280,7 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 		}
 	}
 
-	private class FloatTypeAdapter extends FloatingPointTypeAdapter{
+	private class FloatTypeAdapter extends FloatingPointTypeAdapter<Float>{
 		@Override
 		public String convert(String value){
 			String result = super.convert(value);
@@ -244,9 +294,14 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 			}
 			return result;
 		}
+
+		@Override
+		public Float generateValue(String range) {
+			return null;
+		}
 	}
 
-	private class DoubleTypeAdapter extends FloatingPointTypeAdapter{
+	private class DoubleTypeAdapter extends FloatingPointTypeAdapter<Double>{
 		@Override
 		public String convert(String value){
 			String result = super.convert(value);
@@ -260,9 +315,14 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 			}
 			return result;
 		}
+
+		@Override
+		public Double generateValue(String range) {
+			return null;
+		}
 	}
 
-	private class ByteTypeAdapter extends NumericTypeAdapter{
+	private class ByteTypeAdapter extends NumericTypeAdapter<Byte>{
 		@Override
 		public String convert(String value){
 			String result = super.convert(value);
@@ -283,9 +343,14 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 			}
 			return result;
 		}
+
+		@Override
+		public Byte generateValue(String range) {
+			return null;
+		}
 	}
 
-	private class IntTypeAdapter extends NumericTypeAdapter{
+	private class IntTypeAdapter extends NumericTypeAdapter<Integer>{
 		@Override
 		public String convert(String value){
 			String result = super.convert(value);
@@ -303,9 +368,14 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 			}
 			return result;
 		}
+
+		@Override
+		public Integer generateValue(String range) {
+			return null;
+		}
 	}
 
-	private class LongTypeAdapter extends NumericTypeAdapter{
+	private class LongTypeAdapter extends NumericTypeAdapter<Long>{
 		@Override
 		public String convert(String value){
 			String result = super.convert(value);
@@ -319,9 +389,14 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 			}
 			return result;
 		}
+
+		@Override
+		public Long generateValue(String range) {
+			return null;
+		}
 	}
 
-	private class ShortTypeAdapter extends NumericTypeAdapter{
+	private class ShortTypeAdapter extends NumericTypeAdapter<Short>{
 		@Override
 		public String convert(String value){
 			String result = super.convert(value);
@@ -341,6 +416,11 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 				}
 			}
 			return result;
+		}
+
+		@Override
+		public Short generateValue(String range) {
+			return null;
 		}
 	}
 
@@ -395,7 +475,7 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 			case JavaTypeHelper.TYPE_NAME_STRING:
 				return new StringTypeAdapter();
 			default:
-				return new UserTypeAdapter(type);
+				return new UserTypeTypeAdapter(type);
 			}
 		}
 	}
@@ -424,7 +504,7 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 		case JavaTypeHelper.TYPE_NAME_STRING:
 			return new StringTypeAdapter();
 		default:
-			return new UserTypeAdapter(type);
+			return new UserTypeTypeAdapter(type);
 		}
 	}
 }

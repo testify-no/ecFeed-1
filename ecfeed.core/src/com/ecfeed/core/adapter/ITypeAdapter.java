@@ -10,10 +10,12 @@
 
 package com.ecfeed.core.adapter;
 
-public interface ITypeAdapter {
+public interface ITypeAdapter<T> {
 	public boolean compatible(String type);
 	// returns null if conversion is not possible
 	public String convert(String value);
 	public String defaultValue();
 	public boolean isNullAllowed();
+	public T generateValue(String range);
+	public String generateValueAsString(String range); //we could insert default body in that metod after migrate to java 8
 }
