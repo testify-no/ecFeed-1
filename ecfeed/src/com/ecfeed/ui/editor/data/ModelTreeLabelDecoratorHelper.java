@@ -38,6 +38,7 @@ import com.ecfeed.ui.modelif.IModelUpdateContext;
 public class ModelTreeLabelDecoratorHelper  {
 
 	static int fImageCreationCounter = 0;
+	static boolean fErrorReported = false;
 
 	public static Image decorateImageOfAbstractNode(
 			Image imageToDecorate, 
@@ -49,6 +50,31 @@ public class ModelTreeLabelDecoratorHelper  {
 		if (ApplicationContext.isApplicationTypeRemoteRap()) {
 			return imageToDecorate;
 		}
+
+		try {
+			return decorateImageOfAbstractNodeIntr(
+					imageToDecorate, 
+					abstractNode,
+					decoratedImagesCache,
+					modelUpdateContext,
+					fileInfoProvider);
+		} catch (Exception e) {
+
+			if (!fErrorReported) {
+				SystemLogger.logCatch("Can not decorate image. Icon implementation status etc. will not be available.");
+				fErrorReported = true;
+			}
+
+			return imageToDecorate;
+		}
+	}
+
+	public static Image decorateImageOfAbstractNodeIntr(
+			Image imageToDecorate, 
+			AbstractNode abstractNode,
+			Map<List<Image>, Image> decoratedImagesCache,
+			IModelUpdateContext modelUpdateContext,
+			IFileInfoProvider fileInfoProvider) {
 
 		List<Image> decorators = 
 				ModelTreeLabelDecoratorHelper.getDecoratorsForNode(
