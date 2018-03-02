@@ -13,7 +13,6 @@ package com.ecfeed.ui.editor;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.eclipse.core.commands.IParameter;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
@@ -23,6 +22,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import com.ecfeed.core.model.AbstractNode;
@@ -33,7 +33,6 @@ import com.ecfeed.ui.common.utils.SwtObjectHelper;
 import com.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.ecfeed.ui.modelif.ChoiceInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
-import com.ecfeed.ui.modelif.MethodParameterInterface;
 
 public class ChoiceDetailsPage extends BasicDetailsPage {
 
@@ -47,6 +46,8 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 	private AbstractCommentsSection fCommentsSection;
 	
 	private Button fRandomizeCheckbox;
+	
+	private Label fValueLabel;
 	
 	public ChoiceDetailsPage(
 			ModelMasterSection masterSection, 
@@ -126,7 +127,7 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		}
 		items.add(fChoiceIf.getValue());
 		fValueCombo.setItems(items.toArray(new String[]{}));
-		setValueComboText(choiceNode);
+		setValueComboText(choiceNode);		
 		fValueCombo.addSelectionListener(new ValueSelectedListener());
 		fValueCombo.addFocusListener(new ValueFocusLostListener());
 
@@ -135,15 +136,29 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		} else {
 			fValueCombo.setEnabled(true);
 		}
-		
-		
 		fRandomizeCheckbox.setSelection(choiceNode.isRandomizeValue());
 		fRandomizeCheckbox.setEnabled(isRandomizeCheckboxEnabled());
-
+		updateValueLabel(choiceNode);
+		
 
 		fAttributesComposite.layout();
 	}
 	
+	private void updateValueLabel(ChoiceNode choiceNode) {
+		String type = fChoiceIf.getParameter().getType();
+		boolean isRandomizedValue = choiceNode.isRandomizeValue();
+
+		if (isRandomizedValue) {
+			if (type.equals(JavaTypeHelper.TYPE_NAME_STRING)) {
+				fValueLabel.setText("Regex");
+			} else {
+				fValueLabel.setText("Range");
+			}
+		} else {
+			fValueLabel.setText("Value");
+		}
+	}
+
 	private boolean isRandomizeCheckboxEnabled() {
 		String typeName = fChoiceIf.getParameter().getType();
 		return !isChoiceNodeAbstract() && isCorrectableType(typeName);
@@ -186,7 +201,7 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 						fAttributesComposite, "Randomize value", new RandomizedApplier());
 		SwtObjectHelper.setHorizontalSpan(fRandomizeCheckbox, 3);
 		
-		getFormObjectToolkit().createLabel(fAttributesComposite, "Value");
+		fValueLabel = getFormObjectToolkit().createLabel(fAttributesComposite, "Value");
 		getFormObjectToolkit().paintBorders(fAttributesComposite);
 	}
 	
@@ -196,7 +211,35 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		public void applyValue() {
 			fChoiceIf.setRandomize(fRandomizeCheckbox.getSelection());
 			fRandomizeCheckbox.setSelection(fChoiceIf.isRandomize());
+			updateValueLabel(getSelectedChoice());
+			switchValueOnThefly();
 		}
+	}
+	
+	private void switchValueOnThefly() {
+		boolean isRandomized = fChoiceIf.isRandomize();
+		String fValueComboText = fValueCombo.getText();
+		String type = fChoiceIf.getParameter().getType();
+		if (!type.equals(JavaTypeHelper.TYPE_NAME_STRING)) {
+			if (isRandomized) {
+				fValueComboText = convertFromValueToRange(fValueComboText);
+			} else {
+				fValueComboText = convertFromRangeToValue(fValueComboText);
+			}
+			fValueCombo.setText(fValueComboText);
+			setValueComboToModel();
+		}
+		//refresh maybe?
+	}
+	
+	public static final String DELIMITER = ":";
+	
+	private String convertFromValueToRange(String value) {
+		return value+DELIMITER+value;
+	}
+	
+	private String convertFromRangeToValue(String value) {
+		return value.split(DELIMITER)[0];
 	}
 	
 	@Override
@@ -227,7 +270,6 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		public void focusLost(FocusEvent e) {
 			setValueComboToModel();
 		}
-
 	}
 
 	private void setValueComboToModel() {
