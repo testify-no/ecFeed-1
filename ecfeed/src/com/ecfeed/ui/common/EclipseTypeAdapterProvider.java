@@ -11,6 +11,7 @@
 package com.ecfeed.ui.common;
 
 import java.util.Arrays;
+import java.util.concurrent.ThreadLocalRandom;
 
 import nl.flotsam.xeger.Xeger;
 
@@ -22,6 +23,9 @@ import com.ecfeed.core.utils.StringHelper;
 
 public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 
+	//TODO, refactor, set all static fields to one container-class
+	public static final String DELIMITER = ":";
+	
 	private final String USER_TYPE = "USER_TYPE";
 	private final String[] TYPES_CONVERTABLE_TO_BOOLEAN = new String[]{
 			JavaTypeHelper.TYPE_NAME_STRING
@@ -86,7 +90,7 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 
 		@Override
 		public Boolean generateValue(String range) {
-			return null;
+			return ThreadLocalRandom.current().nextBoolean();
 		}
 
 		@Override
@@ -214,8 +218,8 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 		}
 
 		@Override
-		public Character generateValue(String range) {
-			return null;
+		public Character generateValue(String regex) {
+			return new Xeger(regex).generate().charAt(0);
 		}
 
 		@Override
@@ -223,6 +227,8 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 			return String.valueOf(generateValue(range));
 		}
 	}
+	
+
 
 	private abstract class NumericTypeAdapter<T extends Number> implements ITypeAdapter<T>{
 
@@ -253,6 +259,14 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 		@Override
 		public String generateValueAsString(String range) {
 			return String.valueOf(generateValue(range));
+		}
+		
+		protected final int getLower(String range) {
+			return Integer.parseInt(range.split(DELIMITER)[0]);
+		}
+		
+		protected final int getUpper(String range) {
+			return Integer.parseInt(range.split(DELIMITER)[1]);
 		}
 	}
 
@@ -299,7 +313,9 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 
 		@Override
 		public Float generateValue(String range) {
-			return null;
+			int min = getLower(range);
+			int max = getUpper(range);
+			return ThreadLocalRandom.current().nextFloat() * (max - min) + min;
 		}
 	}
 
@@ -320,7 +336,7 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 
 		@Override
 		public Double generateValue(String range) {
-			return null;
+			return ThreadLocalRandom.current().nextDouble(getLower(range),getUpper(range));
 		}
 	}
 
@@ -348,7 +364,10 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 
 		@Override
 		public Byte generateValue(String range) {
-			return null;
+			byte[] bytes = new byte[1];
+			ThreadLocalRandom.current().nextBytes(bytes);
+			return bytes[0];
+			//In Java 8: SecureRandom.getInstanceStrong().nextBytes(bytes);
 		}
 	}
 
@@ -373,7 +392,7 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 
 		@Override
 		public Integer generateValue(String range) {
-			return null;
+			return ThreadLocalRandom.current().nextInt(getLower(range),getUpper(range));
 		}
 	}
 
@@ -394,7 +413,7 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 
 		@Override
 		public Long generateValue(String range) {
-			return null;
+			return ThreadLocalRandom.current().nextLong(getLower(range),getUpper(range));
 		}
 	}
 
@@ -422,7 +441,7 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 
 		@Override
 		public Short generateValue(String range) {
-			return null;
+			return (short)ThreadLocalRandom.current().nextInt(getLower(range),getUpper(range));
 		}
 	}
 
