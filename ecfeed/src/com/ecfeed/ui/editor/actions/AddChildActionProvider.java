@@ -300,7 +300,7 @@ public class AddChildActionProvider {
 			}
 
 		}
-
+		
 		public AddChoiceAction(IFileInfoProvider fileInfoProvider, boolean selectChild){
 			super(ADD_PARTITION_ACTION_ID, ADD_PARTITION_ACTION_NAME, fViewer, fContext);
 			fParentIf = new ChoicesParentInterface(fContext, fileInfoProvider);
@@ -323,6 +323,7 @@ public class AddChildActionProvider {
 			setOwnNode(selectedNode, fParentIf);
 
 			AbstractNode node = fParentIf.addNewChoice();
+			
 			if (fSelectChild) {
 				select(node);
 			} else {

@@ -44,6 +44,14 @@ public class MethodOperationRemoveTestCase extends AbstractModelOperation {
 				public boolean compatible(String type) {
 					return true;
 				}
+				@Override
+				public Object generateValue(String range) {
+					return null;
+				}
+				@Override
+				public String generateValueAsString(String range) {
+					return null;
+				}
 			};
 		}
 
