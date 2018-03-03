@@ -184,7 +184,11 @@ public class ChoiceNode extends ChoicesParentNode{
 	}
 
 	public boolean isAbstract(){
-		return getChoices().size() != 0;
+		boolean isAbstract = getChoices().size() != 0;
+		if (isAbstract) {
+			setRandomizeValue(false);
+		}
+		return isAbstract;
 	}
 
 	public boolean isMatchIncludingParents(ChoiceNode choice) {

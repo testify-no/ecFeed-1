@@ -46,12 +46,10 @@ public class MethodOperationRemoveTestCase extends AbstractModelOperation {
 				}
 				@Override
 				public Object generateValue(String range) {
-					// TODO Auto-generated method stub
 					return null;
 				}
 				@Override
 				public String generateValueAsString(String range) {
-					// TODO Auto-generated method stub
 					return null;
 				}
 			};
