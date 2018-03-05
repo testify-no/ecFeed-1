@@ -32,6 +32,7 @@ import static com.ecfeed.core.serialization.ect.SerializationConstants.TEST_PARA
 import static com.ecfeed.core.serialization.ect.SerializationConstants.EXPECTED_PARAMETER_NODE_NAME;
 import static com.ecfeed.core.serialization.ect.SerializationConstants.TYPE_NAME_ATTRIBUTE;
 import static com.ecfeed.core.serialization.ect.SerializationConstants.VALUE_ATTRIBUTE;
+import static com.ecfeed.core.serialization.ect.SerializationConstants.NODE_IS_RADOMIZED_ATTRIBUTE;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -608,7 +609,11 @@ public abstract class XomAnalyser {
 		String name = getElementName(element);
 		String value = getAttributeValue(element, VALUE_ATTRIBUTE);
 
+		boolean isRandomized = getIsRandomizedValue(element, NODE_IS_RADOMIZED_ATTRIBUTE);
+		
+		
 		ChoiceNode choice = new ChoiceNode(name, value);
+		choice.setRandomizeValue(isRandomized);
 		choice.setDescription(parseComments(element));
 
 		for (Element child : getIterableChildren(element)) {
@@ -690,6 +695,14 @@ public abstract class XomAnalyser {
 		}
 		return fWhiteCharConverter.decode(value);
 	}
+	
+	protected boolean getIsRandomizedValue(Element element, String attributeName) throws ParserException {
+		String isRandomizedValue = element.getAttributeValue(attributeName);
+		if (isRandomizedValue == null) {
+			ParserException.report(Messages.MISSING_ATTRIBUTE(element, attributeName));
+		}
+		return Boolean.parseBoolean(fWhiteCharConverter.decode(isRandomizedValue));
+	}
 
 	protected EStatementRelation getRelation(String relationName) throws ParserException {
 
@@ -763,6 +776,12 @@ public abstract class XomAnalyser {
 
 	private static String getValueFromPropertyElem(Element property) {
 		return property.getAttributeValue(SerializationConstants.PROPERTY_ATTRIBUTE_VALUE);
+	}	
+	
+	
+	// TODO 33
+	private static String getIsRandomizedFromPropertyElem(Element property) {
+		return property.getAttributeValue(SerializationConstants.NODE_IS_RADOMIZED_ATTRIBUTE);
 	}	
 
 }
