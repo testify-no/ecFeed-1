@@ -102,13 +102,11 @@ public class ChoiceOperationSetValue extends AbstractModelOperation {
 	}
 
 	@Override
-	//TODO 12
-	//here first
 	public void execute() throws ModelOperationException {
 		//
 		String convertedValue = validateChoiceValue(fTarget.getParameter().getType(), fNewValue);
 		if(convertedValue == null){
-			ModelOperationException.report(Messages.PARTITION_VALUE_PROBLEM(fNewValue+"q"));
+			ModelOperationException.report(Messages.PARTITION_VALUE_PROBLEM(fNewValue));
 		}
 		fTarget.setValueString(convertedValue);
 		adaptParameter(fTarget.getParameter());

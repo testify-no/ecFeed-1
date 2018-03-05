@@ -777,11 +777,4 @@ public abstract class XomAnalyser {
 	private static String getValueFromPropertyElem(Element property) {
 		return property.getAttributeValue(SerializationConstants.PROPERTY_ATTRIBUTE_VALUE);
 	}	
-	
-	
-	// TODO 33
-	private static String getIsRandomizedFromPropertyElem(Element property) {
-		return property.getAttributeValue(SerializationConstants.NODE_IS_RADOMIZED_ATTRIBUTE);
-	}	
-
 }
