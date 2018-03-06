@@ -31,22 +31,13 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.AST;
-import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
-import org.eclipse.jdt.core.dom.BodyDeclaration;
-import org.eclipse.jdt.core.dom.ChildListPropertyDescriptor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.EnumConstantDeclaration;
 import org.eclipse.jdt.core.dom.EnumDeclaration;
-import org.eclipse.jdt.core.dom.ImportDeclaration;
-import org.eclipse.jface.text.BadLocationException;
-import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
-import org.eclipse.text.edits.MalformedTreeException;
 import org.eclipse.text.edits.TextEdit;
-import org.eclipse.text.edits.UndoEdit;
-import org.w3c.dom.NodeList;
 
 import com.ecfeed.android.external.AndroidMethodImplementerExt;
 import com.ecfeed.android.external.AndroidUserClassImplementerExt;
@@ -73,10 +64,12 @@ import com.ecfeed.core.utils.JavaLanguageHelper;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.PackageClassHelper;
 import com.ecfeed.core.utils.SystemLogger;
+import com.ecfeed.core.utils.TextFileHelper;
 import com.ecfeed.ui.common.utils.EclipsePackageFragmentGetter;
 import com.ecfeed.ui.common.utils.EclipseProjectHelper;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.common.utils.JavaUserClassImplementer;
+import com.ecfeed.ui.common.utils.SourceCodeTextImplementer;
 
 public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 
@@ -250,16 +243,6 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 
 	private void implementChoiceNodes(List<ChoiceNode> choiceNodes) throws CoreException, EcException {
 
-		try {
-			test1();
-		} catch (MalformedTreeException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (BadLocationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 		refreshWorkspace();
 
 		AbstractParameterNode parent = getParameter(choiceNodes);
@@ -271,90 +254,42 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 			implementParameterDefinition(parent);
 		}
 
-		String enumTypeName = parent.getType();		
+		String enumTypeName = parent.getType();
 		IType enumType = getJavaProject().findType(enumTypeName);
 		ICompilationUnit compilationUnit = enumType.getCompilationUnit();
 
-		addEnumItemsFromChoiceNodes(choiceNodes, enumType, enumTypeName);
+		implementEnumItemsFromChoiceNodes(choiceNodes, enumType, compilationUnit);
+	}
 
+	private void implementEnumItemsFromChoiceNodes(
+			List<ChoiceNode> choiceNodes,
+			IType enumType,
+			ICompilationUnit compilationUnit) 
+					throws CoreException, JavaModelException, EcException {
+
+		addEnumItemsFromChoiceNodes(choiceNodes, enumType);
 		refresh(enumType, compilationUnit);
+
+		if (enumHasConstructorWithStringParam(enumType)) {
+			correctEnumFile(choiceNodes, enumType);
+			refreshWorkspace();
+		}
 	}
 
-	private void test1() throws MalformedTreeException, BadLocationException {
-		
-		Document document = new Document("public enum Enum1 { V1(\"V1\"); Enum1(String value) {} }");
-		ASTParser parser = ASTParser.newParser(AST.JLS3);
-		parser.setSource(document.get().toCharArray());
-		CompilationUnit compilationUnit = (CompilationUnit) parser.createAST(null);
-		// XYX
+	private void correctEnumFile(List<ChoiceNode> choiceNodes, IType enumType) throws EcException {
 
-		EnumDeclaration foundEnumDeclaration = null;
-		
-		for (Object object : compilationUnit.types()) {
-			AbstractTypeDeclaration abstractTypeDeclaration = (AbstractTypeDeclaration)object;
-			if (abstractTypeDeclaration.getName().toString().equals("Enum1") && abstractTypeDeclaration instanceof EnumDeclaration) {
-				foundEnumDeclaration = (EnumDeclaration)abstractTypeDeclaration;
-			}
-		}
-		
-		List<EnumConstantDeclaration> enumConstantDeclarations = foundEnumDeclaration.enumConstants();
-		EnumConstantDeclaration foundEnumConstantDeclaration = null;
-		
-		for (EnumConstantDeclaration enumConstantDeclaration : enumConstantDeclarations) {
-			foundEnumConstantDeclaration = enumConstantDeclaration;
-		}
-		
-		System.out.println("enumConstantDeclaration:" + foundEnumConstantDeclaration);
+		String enumFilePath = enumType.getResource().getLocation().toString();
+		String oldFileContent = null;
 
-		@SuppressWarnings("unchecked")
-		//org.eclipse.jdt.core.dom.ASTNode.NodeList childListPropertyDescriptor = 
-		List childListPropertyDescriptors =
-				(List)foundEnumConstantDeclaration.getStructuralProperty(
-						EnumConstantDeclaration.ARGUMENTS_PROPERTY);
-		
-		ASTNode foundAstNode = null;
-		for (Object descriptor : childListPropertyDescriptors) {
-			foundAstNode = (ASTNode)descriptor;
-		}
+		oldFileContent = TextFileHelper.readContent(enumFilePath);
 
-		System.out.println("ASTNode:" + foundAstNode);
-		
-//		new ASTNode
-		
-//		Class<?> enclosingClass = childListPropertyDescriptor.getClass().getEnclosingClass();
-//		if (enclosingClass != null) {
-//		  System.out.println(enclosingClass.getName());
-//		} else {
-//		  System.out.println(getClass().getName());
-//		}		
-		
-		System.out.println("XYX 2 childListPropertyDescriptor: " + childListPropertyDescriptors);
-		
-		System.out.println("XYX 10");
-		
-//		List<BodyDeclaration> bodyDeclarations = enumDeclaration.bodyDeclarations();
-//		
-//		for (BodyDeclaration bodyDeclaration : bodyDeclarations) {
-//			System.out.println("body declaration:" + bodyDeclaration);
-//		}
-//		
-//		List<BodyDeclaration> modifiers = enumDeclaration.modifiers();
-//
-//		for (BodyDeclaration bodyDeclaration : modifiers) {
-//			System.out.println("body declaration:" + bodyDeclaration);
-//		}
-//		
-//		System.out.println("XYX");
-//		
-//		compilationUnit.recordModifications();
-//		AST ast = compilationUnit.getAST();
-//		ImportDeclaration id = ast.newImportDeclaration();
-//		id.setName(ast.newName(new String[] {"java", "util", "Set"}));
-//		compilationUnit.imports().add(id); // add import declaration at end
-//		TextEdit edits = compilationUnit.rewrite(document, null);
-//		UndoEdit undo = edits.apply(document);		
+		String newFileContent = 
+				SourceCodeTextImplementer.correctItemsForEnumWithStringConstructor(
+						enumFilePath, oldFileContent, choiceNodes);
+
+		TextFileHelper.writeContent(enumFilePath, newFileContent);
 	}
-	
+
 	private void refresh(IType enumType, ICompilationUnit iUnit) throws CoreException, JavaModelException {
 
 		enumType.getResource().refreshLocal(IResource.DEPTH_ONE, null);
@@ -367,15 +302,16 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 		compilationUnit.becomeWorkingCopy(null);
 		compilationUnit.commitWorkingCopy(true, null);
 	}
-	
+
 	private void addEnumItemsFromChoiceNodes(
 			List<ChoiceNode> choiceNodes,
-			IType enumType,
-			String enumTypeName) throws CoreException {
+			IType enumType) throws CoreException {
 
 		CompilationUnit compilationUnit = getCompilationUnit(enumType);
 
-		EnumDeclaration enumDeclaration = getEnumDeclaration(compilationUnit, enumTypeName); // XYX
+		EnumDeclaration enumDeclaration = 
+				getEnumDeclaration(compilationUnit, enumType.getFullyQualifiedName());
+
 		if (enumDeclaration == null) {
 			return;
 		}
@@ -384,26 +320,26 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 
 		saveChanges(compilationUnit, enumType.getResource().getLocation());
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	private void addChoicesToEnum(
 			List<ChoiceNode> nodes,
 			EnumDeclaration enumDeclaration,
 			CompilationUnit compilationUnit) {
-		
+
 		EnumConstantDeclaration enumConstant = compilationUnit.getAST().newEnumConstantDeclaration();
 		List<String> enumItemNames = new ArrayList<String>();
-		
+
 		for (ChoiceNode node : nodes) {
-			
+
 			String enumItemName = node.getValueString();
 
 			if (enumItemNames.contains(enumItemName)) {
 				continue;
 			}
-			
+
 			enumConstant.setName(compilationUnit.getAST().newSimpleName(enumItemName));
-//			enumConstant.setProperty(propertyName, data);
+			//			enumConstant.setProperty(propertyName, data);
 			enumDeclaration.enumConstants().add(enumConstant);
 			enumItemNames.add(enumItemName);
 		}
@@ -451,10 +387,6 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 	@Override
 	protected boolean isImplementableNode(ChoiceNode choiceNode) {
 
-		if (choiceNode.getName().equals("V2")) {
-			System.out.println("XYX - V2");
-		}
-
 		if (choiceNode.isAbstract()) {
 			return hasImplementableNode(choiceNode.getChoices());
 		}
@@ -480,7 +412,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 				return false;
 			}
 
-			if (!hasImplementableConstructor(parameterType)) {
+			if (!enumHasImplementableConstructor(parameterType)) {
 				return false;
 			}
 
@@ -492,7 +424,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 		}
 	}
 
-	private static boolean hasImplementableConstructor(IType parameterType) throws JavaModelException {
+	private static boolean enumHasImplementableConstructor(IType parameterType) throws JavaModelException {
 
 		JavaModelAnalyser.ClassConstructorsType classConstructorsType = 
 				JavaModelAnalyser.analyzeConstructors(parameterType);
@@ -507,14 +439,30 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 		return false;
 	}
 
+
+	private static boolean enumHasConstructorWithStringParam(IType parameterType) throws JavaModelException {
+
+		JavaModelAnalyser.ClassConstructorsType classConstructorsType = 
+				JavaModelAnalyser.analyzeConstructors(parameterType);
+
+		if (classConstructorsType == JavaModelAnalyser.ClassConstructorsType.CONSTRUCTOR_WITH_STRING_ONLY) {
+			return true;
+		}
+
+		return false;
+	}	
+
 	@Override
 	protected boolean androidCodeImplemented(ClassNode classNode) throws EcException {
+
 		if (!classNode.getRunOnAndroid()) {
 			return true;
 		}
+
 		if (!new EclipseProjectHelper(fFileInfoProvider).isAndroidProject()) {
 			return true;
 		}
+
 		ImplementerExt implementer = createImplementer(classNode);
 		return implementer.contentImplemented();
 	}
