@@ -10,11 +10,14 @@
 
 package com.ecfeed.core.utils;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 
 public class TextFileHelper {
@@ -32,11 +35,42 @@ public class TextFileHelper {
 
 	public static String readContent(String filePath) throws EcException {
 
-		FileInputStream inputStream = StreamHelper.openInputStream(filePath);
-		String content = inputStream.toString();
-		StreamHelper.closeInputStream(inputStream);
-
+		String content = null;
+		try {
+			content = readContentIntr(filePath);
+		} catch (Exception e) {
+			EcException.report(e.getMessage());
+		}
 		return content;
+	}
+
+	public static String readContentIntr(String filePath) throws Exception {
+
+		InputStream inputStream = new FileInputStream(filePath);
+
+		try {
+			return readLines(inputStream);
+		} finally {
+			inputStream.close();
+		}
+	}
+
+	private static String readLines(InputStream inputStream) throws IOException {
+
+		StringBuilder resultStringBuilder = new StringBuilder();
+		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+
+		try {
+			String line = bufferedReader.readLine();
+			while (line != null) {
+				resultStringBuilder.append(line).append("\n");
+				line = bufferedReader.readLine();
+			}	
+		} finally {
+			bufferedReader.close();
+		}
+
+		return resultStringBuilder.toString();
 	}
 
 	public static void writeContent(String filePath, String newContent) throws EcException {

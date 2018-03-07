@@ -13,16 +13,51 @@ package com.ecfeed.ui.common.utils;
 import java.util.List;
 
 import com.ecfeed.core.model.ChoiceNode;
+import com.ecfeed.core.utils.RegexHelper;
 
 public class SourceCodeTextImplementer {
 
 	public static String correctItemsForEnumWithStringConstructor(
-			String enumFilePath,
 			String oldContent, 
 			List<ChoiceNode> choiceNodes) {
 
-		String newContent = "package com.example.test;\npublic enum Enum1 {V1(\"V1\"), V2(\"V2\");\nEnum1(String value){}}";
+		if (oldContent == null) {
+			return null;
+		}
 
+		if (choiceNodes == null || choiceNodes.isEmpty()) {
+			return oldContent;
+		}
+
+		String newContent = oldContent;
+
+		for (ChoiceNode choiceNode : choiceNodes) {
+			newContent = correctOneChoice(choiceNode, oldContent);
+		}
+
+		return newContent;
+	}
+
+	private static String correctOneChoice(ChoiceNode choiceNode, String oldContent) {
+
+		String itemRegex = choiceNode.getName() + "\\s*[;,]";
+
+		String itemString = RegexHelper.getOneMatchingSubstring(oldContent, itemRegex);
+		if (itemString == null) {
+			return oldContent;
+		}
+
+		String newValue = choiceNode.getName() + "(\"" + choiceNode.getName() + "\")";
+
+		if (itemString.endsWith(",")) {
+			newValue = newValue + ",";
+		}
+
+		if (itemString.endsWith(";")) {
+			newValue = newValue + ";";
+		}
+
+		String newContent = oldContent.replace(itemString, newValue);
 		return newContent;
 	}
 
