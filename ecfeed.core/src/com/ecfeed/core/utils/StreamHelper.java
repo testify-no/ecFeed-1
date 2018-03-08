@@ -10,8 +10,10 @@
 
 package com.ecfeed.core.utils;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Scanner;
 
@@ -48,5 +50,28 @@ public class StreamHelper {
 			ExceptionHelper.reportRuntimeException("Can not create output stream." + e.getMessage());
 		}
 		return outputStream;
-	}	
+	}
+
+	public static FileInputStream openInputStream(String filePath) throws EcException {
+
+		FileInputStream inputStream = null;
+
+		try {
+			inputStream = new FileInputStream(filePath);
+		} catch (FileNotFoundException e) {
+			EcException.report(e.getMessage());
+		}
+
+		return inputStream;
+	}
+
+	public static void closeInputStream(FileInputStream inputStream) throws EcException {
+
+		try {
+			inputStream.close();
+		} catch (IOException e) {
+			EcException.report(e.getMessage());
+		}
+	}
+
 }
