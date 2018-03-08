@@ -71,6 +71,7 @@ import com.ecfeed.ui.common.utils.EclipseProjectHelper;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.common.utils.JavaUserClassImplementer;
 import com.ecfeed.ui.common.utils.SourceCodeTextImplementer;
+import com.ecfeed.utils.EclipseHelper;
 
 public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 
@@ -273,7 +274,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 
 		if (enumHasConstructorWithStringParam(enumType)) {
 
-			final float secondsToFinishWritingTheProject = (float)0.5;
+			final int secondsToFinishWritingTheProject = 1;
 			SleepHelper.sleep(secondsToFinishWritingTheProject);
 
 			correctEnumFile(choiceNodes, enumType);
@@ -283,7 +284,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 
 	private void correctEnumFile(List<ChoiceNode> choiceNodes, IType enumType) throws EcException {
 
-		String enumFilePath = enumType.getResource().getLocation().toString();
+		String enumFilePath = EclipseHelper.getTypePath(enumType);
 		String oldFileContent = TextFileHelper.readContent(enumFilePath);
 
 		String newFileContent = 
