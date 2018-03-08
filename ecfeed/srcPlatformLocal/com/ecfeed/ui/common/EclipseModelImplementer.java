@@ -74,7 +74,7 @@ import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.common.utils.JavaUserClassImplementer;
 import com.ecfeed.ui.common.utils.local.EclipsePackageFragmentGetter;
 import com.ecfeed.ui.common.utils.SourceCodeTextImplementer;
-import com.ecfeed.utils.EclipseHelper;
+import com.ecfeed.utils.ITypeHelper;
 
 public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 
@@ -287,7 +287,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 
 	private void correctEnumFile(List<ChoiceNode> choiceNodes, IType enumType) throws EcException {
 
-		String enumFilePath = EclipseHelper.getTypePath(enumType);
+		String enumFilePath = ITypeHelper.getTypePath(enumType);
 		String oldFileContent = TextFileHelper.readContent(enumFilePath);
 
 		String newFileContent = 
