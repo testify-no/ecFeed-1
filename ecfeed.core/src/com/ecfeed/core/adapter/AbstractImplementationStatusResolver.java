@@ -88,13 +88,13 @@ IImplementationStatusResolver {
 			return EImplementationStatus.NOT_IMPLEMENTED;
 		}
 
-		try{
+		try {
 			return (EImplementationStatus)node.accept(fStatusResolver);
-		}
-		catch(Exception e){
+		} catch(Exception e) {
 			SystemLogger.logCatch(e.getMessage());
 
 		}
+
 		return EImplementationStatus.NOT_IMPLEMENTED;
 	}
 
@@ -187,32 +187,27 @@ IImplementationStatusResolver {
 		return EImplementationStatus.IRRELEVANT;
 	}
 
-	protected EImplementationStatus implementationStatus(ChoiceNode choice){
-		EImplementationStatus status = EImplementationStatus.IMPLEMENTED;
-		if(choice.isAbstract() == false){
-			AbstractParameterNode parameter = choice.getParameter();
-			if(parameter == null){
-				status = EImplementationStatus.NOT_IMPLEMENTED;
-			}
-			else{
-				String type = parameter.getType();
-				if(fPrimitiveTypeTester.isPrimitive(type)){
-					status = EImplementationStatus.IMPLEMENTED;
-				}
-				else{
-					if(enumValueImplemented(type, choice.getValueString())){
-						status = EImplementationStatus.IMPLEMENTED;
-					}
-					else{
-						status = EImplementationStatus.NOT_IMPLEMENTED;
-					}
-				}
-			}
+	protected EImplementationStatus implementationStatus(ChoiceNode choice) {
+
+		if (choice.isAbstract()) {
+			return childrenStatus(choice.getChoices());
 		}
-		else{
-			status = childrenStatus(choice.getChoices());
+
+		AbstractParameterNode parameter = choice.getParameter();
+		if (parameter == null) {
+			return EImplementationStatus.NOT_IMPLEMENTED;
 		}
-		return status;
+
+		String type = parameter.getType();
+		if (fPrimitiveTypeTester.isPrimitive(type)) {
+			return EImplementationStatus.IMPLEMENTED;
+		}
+
+		if (enumValueImplemented(type, choice.getValueString())) {
+			return EImplementationStatus.IMPLEMENTED;
+		}
+
+		return EImplementationStatus.NOT_IMPLEMENTED;
 	}
 
 	protected EImplementationStatus childrenStatus(List<? extends AbstractNode> children){

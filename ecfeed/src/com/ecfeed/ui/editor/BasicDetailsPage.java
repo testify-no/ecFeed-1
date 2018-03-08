@@ -99,7 +99,7 @@ implements IDetailsPage, IModelUpdateListener, ISectionContext {
 	public void createContents(Composite parent) {
 
 		parent.setLayout(new FillLayout());
-		
+
 		fMainSection = 
 				MainDetailsSection.create(
 						parent, 
@@ -121,7 +121,7 @@ implements IDetailsPage, IModelUpdateListener, ISectionContext {
 	protected IMainTreeProvider getMainTreeProvider() {
 		return fMainTreeProvider;
 	}
-	
+
 	protected IJavaProjectProvider getJavaProjectProvider() {
 		return fJavaProjectProvider;
 	}
@@ -148,7 +148,7 @@ implements IDetailsPage, IModelUpdateListener, ISectionContext {
 	protected void addToolbarActions(){
 
 		if (ApplicationContext.isProjectAvailable()) {
-			if(fImplementer.implementable(getNodeType())){
+			if(fImplementer.isImplementable(getNodeType())){
 				getToolBarManager().add(new GoToImplementationToolbarAction());
 				getToolBarManager().add(new ImplementToolbarAction());
 
