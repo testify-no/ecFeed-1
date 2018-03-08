@@ -75,17 +75,40 @@ public class EclipseImplementationStatusResolver extends AbstractJavaImplementat
 
 	@Override
 	protected boolean enumValueImplemented(String qualifiedName, String value) {
-		IType type = JavaModelAnalyser.getIType(qualifiedName);
+
+		IType enumType = JavaModelAnalyser.getIType(qualifiedName);
+
 		try {
-			if(type == null || type.isEnum() == false){
+			if (enumType == null || (!enumType.isEnum())) {
 				return false;
 			}
-			for(IField field : type.getFields()){
-				if(field.isEnumConstant() && field.getElementName().equals(value)){
-					return true;
-				}
+
+			if (enumFieldsContainValue(value, enumType)) {
+				return true;
 			}
-		} catch (JavaModelException e) {SystemLogger.logCatch(e.getMessage());}
+			
+			return false;
+
+		} catch (JavaModelException e) {
+
+			SystemLogger.logCatch(e.getMessage());
+			return false;
+		}
+	}
+
+	private boolean enumFieldsContainValue(String value, IType enumType) throws JavaModelException {
+
+		IField[] fields = enumType.getFields();
+
+		for (IField field : fields) {
+
+			if (field.isEnumConstant() && field.getElementName().equals(value)) {
+				return true;
+			}
+
+		}
+
 		return false;
 	}
+
 }

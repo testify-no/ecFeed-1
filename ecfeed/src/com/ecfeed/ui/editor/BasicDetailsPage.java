@@ -48,7 +48,7 @@ import com.ecfeed.ui.modelif.IModelUpdateListener;
 
 public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateListener, ISectionContext, IModelUpdateContext{
 
-	protected class ImplementToolbarAction extends ImplementAction{
+	protected class ImplementToolbarAction extends ImplementAction {
 
 		public ImplementToolbarAction() {
 			super(null, BasicDetailsPage.this, fImplementer);
@@ -62,7 +62,7 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 		}
 	}
 
-	protected class GoToImplementationToolbarAction extends GoToImplementationAction{
+	protected class GoToImplementationToolbarAction extends GoToImplementationAction {
 
 		public GoToImplementationToolbarAction() {
 			super(null, fFileInfoProvider);
@@ -157,7 +157,7 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 	protected void addToolbarActions(){
 
 		if (fFileInfoProvider.isProjectAvailable()) {
-			if(fImplementer.implementable(getNodeType())){
+			if(fImplementer.isImplementable(getNodeType())){
 				getToolBarManager().add(new GoToImplementationToolbarAction());
 				getToolBarManager().add(new ImplementToolbarAction());
 
