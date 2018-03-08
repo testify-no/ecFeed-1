@@ -30,8 +30,21 @@ import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.SystemLogger;
 
-public class JavaModelAnalyser {
 
+public class JavaModelAnalyser {
+	
+	private static final String fTypeSignatureOfString = "QString;";
+	
+	public enum ClassConstructorsType {
+		
+		NOT_INITIALIZED,
+		NO_CONSTRUCTOR,
+		INVALID_CONSTRUCTOR,
+		MULTIPLE_CONSTRUCTORS,
+		CONSTRUCTOR_WITHOUT_PARAMETERS,
+		CONSTRUCTOR_WITH_STRING_ONLY
+	}
+	
 	public static IType getVariableType(String signature){
 		for(IProject project : ResourcesPlugin.getWorkspace().getRoot().getProjects()){
 			IJavaProject javaProject = JavaCore.create(project);
@@ -190,7 +203,7 @@ public class JavaModelAnalyser {
 			return JavaTypeHelper.TYPE_NAME_LONG;
 		case Signature.SIG_SHORT:
 			return JavaTypeHelper.TYPE_NAME_SHORT;
-		case "QString;":
+		case fTypeSignatureOfString:
 			return JavaTypeHelper.TYPE_NAME_STRING;
 		default:
 			return getVariableType(method, parameter).getFullyQualifiedName().replaceAll("\\$",	"\\.");
@@ -240,6 +253,70 @@ public class JavaModelAnalyser {
 		} catch (JavaModelException e1) {
 		}
 		return null;
+	}
+	
+	public static ClassConstructorsType analyzeConstructors(IType typeWithMethods) throws JavaModelException {
+
+		IMethod[] methods = typeWithMethods.getMethods();
+
+		int constructorCount = 0;
+		IMethod constructor = null;
+
+		for (IMethod method : methods) {
+
+			if (method.isConstructor()) {
+				constructor = method;
+				constructorCount++;
+			}
+		}
+
+		return analyzeConstructors(constructor, constructorCount);
+	}
+
+	private static ClassConstructorsType analyzeConstructors(
+			IMethod constructor, 
+			int constructorCount) throws JavaModelException {
+
+		if (constructor == null) {
+			return ClassConstructorsType.NO_CONSTRUCTOR;
+		}
+
+		if (constructorCount == 0) {
+			return ClassConstructorsType.NO_CONSTRUCTOR;
+		}
+
+		if (constructorCount > 1) {
+			return ClassConstructorsType.MULTIPLE_CONSTRUCTORS;
+		}
+
+		return getConstructorType(constructor);
+	}
+
+	private static ClassConstructorsType getConstructorType(IMethod method) throws JavaModelException {
+
+		if (!method.isConstructor()) {
+			return ClassConstructorsType.NO_CONSTRUCTOR;
+		}
+
+		int parametersCount = method.getNumberOfParameters();
+
+		if (parametersCount == 0) {
+			return ClassConstructorsType.CONSTRUCTOR_WITHOUT_PARAMETERS;
+		}
+
+		if (parametersCount > 1) {
+			return ClassConstructorsType.INVALID_CONSTRUCTOR;
+		}
+
+		ILocalVariable[] parameters = method.getParameters();
+
+		ILocalVariable theFirstParam = parameters[0];
+
+		if (theFirstParam.getTypeSignature().equals(fTypeSignatureOfString)) {
+			return ClassConstructorsType.CONSTRUCTOR_WITH_STRING_ONLY;
+		}
+
+		return ClassConstructorsType.INVALID_CONSTRUCTOR;
 	}
 
 }

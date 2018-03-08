@@ -216,7 +216,9 @@ public class AbstractNodeInterface extends OperationExecuter {
 	}
 
 	public boolean goToImplementationEnabled(){
-		return getImplementationStatus() != EImplementationStatus.NOT_IMPLEMENTED;
+		EImplementationStatus implemenationStatus = getImplementationStatus();
+		
+		return implemenationStatus != EImplementationStatus.NOT_IMPLEMENTED;
 	}
 
 	public void goToImplementation(){

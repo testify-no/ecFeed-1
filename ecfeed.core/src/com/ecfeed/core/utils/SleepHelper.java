@@ -8,13 +8,21 @@
  *  
  *******************************************************************************/
 
-package com.ecfeed.core.adapter;
+package com.ecfeed.core.utils;
 
-import com.ecfeed.core.model.AbstractNode;
+public class SleepHelper {
 
-public interface IModelImplementer {
-	public boolean isImplementable(Class<? extends AbstractNode> type);
-	public boolean isImplementable(AbstractNode node);
-	public boolean implement(AbstractNode node) throws Exception;
-	public EImplementationStatus getImplementationStatus(AbstractNode node);
+	public static void sleep(int seconds) {
+		sleep((float)seconds);
+	}
+
+	public static void sleep(float seconds) {
+
+		try {
+			Thread.sleep((long)(1000 * seconds));
+		} catch (InterruptedException e) {
+
+		}		
+	}
+
 }
