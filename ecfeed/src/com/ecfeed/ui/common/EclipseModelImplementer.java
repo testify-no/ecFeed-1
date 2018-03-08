@@ -273,8 +273,8 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 
 		if (enumHasConstructorWithStringParam(enumType)) {
 
-			final int TIME_TO_FINISH_WRITING_OF_PROJECT = 1;
-			SleepHelper.sleep(TIME_TO_FINISH_WRITING_OF_PROJECT);
+			final float secondsToFinishWritingTheProject = (float)0.5;
+			SleepHelper.sleep(secondsToFinishWritingTheProject);
 
 			correctEnumFile(choiceNodes, enumType);
 			refreshWorkspace();
@@ -330,7 +330,6 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 			EnumDeclaration enumDeclaration,
 			CompilationUnit compilationUnit) {
 
-		EnumConstantDeclaration enumConstant = compilationUnit.getAST().newEnumConstantDeclaration();
 		List<String> enumItemNames = new ArrayList<String>();
 
 		for (ChoiceNode node : nodes) {
@@ -341,6 +340,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 				continue;
 			}
 
+			EnumConstantDeclaration enumConstant = compilationUnit.getAST().newEnumConstantDeclaration();
 			enumConstant.setName(compilationUnit.getAST().newSimpleName(enumItemName));
 			//			enumConstant.setProperty(propertyName, data);
 			enumDeclaration.enumConstants().add(enumConstant);

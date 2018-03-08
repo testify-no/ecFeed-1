@@ -13,6 +13,10 @@ package com.ecfeed.core.utils;
 public class SleepHelper {
 
 	public static void sleep(int seconds) {
+		sleep((float)seconds);
+	}
+
+	public static void sleep(float seconds) {
 
 		try {
 			Thread.sleep((long)(1000 * seconds));

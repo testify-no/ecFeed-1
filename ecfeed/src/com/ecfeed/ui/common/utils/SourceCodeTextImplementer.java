@@ -32,7 +32,7 @@ public class SourceCodeTextImplementer {
 		String newContent = oldContent;
 
 		for (ChoiceNode choiceNode : choiceNodes) {
-			newContent = correctOneChoice(choiceNode, oldContent);
+			newContent = correctOneChoice(choiceNode, newContent);
 		}
 
 		return newContent;
@@ -42,22 +42,22 @@ public class SourceCodeTextImplementer {
 
 		String itemRegex = choiceNode.getName() + "\\s*[;,]";
 
-		String itemString = RegexHelper.getOneMatchingSubstring(oldContent, itemRegex);
-		if (itemString == null) {
+		String oldValue = RegexHelper.getOneMatchingSubstring(oldContent, itemRegex);
+		if (oldValue == null) {
 			return oldContent;
 		}
 
 		String newValue = choiceNode.getName() + "(\"" + choiceNode.getName() + "\")";
 
-		if (itemString.endsWith(",")) {
+		if (oldValue.endsWith(",")) {
 			newValue = newValue + ",";
 		}
 
-		if (itemString.endsWith(";")) {
+		if (oldValue.endsWith(";")) {
 			newValue = newValue + ";";
 		}
 
-		String newContent = oldContent.replace(itemString, newValue);
+		String newContent = oldContent.replace(oldValue, newValue);
 		return newContent;
 	}
 

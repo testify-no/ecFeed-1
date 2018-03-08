@@ -81,6 +81,25 @@ public class SourceCodeTextImplementerTest {
 		assertTrue(isMatch);
 	}
 
+	@Test
+	public void shouldCorrectMultipleEnumItems() {
+
+		String oldContent = 
+				"package com.example.test;\npublic enum Enum1 {V1(\"V1\"), V2, V3;\nEnum1(String value){}}\n";		
+
+		String newContent = 
+				SourceCodeTextImplementer.correctItemsForEnumWithStringConstructor(
+						oldContent, createChoiceNodeList("V3", "V2"));
+
+		String expectedContent = 
+				"package com.example.test;\npublic enum Enum1 {V1(\"V1\"), V2(\"V2\"), V3(\"V3\");\nEnum1(String value){}}\n";
+
+		boolean isMatch = expectedContent.equals(newContent);
+
+		assertTrue(isMatch);
+	}
+
+
 	private static List<ChoiceNode> createChoiceNodeList(String... choicesNames) {
 
 		List<ChoiceNode> choiceNodes = new ArrayList<ChoiceNode>();
