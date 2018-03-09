@@ -15,10 +15,7 @@ import java.net.URI;
 
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.jdt.core.IType;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -123,27 +120,6 @@ public class EclipseHelper {
 			return null;
 		}
 		return editorPart.getEditorSite().getActionBars();
-	}
-
-	public static String getTypePath(IType iType) {
-
-		if (iType == null) {
-			return null;
-		}
-
-		IResource resource = iType.getResource();
-
-		if (iType.getResource() == null) {
-			return null;
-		}
-
-		IPath path = resource.getLocation();
-
-		if (path == null) {
-			return null;
-		}
-
-		return path.toString();
 	}
 
 }
