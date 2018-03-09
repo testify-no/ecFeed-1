@@ -13,13 +13,14 @@ package com.ecfeed.ui.common.utils;
 import java.util.List;
 
 import com.ecfeed.core.model.ChoiceNode;
+import com.ecfeed.core.utils.EcException;
 import com.ecfeed.core.utils.RegexHelper;
 
 public class SourceCodeTextImplementer {
 
 	public static String correctItemsForEnumWithStringConstructor(
 			String oldContent, 
-			List<ChoiceNode> choiceNodes) {
+			List<ChoiceNode> choiceNodes) throws EcException {
 
 		if (oldContent == null) {
 			return null;
@@ -38,16 +39,18 @@ public class SourceCodeTextImplementer {
 		return newContent;
 	}
 
-	private static String correctOneChoice(ChoiceNode choiceNode, String oldContent) {
+	private static String correctOneChoice(ChoiceNode choiceNode, String oldContent) throws EcException {
 
-		String itemRegex = choiceNode.getName() + "\\s*[;,]";
+		String choiceName = choiceNode.getName();
+
+		String itemRegex = choiceName + "\\s*[;,]";
 
 		String oldValue = RegexHelper.getOneMatchingSubstring(oldContent, itemRegex);
 		if (oldValue == null) {
-			return oldContent;
+			EcException.report("Can not find choice: " + choiceName);
 		}
 
-		String newValue = choiceNode.getName() + "(\"" + choiceNode.getName() + "\")";
+		String newValue = choiceNode.getName() + "(\"" + choiceName + "\")";
 
 		if (oldValue.endsWith(",")) {
 			newValue = newValue + ",";
