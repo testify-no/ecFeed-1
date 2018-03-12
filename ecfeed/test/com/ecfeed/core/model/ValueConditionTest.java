@@ -21,6 +21,7 @@ import org.junit.Test;
 import com.ecfeed.core.utils.EvaluationResult;
 import com.ecfeed.core.utils.JavaTypeHelper;
 
+//TODO: validate ranges
 public class ValueConditionTest {
 
 	enum AssertType {
@@ -78,7 +79,7 @@ public class ValueConditionTest {
 		evaluateOne(methodParameterNode, "abc", EStatementRelation.EQUAL, "abd", AssertType.FALSE);
 	}
 
-	public void evaluateForIntegerTypes(String parameterType) {
+	private void evaluateForIntegerTypes(String parameterType) {
 
 		MethodParameterNode methodParameterNode = new MethodParameterNode("par1", parameterType, "", false);
 

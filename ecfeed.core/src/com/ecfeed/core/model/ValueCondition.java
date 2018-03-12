@@ -54,7 +54,7 @@ public class ValueCondition implements IStatementCondition {
 				break;
 			case "<":
 				result = isValueInRange(lower, lowerConstraint, upperConstraint-1)
-				|| isValueInRange(lower, lowerConstraint, upperConstraint-1);
+				|| isValueInRange(upper, lowerConstraint, upperConstraint-1);
 				break;
 			case ">":
 				break;
