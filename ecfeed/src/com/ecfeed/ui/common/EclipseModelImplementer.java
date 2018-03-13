@@ -280,50 +280,18 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 
 	private void correctEnumFile(List<ChoiceNode> choiceNodes, IType enumType) throws EcException {
 
-		String enumFilePath = ITypeHelper.getTypePath(enumType);
-
-		String newFileContent = correctContent(choiceNodes, enumType);
-
-		if (newFileContent == null) {
-			EcException.report("Can not correct enum values.");
-		} 
-
 		final int secondsToWaitForEclipseToRefresh = 1;
 		SleepHelper.sleep(secondsToWaitForEclipseToRefresh);
-		TextFileHelper.writeContent(enumFilePath, newFileContent);
-		SleepHelper.sleep(secondsToWaitForEclipseToRefresh);
-	}
 
-	private String correctContent(List<ChoiceNode> choiceNodes, IType enumType) throws EcException {
-
-		final int attemptsToCorrectFile = 10;
-		final float secondsToFinishWritingTheProject = (float) 0.5;
 		String enumFilePath = ITypeHelper.getTypePath(enumType);
 
-		for (int attempt = 0; attempt < attemptsToCorrectFile; attempt++) {
+		String oldFileContent = TextFileHelper.readContent(enumFilePath);
 
-			SleepHelper.sleep(secondsToFinishWritingTheProject);
+		String newFileContent = 		
+				SourceCodeTextImplementer.correctItemsForEnumWithStringConstructor(
+						oldFileContent, choiceNodes);
 
-			String oldFileContent = TextFileHelper.readContent(enumFilePath);
-
-			String newFileContent = tryToCorrectEnum(choiceNodes, oldFileContent);
-			if (newFileContent != null) {
-				return newFileContent;
-			}
-		}
-
-		return null;
-	}
-
-	private String tryToCorrectEnum(List<ChoiceNode> choiceNodes, String oldFileContent) {
-
-		try {
-			return SourceCodeTextImplementer.correctItemsForEnumWithStringConstructor(
-					oldFileContent, choiceNodes);
-
-		} catch (EcException e) {
-			return null;
-		}
+		TextFileHelper.writeContent(enumFilePath, newFileContent);
 	}
 
 	private void refresh(IType enumType, ICompilationUnit iUnit) throws CoreException, JavaModelException {
@@ -375,7 +343,6 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 
 			EnumConstantDeclaration enumConstant = compilationUnit.getAST().newEnumConstantDeclaration();
 			enumConstant.setName(compilationUnit.getAST().newSimpleName(enumItemName));
-			//			enumConstant.setProperty(propertyName, data);
 			enumDeclaration.enumConstants().add(enumConstant);
 			enumItemNames.add(enumItemName);
 		}
@@ -678,10 +645,12 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 	}
 
 	private void saveChanges(CompilationUnit unit, IPath location) throws CoreException {
+
 		ITextFileBufferManager bufferManager = FileBuffers.getTextFileBufferManager();
 		ITextFileBuffer textFileBuffer = bufferManager.getTextFileBuffer(location, LocationKind.LOCATION);
 		IDocument document = textFileBuffer.getDocument();
 		TextEdit edits = unit.rewrite(document, null);
+
 		try {
 			edits.apply(document);
 			textFileBuffer.commit(null, false);

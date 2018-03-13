@@ -13,17 +13,17 @@ import com.ecfeed.core.utils.EcException;
 public class SourceCodeTextImplementerTest {
 
 	@Test
-	public void shouldIgnoreEmptyContent() {
+	public void shouldThrowWhenEmptyContent() {
 
-		String newContent = null;
 		try {
-			newContent = SourceCodeTextImplementer.correctItemsForEnumWithStringConstructor(
+			SourceCodeTextImplementer.correctItemsForEnumWithStringConstructor(
 					null, createChoiceNodeList());
+
 		} catch (EcException e) {
-			fail();
+			return;
 		}
 
-		assertEquals(null, newContent);
+		fail();
 	}
 
 	@Test
@@ -41,24 +41,6 @@ public class SourceCodeTextImplementerTest {
 	}
 
 	@Test
-	public void shouldIgnoreInvalidChoices() {
-
-		String oldContent = 
-				"package com.example.test; public enum Enum1 { V1(\"V1\"); Enum1(String value){} }";		
-
-		String newContent = null;
-		try {
-			newContent = SourceCodeTextImplementer.correctItemsForEnumWithStringConstructor(
-					oldContent, createChoiceNodeList("C1"));
-		} catch (EcException e) {
-			assertEquals(null, newContent);
-			return;
-		}
-
-		fail();
-	}
-
-	@Test
 	public void shouldCorrectEnumItemV2() {
 
 		String oldContent = 
@@ -67,7 +49,7 @@ public class SourceCodeTextImplementerTest {
 		String newContent = null;
 		try {
 			newContent = SourceCodeTextImplementer.correctItemsForEnumWithStringConstructor(
-					oldContent, createChoiceNodeList("V2"));
+					oldContent, createChoiceNodeList("2"));
 		} catch (EcException e) {
 			fail();
 		}
@@ -81,6 +63,28 @@ public class SourceCodeTextImplementerTest {
 	}
 
 	@Test
+	public void shouldAddEnumItemV2() {
+
+		String oldContent = 
+				"package com.example.test; public enum Enum1 { V1(\"V1\"); Enum1(String value){} }";		
+
+		String newContent = null;
+		try {
+			newContent = SourceCodeTextImplementer.correctItemsForEnumWithStringConstructor(
+					oldContent, createChoiceNodeList("2"));
+		} catch (EcException e) {
+			fail();
+		}
+
+		String expectedContent = 
+				"package com.example.test; public enum Enum1 { V1(\"V1\"), V2(\"V2\"); Enum1(String value){} }";		
+
+		boolean isMatch = expectedContent.equals(newContent);
+
+		assertTrue(isMatch);
+	}	
+
+	@Test
 	public void shouldCorrectEnumItemV2WithMultilineSrc() {
 
 		String oldContent = 
@@ -89,7 +93,7 @@ public class SourceCodeTextImplementerTest {
 		String newContent = null;
 		try {
 			newContent = SourceCodeTextImplementer.correctItemsForEnumWithStringConstructor(
-					oldContent, createChoiceNodeList("V2"));
+					oldContent, createChoiceNodeList("2"));
 		} catch (EcException e) {
 			fail();
 		}
@@ -111,7 +115,7 @@ public class SourceCodeTextImplementerTest {
 		String newContent = null;
 		try {
 			newContent = SourceCodeTextImplementer.correctItemsForEnumWithStringConstructor(
-					oldContent, createChoiceNodeList("V3", "V2"));
+					oldContent, createChoiceNodeList("3", "2"));
 		} catch (EcException e) {
 			fail();
 		}
@@ -124,13 +128,34 @@ public class SourceCodeTextImplementerTest {
 		assertTrue(isMatch);
 	}
 
+	@Test
+	public void shouldAddMultipleEnumItems() {
+
+		String oldContent = 
+				"package com.example.test;\npublic enum Enum1 {V1(\"V1\");\nEnum1(String value){}}\n";		
+
+		String newContent = null;
+		try {
+			newContent = SourceCodeTextImplementer.correctItemsForEnumWithStringConstructor(
+					oldContent, createChoiceNodeList("2", "3"));
+		} catch (EcException e) {
+			fail();
+		}
+
+		String expectedContent = 
+				"package com.example.test;\npublic enum Enum1 {V1(\"V1\"), V2(\"V2\"), V3(\"V3\");\nEnum1(String value){}}\n";
+
+		boolean isMatch = expectedContent.equals(newContent);
+
+		assertTrue(isMatch);
+	}
 
 	private static List<ChoiceNode> createChoiceNodeList(String... choicesNames) {
 
 		List<ChoiceNode> choiceNodes = new ArrayList<ChoiceNode>();
 
 		for (String choiceName : choicesNames) {
-			ChoiceNode choiceNode = new ChoiceNode(choiceName, choiceName);
+			ChoiceNode choiceNode = new ChoiceNode("N" + choiceName, "V" + choiceName);
 			choiceNodes.add(choiceNode);
 		}
 
