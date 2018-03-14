@@ -54,10 +54,130 @@ public class ValueConditionTest {
 		}
 	}
 
+
 	private List<ChoiceNode> createList(ChoiceNode choiceNode) {
 		return Arrays.asList(new ChoiceNode[]{choiceNode});
 	}
 
+	public void evaluateRandomizedOne(
+			MethodParameterNode methodParameterNode, 
+			String choiceValue, 
+			EStatementRelation statementRelation, 
+			String value,
+			AssertType assertResult) {
+
+		MethodNode methodNode = new MethodNode("TestMethod");
+		methodNode.addParameter(methodParameterNode);
+
+		RelationStatement statement = 
+				RelationStatement.createStatementWithValueCondition(
+						methodParameterNode, statementRelation, value);
+
+		ChoiceNode choiceNode = new ChoiceNode("Label" + choiceValue, choiceValue);
+		choiceNode.setRandomizeValue(true);
+		
+
+		EvaluationResult result = statement.evaluate(createList(choiceNode));
+
+		if (assertResult == AssertType.TRUE) {
+			assertEquals(EvaluationResult.TRUE, result);
+		} else {
+			assertEquals(EvaluationResult.FALSE, result);
+		}
+	}
+	
+	
+	//TODO 
+	//change/split integer to long, int, short, byte
+	public void evaluateForRangeIntegerTypes(String parameterType) {
+		MethodParameterNode methodParameterNode = new MethodParameterNode("par1", parameterType, "", false);
+/*
+		evaluateOne(methodParameterNode, "1", EStatementRelation.EQUAL,     "1", AssertType.TRUE);
+		evaluateOne(methodParameterNode, "1", EStatementRelation.NOT_EQUAL, "1", AssertType.FALSE);
+		evaluateOne(methodParameterNode, "1", EStatementRelation.EQUAL, "2", AssertType.FALSE);
+		evaluateOne(methodParameterNode, "1", EStatementRelation.NOT_EQUAL, "2", AssertType.TRUE);
+*/
+		evaluateRandomizedOne(methodParameterNode, "1", EStatementRelation.LESS_THAN,     "2", AssertType.TRUE);
+		evaluateRandomizedOne(methodParameterNode, "1", EStatementRelation.LESS_EQUAL,    "2", AssertType.TRUE);
+		evaluateRandomizedOne(methodParameterNode, "1", EStatementRelation.GREATER_THAN,  "2", AssertType.FALSE);
+		evaluateRandomizedOne(methodParameterNode, "1", EStatementRelation.GREATER_EQUAL, "2", AssertType.FALSE);
+
+		// For integer types allow greater values than type range e.g. 256 for Byte
+		evaluateRandomizedOne(methodParameterNode, "99999", EStatementRelation.LESS_THAN, "100000", AssertType.TRUE); 
+
+		evaluateRandomizedOne(methodParameterNode, "1", EStatementRelation.EQUAL,         "a", AssertType.FALSE);
+		evaluateRandomizedOne(methodParameterNode, "1", EStatementRelation.NOT_EQUAL,     "a", AssertType.TRUE);
+		evaluateRandomizedOne(methodParameterNode, "1", EStatementRelation.LESS_THAN,     "a", AssertType.FALSE);
+		evaluateRandomizedOne(methodParameterNode, "1", EStatementRelation.LESS_EQUAL,    "a", AssertType.FALSE);
+		evaluateRandomizedOne(methodParameterNode, "1", EStatementRelation.GREATER_THAN,  "a", AssertType.FALSE);
+		evaluateRandomizedOne(methodParameterNode, "1", EStatementRelation.GREATER_EQUAL, "a", AssertType.FALSE);
+
+		evaluateRandomizedOne(methodParameterNode, "a", EStatementRelation.EQUAL,         "1", AssertType.FALSE);
+		evaluateRandomizedOne(methodParameterNode, "a", EStatementRelation.NOT_EQUAL,     "1", AssertType.TRUE);
+		evaluateRandomizedOne(methodParameterNode, "a", EStatementRelation.LESS_THAN,     "1", AssertType.FALSE);
+		evaluateRandomizedOne(methodParameterNode, "a", EStatementRelation.LESS_EQUAL,    "1", AssertType.FALSE);
+		evaluateRandomizedOne(methodParameterNode, "a", EStatementRelation.GREATER_THAN,  "1", AssertType.FALSE);
+		evaluateRandomizedOne(methodParameterNode, "a", EStatementRelation.GREATER_EQUAL, "1", AssertType.FALSE);
+		
+		
+		//tests from randomize-choice-value document
+		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.LESS_EQUAL, "1:2", AssertType.TRUE);
+		
+	}
+	
+	@Test
+	public void evaluateForRandomizedInteger() {
+		evaluateForRangeIntegerTypes(JavaTypeHelper.TYPE_NAME_INT);
+	}
+
+	@Test
+	public void evaluateForRandomizedLong() {
+		evaluateForRangeIntegerTypes(JavaTypeHelper.TYPE_NAME_LONG);
+	}	
+
+	@Test
+	public void evaluateForRandomizedShort() {
+		evaluateForRangeIntegerTypes(JavaTypeHelper.TYPE_NAME_SHORT);
+	}	
+
+	@Test
+	public void evaluateForRandomizedByte() {
+		evaluateForRangeIntegerTypes(JavaTypeHelper.TYPE_NAME_BYTE);
+	}	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	@Test
 	public void evaluateForStrings() {
 
