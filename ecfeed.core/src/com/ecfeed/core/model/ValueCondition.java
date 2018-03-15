@@ -29,23 +29,40 @@ public class ValueCondition implements IStatementCondition {
 	}
 
 	//TODO refactor + isAmbiguous
-	private static boolean isConstraintInChoiceRange(String choice, String constraint, String relation, String substituteType) {
+	private static boolean isConstraintInChoiceRange(String choice, String constraint, EStatementRelation relation, String substituteType) {
 		boolean result = false;
 		if(substituteType.equals("int") || substituteType.equals("long")) {		
 			
 			String[] choices = choice.split(":");
 			String[] constraints = constraint.split(":");
 			
-			long lower = Long.parseLong(choices[0]);
-			long upper = Long.parseLong(choices[1]);
-			long lowerConstraint = Long.parseLong(constraints[0]);
-			long upperConstraint;
-			if (constraints.length == 2) {
-				upperConstraint = Long.parseLong(constraints[1]);
+			String lower;
+			String upper;
+			
+			lower = choices[0];
+			
+			if (choices.length == 1) {
+				upper = lower;
 			}
 			else {
-				upperConstraint = Long.parseLong(constraints[0]);
+				 upper = choices[1];
 			}
+			
+			//TODO
+			//call the methods from StatemenetConditionHelper
+			//e.g.: 	private static boolean isMatchForNumericTypes(
+			//String typeName, EStatementRelation relation, String actualValue, String valueToMatch) {
+
+			
+			String lowerConstraint = constraints[0];
+			String upperConstraint;
+			
+			if (constraints.length == 1) {
+				upperConstraint = lowerConstraint;
+			}
+			else {
+				upperConstraint = constraints[1];
+			}/*
 			
 			switch (substituteType) {
 			case "=": 
@@ -58,8 +75,16 @@ public class ValueCondition implements IStatementCondition {
 				break;
 			case ">":
 				break;
-			}
-
+			}*/
+			
+			result = 
+			StatementConditionHelper.isRelationMatchQuiet(relation, substituteType, lower, lowerConstraint)
+			||
+			StatementConditionHelper.isRelationMatchQuiet(relation, substituteType, lower, upperConstraint)
+			||
+			StatementConditionHelper.isRelationMatchQuiet(relation, substituteType, upper, lowerConstraint)
+			||
+			StatementConditionHelper.isRelationMatchQuiet(relation, substituteType, upper, upperConstraint);
 		}
 		return result;
 	}
@@ -109,7 +134,7 @@ public class ValueCondition implements IStatementCondition {
 				//check does string match with regex
 			}
 			else {
-				boolean result = isConstraintInChoiceRange(leftChoiceStr, fRightValue, relation.getName(), substituteType);
+				boolean result = isConstraintInChoiceRange(leftChoiceStr, fRightValue, relation, substituteType);
 				return EvaluationResult.convertFromBoolean(result);
 			}
 		}
