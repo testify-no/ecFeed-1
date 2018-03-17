@@ -89,10 +89,15 @@ public class ValueCondition implements IStatementCondition {
 			}
 			else {
 				if(choices.length == 2 && constraints.length == 2)
-				result = (StatementConditionHelper.isRelationMatch(EStatementRelation.GREATER_EQUAL, substituteType, lower, lowerConstraint) 
+				result = 
+						StatementConditionHelper.isRelationMatch(EStatementRelation.GREATER_EQUAL, substituteType, upper, lowerConstraint)
+						&& StatementConditionHelper.isRelationMatch(EStatementRelation.LESS_EQUAL, substituteType, lower, upperConstraint);
+				/*
+				(StatementConditionHelper.isRelationMatch(EStatementRelation.GREATER_EQUAL, substituteType, lower, lowerConstraint) 
 				&& StatementConditionHelper.isRelationMatch(EStatementRelation.LESS_EQUAL, substituteType, lower, upperConstraint))
 						|| (StatementConditionHelper.isRelationMatch(EStatementRelation.GREATER_EQUAL, substituteType, upper, lowerConstraint)
 								&& StatementConditionHelper.isRelationMatch(EStatementRelation.LESS_EQUAL, substituteType, upper, upperConstraint));
+				*/
 				else if(choices.length == 2 && constraints.length == 1) {
 					result = StatementConditionHelper.isRelationMatch(EStatementRelation.GREATER_EQUAL, substituteType, lower, lowerConstraint)
 							&& StatementConditionHelper.isRelationMatch(EStatementRelation.GREATER_EQUAL, substituteType, upper, lowerConstraint);
