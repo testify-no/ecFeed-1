@@ -45,6 +45,19 @@ public class ParameterCondition implements IStatementCondition {
 
 		EStatementRelation relation = fParentRelationStatement.getRelation();
 
+		//TODO 444
+		
+		boolean isRandomizedChoice = StatementConditionHelper.getChoiceRandomized(choices, fParentRelationStatement.getLeftParameter());
+		if(isRandomizedChoice) {
+			if(JavaTypeHelper.TYPE_NAME_STRING.equals(substituteType)) {
+				return EvaluationResult.convertFromBoolean(leftChoiceStr.matches(rightChoiceStr));
+			}
+			else {
+				boolean result = StatementConditionHelper.isConstraintInChoiceRange(leftChoiceStr, rightChoiceStr, relation, substituteType);
+				return EvaluationResult.convertFromBoolean(result);
+			}
+		}
+		
 		if (StatementConditionHelper.isRelationMatchQuiet(relation, substituteType, leftChoiceStr, rightChoiceStr)) {
 			return EvaluationResult.TRUE;
 		}
