@@ -240,4 +240,10 @@ public class StatementArray extends AbstractStatement {
 		addStatement(statement, fStatements.size());
 	}
 
+	@Override
+	public EvaluationResult isAmgibous(List<ChoiceNode> values) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

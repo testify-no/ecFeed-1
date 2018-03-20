@@ -145,4 +145,10 @@ public class ExpectedValueStatement extends AbstractStatement implements IRelati
 		return fPredicate.isPrimitive(fParameter.getType());
 	}
 
+	@Override
+	public EvaluationResult isAmgibous(List<ChoiceNode> values) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

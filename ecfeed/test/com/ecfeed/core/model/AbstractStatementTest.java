@@ -24,6 +24,7 @@ import com.ecfeed.core.model.IStatement;
 import com.ecfeed.core.model.IStatementVisitor;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.StatementArray;
+import com.ecfeed.core.utils.EvaluationResult;
 
 public class AbstractStatementTest {
 
@@ -51,6 +52,11 @@ public class AbstractStatementTest {
 		@Override
 		public boolean mentions(int methodParameterIndex) {
 			return false;
+		}
+		@Override
+		public EvaluationResult isAmgibous(List<ChoiceNode> values) {
+			// TODO Auto-generated method stub
+			return null;
 		}
 	}
 

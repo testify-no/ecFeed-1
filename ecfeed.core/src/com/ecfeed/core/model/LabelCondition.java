@@ -109,5 +109,11 @@ public class LabelCondition implements IStatementCondition {
 
 	}
 
+	@Override
+	public EvaluationResult isAmgibous(List<ChoiceNode> values) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
 
