@@ -14,9 +14,4 @@ public enum EvaluationResult {
 
 		return EvaluationResult.FALSE;
 	}
-	
-	public boolean getAsPrimitiveBoolean() {
-		return this.equals(TRUE);
-	}
-
 }

@@ -195,16 +195,16 @@ public class StatementConditionHelper {
 			String upperConstraint) {
 		boolean result = false;
 		if (choicesLength == RANGE_VALUE && constraintsLength == RANGE_VALUE)
-			result = GREATER_EQUAL.evalAsBoolean(substituteType, upper, lowerConstraint)
-					&& LESS_EQUAL.evalAsBoolean(substituteType, lower, upperConstraint);
+			result = GREATER_EQUAL.eval(substituteType, upper, lowerConstraint)
+					&& LESS_EQUAL.eval(substituteType, lower, upperConstraint);
 		else if (choicesLength == RANGE_VALUE && constraintsLength == SINGLE_VALUE) {
-			result = GREATER_EQUAL.evalAsBoolean(substituteType, lower, lowerConstraint)
-					&& GREATER_EQUAL.evalAsBoolean(substituteType, upper, lowerConstraint);
+			result = GREATER_EQUAL.eval(substituteType, lower, lowerConstraint)
+					&& GREATER_EQUAL.eval(substituteType, upper, lowerConstraint);
 		} else if (choicesLength == SINGLE_VALUE && constraintsLength == RANGE_VALUE) {
-			result = GREATER_EQUAL.evalAsBoolean(substituteType, lower, lowerConstraint)
-					&& LESS_EQUAL.evalAsBoolean(substituteType, lower, upperConstraint);
+			result = GREATER_EQUAL.eval(substituteType, lower, lowerConstraint)
+					&& LESS_EQUAL.eval(substituteType, lower, upperConstraint);
 		} else if (choicesLength == SINGLE_VALUE && constraintsLength == SINGLE_VALUE) {
-			result = EQUAL.evalAsBoolean(substituteType, lower, lowerConstraint);
+			result = EQUAL.eval(substituteType, lower, lowerConstraint);
 		}
 		return result;
 	}
@@ -254,7 +254,7 @@ public class StatementConditionHelper {
 			// get an info about is ambigious from these 4 cases
 			
 			
-			if (!relation.equals(EStatementRelation.EQUAL)) {
+			if (!relation.equals(EQUAL)) {
 				result = StatementConditionHelper.validateOtherthanEqualCondition(relation, substituteType, upper, lower, lowerConstraint, upperConstraint);
 			}
 			else {
@@ -297,7 +297,7 @@ public class StatementConditionHelper {
 				upperConstraint = constraints[1];
 			}
 			
-			if (!relation.equals(EStatementRelation.EQUAL)) {
+			if (!relation.equals(EQUAL)) {
 				result = StatementConditionHelper.validateOtherthanEqualCondition(relation, substituteType, upper, lower, lowerConstraint, upperConstraint);
 				boolean a = isRelationMatchQuiet(relation, substituteType, lower, lowerConstraint);
 				boolean b = isRelationMatchQuiet(relation, substituteType, upper, upperConstraint);
@@ -311,10 +311,6 @@ public class StatementConditionHelper {
 			else {
 				result = validateEqualCondition(choices.length, constraints.length, substituteType, upper, lower, lowerConstraint, upperConstraint);
 				outsideTheRange = !isAmbigousEqualCondition(substituteType, lower, upper, lowerConstraint, upperConstraint);
-						
-						/*!isRelationMatchQuiet(relation, substituteType, lower, lowerConstraint) 
-						||
-						!isRelationMatchQuiet(relation, substituteType, upper, upperConstraint);*/
 			}
 	
 		}
@@ -328,15 +324,15 @@ public class StatementConditionHelper {
 			}
 			return true;
 		}
-		if (LESS_THAN.eval(substituteType, lower, lowerConstraint).getAsPrimitiveBoolean() 
-				&& LESS_THAN.eval(substituteType, upper, upperConstraint).getAsPrimitiveBoolean() 
-				&& LESS_THAN.eval(substituteType, upper, lowerConstraint).getAsPrimitiveBoolean()) {
+		if (LESS_THAN.eval(substituteType, lower, lowerConstraint) 
+				&& LESS_THAN.eval(substituteType, upper, upperConstraint) 
+				&& LESS_THAN.eval(substituteType, upper, lowerConstraint)) {
 			return false;
 			
 		}
-		if (GREATER_THAN.evalAsBoolean(substituteType, lower, lowerConstraint)
-				&& GREATER_THAN.evalAsBoolean(substituteType, lower, upperConstraint)
-				&& GREATER_THAN.evalAsBoolean(substituteType, upper, upperConstraint)) {
+		if (GREATER_THAN.eval(substituteType, lower, lowerConstraint)
+				&& GREATER_THAN.eval(substituteType, lower, upperConstraint)
+				&& GREATER_THAN.eval(substituteType, upper, upperConstraint)) {
 			return false;
 		}
 		
@@ -346,20 +342,8 @@ public class StatementConditionHelper {
 	public static boolean validateOtherthanEqualCondition(EStatementRelation relation,
 			String substituteType, String upper, String lower, String lowerConstraint,
 			String upperConstraint) {
-		return relation.eval(substituteType, lower, upperConstraint).getAsPrimitiveBoolean()
-				|| relation.eval(substituteType, upper, lowerConstraint).getAsPrimitiveBoolean();
-	
-				//
-				//isRelationMatchQuiet(relation, substituteType, lower, lowerConstraint)||
-			
-				/*
-				isRelationMatchQuiet(relation, substituteType, lower, upperConstraint)
-				|| isRelationMatchQuiet(relation, substituteType, upper, lowerConstraint);
-		*/
-		
-		
-		
-				//|| isRelationMatchQuiet(relation, substituteType, upper, upperConstraint); //useless?
+		return relation.eval(substituteType, lower, upperConstraint)
+				|| relation.eval(substituteType, upper, lowerConstraint);
 	}
 }
 
