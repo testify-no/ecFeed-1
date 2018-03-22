@@ -164,15 +164,12 @@ public class ModelLabelDecoratorHelper  {
 			int maxCol,
 			int maxRow) {
 
-		int imageIndex = 0;
-		int decoratorIndex = 0;
+		int pixelIndex = 0;
 
-		for(int row = 0; row < maxRow; row ++){
-			for(int col = 0; col < maxCol; col++){
-
-				decorateOnePixel(inOutImageData, decoratorData, imageIndex, decoratorIndex);
-				imageIndex += 1;
-				decoratorIndex += 1;
+		for (int row = 0; row < maxRow; row ++) {
+			for (int col = 0; col < maxCol; col++) {
+				decorateOnePixel(inOutImageData, decoratorData, pixelIndex);
+				pixelIndex += 1;
 			}
 		}
 	}
@@ -180,17 +177,25 @@ public class ModelLabelDecoratorHelper  {
 	private static void decorateOnePixel(
 			ImageData inOutImageData,
 			ImageData decoratorData, 
-			int imageIndex, 
-			int decoratorIndex) {
+			int pixelIndex) {
 
-		if (decoratorData.alphaData[decoratorIndex] < 0) {
-
-			inOutImageData.alphaData[imageIndex] = (byte)-1;
-
-			inOutImageData.data[4 * imageIndex] = decoratorData.data[4 * decoratorIndex];
-			inOutImageData.data[4 * imageIndex + 1] = decoratorData.data[4 * decoratorIndex + 1];
-			inOutImageData.data[4 * imageIndex + 2] = decoratorData.data[4 * decoratorIndex + 2];
+		if (decoratorData.alphaData[pixelIndex] < 0) {
+			inOutImageData.alphaData[pixelIndex] = (byte)-1;
+			copyPixelData(inOutImageData, decoratorData, pixelIndex);
 		}
+	}
+
+	private static void copyPixelData(
+			ImageData inOutImageData,
+			ImageData decoratorData, 
+			int pixelIndex) {
+
+		int dataIndex = 4 * pixelIndex;
+
+		inOutImageData.data[dataIndex + 0] = decoratorData.data[dataIndex + 0];
+		inOutImageData.data[dataIndex + 1] = decoratorData.data[dataIndex + 1];
+		inOutImageData.data[dataIndex + 2] = decoratorData.data[dataIndex + 2];
+		inOutImageData.data[dataIndex + 3] = decoratorData.data[dataIndex + 3];
 	}
 
 	private static List<Image> createDecoratedImageKey(Image image, List<Image> decorators) {
