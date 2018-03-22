@@ -9,7 +9,7 @@
 
 Version 1.12.10
  - fixed image decorators on MacOS
- - handlig enums with String
+ - handling enums with String
  
 Version 1.12.9
  - image decorators are back
