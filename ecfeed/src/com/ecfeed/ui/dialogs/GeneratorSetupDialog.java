@@ -100,6 +100,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 	private ExportTemplateFactory fExportTemplateFactory;
 	private IExportTemplate fExportTemplate;
 	DialogObjectToolkit.FileSelectionComposite fExportFileSelectionComposite;
+	private Label ambigousLabel;
 
 	public final static int CONSTRAINTS_COMPOSITE = 1;
 	public final static int CHOICES_COMPOSITE = 1 << 1;
@@ -211,11 +212,25 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 				}
 			}
 		}
-
 		createButton(parent, IDialogConstants.CANCEL_ID,
 				IDialogConstants.CANCEL_LABEL, false);
 
+		
 		updateOkButtonAndErrorMsg();
+	}
+	
+	private Label createAmgibousWarningLabel(Composite parent) {
+		return DialogObjectToolkit.createLabel(parent, "");
+	}
+	
+	//todo update when choice/constrain listeren is in action
+	private void updateAmbigousWarningLabel(boolean isAmbigousCondition) {
+		if(isAmbigousCondition) {
+			ambigousLabel.setText("todo"); //String.Format
+		}
+		else {
+			ambigousLabel.setText("");
+		}
 	}
 
 	@Override
@@ -556,12 +571,12 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		generatorLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
 				false, 1, 1));
 		generatorLabel.setText("Generator");
-
+		
 		createGeneratorViewer(generatorComposite);
+		ambigousLabel = createAmgibousWarningLabel(container);
 	}
 
 	private void createTestCasesExportComposite(Composite parentComposite) {
-
 		Composite advancedButtonComposite = 
 				DialogObjectToolkit.createGridComposite(parentComposite, 1);
 
