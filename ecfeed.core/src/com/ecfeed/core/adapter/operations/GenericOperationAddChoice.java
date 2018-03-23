@@ -104,7 +104,7 @@ public class GenericOperationAddChoice extends BulkOperation {
 				String newValue = adapter.convert(choice.getValueString());
 
 				if(newValue == null){
-					ModelOperationException.report(Messages.PARTITION_VALUE_PROBLEM(choice.getValueString()+"W"));
+					ModelOperationException.report(Messages.PARTITION_VALUE_PROBLEM(choice.getValueString()));
 				}
 			}
 			else {
