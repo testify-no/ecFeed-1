@@ -91,7 +91,7 @@ public class RelationStatement extends AbstractStatement implements IRelationalS
 	public EvaluationResult isAmgibous(List<ChoiceNode> values) {
 		EvaluationResult result;
 		try {
-			result = fRightCondition.isAmgibous(values);
+			result = fRightCondition.isAmbigous(values);
 		}
 		catch (Exception e) {
 			SystemLogger.logCatch(e.getMessage());
