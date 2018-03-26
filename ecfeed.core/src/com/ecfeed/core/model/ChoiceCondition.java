@@ -109,14 +109,28 @@ public class ChoiceCondition implements IStatementCondition {
 
 	private EvaluationResult evaluateChoice(ChoiceNode actualLeftChoice) {
 
+		String leftChoiceStr = actualLeftChoice.getValueString();
+		String fRightValue = fRightChoice.getValueString();
+		String typeName1 = actualLeftChoice.getParameter().getType();
+		String substituteType = JavaTypeHelper.getSubstituteType(typeName1);
 		EStatementRelation relation = fParentRelationStatement.getRelation();
+		
+		boolean isRandomizedChoice = StatementConditionHelper.getChoiceRandomized(actualLeftChoice, fParentRelationStatement.getLeftParameter());
+		if(isRandomizedChoice) {
+			if(JavaTypeHelper.TYPE_NAME_STRING.equals(substituteType)) {
+				return EvaluationResult.convertFromBoolean(leftChoiceStr.matches(fRightValue));
+			}
+			else {
+				boolean result = StatementConditionHelper.isConstraintInChoiceRange(leftChoiceStr, fRightValue, relation, substituteType);
+				return EvaluationResult.convertFromBoolean(result);
+			}
+		}
+
 		if (relation == EStatementRelation.EQUAL || relation == EStatementRelation.NOT_EQUAL) {
 			return evaluateEqualityIncludingParents(relation, actualLeftChoice);
 		}
 
-		String typeName1 = actualLeftChoice.getParameter().getType();
-		String substituteType = JavaTypeHelper.getSubstituteType(typeName1);
-
+		
 		String actualLeftValue = JavaTypeHelper.convertValueString(actualLeftChoice.getValueString(), substituteType);
 		String rightValue = JavaTypeHelper.convertValueString(fRightChoice.getValueString(), substituteType);
 
