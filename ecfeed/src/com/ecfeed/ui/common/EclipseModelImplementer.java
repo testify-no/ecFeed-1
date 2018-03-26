@@ -147,7 +147,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 			}
 			else{
 				if(implementable(choiceNode) && getImplementationStatus(choiceNode) != EImplementationStatus.IMPLEMENTED){
-					implementChoicesDefinitions(Arrays.asList(new ChoiceNode[]{choiceNode}));
+					implementChoicesDefinitions(Arrays.asList(choiceNode));
 				}
 			}
 		}
@@ -216,7 +216,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 	@Override
 	protected void implementChoiceDefinition(ChoiceNode node) throws CoreException, EcException {
 		if(implementable(node) && getImplementationStatus(node) != EImplementationStatus.IMPLEMENTED){
-			implementChoicesDefinitions(Arrays.asList(new ChoiceNode[]{node}));
+			implementChoicesDefinitions(Arrays.asList(node));
 		}
 	}
 

@@ -55,7 +55,7 @@ public class ValueConditionTest {
 
 
 	private List<ChoiceNode> createList(ChoiceNode choiceNode) {
-		return Arrays.asList(new ChoiceNode[]{choiceNode});
+		return Arrays.asList(choiceNode);
 	}
 
 	public void evaluateRandomizedOne(

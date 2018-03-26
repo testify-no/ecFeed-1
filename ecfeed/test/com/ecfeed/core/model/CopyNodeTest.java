@@ -82,8 +82,8 @@ public class CopyNodeTest{
 		expectedChoice1.setParent(par2);
 		ChoiceNode expectedChoice2 = new ChoiceNode("expected", "2");
 		expectedChoice2.setParent(par2);
-		TestCaseNode testCase1 = new TestCaseNode("test case 1", Arrays.asList(new ChoiceNode[]{choice1, expectedChoice1}));
-		TestCaseNode testCase2 = new TestCaseNode("test case 1", Arrays.asList(new ChoiceNode[]{choice1, expectedChoice2}));
+		TestCaseNode testCase1 = new TestCaseNode("test case 1", Arrays.asList(choice1, expectedChoice1));
+		TestCaseNode testCase2 = new TestCaseNode("test case 1", Arrays.asList(choice1, expectedChoice2));
 
 		method.addParameter(par1);
 		method.addParameter(par2);
@@ -175,7 +175,7 @@ public class CopyNodeTest{
 		expectedChoice1.setParent(par2);
 		ChoiceNode expectedChoice2 = new ChoiceNode("expected", "2");
 		expectedChoice2.setParent(par2);
-		TestCaseNode testCase = new TestCaseNode("test case 1", Arrays.asList(new ChoiceNode[]{choice1, expectedChoice1}));
+		TestCaseNode testCase = new TestCaseNode("test case 1", Arrays.asList(choice1, expectedChoice1));
 
 		method.addParameter(par1);
 		method.addParameter(par2);

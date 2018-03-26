@@ -33,6 +33,13 @@ public class ChoiceNode extends ChoicesParentNode{
 		fIsRandomizeValue = false;
 	}
 
+	public ChoiceNode(String name, String value, boolean isRandomized) {
+		super(name);
+		fValueString = value;
+		fLabels = new LinkedHashSet<String>();
+		fIsRandomizeValue = isRandomized;
+	}
+	
 	@Override
 	public AbstractParameterNode getParameter() {
 		if(fParent != null){
