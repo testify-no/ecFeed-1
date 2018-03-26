@@ -18,7 +18,6 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.ecfeed.core.model.ValueConditionTest.AssertType;
 import com.ecfeed.core.utils.EvaluationResult;
 import com.ecfeed.core.utils.JavaTypeHelper;
 
@@ -82,6 +81,38 @@ public class ChoiceConditionTest {
 		leftChoiceNode.setParent(leftMethodParameterNode);
 
 		EvaluationResult result = statement.evaluate(createList(leftChoiceNode));
+
+		if (assertResult == AssertType.TRUE) {
+			assertEquals(EvaluationResult.TRUE, result);
+		} else {
+			assertEquals(EvaluationResult.FALSE, result);
+		}
+	}
+	
+	public void evaluateRandomizeAmbigousOne(
+			MethodParameterNode leftMethodParameterNode,
+			String leftChoiceValue,
+			EStatementRelation statementRelation,
+			String rightChoiceValue,
+			AssertType assertResult) {
+
+		MethodNode methodNode = new MethodNode("TestMethod");
+		methodNode.addParameter(leftMethodParameterNode);
+
+		ChoiceNode rightChoiceNode = new ChoiceNode("Label" + rightChoiceValue , rightChoiceValue);
+		rightChoiceNode.setParent(leftMethodParameterNode);
+
+		rightChoiceNode.setRandomizeValue(true);
+		RelationStatement statement = 
+				RelationStatement.createStatementWithChoiceCondition(
+						leftMethodParameterNode, statementRelation, rightChoiceNode);
+
+		ChoiceNode leftChoiceNode = new ChoiceNode("Label" + leftChoiceValue, leftChoiceValue);
+		leftChoiceNode.setRandomizeValue(true);
+		
+		leftChoiceNode.setParent(leftMethodParameterNode);
+
+		EvaluationResult result = statement.isAmgibous(createList(leftChoiceNode));
 
 		if (assertResult == AssertType.TRUE) {
 			assertEquals(EvaluationResult.TRUE, result);
@@ -325,6 +356,126 @@ public class ChoiceConditionTest {
 		evaluateOne(leftParam, "a", EStatementRelation.GREATER_THAN,  "1.0", AssertType.FALSE);
 		evaluateOne(leftParam, "a", EStatementRelation.GREATER_EQUAL, "1.0", AssertType.FALSE);		
 	}	
+	
+	public void evaluateForAmbigousIntegerTypes(String parameterType) {
+		MethodParameterNode methodParameterNode = new MethodParameterNode("par1", parameterType, "", false);
+		
+		evaluateRandomizeAmbigousOne(methodParameterNode, "1", EStatementRelation.EQUAL,     "1", AssertType.FALSE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "1", EStatementRelation.NOT_EQUAL, "1", AssertType.FALSE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "1", EStatementRelation.EQUAL, "2", AssertType.FALSE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "1", EStatementRelation.NOT_EQUAL, "2", AssertType.FALSE);
+
+		evaluateRandomizeAmbigousOne(methodParameterNode, "1", EStatementRelation.LESS_THAN,     "2", AssertType.FALSE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "1", EStatementRelation.LESS_EQUAL,    "2", AssertType.FALSE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "1", EStatementRelation.GREATER_THAN,  "2", AssertType.FALSE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "1", EStatementRelation.GREATER_EQUAL, "2", AssertType.FALSE);
+
+		evaluateRandomizeAmbigousOne(methodParameterNode, "99999", EStatementRelation.LESS_THAN, "100000", AssertType.FALSE); 
+
+		evaluateRandomizeAmbigousOne(methodParameterNode, "1", EStatementRelation.EQUAL,         "a", AssertType.FALSE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "1", EStatementRelation.NOT_EQUAL,     "a", AssertType.FALSE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "1", EStatementRelation.LESS_THAN,     "a", AssertType.FALSE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "1", EStatementRelation.LESS_EQUAL,    "a", AssertType.FALSE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "1", EStatementRelation.GREATER_THAN,  "a", AssertType.FALSE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "1", EStatementRelation.GREATER_EQUAL, "a", AssertType.FALSE);
+
+		evaluateRandomizedOne(methodParameterNode, "a", EStatementRelation.EQUAL,         "1", AssertType.FALSE);
+		evaluateRandomizedOne(methodParameterNode, "a", EStatementRelation.NOT_EQUAL,     "1", AssertType.TRUE);
+		evaluateRandomizedOne(methodParameterNode, "a", EStatementRelation.LESS_THAN,     "1", AssertType.FALSE);
+		evaluateRandomizedOne(methodParameterNode, "a", EStatementRelation.LESS_EQUAL,    "1", AssertType.FALSE);
+		evaluateRandomizedOne(methodParameterNode, "a", EStatementRelation.GREATER_THAN,  "1", AssertType.FALSE);
+		evaluateRandomizedOne(methodParameterNode, "a", EStatementRelation.GREATER_EQUAL, "1", AssertType.FALSE);
+		
+		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.GREATER_EQUAL, "0:10", AssertType.TRUE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "2:2", EStatementRelation.GREATER_EQUAL, "2:2", AssertType.FALSE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.GREATER_EQUAL, "9:100", AssertType.TRUE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.GREATER_EQUAL, "10:100", AssertType.TRUE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.GREATER_EQUAL, "11:100", AssertType.FALSE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.GREATER_EQUAL, "-10:-1", AssertType.FALSE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.GREATER_EQUAL, "-10:0", AssertType.FALSE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.GREATER_EQUAL, "-10:1", AssertType.TRUE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.GREATER_EQUAL, "-1:11", AssertType.TRUE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.GREATER_EQUAL, "1:9", AssertType.TRUE);
+		
+		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.GREATER_EQUAL, "0:10", AssertType.TRUE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "2:2", EStatementRelation.GREATER_THAN, "2:2", AssertType.FALSE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.GREATER_THAN, "9:100", AssertType.TRUE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.GREATER_THAN, "10:100", AssertType.FALSE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.GREATER_THAN, "11:100", AssertType.FALSE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.GREATER_THAN, "-10:-1", AssertType.FALSE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.GREATER_THAN, "-10:0", AssertType.TRUE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.GREATER_THAN, "-10:1", AssertType.TRUE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.GREATER_THAN, "-1:11", AssertType.TRUE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.GREATER_THAN, "1:9", AssertType.TRUE);
+		
+		evaluateRandomizeAmbigousOne(methodParameterNode, "2:2", EStatementRelation.EQUAL, "2:2", AssertType.FALSE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "9:100", AssertType.TRUE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "10:100", AssertType.TRUE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "11:100", AssertType.FALSE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "-10:-1", AssertType.FALSE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "-10:0", AssertType.TRUE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "-10:1", AssertType.TRUE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "-1:11", AssertType.TRUE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "1:9", AssertType.TRUE);
+		
+		evaluateRandomizeAmbigousOne(methodParameterNode, "2:2", EStatementRelation.LESS_EQUAL, "2:2", AssertType.FALSE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.LESS_EQUAL, "9:100", AssertType.TRUE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.LESS_EQUAL, "10:100", AssertType.FALSE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.LESS_EQUAL, "11:100", AssertType.FALSE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.LESS_EQUAL, "-10:-1", AssertType.FALSE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.LESS_EQUAL, "-10:0", AssertType.TRUE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.LESS_EQUAL, "-10:1", AssertType.TRUE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.LESS_EQUAL, "-1:11", AssertType.TRUE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.LESS_EQUAL, "1:9", AssertType.TRUE);
+		
+		evaluateRandomizeAmbigousOne(methodParameterNode, "2:2", EStatementRelation.LESS_THAN, "2:2", AssertType.FALSE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.LESS_THAN, "9:100", AssertType.TRUE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.LESS_THAN, "10:100", AssertType.TRUE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.LESS_THAN, "11:100", AssertType.FALSE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.LESS_THAN, "-10:-1", AssertType.FALSE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.LESS_THAN, "-10:0", AssertType.FALSE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.LESS_THAN, "-10:1", AssertType.TRUE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.LESS_THAN, "-1:11", AssertType.TRUE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.LESS_THAN, "1:9", AssertType.TRUE);
+	
+		evaluateRandomizeAmbigousOne(methodParameterNode, "a", EStatementRelation.GREATER_EQUAL, "1", AssertType.FALSE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "a", EStatementRelation.GREATER_EQUAL, "1", AssertType.FALSE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "a", EStatementRelation.GREATER_EQUAL, "1", AssertType.FALSE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "a", EStatementRelation.GREATER_EQUAL, "1", AssertType.FALSE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "a", EStatementRelation.GREATER_EQUAL, "1", AssertType.FALSE);
+
+//		//tests from randomize-choice-value document
+		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.LESS_THAN, "1:2", AssertType.TRUE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "1:10", EStatementRelation.LESS_THAN, "2", AssertType.TRUE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "1:10", EStatementRelation.GREATER_THAN, "2", AssertType.TRUE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "5:10", EStatementRelation.LESS_THAN, "1:4", AssertType.FALSE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "5:10", EStatementRelation.LESS_THAN, "1", AssertType.FALSE);
+//		evaluateRandomizedOne(methodParameterNode, "a-z", EStatementRelation.LESS_THAN, "a-z", AssertType.FALSE);
+//		evaluateRandomizedOne(methodParameterNode, "a-z", EStatementRelation.EQUAL, "a-z", AssertType.FALSE);
+//		evaluateRandomizedOne(methodParameterNode, "a-z", EStatementRelation.EQUAL, "x", AssertType.FALSE);
+	}
+	
+	
+	@Test
+	public void evaluateForAmbigousInteger() {
+		evaluateForAmbigousIntegerTypes(JavaTypeHelper.TYPE_NAME_INT);
+	}
+
+	@Test
+	public void evaluateForAmbigousLong() {
+		evaluateForAmbigousIntegerTypes(JavaTypeHelper.TYPE_NAME_LONG);
+	}	
+
+	@Test
+	public void evaluateForAmbigousShort() {
+		evaluateForAmbigousIntegerTypes(JavaTypeHelper.TYPE_NAME_SHORT);
+	}	
+
+	@Test
+	public void evaluateFoAmbigousdByte() {
+		evaluateForAmbigousIntegerTypes(JavaTypeHelper.TYPE_NAME_BYTE);
+	}	
+	
 
 	@Test
 	public void evaluateForFloat() {

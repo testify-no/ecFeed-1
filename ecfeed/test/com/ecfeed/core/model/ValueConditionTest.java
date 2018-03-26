@@ -337,22 +337,22 @@ public class ValueConditionTest {
 	public void evaluateForAmbigousInteger() {
 		evaluateForAmbigousIntegerTypes(JavaTypeHelper.TYPE_NAME_INT);
 	}
-//
-//	@Test
-//	public void evaluateForAmbigousLong() {
-//		evaluateForAmbigousIntegerTypes(JavaTypeHelper.TYPE_NAME_LONG);
-//	}	
-//
-//	@Test
-//	public void evaluateForAmbigousShort() {
-//		evaluateForAmbigousIntegerTypes(JavaTypeHelper.TYPE_NAME_SHORT);
-//	}	
-//
-//	@Test
-//	public void evaluateFoAmbigousdByte() {
-//		evaluateForAmbigousIntegerTypes(JavaTypeHelper.TYPE_NAME_BYTE);
-//	}	
-//	
+
+	@Test
+	public void evaluateForAmbigousLong() {
+		evaluateForAmbigousIntegerTypes(JavaTypeHelper.TYPE_NAME_LONG);
+	}	
+
+	@Test
+	public void evaluateForAmbigousShort() {
+		evaluateForAmbigousIntegerTypes(JavaTypeHelper.TYPE_NAME_SHORT);
+	}	
+
+	@Test
+	public void evaluateFoAmbigousdByte() {
+		evaluateForAmbigousIntegerTypes(JavaTypeHelper.TYPE_NAME_BYTE);
+	}	
+	
 	
 	
 	
