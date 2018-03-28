@@ -19,12 +19,12 @@ import com.ecfeed.core.utils.StringHelper;
 
 public class ValueCondition implements IStatementCondition {
 
-	//with one, cannot be range
+	//with one, cannot be range (probably)
 	private String fRightValue;
 	private RelationStatement fParentRelationStatement;
 
 	public ValueCondition(String rightValue, RelationStatement parentRelationStatement) {
-
+ 
 		fRightValue = rightValue;
 		fParentRelationStatement = parentRelationStatement;
 	}
