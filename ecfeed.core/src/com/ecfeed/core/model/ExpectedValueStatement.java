@@ -14,6 +14,7 @@ import java.util.List;
 
 import com.ecfeed.core.utils.EvaluationResult;
 
+//ambigous always false
 public class ExpectedValueStatement extends AbstractStatement implements IRelationalStatement{
 
 	MethodParameterNode fParameter;
@@ -146,9 +147,9 @@ public class ExpectedValueStatement extends AbstractStatement implements IRelati
 	}
 
 	@Override
-	public EvaluationResult isAmgibous(List<ChoiceNode> values) {
+	public boolean isAmgibous(List<ChoiceNode> values) {
 		// TODO Auto-generated method stub
-		return null;
+		return false;
 	}
 
 }

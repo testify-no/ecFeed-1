@@ -54,9 +54,8 @@ public class AbstractStatementTest {
 			return false;
 		}
 		@Override
-		public EvaluationResult isAmgibous(List<ChoiceNode> values) {
-			// TODO Auto-generated method stub
-			return null;
+		public boolean isAmgibous(List<ChoiceNode> values) {
+			return false;
 		}
 	}
 

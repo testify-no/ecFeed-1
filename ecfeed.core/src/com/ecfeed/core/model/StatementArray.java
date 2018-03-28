@@ -16,7 +16,7 @@ import java.util.List;
 import com.ecfeed.core.utils.EvaluationResult;
 
 public class StatementArray extends AbstractStatement {
-
+	//cascade call isAmbigous;
 	private EStatementOperator fOperator;
 	private List<AbstractStatement> fStatements;
 
@@ -241,9 +241,9 @@ public class StatementArray extends AbstractStatement {
 	}
 
 	@Override
-	public EvaluationResult isAmgibous(List<ChoiceNode> values) {
+	public boolean isAmgibous(List<ChoiceNode> values) {
 		// TODO Auto-generated method stub
-		return null;
+		return false;
 	}
 
 }

@@ -18,7 +18,7 @@ import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.ObjectHelper;
 
 public class ChoiceCondition implements IStatementCondition {
-
+	//with one param, can be range
 	private ChoiceNode fRightChoice;
 	RelationStatement fParentRelationStatement;
 
@@ -164,41 +164,39 @@ public class ChoiceCondition implements IStatementCondition {
 		}
 	}
 
-	@Override
-	public EvaluationResult isAmbigous(List<ChoiceNode> choices) {
+	
+	public boolean isAmbigous(List<ChoiceNode> choices, EStatementRelation relation) {
 		String fRightValue = fRightChoice.getValueString();
 		String substituteType = JavaTypeHelper.getSubstituteType(fParentRelationStatement
 				.getLeftParameter().getType(), JavaTypeHelper.getStringTypeName());
 
 		if (substituteType == null) {
-			return EvaluationResult.FALSE;
+			return false;
 		}
 
 		String leftChoiceStr = getChoiceString(choices, fParentRelationStatement.getLeftParameter());
 
-		if (leftChoiceStr == null) {
-			return EvaluationResult.INSUFFICIENT_DATA;
-		}
-		EStatementRelation relation = fParentRelationStatement.getRelation();
+
+	//	EStatementRelation relation = fParentRelationStatement.getRelation();
 		
 		boolean isRandomizedChoice = StatementConditionHelper.getChoiceRandomized(choices,
 				fParentRelationStatement.getLeftParameter());
 		if (isRandomizedChoice) {
 			if (JavaTypeHelper.TYPE_NAME_STRING.equals(substituteType)) {
-				return EvaluationResult.convertFromBoolean(leftChoiceStr.matches(fRightValue));
+				return leftChoiceStr.matches(fRightValue);
 			} else {
 				boolean result = StatementConditionHelper.isAmbigous(leftChoiceStr,
 						fRightValue, relation, substituteType);
-				return EvaluationResult.convertFromBoolean(result);
+				return result;
 			}
 		}
 
 		if (StatementConditionHelper.isRelationMatchQuiet(relation, substituteType, leftChoiceStr,
 				fRightValue)) {
-			return EvaluationResult.TRUE;
+			return true;
 		}
 
-		return EvaluationResult.FALSE;
+		return false;
 	}
 	
 	private static String getChoiceString(List<ChoiceNode> choices, MethodParameterNode methodParameterNode) {
@@ -211,6 +209,5 @@ public class ChoiceCondition implements IStatementCondition {
 
 		return choiceNode.getValueString();
 	}
-
 }
 
