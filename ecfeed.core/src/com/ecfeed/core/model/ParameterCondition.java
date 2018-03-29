@@ -165,8 +165,9 @@ public class ParameterCondition implements IStatementCondition {
 		String leftChoiceStr = getChoiceString(values, fParentRelationStatement.getLeftParameter());
 
 
+		boolean isAmbigous = false;
 		for (ChoiceNode choiceNode : fRightParameterNode.getLeafChoices()) {
-			
+			//isAmbigous |= choiceNode.isAmbigous(values, relation);
 		}
 		
 	//	EStatementRelation relation = fParentRelationStatement.getRelation();
