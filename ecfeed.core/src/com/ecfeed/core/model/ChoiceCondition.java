@@ -165,7 +165,8 @@ public class ChoiceCondition implements IStatementCondition {
 		}
 	}
 
-	
+	// return false;
+	// evaluate checks only object references, it's always the same choice, so checking ranges doesn't make sense
 	public boolean isAmbigous(List<ChoiceNode> choices, EStatementRelation relation) {
 		String fRightValue = fRightChoice.getValueString();
 		String substituteType = JavaTypeHelper.getSubstituteType(fParentRelationStatement
