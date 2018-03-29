@@ -165,7 +165,7 @@ public class ParameterCondition implements IStatementCondition {
 		String leftChoiceStr = getChoiceString(values, fParentRelationStatement.getLeftParameter());
 
 
-		for (ChoiceNode what : fRightParameterNode.getLeafChoices()) {
+		for (ChoiceNode choiceNode : fRightParameterNode.getLeafChoices()) {
 			
 		}
 		
