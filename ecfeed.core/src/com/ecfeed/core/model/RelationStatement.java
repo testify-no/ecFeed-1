@@ -12,6 +12,8 @@ package com.ecfeed.core.model;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.ecfeed.core.utils.EvaluationResult;
 import com.ecfeed.core.utils.SystemLogger;
 

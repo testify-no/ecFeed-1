@@ -456,7 +456,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		if (!validateTargetFileText(message)) {
 			return false;
 		}
-		
+		System.out.println("costam");
 		if (isAmbigous(null, null)) {
 			//todo
 		}
@@ -923,6 +923,9 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 					&& ((MethodParameterNode) event.getElement()).isExpected()) {
 				fParametersViewer.setChecked(event.getElement(), true);
 			} else {
+				//maybe check only after click OK
+				//check constraints here(?) parameternodes, gimme any help, example, something :|
+				System.out.println(event.getElement());
 				updateOkButtonAndErrorMsg();
 			}
 		}
