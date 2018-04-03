@@ -80,7 +80,7 @@ import com.ecfeed.ui.editor.IValueApplier;
 public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 	private Combo fTestSuiteCombo;
 	private Combo fGeneratorCombo;
-	private Button fOkButton;
+	private Button fOkButton;	//on constraints, ambigous
 	private MethodNode fMethod;
 	private String fTestSuiteName;
 	private CheckboxTreeViewer fParametersViewer;
@@ -172,6 +172,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		return fExportTemplate.getTemplateText();
 	}
 
+	//here  
 	@Override
 	public void okPressed() {
 		if (fTargetFileText != null) {
@@ -454,9 +455,8 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		if (!validateTargetFileText(message)) {
 			return false;
 		}
-		System.out.println("costam");
 		if (isAmbigous(null, null)) {
-			//todo
+			System.out.println("Ambigous state, todo");
 		}
 		return true;
 	}
@@ -883,7 +883,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 			} else {
 				for (ChoiceNode choice : parameters.get(i).getLeafChoicesWithCopies()) {
 					if (fParametersViewer.getChecked(choice)) {
-						choices.add(choice);
+						choices.add(choice); //?
 					}
 				}
 			}
