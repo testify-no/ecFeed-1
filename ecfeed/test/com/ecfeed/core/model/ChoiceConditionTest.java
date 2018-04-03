@@ -409,14 +409,14 @@ public class ChoiceConditionTest {
 		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.GREATER_THAN, "1:9", AssertType.TRUE);
 		
 		evaluateRandomizeAmbigousOne(methodParameterNode, "2:2", EStatementRelation.EQUAL, "2:2", AssertType.FALSE);
-		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "9:100", AssertType.TRUE);
-		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "10:100", AssertType.TRUE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "9:100", AssertType.FALSE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "10:100", AssertType.FALSE);
 		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "11:100", AssertType.FALSE);
 		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "-10:-1", AssertType.FALSE);
-		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "-10:0", AssertType.TRUE);
-		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "-10:1", AssertType.TRUE);
-		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "-1:11", AssertType.TRUE);
-		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "1:9", AssertType.TRUE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "-10:0", AssertType.FALSE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "-10:1", AssertType.FALSE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "-1:11", AssertType.FALSE);
+		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "1:9", AssertType.FALSE);
 		
 		evaluateRandomizeAmbigousOne(methodParameterNode, "2:2", EStatementRelation.LESS_EQUAL, "2:2", AssertType.FALSE);
 		evaluateRandomizeAmbigousOne(methodParameterNode, "0:10", EStatementRelation.LESS_EQUAL, "9:100", AssertType.TRUE);
