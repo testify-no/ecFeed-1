@@ -34,11 +34,6 @@ public class Constraint implements IConstraint<ChoiceNode> {
 		fPremise = premise;
 		fConsequence = consequence;
 	}
-
-	private boolean getChocieEvaluate(List<ChoiceNode> values) {//uglyMethodNeedsRefactor() {
-		
-		return true;
-	}
 	
 	@Override
 	public EvaluationResult evaluate(List<ChoiceNode> values) {

@@ -124,7 +124,7 @@ public class TestSuiteGenerationSupport {
 		SetupDialogGenerateTestSuite dialog = 
 				new SetupDialogGenerateTestSuite(
 						getActiveShell(), fTarget, null, fFileInfoProvider);
-
+	
 		if(dialog.open() == IDialogConstants.OK_ID){
 			IGenerator<ChoiceNode> selectedGenerator = dialog.getSelectedGenerator();
 			List<List<ChoiceNode>> algorithmInput = dialog.getAlgorithmInput();
