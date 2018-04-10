@@ -241,10 +241,10 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		List<List<ChoiceNode>> input = getCheckedArguments();
 		
 		for (Constraint constraint : constraints) {
-		/*	if(constraint.isAmbigous(input)) {
+			if(constraint.isAmbigous(input)) {
 				updateAmbigousWarningLabel(true);
 				return;
-			}*/
+			}
 		}
 		updateAmbigousWarningLabel(false);
 		
@@ -484,7 +484,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 	}
 
 	private boolean isAmbigous(EStatementRelation statementRelation, String leftValue) {
-		for (ConstraintNode constaintNode: fMethod.getConstraintNodes()) {
+	/*	for (ConstraintNode constaintNode: fMethod.getConstraintNodes()) {
 			//check value conditions for all nodes, constrains and param. methods
 		}
 		
@@ -499,7 +499,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 				//info - about object - is necessary
 			}
 		}
-		return false;
+*/		return false;
 	}
 
 	private boolean validateTestSuiteName(StringHolder message) {

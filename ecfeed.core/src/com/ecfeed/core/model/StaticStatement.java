@@ -103,8 +103,7 @@ public class StaticStatement extends AbstractStatement {
 	}
 
 	@Override
-	public boolean isAmgibous(List<ChoiceNode> values) {
-		// TODO Auto-generated method stub
+	public boolean isAmgibous(List<List<ChoiceNode>> values) {
 		return false;
 	}
 

@@ -103,8 +103,8 @@ public class ValueConditionTest {
 		choiceNode.setRandomizeValue(true);
 		
 		
-
-		EvaluationResult result = EvaluationResult.convertFromBoolean(statement.isAmgibous(createList(choiceNode)));
+		EvaluationResult result = EvaluationResult.convertFromBoolean(
+				statement.isAmgibous(Arrays.asList(createList(choiceNode)));
 
 		
 		if (assertResult == AssertType.TRUE) {

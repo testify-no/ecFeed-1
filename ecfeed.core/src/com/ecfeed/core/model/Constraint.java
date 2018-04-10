@@ -35,12 +35,8 @@ public class Constraint implements IConstraint<ChoiceNode> {
 		fConsequence = consequence;
 	}
 	
-
-
-	@Override
-	public boolean isAmbigous(List<ChoiceNode> values) {
-		
-		return fPremise.isAmgibous(values);
+	public boolean isAmbigous(List<List<ChoiceNode>> values) {
+		return fPremise.isAmgibous(values) || fConsequence.isAmgibous(values);
 		
 		//todo 		EvaluationResult premiseEvaluationResult = fPremise.evaluate(values); 
 		//return false;

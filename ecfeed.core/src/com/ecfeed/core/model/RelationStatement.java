@@ -91,11 +91,17 @@ public class RelationStatement extends AbstractStatement implements IRelationalS
 		return result;
 	}
 	
+/*	private int getParameterPosition() {
+		return fLeftParameter.getIndex();
+	}*/
+	
 	@Override
-	public boolean isAmgibous(List<ChoiceNode> values) {
+	public boolean isAmgibous(List<List<ChoiceNode>> values) {
 		boolean result;
 		try {
-			result = fRightCondition.isAmbigous(values, fRelation);
+			int index = fLeftParameter.getIndex();
+//			List<ChoiceNode> input = values.get(index);
+			result = fRightCondition.isAmbigous(values, index, fRelation);
 		}
 		catch (Exception e) {
 			SystemLogger.logCatch(e.getMessage());
