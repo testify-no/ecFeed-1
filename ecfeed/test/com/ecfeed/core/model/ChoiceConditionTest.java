@@ -112,7 +112,7 @@ public class ChoiceConditionTest {
 		
 		leftChoiceNode.setParent(leftMethodParameterNode);
 
-		EvaluationResult result = EvaluationResult.convertFromBoolean(statement.isAmgibous(createList(leftChoiceNode)));
+		EvaluationResult result = EvaluationResult.convertFromBoolean(statement.isAmgibous(Arrays.asList(createList(leftChoiceNode))));
 
 		if (assertResult == AssertType.TRUE) {
 			assertEquals(EvaluationResult.TRUE, result);
@@ -122,7 +122,7 @@ public class ChoiceConditionTest {
 	}
 
 	private List<ChoiceNode> createList(ChoiceNode choiceNode1) {
-		return Arrays.asList(new ChoiceNode[]{choiceNode1});
+		return Arrays.asList(choiceNode1);
 	}
 
 	@Test

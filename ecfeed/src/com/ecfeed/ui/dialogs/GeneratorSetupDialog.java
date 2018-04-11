@@ -172,7 +172,6 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		return fExportTemplate.getTemplateText();
 	}
 
-	//here  
 	@Override
 	public void okPressed() {
 		if (fTargetFileText != null) {
@@ -231,15 +230,17 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		selectChoicesLabel.setLayoutData(
 				new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 
-		selectChoicesLabel.setText("qqq");
+		selectChoicesLabel.setText("                    ");
 
 		return selectChoicesLabel;
 	}
 	
-	private void checkAmbigousState() {
+	private void checkAmbigousState() { 
 		List<Constraint> constraints = getCheckedConstraints();
 		List<List<ChoiceNode>> input = getCheckedArguments();
 		
+		//constain's name
+		//and statement
 		for (Constraint constraint : constraints) {
 			if(constraint.isAmbigous(input)) {
 				updateAmbigousWarningLabel(true);
@@ -247,18 +248,14 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 			}
 		}
 		updateAmbigousWarningLabel(false);
-		
-		//do something with it
-		System.out.println("done");
 	}
 	
-	//todo update when choice/constrain listener is in action
 	private void updateAmbigousWarningLabel(boolean isAmbigousCondition) {
 		if(isAmbigousCondition) {
-			ambigousLabel.setText("ambigous is near"); //String.Format
+			ambigousLabel.setText(String.format(IS_AMBIGOUS, "constraintsname", "somethingfromstatement")); //String.Format
 		}
 		else {
-			ambigousLabel.setText("abcd");
+			ambigousLabel.setText("                    ");
 		}
 	}
 
@@ -520,8 +517,6 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		return true;
 	}
 
-	
-	//here ambigous
 	private boolean validateMethodParameters(boolean onlyExecutable, StringHolder message) {
 		for (MethodParameterNode parameter : fMethod.getMethodParameters()) {
 			if (!validateOneParameter(parameter, onlyExecutable, message)) {
@@ -554,7 +549,6 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		return true;
 	}
 
-	//todo here maybe
 	private boolean validateChoices(
 			MethodParameterNode parameter, boolean onlyExecutable, StringHolder message) {
 		boolean checkedChoiceFound = false;
