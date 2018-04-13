@@ -93,7 +93,7 @@ public class MethodParameterOperationSetType extends BulkOperation {
 
 			@Override
 			public Object visit(ExpectedValueStatement statement) throws Exception {
-
+				//here, todo
 				boolean success = true;
 				ITypeAdapter typeAdapter = getTypeAdapterProvider().getAdapter(getNewType());
 				String newValue = typeAdapter.convert(statement.getCondition().getValueString());
@@ -245,6 +245,8 @@ public class MethodParameterOperationSetType extends BulkOperation {
 
 			adaptDefaultValue();
 
+			//here
+			// problem isn't with 'expected' parameter, but with adaptConstraints logic
 			if (fMethodParameterNode.isExpected()) {
 				adaptTestCases();
 				adaptConstraints();
@@ -345,7 +347,7 @@ public class MethodParameterOperationSetType extends BulkOperation {
 		}
 
 		private void adaptConstraints() {
-
+			//here, todo
 			MethodNode methodNode = fMethodParameterNode.getMethod();
 			MethodNode.ConstraintsItr constraintItr = methodNode.getIterator();
 
@@ -356,8 +358,8 @@ public class MethodParameterOperationSetType extends BulkOperation {
 
 				IStatementVisitor statementAdapter = new StatementAdapter();
 				try {
-					if ((boolean)constraint.getPremise().accept(statementAdapter) == false ||
-							(boolean)constraint.getConsequence().accept(statementAdapter) == false) {
+					if (!(boolean)constraint.getPremise().accept(statementAdapter) ||
+							!(boolean)constraint.getConsequence().accept(statementAdapter)) {
 						methodNode.removeConstraint(constraintItr);
 					}
 				} catch(Exception e) {

@@ -47,7 +47,6 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 	}	
 
 	private class TypeApplier implements IValueApplier {
-
 		@Override
 		public void applyValue() {
 			getParameterIf().setType(fTypeCombo.getText());
