@@ -93,8 +93,7 @@ public class MethodParameterOperationSetType extends BulkOperation {
 
 			@Override
 			public Object visit(ExpectedValueStatement statement) throws Exception {
-				//here, todo
-				boolean success = true;
+ 				boolean success = true;
 				ITypeAdapter typeAdapter = getTypeAdapterProvider().getAdapter(getNewType());
 				String newValue = typeAdapter.convert(statement.getCondition().getValueString());
 				fOriginalStatementValues.put(statement, statement.getCondition().getValueString());
@@ -245,8 +244,6 @@ public class MethodParameterOperationSetType extends BulkOperation {
 
 			adaptDefaultValue();
 
-			//here
-			// problem isn't with 'expected' parameter, but with adaptConstraints logic
 			if (fMethodParameterNode.isExpected()) {
 				adaptTestCases();
 				adaptConstraints();
@@ -347,7 +344,6 @@ public class MethodParameterOperationSetType extends BulkOperation {
 		}
 
 		private void adaptConstraints() {
-			//here, todo
 			MethodNode methodNode = fMethodParameterNode.getMethod();
 			MethodNode.ConstraintsItr constraintItr = methodNode.getIterator();
 
@@ -355,19 +351,35 @@ public class MethodParameterOperationSetType extends BulkOperation {
 
 				ConstraintNode constraintNode = methodNode.nextConstraint(constraintItr);
 				Constraint constraint = constraintNode.getConstraint();
+				
+				if (isRelevantConstraint(constraint)) {
 
-				IStatementVisitor statementAdapter = new StatementAdapter();
-				try {
-					if (!(boolean)constraint.getPremise().accept(statementAdapter) ||
-							!(boolean)constraint.getConsequence().accept(statementAdapter)) {
+					IStatementVisitor statementAdapter = new StatementAdapter();
+					try {
+						if (!(boolean) constraint.getPremise().accept(statementAdapter)
+								|| !(boolean) constraint.getConsequence().accept(statementAdapter)) {
+							methodNode.removeConstraint(constraintItr);
+						}
+					} catch (Exception e) {
 						methodNode.removeConstraint(constraintItr);
 					}
-				} catch(Exception e) {
-					methodNode.removeConstraint(constraintItr);
 				}
 			}
 		}
+		
+		private boolean isRelevantConstraint(Constraint constraint) {
+			if (constraint.getConsequence() instanceof ExpectedValueStatement) {
+				ExpectedValueStatement expectedValueStatement = (ExpectedValueStatement)constraint.getConsequence();
+				MethodParameterNode methodParameterNode = expectedValueStatement.getParameter();
+				if(fMethodParameterNode.equals(methodParameterNode)) {
+					return true;
+				}
+			}
+			return false;
+		}
 	}
+	
+
 
 	public MethodParameterOperationSetType(MethodParameterNode target, String newType, ITypeAdapterProvider adapterProvider) {
 
