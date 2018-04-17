@@ -93,10 +93,16 @@ public class MethodParameterOperationSetType extends BulkOperation {
 
 			@Override
 			public Object visit(ExpectedValueStatement statement) throws Exception {
+<<<<<<< HEAD
 
 				boolean success = true;
 				ITypeAdapter adapter = getAdapterProvider().getAdapter(getNewType());
 				String newValue = adapter.convert(statement.getCondition().getValueString());
+=======
+ 				boolean success = true;
+				ITypeAdapter typeAdapter = getTypeAdapterProvider().getAdapter(getNewType());
+				String newValue = typeAdapter.convert(statement.getCondition().getValueString());
+>>>>>>> 30b0ad4... Fix bug, which validated all constraints, when parameter type was changed, instead of validate  only constraints that used the parameter. Correction validate premise and consequence statements in case of change parameter type.
 				fOriginalStatementValues.put(statement, statement.getCondition().getValueString());
 				statement.getCondition().setValueString(newValue);
 				if (JavaTypeHelper.isUserType(getNewType())) {
@@ -246,6 +252,10 @@ public class MethodParameterOperationSetType extends BulkOperation {
 			fOriginalTestCases = new ArrayList<>(fMethodParameterNode.getMethod().getTestCases());
 			fOriginalConstraints = new ArrayList<>(fMethodParameterNode.getMethod().getConstraintNodes());
 			adaptDefaultValue();
+<<<<<<< HEAD
+=======
+
+>>>>>>> 30b0ad4... Fix bug, which validated all constraints, when parameter type was changed, instead of validate  only constraints that used the parameter. Correction validate premise and consequence statements in case of change parameter type.
 			if (fMethodParameterNode.isExpected()) {
 				adaptTestCases();
 				adaptConstraints();
@@ -324,7 +334,10 @@ public class MethodParameterOperationSetType extends BulkOperation {
 		}
 
 		private void adaptConstraints() {
+<<<<<<< HEAD
 
+=======
+>>>>>>> 30b0ad4... Fix bug, which validated all constraints, when parameter type was changed, instead of validate  only constraints that used the parameter. Correction validate premise and consequence statements in case of change parameter type.
 			MethodNode methodNode = fMethodParameterNode.getMethod();
 			MethodNode.ConstraintsItr constraintItr = methodNode.getIterator();
 
@@ -332,19 +345,42 @@ public class MethodParameterOperationSetType extends BulkOperation {
 
 				ConstraintNode constraintNode = methodNode.nextConstraint(constraintItr);
 				Constraint constraint = constraintNode.getConstraint();
+				
+				if (isRelevantConstraint(constraint)) {
 
+<<<<<<< HEAD
 				IStatementVisitor statementAdapter = new StatementAdapter();
 				try {
 					if ((boolean)constraint.getPremise().accept(statementAdapter) == false ||
 							(boolean)constraint.getConsequence().accept(statementAdapter) == false) {
+=======
+					IStatementVisitor statementAdapter = new StatementAdapter();
+					try {
+						if (!(boolean) constraint.getPremise().accept(statementAdapter)
+								|| !(boolean) constraint.getConsequence().accept(statementAdapter)) {
+							methodNode.removeConstraint(constraintItr);
+						}
+					} catch (Exception e) {
+>>>>>>> 30b0ad4... Fix bug, which validated all constraints, when parameter type was changed, instead of validate  only constraints that used the parameter. Correction validate premise and consequence statements in case of change parameter type.
 						methodNode.removeConstraint(constraintItr);
 					}
-				} catch(Exception e) {
-					methodNode.removeConstraint(constraintItr);
 				}
 			}
 		}
+		
+		private boolean isRelevantConstraint(Constraint constraint) {
+			if (constraint.getConsequence() instanceof ExpectedValueStatement) {
+				ExpectedValueStatement expectedValueStatement = (ExpectedValueStatement)constraint.getConsequence();
+				MethodParameterNode methodParameterNode = expectedValueStatement.getParameter();
+				if(fMethodParameterNode.equals(methodParameterNode)) {
+					return true;
+				}
+			}
+			return false;
+		}
 	}
+	
+
 
 	public MethodParameterOperationSetType(MethodParameterNode target, String newType, ITypeAdapterProvider adapterProvider) {
 
