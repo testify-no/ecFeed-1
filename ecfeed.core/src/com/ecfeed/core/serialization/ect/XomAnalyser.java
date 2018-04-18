@@ -609,7 +609,6 @@ public abstract class XomAnalyser {
 		String name = getElementName(element);
 		String value = getAttributeValue(element, VALUE_ATTRIBUTE);
 
-		//here
 		boolean isRandomized = getIsRandomizedValue(element, NODE_IS_RADOMIZED_ATTRIBUTE);
 		
 		
