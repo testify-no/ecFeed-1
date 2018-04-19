@@ -330,19 +330,35 @@ public class MethodParameterOperationSetType extends BulkOperation {
 
 			while (methodNode.hasNextConstraint(constraintItr)) {
 
-				ConstraintNode constraintNode = methodNode.nextConstraint(constraintItr);
+				ConstraintNode constraintNode = methodNode
+						.nextConstraint(constraintItr);
 				Constraint constraint = constraintNode.getConstraint();
 
-				IStatementVisitor statementAdapter = new StatementAdapter();
-				try {
-					if ((boolean)constraint.getPremise().accept(statementAdapter) == false ||
+				if (isRelevantConstraint(constraint)) {
+					IStatementVisitor statementAdapter = new StatementAdapter();
+					try {
+						if ((boolean)constraint.getPremise().accept(statementAdapter) == false ||
 							(boolean)constraint.getConsequence().accept(statementAdapter) == false) {
+							methodNode.removeConstraint(constraintItr);
+						}
+					} catch (Exception e) {
 						methodNode.removeConstraint(constraintItr);
 					}
-				} catch(Exception e) {
-					methodNode.removeConstraint(constraintItr);
 				}
 			}
+		}
+		
+		private boolean isRelevantConstraint(Constraint constraint) {
+			if (constraint.getConsequence() instanceof ExpectedValueStatement) {
+				ExpectedValueStatement expectedValueStatement = (ExpectedValueStatement) constraint
+						.getConsequence();
+				MethodParameterNode methodParameterNode = expectedValueStatement
+						.getParameter();
+				if (fMethodParameterNode.equals(methodParameterNode)) {
+					return true;
+				}
+			}
+			return false;
 		}
 	}
 
