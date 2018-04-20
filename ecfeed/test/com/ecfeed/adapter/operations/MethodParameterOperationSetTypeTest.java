@@ -1,5 +1,6 @@
 package com.ecfeed.adapter.operations;
 
+import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.ecfeed.core.generators.CartesianProductGenerator;
@@ -13,5 +14,15 @@ import com.ecfeed.junit.annotations.Generator;
 @EcModel("test/com/ecfeed/adapter/operations/Inntekstkomponenten.ect")
 @Constraints(Constraints.ALL)
 public class MethodParameterOperationSetTypeTest {
-
+	
+	@Test
+	public void parseStringToLongTest(){
+		
+	}
+	
+	@Test
+	public void parseAnotherStringArgumentToLongTest() {
+		
+	}
+	
 }
