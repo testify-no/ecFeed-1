@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Model name="Inntektskomponenten" version="2">
-    <Class name="com.example.test.TestClass">
+<Model name="MethodParameterOperationSetTypeTest" version="2">
+    <Class name="com.ecfeed.adapter.operations.MethodParameterOperationSetTypeTest">
         <Properties>
             <Property name="runOnAndroid" type="boolean" value="false"/>
         </Properties>
@@ -71,7 +71,7 @@
                 <Choice name="bidrag" value="Bidrag"/>
                 <Choice name="Oppfostringsbidrag" value="Oppfostringsbidrag"/>
             </Parameter>
-            <Parameter name="Feilmelding" type="String" isExpected="true" expected="" linked="false">
+            <Parameter name="feilmelding" type="String" isExpected="true" expected="" linked="false">
                 <Properties>
                     <Property name="wbIsOptional" type="boolean" value="false"/>
                 </Properties>
@@ -79,7 +79,7 @@
                     <TypeComments/>
                 </Comments>
             </Parameter>
-            <Parameter name="AnotherParameter" type="String" isExpected="true" expected="" linked="false">
+            <Parameter name="anotherParameter" type="String" isExpected="true" expected="" linked="false">
                 <Properties>
                     <Property name="wbIsOptional" type="boolean" value="false"/>
                 </Properties>
@@ -95,7 +95,7 @@
                     </StatementArray>
                 </Premise>
                 <Consequence>
-                    <ExpectedValueStatement parameter="AnotherParameter" value="434"/>
+                    <ExpectedValueStatement parameter="anotherParameter" value="434"/>
                 </Consequence>
             </Constraint>
             <Constraint name="constraint">
@@ -106,7 +106,7 @@
                     </StatementArray>
                 </Premise>
                 <Consequence>
-                    <ExpectedValueStatement parameter="AnotherParameter" value="sdgsdgs"/>
+                    <ExpectedValueStatement parameter="anotherParameter" value="sdgsdgs"/>
                 </Consequence>
             </Constraint>
             <Constraint name="Mangler\stilgang\stil\sBidragsforskuddA-Inntekt">
@@ -118,7 +118,7 @@
                     </StatementArray>
                 </Premise>
                 <Consequence>
-                    <ExpectedValueStatement parameter="Feilmelding" value="Bruker\shar\sikke\stilgang\stil\sfilter\sBidragsforskudd\sa-inntekt"/>
+                    <ExpectedValueStatement parameter="feilmelding" value="Bruker\shar\sikke\stilgang\stil\sfilter\sBidragsforskudd\sa-inntekt"/>
                 </Consequence>
             </Constraint>
             <Constraint name="Sykepenger\sog\sBidragsforskudd\sa-inntekt">
@@ -130,7 +130,7 @@
                     </StatementArray>
                 </Premise>
                 <Consequence>
-                    <ExpectedValueStatement parameter="Feilmelding" value="Sykepenger\ser\sikke\set\sgyldig\sformål\sfor\sfilter\sBidragsforskudd\sa-inntekt"/>
+                    <ExpectedValueStatement parameter="feilmelding" value="Sykepenger\ser\sikke\set\sgyldig\sformål\sfor\sfilter\sBidragsforskudd\sa-inntekt"/>
                 </Consequence>
             </Constraint>
             <Constraint name="Mangler\stilgang\stil\sBidrag\sa-inntekt">
@@ -142,7 +142,7 @@
                     </StatementArray>
                 </Premise>
                 <Consequence>
-                    <ExpectedValueStatement parameter="Feilmelding" value="Bruker\shar\sikke\stilgang\stil\sfilter\sBidrag\sa-inntekt"/>
+                    <ExpectedValueStatement parameter="feilmelding" value="Bruker\shar\sikke\stilgang\stil\sfilter\sBidrag\sa-inntekt"/>
                 </Consequence>
             </Constraint>
             <Constraint name="Sykepenger\sog\sBidrag\sa-inntekt">
@@ -154,7 +154,7 @@
                     </StatementArray>
                 </Premise>
                 <Consequence>
-                    <ExpectedValueStatement parameter="Feilmelding" value="Sykepenger\ser\sikke\set\sgyldig\sformål\sfor\sfilter\sBidrag\sa-inntekt"/>
+                    <ExpectedValueStatement parameter="feilmelding" value="Sykepenger\ser\sikke\set\sgyldig\sformål\sfor\sfilter\sBidrag\sa-inntekt"/>
                 </Consequence>
             </Constraint>
             <Constraint name="What">
@@ -166,9 +166,25 @@
                     </StatementArray>
                 </Premise>
                 <Consequence>
-                    <ExpectedValueStatement parameter="AnotherParameter" value="AFSDFsd"/>
+                    <ExpectedValueStatement parameter="anotherParameter" value="AFSDFsd"/>
                 </Consequence>
             </Constraint>
+        </Method>
+        <Method name="uselessMethod">
+            <Properties>
+                <Property name="methodRunner" type="String" value="Java Runner"/>
+                <Property name="wbMapBrowserToParam" type="boolean" value="false"/>
+                <Property name="wbBrowser" type="String" value="Chrome"/>
+                <Property name="wbMapStartUrlToParam" type="boolean" value="false"/>
+            </Properties>
+            <Parameter name="arg1" type="String" isExpected="false" expected="0" linked="false">
+                <Properties>
+                    <Property name="wbIsOptional" type="boolean" value="false"/>
+                </Properties>
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+            </Parameter>
         </Method>
     </Class>
 </Model>
