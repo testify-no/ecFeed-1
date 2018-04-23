@@ -13,6 +13,7 @@ package com.ecfeed.ui.editor;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -104,4 +105,10 @@ public class OtherMethodsViewer extends CheckboxTableViewerSection {
 		}
 		return true;
 	}	
+
+	@Override
+	protected IBaseLabelProvider createViewerLabelProvider(){
+		return new OtherMethodLabelProvider();
+	}
 }
+

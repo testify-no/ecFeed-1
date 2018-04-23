@@ -10,54 +10,24 @@
 
 package com.ecfeed.ui.editor;
 
-import java.util.List;
+import org.eclipse.jface.viewers.LabelProvider;
 
-import org.eclipse.jface.viewers.ILabelProvider;
-import org.eclipse.jface.viewers.ILabelProviderListener;
-import org.eclipse.swt.graphics.Image;
-
-import com.ecfeed.core.model.AbstractParameterNode;
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.model.MethodNode;
+import com.ecfeed.core.model.MethodNodeHelper;
 
-public class OtherMethodLabelProvider implements ILabelProvider {
-
-	@Override
-	public void addListener(ILabelProviderListener listener) {
-	}
-
-	@Override
-	public void dispose() {		
-	}
-
-	@Override
-	public boolean isLabelProperty(Object element, String property) {
-		return false;
-	}
-
-	@Override
-	public void removeListener(ILabelProviderListener listener) {
-		
-	}
-
-	@Override
-	public Image getImage(Object element) {
-		return null;
-	}
+public class OtherMethodLabelProvider extends LabelProvider {
 
 	@Override
 	public String getText(Object element) {
-		List<MethodNode> othermethods = (List<MethodNode>) element;
-//		String result = othermethods.to
-		for(MethodNode method: othermethods){
-			for(AbstractParameterNode parameter: method.getParameters()){
-//				String result = parameter.toString();
-				String result = parameter.toString();
-				
-				
+		if (element instanceof MethodNode) {
+			MethodNode othermethods = (MethodNode) element;
+			if (ApplicationContext.getSimplifiedUI()) {
+				return MethodNodeHelper.simplifiedToSimpleModeString(othermethods);
+			} else {
+				return othermethods.toString();
 			}
 		}
 		return null;
 	}
-
-		
 }
