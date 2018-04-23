@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Core
 Bundle-SymbolicName: ecfeed.core
 Bundle-Version: 1.0.1.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: com.ecfeed.core.adapter,
  com.ecfeed.core.adapter.java,
  com.ecfeed.core.adapter.operations,
