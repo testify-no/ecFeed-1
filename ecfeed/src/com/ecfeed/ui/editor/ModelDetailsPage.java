@@ -116,6 +116,7 @@ public class ModelDetailsPage extends BasicDetailsPage {
 				
 			} catch (Exception e) {
 				SystemLogger.logCatch(e.getMessage());
+				e.printStackTrace();
 			}
 			
 			refresh();

@@ -91,26 +91,36 @@ public class AbstractNodeInterface extends OperationExecuter {
 		return fFileInfoProvider;
 	}
 
+//	public boolean setName(String newName) {
+//		if (newName.equals(getName())) {
+//			return false;
+//		}
+//		String problemTitle = "";
+//		try {
+//			problemTitle = (String) fNode.accept(new RenameParameterProblemTitleProvider());
+//		} catch (Exception e) {
+//			SystemLogger.logCatch(e.getMessage());
+//		}
+//		ApplicationContext.setSimplifiedUI(true);
+//		if(ApplicationContext.getSimplifiedUI()){
+//			TypeConverter typeConverter = new TypeConverter(newName);
+//			newName = typeConverter.convertToValidJaveIdentifier();
+//			return execute(FactoryRenameOperation.getRenameOperation(fNode, newName), problemTitle);
+//		} else {
+//			TypeConverter typeConverter = new TypeConverter(newName);
+//			newName = typeConverter.getString();
+//			return execute(FactoryRenameOperation.getRenameOperation(fNode, newName), problemTitle);
+//		}
+//	}
 	public boolean setName(String newName) {
 		if (newName.equals(getName())) {
 			return false;
 		}
 		String problemTitle = "";
-		try {
-			problemTitle = (String) fNode.accept(new RenameParameterProblemTitleProvider());
-		} catch (Exception e) {
-			SystemLogger.logCatch(e.getMessage());
-		}
-		ApplicationContext.setSimplifiedUI(true);
-		if(ApplicationContext.getSimplifiedUI()){
-			TypeConverter typeConverter = new TypeConverter(newName);
-			newName = typeConverter.convertToValidJaveIdentifier();
-			return execute(FactoryRenameOperation.getRenameOperation(fNode, newName), problemTitle);
-		} else {
-			TypeConverter typeConverter = new TypeConverter(newName);
-			newName = typeConverter.getString();
-			return execute(FactoryRenameOperation.getRenameOperation(fNode, newName), problemTitle);
-		}
+		try{
+			problemTitle = (String)fNode.accept(new RenameParameterProblemTitleProvider());
+		}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
+		return execute(FactoryRenameOperation.getRenameOperation(fNode, newName), problemTitle);
 	}
 
 	public boolean setProperty(NodePropertyDefs.PropertyId propertyId, String value) {

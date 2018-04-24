@@ -27,6 +27,7 @@ import org.eclipse.swt.widgets.Button;
 import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.MethodNode;
+import com.ecfeed.core.model.MethodNodeHelper;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelHelper;
 import com.ecfeed.ui.common.Messages;
@@ -137,9 +138,9 @@ public class MethodsViewer extends TableViewerSection {
 			String newName = (String)value;
 			MethodNode method = (MethodNode)element;
 			fMethodIf.setOwnNode(method);
-			TypeConverter name = new TypeConverter(newName);
-//			fMethodIf.setName(newName);
-			fMethodIf.setName(name.getReversedName());
+//			TypeConverter name = new TypeConverter(newName);
+			fMethodIf.setName(newName);
+//			fMethodIf.setName(name.getReversedName());
 		}
 	}
 

@@ -42,8 +42,10 @@ public class EditorStyleChecker implements IModelVisitor{
 		List<ClassNode> classesInRootNode = rootNode.getClasses();
 
 		for (ClassNode classNode: classesInRootNode) {
+			System.out.println(classNode.getName());
 			errorDescription = (ErrorDescription) classNode.accept(this);
 			if (errorDescription != null) {
+				System.out.println(errorDescription.toString());
 				return errorDescription;
 			}
 		}
@@ -63,8 +65,10 @@ public class EditorStyleChecker implements IModelVisitor{
 
 		List<MethodNode> methodsInNode = node.getMethods();
 		for (MethodNode method: methodsInNode) {
+			System.out.println(method.getName());
 			errorDescription = (ErrorDescription) method.accept(this);
 			if (errorDescription != null) {
+				System.out.println(errorDescription.toString());
 				return errorDescription;
 			}
 		}
@@ -81,6 +85,7 @@ public class EditorStyleChecker implements IModelVisitor{
 		ErrorDescription errorDescription =
 				duplicateChecker.checkForDuplicateMethods();
 		if (errorDescription != null) {
+			System.out.println(errorDescription.toString());
 			return errorDescription;
 		}	
 
