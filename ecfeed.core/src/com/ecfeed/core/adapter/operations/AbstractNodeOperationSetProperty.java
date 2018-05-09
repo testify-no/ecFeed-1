@@ -37,7 +37,10 @@ public class AbstractNodeOperationSetProperty extends AbstractModelOperation {
 
 	@Override
 	public void execute() throws ModelOperationException {
+		
+		setOneNodeToSelect(fAbstractNode);
 		fAbstractNode.setPropertyValue(fPropertyId, fNewValue);
+		
 		markModelUpdated();
 	}
 

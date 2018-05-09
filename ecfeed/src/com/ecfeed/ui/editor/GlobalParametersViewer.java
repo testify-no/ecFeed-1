@@ -14,7 +14,7 @@ import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.Transfer;
 
 import com.ecfeed.core.model.GlobalParametersParentNode;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.ecfeed.ui.modelif.GlobalParameterInterface;
 import com.ecfeed.ui.modelif.GlobalParametersParentInterface;
@@ -28,10 +28,13 @@ public class GlobalParametersViewer extends AbstractParametersViewer {
 	private GlobalParameterInterface fParameterIf;
 
 	public GlobalParametersViewer(
-			ISectionContext sectionContext, 
+			ISectionContext sectionContext,
+			IMainTreeProvider mainTreeProvider,
 			IModelUpdateContext updateContext,
-			IFileInfoProvider fileInfoProvider) {
-		super(sectionContext, updateContext, fileInfoProvider, StyleDistributor.getSectionStyle());
+			IJavaProjectProvider javaProjectProvider) {
+
+		super(sectionContext, mainTreeProvider, updateContext, 
+				javaProjectProvider, StyleDistributor.getSectionStyle());
 
 		getSection().setText("Global parameters");
 		getViewer().addDragSupport(DND.DROP_COPY|DND.DROP_MOVE|DND.DROP_LINK, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDragListener(getViewer()));
@@ -44,7 +47,7 @@ public class GlobalParametersViewer extends AbstractParametersViewer {
 
 	protected ParametersParentInterface getGlobalParametersParentIf() {
 		if(fParentIf == null){
-			fParentIf = new GlobalParametersParentInterface(this, getFileInfoProvider());
+			fParentIf = new GlobalParametersParentInterface(getModelUpdateContext(), getJavaProjectProvider());
 		}
 		return fParentIf;
 	}
@@ -57,7 +60,7 @@ public class GlobalParametersViewer extends AbstractParametersViewer {
 	@Override
 	protected AbstractParameterInterface getParameterInterface() {
 		if(fParameterIf == null){
-			fParameterIf = new GlobalParameterInterface(this, getFileInfoProvider());
+			fParameterIf = new GlobalParameterInterface(getModelUpdateContext(), getJavaProjectProvider());
 		}
 		return fParameterIf;
 	}

@@ -20,7 +20,7 @@ public class RootOperationRemoveClass extends AbstractModelOperation {
 	private ClassNode fRemovedClass;
 	private RootNode fTarget;
 	private int fCurrentIndex;
-	
+
 	public RootOperationRemoveClass(RootNode target, ClassNode removedClass) {
 		super(OperationNames.REMOVE_CLASS);
 		fTarget = target;
@@ -30,6 +30,7 @@ public class RootOperationRemoveClass extends AbstractModelOperation {
 
 	@Override
 	public void execute() throws ModelOperationException {
+		setOneNodeToSelect(fTarget);
 		fCurrentIndex = fRemovedClass.getIndex();
 		fTarget.removeClass(fRemovedClass);
 		markModelUpdated();

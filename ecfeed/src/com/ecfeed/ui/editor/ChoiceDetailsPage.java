@@ -18,22 +18,22 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ChoiceNode;
+import com.ecfeed.core.utils.IValueApplier;
 import com.ecfeed.core.utils.JavaTypeHelper;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.ecfeed.ui.modelif.ChoiceInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class ChoiceDetailsPage extends BasicDetailsPage {
 
-	private IFileInfoProvider fFileInfoProvider;	
 	private ChoicesViewer fChildrenViewer;
 	private ChoiceLabelsViewer fLabelsViewer;
 	private Composite fAttributesComposite;
@@ -45,12 +45,21 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 
 
 	public ChoiceDetailsPage(
-			ModelMasterSection masterSection, 
+			IMainTreeProvider mainTreeProvider,
+			ChoiceInterface choiceInterface,
 			IModelUpdateContext updateContext, 
-			IFileInfoProvider fileInfoProvider) {
-		super(masterSection, updateContext, fileInfoProvider);
-		fFileInfoProvider = fileInfoProvider;
-		fChoiceIf = new ChoiceInterface(this, fFileInfoProvider);
+			IJavaProjectProvider javaProjectProvider) {
+		this(mainTreeProvider, choiceInterface, updateContext, javaProjectProvider, null);
+	}
+
+	public ChoiceDetailsPage(
+			IMainTreeProvider mainTreeProvider,
+			ChoiceInterface choiceInterface,
+			IModelUpdateContext updateContext, 
+			IJavaProjectProvider javaProjectProvider,
+			EcFormToolkit ecFormToolkit) {
+		super(mainTreeProvider, updateContext, javaProjectProvider, ecFormToolkit);
+		fChoiceIf = choiceInterface;
 	}
 
 	@Override
@@ -61,10 +70,13 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 
 		addCommentsSection();
 
-		addViewerSection(fChildrenViewer = new ChoicesViewer(this, this, fFileInfoProvider));
-		addViewerSection(fLabelsViewer = new ChoiceLabelsViewer(this, this, fFileInfoProvider));
+		addViewerSection(fChildrenViewer = 
+				new ChoicesViewer(
+						this, getMainTreeProvider(), getModelUpdateContext(), getJavaProjectProvider()));
 
-		getToolkit().paintBordersFor(getMainComposite());
+		addViewerSection(fLabelsViewer = new ChoiceLabelsViewer(this, getModelUpdateContext(), getJavaProjectProvider()));
+
+		getEcFormToolkit().paintBordersFor(getMainComposite());
 	}
 
 	@Override
@@ -93,10 +105,10 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 
 	private void addCommentsSection() {
 
-		if (fFileInfoProvider.isProjectAvailable()) {
-			addForm(fCommentsSection = new ChoiceCommentsSection(this, this, fFileInfoProvider));
+		if (ApplicationContext.isProjectAvailable()) {
+			addForm(fCommentsSection = new ChoiceCommentsSection(this, getModelUpdateContext(), getJavaProjectProvider()));
 		} else {
-			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fFileInfoProvider));
+			addForm(fCommentsSection = new SingleTextCommentsSection(this, getModelUpdateContext(), getJavaProjectProvider()));
 		}
 	}
 
@@ -148,15 +160,14 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 	}
 
 	private void createNameValueEditor(Composite parent) {
-		fAttributesComposite = getToolkit().createComposite(parent);
-		fAttributesComposite.setLayout(new GridLayout(2, false));
-		fAttributesComposite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 
-		getFormObjectToolkit().createLabel(fAttributesComposite, "Name");
-		fNameText = getFormObjectToolkit().createGridText(fAttributesComposite, new NameApplier());
+		fAttributesComposite = getEcFormToolkit().createGridComposite(parent, 2);
 
-		getFormObjectToolkit().createLabel(fAttributesComposite, "Value");
-		getFormObjectToolkit().paintBorders(fAttributesComposite);
+		getEcFormToolkit().createLabel(fAttributesComposite, "Name");
+		fNameText = getEcFormToolkit().createGridText(fAttributesComposite, new NameApplier());
+
+		getEcFormToolkit().createLabel(fAttributesComposite, "Value");
+		getEcFormToolkit().paintBordersFor(fAttributesComposite);
 	}
 
 	@Override
@@ -169,7 +180,7 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		@Override
 		public void applyValue() {
 			fChoiceIf.setName(fNameText.getText());
-			fNameText.setText(fChoiceIf.getName());
+			fNameText.setText(fChoiceIf.getNodeName());
 		}
 	}
 

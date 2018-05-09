@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -32,106 +31,99 @@ import org.eclipse.ui.forms.AbstractFormPart;
 import org.eclipse.ui.forms.IDetailsPage;
 import org.eclipse.ui.forms.IFormPart;
 import org.eclipse.ui.forms.IManagedForm;
-import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.adapter.IModelImplementer;
-import com.ecfeed.core.adapter.ModelOperationManager;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.ui.common.EclipseModelImplementer;
 import com.ecfeed.ui.common.ImageManager;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.editor.actions.GoToImplementationAction;
 import com.ecfeed.ui.editor.actions.ImplementAction;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.IModelUpdateListener;
 
-public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateListener, ISectionContext, IModelUpdateContext{
-
-	protected class ImplementToolbarAction extends ImplementAction{
-
-		public ImplementToolbarAction() {
-			super(null, BasicDetailsPage.this, fImplementer);
-			setToolTipText("Implement node");
-			setImageDescriptor(getIconDescription("implement.png"));
-		}
-
-		@Override
-		protected List<AbstractNode> getSelectedNodes(){
-			return Arrays.asList(new AbstractNode[]{fSelectedNode});
-		}
-	}
-
-	protected class GoToImplementationToolbarAction extends GoToImplementationAction{
-
-		public GoToImplementationToolbarAction() {
-			super(null, fFileInfoProvider);
-			setToolTipText("Go to node's implementation");
-			setImageDescriptor(getIconDescription("goto_impl.png"));
-		}
-
-		@Override
-		protected List<AbstractNode> getSelectedNodes(){
-			return Arrays.asList(new AbstractNode[]{fSelectedNode});
-		}
-	}
+public abstract class BasicDetailsPage 
+implements IDetailsPage, IModelUpdateListener, ISectionContext {
 
 	private Section fMainSection;
 	private Composite fMainComposite;
 	private IManagedForm fManagedForm;
-	private FormObjectToolkit fFormObjectToolkit;
+	private EcFormToolkit fEcFormToolkit;
 
 	private List<IFormPart> fForms;
 	private List<ViewerSection> fViewerSections;
-	private ModelMasterSection fMasterSection;
+	private IMainTreeProvider fMainTreeProvider;
 	private IModelUpdateContext fModelUpdateContext;
 	private AbstractNode fSelectedNode;
 	private IModelImplementer fImplementer;
-	private IFileInfoProvider fFileInfoProvider;
+	private IJavaProjectProvider fJavaProjectProvider;
 	private Button fImplementButton;
 	private ToolBarManager fToolBarManager;
 
 	public BasicDetailsPage(
-			ModelMasterSection masterSection, 
-			IModelUpdateContext updateContext, 
-			IFileInfoProvider fileInfoProvider){
+			IMainTreeProvider mainTreeProvider, 
+			IModelUpdateContext modelUpdateContext, 
+			IJavaProjectProvider javaProjectProvider,
+			EcFormToolkit ecFormToolkit) {
 
-		fMasterSection = masterSection;
+		fMainTreeProvider = mainTreeProvider;
 		fForms = new ArrayList<IFormPart>();
 		fViewerSections = new ArrayList<ViewerSection>();
-		fModelUpdateContext = updateContext;
-		fImplementer = new EclipseModelImplementer(fileInfoProvider);
-		fFileInfoProvider = fileInfoProvider;
+		fModelUpdateContext = modelUpdateContext;
+		fImplementer = new EclipseModelImplementer(javaProjectProvider);
+		fJavaProjectProvider = javaProjectProvider;
+		fEcFormToolkit = ecFormToolkit;
+	}
+
+	public BasicDetailsPage(
+			IMainTreeProvider mainTreeProvider, 
+			IModelUpdateContext modelUpdateContext, 
+			IJavaProjectProvider javaProjectProvider) {
+		this(mainTreeProvider, modelUpdateContext, javaProjectProvider, null);
 	}
 
 	@Override
 	public void initialize(IManagedForm form) {
 		fManagedForm = form;
-		fFormObjectToolkit = new FormObjectToolkit(form.getToolkit());
+		fEcFormToolkit = new EcFormToolkit(form.getToolkit(), false);
 	}
 
 	@Override
 	public void selectionChanged(IFormPart part, ISelection selection) {
-		fSelectedNode = (AbstractNode)fMasterSection.getSelectedElement();
+		fSelectedNode = fMainTreeProvider.getCurrentNode();
 	}
 
 	@Override
 	public void createContents(Composite parent) {
+
 		parent.setLayout(new FillLayout());
-		fMainSection = getToolkit().createSection(parent, StyleDistributor.getSectionStyle());
+
+		fMainSection = 
+				MainDetailsSection.create(
+						parent, 
+						StyleDistributor.getSectionStyle(), 
+						getEcFormToolkit().getEclipseToolkit());
+
 		Composite textClient = createTextClientComposite();
 		fMainSection.setTextClient(textClient);
 
-		getToolkit().adapt(getMainSection());
+		getEcFormToolkit().adapt(getMainSection());
 
-		fMainComposite = getToolkit().createComposite(getMainSection(), SWT.NONE);
+		fMainComposite = getEcFormToolkit().createComposite(getMainSection());
 		fMainComposite.setLayout(new GridLayout(1, false));
-		getToolkit().adapt(fMainComposite);
+
+		getEcFormToolkit().adapt(fMainComposite);
 		getMainSection().setClient(fMainComposite);
 	}
 
-	protected IFileInfoProvider getFileInfoProvider() {
-		return fFileInfoProvider;
+	protected IMainTreeProvider getMainTreeProvider() {
+		return fMainTreeProvider;
+	}
+
+	protected IJavaProjectProvider getJavaProjectProvider() {
+		return fJavaProjectProvider;
 	}
 
 	protected ToolBar createToolBar(Section section) {
@@ -155,8 +147,8 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 
 	protected void addToolbarActions(){
 
-		if (fFileInfoProvider.isProjectAvailable()) {
-			if(fImplementer.implementable(getNodeType())){
+		if (ApplicationContext.isProjectAvailable()) {
+			if(fImplementer.isImplementable(getNodeType())){
 				getToolBarManager().add(new GoToImplementationToolbarAction());
 				getToolBarManager().add(new ImplementToolbarAction());
 
@@ -166,7 +158,7 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 
 	@Override
 	public void refresh(){
-		fSelectedNode = (AbstractNode)fMasterSection.getSelectedElement();
+		fSelectedNode = fMainTreeProvider.getCurrentNode();
 		refreshTextClient();
 	}
 
@@ -226,21 +218,12 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 	}
 
 	@Override
-	public FormToolkit getToolkit(){
-		return fManagedForm.getToolkit();
-	}
-
-	protected FormObjectToolkit getFormObjectToolkit() {
-		return fFormObjectToolkit;
+	public EcFormToolkit getEcFormToolkit() {
+		return fEcFormToolkit;
 	}
 
 	protected Section getMainSection(){
 		return fMainSection;
-	}
-
-	@Override
-	public ModelMasterSection getMasterSection(){
-		return fMasterSection;
 	}
 
 	protected void addForm(IFormPart form){
@@ -254,7 +237,7 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 	}
 
 	protected Object getSelectedElement(){
-		return getMasterSection().getSelectedElement();
+		return fMainTreeProvider.getCurrentNode();
 	}
 
 	protected IManagedForm getManagedForm(){
@@ -266,16 +249,26 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 	}
 
 	@Override
-	public void modelUpdated(AbstractFormPart source){
-		if(source != null){
-			source.markDirty();
+	public void notifyModelUpdated(Object source){
+
+		if (!(source instanceof AbstractFormPart)) {
+			return;
 		}
-		if(getMasterSection() != null){
-			getMasterSection().markDirty();
+
+		AbstractFormPart abstractFormPart = (AbstractFormPart)source;
+
+		if (abstractFormPart != null) {
+			abstractFormPart.markDirty();
 		}
-		if(getMasterSection() != null){
-			getMasterSection().refresh();
+
+		if (fMainTreeProvider != null) {
+			fMainTreeProvider.markDirty();
 		}
+
+		if (fMainTreeProvider != null) {
+			fMainTreeProvider.refresh();
+		}
+
 		refresh();
 	}
 
@@ -297,24 +290,8 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 		return fMainComposite;
 	}
 
-	@Override
-	public ModelOperationManager getOperationManager(){
-		return fModelUpdateContext.getOperationManager();
-	}
-
-	@Override
-	public AbstractFormPart getSourceForm(){
-		return null;
-	}
-
-	@Override
-	public List<IModelUpdateListener> getUpdateListeners(){
-		return Arrays.asList(new IModelUpdateListener[]{this});
-	}
-
-	@Override
-	public IUndoContext getUndoContext(){
-		return fModelUpdateContext.getUndoContext();
+	IModelUpdateContext getModelUpdateContext() {
+		return fModelUpdateContext;
 	}
 
 	protected ImageDescriptor getIconDescription(String fileName) {
@@ -322,4 +299,33 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 	}
 
 	abstract protected Class<? extends AbstractNode> getNodeType();
+
+	protected class ImplementToolbarAction extends ImplementAction{
+
+		public ImplementToolbarAction() {
+			super(null, getModelUpdateContext(), fImplementer);
+			setToolTipText("Implement node");
+			setImageDescriptor(getIconDescription("implement.png"));
+		}
+
+		@Override
+		protected List<AbstractNode> getSelectedNodes(){
+			return Arrays.asList(new AbstractNode[]{fSelectedNode});
+		}
+	}
+
+	protected class GoToImplementationToolbarAction extends GoToImplementationAction {
+
+		public GoToImplementationToolbarAction() {
+			super(null, fJavaProjectProvider);
+			setToolTipText("Go to node's implementation");
+			setImageDescriptor(getIconDescription("goto_impl.png"));
+		}
+
+		@Override
+		protected List<AbstractNode> getSelectedNodes(){
+			return Arrays.asList(new AbstractNode[]{fSelectedNode});
+		}
+	}
+
 }

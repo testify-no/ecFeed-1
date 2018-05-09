@@ -191,6 +191,11 @@ public class MethodNode extends ParametersParentNode {
 	public MethodParameterNode getMethodParameter(int index) {
 		return (MethodParameterNode)(getParameters().get(index));
 	}
+	
+	public int getMethodParameterCount()
+	{
+		return getParameters().size();
+	}
 
 	public List<ConstraintNode> getConstraintNodes(){
 		return fConstraints;
@@ -250,12 +255,15 @@ public class MethodNode extends ParametersParentNode {
 		return testCases;
 	}
 
-	public Set<String> getTestSuites(){
-		Set<String> testSuites = new HashSet<String>();
+	public Set<String> getTestCaseNames() {
+		
+		Set<String> names = new HashSet<String>();
+		
 		for(TestCaseNode testCase : getTestCases()){
-			testSuites.add(testCase.getName());
+			names.add(testCase.getName());
 		}
-		return testSuites;
+		
+		return names;
 	}
 
 	public boolean removeTestCase(TestCaseNode testCase){
@@ -377,19 +385,19 @@ public class MethodNode extends ParametersParentNode {
 
 	@Override
 	public int getMaxChildIndex(AbstractNode potentialChild) {
-		
+
 		if (potentialChild instanceof AbstractParameterNode) { 
 			return getParameters().size();
 		}
-		
+
 		if (potentialChild instanceof ConstraintNode) {
 			return getConstraintNodes().size();
 		}
-		
+
 		if (potentialChild instanceof TestCaseNode) { 
 			return getTestCases().size();
 		}
-		
+
 		return super.getMaxChildIndex(potentialChild);
 	}
 

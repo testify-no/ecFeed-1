@@ -125,9 +125,9 @@ public class MethodNodeTest {
 		assertTrue(method.getTestCases("suite 2").contains(testCase2));
 		assertFalse(method.getTestCases("suite 2").contains(testCase1));
 
-		assertEquals(2, method.getTestSuites().size());
-		assertTrue(method.getTestSuites().contains("suite 1"));
-		assertTrue(method.getTestSuites().contains("suite 2"));
+		assertEquals(2, method.getTestCaseNames().size());
+		assertTrue(method.getTestCaseNames().contains("suite 1"));
+		assertTrue(method.getTestCaseNames().contains("suite 2"));
 	}
 
 	@Test

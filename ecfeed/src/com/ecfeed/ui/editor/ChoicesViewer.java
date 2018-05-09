@@ -31,6 +31,7 @@ import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Table;
 
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ChoiceNode;
@@ -38,11 +39,11 @@ import com.ecfeed.core.model.ChoicesParentNode;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.NodeNameColumnLabelProvider;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.editor.actions.DeleteAction;
-import com.ecfeed.ui.editor.actions.IActionProvider;
-import com.ecfeed.ui.editor.actions.ModelViewerActionProvider;
+import com.ecfeed.ui.editor.actions.IActionGrouppingProvider;
+import com.ecfeed.ui.editor.actions.MainActionGrouppingProvider;
 import com.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.ecfeed.ui.modelif.ChoiceInterface;
 import com.ecfeed.ui.modelif.ChoicesParentInterface;
@@ -52,7 +53,7 @@ import com.ecfeed.ui.modelif.NodeInterfaceFactory;
 
 public class ChoicesViewer extends TableViewerSection {
 
-	private IFileInfoProvider fFileInfoProvider;
+	private IJavaProjectProvider fJavaProjectProvider;
 
 	private ChoicesParentInterface fParentIf;
 	private ChoiceInterface fTableItemIf;
@@ -72,7 +73,7 @@ public class ChoicesViewer extends TableViewerSection {
 	private ModelNodeDropListener fDropListener;
 	private ModelNodeDragListener fDragListener;
 
-	private IActionProvider fActionProvider;
+	private IActionGrouppingProvider fActionGroupingProvider;
 
 	private Button fReplaceWithDefaultButton;
 
@@ -200,15 +201,29 @@ public class ChoicesViewer extends TableViewerSection {
 		@Override
 		public void widgetSelected(SelectionEvent ev){
 			try {
-				ChoiceNode added = fParentIf.addNewChoice();
-				if(added != null){
-					getTable().setSelection(added.getIndex());
-				}
-
+				ChoiceNode choiceNode = fParentIf.addNewChoice();
+				setSelectionOnChoice(choiceNode);
 				setRemoveSelectedStatus();
 			} catch (Exception e) {
 				ExceptionCatchDialog.open("Can not add choice.", e.getMessage());
 			}
+		}
+
+		private void setSelectionOnChoice(ChoiceNode choiceNode) {
+
+			if (choiceNode == null) {
+				return;
+			}
+
+			Table table = getTable();
+
+			if (table == null) {
+				return;
+			}
+
+			try {
+				table.setSelection(choiceNode.getIndex());
+			} catch (Exception e) {}
 		}
 	}
 
@@ -220,7 +235,7 @@ public class ChoicesViewer extends TableViewerSection {
 				if(fSelectedParent == fSelectedParent.getParameter()){
 					AbstractParameterInterface parameterIf = 
 							(AbstractParameterInterface)NodeInterfaceFactory.getNodeInterface(
-									fSelectedParent, ChoicesViewer.this, fFileInfoProvider);
+									fSelectedParent, getModelUpdateContext(), fJavaProjectProvider);
 					parameterIf.resetChoicesToDefault();
 
 					setRemoveSelectedStatus();
@@ -232,15 +247,16 @@ public class ChoicesViewer extends TableViewerSection {
 	}
 
 	public ChoicesViewer(
-			ISectionContext sectionContext, 
+			ISectionContext sectionContext,
+			IMainTreeProvider mainTreeProvider,
 			IModelUpdateContext updateContext, 
-			IFileInfoProvider fileInfoProvider) {
-		super(sectionContext, updateContext, fileInfoProvider, StyleDistributor.getSectionStyle());
+			IJavaProjectProvider javaProjectProvider) {
+		super(sectionContext, updateContext, javaProjectProvider, StyleDistributor.getSectionStyle());
 
-		fFileInfoProvider = fileInfoProvider;
+		fJavaProjectProvider = javaProjectProvider;
 
-		fParentIf = new ChoicesParentInterface(this, fileInfoProvider);
-		fTableItemIf = new ChoiceInterface(this, fFileInfoProvider);
+		fParentIf = new ChoicesParentInterface(getModelUpdateContext(), fJavaProjectProvider);
+		fTableItemIf = new ChoiceInterface(getModelUpdateContext(), fJavaProjectProvider);
 
 		fNameEditingSupport = new ChoiceNameEditingSupport();
 		fValueEditingSupport = new ChoiceValueEditingSupport(this);
@@ -253,15 +269,18 @@ public class ChoicesViewer extends TableViewerSection {
 		fRemoveSelectedButton = 
 				addButton("Remove selected", 
 						new ActionSelectionAdapter(
-								new DeleteAction(getViewer(), this), Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
+								new DeleteAction(
+										getViewer(), 
+										getModelUpdateContext()), 
+										Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
 
 		fReplaceWithDefaultButton = addButton("Reset with default", new ReplaceWithDefaultAdapter());
 
-		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
-		fActionProvider = new ModelViewerActionProvider(getTableViewer(), this, fileInfoProvider);
-		setActionProvider(fActionProvider);
+		addDoubleClickListener(new SelectNodeDoubleClickListener(mainTreeProvider));
+		fActionGroupingProvider = new MainActionGrouppingProvider(getTableViewer(), getModelUpdateContext(), javaProjectProvider);
+		setActionGrouppingProvider(fActionGroupingProvider);
 		fDragListener = new ModelNodeDragListener(getViewer());
-		fDropListener = new ModelNodeDropListener(getViewer(), this, fFileInfoProvider);
+		fDropListener = new ModelNodeDropListener(getViewer(), getModelUpdateContext(), javaProjectProvider);
 		getViewer().addDragSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, fDragListener);
 		getViewer().addDropSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, fDropListener);
 
@@ -309,9 +328,9 @@ public class ChoicesViewer extends TableViewerSection {
 		fDragListener.setEnabled(enabled);
 		fDropListener.setEnabled(enabled);
 		if(enabled){
-			setActionProvider(fActionProvider);
+			setActionGrouppingProvider(fActionGroupingProvider);
 		}else{
-			setActionProvider(null);
+			setActionGrouppingProvider(null);
 		}
 	}
 
@@ -320,6 +339,10 @@ public class ChoicesViewer extends TableViewerSection {
 	}
 
 	private void setRemoveSelectedStatus() {
+
+		if (fRemoveSelectedButton.isDisposed()) {
+			return;
+		}
 
 		if (!fChoiceViewerEnabled) {
 			fRemoveSelectedButton.setEnabled(false);

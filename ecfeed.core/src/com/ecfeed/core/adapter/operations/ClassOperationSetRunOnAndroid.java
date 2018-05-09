@@ -28,6 +28,8 @@ public class ClassOperationSetRunOnAndroid extends AbstractModelOperation {
 
 	@Override
 	public void execute() throws ModelOperationException {
+
+		setOneNodeToSelect(fClassNode);
 		fClassNode.setRunOnAndroid(fNewValue);
 		markModelUpdated();
 	}

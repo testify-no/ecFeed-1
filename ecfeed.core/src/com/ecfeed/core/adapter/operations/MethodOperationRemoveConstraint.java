@@ -17,27 +17,29 @@ import com.ecfeed.core.model.ModelOperationException;
 
 public class MethodOperationRemoveConstraint extends AbstractModelOperation {
 
-	private MethodNode fTarget;
+	private MethodNode fMethodNode;
 	private ConstraintNode fConstraint;
 	private int fIndex;
 
 	public MethodOperationRemoveConstraint(MethodNode target, ConstraintNode constraint){
 		super(OperationNames.REMOVE_CONSTRAINT);
-		fTarget = target;
+		fMethodNode = target;
 		fConstraint = constraint;
 		fIndex = fConstraint.getIndex();
 	}
-	
+
 	@Override
 	public void execute() throws ModelOperationException {
+
+		setOneNodeToSelect(fMethodNode);
 		fIndex = fConstraint.getIndex();
-		fTarget.removeConstraint(fConstraint);
+		fMethodNode.removeConstraint(fConstraint);
 		markModelUpdated();
 	}
 
 	@Override
 	public IModelOperation reverseOperation() {
-		return new MethodOperationAddConstraint(fTarget, fConstraint, fIndex);
+		return new MethodOperationAddConstraint(fMethodNode, fConstraint, fIndex);
 	}
 
 }

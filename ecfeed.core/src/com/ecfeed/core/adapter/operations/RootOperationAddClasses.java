@@ -17,7 +17,7 @@ import com.ecfeed.core.model.RootNode;
 
 public class RootOperationAddClasses extends BulkOperation {
 	public RootOperationAddClasses(RootNode target, Collection<ClassNode> classes, int index) {
-		super(OperationNames.ADD_CLASSES, false);
+		super(OperationNames.ADD_CLASSES, false, target, target);
 		for(ClassNode classNode : classes){
 			addOperation(new RootOperationAddNewClass(target, classNode, index++));
 		}

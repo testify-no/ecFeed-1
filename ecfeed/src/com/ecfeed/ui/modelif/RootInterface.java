@@ -12,8 +12,6 @@ package com.ecfeed.ui.modelif;
 
 import java.util.Collection;
 
-import org.eclipse.jdt.core.IType;
-import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
@@ -21,20 +19,17 @@ import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.operations.RootOperationAddClasses;
 import com.ecfeed.core.adapter.operations.RootOperationAddNewClass;
 import com.ecfeed.core.model.ClassNode;
-import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.RootNodeHelper;
 import com.ecfeed.ui.common.CommonConstants;
-import com.ecfeed.ui.common.EclipseModelBuilder;
+import com.ecfeed.ui.common.ImplementationAdapter;
 import com.ecfeed.ui.common.Messages;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
-import com.ecfeed.ui.dialogs.TestClassImportDialog;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 
 public class RootInterface extends GlobalParametersParentInterface {
 
-	public RootInterface(IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider) {
-
-		super(updateContext, fileInfoProvider);
+	public RootInterface(IModelUpdateContext updateContext, IJavaProjectProvider javaProjectProvider) {
+		super(updateContext, javaProjectProvider);
 	}
 
 	@Override
@@ -51,7 +46,7 @@ public class RootInterface extends GlobalParametersParentInterface {
 	public ClassNode addNewClass(String className) {
 
 		ClassNode addedClass = new ClassNode(className);
-		if (execute(
+		if (getOperationExecuter().execute(
 				new RootOperationAddNewClass(
 						getOwnNode(), 
 						addedClass, 
@@ -63,34 +58,7 @@ public class RootInterface extends GlobalParametersParentInterface {
 	}
 
 	public ClassNode addImplementedClass() {
-
-		TestClassImportDialog dialog = new TestClassImportDialog(Display.getCurrent().getActiveShell());
-
-		if (dialog.open() == IDialogConstants.OK_ID) {
-			IType selectedClass = (IType)dialog.getFirstResult();
-			boolean testOnly = dialog.getTestOnlyFlag();
-
-			if (selectedClass != null) {
-				ClassNode classModel;
-				try {
-					classModel = new EclipseModelBuilder().buildClassModel(selectedClass, testOnly);
-					if (execute(
-							new RootOperationAddNewClass(
-									getOwnNode(), 
-									classModel, 
-									getOwnNode().getClasses().size()), 
-									Messages.DIALOG_ADD_NEW_CLASS_PROBLEM_TITLE)) {
-
-						return classModel;
-					}
-				} catch (ModelOperationException e) {
-					MessageDialog.openError(Display.getCurrent().getActiveShell(),
-							Messages.DIALOG_ADD_NEW_CLASS_PROBLEM_TITLE,
-							e.getMessage());
-				}
-			}
-		}
-		return null;
+		return ImplementationAdapter.addImplementedClass(getOwnNode(), getOperationExecuter());
 	}
 
 	public boolean removeClasses(Collection<ClassNode> removedClasses){
@@ -106,7 +74,7 @@ public class RootInterface extends GlobalParametersParentInterface {
 	public boolean addClasses(Collection<ClassNode> classes) {
 
 		IModelOperation operation = new RootOperationAddClasses(getOwnNode(), classes, getOwnNode().getClasses().size());
-		return execute(operation, Messages.DIALOG_ADD_METHODS_PROBLEM_TITLE);
+		return getOperationExecuter().execute(operation, Messages.DIALOG_ADD_METHODS_PROBLEM_TITLE);
 	}
 
 	private String generateNewClassName() {

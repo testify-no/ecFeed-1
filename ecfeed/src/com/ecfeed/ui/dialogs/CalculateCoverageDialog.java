@@ -10,9 +10,11 @@
 
 package com.ecfeed.ui.dialogs;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -25,6 +27,7 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -38,20 +41,28 @@ import org.eclipse.swt.widgets.Tree;
 import com.ecfeed.core.adapter.IImplementationStatusResolver;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.TestCaseNode;
+import com.ecfeed.core.utils.IValueApplier;
+import com.ecfeed.core.utils.StringHelper;
+import com.ecfeed.ui.common.ApplyValueMode;
 import com.ecfeed.ui.common.EclipseImplementationStatusResolver;
 import com.ecfeed.ui.common.TestCasesViewerContentProvider;
 import com.ecfeed.ui.common.TestCasesViewerLabelProvider;
 import com.ecfeed.ui.common.TreeCheckStateListener;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
+import com.ecfeed.ui.dialogs.basic.DialogObjectToolkit;
 
 public class CalculateCoverageDialog extends TitleAreaDialog {
 
 	public static final String DIALOG_CALCULATE_COVERAGE_MESSAGE = "Select test cases to include in evaluation.";
 	public static final String DIALOG_CALCULATE_COVERAGE_TITLE = "Calculate n-wise coverage";
+	private static final Integer INITIAL_N_MAX = 5;
+	private static final Integer INITIAL_N_MIN = 1;
 
 	private CoverageCalculator fCalculator;
 	private MethodNode fMethod;
-	IFileInfoProvider fFileInfoProvider;
+	private IJavaProjectProvider fJavaProjectProvider;
+	private int fNMax;
+	private Combo NMaxCombo;
 
 	//Initial state of the tree viewer
 	private final Object[] fInitChecked;
@@ -60,6 +71,255 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 	private Table fCoverageTable;
 	private CoverageTreeViewerListener fCheckStateListener;
 	private IImplementationStatusResolver fStatusResolver;
+
+	public CalculateCoverageDialog (
+			Shell parentShell, 
+			MethodNode method, 
+			Object[] checked, 
+			Object[] grayed,
+			IJavaProjectProvider javaProjectProvider) throws InterruptedException {
+
+		super(parentShell);
+		setHelpAvailable(false);
+		setShellStyle(SWT.BORDER | SWT.RESIZE | SWT.TITLE | SWT.APPLICATION_MODAL);
+
+		fJavaProjectProvider = javaProjectProvider;
+		fMethod = method;
+
+		fNMax = Math.min(fMethod.getParametersCount(), INITIAL_N_MAX); 
+
+		try {
+			fCalculator = new CoverageCalculator(fMethod.getMethodParameters(), fNMax);
+		} catch (InterruptedException e) {
+			this.close();
+			throw e;
+		}
+
+		fStatusResolver = new EclipseImplementationStatusResolver(javaProjectProvider);
+		fInitChecked = checked;
+		fInitGrayed = grayed;
+	}
+
+	@Override
+	public Point getInitialSize() {
+
+		return new Point(600, 750);
+	}
+
+	@Override
+	protected void createButtonsForButtonBar(Composite parent) {
+
+		Button okButton = createButton(parent, IDialogConstants.OK_ID, DialogHelper.getOkLabel(), false);
+		okButton.setEnabled(true);
+	}
+
+	@Override
+	protected Control createDialogArea(Composite parent) {
+
+		setTitle(DIALOG_CALCULATE_COVERAGE_TITLE);
+		setMessage(DIALOG_CALCULATE_COVERAGE_MESSAGE);
+
+		Composite area = (Composite) super.createDialogArea(parent);
+
+		Composite mainContainer = new Composite(area, SWT.NONE);
+		mainContainer.setLayout(new GridLayout(1, false));
+		mainContainer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+
+		createTestCaseComposite(mainContainer);
+		createMaxNComposite(mainContainer);
+		createCoverageTableWithMargins(mainContainer);
+
+		selectTestCasesAndRecalculate(fTestCasesViewer, fInitChecked, fInitGrayed);
+
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				fillCoverageTableRows();
+			}
+		});
+
+		return area;
+	}
+
+	private void selectTestCasesAndRecalculate(CheckboxTreeViewer viewer, Object[] checked, Object[] grayed) {
+
+		viewer.setCheckedElements(checked);
+		viewer.setGrayedElements(grayed);
+
+		Set<TestCaseNode> testCases = new HashSet<>();
+
+		for (Object element : checked) {
+			//if the element is non grayed test suite name
+			if (element instanceof String && Arrays.asList(grayed).contains(element) == false) {
+				testCases.addAll(fMethod.getTestCases((String)element));
+			} else if (element instanceof TestCaseNode) {
+				testCases.add((TestCaseNode)element);
+			}
+		}
+
+		fCheckStateListener.recalculateAndShowTestCases(testCases, true);
+	}
+
+	private void createTestCaseComposite(Composite parent) {
+
+		Composite composite = new Composite(parent, SWT.NONE);
+		composite.setLayout(new GridLayout(1, false));
+		GridData griddata = new GridData(SWT.FILL, SWT.FILL, true, true);
+		griddata.minimumHeight = 250;
+		composite.setLayoutData(griddata);
+
+		Label selectTestCasesLabel = new Label(composite, SWT.WRAP);
+		selectTestCasesLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		selectTestCasesLabel.setText(DIALOG_CALCULATE_COVERAGE_MESSAGE);
+
+		createTestCaseViewer(composite);
+	}
+
+	private void createMaxNComposite(Composite parent) {
+
+		Composite composite = DialogObjectToolkit.createGridComposite(parent, 2);
+
+		DialogObjectToolkit.createLabel(composite, "N max ");
+
+		NMaxCombo = DialogObjectToolkit.createReadOnlyGridCombo(
+				composite, 
+				new NMaxComboValueApplier(), 
+				ApplyValueMode.ON_SELECTION_ONLY);
+
+
+		NMaxCombo.setItems(getAvailableNMaxValues());
+		
+		Integer initialValue = Math.min(INITIAL_N_MAX, fMethod.getParametersCount()); 
+		
+		NMaxCombo.setText(initialValue.toString());
+	}
+
+	private String[] getAvailableNMaxValues() {
+
+		List<String> availableValues = new ArrayList<String>();
+
+		Integer parametersCount = fMethod.getParametersCount();
+
+		for (Integer parameter = 1; parameter <= parametersCount; parameter++) {
+			availableValues.add(parameter.toString());
+		}
+
+		String[] arr = availableValues.toArray(new String[availableValues.size()]);
+		return arr;
+	}
+
+	private class NMaxComboValueApplier implements IValueApplier {
+
+		@Override
+		public void applyValue() {
+
+			String comboText = NMaxCombo.getText();
+			int newNMax = StringHelper.convertToInteger(comboText);
+
+			try {
+				fCalculator.initialize(newNMax);
+			} catch (InterruptedException e1) {
+				NMaxCombo.setText((new Integer(INITIAL_N_MIN)).toString());
+				return;
+			}
+
+			fNMax = newNMax;
+			selectTestCasesAndRecalculate(
+					fTestCasesViewer, 
+					fTestCasesViewer.getCheckedElements(), 
+					fTestCasesViewer.getGrayedElements());
+		}
+
+	}
+
+	private void createTestCaseViewer(Composite parent) {
+
+		Tree tree = new Tree(parent, SWT.CHECK | SWT.BORDER);
+		tree.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, true, 1, 1));
+
+		fTestCasesViewer = new CheckboxTreeViewer(tree);
+		fTestCasesViewer.setContentProvider(new TestCasesViewerContentProvider(fMethod));
+		fTestCasesViewer.setLabelProvider(
+				new TestCasesViewerLabelProvider(fStatusResolver, fMethod, fJavaProjectProvider));
+		fTestCasesViewer.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		fTestCasesViewer.setInput(fMethod);
+
+		fCheckStateListener = new CoverageTreeViewerListener(fTestCasesViewer);
+		fTestCasesViewer.addCheckStateListener(fCheckStateListener);
+	}
+
+	private void createCoverageTableWithMargins(Composite parent) {
+
+		Composite compositeAligningMargins = new Composite(parent, SWT.FILL);
+
+		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
+
+		compositeAligningMargins.setLayout(new GridLayout(1, false));
+		compositeAligningMargins.setLayoutData(gridData);
+
+		createCoverageTable(compositeAligningMargins);
+	}
+
+	private void createCoverageTable(Composite parent) {
+
+		Composite composite = new Composite(parent, SWT.FILL);
+
+		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
+		gridData.minimumWidth = 100;
+		gridData.minimumHeight = 100;
+
+		composite.setLayout(new FillLayout());
+		composite.setLayoutData(gridData);
+
+		fCoverageTable = new Table(composite, SWT.BORDER);
+		createColumns(fCoverageTable);
+
+		initializeCoverageTableItems();
+		fillCoverageTableRows();	    
+	}
+
+	private void initializeCoverageTableItems() {
+
+		fCoverageTable.clearAll();
+
+		for (int index = 0; index < fNMax; index++) {
+			TableItem tableItem = new TableItem(fCoverageTable, SWT.NONE);
+			tableItem.setText(new String[] { "", "" });
+		}
+	}
+
+	private void fillCoverageTableRows() {
+
+		double[] coverage = fCalculator.getCoverage();
+
+		if (fNMax != coverage.length) {
+			return;
+		}
+
+		for (int n = 0; n < fNMax; n++) {
+			TableItem tableItem = fCoverageTable.getItem(n);
+			fillTableItem(tableItem, n, coverage[n]);
+		}
+	}
+
+	private void fillTableItem(TableItem tableItem, int n, double coverage) {
+
+		tableItem.setText(0, new Integer(n+1).toString());
+		tableItem.setText(1, String.format( "%.2f", coverage ));
+	}
+
+
+	private void createColumns(Table table) {
+		TableColumn columnN = new TableColumn(table, SWT.CENTER);
+		TableColumn columnCoverage = new TableColumn(table, SWT.CENTER);
+		columnN.setText("N");
+		columnCoverage.setText("Coverage");
+
+		columnN.setWidth(280);
+		columnCoverage.setWidth(280);
+
+		table.setHeaderVisible(true);
+	}
 
 	private class CoverageTreeViewerListener extends TreeCheckStateListener {
 		// saved tree state
@@ -86,18 +346,20 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 				checkedTestCases = getCheckedTestCases(element, checked);
 			}
 
-			applyCheckedTestCases(checkedTestCases, checked);
+			recalculateAndShowTestCases(checkedTestCases, checked);
 		}
 
-		public void applyCheckedTestCases(Collection<TestCaseNode> checkedTestCases, boolean checked) {
+		public void recalculateAndShowTestCases(Collection<TestCaseNode> testCases, boolean checked) {
 
-			fCalculator.setCurrentChangedCases(checkedTestCases, checked);
+			fCalculator.setCurrentChangedCases(testCases, checked);
 
 			if (fCalculator.calculateCoverage()) {
 				fTreeState = getViewer().getCheckedElements();
+				initializeCoverageTableItems();
 				fillCoverageTableRows();
 			} else {
 				revertLastTreeChange();
+				NMaxCombo.setText(INITIAL_N_MIN.toString());
 			}
 		}
 
@@ -150,188 +412,4 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 
 	}
 
-	public CalculateCoverageDialog (
-			Shell parentShell, 
-			MethodNode method, 
-			Object[] checked, 
-			Object[] grayed,
-			IFileInfoProvider fileInfoProvider) {
-
-		super(parentShell);
-		setHelpAvailable(false);
-		setShellStyle(SWT.BORDER | SWT.RESIZE | SWT.TITLE | SWT.APPLICATION_MODAL);
-
-		fFileInfoProvider = fileInfoProvider;
-		fMethod = method;
-		fCalculator = new CoverageCalculator(fMethod.getMethodParameters());
-
-		fStatusResolver = new EclipseImplementationStatusResolver(fileInfoProvider);
-		fInitChecked = checked;
-		fInitGrayed = grayed;
-	}
-
-	@Override
-	public Point getInitialSize() {
-
-		return new Point(600, 800);
-	}
-
-	@Override
-	protected void createButtonsForButtonBar(Composite parent) {
-
-		Button okButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, false);
-		okButton.setEnabled(true);
-	}
-
-	@Override
-	protected Control createDialogArea(Composite parent) {
-
-		setTitle(DIALOG_CALCULATE_COVERAGE_TITLE);
-		setMessage(DIALOG_CALCULATE_COVERAGE_MESSAGE);
-
-		Composite area = (Composite) super.createDialogArea(parent);
-
-		Composite mainContainer = new Composite(area, SWT.NONE);
-		mainContainer.setLayout(new GridLayout(1, false));
-		mainContainer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-
-		createTestCaseComposite(mainContainer);
-		createCoverageTableWithMargins(mainContainer);
-
-		setInitialSelection(fTestCasesViewer, fInitChecked, fInitGrayed);
-
-		//Draw bar graph. Possible change for a timer with slight delay if tests prove current solution insufficient in some cases.
-		Display.getDefault().asyncExec(new Runnable() {
-			@Override
-			public void run() {
-				fillCoverageTableRows();
-			}
-		});
-
-		return area;
-	}
-
-	private void setInitialSelection(CheckboxTreeViewer viewer, Object[] checked, Object[] grayed) {
-
-		viewer.setCheckedElements(checked);
-		viewer.setGrayedElements(grayed);
-
-		Set<TestCaseNode> testCases = new HashSet<>();
-
-		for (Object element : checked) {
-			//if the element is non grayed test suite name
-			if (element instanceof String && Arrays.asList(grayed).contains(element) == false) {
-				testCases.addAll(fMethod.getTestCases((String)element));
-			} else if (element instanceof TestCaseNode) {
-				testCases.add((TestCaseNode)element);
-			}
-		}
-
-		fCheckStateListener.applyCheckedTestCases(testCases, true);
-	}
-
-	private void createTestCaseComposite(Composite parent) {
-
-		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setLayout(new GridLayout(1, false));
-		GridData griddata = new GridData(SWT.FILL, SWT.FILL, true, true);
-		griddata.minimumHeight = 250;
-		composite.setLayoutData(griddata);
-
-		Label selectTestCasesLabel = new Label(composite, SWT.WRAP);
-		selectTestCasesLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
-		selectTestCasesLabel.setText(DIALOG_CALCULATE_COVERAGE_MESSAGE);
-
-		createTestCaseViewer(composite);
-	}
-
-	private void createTestCaseViewer(Composite parent) {
-
-		Tree tree = new Tree(parent, SWT.CHECK | SWT.BORDER);
-		tree.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, true, 1, 1));
-
-		fTestCasesViewer = new CheckboxTreeViewer(tree);
-		fTestCasesViewer.setContentProvider(new TestCasesViewerContentProvider(fMethod));
-		fTestCasesViewer.setLabelProvider(
-				new TestCasesViewerLabelProvider(fStatusResolver, fMethod, fFileInfoProvider));
-		fTestCasesViewer.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		fTestCasesViewer.setInput(fMethod);
-
-		fCheckStateListener = new CoverageTreeViewerListener(fTestCasesViewer);
-		fTestCasesViewer.addCheckStateListener(fCheckStateListener);
-	}
-
-	private void createCoverageTableWithMargins(Composite parent) {
-
-		Composite compositeAligningMargins = new Composite(parent, SWT.FILL);
-
-		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
-		gridData.minimumWidth = 100;
-		gridData.minimumHeight = 150;
-
-		compositeAligningMargins.setLayout(new GridLayout(1, false));
-		compositeAligningMargins.setLayoutData(gridData);
-
-		createCoverageTable(compositeAligningMargins);
-	}
-
-	private void createCoverageTable(Composite parent) {
-
-		Composite composite = new Composite(parent, SWT.FILL);
-
-		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
-		gridData.minimumWidth = 100;
-		gridData.minimumHeight = 150;
-
-		composite.setLayout(new FillLayout());
-		composite.setLayoutData(gridData);
-
-		fCoverageTable = new Table(composite, SWT.BORDER);
-		createColumns(fCoverageTable);
-
-		for (int index = 0; index < getN(); index++) {
-			TableItem tableItem = new TableItem(fCoverageTable, SWT.NONE);
-			tableItem.setText(new String[] { "", "" });
-		}
-
-		fillCoverageTableRows();	    
-	}
-
-	private void fillCoverageTableRows() {
-
-		double[] coverage = fCalculator.getCoverage();
-
-		if (getN() != coverage.length) {
-			return;
-		}
-
-		for (int n = 0; n < getN(); n++) {
-			TableItem tableItem = fCoverageTable.getItem(n);
-			fillTableItem(tableItem, n, coverage[n]);
-		}
-	}
-
-	private void fillTableItem(TableItem tableItem, int n, double coverage) {
-
-		tableItem.setText(0, new Integer(n+1).toString());
-
-		tableItem.setText(1, String.format( "%.2f", coverage ));
-	}
-
-
-	private void createColumns(Table table) {
-		TableColumn columnN = new TableColumn(table, SWT.CENTER);
-		TableColumn columnCoverage = new TableColumn(table, SWT.CENTER);
-		columnN.setText("N");
-		columnCoverage.setText("Coverage");
-
-		columnN.setWidth(280);
-		columnCoverage.setWidth(280);
-
-		table.setHeaderVisible(true);
-	}
-
-	private int getN(){
-		return fMethod.getParameters().size();
-	}
 }

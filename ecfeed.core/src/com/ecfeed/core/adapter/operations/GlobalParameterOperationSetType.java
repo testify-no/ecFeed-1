@@ -17,11 +17,16 @@ import com.ecfeed.core.model.MethodNode;
 
 public class GlobalParameterOperationSetType extends BulkOperation {
 
-	public GlobalParameterOperationSetType(GlobalParameterNode target, String newType, ITypeAdapterProvider adapterProvider) {
-		super(OperationNames.SET_TYPE, true);
+	public GlobalParameterOperationSetType(
+			GlobalParameterNode target, 
+			String newType, 
+			ITypeAdapterProvider adapterProvider) {
+
+		super(OperationNames.SET_TYPE, true, target, target);
 
 		addOperation(new AbstractParameterOperationSetType(target, newType, adapterProvider));
-		for(MethodNode method : target.getMethods()){
+
+		for (MethodNode method : target.getMethods()) {
 			addOperation(new MethodOperationMakeConsistent(method));
 		}
 	}

@@ -57,6 +57,16 @@ public class ChoiceNode extends ChoicesParentNode{
 		return getQualifiedName() + " [" + getValueString() + "]";
 	}
 
+	public String toStringWithParenthesis() {
+
+		if(isAbstract()){
+			return getQualifiedName() + ABSTRACT_CHOICE_MARKER;
+		}
+
+		return getQualifiedName() + "(" + getValueString() + ")";
+	}
+
+
 	@Override
 	public ChoiceNode makeClone(){
 		ChoiceNode copy = new ChoiceNode(getName(), fValueString);
@@ -129,9 +139,9 @@ public class ChoiceNode extends ChoicesParentNode{
 		}
 		return new LinkedHashSet<String>();
 	}
-	
+
 	public List<String> getListOfChildrenChoiceNames() {
-		
+
 		List<ChoiceNode> existingChoices = getChoices();
 
 		List<String> names = new ArrayList<String>();
@@ -139,7 +149,7 @@ public class ChoiceNode extends ChoicesParentNode{
 		for (ChoiceNode choice : existingChoices) {
 			names.add(choice.getName());
 		}
-		
+
 		return names;
 	}
 

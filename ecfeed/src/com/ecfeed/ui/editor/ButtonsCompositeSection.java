@@ -20,7 +20,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.Text;
 
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 
@@ -42,9 +42,10 @@ public class ButtonsCompositeSection extends BasicSection {
 	public ButtonsCompositeSection(
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext,
-			IFileInfoProvider fileInfoProvider,
+			IJavaProjectProvider javaProjectProvider,
 			int style) {
-		super(sectionContext, updateContext, fileInfoProvider, style);
+
+		super(sectionContext, updateContext, javaProjectProvider, style);
 	}
 
 	@Override
@@ -64,7 +65,7 @@ public class ButtonsCompositeSection extends BasicSection {
 	}
 
 	protected Composite createMainControlComposite(Composite parent) {
-		fMainControlComposite = getToolkit().createComposite(parent);
+		fMainControlComposite = getEcFormToolkit().createComposite(parent);
 		GridLayout gl = new GridLayout(1, false);
 		gl.marginHeight = 0;
 		gl.marginWidth = 0;
@@ -80,7 +81,8 @@ public class ButtonsCompositeSection extends BasicSection {
 	}
 
 	protected Button addButton(String text, SelectionAdapter adapter, int style){
-		Button button = getToolkit().createButton(fButtonsComposite, text, style);
+		Button button = getEcFormToolkit().createButton(fButtonsComposite, text, style);
+
 		if(adapter != null){
 			button.addSelectionListener(adapter);
 		}
@@ -91,15 +93,18 @@ public class ButtonsCompositeSection extends BasicSection {
 	}
 
 	protected Text addText(String text, SelectionAdapter adapter) {
-		Text txt = getToolkit().createText(fButtonsComposite, text, SWT.BORDER);
+
+		Text txt = getEcFormToolkit().createText(fButtonsComposite, text, SWT.BORDER);
+
 		if(adapter != null) {
 			txt.addSelectionListener(adapter);
 		}
+
 		return txt;
 	}
 
 	protected Composite createButtonsComposite(Composite parent) {
-		Composite buttonsComposite = getToolkit().createComposite(parent);
+		Composite buttonsComposite = getEcFormToolkit().createComposite(parent);
 		buttonsComposite.setLayout(buttonsCompositeLayout());
 		if(buttonsCompositeLayoutData() != null){
 			buttonsComposite.setLayoutData(buttonsCompositeLayoutData());

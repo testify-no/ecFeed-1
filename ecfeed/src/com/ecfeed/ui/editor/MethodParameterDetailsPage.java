@@ -28,8 +28,9 @@ import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.GlobalParameterNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelHelper;
+import com.ecfeed.core.utils.IValueApplier;
 import com.ecfeed.core.utils.JavaTypeHelper;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.common.utils.SwtObjectHelper;
 import com.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
@@ -37,7 +38,6 @@ import com.ecfeed.ui.modelif.MethodParameterInterface;
 
 public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 
-	private IFileInfoProvider fFileInfoProvider;
 	private MethodParameterInterface fParameterIf;
 	private Button fExpectedCheckbox;
 	private Combo fDefaultValueCombo;
@@ -46,31 +46,41 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 	private Combo fLinkCombo;
 
 
-	public MethodParameterDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext,
-			IFileInfoProvider fileInfoProvider) {
-		super(masterSection, updateContext, fileInfoProvider);
-		fFileInfoProvider = fileInfoProvider;
-		getParameterIf();
+	public MethodParameterDetailsPage(
+			IMainTreeProvider mainTreeProvider,
+			MethodParameterInterface methodParameterInterface,
+			IModelUpdateContext updateContext,
+			IJavaProjectProvider javaProjectProvider) {
+
+		this(mainTreeProvider,methodParameterInterface, updateContext, javaProjectProvider, null);
 	}
+	
+	public MethodParameterDetailsPage(
+			IMainTreeProvider mainTreeProvider,
+			MethodParameterInterface methodParameterInterface,
+			IModelUpdateContext updateContext,
+			IJavaProjectProvider javaProjectProvider,
+			EcFormToolkit ecFormToolkit) {
+
+		super(mainTreeProvider, updateContext, javaProjectProvider, ecFormToolkit);
+		fParameterIf = methodParameterInterface;
+	}	
 
 	@Override
 	protected AbstractParameterInterface getParameterIf() {
-		if(fParameterIf == null){
-			fParameterIf = new MethodParameterInterface(this, fFileInfoProvider);
-		}
 		return fParameterIf;
 	}
 
 	@Override
 	protected WebParameterSection createWebParameterSection() {
-		return new WebParameterSection(this, this, getParameterIf(), fFileInfoProvider);
+		return new WebParameterSection(this, getModelUpdateContext(), getParameterIf(), getJavaProjectProvider());
 	}
 
 	@Override
 	protected Composite createAttributesComposite(){
 		Composite attributesComposite = super.createAttributesComposite();
 
-		FormObjectToolkit formObjectToolkit = getFormObjectToolkit(); 
+		EcFormToolkit formObjectToolkit = getEcFormToolkit(); 
 
 		GridData comboGridData = new GridData(SWT.FILL,  SWT.CENTER, true, false);
 		comboGridData.horizontalSpan = 2;
@@ -82,8 +92,8 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 		SwtObjectHelper.setHorizontalSpan(fExpectedCheckbox, 3);
 
 
-		getToolkit().createLabel(attributesComposite, "Default value: ", SWT.NONE);
-		fDefaultValueComboComposite = getToolkit().createComposite(attributesComposite);
+		getEcFormToolkit().createLabel(attributesComposite, "Default value: ");
+		fDefaultValueComboComposite = getEcFormToolkit().createComposite(attributesComposite);
 		GridLayout gl = new GridLayout(1, false);
 		gl.marginHeight = 0;
 		gl.marginWidth = 0;
@@ -97,7 +107,7 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 		SwtObjectHelper.setHorizontalSpan(fLinkedCheckbox, 3);
 
 
-		getToolkit().createLabel(attributesComposite, "Parameter link: ", SWT.NONE);
+		getEcFormToolkit().createLabel(attributesComposite, "Parameter link: ");
 
 		fLinkCombo = new Combo(attributesComposite,SWT.DROP_DOWN|SWT.READ_ONLY);
 		fLinkCombo.setLayoutData(comboGridData);
@@ -132,7 +142,7 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 			}
 			fLinkCombo.setEnabled(fParameterIf.isLinked());
 
-			if (fFileInfoProvider.isProjectAvailable()) {
+			if (ApplicationContext.isProjectAvailable()) {
 				getBrowseUserTypeButton().setEnabled(!fParameterIf.isLinked());
 			}
 			getChoicesViewer().setReplaceButtonEnabled(isReplaceButtonEnabled());
@@ -165,7 +175,7 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 
 	private boolean isReplaceButtonEnabledForUserType() {
 
-		if (ApplicationContext.isStandaloneApplication()) {
+		if (ApplicationContext.isApplicationTypeLocalStandalone()) {
 			return false;
 		} 
 
@@ -237,12 +247,13 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 	}
 
 	@Override
-	protected AbstractCommentsSection getCommentsSection(ISectionContext sectionContext, IModelUpdateContext updateContext) {
+	protected AbstractCommentsSection getCommentsSection(
+			ISectionContext sectionContext, IModelUpdateContext updateContext) {
 
-		if (fFileInfoProvider.isProjectAvailable()) {
-			return new MethodParameterCommentsSection(sectionContext, updateContext, fFileInfoProvider);
+		if (ApplicationContext.isProjectAvailable()) {
+			return new MethodParameterCommentsSection(sectionContext, updateContext, getJavaProjectProvider());
 		} else {
-			return new SingleTextCommentsSection(this, this, fFileInfoProvider);
+			return new SingleTextCommentsSection(this, getModelUpdateContext(), getJavaProjectProvider());
 		}
 	}
 
@@ -269,6 +280,11 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 		public void applyValue() {
 
 			fParameterIf.setExpected(fExpectedCheckbox.getSelection());
+			
+			if (fExpectedCheckbox.isDisposed()) {
+				return;
+			}
+
 			fExpectedCheckbox.setSelection(fParameterIf.isExpected());
 		}
 	}

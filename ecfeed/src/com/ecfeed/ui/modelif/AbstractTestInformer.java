@@ -17,11 +17,12 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 
+import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.runner.RunnerException;
 import com.ecfeed.ui.common.Messages;
+import com.ecfeed.ui.dialogs.basic.AdvancedStatisticsButtonDialog;
 import com.ecfeed.ui.plugin.Activator;
 
 public abstract class AbstractTestInformer {
@@ -30,8 +31,12 @@ public abstract class AbstractTestInformer {
 	int fTotalWork;
 	private int fExecutedTestCases = 0;
 	private List<Status> fUnsuccesfullExecutionStatuses;
-
-	public AbstractTestInformer(){
+	private MethodNode fmethodNode;
+	private TestResultsHolder ftestResultsHolder;
+	
+	public AbstractTestInformer(MethodNode methodNode, TestResultsHolder testResultsHolder){
+		fmethodNode = methodNode;
+		ftestResultsHolder = testResultsHolder;
 		fUnsuccesfullExecutionStatuses = new ArrayList<>();
 	}
 
@@ -69,7 +74,7 @@ public abstract class AbstractTestInformer {
 		return false;
 	}
 
-	protected void clearFailedTests(){
+	protected void clearFailedTests(){ 
 		fUnsuccesfullExecutionStatuses.clear();
 	}
 
@@ -83,8 +88,10 @@ public abstract class AbstractTestInformer {
 							fUnsuccesfullExecutionStatuses.toArray(new Status[]{}), 
 							"Open details to see more", 
 							new RunnerException("Problematic test cases"));
+			
+			AdvancedStatisticsButtonDialog dialog = new AdvancedStatisticsButtonDialog(null, Messages.DIALOG_TEST_EXECUTION_REPORT_TITLE, msg, ms, IStatus.ERROR, fmethodNode, ftestResultsHolder);
+			dialog.open();
 
-			ErrorDialog.openError(null, Messages.DIALOG_TEST_EXECUTION_REPORT_TITLE, msg, ms);
 			return;
 		}
 		if (fExecutedTestCases > 0) {

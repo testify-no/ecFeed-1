@@ -16,12 +16,14 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodNodeHelper;
 import com.ecfeed.core.model.NodePropertyDefs;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.core.utils.IValueApplier;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.MethodInterface;
@@ -42,37 +44,59 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	private MethodInterface fMethodInterface;
 	private AbstractCommentsSection fCommentsSection;
 
-	private final NodePropertyDefs.PropertyId fRunnerPropertyId = NodePropertyDefs.PropertyId.PROPERTY_METHOD_RUNNER;
+	private final NodePropertyDefs.PropertyId fRunnerPropertyId = 
+			NodePropertyDefs.PropertyId.PROPERTY_METHOD_RUNNER;
 
 
-	public MethodDetailsPage(ModelMasterSection masterSection,
+	public MethodDetailsPage(
+			IMainTreeProvider mainTreeProvider,
+			MethodInterface methodInterface,
 			IModelUpdateContext updateContext,
-			IFileInfoProvider fileInfoProvider) {
-		super(masterSection, updateContext, fileInfoProvider);
-		fMethodInterface = new MethodInterface(this, fileInfoProvider);
+			IJavaProjectProvider javaProjectProvider,
+			EcFormToolkit ecForToolkit) {
+
+		super(mainTreeProvider, updateContext, javaProjectProvider, ecForToolkit);
+		fMethodInterface = methodInterface;
+	}
+
+	public MethodDetailsPage(
+			IMainTreeProvider mainTreeProvider,
+			MethodInterface methodInterface,
+			IModelUpdateContext updateContext,
+			IJavaProjectProvider javaProjectProvider) {
+
+		this(mainTreeProvider, methodInterface, updateContext, javaProjectProvider, null);
 	}
 
 	@Override
 	public void createContents(Composite parent) {
 		super.createContents(parent);
 
-		IFileInfoProvider fileInfoProvider = getFileInfoProvider();
+		createMethodNameWidgets();
+		createTestAndExportButtons();
 
-		createMethodNameWidgets(fileInfoProvider);
-		createTestAndExportButtons(fileInfoProvider);
-		createRunnerCombo();
-		createRunnerSection(fileInfoProvider);
+		if (ApplicationContext.isApplicationTypeLocal()) {
+			createRunnerCombo();
+			createRunnerSection();
+		}
 
-		addCommentsSection(fileInfoProvider);
+		addCommentsSection();
 
-		addViewerSection(fParemetersSection = new MethodParametersViewer(this,
-				this, fileInfoProvider));
-		addViewerSection(fConstraintsSection = new ConstraintsListViewer(this,
-				this, fileInfoProvider));
-		addViewerSection(fTestCasesSection = new TestCasesViewer(this, this,
-				fileInfoProvider));
+		IJavaProjectProvider javaProjectProvider = getJavaProjectProvider();
 
-		getToolkit().paintBordersFor(getMainComposite());
+		addViewerSection(fParemetersSection = 
+				new MethodParametersViewer(
+						this, getMainTreeProvider(), getModelUpdateContext(), javaProjectProvider));
+
+		addViewerSection(fConstraintsSection = 
+				new ConstraintsListViewer(
+						this, getMainTreeProvider(), getModelUpdateContext(), javaProjectProvider));
+
+		addViewerSection(fTestCasesSection = 
+				new TestCasesViewer(
+						this, getMainTreeProvider(), getModelUpdateContext(), javaProjectProvider));
+
+		getEcFormToolkit().paintBordersFor(getMainComposite());
 	}
 
 	@Override
@@ -81,55 +105,60 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		return textClient;
 	}
 
-	private void addCommentsSection(IFileInfoProvider fileInfoProvider) {
+	private void addCommentsSection() {
 
-		if (fileInfoProvider.isProjectAvailable()) {
-			addForm(fCommentsSection = new ExportableJavaDocCommentsSection(this, this, fileInfoProvider));
+		if (ApplicationContext.isProjectAvailable()) {
+			addForm(fCommentsSection = 
+					new ExportableJavaDocCommentsSection(this, getModelUpdateContext(), getJavaProjectProvider()));
 		} else {
-			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fileInfoProvider));
+			addForm(fCommentsSection = 
+					new SingleTextCommentsSection(this, getModelUpdateContext(), getJavaProjectProvider()));
 		}
 	}
 
-	private void createMethodNameWidgets(IFileInfoProvider fileInfoProvider) {
+	private void createMethodNameWidgets() {
 		int gridColumns = 2;
 
-		if (fileInfoProvider.isProjectAvailable()) {
+		if (ApplicationContext.isProjectAvailable()) {
 			++gridColumns;
 		}
 
-		Composite gridComposite = getFormObjectToolkit().createGridComposite(
+		Composite gridComposite = getEcFormToolkit().createGridComposite(
 				getMainComposite(), gridColumns);
 
-		getFormObjectToolkit().createLabel(gridComposite, "Method name ");
-		fMethodNameText = getFormObjectToolkit().createGridText(gridComposite,
+		getEcFormToolkit().createLabel(gridComposite, "Method name ");
+		fMethodNameText = getEcFormToolkit().createGridText(gridComposite,
 				new MethodNameApplier());
 
-		if (fileInfoProvider.isProjectAvailable()) {
-			fBrowseButton = getFormObjectToolkit().createButton(gridComposite,
+		if (ApplicationContext.isProjectAvailable()) {
+			fBrowseButton = getEcFormToolkit().createButton(gridComposite,
 					"Browse...", new ReassignAdapter());
 		}
 
-		getFormObjectToolkit().paintBorders(gridComposite);
+		getEcFormToolkit().paintBordersFor(gridComposite);
 	}
 
-	private void createTestAndExportButtons(IFileInfoProvider fileInfoProvider) {
+	private void createTestAndExportButtons() {
 
-		Composite childComposite = getFormObjectToolkit().createRowComposite(
+		Composite childComposite = getEcFormToolkit().createRowComposite(
 				getMainComposite());
 
-		FormObjectToolkit formObjectToolkit = getFormObjectToolkit();
+		EcFormToolkit formObjectToolkit = getEcFormToolkit();
 
-		fTestOnlineButton = formObjectToolkit.createButton(
-				childComposite, "Test online...", new OnlineTestAdapter());
+		if (ApplicationContext.isApplicationTypeLocal()) {
+			fTestOnlineButton = 
+					formObjectToolkit.createButton(
+							childComposite, "Test online...", new OnlineTestAdapter());
+		}
 
 		fExportOnlineButton = formObjectToolkit.createButton(
 				childComposite, "Export online...", new OnlineExportAdapter());
 
-		formObjectToolkit.paintBorders(childComposite);
+		formObjectToolkit.paintBordersFor(childComposite);
 	}
 
 	private void createRunnerCombo() {
-		FormObjectToolkit formObjectToolkit = getFormObjectToolkit();
+		EcFormToolkit formObjectToolkit = getEcFormToolkit();
 		Composite gridComposite = formObjectToolkit.createGridComposite(getMainComposite(), 2);
 
 		formObjectToolkit.createLabel(gridComposite, "Runner");
@@ -148,8 +177,11 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		}
 	}	
 
-	private void createRunnerSection(IFileInfoProvider fileInfoProvider) {
-		fRunnerSection = new WebRunnerSection(this, this, fMethodInterface, fileInfoProvider);
+	private void createRunnerSection() {
+		fRunnerSection = 
+				new WebRunnerSection(
+						this, getModelUpdateContext(), fMethodInterface, getJavaProjectProvider());
+
 		fRunnerSection.initialize(getManagedForm());
 	}
 
@@ -161,7 +193,6 @@ public class MethodDetailsPage extends BasicDetailsPage {
 			return;
 		}
 
-		IFileInfoProvider fileInfoProvider = getFileInfoProvider();
 		MethodNode methodNode = (MethodNode)getSelectedElement();
 		fMethodInterface.setOwnNode(methodNode);
 
@@ -170,22 +201,31 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		refreshRunnerCombo(methodNode);		
 		refreshRunnerSection(methodNode);
 
-		refrestTestOnlineButton(fileInfoProvider);
+		refrestTestOnlineButton();
 		refreshExportOnlineButton(methodNode);
 
-		setInputForOtherSections(fileInfoProvider, methodNode);
+		setInputForOtherSections(methodNode);
 
-		refreshBrowseButton(fileInfoProvider, methodNode);
+		refreshBrowseButton(methodNode);
 	}
 
 	private void refreshMethodNameAndSignature(MethodNode methodNode) {
 		getMainSection().setText(MethodNodeHelper.simplifiedToString(methodNode));
+//<<<<<<< HEAD
 //		TypeConverter tc = new TypeConverter(fMethodInterface.getName());
-		fMethodNameText.setText(fMethodInterface.getName());
+		fMethodNameText.setText(fMethodInterface.getNodeName());
 //		fMethodNameText.setText(tc.getReversedName());
+//=======
+//		fMethodNameText.setText(fMethodInterface.getNodeName());
+//>>>>>>> master
 	}
 
 	private void refreshRunnerCombo(MethodNode methodNode) {
+
+		if (fRunnerCombo == null) {
+			return;
+		}
+
 		String methodRunner = methodNode.getPropertyValue(fRunnerPropertyId);
 		if (methodRunner != null) {
 			fRunnerCombo.setText(methodRunner);
@@ -193,6 +233,11 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	}
 
 	private void refreshRunnerSection(MethodNode methodNode) {
+
+		if (fRunnerSection == null) {
+			return;
+		}
+
 		fRunnerSection.refresh();
 
 		String runner = methodNode.getPropertyValue(fRunnerPropertyId);
@@ -203,13 +248,18 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		}		
 	}
 
-	private void refrestTestOnlineButton(IFileInfoProvider fileInfoProvider) {
+	private void refrestTestOnlineButton() {
+
+		if (fTestOnlineButton == null) {
+			return;
+		}
+
 		EImplementationStatus methodImplementationStatus = null;
-		if (fileInfoProvider.isProjectAvailable()) {
+		if (ApplicationContext.isProjectAvailable()) {
 			methodImplementationStatus = fMethodInterface.getImplementationStatus();
 		}
 
-		fTestOnlineButton.setEnabled(isTestOnlineButtonEnabled(fileInfoProvider, methodImplementationStatus));
+		fTestOnlineButton.setEnabled(isTestOnlineButtonEnabled(methodImplementationStatus));
 	}
 
 	private void refreshExportOnlineButton(MethodNode methodNode) {
@@ -220,15 +270,15 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		}
 	}
 
-	private void setInputForOtherSections(IFileInfoProvider fileInfoProvider, MethodNode methodNode) {
+	private void setInputForOtherSections(MethodNode methodNode) {
 		fParemetersSection.setInput(methodNode);
 		fConstraintsSection.setInput(methodNode);
 		fTestCasesSection.setInput(methodNode);
 		fCommentsSection.setInput(methodNode);
 	}
 
-	private void refreshBrowseButton(IFileInfoProvider fileInfoProvider, MethodNode methodNode) {
-		if (!fileInfoProvider.isProjectAvailable()) {
+	private void refreshBrowseButton(MethodNode methodNode) {
+		if (!ApplicationContext.isProjectAvailable()) {
 			return;
 		}
 
@@ -243,7 +293,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		fBrowseButton.setEnabled(isEnabled);
 	}
 
-	private boolean isTestOnlineButtonEnabled(IFileInfoProvider fileInfoProvider, EImplementationStatus methodStatus) {
+	private boolean isTestOnlineButtonEnabled(EImplementationStatus methodStatus) {
 
 		MethodNode methodNode = fMethodInterface.getOwnNode();
 
@@ -251,7 +301,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 			return true;
 		}		
 
-		if (fileInfoProvider.isProjectAvailable()) {
+		if (ApplicationContext.isProjectAvailable()) {
 			return methodStatus != EImplementationStatus.NOT_IMPLEMENTED;
 		}
 
@@ -267,7 +317,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		@Override
 		public void widgetSelected(SelectionEvent ev) {
 			try {
-				fMethodInterface.executeOnlineTests(getFileInfoProvider());
+				fMethodInterface.executeOnlineTests(getJavaProjectProvider());
 			} catch (Exception e) {
 				ExceptionCatchDialog.open("Can not execute online tests.",
 						e.getMessage());
@@ -279,7 +329,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		@Override
 		public void widgetSelected(SelectionEvent ev) {
 			try {
-				fMethodInterface.executeOnlineExport(getFileInfoProvider());
+				fMethodInterface.executeOnlineExport(getJavaProjectProvider());
 			} catch (Exception e) {
 				ExceptionCatchDialog.open("Can not execute online export.",
 						e.getMessage());
@@ -299,10 +349,14 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		@Override
 		public void applyValue() {
 			fMethodInterface.setName(fMethodNameText.getText());
+//<<<<<<< HEAD
 //			TypeConverter name = new TypeConverter(fMethodInterface.getName());
 //			fMethodInterface.setName(name.getReversedName());
-			fMethodNameText.setText(fMethodInterface.getName());
+			fMethodNameText.setText(fMethodInterface.getNodeName());
 //			fMethodNameText.setText(name.getReversedName());
+//=======
+//			fMethodNameText.setText(fMethodInterface.getNodeName());
+//>>>>>>> master
 		}
 	}	
 

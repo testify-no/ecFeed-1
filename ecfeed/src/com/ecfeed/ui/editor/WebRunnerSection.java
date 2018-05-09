@@ -20,7 +20,8 @@ import org.eclipse.swt.widgets.Text;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.NodePropertyDefs;
 import com.ecfeed.core.utils.BooleanHelper;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.core.utils.IValueApplier;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.common.utils.SwtObjectHelper;
 import com.ecfeed.ui.dialogs.basic.FileOpenDialog;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
@@ -29,7 +30,7 @@ import com.ecfeed.ui.modelif.MethodInterface;
 public class WebRunnerSection extends BasicSection  {
 
 	MethodInterface fMethodInterface;
-	private FormObjectToolkit fFormObjectToolkit;
+	private EcFormToolkit fEcFormToolkit;
 	private Button fMapBrowserCheckbox;
 	private Combo fBrowserCombo;
 	private Text fBrowserDriverText;
@@ -49,69 +50,69 @@ public class WebRunnerSection extends BasicSection  {
 	public WebRunnerSection(ISectionContext sectionContext, 
 			IModelUpdateContext updateContext,
 			MethodInterface methodInterface,
-			IFileInfoProvider fileInfoProvider) {
-		super(sectionContext, updateContext, fileInfoProvider, StyleDistributor.getCollapsibleSectionStyle());
+			IJavaProjectProvider javaProjectProvider) {
+		super(sectionContext, updateContext, javaProjectProvider, StyleDistributor.getCollapsibleSectionStyle());
 
 		fMethodInterface = methodInterface;
-		fFormObjectToolkit = new FormObjectToolkit(getToolkit());
+		fEcFormToolkit = getEcFormToolkit();
 
 		setText("Web runner properties");
 
 		fClientComposite = getClientComposite();
-		fFormObjectToolkit.paintBorders(fClientComposite);
+		fEcFormToolkit.paintBordersFor(fClientComposite);
 		createWebDriverPropertiesComposite(fClientComposite);
 	}
 
 	private void createWebDriverPropertiesComposite(Composite parentComposite) {
 
-		Composite composite = fFormObjectToolkit.createGridComposite(parentComposite, 3);
-		fFormObjectToolkit.paintBorders(composite);
+		Composite composite = fEcFormToolkit.createGridComposite(parentComposite, 3);
+		fEcFormToolkit.paintBordersFor(composite);
 
 		createMapBrowserCheckBox(composite);
 		createBrowserCombo(composite);
 		createBrowserDriverPathText(composite);
 		createMapStartUrlCheckBox(composite);
 		createUrlText(composite);
-		fFormObjectToolkit.createEmptyLabel(composite);
+		fEcFormToolkit.createEmptyLabel(composite);
 	}
 
 	private void createMapBrowserCheckBox(Composite gridComposite) {
 
-		fFormObjectToolkit.createEmptyLabel(gridComposite);
+		fEcFormToolkit.createEmptyLabel(gridComposite);
 		fMapBrowserCheckbox = 
-				fFormObjectToolkit.createGridCheckBox(
+				fEcFormToolkit.createGridCheckBox(
 						gridComposite, "Map browser to method parameter", new MapBrowserApplier());
 		SwtObjectHelper.setHorizontalSpan(fMapBrowserCheckbox, 2);
 	}
 
 	private void createBrowserCombo(Composite gridComposite) {
 
-		fFormObjectToolkit.createLabel(gridComposite, "Browser");
-		fBrowserCombo = fFormObjectToolkit.createReadOnlyGridCombo(gridComposite, new BrowserApplier());
+		fEcFormToolkit.createLabel(gridComposite, "Browser");
+		fBrowserCombo = fEcFormToolkit.createReadOnlyGridCombo(gridComposite, new BrowserApplier());
 		fBrowserCombo.setItems(NodePropertyDefs.getValueSet(fBrowserPropertyId, null).getPossibleValues());
 		SwtObjectHelper.setHorizontalSpan(fBrowserCombo, 2);
 	}
 
 	private void createBrowserDriverPathText(Composite gridComposite) {
 
-		fFormObjectToolkit.createLabel(gridComposite, "Web driver  ");
-		fBrowserDriverText = fFormObjectToolkit.createGridText(gridComposite, new BrowserDriverApplier());
-		fBrowseButton = fFormObjectToolkit.createButton(gridComposite, "Browse...", new BrowseButtonSelectionAdapter());
+		fEcFormToolkit.createLabel(gridComposite, "Web driver  ");
+		fBrowserDriverText = fEcFormToolkit.createGridText(gridComposite, new BrowserDriverApplier());
+		fBrowseButton = fEcFormToolkit.createButton(gridComposite, "Browse...", new BrowseButtonSelectionAdapter());
 	}
 
 	private void createMapStartUrlCheckBox(Composite gridComposite) {
 
-		fFormObjectToolkit.createEmptyLabel(gridComposite);
+		fEcFormToolkit.createEmptyLabel(gridComposite);
 		fMapStartUrlCheckbox = 
-				fFormObjectToolkit.createGridCheckBox(
+				fEcFormToolkit.createGridCheckBox(
 						gridComposite, "Map start URL to method parameter", new MapStartUrlApplier());
 		SwtObjectHelper.setHorizontalSpan(fMapStartUrlCheckbox, 2);
 	}
 
 	private void createUrlText(Composite gridComposite) {
 
-		fFormObjectToolkit.createLabel(gridComposite, "Start URL");
-		fStartUrlText = fFormObjectToolkit.createGridText(gridComposite, new UrlApplier());
+		fEcFormToolkit.createLabel(gridComposite, "Start URL");
+		fStartUrlText = fEcFormToolkit.createGridText(gridComposite, new UrlApplier());
 
 		SwtObjectHelper.setHorizontalSpan(fStartUrlText, 2);
 	}

@@ -16,19 +16,21 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
 
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
-import com.ecfeed.ui.editor.actions.GlobalActions;
-import com.ecfeed.ui.editor.actions.IActionProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
+import com.ecfeed.ui.editor.actions.ActionDescriptionProvider;
+import com.ecfeed.ui.editor.actions.ActionId;
+import com.ecfeed.ui.editor.actions.IActionGrouppingProvider;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
+import com.ecfeed.utils.SwtHelper;
 
 public abstract class TreeViewerSection extends ViewerSection {
 
 	public TreeViewerSection(
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext,
-			IFileInfoProvider fileInfoProvider,
+			IJavaProjectProvider javaProjectProvider,
 			int style) {
-		super(sectionContext, updateContext, fileInfoProvider, style);
+		super(sectionContext, updateContext, javaProjectProvider, style);
 	}
 
 	@Override
@@ -56,10 +58,16 @@ public abstract class TreeViewerSection extends ViewerSection {
 	}
 
 	@Override
-	protected void setActionProvider(IActionProvider provider){
-		super.setActionProvider(provider);
-		if(provider.getAction(GlobalActions.EXPAND_COLLAPSE.getId()) != null){
-			createKeyListener(SWT.SPACE, SWT.NONE, provider.getAction(GlobalActions.EXPAND_COLLAPSE.getId()));
+	protected void setActionGrouppingProvider(IActionGrouppingProvider provider){
+		super.setActionGrouppingProvider(provider);
+
+		String strActionId = ActionDescriptionProvider.getInstance().getStrId(ActionId.EXPAND_COLLAPSE);
+
+		if (provider.getAction(strActionId) != null){
+			createKeyListener(
+					SwtHelper.getSpaceCode(), 
+					SWT.NONE, 
+					provider.getAction(strActionId));
 		}
 	}
 }

@@ -27,10 +27,12 @@ import com.ecfeed.core.generators.algorithms.Tuples;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.TestCaseNode;
+import com.ecfeed.core.utils.BooleanHolder;
+import com.ecfeed.core.utils.IntegerHolder;
 
 public class CoverageCalculator {
 
-	private int N;
+	private int fNMax;
 	private int[] fTuplesCovered;
 	private int[] fTotalWork;
 	private double[] fResults;
@@ -45,92 +47,30 @@ public class CoverageCalculator {
 	private List<List<ChoiceNode>> fCurrentlyChangedCases;
 	// If user added test cases = true; else we are substracting tuples;
 	private boolean fAddingFlag;
-	
-	
-	/*
-	 * Introducing OrderedChoice to differentiate between equal choices in different parameters
-	 * (Occuring when two parameters link the same global parameter)
-	 */
-	private class OrderedChoice{
-		int fIndex;
-		ChoiceNode fChoice;
-		
-		public OrderedChoice(int index, ChoiceNode choice){
-			fIndex = index;
-			fChoice = choice;
-		}
-		
-		@Override
-		public int hashCode(){
-			int hash = 7;
-			hash = 31 * hash + fIndex;
-			hash = 31 * hash + (fChoice == null ? 0 : fChoice.hashCode());
-			return hash;
-		}
-		
-		@Override
-		public boolean equals(Object obj){
-			if((obj == null) || (obj.getClass() != this.getClass())) return false;
-			OrderedChoice choice = (OrderedChoice)obj;
-			return ((choice.fIndex == this.fIndex) && choice.fChoice.equals(this.fChoice));
-		}
-	}
-	
-	private class CalculatorRunnable implements IRunnableWithProgress {
-		private boolean isCanceled;
-		// if true - add occurences, else substract them
 
-		@Override
-		public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-			int n = 0;
-			List<Map<List<OrderedChoice>, Integer>> coveredTuples = new ArrayList<>();
 
-			monitor.beginTask("Calculating Coverage", fCurrentlyChangedCases.size() * N);
+	public CoverageCalculator(List<MethodParameterNode> parameters, int NMax) throws InterruptedException {
 
-			while (!monitor.isCanceled() && n < N) {
-				Map<List<OrderedChoice>, Integer> mapForN = new HashMap<>();
-
-				ArrayList<List<OrderedChoice>> convertedCases = new ArrayList<>();
-				for(List<ChoiceNode> tcase: fCurrentlyChangedCases){
-					convertedCases.add(convertToOrdered(tcase));
-				}
-				for (List<OrderedChoice> converted: convertedCases) {
-					if (monitor.isCanceled()){
-						break;
-					}
-					Tuples<OrderedChoice> tuples = new Tuples<OrderedChoice>(converted, n + 1);
-					for (List<OrderedChoice> pnode : tuples.getAll()) {
-						addTuplesToMap(mapForN, pnode);
-					}
-					monitor.worked(1);
-				}
-				if (!monitor.isCanceled()) {
-					coveredTuples.add(mapForN);
-					n++;
-				}
-			}
-
-			n = 0;
-			if (!monitor.isCanceled()) {
-				for (Map<List<OrderedChoice>, Integer> map : coveredTuples) {
-					mergeOccurrenceMaps(fTuples.get(n), map, fAddingFlag);
-					fTuplesCovered[n] = fTuples.get(n).size();
-					fResults[n] = (((double) fTuplesCovered[n]) / ((double) fTotalWork[n])) * 100;
-					n++;
-				}
-			} else {
-				isCanceled = true;
-			}
-			monitor.done();
-		}
-	}
-
-	public CoverageCalculator(List<MethodParameterNode> parameters) {
 		fParameters = parameters;
-		initialize();
+		initialize(NMax);
+	}
+
+	public void initialize(int NMax) throws InterruptedException {
+		fNMax = NMax;
+		initalizeWithProgressDialog();
+	}
+
+	public void setCurrentChangedCases(Collection<TestCaseNode> testCases, boolean isAdding) {
+
+		fAddingFlag = isAdding;
+		if (testCases == null)
+			fCurrentlyChangedCases = null;
+		else
+			fCurrentlyChangedCases = prepareCasesToAdd(testCases);
 	}
 
 	public boolean calculateCoverage() {
+
 		// CurrentlyChangedCases are null if deselection left no test cases selected, 
 		// hence we can just clear tuple map and set results to 0
 		if (fCurrentlyChangedCases == null) {
@@ -138,69 +78,71 @@ public class CoverageCalculator {
 				tupleMap.clear();
 			}
 			// set results to zero
-			resetResults();
+			resetCoverageResults();
 			fCurrentlyChangedCases = new ArrayList<>();
 			return true;
-		} else {
-			ProgressMonitorDialog progressDialog = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
-			try {
-				CalculatorRunnable runnable = new CalculatorRunnable();
-				progressDialog.open();
-				progressDialog.run(true, true, runnable);
-				if (runnable.isCanceled) {
-					return false;
-				} else {
-					fCurrentlyChangedCases.clear();
-					return true;
-				}
+		} 
 
-			} catch (InvocationTargetException e) {
-				MessageDialog.openError(Display.getDefault().getActiveShell(), "Exception", "Invocation: " + e.getCause());
+		ProgressMonitorDialog progressDialog = 
+				new ProgressMonitorDialog(Display.getDefault().getActiveShell());
+
+		try {
+			CalculatorRunnable runnable = new CalculatorRunnable();
+			
+			progressDialog.open();
+			progressDialog.run(true, true, runnable);
+			
+			if (runnable.getIsCancelled()) {
 				return false;
-			} catch (InterruptedException e) {
-				MessageDialog.openError(Display.getDefault().getActiveShell(), "Exception", "Interrupted: " + e.getMessage());
-				e.printStackTrace();
-				return false;
+			} else {
+				fCurrentlyChangedCases.clear();
+				return true;
 			}
+
+		} catch (InvocationTargetException e) {
+			MessageDialog.openError(
+					Display.getDefault().getActiveShell(), 
+					"Exception", 
+					"Invocation: " + e.getCause());
+			return false;
+		} catch (InterruptedException e) {
+			MessageDialog.openError(Display.getDefault().getActiveShell(), "Exception", "Interrupted: " + e.getMessage());
+			e.printStackTrace();
+			return false;
 		}
 
 	}
-	
-	public void resetResults() {
+
+	public void resetCoverageResults() {
 		for (int i = 0; i < fResults.length; i++) {
 			fResults[i] = 0;
 		}
 	}	
-	
-	public double[] getCoverage(){
+
+	public double[] getCoverage() {
 		return fResults;
 	}
-	
-	public void setCurrentChangedCases(Collection<TestCaseNode> testCases, boolean isAdding) {
-		fAddingFlag = isAdding;
-		if (testCases == null)
-			fCurrentlyChangedCases = null;
-		else
-			fCurrentlyChangedCases = prepareCasesToAdd(testCases);
-	}
-	
-	private void initialize() {
-		fInput = prepareInput();
-		N = fInput.size();
-		fTuplesCovered = new int[N];
-		fTotalWork = new int[N];
-		fResults = new double[N];
-		fCurrentlyChangedCases = new ArrayList<>();
 
-		fTuples = new ArrayList<Map<List<OrderedChoice>, Integer>>();
-		fExpectedChoices = prepareExpectedChoices();
+	private void initalizeWithProgressDialog() throws InterruptedException {
 
-		for (int n = 0; n < fTotalWork.length; n++) {
-			fTotalWork[n] = calculateTotalTuples(fInput, n + 1, 100);
-			fTuples.add(new HashMap<List<OrderedChoice>, Integer>());
+		ProgressMonitorDialog progressDialog = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
+		CalculatorInitRunnable runnable = new CalculatorInitRunnable();
+
+		progressDialog.open();
+		try {
+			progressDialog.run(true, true, runnable);
+		} catch (InvocationTargetException | InterruptedException e) {
+			MessageDialog.openError(
+					Display.getDefault().getActiveShell(), 
+					"Exception", 
+					"Invocation: " + e.getCause());
+		}
+
+		if (runnable.isCanceled()) {
+			throw new InterruptedException("Operation cancelled.");
 		}
 	}
-	
+
 	private static void addTuplesToMap(Map<List<OrderedChoice>, Integer> map, List<OrderedChoice> tuple) {
 		if (!map.containsKey(tuple)) {
 			map.put(tuple, 1);
@@ -235,6 +177,7 @@ public class CoverageCalculator {
 	}
 
 	private List<List<ChoiceNode>> prepareInput() {
+
 		List<List<ChoiceNode>> input = new ArrayList<List<ChoiceNode>>();
 		for (MethodParameterNode cnode : fParameters) {
 			List<ChoiceNode> parameter = new ArrayList<ChoiceNode>();
@@ -249,7 +192,7 @@ public class CoverageCalculator {
 		}
 		return input;
 	}
-	
+
 	private Map<Integer, ChoiceNode> prepareExpectedChoices() {
 		int n = 0;
 		Map<Integer, ChoiceNode> expected = new HashMap<>();
@@ -258,7 +201,7 @@ public class CoverageCalculator {
 				ChoiceNode p = new ChoiceNode("", cnode.getDefaultValue());
 				p.setParent(cnode);
 				expected.put(n, p);
-//				expected.put(n, cnode.getDefaultValueChoice());
+				//				expected.put(n, cnode.getDefaultValueChoice());
 			}
 			n++;
 		}
@@ -293,11 +236,31 @@ public class CoverageCalculator {
 		return cases;
 	}
 
-	private int calculateTotalTuples(List<List<ChoiceNode>> input, int n, int coverage) {
+	private int calculateTotalTuples(
+			List<List<ChoiceNode>> input, 
+			int n, 
+			int total,
+			int coverage, 
+			IProgressMonitor monitor,
+			BooleanHolder isSubCancelled) {
+
 		int totalWork = 0;
-		
+		int cnt = 0;
+
 		Tuples<List<ChoiceNode>> tuples = new Tuples<List<ChoiceNode>>(input, n);
+
 		while (tuples.hasNext()) {
+
+			cnt++;
+			if (cnt%64 == 0) {
+				monitor.subTask("Calculating totals - pass:" + n + " of:" + total + ", item:" + cnt);
+
+				if (monitor.isCanceled()) {
+					isSubCancelled.set(true);
+					return 0;
+				}
+			}
+
 			long combinations = 1;
 			List<List<ChoiceNode>> tuple = tuples.next();
 			for (List<ChoiceNode> parameter : tuple) {
@@ -305,9 +268,10 @@ public class CoverageCalculator {
 			}
 			totalWork += combinations;
 		}
+
 		return (int) Math.ceil(((double) (coverage * totalWork)) / 100);
 	}
-	
+
 	private List<OrderedChoice> convertToOrdered(List<ChoiceNode> choices){
 		ArrayList<OrderedChoice> ordered = new ArrayList<>();
 		int i = 0;
@@ -316,6 +280,203 @@ public class CoverageCalculator {
 			i++;
 		}
 		return ordered;
+	}
+
+
+	private class CalculatorInitRunnable implements IRunnableWithProgress {
+
+		private boolean fIsCanceled = false;
+
+		@Override
+		public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+
+			fInput = prepareInput();
+			fTuplesCovered = new int[fNMax];
+			fTotalWork = new int[fNMax];
+			fResults = new double[fNMax];
+			fCurrentlyChangedCases = new ArrayList<>();
+
+			fTuples = new ArrayList<Map<List<OrderedChoice>, Integer>>();
+			fExpectedChoices = prepareExpectedChoices();
+
+			createDummyProgress(monitor);
+
+			BooleanHolder isSubCancelled = new BooleanHolder(false);
+
+			for (int index = 0; index < fTotalWork.length; index++) {
+
+				fTotalWork[index] = 
+						calculateTotalTuples(
+								fInput, index + 1, fTotalWork.length, 100, monitor, isSubCancelled);
+
+				if (isSubCancelled.get()) {
+					fIsCanceled = true;
+					break;
+				}
+
+				fTuples.add(new HashMap<List<OrderedChoice>, Integer>());
+
+				if (monitor.isCanceled()) {
+					fIsCanceled = true;
+					break;
+				}
+
+			}
+
+			monitor.done();
+		}
+
+		private void createDummyProgress(IProgressMonitor monitor) {
+			monitor.beginTask("Initializing Coverage calculator", 5);
+			monitor.worked(1);
+		}
+
+		public boolean isCanceled() {
+			return fIsCanceled;
+		}
+
+	}
+
+	private class CalculatorRunnable implements IRunnableWithProgress {
+		
+		private boolean fIsCanceled;
+		// if true - add occurences, else substract them
+		
+		@Override
+		public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+			
+			int n = 0;
+			IntegerHolder cnt = new IntegerHolder(0);
+			BooleanHolder isSubCancelled = new BooleanHolder(false);
+			
+			List<Map<List<OrderedChoice>, Integer>> coveredTuples = new ArrayList<>();
+
+			monitor.beginTask("Calculating Coverage", fCurrentlyChangedCases.size() * fNMax);
+
+			while (!monitor.isCanceled() && n < fNMax) {
+				
+				Map<List<OrderedChoice>, Integer> mapForN = new HashMap<>();
+
+				ArrayList<List<OrderedChoice>> convertedCases = new ArrayList<>();
+				
+				for (List<ChoiceNode> tcase: fCurrentlyChangedCases) {
+					
+					displaySubTaskMessage(n, cnt, isSubCancelled, monitor);
+					if (isSubCancelled.get()) {
+						fIsCanceled = true;
+						break;
+					}
+					
+					convertedCases.add(convertToOrdered(tcase));
+				}
+				
+				for (List<OrderedChoice> converted: convertedCases) {
+					
+					displaySubTaskMessage(n, cnt, isSubCancelled, monitor);
+					if (isSubCancelled.get()) {
+						fIsCanceled = true;
+						break;
+					}
+					
+					Tuples<OrderedChoice> tuples = new Tuples<OrderedChoice>(converted, n + 1);
+					
+					for (List<OrderedChoice> pnode : tuples.getAll()) {
+						
+						displaySubTaskMessage(n, cnt, isSubCancelled, monitor);
+						if (isSubCancelled.get()) {
+							fIsCanceled = true;
+							break;
+						}
+						
+						addTuplesToMap(mapForN, pnode);
+					}
+					
+					monitor.worked(1);
+				}
+				
+				if (!monitor.isCanceled()) {
+					
+					displaySubTaskMessage(n, cnt, isSubCancelled, monitor);
+					if (isSubCancelled.get()) {
+						fIsCanceled = true;
+						break;
+					}
+					
+					coveredTuples.add(mapForN);
+					n++;
+				}
+			}
+
+			n = 0;
+			if (!fIsCanceled) {
+				for (Map<List<OrderedChoice>, Integer> map : coveredTuples) {
+					
+					displaySubTaskMessage(n, cnt, isSubCancelled, monitor);
+					if (isSubCancelled.get()) {
+						fIsCanceled = true;
+						break;
+					}
+					
+					mergeOccurrenceMaps(fTuples.get(n), map, fAddingFlag);
+					fTuplesCovered[n] = fTuples.get(n).size();
+					fResults[n] = (((double) fTuplesCovered[n]) / ((double) fTotalWork[n])) * 100;
+					n++;
+				}
+			}
+			
+			monitor.done();
+		}
+		
+		public boolean getIsCancelled() {
+			return fIsCanceled;
+		}
+		
+		private void displaySubTaskMessage(
+				int pass, IntegerHolder cnt, BooleanHolder isSubCancelled, IProgressMonitor monitor) {
+
+			cnt.increment();
+
+			if (cnt.get()%64 != 0) {
+				return;
+			}
+			
+			monitor.subTask("Calculating coverage - pass:" + pass + " , item:" + cnt.get());
+
+			if (monitor.isCanceled()) {
+				isSubCancelled.set(true);
+				return;
+			}
+		}
+		
+	}
+
+	/*
+	 * Introducing OrderedChoice to differentiate between equal choices in different parameters
+	 * (Occuring when two parameters link the same global parameter)
+	 */
+	private class OrderedChoice{
+		int fIndex;
+		ChoiceNode fChoice;
+
+		public OrderedChoice(int index, ChoiceNode choice){
+			fIndex = index;
+			fChoice = choice;
+		}
+
+		@Override
+		public int hashCode(){
+			int hash = 7;
+			hash = 31 * hash + fIndex;
+			hash = 31 * hash + (fChoice == null ? 0 : fChoice.hashCode());
+			return hash;
+		}
+
+		@Override
+		public boolean equals(Object obj){
+			if((obj == null) || (obj.getClass() != this.getClass())) return false;
+			OrderedChoice choice = (OrderedChoice)obj;
+			return ((choice.fIndex == this.fIndex) && choice.fChoice.equals(this.fChoice));
+		}
 	}
 
 }

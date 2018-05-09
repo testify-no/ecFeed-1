@@ -184,7 +184,7 @@ public class AddTestCaseDialog extends TitleAreaDialog implements ITestDataEdito
 		ComboViewer testSuiteViewer = new ComboViewer(composite, SWT.NONE);
 		fTestSuiteCombo = testSuiteViewer.getCombo();
 		fTestSuiteCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		fTestSuiteCombo.setItems(fMethod.getTestSuites().toArray(new String[]{}));
+		fTestSuiteCombo.setItems(fMethod.getTestCaseNames().toArray(new String[]{}));
 		fTestSuiteCombo.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
@@ -200,10 +200,11 @@ public class AddTestCaseDialog extends TitleAreaDialog implements ITestDataEdito
 	 */
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
-		fOkButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
-				true);
-		createButton(parent, IDialogConstants.CANCEL_ID,
-				IDialogConstants.CANCEL_LABEL, false);
+		fOkButton = 
+				createButton(parent, IDialogConstants.OK_ID, DialogHelper.getOkLabel(), true);
+
+		createButton(
+				parent, IDialogConstants.CANCEL_ID, DialogHelper.getCancelLabel(), false);
 	}
 
 	@Override

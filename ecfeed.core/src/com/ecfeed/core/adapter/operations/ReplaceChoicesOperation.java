@@ -19,17 +19,27 @@ import com.ecfeed.core.model.ChoiceNode;
 
 public class ReplaceChoicesOperation extends BulkOperation {
 
-	public ReplaceChoicesOperation(AbstractParameterNode target, List<ChoiceNode> choices, ITypeAdapterProvider adapterProvider) {
-		super("Replace choices", true);
+	public ReplaceChoicesOperation(
+			AbstractParameterNode target, 
+			List<ChoiceNode> choices, 
+			ITypeAdapterProvider adapterProvider) {
+
+		super("Replace choices", true, target, target);
+
 		List<ChoiceNode> skipped = new ArrayList<ChoiceNode>();
-		for(ChoiceNode choice : choices){
-			if(target.getChoiceNames().contains(choice.getName())){
+
+		for (ChoiceNode choice : choices) {
+			if (target.getChoiceNames().contains(choice.getName())) {
 				skipped.add(choice);
-			}else{
+			} else {
 				addOperation(new GenericOperationAddChoice(target, choice, adapterProvider, true));
 			}
 		}
-		addOperation(new GenericRemoveNodesOperation(target.getChoices(), adapterProvider, true));
+
+		addOperation(
+				new GenericRemoveNodesOperation(
+						target.getChoices(), adapterProvider, true, target, target));
+
 		for(ChoiceNode choice : skipped){
 			addOperation(new GenericOperationAddChoice(target, choice, adapterProvider, true));
 		}

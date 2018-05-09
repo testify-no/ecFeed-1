@@ -104,11 +104,11 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 		}
 	}
 
-	private class UserTypeTypeAdapter implements ITypeAdapter{
+	private class UserTypeAdapter implements ITypeAdapter{
 
 		private String fType;
 
-		public UserTypeTypeAdapter(String type){
+		public UserTypeAdapter(String type){
 			fType = type;
 		}
 
@@ -117,13 +117,18 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 			return Arrays.asList(TYPES_CONVERTABLE_TO_USER_TYPE).contains(type);
 		}
 
-		public String convert(String value){
-			return JavaLanguageHelper.isValidJavaIdentifier(value) ? value : null;
+		public String convert(String value) {
+
+			if (JavaLanguageHelper.isValidJavaIdentifier(value)) {
+				return value;
+			}
+
+			return null;
 		}
 
 		@Override
 		public String defaultValue() {
-			return new EclipseModelBuilder().getDefaultExpectedValue(fType);
+			return EclipseTypeHelper.getDefaultExpectedValue(fType);
 		}
 
 		@Override
@@ -363,7 +368,7 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 		case JavaTypeHelper.TYPE_NAME_STRING:
 			return new StringTypeAdapter();
 		default:
-			return new UserTypeTypeAdapter(type);
+			return new UserTypeAdapter(type);
 		}
 	}
 }

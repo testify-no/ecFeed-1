@@ -14,8 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ecfeed.core.adapter.IModelOperation;
-import com.ecfeed.core.model.Messages;
 import com.ecfeed.core.model.ClassNodeHelper;
+import com.ecfeed.core.model.Messages;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelOperationException;
@@ -28,13 +28,15 @@ public class MethodOperationRemoveParameter extends BulkOperation{
 		private List<TestCaseNode> fOriginalTestCases;
 		private boolean fIgnoreDuplicates;
 
-		private class ReverseOperation extends AbstractReverseOperation{
+		private class ReverseOperation extends AbstractReverseOperation {
 			public ReverseOperation() {
 				super(RemoveMethodParameterOperation.this);
 			}
 
 			@Override
 			public void execute() throws ModelOperationException {
+
+				setOneNodeToSelect(getMethodTarget());
 				getMethodTarget().replaceTestCases(fOriginalTestCases);
 				RemoveMethodParameterOperation.super.reverseOperation().execute();
 			}
@@ -50,7 +52,7 @@ public class MethodOperationRemoveParameter extends BulkOperation{
 			super(target, parameter);
 			fOriginalTestCases = new ArrayList<>();
 		}
-		
+
 		public RemoveMethodParameterOperation(MethodNode target, MethodParameterNode parameter, boolean ignoreDuplicates){
 			this(target, parameter);
 			fIgnoreDuplicates = ignoreDuplicates;
@@ -91,7 +93,7 @@ public class MethodOperationRemoveParameter extends BulkOperation{
 	}
 
 	public MethodOperationRemoveParameter(MethodNode target, MethodParameterNode parameter, boolean validate) {
-		super(OperationNames.REMOVE_METHOD_PARAMETER, true);
+		super(OperationNames.REMOVE_METHOD_PARAMETER, true, target, target);
 		addOperation(new RemoveMethodParameterOperation(target, parameter));
 		if(validate){
 			addOperation(new MethodOperationMakeConsistent(target));
@@ -100,13 +102,13 @@ public class MethodOperationRemoveParameter extends BulkOperation{
 	public MethodOperationRemoveParameter(MethodNode target, MethodParameterNode parameter) {
 		this(target, parameter, true);
 	}
-	
+
 	public MethodOperationRemoveParameter(MethodNode target, MethodParameterNode parameter, boolean validate, boolean ignoreDuplicates){
-		super(OperationNames.REMOVE_METHOD_PARAMETER, true);
+		super(OperationNames.REMOVE_METHOD_PARAMETER, true, target, target);
 		addOperation(new RemoveMethodParameterOperation(target, parameter, ignoreDuplicates));
 		if(validate){
 			addOperation(new MethodOperationMakeConsistent(target));
 		}
 	}
-	
+
 }

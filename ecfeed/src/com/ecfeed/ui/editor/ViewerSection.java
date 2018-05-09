@@ -11,10 +11,7 @@
 package com.ecfeed.ui.editor;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
@@ -28,25 +25,18 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.KeyAdapter;
-import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
-import org.eclipse.swt.events.MenuEvent;
 import org.eclipse.swt.events.MenuListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.MenuItem;
 
-import com.ecfeed.core.model.AbstractNode;
-import com.ecfeed.core.utils.SystemHelper;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
-import com.ecfeed.ui.editor.actions.GlobalActions;
-import com.ecfeed.ui.editor.actions.IActionProvider;
-import com.ecfeed.ui.editor.actions.NamedAction;
+import com.ecfeed.ui.editor.actions.IActionGrouppingProvider;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 /**
@@ -57,11 +47,10 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 	private final int VIEWER_STYLE = SWT.BORDER | SWT.MULTI;
 
 	private List<Object> fSelectedElements;
-
 	private StructuredViewer fViewer;
 	private Composite fViewerComposite;
 	private Menu fMenu;
-	private Set<KeyListener> fKeyListeners;
+	private KeyRegistrator fKeyRegistrator = null;
 
 	protected abstract void createViewerColumns();
 	protected abstract StructuredViewer createViewer(Composite viewerComposite, int style);
@@ -72,11 +61,18 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 	public ViewerSection(
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext, 
-			IFileInfoProvider fileInfoProvider, 
+			IJavaProjectProvider javaProjectProvider, 
 			int style) {
-		super(sectionContext, updateContext, fileInfoProvider, style);
+		super(sectionContext, updateContext, javaProjectProvider, style);
 		fSelectedElements = new ArrayList<>();
-		fKeyListeners = new HashSet<KeyListener>();
+	}
+
+	@Override
+	protected Composite createClientComposite() {
+		Composite client = super.createClientComposite();
+		createViewer();
+
+		return client;
 	}
 
 	@Override
@@ -108,21 +104,23 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 	}
 
 	@Override
-	protected Composite createClientComposite() {
-		Composite client = super.createClientComposite();
-		createViewer();
-		return client;
+	protected void setActionGrouppingProvider(IActionGrouppingProvider actionProvider) {
+
+		super.setActionGrouppingProvider(actionProvider);
+
+		Control viewerControl = fViewer.getControl();
+
+		configureContextMenu(viewerControl);
+		registerKeyShortcuts(viewerControl, actionProvider);
 	}
 
-	@Override
-	protected void setActionProvider(IActionProvider provider){
-		setActionProvider(provider, true);
-	}
 
 	public Object getSelectedElement() {
+
 		if (fSelectedElements.size() > 0) {
 			return fSelectedElements.get(0);
 		}
+
 		return null;
 	}
 
@@ -143,30 +141,12 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 		return fViewer;
 	}
 
-	public List<AbstractNode> getSelectedNodes(){
-		List<AbstractNode> result = new ArrayList<>();
-		for(Object o : getSelection().toList()){
-			if(o instanceof AbstractNode){
-				result.add((AbstractNode)o);
-			}
-		}
-		return result;
-	}
-
-	public AbstractNode getFirstSelectedNode() {
-		List<AbstractNode> selectedNodes = getSelectedNodes();
-
-		if(selectedNodes.size() == 0) {
-			return null;
-		}
-
-		return selectedNodes.get(0);
-	}
-
 	protected void createViewer() {
+
 		fViewer = createViewer(getMainControlComposite(), getViewerStyle());
 		fViewer.setContentProvider(createViewerContentProvider());
 		fViewer.setLabelProvider(createViewerLabelProvider());
+
 		createViewerColumns();
 
 		fViewer.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -198,78 +178,14 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 	}
 
 	protected KeyListener createKeyListener(int keyCode, int modifier, Action action){
-		ViewerKeyAdapter adapter = new ViewerKeyAdapter(keyCode, modifier, action);
+		ActionKeyListener adapter = new ActionKeyListener(keyCode, modifier, action);
 		fViewer.getControl().addKeyListener(adapter);
 		return adapter;
 	}
 
-	protected void setActionProvider(IActionProvider provider, boolean addDeleteAction){
-		super.setActionProvider(provider);
-		fMenu = new Menu(fViewer.getControl());
-		fViewer.getControl().setMenu(fMenu);
-		fMenu.addMenuListener(getMenuListener());
-
-		if(provider != null) {
-			addKeyListenersForActions(provider, addDeleteAction);
-		} else {
-			removeKeyListeners();
-		}
-	}
-
-	private void addKeyListenersForActions(IActionProvider provider, boolean addDeleteAction) {
-
-		addKeyListener(GlobalActions.INSERT.getId(), SWT.INSERT, SWT.NONE, provider);
-		addKeyListener(GlobalActions.DELETE.getId(), SWT.DEL, SWT.NONE, provider);
-
-		addKeyListener(GlobalActions.MOVE_UP.getId(), SWT.ARROW_UP, SWT.ALT, provider);
-		addKeyListener(GlobalActions.MOVE_DOWN.getId(), SWT.ARROW_DOWN, SWT.ALT, provider);
-
-		if (!getFileInfoProvider().isProjectAvailable()) {
-			addActionsForStandaloneApp(provider);
-		}
-	}
-
-	private void addActionsForStandaloneApp(IActionProvider provider) {
-
-		int ctrlModifier = getCtrlModifier();
-
-		addKeyListener(GlobalActions.COPY.getId(), 'c', ctrlModifier, provider);
-		addKeyListener(GlobalActions.CUT.getId(), 'x', ctrlModifier, provider);
-		addKeyListener(GlobalActions.PASTE.getId(), 'v', ctrlModifier, provider);
-
-		addKeyListener(GlobalActions.SAVE.getId(), 's', ctrlModifier, provider);
-		addKeyListener(GlobalActions.UNDO.getId(), 'z', ctrlModifier, provider);
-		addKeyListener(GlobalActions.REDO.getId(), 'z', ctrlModifier | SWT.SHIFT, provider);
-	}
-
-	private void addKeyListener(String actionId, int keyCode, int modifier, IActionProvider provider) {
-		NamedAction action = provider.getAction(actionId);
-		if (action == null) {
-			return;
-		}
-		fKeyListeners.add(createKeyListener(keyCode, modifier, action));
-	}
-
-
-	int getCtrlModifier() {
-
-		if (SystemHelper.isOperatingSystemMacOs()) {
-			return SWT.COMMAND;
-		} else {
-			return SWT.CTRL;
-		}
-	}
-
-	private void removeKeyListeners() {
-		Iterator<KeyListener> it = fKeyListeners.iterator();
-		while(it.hasNext()){
-			fViewer.getControl().removeKeyListener(it.next());
-			it.remove();
-		}
-	}
-
 	protected MenuListener getMenuListener() {
-		return new ViewerMenuListener(fMenu);
+
+		return new ViewerMenuListener(fMenu, getActionGroupingProvider(), fViewer);
 	}
 
 	protected Menu getMenu(){
@@ -296,124 +212,23 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 		}
 	}
 
-	protected class ViewerKeyAdapter extends KeyAdapter {
-		private int fKeyCode;
-		private Action fAction;
-		private int fModifier;
+	private void configureContextMenu(Control viewerControl) {
 
-		public ViewerKeyAdapter(int keyCode, int modifier, Action action){
-			fKeyCode = keyCode;
-			fModifier = modifier;
-			fAction = action;
-		}
-
-		@Override
-		public void keyReleased(KeyEvent e) {
-
-			if(e.keyCode != fKeyCode) {
-				return;
-			}
-			if (e.stateMask != fModifier) {
-				return;
-			}
-			fAction.run();
-		}
+		fMenu = new Menu(viewerControl);
+		viewerControl.setMenu(fMenu);
+		fMenu.addMenuListener(getMenuListener());
 	}
 
-	protected class ViewerMenuListener implements MenuListener {
+	private void registerKeyShortcuts(
+			Control viewerControl, IActionGrouppingProvider actionProvider) {
 
-		private Menu fMenu;
+		fKeyRegistrator = new KeyRegistrator(viewerControl, actionProvider);
 
-		public ViewerMenuListener(Menu menu) {
-			fMenu = menu;
+		if (actionProvider != null) {
+			fKeyRegistrator.registerKeyListeners();
+		} else {
+			fKeyRegistrator.unregisterKeyListeners();
 		}
-
-		protected Menu getMenu(){
-			return fMenu;
-		}
-
-		@Override
-		public void menuHidden(MenuEvent e) {
-		}
-
-		@Override
-		public void menuShown(MenuEvent e) {
-
-			for(MenuItem item : getMenu().getItems()) {
-				item.dispose();
-			}
-
-			populateMenu();
-		}
-
-		protected void populateMenu() {
-
-			IActionProvider provider = getActionProvider();
-			if(provider == null) {
-				return;
-			}
-
-			AbstractNode firstSelectedNode = getFirstSelectedNode();
-			if (firstSelectedNode == null) {
-				return;
-			}
-
-			addActionsForAllGroups(provider);
-		}
-
-		private void addActionsForAllGroups(IActionProvider provider) {
-
-			Iterator<String> groupIt = provider.getGroups().iterator();
-
-			while(groupIt.hasNext()) {
-
-				addActionsForGroup(groupIt, provider);
-
-				if(groupIt.hasNext()){
-					new MenuItem(fMenu, SWT.SEPARATOR);
-				}
-			}
-		}
-
-		private void addActionsForGroup(
-				Iterator<String> groupIt, IActionProvider actionProvider) {
-
-			for (NamedAction action : actionProvider.getActions(groupIt.next())) {
-
-				addMenuItem(action.getName(), action);
-			}
-		}
-
-		protected void addMenuItem(String actionName, Action action) {
-
-			if (actionName.equals(GlobalActions.INSERT.getDescription())) {
-				return;
-			}
-
-			MenuItem item = new MenuItem(getMenu(), SWT.NONE);
-			item.setText(actionName);
-			item.setEnabled(action.isEnabled());
-			item.addSelectionListener(new MenuItemSelectionAdapter(action)); 
-		}
-
-		private class MenuItemSelectionAdapter extends SelectionAdapter {
-
-			private Action fAction;
-
-			public MenuItemSelectionAdapter(Action action){
-				fAction = action;
-			}
-
-			@Override
-			public void widgetSelected(SelectionEvent ev){
-				try {
-					fAction.run();
-				} catch (Exception e) {
-					ExceptionCatchDialog.open(null, e.getMessage());
-				}
-			}
-		}
-
 	}
 
 }

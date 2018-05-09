@@ -19,12 +19,12 @@ import com.ecfeed.core.model.GlobalParameterNode;
 import com.ecfeed.core.model.GlobalParametersParentNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.ui.common.Messages;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 
 public class GlobalParametersParentInterface extends ParametersParentInterface {
 
-	public GlobalParametersParentInterface(IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider) {
-		super(updateContext, fileInfoProvider);
+	public GlobalParametersParentInterface(IModelUpdateContext updateContext, IJavaProjectProvider javaProjectProvider) {
+		super(updateContext, javaProjectProvider);
 	}
 
 	@Override
@@ -49,6 +49,6 @@ public class GlobalParametersParentInterface extends ParametersParentInterface {
 	}
 
 	public boolean replaceMethodParametersWithGlobal(List<MethodParameterNode> originalParameters) {
-		return execute(new ReplaceMethodParametersWithGlobalOperation(getOwnNode(), originalParameters, getAdapterProvider()), Messages.DIALOG_REPLACE_PARAMETERS_WITH_LINKS_TITLE);
+		return getOperationExecuter().execute(new ReplaceMethodParametersWithGlobalOperation(getOwnNode(), originalParameters, getAdapterProvider()), Messages.DIALOG_REPLACE_PARAMETERS_WITH_LINKS_TITLE);
 	}
 }

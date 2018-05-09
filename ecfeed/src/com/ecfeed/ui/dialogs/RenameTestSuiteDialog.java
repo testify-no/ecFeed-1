@@ -59,20 +59,20 @@ public class RenameTestSuiteDialog extends TitleAreaDialog {
 		Composite container = new Composite(area, SWT.NONE);
 		container.setLayout(new GridLayout(1, false));
 		container.setLayoutData(new GridData(GridData.FILL_BOTH));
-		
+
 		Label lblSelectTestSuite = new Label(container, SWT.NONE);
 		lblSelectTestSuite.setText("Select test suite to rename");
-		
+
 		fRenamedTestSuiteCombo = new Combo(container, SWT.READ_ONLY);
 		fRenamedTestSuiteCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		fRenamedTestSuiteCombo.setItems(fTestSuites);
 		if(fTestSuites.length > 0){
 			fRenamedTestSuiteCombo.select(0);
 		}
-		
+
 		Label lblEnterNewName = new Label(container, SWT.NONE);
 		lblEnterNewName.setText("Enter new name for this test suite");
-		
+
 		fNewNameText = new Text(container, SWT.BORDER);
 		fNewNameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		fNewNameText.addModifyListener(new ModifyListener() {
@@ -105,11 +105,10 @@ public class RenameTestSuiteDialog extends TitleAreaDialog {
 	 */
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
-		fOkButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
-				true);
+		fOkButton = createButton(parent, IDialogConstants.OK_ID, DialogHelper.getOkLabel(), true);
 		fOkButton.setEnabled(false);
-		createButton(parent, IDialogConstants.CANCEL_ID,
-				IDialogConstants.CANCEL_LABEL, false);
+		createButton(
+				parent, IDialogConstants.CANCEL_ID, DialogHelper.getCancelLabel(), false);
 	}
 
 	@Override
@@ -129,7 +128,7 @@ public class RenameTestSuiteDialog extends TitleAreaDialog {
 	public String getRenamedTestSuite(){
 		return fRenamedTestSuite;
 	}
-	
+
 	public String getNewName(){
 		return fNewName;
 	}

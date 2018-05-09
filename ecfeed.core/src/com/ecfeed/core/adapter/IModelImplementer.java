@@ -13,8 +13,8 @@ package com.ecfeed.core.adapter;
 import com.ecfeed.core.model.AbstractNode;
 
 public interface IModelImplementer {
-	public boolean implementable(Class<? extends AbstractNode> type);
-	public boolean implementable(AbstractNode node);
+	public boolean isImplementable(Class<? extends AbstractNode> type);
+	public boolean isImplementable(AbstractNode node);
 	public boolean implement(AbstractNode node) throws Exception;
 	public EImplementationStatus getImplementationStatus(AbstractNode node);
 }

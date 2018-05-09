@@ -26,7 +26,7 @@ public class ReplaceMethodParametersWithGlobalOperation extends BulkOperation{
 	private class ReplaceParameterWithLink extends BulkOperation{
 
 		public ReplaceParameterWithLink(MethodParameterNode target, GlobalParametersParentNode parent, ITypeAdapterProvider adapterProvider) {
-			super(OperationNames.REPLACE_PARAMETER_WITH_LINK, true);
+			super(OperationNames.REPLACE_PARAMETER_WITH_LINK, true, target, target);
 			MethodNode method = target.getMethod();
 			GlobalParameterNode global = new GlobalParameterNode(target);
 			addOperation(new GenericOperationAddParameter(parent, global));
@@ -35,7 +35,7 @@ public class ReplaceMethodParametersWithGlobalOperation extends BulkOperation{
 			for(ConstraintNode constraint : method.getConstraintNodes()){
 				if(constraint.mentions(target)){
 					ConstraintNode copy = constraint.makeClone();
-//					addOperation(new MethodOperationRemoveConstraint(method, constraint));
+					//					addOperation(new MethodOperationRemoveConstraint(method, constraint));
 					addOperation(new MethodOperationAddConstraint(method, copy, constraint.getIndex()));
 				}
 			}
@@ -57,7 +57,7 @@ public class ReplaceMethodParametersWithGlobalOperation extends BulkOperation{
 	}
 
 	public ReplaceMethodParametersWithGlobalOperation(GlobalParametersParentNode parent, List<MethodParameterNode> originals, ITypeAdapterProvider adapterProvider){
-		super(OperationNames.REPLACE_PARAMETERS, false);
+		super(OperationNames.REPLACE_PARAMETERS, false, parent, parent);
 		for(MethodParameterNode parameter : originals){
 			addOperation(new ReplaceParameterWithLink(parameter, parent, adapterProvider));
 		}

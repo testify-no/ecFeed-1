@@ -13,6 +13,8 @@ package com.ecfeed.core.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ecfeed.core.utils.EvaluationResult;
+
 public class StatementArray extends AbstractStatement {
 
 	private EStatementOperator fOperator;
@@ -67,29 +69,68 @@ public class StatementArray extends AbstractStatement {
 	}
 
 	@Override
-	public boolean evaluate(List<ChoiceNode> values) {
+	public EvaluationResult evaluate(List<ChoiceNode> values) {
 
 		if (fStatements.size() == 0) {
-			return false;
+			return EvaluationResult.FALSE;
 		}
 
 		switch (fOperator) {
+
 		case AND:
-			for (IStatement statement : fStatements) {
-				if (statement.evaluate(values) == false) {
-					return false;
-				}
-			}
-			return true;
+			return evaluateForAndOperator(values);
 		case OR:
-			for (IStatement statement : fStatements) {
-				if (statement.evaluate(values) == true) {
-					return true;
-				}
-			}
-			return false;
+			return evaluateForOrOperator(values);
 		}
-		return false;
+		return EvaluationResult.FALSE;
+	}
+
+	private EvaluationResult evaluateForOrOperator(List<ChoiceNode> values) {
+
+		boolean insufficient_data = false;
+
+		for (IStatement statement : fStatements) {
+
+			EvaluationResult evaluationResult = statement.evaluate(values);
+
+			if (evaluationResult == EvaluationResult.TRUE) {
+				return EvaluationResult.TRUE;
+			}
+
+			if (evaluationResult == EvaluationResult.INSUFFICIENT_DATA) {
+				insufficient_data = true;
+			}			
+		}
+
+		if (insufficient_data) {
+			return EvaluationResult.INSUFFICIENT_DATA;
+		}
+
+		return EvaluationResult.FALSE;
+	}
+
+	private EvaluationResult evaluateForAndOperator(List<ChoiceNode> values) {
+
+		boolean insufficient_data = false;
+
+		for (IStatement statement : fStatements) {
+
+			EvaluationResult evaluationResult = statement.evaluate(values);
+
+			if (evaluationResult == EvaluationResult.FALSE) {
+				return EvaluationResult.FALSE;
+			}
+
+			if (evaluationResult == EvaluationResult.INSUFFICIENT_DATA) {
+				insufficient_data = true;
+			}
+		}
+
+		if (insufficient_data) {
+			return EvaluationResult.INSUFFICIENT_DATA;
+		}
+
+		return EvaluationResult.TRUE;
 	}
 
 	@Override

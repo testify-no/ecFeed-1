@@ -38,12 +38,12 @@ import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.model.StaticStatement;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.testutils.ModelTestUtils;
-import com.ecfeed.junit.OnlineRunner;
+import com.ecfeed.junit.CollectiveOnlineRunner;
 import com.ecfeed.junit.annotations.Constraints;
 import com.ecfeed.junit.annotations.EcModel;
 import com.ecfeed.junit.annotations.Generator;
 
-@RunWith(OnlineRunner.class)
+@RunWith(CollectiveOnlineRunner.class)
 @Generator(CartesianProductGenerator.class)
 @EcModel("test/com/ecfeed/adapter/operations/MethodOperationRemoveParameterTest.ect")
 @Constraints(Constraints.ALL)

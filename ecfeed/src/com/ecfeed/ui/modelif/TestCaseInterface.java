@@ -21,15 +21,15 @@ import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.utils.EcException;
 import com.ecfeed.ui.common.Messages;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 
 public class TestCaseInterface extends AbstractNodeInterface {
 
-	private IFileInfoProvider fFileInfoProvider;
+	private IJavaProjectProvider fJavaProjectProvider;
 
-	public TestCaseInterface(IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider) {
-		super(updateContext, fileInfoProvider);
-		fFileInfoProvider = fileInfoProvider;
+	public TestCaseInterface(IModelUpdateContext updateContext, IJavaProjectProvider javaProjectProvider) {
+		super(updateContext, javaProjectProvider);
+		fJavaProjectProvider = javaProjectProvider;
 	}
 
 	@Override
@@ -52,7 +52,7 @@ public class TestCaseInterface extends AbstractNodeInterface {
 	}
 
 	public boolean isExecutable(TestCaseNode tc){
-		MethodInterface mIf = new MethodInterface(getUpdateContext(), fFileInfoProvider);
+		MethodInterface mIf = new MethodInterface(getOperationExecuter().getUpdateContext(), fJavaProjectProvider);
 		if(tc.getMethod() == null) return false;
 		mIf.setOwnNode(tc.getMethod());
 		EImplementationStatus tcStatus = getImplementationStatus(tc);
@@ -65,19 +65,19 @@ public class TestCaseInterface extends AbstractNodeInterface {
 	}
 
 	public void executeStaticTest() throws EcException {
-		MethodInterface methodIf = new MethodInterface(getUpdateContext(), fFileInfoProvider);
+		MethodInterface methodIf = new MethodInterface(getOperationExecuter().getUpdateContext(), fJavaProjectProvider);
 
 		TestCaseNode testCaseNode = getOwnNode();
 		MethodNode methodNode = (MethodNode)testCaseNode.getParent();
 		methodIf.setOwnNode(methodNode);
 
 		methodIf.executeStaticTests(
-				new ArrayList<TestCaseNode>(Arrays.asList(new TestCaseNode[]{getOwnNode()})), fFileInfoProvider);
+				new ArrayList<TestCaseNode>(Arrays.asList(new TestCaseNode[]{getOwnNode()})), fJavaProjectProvider);
 	}
 
 	public boolean updateTestData(int index, ChoiceNode value) {
 		IModelOperation operation = new TestCaseOperationUpdateTestData(getOwnNode(), index, value);
-		return execute(operation, Messages.DIALOG_UPDATE_TEST_DATA_PROBLEM_TITLE);
+		return getOperationExecuter().execute(operation, Messages.DIALOG_UPDATE_TEST_DATA_PROBLEM_TITLE);
 	}
 
 	@Override

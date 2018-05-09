@@ -19,7 +19,7 @@ import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.runner.ITestMethodInvoker;
 import com.ecfeed.core.runner.RunnerException;
 import com.ecfeed.core.serialization.export.ExportTemplateFactory;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.SetupDialogExportOnline;
 import com.ecfeed.ui.dialogs.SetupDialogOnline;
 
@@ -30,9 +30,9 @@ public class OnlineExportSupport extends AbstractOnlineSupport {
 	public OnlineExportSupport(
 			MethodNode methodNode, 
 			ITestMethodInvoker testMethodInvoker,
-			IFileInfoProvider fileInfoProvider, 
+			IJavaProjectProvider javaProjectProvider, 
 			String targetFile) {
-		super(methodNode, testMethodInvoker, fileInfoProvider, true);
+		super(methodNode, testMethodInvoker, javaProjectProvider, true);
 
 		fTargetFile = targetFile;
 	}
@@ -44,15 +44,13 @@ public class OnlineExportSupport extends AbstractOnlineSupport {
 
 	@Override
 	protected SetupDialogOnline createSetupDialog(Shell activeShell,
-			MethodNode methodNode, IFileInfoProvider fileInfoProvider) {
+			MethodNode methodNode, IJavaProjectProvider javaProjectProvider) {
 
 		ExportTemplateFactory exportTemplateFactory = 
 				new ExportTemplateFactory(methodNode);
 
-		return new SetupDialogExportOnline(activeShell, methodNode,
-				fileInfoProvider,
-				exportTemplateFactory,
-				fTargetFile);
+		return SetupDialogExportOnline.create(
+				activeShell, methodNode, javaProjectProvider, exportTemplateFactory, fTargetFile);
 	}
 
 	@Override

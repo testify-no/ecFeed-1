@@ -35,15 +35,15 @@ import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.testutils.ETypeName;
 import com.ecfeed.core.testutils.RandomModelGenerator;
-import com.ecfeed.junit.OnlineRunner;
+import com.ecfeed.junit.CollectiveOnlineRunner;
 import com.ecfeed.junit.annotations.Constraints;
 import com.ecfeed.junit.annotations.EcModel;
 import com.ecfeed.junit.annotations.Generator;
 import com.ecfeed.junit.annotations.expected;
-import com.ecfeed.ui.common.EclipseModelBuilder;
+import com.ecfeed.ui.common.JavaCodeModelBuilder;
 
 
-@RunWith(OnlineRunner.class)
+@RunWith(CollectiveOnlineRunner.class)
 @EcModel("test/com/ecfeed/adapter/java/JavaImplementationStatusResolverTest.ect")
 @Constraints(Constraints.ALL)
 @Generator(CartesianProductGenerator.class)
@@ -122,8 +122,8 @@ public class JavaImplementationStatusResolverTest {
 	@Test
 	public void primitiveChoiceStatusTest(ETypeName type){
 		MethodParameterNode parameter = new MethodParameterNode("parameter", type.getTypeName(), "0", false);
-		EclipseModelBuilder builder = new EclipseModelBuilder();
-		for(ChoiceNode choice : builder.defaultChoices(type.getTypeName())){
+		JavaCodeModelBuilder builder = new JavaCodeModelBuilder();
+		for(ChoiceNode choice : builder.getDefaultChoices(type.getTypeName())){
 			parameter.addChoice(choice);
 			assertEquals(EImplementationStatus.IMPLEMENTED, fResolver.getImplementationStatus(choice));
 		}

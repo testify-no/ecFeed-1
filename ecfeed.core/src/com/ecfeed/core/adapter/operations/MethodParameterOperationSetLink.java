@@ -13,8 +13,8 @@ package com.ecfeed.core.adapter.operations;
 import java.util.List;
 
 import com.ecfeed.core.adapter.IModelOperation;
-import com.ecfeed.core.model.Messages;
 import com.ecfeed.core.model.GlobalParameterNode;
+import com.ecfeed.core.model.Messages;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelOperationException;
@@ -34,6 +34,7 @@ public class MethodParameterOperationSetLink extends BulkOperation {
 
 			@Override
 			public void execute() throws ModelOperationException {
+				setOneNodeToSelect(fTarget);
 				fTarget.setLink(fCurrentLink);
 			}
 
@@ -41,6 +42,7 @@ public class MethodParameterOperationSetLink extends BulkOperation {
 			public IModelOperation reverseOperation() {
 				return new SetLinkOperation(fTarget, fNewLink);
 			}
+
 		}
 
 		public SetLinkOperation(MethodParameterNode target, GlobalParameterNode link) {
@@ -51,9 +53,12 @@ public class MethodParameterOperationSetLink extends BulkOperation {
 
 		@Override
 		public void execute() throws ModelOperationException {
+
+			setOneNodeToSelect(fTarget);
 			MethodNode method = fTarget.getMethod();
 			List<String> types = method.getParameterTypes();
 			types.set(fTarget.getIndex(), fNewLink.getType());
+
 			if(method.checkDuplicate(fTarget.getIndex(), fNewLink.getType())){
 				ModelOperationException.report(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM(method.getClassNode().getName(), method.getName()));
 			}
@@ -66,10 +71,11 @@ public class MethodParameterOperationSetLink extends BulkOperation {
 		public IModelOperation reverseOperation() {
 			return new ReverseOperation();
 		}
+
 	}
 
 	public MethodParameterOperationSetLink(MethodParameterNode target, GlobalParameterNode link) {
-		super(OperationNames.SET_LINK, true);
+		super(OperationNames.SET_LINK, true, target, target);
 		addOperation(new SetLinkOperation(target, link));
 		addOperation(new MethodOperationMakeConsistent(target.getMethod()));
 	}

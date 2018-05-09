@@ -74,15 +74,19 @@ public class TestCasesExporter {
 	private void exportHeader(
 			MethodNode method, OutputStream outputStream) throws IOException {
 
-		if (fexportTemplate.getHeaderTemplate() != null) {
-			String section = 
-					TestCasesExportHelper.generateSection(
-							method, fexportTemplate.getHeaderTemplate()) + StringHelper.newLine();
+		fExportedTestCases = 0;
 
-			outputStream.write(section.getBytes());
+		if (fexportTemplate.getHeaderTemplate() == null) {
+			return;
 		}
 
-		fExportedTestCases = 0;
+		String section = 
+				TestCasesExportHelper.generateSection(
+						method, fexportTemplate.getHeaderTemplate()) + StringHelper.newLine();
+
+		section = TestCasesExportHelper.evaluateMinWidthOperators(section);
+
+		outputStream.write(section.getBytes());
 	}
 
 	private void exportTestCase(TestCaseNode testCase, OutputStream outputStream)
@@ -93,18 +97,26 @@ public class TestCasesExporter {
 						fExportedTestCases, testCase, fexportTemplate.getTestCaseTemplate())
 						+ StringHelper.newLine();
 
+		testCaseText = TestCasesExportHelper.evaluateMinWidthOperators(testCaseText);
+
 		outputStream.write(testCaseText.getBytes());
 		++fExportedTestCases;
 	}
 
 	private void exportFooter(MethodNode method, OutputStream outputStream)
 			throws IOException {
-		if (fexportTemplate.getFooterTemplate() != null) {
-			String section = TestCasesExportHelper.generateSection(
-					method, fexportTemplate.getFooterTemplate()) + StringHelper.newLine();
 
-			outputStream.write(section.getBytes());
+		if (fexportTemplate.getFooterTemplate() == null) {
+			return;
 		}
+
+		String section = 
+				TestCasesExportHelper.generateSection(
+						method, fexportTemplate.getFooterTemplate()) + StringHelper.newLine();
+
+		section = TestCasesExportHelper.evaluateMinWidthOperators(section);
+
+		outputStream.write(section.getBytes());
 	}
 
 	private class ExportRunnable implements IRunnableWithProgress {

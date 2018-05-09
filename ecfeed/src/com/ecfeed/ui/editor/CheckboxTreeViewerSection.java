@@ -16,7 +16,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
 
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 public abstract class CheckboxTreeViewerSection extends TreeViewerSection {
@@ -24,9 +24,9 @@ public abstract class CheckboxTreeViewerSection extends TreeViewerSection {
 	public CheckboxTreeViewerSection(
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext,
-			IFileInfoProvider fileInfoProvider,
+			IJavaProjectProvider javaProjectProvider,
 			int style) {
-		super(sectionContext, updateContext, fileInfoProvider, style);
+		super(sectionContext, updateContext, javaProjectProvider, style);
 	}
 
 	@Override

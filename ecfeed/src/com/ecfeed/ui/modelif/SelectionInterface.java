@@ -29,97 +29,144 @@ public class SelectionInterface extends OperationExecuter {
 	private ITypeAdapterProvider fAdapterProvider;
 
 	public SelectionInterface(IModelUpdateContext updateContext) {
+
 		super(updateContext);
+
 		fAdapterProvider = new EclipseTypeAdapterProvider();
 	}
 
 	private List<? extends AbstractNode> fListOfNodes;
 
 	public void setOwnListOfNodes(List<AbstractNode> listOfNodes){
+
 		fListOfNodes = listOfNodes;
 	}
 
-	public boolean delete(){
-		if(fListOfNodes.size() > 0){
-			return execute(new GenericRemoveNodesOperation(fListOfNodes, fAdapterProvider, true), Messages.DIALOG_REMOVE_NODES_PROBLEM_TITLE);
+	public boolean delete() {
+
+		if (fListOfNodes.size() > 0) {
+
+			AbstractNode parentNode = fListOfNodes.get(0).getParent();
+
+			GenericRemoveNodesOperation genericRemoveNodesOperation =
+					new GenericRemoveNodesOperation(
+							fListOfNodes, fAdapterProvider, true, parentNode, parentNode);
+
+			return execute(genericRemoveNodesOperation, Messages.DIALOG_REMOVE_NODES_PROBLEM_TITLE);
 		}
+
 		return false;
 	}
 
-	public boolean deleteEnabled(){
-		if(fListOfNodes.size() == 0) return false;
+	public boolean deleteEnabled() {
+
+		if (fListOfNodes.size() == 0) { 
+			return false;
+		}
+
 		AbstractNode root = fListOfNodes.get(0).getRoot();
-		for(AbstractNode selected : fListOfNodes){
-			if(selected == root) return false;
+
+		for (AbstractNode selected : fListOfNodes) {
+			if (selected == root) { 
+				return false;
+			}
 		}
 		return true;
 	}
 
-	public boolean move(AbstractNode newParent){
+	public boolean move(AbstractNode newParent) {
 		return move(newParent, -1);
 	}
 
-	public boolean move(AbstractNode newParent, int newIndex){
-		try{
+	public boolean move(AbstractNode newParent, int newIndex) {
+
+		try {
 			IModelOperation operation;
-			if(newIndex == -1){
+			if (newIndex == -1) {
 				operation = new GenericMoveOperation(fListOfNodes, newParent, fAdapterProvider);
-			}
-			else{
+			} else {
 				operation = new GenericMoveOperation(fListOfNodes, newParent, fAdapterProvider, newIndex);
 			}
+
 			return execute(operation, Messages.DIALOG_MOVE_NODE_PROBLEM_TITLE);
-		}catch(ModelOperationException e){
+
+		} catch(ModelOperationException e) {
+
 			return false;
 		}
 	}
 
 	public boolean moveUpDown(boolean up) {
+
 		AbstractNode parent = fListOfNodes.get(0).getParent();
-		for(AbstractNode node : fListOfNodes){
-			if(node.getParent() != parent){
+
+		for (AbstractNode node : fListOfNodes) {
+			if (node.getParent() != parent) {
 				return false;
 			}
 		}
-		try{
+
+		try {
 			IModelOperation operation = FactoryShiftOperation.getShiftOperation(fListOfNodes, up);
 			executeMoveOperation(operation);
-		}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
+		} catch(Exception e){
+			SystemLogger.logCatch(e.getMessage());
+		}
+
 		return false;
 	}
 
 	public boolean moveUpDownEnabed(boolean up) {
 
 		AbstractNode parent = getCommonParent();
-		if(parent != null){
+
+		if(parent != null) {
 			try {
 				GenericShiftOperation operation = FactoryShiftOperation.getShiftOperation(fListOfNodes, up);
 				return operation.getShift() != 0;
-			} catch (Exception e) {SystemLogger.logCatch(e.getMessage());}
+			} catch (Exception e) {
+				SystemLogger.logCatch(e.getMessage());
+			}
 		}
 		return false;
 	}
 
 	public AbstractNode getCommonParent() {
-		if(fListOfNodes == null || fListOfNodes.size() == 0) return null;
-		AbstractNode parent = fListOfNodes.get(0).getParent();
-		for(AbstractNode node : fListOfNodes){
-			if(node.getParent() != parent) return null;
+
+		if(fListOfNodes == null || fListOfNodes.size() == 0) { 
+			return null;
 		}
+
+		AbstractNode parent = fListOfNodes.get(0).getParent();
+
+		for (AbstractNode node : fListOfNodes) {
+			if (node.getParent() != parent) { 
+				return null;
+			}
+		}
+
 		return parent;
 	}
 
-	public boolean isSingleType(){
-		if(fListOfNodes == null || fListOfNodes.size() == 0) return false;
-		Class<?> type = fListOfNodes.get(0).getClass();
-		for(AbstractNode node : fListOfNodes){
-			if(node.getClass().equals(type) == false) return false;
-		}
-		return true;
+	public boolean isSingleType() {
 
+		if (fListOfNodes == null || fListOfNodes.size() == 0) { 
+			return false;
+		}
+
+		Class<?> type = fListOfNodes.get(0).getClass();
+
+		for (AbstractNode node : fListOfNodes) {
+			if (node.getClass().equals(type) == false) { 
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	protected boolean executeMoveOperation(IModelOperation moveOperation) {
+
 		return execute(moveOperation, Messages.DIALOG_MOVE_NODE_PROBLEM_TITLE);
 	}
 }

@@ -27,7 +27,7 @@ public class StatementOperationRemoveStatement extends AbstractModelOperation {
 		fStatement = statement;
 		fIndex = target.getChildren().indexOf(statement);
 	}
-	
+
 	@Override
 	public void execute() throws ModelOperationException {
 		fTarget.removeChild(fStatement);
@@ -38,4 +38,5 @@ public class StatementOperationRemoveStatement extends AbstractModelOperation {
 	public IModelOperation reverseOperation() {
 		return new StatementOperationAddStatement(fTarget, fStatement, fIndex);
 	}
+
 }

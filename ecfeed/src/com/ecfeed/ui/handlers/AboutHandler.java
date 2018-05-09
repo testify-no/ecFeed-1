@@ -10,13 +10,13 @@
 
 package com.ecfeed.ui.handlers;
 
-import com.ecfeed.ui.dialogs.About2Dialog;
+import com.ecfeed.ui.dialogs.AboutDialog;
 
 
 public class AboutHandler {
 
 	public static void execute() {
-		About2Dialog.open();
+		AboutDialog.open();
 	}
 
 }

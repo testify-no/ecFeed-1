@@ -34,20 +34,23 @@ import com.ecfeed.core.runner.JavaTestRunner;
 import com.ecfeed.core.runner.RunnerException;
 import com.ecfeed.ui.common.EclipseLoaderProvider;
 import com.ecfeed.ui.common.Messages;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.GeneratorProgressMonitorDialog;
 import com.ecfeed.ui.dialogs.SetupDialogOnline;
 import com.ecfeed.ui.dialogs.basic.ErrorDialog;
 
 public abstract class AbstractOnlineSupport {
 
+
 	public enum Result {
 		OK, CANCELED
 	}
 
 	private MethodNode fMethodNode;
+	private TestResultsHolder ftestResultsHolder;
+	private ModelClassLoader fModelClassLoader;
 	private JavaTestRunner fRunner;
-	private IFileInfoProvider fFileInfoProvider;
+	private IJavaProjectProvider fJavaProjectProvider;
 	private String fTargetFile;
 	private String fExportTemplate;
 	private TestRunMode fTestRunMode;
@@ -55,20 +58,34 @@ public abstract class AbstractOnlineSupport {
 
 	public AbstractOnlineSupport(
 			MethodNode methodNode, ITestMethodInvoker testMethodInvoker, 
-			IFileInfoProvider fileInfoProvider) {
-		this(methodNode, testMethodInvoker, fileInfoProvider, false);
+
+			IJavaProjectProvider javaProjectProvider) {
+		
+		this(methodNode, testMethodInvoker, javaProjectProvider, false);
+
 	}
 
 	public AbstractOnlineSupport(
-			MethodNode methodNode, ITestMethodInvoker testMethodInvoker,
-			IFileInfoProvider fileInfoProvider,
+			MethodNode methodNode, 
+			ITestMethodInvoker testMethodInvoker,
+			IJavaProjectProvider javaProjectProvider,
 			boolean isExport) {
+		
 		ILoaderProvider loaderProvider = new EclipseLoaderProvider();
-		ModelClassLoader loader = loaderProvider.getLoader(true, null);
-		Thread.currentThread().setContextClassLoader(loader);
-		fRunner = new JavaTestRunner(loader, isExport, testMethodInvoker);
-		fFileInfoProvider = fileInfoProvider;
+//<<<<<<< HEAD
+//		ModelClassLoader loader = loaderProvider.getLoader(true, null);
+//		Thread.currentThread().setContextClassLoader(loader);
+//		fRunner = new JavaTestRunner(loader, isExport, testMethodInvoker);
+//		fFileInfoProvider = fileInfoProvider;
+//=======
+
+		fModelClassLoader = loaderProvider.getLoader(true, null);
+		fRunner = new JavaTestRunner(fModelClassLoader, isExport, testMethodInvoker);
+		fJavaProjectProvider = javaProjectProvider;
+//>>>>>>> master
 		fTestRunMode = TestRunModeHelper.getTestRunMode(methodNode);
+		fMethodNode = methodNode;
+		ftestResultsHolder = new TestResultsHolder();
 		fTestInformer = createTestInformer(isExport);
 
 		setOwnMethodNode(methodNode);
@@ -80,7 +97,7 @@ public abstract class AbstractOnlineSupport {
 			return new ExportTestInformer();
 		}
 
-		return new ExecutionTestInformer();
+		return new ExecutionTestInformer(fMethodNode, ftestResultsHolder);
 	}
 
 	protected TestRunMode getTestRunMode() {
@@ -91,7 +108,7 @@ public abstract class AbstractOnlineSupport {
 
 	protected abstract SetupDialogOnline createSetupDialog(
 			Shell activeShell, MethodNode methodNode,
-			IFileInfoProvider fileInfoProvider);
+			IJavaProjectProvider javaProjectProvider);
 
 	protected abstract void prepareRun() throws InvocationTargetException;
 
@@ -102,7 +119,20 @@ public abstract class AbstractOnlineSupport {
 	protected abstract void displayRunSummary();
 
 	public Result proceed() {
-		return run();
+
+		Thread currentThread = Thread.currentThread(); 
+		ClassLoader previousClassLoader = currentThread.getContextClassLoader();
+
+		Result result = Result.CANCELED;
+
+		try {
+			currentThread.setContextClassLoader(fModelClassLoader);
+			result = run();
+		} finally {
+			currentThread.setContextClassLoader(previousClassLoader);
+		}
+
+		return result;
 	}
 
 	private void setOwnMethodNode(MethodNode methodNode) {
@@ -135,7 +165,12 @@ public abstract class AbstractOnlineSupport {
 
 		SetupDialogOnline dialog = 
 				createSetupDialog(
-						Display.getCurrent().getActiveShell(), fMethodNode, fFileInfoProvider);
+						Display.getCurrent().getActiveShell(), fMethodNode, fJavaProjectProvider);
+
+		if (dialog == null) {
+			return Result.CANCELED;
+		}
+
 
 		if (dialog.open() != IDialogConstants.OK_ID) {
 			return Result.CANCELED;
@@ -190,6 +225,7 @@ public abstract class AbstractOnlineSupport {
 		private List<List<ChoiceNode>> fInput;
 		private Collection<IConstraint<ChoiceNode>> fConstraints;
 		private Map<String, Object> fParameters;
+		private boolean resultOk;
 
 		ParametrizedTestRunnable(IGenerator<ChoiceNode> generator,
 				List<List<ChoiceNode>> input,
@@ -217,10 +253,13 @@ public abstract class AbstractOnlineSupport {
 						&& progressMonitor.isCanceled() == false) {
 					try {
 						fTestInformer.setTestProgressMessage();
+						resultOk = true;
 						processTestCase(next);
 					} catch (RunnerException e) {
+						resultOk = false;
 						fTestInformer.incrementFailedTestcases(e.getMessage());
 					}
+					ftestResultsHolder.addTestResult(next, resultOk);
 					progressMonitor.worked(fGenerator.workProgress());
 					fTestInformer.incrementTotalTestcases();
 				}

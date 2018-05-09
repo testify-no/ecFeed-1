@@ -17,14 +17,14 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ConstraintNode;
 import com.ecfeed.core.model.MethodNode;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.modelif.ConstraintInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 
@@ -34,16 +34,25 @@ public class ConstraintDetailsPage extends BasicDetailsPage {
 	private ConstraintInterface fConstraintIf;
 	private ConstraintViewer fConstraintViewer;
 	private SingleTextCommentsSection fCommentsSection;
-	private IFileInfoProvider fFileInfoProvider;
 
 	public ConstraintDetailsPage(
-			ModelMasterSection masterSection, 
+			IMainTreeProvider mainTreeProvider,
+			ConstraintInterface constraintInterface,
 			IModelUpdateContext updateContext, 
-			IFileInfoProvider fileInfoProvider){
-		super(masterSection, updateContext, fileInfoProvider);
-		fFileInfoProvider = fileInfoProvider;
-		fConstraintIf = new ConstraintInterface(this, fileInfoProvider);
+			IJavaProjectProvider javaProjectProvider) {
+
+		this(mainTreeProvider, constraintInterface, updateContext, javaProjectProvider, null);
 	}
+
+	public ConstraintDetailsPage(
+			IMainTreeProvider mainTreeProvider,
+			ConstraintInterface constraintInterface,
+			IModelUpdateContext updateContext, 
+			IJavaProjectProvider javaProjectProvider,
+			EcFormToolkit ecFormToolkit) {
+		super(mainTreeProvider, updateContext, javaProjectProvider, ecFormToolkit);
+		fConstraintIf = constraintInterface; 
+	}	
 
 	@Override
 	public void createContents(Composite parent){
@@ -52,23 +61,24 @@ public class ConstraintDetailsPage extends BasicDetailsPage {
 
 		addCommentsSection();
 
-		addViewerSection(fConstraintViewer = new ConstraintViewer(this, this, fFileInfoProvider));
+		addViewerSection(fConstraintViewer = new ConstraintViewer(this, getModelUpdateContext(), getJavaProjectProvider()));
 	}
 
 	private void addCommentsSection() {
 
-		if (fFileInfoProvider.isProjectAvailable()) {
-			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fFileInfoProvider));
+		if (ApplicationContext.isProjectAvailable()) {
+			addForm(fCommentsSection = new SingleTextCommentsSection(this, getModelUpdateContext(), getJavaProjectProvider()));
 		} else {
-			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fFileInfoProvider));
+			addForm(fCommentsSection = new SingleTextCommentsSection(this, getModelUpdateContext(), getJavaProjectProvider()));
 		}
 	}
 
 	private void createConstraintNameEdit(Composite parent) {
-		Composite composite = getToolkit().createComposite(parent);
-		composite.setLayout(new GridLayout(2, false));
-		composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
-		getToolkit().createLabel(composite, "Constraint name:");
+
+		Composite composite = getEcFormToolkit().createGridComposite(parent, 2);
+
+		getEcFormToolkit().createLabel(composite, "Constraint name");
+
 		fNameCombo = new ComboViewer(composite, SWT.NONE).getCombo();
 		fNameCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		fNameCombo.addSelectionListener(new ConstraintNameChangedListener());
@@ -104,7 +114,7 @@ public class ConstraintDetailsPage extends BasicDetailsPage {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			fConstraintIf.setName(fNameCombo.getText());
-			fNameCombo.setText(fConstraintIf.getName());
+			fNameCombo.setText(fConstraintIf.getNodeName());
 		}
 	}
 
@@ -113,7 +123,7 @@ public class ConstraintDetailsPage extends BasicDetailsPage {
 		@Override
 		public void focusLost(FocusEvent e) {
 			fConstraintIf.setName(fNameCombo.getText());
-			fNameCombo.setText(fConstraintIf.getName());
+			fNameCombo.setText(fConstraintIf.getNodeName());
 		}
 
 	}

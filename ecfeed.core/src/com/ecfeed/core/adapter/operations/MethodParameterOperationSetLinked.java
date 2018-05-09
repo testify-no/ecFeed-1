@@ -14,9 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ecfeed.core.adapter.IModelOperation;
+import com.ecfeed.core.model.ConstraintNode;
 //import com.ecfeed.core.adapter.java.Messages;
 import com.ecfeed.core.model.Messages;
-import com.ecfeed.core.model.ConstraintNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelOperationException;
@@ -40,6 +40,7 @@ public class MethodParameterOperationSetLinked extends BulkOperation{
 			@Override
 			public void execute() throws ModelOperationException {
 
+				setOneNodeToSelect(fTarget);
 				MethodNode methodNode = fTarget.getMethod();
 
 				methodNode.replaceTestCases(fOriginalTestCases);
@@ -70,6 +71,9 @@ public class MethodParameterOperationSetLinked extends BulkOperation{
 
 		@Override
 		public void execute() throws ModelOperationException {
+
+			setOneNodeToSelect(fTarget);
+
 			MethodNode method = fTarget.getMethod();
 			String newType;
 			if(fLinked){
@@ -132,10 +136,11 @@ public class MethodParameterOperationSetLinked extends BulkOperation{
 		public IModelOperation reverseOperation() {
 			return new ReverseSetLinkedOperation();
 		}
+
 	}
 
 	public MethodParameterOperationSetLinked(MethodParameterNode target, boolean linked) {
-		super(OperationNames.SET_LINKED, true);
+		super(OperationNames.SET_LINKED, true, target, target);
 		addOperation(new SetLinkedOperation(target, linked));
 		addOperation(new MethodOperationMakeConsistent(target.getMethod())); 
 	}

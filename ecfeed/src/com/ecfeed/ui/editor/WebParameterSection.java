@@ -22,7 +22,8 @@ import com.ecfeed.core.model.NodePropertyDefFindByType;
 import com.ecfeed.core.model.NodePropertyDefs;
 import com.ecfeed.core.model.NodePropertyValueSet;
 import com.ecfeed.core.utils.BooleanHelper;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.core.utils.IValueApplier;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.common.utils.SwtObjectHelper;
 import com.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
@@ -32,7 +33,7 @@ public class WebParameterSection extends BasicSection {
 	AbstractParameterInterface fAbstractParameterInterface;
 	MethodParameterNode fMethodParameterNode;
 
-	private FormObjectToolkit fFormObjectToolkit;
+	private EcFormToolkit fEcFormToolkit;
 	private Composite fClientComposite;
 	private Composite fGridComposite;
 
@@ -55,49 +56,49 @@ public class WebParameterSection extends BasicSection {
 	public WebParameterSection(ISectionContext sectionContext, 
 			IModelUpdateContext updateContext,
 			AbstractParameterInterface abstractParameterInterface,
-			IFileInfoProvider fileInfoProvider) {
-		super(sectionContext, updateContext, fileInfoProvider, StyleDistributor.getSectionStyle());
+			IJavaProjectProvider javaProjectProvider) {
+		super(sectionContext, updateContext, javaProjectProvider, StyleDistributor.getSectionStyle());
 
 		fAbstractParameterInterface = abstractParameterInterface;
 
-		fFormObjectToolkit = new FormObjectToolkit(getToolkit());
+		fEcFormToolkit = getEcFormToolkit(); 
 
 		setText("Web runner properties");
 		fClientComposite = getClientComposite();
 
-		fGridComposite = fFormObjectToolkit.createGridComposite(fClientComposite, 2);
+		fGridComposite = fEcFormToolkit.createGridComposite(fClientComposite, 2);
 
 		createControls(fGridComposite);
-		fFormObjectToolkit.paintBorders(fGridComposite);
+		fEcFormToolkit.paintBordersFor(fGridComposite);
 	}
 
 	private void createControls(Composite gridComposite) {
 		fMethodParameterNode = (MethodParameterNode)fAbstractParameterInterface.getOwnNode();
 
 		//
-		fFormObjectToolkit.createLabel(fGridComposite, "Element type");
-		fWebElementTypeCombo = fFormObjectToolkit.createReadOnlyGridCombo(fGridComposite, new ElementTypeApplier());
+		fEcFormToolkit.createLabel(fGridComposite, "Element type");
+		fWebElementTypeCombo = fEcFormToolkit.createReadOnlyGridCombo(fGridComposite, new ElementTypeApplier());
 
 		//
-		fOptionalCheckbox = fFormObjectToolkit.createGridCheckBox(fGridComposite, "Optional", new OptionalValueApplier() );
+		fOptionalCheckbox = fEcFormToolkit.createGridCheckBox(fGridComposite, "Optional", new OptionalValueApplier() );
 		fOptionalCheckbox.setEnabled(false);
 		setParamsForTheFirstColumn(fOptionalCheckbox);
 
-		fFormObjectToolkit.createSpacer(fGridComposite, 1);
+		fEcFormToolkit.createSpacer(fGridComposite, 1);
 
 		// 
-		fFormObjectToolkit.createLabel(fGridComposite, "Identified by ");
-		fFormObjectToolkit.createSpacer(fGridComposite, 1);
+		fEcFormToolkit.createLabel(fGridComposite, "Identified by ");
+		fEcFormToolkit.createSpacer(fGridComposite, 1);
 
 		//
-		fFindByElemTypeCombo = fFormObjectToolkit.createReadOnlyGridCombo(fGridComposite, new FindByTypeApplier());
+		fFindByElemTypeCombo = fEcFormToolkit.createReadOnlyGridCombo(fGridComposite, new FindByTypeApplier());
 		setParamsForTheFirstColumn(fFindByElemTypeCombo);
 
-		fFindByElemValueText = fFormObjectToolkit.createGridText(fGridComposite, new FindByValueApplier());
+		fFindByElemValueText = fEcFormToolkit.createGridText(fGridComposite, new FindByValueApplier());
 
 		//
-		fFormObjectToolkit.createLabel(fGridComposite, "Action ");
-		fActionCombo = fFormObjectToolkit.createReadOnlyGridCombo(fGridComposite, new ActionApplier());
+		fEcFormToolkit.createLabel(fGridComposite, "Action ");
+		fActionCombo = fEcFormToolkit.createReadOnlyGridCombo(fGridComposite, new ActionApplier());
 	}
 
 	private void setParamsForTheFirstColumn(Control control) {
@@ -318,7 +319,7 @@ public class WebParameterSection extends BasicSection {
 
 		@Override
 		public void applyValue() {
-			
+
 			String webElementType = fWebElementTypeCombo.getText();
 			fAbstractParameterInterface.setProperty(fWebElementTypePropertyId, webElementType);
 
@@ -326,7 +327,7 @@ public class WebParameterSection extends BasicSection {
 			refreshAction(webElementType);
 		}
 	}
-	
+
 	private class FindByTypeApplier implements IValueApplier {
 
 		@Override
@@ -347,7 +348,7 @@ public class WebParameterSection extends BasicSection {
 
 		@Override
 		public void applyValue() {
-			
+
 			fAbstractParameterInterface.setProperty(fActionPropertyId, fActionCombo.getText());
 		}
 	}	
@@ -356,7 +357,7 @@ public class WebParameterSection extends BasicSection {
 
 		@Override
 		public void applyValue() {
-			
+
 			String isOptionalStr = BooleanHelper.toString(fOptionalCheckbox.getSelection());
 			fAbstractParameterInterface.setProperty(fOptionalPropertyId, isOptionalStr);
 		}

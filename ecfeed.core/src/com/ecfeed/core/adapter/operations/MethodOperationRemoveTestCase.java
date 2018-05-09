@@ -19,7 +19,7 @@ import com.ecfeed.core.model.TestCaseNode;
 
 public class MethodOperationRemoveTestCase extends AbstractModelOperation {
 
-	private MethodNode fTarget;
+	private MethodNode fMethodNode;
 	private TestCaseNode fTestCase;
 	private int fIndex;
 
@@ -51,21 +51,23 @@ public class MethodOperationRemoveTestCase extends AbstractModelOperation {
 
 	public MethodOperationRemoveTestCase(MethodNode target, TestCaseNode testCase) {
 		super(OperationNames.REMOVE_TEST_CASE);
-		fTarget = target;
+		fMethodNode = target;
 		fTestCase = testCase;
 		fIndex = testCase.getIndex();
 	}
 
 	@Override
 	public void execute() throws ModelOperationException {
+
+		setOneNodeToSelect(fMethodNode);
 		fIndex = fTestCase.getIndex();
-		fTarget.removeTestCase(fTestCase);
+		fMethodNode.removeTestCase(fTestCase);
 		markModelUpdated();
 	}
 
 	@Override
 	public IModelOperation reverseOperation() {
-		return new MethodOperationAddTestCase(fTarget, fTestCase, new DummyAdapterProvider(), fIndex);
+		return new MethodOperationAddTestCase(fMethodNode, fTestCase, new DummyAdapterProvider(), fIndex);
 	}
 
 }

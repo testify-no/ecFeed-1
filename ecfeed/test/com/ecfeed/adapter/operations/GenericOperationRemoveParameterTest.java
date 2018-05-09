@@ -31,12 +31,12 @@ import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.model.ParametersParentNode;
 import com.ecfeed.core.testutils.ENodeType;
 import com.ecfeed.core.testutils.ModelTestUtils;
-import com.ecfeed.junit.OnlineRunner;
+import com.ecfeed.junit.CollectiveOnlineRunner;
 import com.ecfeed.junit.annotations.Constraints;
 import com.ecfeed.junit.annotations.EcModel;
 import com.ecfeed.junit.annotations.Generator;
 
-@RunWith(OnlineRunner.class)
+@RunWith(CollectiveOnlineRunner.class)
 @Generator(CartesianProductGenerator.class)
 @EcModel("test/com/ecfeed/adapter/operations/GenericOperationRemoveParameterTest.ect")
 @Constraints(Constraints.ALL)

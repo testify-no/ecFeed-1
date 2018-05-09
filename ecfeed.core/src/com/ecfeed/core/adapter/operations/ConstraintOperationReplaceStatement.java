@@ -32,14 +32,17 @@ public class ConstraintOperationReplaceStatement extends AbstractModelOperation{
 
 	@Override
 	public void execute() throws ModelOperationException {
+
+		setOneNodeToSelect(fTarget);
 		Constraint constraint = fTarget.getConstraint();
-		if(constraint.getPremise() == fCurrentStatement){
+
+		if (constraint.getPremise() == fCurrentStatement) {
 			constraint.setPremise(fNewStatement);
 		}
-		else if(constraint.getConsequence() == fCurrentStatement){
+		else if (constraint.getConsequence() == fCurrentStatement) {
 			constraint.setConsequence(fNewStatement);
 		}
-		else{
+		else {
 			ModelOperationException.report(Messages.TARGET_STATEMENT_NOT_FOUND_PROBLEM);
 		}
 		markModelUpdated();

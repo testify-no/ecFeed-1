@@ -32,6 +32,7 @@ import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.serialization.export.ExportTemplateFactory;
 import com.ecfeed.core.serialization.export.IExportTemplate;
 import com.ecfeed.core.utils.DiskFileHelper;
+import com.ecfeed.core.utils.IValueApplier;
 import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.resources.ResourceHelper;
 import com.ecfeed.ui.common.ApplyValueMode;
@@ -43,7 +44,6 @@ import com.ecfeed.ui.dialogs.basic.FileOpenAndReadDialog;
 import com.ecfeed.ui.dialogs.basic.FileSaveDialog;
 import com.ecfeed.ui.dialogs.basic.InfoDialog;
 import com.ecfeed.ui.dialogs.basic.YesNoDialog;
-import com.ecfeed.ui.editor.IValueApplier;
 import com.ecfeed.utils.EclipseHelper;
 
 public class TestCasesExportDialog extends TitleAreaDialog {

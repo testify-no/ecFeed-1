@@ -39,7 +39,7 @@ public class AbstractParameterOperationSetType extends AbstractModelOperation {
 	private Map<ChoicesParentNode, List<ChoiceNode>> fOriginalChoices;
 	private Map<ChoiceNode, String> fOriginalValues;
 
-	protected class ReverseOperation extends AbstractReverseOperation{
+	protected class ReverseOperation extends AbstractReverseOperation {
 
 		public ReverseOperation() {
 			super(AbstractParameterOperationSetType.this);
@@ -47,8 +47,12 @@ public class AbstractParameterOperationSetType extends AbstractModelOperation {
 
 		@Override
 		public void execute() throws ModelOperationException {
+			
+			setOneNodeToSelect(fTarget);
+			
 			restoreOriginalChoices(fTarget);
 			restoreOriginalValues(fTarget);
+			
 			fTarget.setType(fCurrentType);
 		}
 
@@ -86,6 +90,9 @@ public class AbstractParameterOperationSetType extends AbstractModelOperation {
 
 	@Override
 	public void execute() throws ModelOperationException {
+		
+		setOneNodeToSelect(fTarget);
+		
 		fCurrentType = fTarget.getType();
 		getOriginalChoices().clear();
 		getOriginalValues().clear();
@@ -215,7 +222,7 @@ public class AbstractParameterOperationSetType extends AbstractModelOperation {
 		return parent.getChoices();
 	}
 
-	protected ITypeAdapterProvider getAdapterProvider(){
+	protected ITypeAdapterProvider getTypeAdapterProvider(){
 		return fAdapterProvider;
 	}
 

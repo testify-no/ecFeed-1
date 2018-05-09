@@ -26,7 +26,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.ui.common.Messages;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.modelif.AbstractNodeInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
@@ -35,7 +35,7 @@ public abstract class AbstractCommentsSection extends TabFolderSection {
 
 	private final static String SECTION_TITLE = "Comments";
 
-	private IFileInfoProvider fFileInfoProvider;
+	private IJavaProjectProvider fJavaProjectProvider;
 	private Button fEditButton;
 	private AbstractNode fTarget;
 	private AbstractNodeInterface fTargetIf;
@@ -45,9 +45,10 @@ public abstract class AbstractCommentsSection extends TabFolderSection {
 	public AbstractCommentsSection(
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext,
-			IFileInfoProvider fileInfoProvider) {
-		super(sectionContext, updateContext, fileInfoProvider, StyleDistributor.getCollapsibleSectionStyle());
-		fFileInfoProvider = fileInfoProvider;
+			IJavaProjectProvider javaProjectProvider) {
+
+		super(sectionContext, updateContext, javaProjectProvider, StyleDistributor.getCollapsibleSectionStyle());
+		fJavaProjectProvider = javaProjectProvider;
 
 		if(getTabFolder() != null){
 			getTabFolder().addSelectionListener(new TabFolderSelectionListsner());
@@ -108,7 +109,7 @@ public abstract class AbstractCommentsSection extends TabFolderSection {
 
 	protected AbstractNodeInterface getTargetIf(){
 		if(fTargetIf == null){
-			fTargetIf = new AbstractNodeInterface(getUpdateContext(), fFileInfoProvider);
+			fTargetIf = new AbstractNodeInterface(getModelUpdateContext(), fJavaProjectProvider);
 		}
 		return fTargetIf;
 	}
@@ -126,7 +127,7 @@ public abstract class AbstractCommentsSection extends TabFolderSection {
 	}
 
 	protected TabItem addTextTab(String title, int index){
-		Text text = getToolkit().createText(getTabFolder(), "", SWT.WRAP | SWT.V_SCROLL | SWT.MULTI | SWT.READ_ONLY);
+		Text text = getEcFormToolkit().createText(getTabFolder(), "", SWT.WRAP | SWT.V_SCROLL | SWT.MULTI | SWT.READ_ONLY);
 		text.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND));
 		TabItem item = addTabItem(text, title, index);
 		fTextItems.put(item, text);

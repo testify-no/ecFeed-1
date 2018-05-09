@@ -10,7 +10,6 @@
 
 package com.ecfeed.ui.editor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.viewers.CellEditor;
@@ -21,6 +20,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
@@ -33,21 +33,18 @@ import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.Section;
 
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.core.utils.SystemHelper;
 import com.ecfeed.ui.common.ColorConstants;
 import com.ecfeed.ui.common.ColorManager;
 import com.ecfeed.ui.common.Messages;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.basic.ErrorDialog;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
-import com.ecfeed.ui.editor.actions.ActionProvider;
-import com.ecfeed.ui.editor.actions.CutAction;
-import com.ecfeed.ui.editor.actions.GlobalActions;
+import com.ecfeed.ui.editor.actions.ActionId;
 import com.ecfeed.ui.editor.actions.ModelModifyingAction;
-import com.ecfeed.ui.editor.actions.NamedAction;
-import com.ecfeed.ui.editor.actions.SelectAllAction;
 import com.ecfeed.ui.modelif.ChoiceInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 
@@ -59,82 +56,82 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 	private Text fSelectedLabelText;
 	private String fSelectedLabel;
 
-	private static class LabelClipboard{
-		private static List<String> fLabels = new ArrayList<>();
+//	private static class LabelClipboard {
+//		
+//		private static List<String> fLabels = new ArrayList<>();
+//
+//		public static List<String> getContent(){
+//			return fLabels;
+//		}
+//
+//		public static List<String> getContentCopy(){
+//			List<String> copy = new ArrayList<>();
+//			for(String label : fLabels){
+//				copy.add(new String(label));
+//			}
+//			return copy;
+//		}
+//
+//		public static void setContent(List<String> labels){
+//			fLabels.clear();
+//			for(String label : labels){
+//				fLabels.add(new String(label));
+//			}
+//		}
+//	}
 
-		public static List<String> getContent(){
-			return fLabels;
-		}
+//	private class LabelsViewerActionProvider extends ActionProvider{
+//
+//		public LabelsViewerActionProvider(){
+//			super();
+//			addAction("edit", new LabelCopyAction());
+//			addAction("edit", 
+//					new CutAction(
+//							new LabelCopyAction(), 
+//							new LabelDeleteAction(getModelUpdateContext())));
+//
+//
+//			addAction("edit", new LabelPasteAction(getModelUpdateContext()));
+//			addAction("edit", new LabelDeleteAction(getModelUpdateContext()));
+//			addAction("selection", new SelectAllAction(getTableViewer()));
+//		}
+//	}
 
-		public static List<String> getContentCopy(){
-			List<String> copy = new ArrayList<>();
-			for(String label : fLabels){
-				copy.add(new String(label));
-			}
-			return copy;
-		}
+//	private class LabelCopyAction extends DescribedAction{
+//		public LabelCopyAction() {
+//			super(ActionId.COPY);
+//		}
+//
+//		@Override
+//		public boolean isEnabled(){
+//			return getSelectedLabels().size() > 0;
+//		}
+//
+//		@Override
+//		public void run(){
+//			LabelClipboard.setContent(getSelectedLabels());
+//		}
+//	}
 
-		public static void setContent(List<String> labels){
-			fLabels.clear();
-			for(String label : labels){
-				fLabels.add(new String(label));
-			}
-		}
-	}
-
-	private class LabelsViewerActionProvider extends ActionProvider{
-
-		public LabelsViewerActionProvider(){
-			super();
-			addAction("edit", new LabelCopyAction());
-			addAction("edit", 
-					new CutAction(
-							new LabelCopyAction(), 
-							new LabelDeleteAction(ChoiceLabelsViewer.this)));
-
-
-			addAction("edit", new LabelPasteAction(ChoiceLabelsViewer.this));
-			addAction("edit", new LabelDeleteAction(ChoiceLabelsViewer.this));
-			addAction("selection", new SelectAllAction(getTableViewer()));
-		}
-	}
-
-	private class LabelCopyAction extends NamedAction{
-		public LabelCopyAction() {
-			super(GlobalActions.COPY.getId(), GlobalActions.COPY.getDescription());
-		}
-
-		@Override
-		public boolean isEnabled(){
-			return getSelectedLabels().size() > 0;
-		}
-
-		@Override
-		public void run(){
-			LabelClipboard.setContent(getSelectedLabels());
-		}
-	}
-
-	private class LabelPasteAction extends ModelModifyingAction{
-		public LabelPasteAction(IModelUpdateContext updateContext) {
-			super(GlobalActions.PASTE.getId(), GlobalActions.PASTE.getDescription(), getViewer(), updateContext);
-		}
-
-		@Override
-		public boolean isEnabled(){
-			return LabelClipboard.getContent().size() > 0;
-		}
-
-		@Override
-		public void run(){
-			fChoiceIf.addLabels(LabelClipboard.getContentCopy());
-		}
-	}
+//	private class LabelPasteAction extends ModelModifyingAction{
+//		public LabelPasteAction(IModelUpdateContext updateContext) {
+//			super(ActionId.PASTE, getViewer(), updateContext);
+//		}
+//
+//		@Override
+//		public boolean isEnabled(){
+//			return LabelClipboard.getContent().size() > 0;
+//		}
+//
+//		@Override
+//		public void run(){
+//			fChoiceIf.addLabels(LabelClipboard.getContentCopy());
+//		}
+//	}
 
 	private class LabelDeleteAction extends ModelModifyingAction{
 		public LabelDeleteAction(IModelUpdateContext updateContext) {
-			super(GlobalActions.DELETE.getId(), GlobalActions.DELETE.getDescription(), 
-					getTableViewer(), updateContext);
+			super(ActionId.DELETE, getTableViewer(), updateContext);
 		}
 
 		@Override
@@ -158,13 +155,30 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 		public void widgetSelected(SelectionEvent ev){
 			try {
 				String newLabel = fChoiceIf.addNewLabel();
-				if(newLabel != null){
-					getTableViewer().editElement(newLabel, 0);
-				}
+				startEditingNewLabel(newLabel);
 			}
 			catch (Exception e) {
 				ExceptionCatchDialog.open("Can not add label.", e.getMessage());
 			}
+		}
+
+		private void startEditingNewLabel(String newLabel) {
+
+			if (newLabel == null) {
+				return;
+			}
+
+			TableViewer tableViewer = getTableViewer();
+
+			if (tableViewer == null) {
+				return;
+			}
+
+			if (tableViewer.getControl().isDisposed()) {
+				return;
+			}
+
+			tableViewer.editElement(newLabel, 0);
 		}
 	}
 
@@ -286,10 +300,10 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 	public ChoiceLabelsViewer(
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext, 
-			IFileInfoProvider fileInfoProvider) {
-		super(sectionContext, updateContext, fileInfoProvider, STYLE);
+			IJavaProjectProvider javaProjectProvider) {
+		super(sectionContext, updateContext, javaProjectProvider, STYLE);
 
-		fChoiceIf = new ChoiceInterface(this, fileInfoProvider);
+		fChoiceIf = new ChoiceInterface(getModelUpdateContext(), javaProjectProvider);
 		getSection().setText("Labels");
 
 		addButton("Add label", new AddLabelAdapter());
@@ -298,20 +312,19 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 						new LabelDeleteAction(updateContext), 
 						Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
 
-		if (isLabelEditionInTextField(fileInfoProvider)) {
+		if (isLabelEditionInTextField()) {
 			AbstractSelectionAdapter adapter = new LabelTextSelectionAdapter();
 			fSelectedLabelText = addText("", adapter);
 			fSelectedLabelText.setEnabled(false);
 			addSelectionChangedListener(new LabelSelectionChangedListener());
 		}
 
-		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
-		setActionProvider(new LabelsViewerActionProvider());
+//		setActionProvider(new LabelsViewerActionProvider());
 	}
 
-	private boolean isLabelEditionInTextField(IFileInfoProvider fileInfoProvider) {
+	private boolean isLabelEditionInTextField() {
 		if (SystemHelper.isOperatingSystemLinux()) {
-			if (fileInfoProvider.isProjectAvailable()) {
+			if (ApplicationContext.isProjectAvailable()) {
 				return false;
 			}
 			return true;			

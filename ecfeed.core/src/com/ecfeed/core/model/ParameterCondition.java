@@ -12,6 +12,7 @@ package com.ecfeed.core.model;
 
 import java.util.List;
 
+import com.ecfeed.core.utils.EvaluationResult;
 import com.ecfeed.core.utils.JavaTypeHelper;
 
 
@@ -27,16 +28,16 @@ public class ParameterCondition implements IStatementCondition {
 	}
 
 	@Override
-	public boolean evaluate(List<ChoiceNode> choices) {
+	public EvaluationResult evaluate(List<ChoiceNode> choices) {
 
 		String leftChoiceStr = getChoiceString(choices, fParentRelationStatement.getLeftParameter());
 		if (leftChoiceStr == null) {
-			return false;
+			return EvaluationResult.INSUFFICIENT_DATA;
 		}
 
 		String rightChoiceStr = getChoiceString(choices, fRightParameterNode);
 		if (rightChoiceStr == null) {
-			return false;
+			return EvaluationResult.INSUFFICIENT_DATA;
 		}
 
 		String substituteType = 
@@ -45,10 +46,10 @@ public class ParameterCondition implements IStatementCondition {
 		EStatementRelation relation = fParentRelationStatement.getRelation();
 
 		if (StatementConditionHelper.isRelationMatchQuiet(relation, substituteType, leftChoiceStr, rightChoiceStr)) {
-			return true;
+			return EvaluationResult.TRUE;
 		}
 
-		return false;
+		return EvaluationResult.FALSE;
 	}
 
 	private static String getChoiceString(List<ChoiceNode> choices, MethodParameterNode methodParameterNode) {

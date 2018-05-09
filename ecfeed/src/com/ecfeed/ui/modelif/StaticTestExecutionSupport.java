@@ -33,17 +33,21 @@ import com.ecfeed.core.runner.JavaTestRunner;
 import com.ecfeed.core.runner.RunnerException;
 import com.ecfeed.ui.common.EclipseLoaderProvider;
 import com.ecfeed.ui.common.Messages;
+import com.ecfeed.ui.common.utils.ConsoleManager;
 import com.ecfeed.ui.common.utils.EclipseProjectHelper;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 
 public class StaticTestExecutionSupport {
 
 	private Collection<TestCaseNode> fTestCases;
+	private ModelClassLoader fModelClassLoader;
 	private JavaTestRunner fRunner;
 	private List<TestCaseNode> fFailedTests;
-	private IFileInfoProvider fFileInfoProvider;
+	private IJavaProjectProvider fJavaProjectProvider;
 	private TestRunMode fTestRunMode;
 	private AbstractTestInformer fTestInformer;
+	private TestResultsHolder ftestResultsHolder;
+	private boolean resultOk;
 
 	private class ExecuteRunnable implements IRunnableWithProgress{
 
@@ -52,7 +56,7 @@ public class StaticTestExecutionSupport {
 				throws InvocationTargetException, InterruptedException {
 			if (fTestRunMode == TestRunMode.ANDROID) {
 				DeviceCheckerExt.checkIfOneDeviceAttached();
-				EclipseProjectHelper projectHelper = new EclipseProjectHelper(fFileInfoProvider); 
+				EclipseProjectHelper projectHelper = new EclipseProjectHelper(fJavaProjectProvider); 
 				new ApkInstallerExt(projectHelper).installApplicationsIfModified();
 			}			
 
@@ -71,11 +75,14 @@ public class StaticTestExecutionSupport {
 						if (fTestRunMode == TestRunMode.JUNIT) {
 							fRunner.createTestClassAndMethod(methodNode);
 						}
-
+						
+						resultOk = true;
 						fRunner.runTestCase(testCase.getTestData());
 					} catch (RunnerException e) {
+						resultOk = false;
 						fTestInformer.incrementFailedTestcases(e.getMessage());
 					}
+					ftestResultsHolder.addTestResult(testCase.getTestData(), resultOk);
 					progressMonitor.worked(1);
 					fTestInformer.incrementTotalTestcases();
 				}
@@ -88,23 +95,37 @@ public class StaticTestExecutionSupport {
 	public StaticTestExecutionSupport(
 			Collection<TestCaseNode> testCases, 
 			ITestMethodInvoker testMethodInvoker, 
-			IFileInfoProvider fileInfoProvider,
+			IJavaProjectProvider javaProjectProvider,
 			TestRunMode testRunMode){
 		super();
+		ftestResultsHolder = new TestResultsHolder();
 		ILoaderProvider loaderProvider = new EclipseLoaderProvider();
-		ModelClassLoader loader = loaderProvider.getLoader(true, null);
-		fRunner = new JavaTestRunner(loader, false, testMethodInvoker);
+		fModelClassLoader = loaderProvider.getLoader(true, null);
+		fRunner = new JavaTestRunner(fModelClassLoader, false, testMethodInvoker);
 		fTestCases = testCases;
+		TestCaseNode testCase = fTestCases.iterator().next();
 		fFailedTests = new ArrayList<>();
-		fFileInfoProvider = fileInfoProvider;
+		fJavaProjectProvider = javaProjectProvider;
 		fTestRunMode = testRunMode;
-		fTestInformer = new ExecutionTestInformer();
+		fTestInformer = new ExecutionTestInformer(testCase.getMethod(), ftestResultsHolder);
 	}
 
-	public void proceed(){
+	public void proceed() {
+
+		Thread currentThread = Thread.currentThread(); 
+		ClassLoader previousClassLoader = currentThread.getContextClassLoader();
+
+		try {
+			currentThread.setContextClassLoader(fModelClassLoader);
+			proceedInternal();
+		} finally {
+			currentThread.setContextClassLoader(previousClassLoader);
+		}
+	}
+
+	private void proceedInternal(){
 		PrintStream currentOut = System.out;
-		ConsoleManager.displayConsole();
-		ConsoleManager.redirectSystemOutputToStream(ConsoleManager.getOutputStream());
+		ConsoleManager.prepareOutput();
 
 		try{
 			fFailedTests.clear();

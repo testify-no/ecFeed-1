@@ -17,7 +17,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 public abstract class TabFolderSection extends ButtonsCompositeSection {
@@ -27,9 +27,9 @@ public abstract class TabFolderSection extends ButtonsCompositeSection {
 	public TabFolderSection(
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext, 
-			IFileInfoProvider fileInfoProvider,
+			IJavaProjectProvider javaProjectProvider,
 			int style) {
-		super(sectionContext, updateContext, fileInfoProvider, style);
+		super(sectionContext, updateContext, javaProjectProvider, style);
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, false);
 		getSection().setLayoutData(gd);
 	}

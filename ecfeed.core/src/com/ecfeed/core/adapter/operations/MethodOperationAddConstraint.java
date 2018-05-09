@@ -36,6 +36,9 @@ public class MethodOperationAddConstraint extends AbstractModelOperation {
 
 	@Override
 	public void execute() throws ModelOperationException {
+
+		setOneNodeToSelect(fMethodNode);
+
 		if(fIndex == -1){
 			fIndex = fMethodNode.getConstraintNodes().size();
 		}

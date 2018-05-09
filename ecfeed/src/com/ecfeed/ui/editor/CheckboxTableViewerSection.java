@@ -18,7 +18,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 public abstract class CheckboxTableViewerSection extends TableViewerSection {
@@ -26,9 +26,10 @@ public abstract class CheckboxTableViewerSection extends TableViewerSection {
 	public CheckboxTableViewerSection(
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext, 
-			IFileInfoProvider fileInfoProvider,
+			IJavaProjectProvider javaProjectProvider,
 			int style) {
-		super(sectionContext, updateContext, fileInfoProvider, style);
+		
+		super(sectionContext, updateContext, javaProjectProvider, style);
 	}
 
 	@Override

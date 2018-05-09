@@ -31,6 +31,7 @@ import com.ecfeed.core.generators.algorithms.Tuples;
 import com.ecfeed.core.generators.api.GeneratorException;
 import com.ecfeed.core.generators.api.IConstraint;
 import com.ecfeed.core.generators.testutils.GeneratorTestUtils;
+import com.ecfeed.core.utils.EvaluationResult;
 
 public class NWiseAlgorithmTest{
 	private final Collection<IConstraint<String>> EMPTY_CONSTRAINTS = new HashSet<IConstraint<String>>();
@@ -68,7 +69,7 @@ public class NWiseAlgorithmTest{
 					Set<List<String>> algorithmResult = GeneratorTestUtils.algorithmResult(algorithmUnderTest);
 					for(List<String> vector : algorithmResult){
 						for(IConstraint<String> constraint : constraints){
-							assertTrue(constraint.evaluate(vector));
+							assertTrue(constraint.evaluate(vector) == EvaluationResult.TRUE);
 						}
 					}
 				} catch (GeneratorException e) {

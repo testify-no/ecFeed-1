@@ -12,6 +12,8 @@ package com.ecfeed.core.model;
 
 import java.util.List;
 
+import com.ecfeed.core.utils.EvaluationResult;
+
 public class LabelCondition implements IStatementCondition {
 
 	private String fRightLabel;
@@ -23,13 +25,14 @@ public class LabelCondition implements IStatementCondition {
 	}
 
 	@Override
-	public boolean evaluate(List<ChoiceNode> choices) {
+	public EvaluationResult evaluate(List<ChoiceNode> choices) {
 
 		ChoiceNode choice = 
-				StatementConditionHelper.getChoiceForMethodParameter(choices, fParentRelationStatement.getLeftParameter());
+				StatementConditionHelper.getChoiceForMethodParameter(
+						choices, fParentRelationStatement.getLeftParameter());
 
 		if (choice == null) {
-			return false;
+			return EvaluationResult.INSUFFICIENT_DATA;
 		}
 
 		return evaluateContainsLabel(choice);
@@ -88,7 +91,7 @@ public class LabelCondition implements IStatementCondition {
 		return false;
 	}
 
-	private boolean evaluateContainsLabel(ChoiceNode choice) {
+	private EvaluationResult evaluateContainsLabel(ChoiceNode choice) {
 
 		boolean containsLabel = choice.getAllLabels().contains(fRightLabel);
 
@@ -97,11 +100,11 @@ public class LabelCondition implements IStatementCondition {
 		switch (relation) {
 
 		case EQUAL:
-			return containsLabel;
+			return EvaluationResult.convertFromBoolean(containsLabel);
 		case NOT_EQUAL:
-			return !containsLabel;
+			return EvaluationResult.convertFromBoolean(!containsLabel);
 		default:
-			return false;
+			return EvaluationResult.FALSE;
 		}
 
 	}

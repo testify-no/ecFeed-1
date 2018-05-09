@@ -31,9 +31,10 @@ import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.utils.EcException;
+import com.ecfeed.core.utils.IValueApplier;
 import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.utils.EclipseProjectHelper;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.common.utils.SwtObjectHelper;
 import com.ecfeed.ui.modelif.ClassInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
@@ -41,7 +42,6 @@ import com.ecfeed.ui.modelif.IModelUpdateContext;
 public class ClassDetailsPage extends BasicDetailsPage {
 
 	private boolean fIsAndroidProject;
-	private IFileInfoProvider fFileInfoProvider;
 	private MethodsViewer fMethodsSection;
 	private OtherMethodsViewer fOtherMethodsSection;
 	private Text fClassNameText;
@@ -50,16 +50,29 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	private Label fAndroidBaseRunnerLabel;
 	private Label fPackageNameLabel;
 	private Combo fAndroidBaseRunnerCombo;	
-	private ClassInterface fClassIf;
+	private ClassInterface fClassInterface;
 	private GlobalParametersViewer fGlobalParametersSection;
 	private AbstractCommentsSection fCommentsSection;
 
+	public ClassDetailsPage(
+			IMainTreeProvider mainTreeProvider,
+			ClassInterface classInterface,
+			IModelUpdateContext updateContext, 
+			IJavaProjectProvider javaProjectProvider,
+			EcFormToolkit ecForToolkit) {
 
-	public ClassDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider) {
-		super(masterSection, updateContext, fileInfoProvider);
-		fFileInfoProvider = fileInfoProvider;
-		fIsAndroidProject = new EclipseProjectHelper(fFileInfoProvider).isAndroidProject();
-		fClassIf = new ClassInterface(this, fFileInfoProvider);
+		super(mainTreeProvider, updateContext, javaProjectProvider, ecForToolkit);
+		fIsAndroidProject = new EclipseProjectHelper(javaProjectProvider).isAndroidProject();
+		fClassInterface = classInterface;
+	}
+
+	public ClassDetailsPage(
+			IMainTreeProvider mainTreeProvider,
+			ClassInterface classInterface,
+			IModelUpdateContext updateContext, 
+			IJavaProjectProvider javaProjectProvider) {
+
+		this(mainTreeProvider, classInterface, updateContext, javaProjectProvider, null);
 	}
 
 	@Override
@@ -70,14 +83,20 @@ public class ClassDetailsPage extends BasicDetailsPage {
 
 		addCommentsSection();
 
-		addViewerSection(fMethodsSection = new MethodsViewer(this, this, fFileInfoProvider));
-		addViewerSection(fGlobalParametersSection = new GlobalParametersViewer(this, this, fFileInfoProvider));
+		addViewerSection(fMethodsSection = 
+				new MethodsViewer(
+						this, getMainTreeProvider(), getModelUpdateContext(), getJavaProjectProvider()));
 
-		if (fFileInfoProvider.isProjectAvailable()) {
-			addViewerSection(fOtherMethodsSection = new OtherMethodsViewer(this, this, fFileInfoProvider));
+		addViewerSection(fGlobalParametersSection = 
+				new GlobalParametersViewer(
+						this, getMainTreeProvider(), getModelUpdateContext(), getJavaProjectProvider()));
+
+		if (ApplicationContext.isProjectAvailable()) {
+			addViewerSection(fOtherMethodsSection = 
+					new OtherMethodsViewer(this, getModelUpdateContext(), getJavaProjectProvider()));
 		}
 
-		getToolkit().paintBordersFor(getMainComposite());
+		getEcFormToolkit().paintBordersFor(getMainComposite());
 	}
 
 	@Override
@@ -88,24 +107,25 @@ public class ClassDetailsPage extends BasicDetailsPage {
 
 	private void addCommentsSection() {
 
-		if (fFileInfoProvider.isProjectAvailable()) {
-			addForm(fCommentsSection = new ExportableJavaDocCommentsSection(this, this, fFileInfoProvider));
+		if (ApplicationContext.isProjectAvailable()) {
+			addForm(fCommentsSection = 
+					new ExportableJavaDocCommentsSection(this, getModelUpdateContext(), getJavaProjectProvider()));
 		} else {
-			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fFileInfoProvider));
+			addForm(fCommentsSection = 
+					new SingleTextCommentsSection(this, getModelUpdateContext(), getJavaProjectProvider()));
 		}
 	}
 
 	private void createBasicParametersComposite(Composite parent) {
 
-		Composite mainComposite = getToolkit().createComposite(parent);
-		mainComposite.setLayout(new GridLayout(1, false));
-		mainComposite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+		Composite mainComposite = getEcFormToolkit().createGridComposite(parent, 1);
 
-		Composite packageAndClassComposite = getToolkit().createComposite(mainComposite);
+		Composite packageAndClassComposite = getEcFormToolkit().createComposite(mainComposite);
 		initAndFillClassComposite(packageAndClassComposite);
 
 		if (fIsAndroidProject) {
-			Composite androidComposite = getToolkit().createComposite(mainComposite);
+			Composite androidComposite = getEcFormToolkit().createComposite(mainComposite);
+
 			initAndFillAndroidComposite(androidComposite);
 		}
 	}
@@ -115,19 +135,36 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		composite.setLayout(new GridLayout(3, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
-		FormObjectToolkit formObjectToolkit = getFormObjectToolkit(); 
-		
-		formObjectToolkit.createLabel(composite, "Class name");
-		fClassNameText = formObjectToolkit.createGridText(composite, new ClassNameApplier());
-		if (fFileInfoProvider.isProjectAvailable()) {
-			formObjectToolkit.createButton(composite, "Browse...", new BrowseClassesSelectionListener());
-		}
-		
-		fPackageNameLabel = formObjectToolkit.createLabel(composite, "Package name");
+//<<<<<<< HEAD
+//		FormObjectToolkit formObjectToolkit = getFormObjectToolkit(); 
+//		
+//=======
+		EcFormToolkit formObjectToolkit = getEcFormToolkit(); 
+
+
+		formObjectToolkit.createLabel(composite, "Package name");
 		fPackageNameText = formObjectToolkit.createGridText(composite, new PackageNameApplier());
 		controlPackageNameDisplay();
 		formObjectToolkit.createEmptyLabel(composite);
-		formObjectToolkit.paintBorders(composite);
+
+
+//>>>>>>> master
+		formObjectToolkit.createLabel(composite, "Class name");
+		fClassNameText = formObjectToolkit.createGridText(composite, new ClassNameApplier());
+		if (ApplicationContext.isProjectAvailable()) {
+			formObjectToolkit.createButton(composite, "Browse...", new BrowseClassesSelectionListener());
+		}
+//<<<<<<< HEAD
+//		
+//		fPackageNameLabel = formObjectToolkit.createLabel(composite, "Package name");
+//		fPackageNameText = formObjectToolkit.createGridText(composite, new PackageNameApplier());
+//		controlPackageNameDisplay();
+//		formObjectToolkit.createEmptyLabel(composite);
+//		formObjectToolkit.paintBorders(composite);
+//=======
+
+		formObjectToolkit.paintBordersFor(composite);
+//>>>>>>> master
 	}
 
 	private void controlPackageNameDisplay() {
@@ -150,7 +187,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 
 		// col 1 and 2
 
-		FormObjectToolkit formObjectToolkit = getFormObjectToolkit();
+		EcFormToolkit formObjectToolkit = getEcFormToolkit();
 
 		fRunOnAndroidCheckbox = 
 				formObjectToolkit.createGridCheckBox(
@@ -164,7 +201,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 
 		if (baseRunnerFieldsActive()) {
 			// col 1 - label
-			fAndroidBaseRunnerLabel = getToolkit().createLabel(composite, "Base runner");
+			fAndroidBaseRunnerLabel = getEcFormToolkit().createLabel(composite, "Base runner");
 
 			// col 2 - runner combo
 			fAndroidBaseRunnerCombo = new ComboViewer(composite, SWT.NONE).getCombo();
@@ -191,9 +228,9 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	private void fillAndroidBaseRunnerCombo() {
 		String projectPath = null;
 		try {
-			projectPath = new EclipseProjectHelper(fFileInfoProvider).getProjectPath();
+			projectPath = new EclipseProjectHelper(getJavaProjectProvider()).getProjectPath();
 
-			List<String> runners = fClassIf.createRunnerList(projectPath);
+			List<String> runners = fClassInterface.createRunnerList(projectPath);
 
 			for(String runner : runners) {
 				fAndroidBaseRunnerCombo.add(runner);
@@ -208,15 +245,22 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		super.refresh();
 		if(getSelectedElement() instanceof ClassNode){
 			ClassNode selectedClass = (ClassNode)getSelectedElement();
-			fClassIf.setOwnNode(selectedClass);
-			String title = fClassIf.getQualifiedName();
+			fClassInterface.setOwnNode(selectedClass);
+			String title = fClassInterface.getQualifiedName();
 			//Remove implementation status for performance reasons
 			//			String title = fClassIf.getQualifiedName() + " [" + fClassIf.getImplementationStatus() + "]";
 			getMainSection().setText(title);
-			fClassNameText.setText(fClassIf.getLocalName());
+//<<<<<<< HEAD
+//			fClassNameText.setText(fClassIf.getLocalName());
+//			controlPackageNameDisplay();
+//			fPackageNameText.setText(fClassIf.getPackageName());
+//			
+//=======
+			fClassNameText.setText(fClassInterface.getLocalName());
 			controlPackageNameDisplay();
-			fPackageNameText.setText(fClassIf.getPackageName());
-			
+			fPackageNameText.setText(fClassInterface.getPackageName());
+
+//>>>>>>> master
 			if (fIsAndroidProject) {
 				refreshAndroid();
 			}
@@ -233,11 +277,11 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	}
 
 	private void refreshOtherMethodsSection(ClassNode classNode) {
-		if (!fFileInfoProvider.isProjectAvailable()) {
+		if (!ApplicationContext.isProjectAvailable()) {
 			return;
 		}
 
-		if (fClassIf.getImplementationStatus() == EImplementationStatus.NOT_IMPLEMENTED) {
+		if (fClassInterface.getImplementationStatus() == EImplementationStatus.NOT_IMPLEMENTED) {
 			fOtherMethodsSection.setVisible(false);
 			return;
 		}
@@ -247,14 +291,14 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	}
 
 	private void refreshAndroid() {
-		boolean runOnAndroid = fClassIf.getRunOnAndroid(); 
+		boolean runOnAndroid = fClassInterface.getRunOnAndroid(); 
 		fRunOnAndroidCheckbox.setSelection(runOnAndroid);
 
 		if (baseRunnerFieldsActive()) {
 			fAndroidBaseRunnerLabel.setEnabled(runOnAndroid);
 			fAndroidBaseRunnerCombo.setEnabled(runOnAndroid);
 
-			String androidBaseRunner = fClassIf.getAndroidBaseRunner();
+			String androidBaseRunner = fClassInterface.getAndroidBaseRunner();
 
 			if (androidBaseRunner == null) {
 				androidBaseRunner = "";
@@ -277,7 +321,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	private class BrowseClassesSelectionListener extends ButtonClickListener {
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			fClassIf.reassignClass();
+			fClassInterface.reassignImplementedClass();
 		}
 	}
 
@@ -286,9 +330,9 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		public void widgetSelected(SelectionEvent e){
 
 			if (baseRunnerFieldsActive()) {
-				fClassIf.setAndroidBaseRunner(fAndroidBaseRunnerCombo.getText());
+				fClassInterface.setAndroidBaseRunner(fAndroidBaseRunnerCombo.getText());
 
-				String androidBaseRunner = fClassIf.getAndroidBaseRunner();
+				String androidBaseRunner = fClassInterface.getAndroidBaseRunner();
 				fAndroidBaseRunnerCombo.setText(androidBaseRunner);
 			}
 		}
@@ -310,8 +354,8 @@ public class ClassDetailsPage extends BasicDetailsPage {
 
 		@Override
 		public void applyValue() {
-			fClassIf.setLocalName(fClassNameText.getText());
-			fClassNameText.setText(fClassIf.getLocalName());
+			fClassInterface.setLocalName(fClassNameText.getText());
+			fClassNameText.setText(fClassInterface.getLocalName());
 		}
 	}	
 
@@ -319,12 +363,21 @@ public class ClassDetailsPage extends BasicDetailsPage {
 
 		@Override
 		public void applyValue() {
-			fClassIf.setPackageName(fPackageNameText.getText());
+//<<<<<<< HEAD
+//			fClassIf.setPackageName(fPackageNameText.getText());
+//			if(ApplicationContext.getSimplifiedUI()){
+//				fPackageNameText.setVisible(false);
+//			} else {
+//				fPackageNameText.setText(fClassIf.getPackageName());
+//			}
+//=======
+			fClassInterface.setPackageName(fPackageNameText.getText());
 			if(ApplicationContext.getSimplifiedUI()){
 				fPackageNameText.setVisible(false);
 			} else {
-				fPackageNameText.setText(fClassIf.getPackageName());
+				fPackageNameText.setText(fClassInterface.getPackageName());
 			}
+//>>>>>>> master
 		}
 	}	
 
@@ -334,7 +387,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		public void applyValue() {
 
 			boolean selection = fRunOnAndroidCheckbox.getSelection();
-			fClassIf.setRunOnAndroid(selection);
+			fClassInterface.setRunOnAndroid(selection);
 
 			if (selection) {
 				adjustAndroidBaseRunner();
@@ -348,14 +401,14 @@ public class ClassDetailsPage extends BasicDetailsPage {
 					AndroidBaseRunnerHelper.getDefaultAndroidBaseRunnerName();
 
 			if (!baseRunnerFieldsActive()) {
-				fClassIf.setAndroidBaseRunner(defaultBaseAndroidBaseRunner);
+				fClassInterface.setAndroidBaseRunner(defaultBaseAndroidBaseRunner);
 				return;
 			}
 
-			String androidBaseRunner = fClassIf.getAndroidBaseRunner();
+			String androidBaseRunner = fClassInterface.getAndroidBaseRunner();
 			if (androidBaseRunner == null || androidBaseRunner.isEmpty()) {
 
-				fClassIf.setAndroidBaseRunner(defaultBaseAndroidBaseRunner);
+				fClassInterface.setAndroidBaseRunner(defaultBaseAndroidBaseRunner);
 			}
 		}
 

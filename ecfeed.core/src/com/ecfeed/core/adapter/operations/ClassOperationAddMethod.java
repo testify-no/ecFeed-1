@@ -41,6 +41,7 @@ public class ClassOperationAddMethod extends AbstractModelOperation{
 	@Override
 	public void execute() throws ModelOperationException {
 
+		setOneNodeToSelect(fClassNode);
 		List<String> problems = new ArrayList<String>();
 
 		if(fIndex == -1){

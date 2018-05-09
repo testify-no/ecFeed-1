@@ -11,6 +11,7 @@
 package com.ecfeed.core.utils;
 
 public class Pair<A, B> {
+
 	private A fA;
 	private B fB;
 

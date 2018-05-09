@@ -14,20 +14,37 @@ import org.eclipse.swt.widgets.Shell;
 
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.serialization.export.ExportTemplateFactory;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 
 public class SetupDialogGenerateTestSuite extends GeneratorSetupDialog {
 
-	public SetupDialogGenerateTestSuite(
+	public static SetupDialogGenerateTestSuite create(
 			Shell parentShell, 
 			MethodNode method,
 			ExportTemplateFactory exportTemplateFactory,
-			IFileInfoProvider fileInfoProvider) {
+			IJavaProjectProvider javaProjectProvider) {
+
+		if (!canCreate(method)) {
+			return null;
+		}
+
+		return new SetupDialogGenerateTestSuite(
+				parentShell, 
+				method,
+				exportTemplateFactory,
+				javaProjectProvider);
+	}
+
+	protected SetupDialogGenerateTestSuite(
+			Shell parentShell, 
+			MethodNode method,
+			ExportTemplateFactory exportTemplateFactory,
+			IJavaProjectProvider javaProjectProvider) {
 
 		super(parentShell, 
 				method, 
 				false, 
-				fileInfoProvider,
+				javaProjectProvider,
 				exportTemplateFactory,
 				null);
 	}

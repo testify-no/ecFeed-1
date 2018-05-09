@@ -12,6 +12,7 @@ package com.ecfeed.core.model;
 
 import java.util.List;
 
+import com.ecfeed.core.utils.EvaluationResult;
 import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.ObjectHelper;
@@ -28,9 +29,15 @@ public class ChoiceCondition implements IStatementCondition {
 	}
 
 	@Override
-	public boolean evaluate(List<ChoiceNode> choices) {
+	public EvaluationResult evaluate(List<ChoiceNode> choices) {
 
-		ChoiceNode choice = StatementConditionHelper.getChoiceForMethodParameter(choices, fParentRelationStatement.getLeftParameter());
+		ChoiceNode choice = 
+				StatementConditionHelper.getChoiceForMethodParameter(
+						choices, fParentRelationStatement.getLeftParameter());
+		
+		if (choice == null) {
+			return EvaluationResult.INSUFFICIENT_DATA;
+		}
 
 		return evaluateChoice(choice);
 	}
@@ -100,7 +107,7 @@ public class ChoiceCondition implements IStatementCondition {
 		return fRightChoice;
 	}
 
-	private boolean evaluateChoice(ChoiceNode actualLeftChoice) {
+	private EvaluationResult evaluateChoice(ChoiceNode actualLeftChoice) {
 
 		EStatementRelation relation = fParentRelationStatement.getRelation();
 		if (relation == EStatementRelation.EQUAL || relation == EStatementRelation.NOT_EQUAL) {
@@ -115,13 +122,13 @@ public class ChoiceCondition implements IStatementCondition {
 
 
 		if (StatementConditionHelper.isRelationMatchQuiet(relation, substituteType, actualLeftValue, rightValue)) {
-			return true;
+			return EvaluationResult.TRUE;
 		}
 
-		return false;
+		return EvaluationResult.FALSE;
 	}
 
-	private boolean evaluateEqualityIncludingParents(EStatementRelation relation, ChoiceNode choice) {
+	private EvaluationResult evaluateEqualityIncludingParents(EStatementRelation relation, ChoiceNode choice) {
 
 		boolean isMatch = false;
 
@@ -134,12 +141,12 @@ public class ChoiceCondition implements IStatementCondition {
 		switch (relation) {
 
 		case EQUAL:
-			return isMatch;
+			return EvaluationResult.convertFromBoolean(isMatch);
 		case NOT_EQUAL:
-			return !isMatch;
+			return EvaluationResult.convertFromBoolean(!isMatch);
 		default:
 			ExceptionHelper.reportRuntimeException("Invalid relation.");
-			return false;
+			return EvaluationResult.FALSE;
 		}
 	}
 

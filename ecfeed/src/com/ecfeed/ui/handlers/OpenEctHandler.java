@@ -13,7 +13,7 @@ package com.ecfeed.ui.handlers;
 import org.eclipse.core.commands.ExecutionException;
 
 import com.ecfeed.ui.dialogs.basic.FileOpenEctDialog;
-import com.ecfeed.utils.EclipseHelper;
+import com.ecfeed.utils.ModelEditorPlatformAdapter;
 
 
 public class OpenEctHandler {
@@ -23,7 +23,7 @@ public class OpenEctHandler {
 		if (pathWithFileName == null) {
 			return;
 		}
-		EclipseHelper.openEditorOnExistingExtFile(pathWithFileName);
+		ModelEditorPlatformAdapter.openEditorOnExistingExtFile(pathWithFileName);
 	}
 
 }

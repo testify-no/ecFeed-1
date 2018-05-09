@@ -34,6 +34,8 @@ public class MethodOperationMakeConsistent extends AbstractModelOperation {
 
 		@Override
 		public void execute() throws ModelOperationException {
+
+			setOneNodeToSelect(fMethodNode);
 			fMethodNode.replaceTestCases(fOriginalTestCases);
 			fMethodNode.replaceConstraints(fOriginalConstraints);
 			markModelUpdated();
@@ -55,6 +57,8 @@ public class MethodOperationMakeConsistent extends AbstractModelOperation {
 
 	@Override
 	public void execute() throws ModelOperationException {
+
+		setOneNodeToSelect(fMethodNode);
 
 		boolean modelUpdated = false;
 

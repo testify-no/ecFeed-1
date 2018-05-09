@@ -10,22 +10,22 @@
 
 package com.ecfeed.ui.editor;
 
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.ecfeed.ui.modelif.GlobalParameterInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class GlobalParameterCommentsSection extends AbstractParameterCommentsSection {
 
-	private IFileInfoProvider fFileInfoProvider;
+	private IJavaProjectProvider fJavaProjectProvider;
 	private GlobalParameterInterface fTargetIf;
 
 	public GlobalParameterCommentsSection(
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext, 
-			IFileInfoProvider fileInfoProvider) {
-		super(sectionContext, updateContext, fileInfoProvider);
-		fFileInfoProvider = fileInfoProvider;
+			IJavaProjectProvider javaProjectProvider) {
+		super(sectionContext, updateContext, javaProjectProvider);
+		fJavaProjectProvider = javaProjectProvider;
 		getExportButton().setText("Export type comments");
 		getImportButton().setText("Import type comments");
 	}
@@ -33,7 +33,7 @@ public class GlobalParameterCommentsSection extends AbstractParameterCommentsSec
 	@Override
 	protected AbstractParameterInterface getTargetIf() {
 		if(fTargetIf == null){
-			fTargetIf = new GlobalParameterInterface(getUpdateContext(), fFileInfoProvider);
+			fTargetIf = new GlobalParameterInterface(getModelUpdateContext(), fJavaProjectProvider);
 		}
 		return fTargetIf;
 	}

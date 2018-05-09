@@ -28,12 +28,12 @@ import com.ecfeed.algorithm.VersionCheckerAndRegistrator;
 import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.application.ApplicationPreferences;
 import com.ecfeed.application.ApplicationVersion;
+import com.ecfeed.core.utils.IValueApplier;
 import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.core.net.IHttpCommunicator;
 import com.ecfeed.net.HttpCommunicatorWithProgress;
 import com.ecfeed.net.HttpCommunicatorWithoutProgress;
 import com.ecfeed.ui.dialogs.basic.DialogObjectToolkit;
-import com.ecfeed.ui.editor.IValueApplier;
 
 public class CheckForUpdatesDialog extends TitleAreaDialog {
 
@@ -54,7 +54,7 @@ public class CheckForUpdatesDialog extends TitleAreaDialog {
 		final int timeoutInSeconds = 15;
 
 		CurrentReleases currentReleases = 
-				VersionCheckerAndRegistrator.registerAndGetCurrentReleases(httpCommunicator, timeoutInSeconds);
+				VersionCheckerAndRegistrator.registerAppAndGetCurrentReleases(httpCommunicator, timeoutInSeconds);
 
 		CheckForUpdatesDialog updatesDialog = new CheckForUpdatesDialog(currentReleases);
 		updatesDialog.open();		
@@ -75,7 +75,7 @@ public class CheckForUpdatesDialog extends TitleAreaDialog {
 		final int timeoutInSeconds = 5;
 
 		CurrentReleases currentReleases = 
-				VersionCheckerAndRegistrator.registerAndGetCurrentReleases(httpCommunicator, timeoutInSeconds);
+				VersionCheckerAndRegistrator.registerAppAndGetCurrentReleases(httpCommunicator, timeoutInSeconds);
 
 		if (!shouldOpenConditionalDialog(
 				ApplicationContext.getEcFeedVersion(),
@@ -255,7 +255,7 @@ public class CheckForUpdatesDialog extends TitleAreaDialog {
 
 	private String createDownloadInstructions() {
 
-		if (ApplicationContext.isStandaloneApplication()) {
+		if (ApplicationContext.isApplicationTypeLocalStandalone()) {
 			return "You can download the new version from:\nhttp://ecfeed.com/index.php/download/\n";
 		}
 
@@ -273,7 +273,7 @@ public class CheckForUpdatesDialog extends TitleAreaDialog {
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
 
-		fOkButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
+		fOkButton = createButton(parent, IDialogConstants.OK_ID, DialogHelper.getOkLabel(), true);
 		fOkButton.setEnabled(true);
 	}
 

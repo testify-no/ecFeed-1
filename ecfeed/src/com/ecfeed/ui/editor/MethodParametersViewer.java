@@ -29,7 +29,7 @@ import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.ui.common.NodeViewerColumnLabelProvider;
-import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.MethodInterface;
@@ -235,10 +235,12 @@ public class MethodParametersViewer extends AbstractParametersViewer {
 	}
 
 	public MethodParametersViewer(
-			ISectionContext sectionContext, 
+			ISectionContext sectionContext,
+			IMainTreeProvider mainTreeProvider,
 			IModelUpdateContext updateContext, 
-			IFileInfoProvider fileInfoProvider) {
-		super(sectionContext, updateContext, fileInfoProvider, StyleDistributor.getSectionStyle());
+			IJavaProjectProvider javaProjectProvider) {
+		super(sectionContext, mainTreeProvider, updateContext, 
+				javaProjectProvider, StyleDistributor.getSectionStyle());
 
 		fParameterIf = (MethodParameterInterface)getParameterInterface();
 		getSection().setText("Parameters");
@@ -283,7 +285,7 @@ public class MethodParametersViewer extends AbstractParametersViewer {
 		});
 	}
 
-	public void setInput(MethodNode method, IFileInfoProvider fileInfoProvider){
+	public void setInput(MethodNode method, IJavaProjectProvider javaProjectProvider) {
 		fSelectedMethod = method;
 		showDefaultValueColumn(fSelectedMethod.getParametersNames(true).size() == 0);
 		getMethodIf().setOwnNode(method);
@@ -308,7 +310,7 @@ public class MethodParametersViewer extends AbstractParametersViewer {
 
 	protected MethodInterface getMethodIf() {
 		if(fMethodIf == null){
-			fMethodIf = new MethodInterface(this, getFileInfoProvider());
+			fMethodIf = new MethodInterface(getModelUpdateContext(), getJavaProjectProvider());
 		}
 		return fMethodIf;
 	}
@@ -316,7 +318,7 @@ public class MethodParametersViewer extends AbstractParametersViewer {
 	@Override
 	protected AbstractParameterInterface getParameterInterface() {
 		if(fParameterIf == null){
-			fParameterIf = new MethodParameterInterface(this, getFileInfoProvider());
+			fParameterIf = new MethodParameterInterface(getModelUpdateContext(), getJavaProjectProvider());
 		}
 		return fParameterIf;
 	}
