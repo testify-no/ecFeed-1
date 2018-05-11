@@ -48,7 +48,7 @@ public class ModelTreeLabelDecoratorHelperTest {
 			Image imageToDecorate = createTestImage(display);
 
 			IModelUpdateContext modelUpdateContext = null;
-			IJavaProjectProvider javaProjectProvider = null;
+			IJavaProjectProvider javaProjectProvider = new DummyJavaProjectProvider();
 
 			RootNode rootNode = new RootNode("Root", ModelVersionDistributor.getCurrentSoftwareVersion());
 
@@ -224,5 +224,19 @@ public class ModelTreeLabelDecoratorHelperTest {
 		Image imageToDecorate = new Image(display, imageData);
 		return imageToDecorate;
 	}
+
+	private class DummyJavaProjectProvider implements IJavaProjectProvider {
+
+		@Override
+		public Object getProject() {
+			return null;
+		}
+
+		@Override
+		public Object getPackageFragmentRoot() {
+			return null;
+		}
+
+	}	
 
 }
