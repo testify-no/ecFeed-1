@@ -1,11 +1,11 @@
 /*******************************************************************************
  *
- * Copyright (c) 2016 ecFeed AS.                                                
  * All rights reserved. This program and the accompanying materials              
  * are made available under the terms of the Eclipse Public License v1.0         
  * which accompanies this distribution, and is available at                      
  * http://www.eclipse.org/legal/epl-v10.html 
  *  
+ * Copyright (c) 2016 ecFeed AS.                                                
  *******************************************************************************/
 
 package com.ecfeed.ui.editor.data;
@@ -26,6 +26,7 @@ import org.junit.Test;
 
 import com.ecfeed.core.model.ModelVersionDistributor;
 import com.ecfeed.core.model.RootNode;
+import com.ecfeed.core.utils.SystemHelper;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 
@@ -34,6 +35,10 @@ public class ModelTreeLabelDecoratorHelperTest {
 
 	@Test
 	public void shouldReturnTheSameImageWhenThereAreNoDecorators() {
+
+		if (!operatingSystemOk()) {
+			return;
+		}
 
 		Display display = new Display();
 
@@ -64,6 +69,10 @@ public class ModelTreeLabelDecoratorHelperTest {
 
 	@Test
 	public void shouldGetTheSameImage() {
+
+		if (!operatingSystemOk()) {
+			return;
+		}
 
 		Map<List<Image>, Image> decoratedImagesCache = new HashMap<List<Image>, Image>();
 		Display display = new Display();
@@ -113,6 +122,10 @@ public class ModelTreeLabelDecoratorHelperTest {
 	@Test
 	public void shouldGetDifferentImagesWhenDecoratorDiffers() {
 
+		if (!operatingSystemOk()) {
+			return;
+		}
+
 		Map<List<Image>, Image> decoratedImagesCache = new HashMap<List<Image>, Image>();
 		Display display = new Display();
 
@@ -154,6 +167,10 @@ public class ModelTreeLabelDecoratorHelperTest {
 	@Test
 	public void shouldGetDifferentImagesWhenImagesDiffers() {
 
+		if (!operatingSystemOk()) {
+			return;
+		}
+
 		Map<List<Image>, Image> decoratedImagesCache = new HashMap<List<Image>, Image>();
 		Display display = new Display();
 
@@ -185,6 +202,17 @@ public class ModelTreeLabelDecoratorHelperTest {
 
 			display.dispose();
 		}
+	}
+
+
+	private boolean operatingSystemOk() {
+
+		if (SystemHelper.isOperatingSystemMacOs()) {
+			// On MacOs Infinitest reports exception. Run As Unit Test - passes.
+			return false;
+		}
+
+		return true;
 	}
 
 	private Image createTestImage(Display display) {
