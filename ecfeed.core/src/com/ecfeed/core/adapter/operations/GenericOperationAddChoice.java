@@ -100,7 +100,7 @@ public class GenericOperationAddChoice extends BulkOperation {
 			if (choice.isAbstract() == false) {
 
 				String type = fChoicesParentNode.getParameter().getType();
-				ITypeAdapter adapter = fAdapterProvider.getAdapter(type);
+				ITypeAdapter<?> adapter = fAdapterProvider.getAdapter(type);
 				String newValue = adapter.convert(choice.getValueString());
 
 				if(newValue == null){

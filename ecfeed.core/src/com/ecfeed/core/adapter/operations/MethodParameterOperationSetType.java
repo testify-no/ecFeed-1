@@ -95,7 +95,7 @@ public class MethodParameterOperationSetType extends BulkOperation {
 			public Object visit(ExpectedValueStatement statement) throws Exception {
 
 				boolean success = true;
-				ITypeAdapter adapter = getAdapterProvider().getAdapter(getNewType());
+				ITypeAdapter<?> adapter = getAdapterProvider().getAdapter(getNewType());
 				String newValue = adapter.convert(statement.getCondition().getValueString());
 				fOriginalStatementValues.put(statement, statement.getCondition().getValueString());
 				statement.getCondition().setValueString(newValue);
@@ -271,7 +271,7 @@ public class MethodParameterOperationSetType extends BulkOperation {
 		private void adaptDefaultValue() {
 
 			fOriginalDefaultValue = fMethodParameterNode.getDefaultValue();
-			ITypeAdapter adapter = getAdapterProvider().getAdapter(getNewType());
+			ITypeAdapter<?> adapter = getAdapterProvider().getAdapter(getNewType());
 			String defaultValue = adapter.convert(fMethodParameterNode.getDefaultValue());
 
 			if (defaultValue == null) {
@@ -300,7 +300,7 @@ public class MethodParameterOperationSetType extends BulkOperation {
 			MethodNode method = fMethodParameterNode.getMethod();
 			if (method != null) {
 				Iterator<TestCaseNode> tcIt = method.getTestCases().iterator();
-				ITypeAdapter adapter = getAdapterProvider().getAdapter(getNewType());
+				ITypeAdapter<?> adapter = getAdapterProvider().getAdapter(getNewType());
 				while (tcIt.hasNext()) {
 					ChoiceNode expectedValue = tcIt.next().getTestData().get(fMethodParameterNode.getIndex());
 					String newValue = adapter.convert(expectedValue.getValueString());

@@ -5,11 +5,12 @@ import com.ecfeed.core.adapter.ITypeAdapterProvider;
 
 public class TypeAdapterProvider implements ITypeAdapterProvider{
 
-	protected ITypeAdapter getTypeAdapterBaseForUserType(String type) {
+	@SuppressWarnings("rawtypes")
+	protected ITypeAdapter<?> getTypeAdapterBaseForUserType(String type) {
 		return new TypeAdapterBaseForUserType(type);
 	}
-	
-	public ITypeAdapter getAdapter(String type){
+
+	public ITypeAdapter<?> getAdapter(String type){
 		if(JavaTypeHelper.isJavaType(type) == false){
 			type = TypeAdapterHelper.USER_TYPE;
 		}

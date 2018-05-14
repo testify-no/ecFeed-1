@@ -17,7 +17,7 @@ import com.ecfeed.core.utils.JavaTypeHelper;
 
 
 public class ParameterCondition implements IStatementCondition {
-	
+
 	//cartesian
 	private MethodParameterNode fRightParameterNode;
 	private RelationStatement fParentRelationStatement;
@@ -45,7 +45,7 @@ public class ParameterCondition implements IStatementCondition {
 				JavaTypeHelper.getSubstituteType(fParentRelationStatement.getLeftParameter().getType(), fRightParameterNode.getType());
 
 		EStatementRelation relation = fParentRelationStatement.getRelation();
-		
+
 		boolean isRandomizedChoice = StatementConditionHelper.getChoiceRandomized(choices, fParentRelationStatement.getLeftParameter());
 		if(isRandomizedChoice) {
 			if(JavaTypeHelper.TYPE_NAME_STRING.equals(substituteType)) {
@@ -56,7 +56,7 @@ public class ParameterCondition implements IStatementCondition {
 				return EvaluationResult.convertFromBoolean(result);
 			}
 		}
-		
+
 		if (StatementConditionHelper.isRelationMatchQuiet(relation, substituteType, leftChoiceStr, rightChoiceStr)) {
 			return EvaluationResult.TRUE;
 		}
@@ -165,8 +165,6 @@ public class ParameterCondition implements IStatementCondition {
 		int index2 = fRightParameterNode.getIndex();
 		List<ChoiceNode> rightSideDomain = domain.get(index2);
 
-		boolean isAmbigous = false;
-
 		boolean isRandomizedChoice = StatementConditionHelper.getChoiceRandomized(values,
 				fParentRelationStatement.getLeftParameter());
 
@@ -175,8 +173,8 @@ public class ParameterCondition implements IStatementCondition {
 				return false;
 			}
 
-			String leftChoiceStr = getChoiceString(values,
-					fParentRelationStatement.getLeftParameter());
+//			String leftChoiceStr = getChoiceString(values,
+//					fParentRelationStatement.getLeftParameter());
 
 			for (ChoiceNode left : values) {
 				for (ChoiceNode right : rightSideDomain) {

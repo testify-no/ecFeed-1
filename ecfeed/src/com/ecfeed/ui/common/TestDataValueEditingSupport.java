@@ -179,7 +179,7 @@ public class TestDataValueEditingSupport extends EditingSupport {
 		if(parameter.isExpected()){
 			String valueString = fComboCellEditor.getViewer().getCCombo().getText();
 			String type = parameter.getType();
-			ITypeAdapter adapter = new EclipseTypeAdapterProvider().getAdapter(type);
+			ITypeAdapter<?> adapter = new EclipseTypeAdapterProvider().getAdapter(type);
 			if(adapter.convert(valueString) == null){
 				MessageDialog.openError(Display.getCurrent().getActiveShell(),
 						Messages.DIALOG_CHOICE_VALUE_PROBLEM_TITLE,

@@ -11,5 +11,5 @@
 package com.ecfeed.core.adapter;
 
 public interface ITypeAdapterProvider {
-	public ITypeAdapter getAdapter(String type);
+	public ITypeAdapter<?> getAdapter(String type);
 }

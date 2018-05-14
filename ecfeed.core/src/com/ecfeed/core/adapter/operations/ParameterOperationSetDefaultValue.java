@@ -19,11 +19,11 @@ import com.ecfeed.core.model.ModelOperationException;
 public class ParameterOperationSetDefaultValue extends AbstractModelOperation {
 
 	private MethodParameterNode fTarget;
-	private ITypeAdapter fTypeAdapter;
+	private ITypeAdapter<?> fTypeAdapter;
 	private String fNewValue;
 	private String fOriginalValue;
 
-	public ParameterOperationSetDefaultValue(MethodParameterNode target, String newValue, ITypeAdapter typeAdapter) {
+	public ParameterOperationSetDefaultValue(MethodParameterNode target, String newValue, ITypeAdapter<?> typeAdapter) {
 		super(OperationNames.SET_DEFAULT_VALUE);
 		fTarget = target;
 		fNewValue = newValue;
