@@ -134,11 +134,11 @@ public class ChoiceOperationSetValue extends AbstractModelOperation {
 			return null;
 		}
 
-		if(!fTarget.isRandomizeValue()) {
+		if(!fTarget.isRandomizedValue()) {
 			return fAdapterProvider.getAdapter(type).convert(value);
 		}
 		else {
-			return ValueFieldHelper.adapt(type, value, fTarget.isRandomizeValue(), fAdapterProvider);
+			return ValueFieldHelper.adapt(type, value, fTarget.isRandomizedValue(), fAdapterProvider);
 		}
 
 	}

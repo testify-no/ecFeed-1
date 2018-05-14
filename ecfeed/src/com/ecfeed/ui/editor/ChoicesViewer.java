@@ -201,7 +201,7 @@ public class ChoicesViewer extends TableViewerSection {
 		public String getText(Object element){
 			if(element instanceof ChoiceNode){
 				ChoiceNode choice = (ChoiceNode)element;
-				return choice.getRandomizeValue();
+				return choice.getRandomizedValue();
 			}
 			return "";
 		}
@@ -309,18 +309,18 @@ public class ChoicesViewer extends TableViewerSection {
 	protected void createTableColumns() {
 		fNameColumn = addColumn("Name", 150, new NodeNameColumnLabelProvider());
 		fRandomizedColumn = addColumn("Randomized", 250, new RandomizedValueLabelProdiver());
-		fRandomizedColumn.setEditingSupport(new RandomizeValueEditingSupport());		
+		fRandomizedColumn.setEditingSupport(new RandomizedValueEditingSupport());		
 		fValueColumn = addColumn("Value", 150, new ChoiceValueLabelProvider());
 	}
 	
 	
 	//TODO 555 editing support
-	private class RandomizeValueEditingSupport extends EditingSupport {
+	private class RandomizedValueEditingSupport extends EditingSupport {
 
 		private final String[] EDITOR_ITEMS = {"YES", "NO"};
 		private ComboBoxCellEditor fCellEditor;
 
-		public RandomizeValueEditingSupport() {
+		public RandomizedValueEditingSupport() {
 			super(getTableViewer());
 		}
 
@@ -336,7 +336,7 @@ public class ChoicesViewer extends TableViewerSection {
 		@Override
 		protected Object getValue(Object element) {
 			ChoiceNode node = (ChoiceNode)element;
-			return (node.isRandomizeValue() ? 0 : 1);
+			return (node.isRandomizedValue() ? 0 : 1);
 		}
 
 		@Override
@@ -344,7 +344,7 @@ public class ChoicesViewer extends TableViewerSection {
 			ChoiceNode node = (ChoiceNode)element;
 			boolean expected = ((int)value == 0) ? true : false;
 			fParentIf.setOwnNode(node);
-			node.setRandomizeValue(expected);
+			node.setRandomizedValue(expected);
 			fCellEditor.setFocus();
 		}
 

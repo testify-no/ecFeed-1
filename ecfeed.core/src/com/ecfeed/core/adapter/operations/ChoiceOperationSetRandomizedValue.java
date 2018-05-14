@@ -11,14 +11,14 @@ import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.utils.SystemLogger;
 
-public class ChoiceOperationSetRandomizeValue extends AbstractModelOperation {
+public class ChoiceOperationSetRandomizedValue extends AbstractModelOperation {
 
 	private boolean fNewValue;
 	private ChoiceNode fChoiceNode;
 	private ITypeAdapterProvider fAdapterProvider;
 
 
-	public ChoiceOperationSetRandomizeValue(ChoiceNode choiceNode, boolean newValue, ITypeAdapterProvider adapterProvider) {
+	public ChoiceOperationSetRandomizedValue(ChoiceNode choiceNode, boolean newValue, ITypeAdapterProvider adapterProvider) {
 		super(OperationNames.SET_PARTITION_VALUE);
 		fNewValue = newValue;
 		fChoiceNode = choiceNode;
@@ -33,7 +33,7 @@ public class ChoiceOperationSetRandomizeValue extends AbstractModelOperation {
 			ModelOperationException.report(Messages.PARTITION_VALUE_PROBLEM(Boolean.toString(fNewValue)));
 		}
 
-		fChoiceNode.setRandomizeValue(convertedValue);
+		fChoiceNode.setRandomizedValue(convertedValue);
 		adaptParameter(fChoiceNode.getParameter());
 		markModelUpdated();
 	}
@@ -71,7 +71,7 @@ public class ChoiceOperationSetRandomizeValue extends AbstractModelOperation {
 
 	private class ReverseOperation extends AbstractModelOperation {
 		public ReverseOperation() {
-			super(ChoiceOperationSetRandomizeValue.this.getName());
+			super(ChoiceOperationSetRandomizedValue.this.getName());
 		}
 
 		@Override
@@ -81,7 +81,7 @@ public class ChoiceOperationSetRandomizeValue extends AbstractModelOperation {
 
 		@Override
 		public IModelOperation reverseOperation() {
-			return new ChoiceOperationSetRandomizeValue(fChoiceNode, fNewValue,
+			return new ChoiceOperationSetRandomizedValue(fChoiceNode, fNewValue,
 					fAdapterProvider);
 		}
 

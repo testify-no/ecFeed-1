@@ -613,7 +613,7 @@ public abstract class XomAnalyser {
 		
 		
 		ChoiceNode choice = new ChoiceNode(name, value);
-		choice.setRandomizeValue(isRandomized);
+		choice.setRandomizedValue(isRandomized);
 		choice.setDescription(parseComments(element));
 
 		for (Element child : getIterableChildren(element)) {

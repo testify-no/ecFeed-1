@@ -55,12 +55,12 @@ public class ChoiceInterface extends ChoicesParentInterface {
 		return getOwnNode().getValueString();
 	}
 	
-	public void setRandomize(boolean choice) {
-		getOwnNode().setRandomizeValue(choice);
+	public void setRandomized(boolean choice) {
+		getOwnNode().setRandomizedValue(choice);
 	}
 	
-	public boolean isRandomize() {
-		return getOwnNode().isRandomizeValue();
+	public boolean isRandomized() {
+		return getOwnNode().isRandomizedValue();
 	}
 
 	@Override
