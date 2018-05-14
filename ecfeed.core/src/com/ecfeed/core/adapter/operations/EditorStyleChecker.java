@@ -10,6 +10,7 @@
 
 package com.ecfeed.core.adapter.operations;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -40,8 +41,9 @@ public class EditorStyleChecker implements IModelVisitor{
 		}
 
 		List<ClassNode> classesInRootNode = rootNode.getClasses();
+		List<ClassNode> classesInRootNodeClone = new ArrayList<ClassNode>(classesInRootNode);
 
-		for (ClassNode classNode: classesInRootNode) {
+		for (ClassNode classNode: classesInRootNodeClone) {
 			System.out.println(classNode.getName());
 			errorDescription = (ErrorDescription) classNode.accept(this);
 			if (errorDescription != null) {
@@ -64,9 +66,10 @@ public class EditorStyleChecker implements IModelVisitor{
 		}
 
 		List<MethodNode> methodsInNode = node.getMethods();
-		for (MethodNode method: methodsInNode) {
-			System.out.println(method.getName());
+		List<MethodNode> methodsInNodeClone = new ArrayList<MethodNode>(methodsInNode);
+		for (MethodNode method: methodsInNodeClone) {
 			errorDescription = (ErrorDescription) method.accept(this);
+			System.out.println(methodsInNode.size());
 			if (errorDescription != null) {
 				System.out.println(errorDescription.toString());
 				return errorDescription;
