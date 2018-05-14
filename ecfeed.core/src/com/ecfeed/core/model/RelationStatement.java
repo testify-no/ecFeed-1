@@ -99,7 +99,7 @@ public class RelationStatement extends AbstractStatement implements IRelationalS
 		try {
 			int index = fLeftParameter.getIndex();
 			//			List<ChoiceNode> input = values.get(index);
-			result = fRightCondition.isAmbigous(values, index, fRelation);
+			result = fRightCondition.isAmbiguous(values, index, fRelation);
 		}
 		catch (Exception e) {
 			SystemLogger.logCatch(e.getMessage());

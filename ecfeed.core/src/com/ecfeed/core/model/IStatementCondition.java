@@ -23,6 +23,6 @@ public interface IStatementCondition {
 	public boolean compare(IStatementCondition condition);
 	public Object accept(IStatementVisitor visitor) throws Exception;
 	public boolean mentions(MethodParameterNode methodParameterNode);
-	public boolean isAmbigous(List<List<ChoiceNode>> leftSideDomain, int parameterIndex, EStatementRelation relation);
+	public boolean isAmbiguous(List<List<ChoiceNode>> leftSideDomain, int parameterIndex, EStatementRelation relation);
 }
 

@@ -152,7 +152,7 @@ public class ParameterCondition implements IStatementCondition {
 	}
 
 	@Override
-	public boolean isAmbigous(List<List<ChoiceNode>> domain, int parameterIndex,
+	public boolean isAmbiguous(List<List<ChoiceNode>> domain, int parameterIndex,
 			EStatementRelation relation) {
 		String substituteType = JavaTypeHelper.getSubstituteType(fParentRelationStatement
 				.getLeftParameter().getType(), JavaTypeHelper.getStringTypeName());
@@ -173,12 +173,12 @@ public class ParameterCondition implements IStatementCondition {
 				return false;
 			}
 
-//			String leftChoiceStr = getChoiceString(values,
-//					fParentRelationStatement.getLeftParameter());
+			//			String leftChoiceStr = getChoiceString(values,
+			//					fParentRelationStatement.getLeftParameter());
 
 			for (ChoiceNode left : values) {
 				for (ChoiceNode right : rightSideDomain) {
-					if (StatementConditionHelper.isAmbigous(left.getValueString(),
+					if (StatementConditionHelper.isAmbiguous(left.getValueString(),
 							right.getValueString(), relation, substituteType)) {
 						return true;
 					}
@@ -187,7 +187,7 @@ public class ParameterCondition implements IStatementCondition {
 
 			/*
 			 * else { boolean result =
-			 * StatementConditionHelper.isAmbigous(leftChoiceStr, fRightValue,
+			 * StatementConditionHelper.isAmbiguous(leftChoiceStr, fRightValue,
 			 * relation, substituteType); return result; } }
 			 */
 			/*
