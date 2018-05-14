@@ -103,7 +103,7 @@ public class ChoiceOperationSetValue extends AbstractModelOperation {
 
 	@Override
 	public void execute() throws ModelOperationException {
-		//
+
 		String convertedValue = validateChoiceValue(fTarget.getParameter().getType(), fNewValue);
 		if(convertedValue == null){
 			ModelOperationException.report(Messages.PARTITION_VALUE_PROBLEM(fNewValue));
@@ -133,20 +133,13 @@ public class ChoiceOperationSetValue extends AbstractModelOperation {
 		if (value.length() > AdapterConstants.MAX_PARTITION_VALUE_STRING_LENGTH) {
 			return null;
 		}
-		
+
 		if(!fTarget.isRandomizeValue()) {
 			return fAdapterProvider.getAdapter(type).convert(value);
 		}
 		else {
-			
 			return ValueFieldHelper.adapt(type, value, fTarget.isRandomizeValue(), fAdapterProvider);
-			
-			//fAdapterProvider;
-//			/return "nothing";
 		}
-		
-		//fTarget.isRandomizeValue()
-		
 
 	}
 }
