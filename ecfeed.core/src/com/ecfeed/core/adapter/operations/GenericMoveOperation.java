@@ -43,7 +43,7 @@ public class GenericMoveOperation extends BulkOperation {
 					addOperation((IModelOperation)node.getParent().accept(new FactoryRemoveChildOperation(node, adapterProvider, false)));
 					if(node instanceof GlobalParameterNode && newParent instanceof MethodNode){
 						GlobalParameterNode parameter = (GlobalParameterNode)node;
-						node = new MethodParameterNode(parameter, adapterProvider.getAdapter(parameter.getType()).defaultValue(), false);
+						node = new MethodParameterNode(parameter, adapterProvider.getAdapter(parameter.getType()).getDefaultValue(), false);
 					}
 					if(newIndex != -1){
 						addOperation((IModelOperation)newParent.accept(new FactoryAddChildOperation(node, newIndex, adapterProvider, false)));

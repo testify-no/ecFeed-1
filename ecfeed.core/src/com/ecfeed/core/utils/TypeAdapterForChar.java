@@ -7,16 +7,16 @@ import nl.flotsam.xeger.Xeger;
 import com.ecfeed.core.adapter.ITypeAdapter;
 
 public class TypeAdapterForChar implements ITypeAdapter<Character>{
-	
+
 	private final String[] TYPES_CONVERTABLE_TO_CHAR = new String[]{
 			JavaTypeHelper.TYPE_NAME_STRING, 
 			JavaTypeHelper.TYPE_NAME_SHORT, 
 			JavaTypeHelper.TYPE_NAME_BYTE,
 			JavaTypeHelper.TYPE_NAME_INT
 	};
-	
+
 	@Override
-	public boolean compatible(String type){
+	public boolean isCompatible(String type){
 		return Arrays.asList(TYPES_CONVERTABLE_TO_CHAR).contains(type);
 	}
 
@@ -43,7 +43,7 @@ public class TypeAdapterForChar implements ITypeAdapter<Character>{
 	}
 
 	@Override
-	public String defaultValue() {
+	public String getDefaultValue() {
 		return CommonConstants.DEFAULT_EXPECTED_CHAR_VALUE;
 	}
 

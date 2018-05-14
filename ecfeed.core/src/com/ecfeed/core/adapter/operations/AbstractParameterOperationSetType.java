@@ -188,7 +188,7 @@ public class AbstractParameterOperationSetType extends AbstractModelOperation {
 				}else{
 					String newValue = adapter.convert(choice.getValueString());
 					if(newValue == null){
-						newValue = adapter.defaultValue();
+						newValue = adapter.getDefaultValue();
 					}
 					choice.setValueString(newValue);
 				}

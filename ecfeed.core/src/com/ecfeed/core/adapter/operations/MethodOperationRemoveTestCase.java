@@ -33,7 +33,7 @@ public class MethodOperationRemoveTestCase extends AbstractModelOperation {
 					return false;
 				}
 				@Override
-				public String defaultValue() {
+				public String getDefaultValue() {
 					return null;
 				}
 				@Override
@@ -41,7 +41,7 @@ public class MethodOperationRemoveTestCase extends AbstractModelOperation {
 					return value;
 				}
 				@Override
-				public boolean compatible(String type) {
+				public boolean isCompatible(String type) {
 					return true;
 				}
 				@Override

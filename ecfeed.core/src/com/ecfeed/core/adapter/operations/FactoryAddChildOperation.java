@@ -122,7 +122,7 @@ public class FactoryAddChildOperation implements IModelVisitor{
 	public Object visit(MethodNode node) throws Exception {
 		if(fChild instanceof GlobalParameterNode){
 			GlobalParameterNode globalParameter = (GlobalParameterNode)fChild;
-			String defaultValue = fAdapterProvider.getAdapter(globalParameter.getType()).defaultValue();
+			String defaultValue = fAdapterProvider.getAdapter(globalParameter.getType()).getDefaultValue();
 			MethodParameterNode parameter = new MethodParameterNode(globalParameter, defaultValue, false);
 
 			if(fIndex == -1){

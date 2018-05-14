@@ -7,7 +7,7 @@ import nl.flotsam.xeger.Xeger;
 import com.ecfeed.core.adapter.ITypeAdapter;
 
 public class TypeAdapterForString implements ITypeAdapter<String>{
-	
+
 	private final String[] TYPES_CONVERTABLE_TO_STRING = new String[]{
 			JavaTypeHelper.TYPE_NAME_INT, 
 			JavaTypeHelper.TYPE_NAME_FLOAT, 
@@ -20,9 +20,9 @@ public class TypeAdapterForString implements ITypeAdapter<String>{
 			JavaTypeHelper.TYPE_NAME_BOOLEAN,
 			TypeAdapterHelper.USER_TYPE
 	};
-	
+
 	@Override
-	public boolean compatible(String type){
+	public boolean isCompatible(String type){
 		return Arrays.asList(TYPES_CONVERTABLE_TO_STRING).contains(type);
 	}
 
@@ -31,7 +31,7 @@ public class TypeAdapterForString implements ITypeAdapter<String>{
 	}
 
 	@Override
-	public String defaultValue() {
+	public String getDefaultValue() {
 		return CommonConstants.DEFAULT_EXPECTED_STRING_VALUE;
 	}
 
