@@ -193,20 +193,27 @@ public class StatementConditionHelper {
 	static boolean validateEqualCondition(int choicesLength, int constraintsLength,
 			String substituteType, String upper, String lower, String lowerConstraint,
 			String upperConstraint) {
-		boolean result = false;
-		if (choicesLength == RANGE_VALUE && constraintsLength == RANGE_VALUE)
-			result = GREATER_EQUAL.eval(substituteType, upper, lowerConstraint)
-			&& LESS_EQUAL.eval(substituteType, lower, upperConstraint);
-		else if (choicesLength == RANGE_VALUE && constraintsLength == SINGLE_VALUE) {
-			result = GREATER_EQUAL.eval(substituteType, lower, lowerConstraint)
-					&& GREATER_EQUAL.eval(substituteType, upper, lowerConstraint);
-		} else if (choicesLength == SINGLE_VALUE && constraintsLength == RANGE_VALUE) {
-			result = GREATER_EQUAL.eval(substituteType, lower, lowerConstraint)
-					&& LESS_EQUAL.eval(substituteType, lower, upperConstraint);
-		} else if (choicesLength == SINGLE_VALUE && constraintsLength == SINGLE_VALUE) {
-			result = EQUAL.eval(substituteType, lower, lowerConstraint);
+
+		if (choicesLength == RANGE_VALUE && constraintsLength == RANGE_VALUE) {
+			return GREATER_EQUAL.isMatch(substituteType, upper, lowerConstraint)
+					&& LESS_EQUAL.isMatch(substituteType, lower, upperConstraint);
 		}
-		return result;
+
+		if (choicesLength == RANGE_VALUE && constraintsLength == SINGLE_VALUE) {
+			return GREATER_EQUAL.isMatch(substituteType, lower, lowerConstraint)
+					&& GREATER_EQUAL.isMatch(substituteType, upper, lowerConstraint);
+		} 
+
+		if (choicesLength == SINGLE_VALUE && constraintsLength == RANGE_VALUE) {
+			return GREATER_EQUAL.isMatch(substituteType, lower, lowerConstraint)
+					&& LESS_EQUAL.isMatch(substituteType, lower, upperConstraint);
+		} 
+
+		if (choicesLength == SINGLE_VALUE && constraintsLength == SINGLE_VALUE) {
+			return EQUAL.isMatch(substituteType, lower, lowerConstraint);
+		}
+
+		return false;
 	}
 
 
@@ -310,22 +317,24 @@ public class StatementConditionHelper {
 		return result && (!outsideTheRange);
 	}
 
-	private static boolean isAmbiguousEqualCondition(String substituteType, String lower, String upper, String lowerConstraint, String upperConstraint) {
+	private static boolean isAmbiguousEqualCondition(
+			String substituteType, String lower, String upper, String lowerConstraint, String upperConstraint) {
+
 		if (StringUtils.equals(lower, lowerConstraint) && StringUtils.equals(upper, upperConstraint)) {
 			if (StringUtils.equals(lower, upper) && StringUtils.equals(lowerConstraint, upperConstraint)) {
 				return false;
 			}
 			return true;
 		}
-		if (LESS_THAN.eval(substituteType, lower, lowerConstraint) 
-				&& LESS_THAN.eval(substituteType, upper, upperConstraint) 
-				&& LESS_THAN.eval(substituteType, upper, lowerConstraint)) {
+		if (LESS_THAN.isMatch(substituteType, lower, lowerConstraint) 
+				&& LESS_THAN.isMatch(substituteType, upper, upperConstraint) 
+				&& LESS_THAN.isMatch(substituteType, upper, lowerConstraint)) {
 			return false;
 
 		}
-		if (GREATER_THAN.eval(substituteType, lower, lowerConstraint)
-				&& GREATER_THAN.eval(substituteType, lower, upperConstraint)
-				&& GREATER_THAN.eval(substituteType, upper, upperConstraint)) {
+		if (GREATER_THAN.isMatch(substituteType, lower, lowerConstraint)
+				&& GREATER_THAN.isMatch(substituteType, lower, upperConstraint)
+				&& GREATER_THAN.isMatch(substituteType, upper, upperConstraint)) {
 			return false;
 		}
 
@@ -335,8 +344,9 @@ public class StatementConditionHelper {
 	public static boolean validateOtherthanEqualCondition(EStatementRelation relation,
 			String substituteType, String upper, String lower, String lowerConstraint,
 			String upperConstraint) {
-		return relation.eval(substituteType, lower, upperConstraint)
-				|| relation.eval(substituteType, upper, lowerConstraint);
+
+		return relation.isMatch(substituteType, lower, upperConstraint)
+				|| relation.isMatch(substituteType, upper, lowerConstraint);
 	}
 }
 
