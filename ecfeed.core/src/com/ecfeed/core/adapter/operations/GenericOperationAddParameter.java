@@ -37,7 +37,7 @@ public class GenericOperationAddParameter extends AbstractModelOperation {
 
 		@Override
 		public void execute() throws ModelOperationException {
-			fOriginalIndex = fReversedParameter.getIndex();
+			fOriginalIndex = fReversedParameter.getMyIndex();
 			fReversedTarget.removeParameter(fReversedParameter);
 			markModelUpdated();
 		}

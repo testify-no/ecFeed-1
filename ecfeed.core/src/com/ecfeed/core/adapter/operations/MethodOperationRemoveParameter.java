@@ -68,7 +68,7 @@ public class MethodOperationRemoveParameter extends BulkOperation{
 				fOriginalTestCases.add(tcase.getCopy(getMethodTarget()));
 			}
 			for(TestCaseNode tc : getMethodTarget().getTestCases()){
-				tc.getTestData().remove(getParameter().getIndex());
+				tc.getTestData().remove(getParameter().getMyIndex());
 			}
 			super.execute();
 		}
@@ -84,7 +84,7 @@ public class MethodOperationRemoveParameter extends BulkOperation{
 
 		private boolean validateNewSignature() {
 			List<String> types = getMethodTarget().getParameterTypes();
-			int index = getParameter().getIndex();
+			int index = getParameter().getMyIndex();
 			types.remove(index);
 			return ClassNodeHelper.validateNewMethodSignature(getMethodTarget().getClassNode(), getMethodTarget().getName(), types);
 		}

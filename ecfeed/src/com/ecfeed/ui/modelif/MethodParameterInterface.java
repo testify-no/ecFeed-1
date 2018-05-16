@@ -105,7 +105,7 @@ public class MethodParameterInterface extends AbstractParameterInterface {
 		MethodNode method = getOwnNode().getMethod();
 		if(linked){
 			GlobalParameterNode link = getOwnNode().getLink();
-			if(link == null || method.getAvailableGlobalParameters().contains(link) == false || method.checkDuplicate(getOwnNode().getIndex(), link.getType())){
+			if(link == null || method.getAvailableGlobalParameters().contains(link) == false || method.checkDuplicate(getOwnNode().getMyIndex(), link.getType())){
 				GlobalParameterNode newLink = findNewLink();
 				if(newLink == null){
 					MessageDialog.openError(Display.getCurrent().getActiveShell(), Messages.DIALOG_SET_PARAMETER_LINKED_PROBLEM_TITLE, Messages.DIALOG_NO_VALID_LINK_AVAILABLE_PROBLEM_MESSAGE);
@@ -114,7 +114,7 @@ public class MethodParameterInterface extends AbstractParameterInterface {
 			}
 		}else{
 			//check the type of the unlinked parameter. If it causes collision, set new type
-			if(method.checkDuplicate(getOwnNode().getIndex(), getOwnNode().getRealType())){
+			if(method.checkDuplicate(getOwnNode().getMyIndex(), getOwnNode().getRealType())){
 				operation.addOperation(0, new MethodParameterOperationSetType(getOwnNode(), getOwnNode().getType(), getAdapterProvider()));
 			}
 		}
@@ -195,7 +195,7 @@ public class MethodParameterInterface extends AbstractParameterInterface {
 
 	private GlobalParameterNode findNewLink() {
 		MethodNode method = getOwnNode().getMethod();
-		int index = getOwnNode().getIndex();
+		int index = getOwnNode().getMyIndex();
 		for(GlobalParameterNode parameter : method.getAvailableGlobalParameters()){
 			if(method.checkDuplicate(index, parameter.getType()) == false){
 				return parameter;

@@ -128,12 +128,12 @@ public class GenericOperationRemoveChoice extends BulkOperation {
 			fAdapterProvider = adapterProvider;
 			fTarget = target;
 			fChoice = choice;
-			fOriginalIndex = fChoice.getIndex();
+			fOriginalIndex = fChoice.getMyIndex();
 		}
 
 		@Override
 		public void execute() throws ModelOperationException {
-			fOriginalIndex = fChoice.getIndex();
+			fOriginalIndex = fChoice.getMyIndex();
 			validateOperation();
 			fTarget.removeChoice(fChoice);
 			adaptParameter();

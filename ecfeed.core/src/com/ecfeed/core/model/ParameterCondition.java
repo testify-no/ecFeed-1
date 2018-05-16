@@ -164,7 +164,7 @@ public class ParameterCondition implements IStatementCondition {
 		}
 
 		List<ChoiceNode> values = domain.get(parameterIndex);
-		int index2 = fRightParameterNode.getIndex();
+		int index2 = fRightParameterNode.getMyIndex();
 		List<ChoiceNode> rightSideDomain = domain.get(index2);
 
 		boolean isRandomizedChoice = StatementConditionHelper.getChoiceRandomized(values,

@@ -25,12 +25,12 @@ public class MethodOperationRemoveConstraint extends AbstractModelOperation {
 		super(OperationNames.REMOVE_CONSTRAINT);
 		fTarget = target;
 		fConstraint = constraint;
-		fIndex = fConstraint.getIndex();
+		fIndex = fConstraint.getMyIndex();
 	}
 	
 	@Override
 	public void execute() throws ModelOperationException {
-		fIndex = fConstraint.getIndex();
+		fIndex = fConstraint.getMyIndex();
 		fTarget.removeConstraint(fConstraint);
 		markModelUpdated();
 	}

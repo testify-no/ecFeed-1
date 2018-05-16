@@ -162,9 +162,9 @@ public class ModelNodeDropListener extends ViewerDropAdapter {
 		case LOCATION_ON:
 			return target.getMaxChildIndex(NodeDnDBuffer.getInstance().getDraggedNodes().get(0));
 		case LOCATION_AFTER:
-			return target.getIndex() + 1;
+			return target.getMyIndex() + 1;
 		case LOCATION_BEFORE:
-			return target.getIndex();
+			return target.getMyIndex();
 		}
 
 		return -1;

@@ -214,7 +214,7 @@ public class ChoicesViewer extends TableViewerSection {
 			try {
 				ChoiceNode added = fParentIf.addNewChoice();
 				if(added != null){
-					getTable().setSelection(added.getIndex());
+					getTable().setSelection(added.getMyIndex());
 				}
 
 				setRemoveSelectedStatus();

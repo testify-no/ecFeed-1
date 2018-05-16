@@ -36,7 +36,7 @@ public abstract class AbstractNode{
 		return fId;
 	}
 
-	public int getIndex(){
+	public int getMyIndex(){
 		if(getParent() == null){
 			return -1;
 		}

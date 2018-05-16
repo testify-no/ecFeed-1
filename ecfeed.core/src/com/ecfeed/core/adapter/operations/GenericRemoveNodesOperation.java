@@ -119,7 +119,7 @@ public class GenericRemoveNodesOperation extends BulkOperation {
 			for(MethodParameterNode param : linkers){
 				MethodNode method = param.getMethod();
 				if(addMethodToMap(method, duplicatesMap, methods)){
-					duplicatesMap.get(method.getClassNode()).get(method.getName()).get(method).set(param.getIndex(), null);
+					duplicatesMap.get(method.getClassNode()).get(method.getName()).get(method).set(param.getMyIndex(), null);
 					isDependent = true;
 					if(!parameterMap.containsKey(method)){
 						parameterMap.put(method, new ArrayList<AbstractParameterNode>());
@@ -154,7 +154,7 @@ public class GenericRemoveNodesOperation extends BulkOperation {
 			MethodNode method = param.getMethod();
 
 			if(addMethodToMap(method, duplicatesMap, methods)){
-				duplicatesMap.get(method.getClassNode()).get(method.getName()).get(method).set(param.getIndex(), null);
+				duplicatesMap.get(method.getClassNode()).get(method.getName()).get(method).set(param.getMyIndex(), null);
 				if(!parameterMap.containsKey(method)){
 					parameterMap.put(method, new ArrayList<AbstractParameterNode>());
 				}

@@ -25,12 +25,12 @@ public class RootOperationRemoveClass extends AbstractModelOperation {
 		super(OperationNames.REMOVE_CLASS);
 		fTarget = target;
 		fRemovedClass = removedClass;
-		fCurrentIndex = removedClass.getIndex();
+		fCurrentIndex = removedClass.getMyIndex();
 	}
 
 	@Override
 	public void execute() throws ModelOperationException {
-		fCurrentIndex = fRemovedClass.getIndex();
+		fCurrentIndex = fRemovedClass.getMyIndex();
 		fTarget.removeClass(fRemovedClass);
 		markModelUpdated();
 	}

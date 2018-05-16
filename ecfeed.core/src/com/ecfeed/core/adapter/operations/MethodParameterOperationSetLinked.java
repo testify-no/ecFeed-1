@@ -82,7 +82,7 @@ public class MethodParameterOperationSetLinked extends BulkOperation{
 				newType = fTarget.getRealType();
 			}
 
-			if(method.checkDuplicate(fTarget.getIndex(), newType)){
+			if(method.checkDuplicate(fTarget.getMyIndex(), newType)){
 				ModelOperationException.report(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM(method.getClassNode().getName(), method.getName()));
 			}
 			//			if(fLinked){

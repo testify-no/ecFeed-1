@@ -236,7 +236,7 @@ public class MethodParameterOperationSetType extends BulkOperation {
 
 			MethodNode method = fMethodParameterNode.getMethod();
 			List<String> types = method.getParameterTypes();
-			types.set(fMethodParameterNode.getIndex(), getNewType());
+			types.set(fMethodParameterNode.getMyIndex(), getNewType());
 
 			if (method.getClassNode().getMethod(method.getName(), types) != null && method.getClassNode().getMethod(method.getName(), types) != method) {
 				ModelOperationException.report(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM(method.getClassNode().getName(), method.getName()));
@@ -302,7 +302,7 @@ public class MethodParameterOperationSetType extends BulkOperation {
 				Iterator<TestCaseNode> tcIt = method.getTestCases().iterator();
 				ITypeAdapter<?> adapter = getAdapterProvider().getAdapter(getNewType());
 				while (tcIt.hasNext()) {
-					ChoiceNode expectedValue = tcIt.next().getTestData().get(fMethodParameterNode.getIndex());
+					ChoiceNode expectedValue = tcIt.next().getTestData().get(fMethodParameterNode.getMyIndex());
 					String newValue = adapter.convert(expectedValue.getValueString());
 					if (JavaTypeHelper.isUserType(getNewType())) {
 						if (fMethodParameterNode.getLeafChoiceValues().contains(newValue) == false) {
