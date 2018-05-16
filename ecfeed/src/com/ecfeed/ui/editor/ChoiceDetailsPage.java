@@ -44,11 +44,11 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 	private Combo fValueCombo;
 	private ChoiceInterface fChoiceIf;
 	private AbstractCommentsSection fCommentsSection;
-	
+
 	private Button fRandomizeCheckbox;
-	
+
 	private Label fValueLabel;
-	
+
 	public ChoiceDetailsPage(
 			ModelMasterSection masterSection, 
 			IModelUpdateContext updateContext, 
@@ -92,12 +92,12 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 			fChildrenViewer.setInput(selectedChoice);
 			fLabelsViewer.setInput(selectedChoice);
 
-			
+
 			fNameText.setText(selectedChoice.getName());
 			refreshValueEditor(selectedChoice);
 		}
 	}
-	
+
 
 	private void addCommentsSection() {
 
@@ -139,11 +139,11 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		fRandomizeCheckbox.setSelection(choiceNode.isRandomizedValue());
 		fRandomizeCheckbox.setEnabled(isRandomizeCheckboxEnabled());
 		updateValueLabel(choiceNode);
-		
+
 
 		fAttributesComposite.layout();
 	}
-	
+
 	private void updateValueLabel(ChoiceNode choiceNode) {
 		String type = fChoiceIf.getParameter().getType();
 		boolean isRandomizedValue = choiceNode.isRandomizedValue();
@@ -163,12 +163,12 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		String typeName = fChoiceIf.getParameter().getType();
 		return !isChoiceNodeAbstract() && isCorrectableType(typeName);
 	}
-	
+
 	private boolean isChoiceNodeAbstract() {
 		ChoiceNode choiceNode = getSelectedChoice();
 		return choiceNode!=null && choiceNode.isAbstract();
 	}
-	
+
 	private boolean isCorrectableType(String typeName) {
 		return JavaTypeHelper.isNumericTypeName(typeName) || JavaTypeHelper.isStringTypeName(typeName);
 	}
@@ -200,11 +200,11 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 				getFormObjectToolkit().createGridCheckBox(
 						fAttributesComposite, "Randomize value", new RandomizedApplier());
 		SwtObjectHelper.setHorizontalSpan(fRandomizeCheckbox, 3);
-		
+
 		fValueLabel = getFormObjectToolkit().createLabel(fAttributesComposite, "Value");
 		getFormObjectToolkit().paintBorders(fAttributesComposite);
 	}
-	
+
 	private class RandomizedApplier implements IValueApplier {
 
 		@Override
@@ -215,7 +215,7 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 			switchValueOnThefly();
 		}
 	}
-	
+
 	private void switchValueOnThefly() {
 		boolean isRandomized = fChoiceIf.isRandomized();
 		String fValueComboText = fValueCombo.getText();
@@ -229,19 +229,18 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 			fValueCombo.setText(fValueComboText);
 			setValueComboToModel();
 		}
-		//refresh maybe?
 	}
-	
+
 	public static final String DELIMITER = ":";
-	
+
 	private String convertFromValueToRange(String value) {
 		return value+DELIMITER+value;
 	}
-	
+
 	private String convertFromRangeToValue(String value) {
 		return value.split(DELIMITER)[0];
 	}
-	
+
 	@Override
 	protected Class<? extends AbstractNode> getNodeType() {
 		return ChoiceNode.class;
@@ -255,7 +254,7 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 			fNameText.setText(fChoiceIf.getName());
 		}
 	}
-	
+
 	private class ValueSelectedListener extends ComboSelectionListener {
 
 		@Override
