@@ -36,7 +36,7 @@ public class Constraint implements IConstraint<ChoiceNode> {
 	}
 	
 	public boolean isAmbiguous(List<List<ChoiceNode>> values) {
-		return fPremise.isAmgibous(values) || fConsequence.isAmgibous(values);
+		return fPremise.isAmbiguous(values) || fConsequence.isAmbiguous(values);
 	}
 
 	

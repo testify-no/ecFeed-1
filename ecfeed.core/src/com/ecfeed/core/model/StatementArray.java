@@ -240,9 +240,9 @@ public class StatementArray extends AbstractStatement {
 	}
 
 	@Override
-	public boolean isAmgibous(List<List<ChoiceNode>> values) {
+	public boolean isAmbiguous(List<List<ChoiceNode>> values) {
 		for (AbstractStatement statement : fStatements) {
-			if (statement.isAmgibous(values)) {
+			if (statement.isAmbiguous(values)) {
 				return true;
 			}
 		}
