@@ -231,6 +231,7 @@ public class StatementConditionHelper {
 		return getChoiceRandomized(Arrays.asList(choice), methodParameterNode);
 	}
 
+	// ADR-REF
 	public static boolean isConstraintInChoiceRange(String choice, String constraint, EStatementRelation relation, String substituteType) {
 		boolean result = false;
 		if(JavaTypeHelper.isNumericTypeName(substituteType)) {		
@@ -272,6 +273,7 @@ public class StatementConditionHelper {
 		return result;
 	}
 
+	// ADR-REF
 	public static final boolean isAmbiguous(String choice, String constraint, EStatementRelation relation, String substituteType)  {
 		boolean result = false; 
 		boolean outsideTheRange = false;
