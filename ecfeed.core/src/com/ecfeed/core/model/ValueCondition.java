@@ -79,21 +79,20 @@ public class ValueCondition implements IStatementCondition {
 
 		String leftChoiceStr = getChoiceString(values, fParentRelationStatement.getLeftParameter());
 
-		boolean isRandomizedChoice = StatementConditionHelper.getChoiceRandomized(values,
-				fParentRelationStatement.getLeftParameter());
+		boolean isRandomizedChoice = 
+				StatementConditionHelper.getChoiceRandomized(values,fParentRelationStatement.getLeftParameter());
 
 		if (isRandomizedChoice) {
 			if (JavaTypeHelper.TYPE_NAME_STRING.equals(substituteType)) {
 				return false;
 			} else {
-				boolean result = StatementConditionHelper.isAmbiguous(leftChoiceStr,
-						fRightValue, relation, substituteType);
-				return result;
+				return StatementConditionHelper.isAmbiguous(
+						leftChoiceStr, fRightValue, relation, substituteType);
 			}
 		}
 
-		if (StatementConditionHelper.isRelationMatchQuiet(relation, substituteType, leftChoiceStr,
-				fRightValue)) {
+		if (StatementConditionHelper.isRelationMatchQuiet(
+				relation, substituteType, leftChoiceStr, fRightValue)) {
 			return true;
 		}
 
