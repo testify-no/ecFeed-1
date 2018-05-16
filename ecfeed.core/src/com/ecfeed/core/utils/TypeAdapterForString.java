@@ -32,7 +32,7 @@ public class TypeAdapterForString implements ITypeAdapter<String>{
 
 	@Override
 	public String getDefaultValue() {
-		return CommonConstants.DEFAULT_EXPECTED_STRING_VALUE;
+		return JavaTypeHelper.DEFAULT_EXPECTED_STRING_VALUE;
 	}
 
 	@Override

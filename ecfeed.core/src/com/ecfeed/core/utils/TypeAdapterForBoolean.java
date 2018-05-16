@@ -16,19 +16,20 @@ public class TypeAdapterForBoolean implements ITypeAdapter<Boolean>{
 		return Arrays.asList(TYPES_CONVERTABLE_TO_BOOLEAN).contains(type);
 	}
 
+	// ADR-REF - use string helper
 	public String convert(String value){
-		if(value.toLowerCase().equals(CommonConstants.BOOLEAN_TRUE_STRING_REPRESENTATION.toLowerCase())){
-			return CommonConstants.BOOLEAN_TRUE_STRING_REPRESENTATION;
+		if(value.toLowerCase().equals(JavaTypeHelper.VALUE_REPRESENTATION_TRUE.toLowerCase())){
+			return JavaTypeHelper.VALUE_REPRESENTATION_TRUE;
 		}
-		else if(value.toLowerCase().equals(CommonConstants.BOOLEAN_FALSE_STRING_REPRESENTATION.toLowerCase())){
-			return CommonConstants.BOOLEAN_FALSE_STRING_REPRESENTATION;
+		else if(value.toLowerCase().equals(JavaTypeHelper.VALUE_REPRESENTATION_FALSE.toLowerCase())){
+			return JavaTypeHelper.VALUE_REPRESENTATION_FALSE;
 		};
 		return null;
 	}
 
 	@Override
 	public String getDefaultValue() {
-		return CommonConstants.DEFAULT_EXPECTED_BOOLEAN_VALUE;
+		return JavaTypeHelper.DEFAULT_EXPECTED_BOOLEAN_VALUE;
 	}
 
 	@Override
