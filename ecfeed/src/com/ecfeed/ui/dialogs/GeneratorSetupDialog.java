@@ -220,10 +220,10 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		updateOkButtonAndErrorMsg();
 	}
 
-	public static final String IS_NOT_AMBIGOUS = "";
-	public static final String IS_AMBIGOUS = "%s is ambigous because %s is ambigous.";
+	public static final String IS_NOT_AMBIGUOUS = "";
+	public static final String IS_AMBIGUOUS = "%s is ambigous because %s is ambigous.";
 
-	private Label createAmgibousWarningLabel(Composite parent) {
+	private Label createAmgiguousWarningLabel(Composite parent) {
 		Label selectChoicesLabel = new Label(parent, SWT.WRAP);
 
 		selectChoicesLabel.setLayoutData(
@@ -234,24 +234,23 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		return selectChoicesLabel;
 	}
 
-	private void checkAmbigousState() { 
+	private void checkAmbiguousState() { 
 		List<Constraint> constraints = getCheckedConstraints();
 		List<List<ChoiceNode>> input = getCheckedArguments();
 
-		//constain's name
-		//and statement
 		for (Constraint constraint : constraints) {
 			if(constraint.isAmbiguous(input)) {
-				updateAmbigousWarningLabel(true);
+				updateAmbiguousWarningLabel(true);
 				return;
 			}
 		}
-		updateAmbigousWarningLabel(false);
+
+		updateAmbiguousWarningLabel(false);
 	}
 
-	private void updateAmbigousWarningLabel(boolean isAmbiguousCondition) {
+	private void updateAmbiguousWarningLabel(boolean isAmbiguousCondition) {
 		if(isAmbiguousCondition) {
-			ambigousLabel.setText(String.format(IS_AMBIGOUS, "constraintsname", "somethingfromstatement")); //String.Format
+			ambigousLabel.setText(String.format(IS_AMBIGUOUS, "constraintsname", "somethingfromstatement"));
 		}
 		else {
 			ambigousLabel.setText("                    ");
@@ -346,7 +345,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 				fConstraintsViewer){
 			@Override
 			public void checkStateChanged(CheckStateChangedEvent event) {
-				checkAmbigousState();
+				checkAmbiguousState();
 				super.checkStateChanged(event);
 			}
 
@@ -610,7 +609,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		generatorLabel.setText("Generator");
 
 		createGeneratorViewer(generatorComposite);
-		ambigousLabel = createAmgibousWarningLabel(container);
+		ambigousLabel = createAmgiguousWarningLabel(container);
 	}
 
 	private void createTestCasesExportComposite(Composite parentComposite) {
@@ -946,7 +945,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 					&& ((MethodParameterNode) event.getElement()).isExpected()) {
 				fParametersViewer.setChecked(event.getElement(), true);
 			} else {
-				checkAmbigousState();
+				checkAmbiguousState();
 				updateOkButtonAndErrorMsg();
 			}
 		}
