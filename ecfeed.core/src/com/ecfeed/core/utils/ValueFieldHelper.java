@@ -17,11 +17,11 @@ public class ValueFieldHelper {
 	}
 
 	//TODO and refactor next time
-	public static String adapt(String type, String value, boolean randomizeValue, ITypeAdapterProvider iTypeAdapterProvider) throws ModelOperationException {
+	public static String adapt(String type, String value, boolean isRandomized, ITypeAdapterProvider iTypeAdapterProvider) throws ModelOperationException {
 		
 		ITypeAdapter<?> typeAdapter = iTypeAdapterProvider.getAdapter(type);
 		
-		if (randomizeValue && !type.equals(JavaTypeHelper.TYPE_NAME_STRING)) {
+		if (isRandomized && !type.equals(JavaTypeHelper.TYPE_NAME_STRING)) {
 			String[] values = value.split(":");
 			if (values.length != 2) {
 				ValueFieldOperationException.report("todo");
@@ -30,8 +30,8 @@ public class ValueFieldHelper {
 			String firstValue = values[0];
 			String secondValue = values[1];
 
-			firstValue = typeAdapter.convert(firstValue);
-			secondValue = typeAdapter.convert(secondValue);
+			firstValue = typeAdapter.convert(firstValue, isRandomized);
+			secondValue = typeAdapter.convert(secondValue, isRandomized);
 
 			if (firstValue == null || secondValue == null) {
 				return null; // wrong value
@@ -43,7 +43,7 @@ public class ValueFieldHelper {
 			}
 			return firstValue + DELIMITER + secondValue;
 		}
-		return typeAdapter.convert(value);
+		return typeAdapter.convert(value, isRandomized);
 	}
 	
 	private static boolean isCorrect(String type, String value) {

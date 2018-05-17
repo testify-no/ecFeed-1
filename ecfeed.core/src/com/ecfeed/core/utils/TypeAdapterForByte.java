@@ -3,16 +3,19 @@ package com.ecfeed.core.utils;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class TypeAdapterForByte extends TypeAdapterForNumeric<Byte>{
-	
+
+	// ADR-REF
 	@Override
-	public String convert(String value){
-		String result = super.convert(value);
-		if(result == null){
+	public String convert(String value, boolean isRandomized){
+		
+		String result = super.convert(value, isRandomized);
+		
+		if (result == null) {
 			try{
 				result = String.valueOf(StringHelper.convertToByte(value));
 			}
-			catch(NumberFormatException e){
-				if(value.length() == 1){
+			catch (NumberFormatException e) {
+				if (value.length() == 1) {
 					int charValue = (int)value.charAt(0);
 					if((charValue > Byte.MAX_VALUE) == false){
 						result = Integer.toString(charValue);
@@ -22,9 +25,14 @@ public class TypeAdapterForByte extends TypeAdapterForNumeric<Byte>{
 				}
 			}
 		}
+		
+		if (isRandomized) {
+			result = generateRange(result);
+		}
+		
 		return result;
 	}
-
+	
 	@Override
 	public Byte generateValue(String range) {
 		byte[] bytes = new byte[1];

@@ -26,7 +26,8 @@ public class TypeAdapterForString implements ITypeAdapter<String>{
 		return Arrays.asList(TYPES_CONVERTABLE_TO_STRING).contains(type);
 	}
 
-	public String convert(String value){
+	@Override
+	public String convert(String value, boolean isRandomized){
 		return value;
 	}
 

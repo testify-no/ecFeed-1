@@ -33,7 +33,7 @@ public class ParameterOperationSetDefaultValue extends AbstractModelOperation {
 
 	@Override
 	public void execute() throws ModelOperationException {
-		String convertedValue = fTypeAdapter.convert(fNewValue);
+		String convertedValue = fTypeAdapter.convert(fNewValue, false);
 		if(convertedValue == null){
 			ModelOperationException.report(Messages.CATEGORY_DEFAULT_VALUE_REGEX_PROBLEM);
 		}

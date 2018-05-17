@@ -3,10 +3,10 @@ package com.ecfeed.core.utils;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class TypeAdapterForLong extends TypeAdapterForNumeric<Long>{
-	
+
 	@Override
-	public String convert(String value){
-		String result = super.convert(value);
+	public String convert(String value, boolean isRandomized){
+		String result = super.convert(value, isRandomized);
 		if(result == null){
 			try{
 				result = String.valueOf(StringHelper.convertToLong(value));
@@ -15,6 +15,11 @@ public class TypeAdapterForLong extends TypeAdapterForNumeric<Long>{
 				result = null;
 			}
 		}
+
+		if (isRandomized) {
+			result = generateRange(result);
+		}
+
 		return result;
 	}
 
