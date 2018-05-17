@@ -42,7 +42,19 @@ public class TypeAdapterForString implements ITypeAdapter<String>{
 
 	@Override
 	public String generateValue(String regex) {
-		return new Xeger(regex).generate();
+		
+		String result = null;
+		
+		try {
+			Xeger xeger = new Xeger(regex);
+		
+			result = xeger.generate();
+		} catch (Throwable ex) {
+			final String CAN_NOT_GENERATE = "Cannot generate value from expression: " + regex + " (Xeger problem).";
+			ExceptionHelper.reportRuntimeException(CAN_NOT_GENERATE);
+		}
+		
+		return result;
 	}
 
 	@Override
