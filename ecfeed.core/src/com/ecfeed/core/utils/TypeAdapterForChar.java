@@ -20,26 +20,22 @@ public class TypeAdapterForChar implements ITypeAdapter<Character>{
 		return Arrays.asList(TYPES_CONVERTABLE_TO_CHAR).contains(type);
 	}
 
-	public String convert(String value, boolean isRandomized){			
-		if(value.length() == 1){
+	public String convert(String value, boolean isRandomized){
+
+		if (value.length() == 1) {
+
+			if (isRandomized) {
+				return generateRange(value);
+			}
+
 			return value;
 		}
 
-		String avalue = value;
-		if(value.length() > 1 && value.charAt(0) == '\\'){
-			avalue = value.substring(1);
+		if (isRandomized) { 
+			return generateRange(getDefaultValue());
 		}
 
-		try{
-			int number = Integer.parseInt(avalue);
-			return  String.valueOf(Character.toChars(number));
-		} 
-		catch(NumberFormatException e){
-		}
-		catch(IllegalArgumentException i){	
-		}
-
-		return null;
+		return getDefaultValue();
 	}
 
 	@Override
@@ -61,4 +57,10 @@ public class TypeAdapterForChar implements ITypeAdapter<Character>{
 	public String generateValueAsString(String range) {
 		return String.valueOf(generateValue(range));
 	}
+
+	// ADR-REF - move to a common file - ValueFieldHelper ?
+	protected String generateRange(String numericValue) {
+		return numericValue + ":" + numericValue;
+	}
+
 }
