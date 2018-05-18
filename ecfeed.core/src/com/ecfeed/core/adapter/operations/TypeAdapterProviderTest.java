@@ -9,9 +9,11 @@ import com.ecfeed.core.utils.TypeAdapterProvider;
 
 public class TypeAdapterProviderTest {
 
+	@SuppressWarnings("unchecked")
 	@Test
 	public void generateStringValueTest() {
-		ITypeAdapter<String> adapter = new TypeAdapterProvider().getAdapter("String");
+		ITypeAdapter<String> adapter = 
+				(ITypeAdapter<String>) new TypeAdapterProvider().getAdapter("String");
 		
 		String regex = "[ab]{4,6}c";
 		String value = adapter.generateValue(regex);
