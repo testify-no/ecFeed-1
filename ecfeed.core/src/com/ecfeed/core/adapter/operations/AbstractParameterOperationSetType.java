@@ -194,10 +194,15 @@ public class AbstractParameterOperationSetType extends AbstractModelOperation {
 				}
 			}else{
 				String newValue = adapter.convert(choice.getValueString(), choice.isRandomizedValue());
+				
 				if(newValue == null){
 					it.remove();
 				}else{
 					choice.setValueString(newValue);
+					
+					if (!adapter.isRandomizable()) {
+						choice.setRandomizedValue(false);
+					}
 				}
 			}
 		}
