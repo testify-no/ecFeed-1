@@ -22,7 +22,6 @@ import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.SystemLogger;
-import com.ecfeed.core.utils.ValueFieldHelper;
 
 public class ChoiceOperationSetValue extends AbstractModelOperation {
 
@@ -104,7 +103,7 @@ public class ChoiceOperationSetValue extends AbstractModelOperation {
 	@Override
 	public void execute() throws ModelOperationException {
 
-		String convertedValue = validateChoiceValue(fTarget.getParameter().getType(), fNewValue);
+		String convertedValue = adaptChoiceValue(fTarget.getParameter().getType(), fNewValue);
 		if(convertedValue == null){
 			ModelOperationException.report(Messages.PARTITION_VALUE_PROBLEM(fNewValue));
 		}
@@ -129,17 +128,13 @@ public class ChoiceOperationSetValue extends AbstractModelOperation {
 		return "setValue[" + fTarget + "](" + fNewValue + ")";
 	}
 
-	private String validateChoiceValue(String type, String value) throws ModelOperationException {
+	private String adaptChoiceValue(String type, String value) throws ModelOperationException {
+
 		if (value.length() > AdapterConstants.MAX_PARTITION_VALUE_STRING_LENGTH) {
 			return null;
 		}
 
-		if (!fTarget.isRandomizedValue()) {
-			return fAdapterProvider.getAdapter(type).convert(value, false);
-		}
-		else {
-			return ValueFieldHelper.adapt(type, value, fTarget.isRandomizedValue(), fAdapterProvider);
-		}
+		return fAdapterProvider.getAdapter(type).convert(value, fTarget.isRandomizedValue());
 
 	}
 }

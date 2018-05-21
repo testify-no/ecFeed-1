@@ -2,31 +2,33 @@ package com.ecfeed.core.utils;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-public class TypeAdapterForInt extends TypeAdapterForNumeric<Integer>{
+public class TypeAdapterForInt extends TypeAdapterForNumericType<Integer>{
 
 	@Override
-	public String convert(String value, boolean isRandomized){
+	protected String convertSingleValue(String value) {
 
-		String result = super.convert(value, isRandomized);
+		String result = super.convertSpecialValue(value);
 
-		if (result == null) {
-			try {
-				result = String.valueOf(StringHelper.convertToInteger(value));
-			}
-			catch (NumberFormatException e) {
-				result = getDefaultValue();
-			}
+		if (result != null) {
+			return result;
 		}
 
-		if (isRandomized) {
-			result = generateRange(result);
+		try {
+			Integer integer = StringHelper.convertToInteger(value);
+			return String.valueOf(integer);
 		}
-
-		return result;
+		catch (NumberFormatException e) {
+			return getDefaultValue();
+		}
 	}
 
 	@Override
 	public Integer generateValue(String range) {
 		return ThreadLocalRandom.current().nextInt(getLower(range),getUpper(range));
+	}
+
+	@Override
+	protected String[] getSpecialValues() {
+		return NUMERIC_SPECIAL_VALUES;
 	}
 }

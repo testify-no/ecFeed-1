@@ -7,7 +7,7 @@ import org.junit.Test;
 public class TypeAdapterForCharTest {
 
 	@Test
-	public void shouldConvertNumericToRandomizedRange() {
+	public void shouldConvertNumberToRange() {
 
 		TypeAdapterForChar typeAdapterForChar = new TypeAdapterForChar();
 
@@ -19,44 +19,81 @@ public class TypeAdapterForCharTest {
 	}
 
 	@Test
-	public void shouldConvertNonNumericShortToRandomizedRange() {
+	public void shouldConvertCharToRange() {
 
 		TypeAdapterForChar typeAdapterForChar = new TypeAdapterForChar();
 
-		String result = typeAdapterForChar.convert("X", true);
+		String result = typeAdapterForChar.convert("Z", true);
+		assertEquals("Z:Z", result);
+	}	
 
-		assertEquals("X:X", result);
+	@Test
+	public void shouldConvertCharToTheSameValue() {
+
+		TypeAdapterForChar typeAdapterForChar = new TypeAdapterForChar();
+
+		String result = typeAdapterForChar.convert("X", false);
+
+		assertEquals("X", result);
 	}
 
-
 	@Test
-	public void shouldConvertNumericValue() {
+	public void shouldConvertRangeToTheSameRange() {
 
 		TypeAdapterForChar typeAdapterForChar = new TypeAdapterForChar();
 
-		String result = typeAdapterForChar.convert("10", false);
+		String result = typeAdapterForChar.convert("a:A", true);
+
+		assertEquals("a:A", result);
+	}	
+
+	@Test
+	public void shouldConvertRangeToTheTheFirstNumber() {
+
+		TypeAdapterForChar typeAdapterForChar = new TypeAdapterForChar();
+
+		String result = typeAdapterForChar.convert("a:A", false);
+
+		assertEquals("a", result);
+	}	
+
+	@Test
+	public void shouldConvertAlphaToDefaultRange() {
+
+		TypeAdapterForChar typeAdapterForChar = new TypeAdapterForChar();
+
+		String result = typeAdapterForChar.convert("abc", true);
+
+		assertEquals("0:0", result);
+	}	
+
+	@Test
+	public void shouldConvertAlphaToDefaultNumber() {
+
+		TypeAdapterForChar typeAdapterForChar = new TypeAdapterForChar();
+
+		String result = typeAdapterForChar.convert("abc", false);
 
 		assertEquals("0", result);
 	}	
 
 	@Test
-	public void shouldConvertNonNumericShortValue() {
+	public void shouldConvertInvalidRangeToDefaultRange() {
 
 		TypeAdapterForChar typeAdapterForChar = new TypeAdapterForChar();
 
-		String result = typeAdapterForChar.convert("A", false);
+		String result = typeAdapterForChar.convert("A:B:C", true);
 
-		assertEquals("A", result);
+		assertEquals("0:0", result);
 	}	
 
 	@Test
-	public void shouldConvertNonNumericLongValue() {
+	public void shouldConvertInvalidRangeToDefaultNumber() {
 
 		TypeAdapterForChar typeAdapterForChar = new TypeAdapterForChar();
 
-		String result = typeAdapterForChar.convert("ABC", false);
+		String result = typeAdapterForChar.convert("A:B:C", false);
 
 		assertEquals("0", result);
 	}	
-
 }
