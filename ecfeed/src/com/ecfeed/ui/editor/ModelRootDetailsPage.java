@@ -35,7 +35,7 @@ public class ModelRootDetailsPage extends BasicDetailsPage {
 	private ModelNameComposite fModelNameComposite;
 	private RootInterface fRootInterface;
 	private SingleTextCommentsSection fCommentsSection;
-	private ModelMasterSection fMasterSection;
+	private IMainTreeProvider fmainTreeProvider;
 
 	public ModelRootDetailsPage(
 			IMainTreeProvider mainTreeProvider,
@@ -44,6 +44,7 @@ public class ModelRootDetailsPage extends BasicDetailsPage {
 			IJavaProjectProvider javaProjectProvider) {
 
 		super(mainTreeProvider, updateContext, javaProjectProvider);
+		fmainTreeProvider = mainTreeProvider;
 		fRootInterface = rootInterface;
 	}
 
@@ -55,6 +56,7 @@ public class ModelRootDetailsPage extends BasicDetailsPage {
 			EcFormToolkit ecFormToolkit) {
 
 		super(mainTreeProvider, updateContext, javaProjectProvider, ecFormToolkit);
+		fmainTreeProvider = mainTreeProvider;
 		fRootInterface = rootInterface;
 	}
 
@@ -121,7 +123,7 @@ public class ModelRootDetailsPage extends BasicDetailsPage {
 			}
 			
 			refresh();
-			fMasterSection.refresh();
+			fmainTreeProvider.refresh();
 		}
 
 		private void modifyModeView() {
@@ -173,10 +175,14 @@ public class ModelRootDetailsPage extends BasicDetailsPage {
 			fRootIf = rootIf;
 
 			Composite composite = ecFormToolkit.createGridComposite(parent, 2);		
-
+			
+			ecFormToolkit.createButton(composite, "Switch edit mode", new SwitchEditModeButtonSelectionAdapter());
+			ecFormToolkit.createEmptyLabel(composite);
+			
 			ecFormToolkit.createLabel(composite, "Model name");
 			fModelNameText = ecFormToolkit.createGridText(composite, new ModelNameApplier());
 			ecFormToolkit.paintBordersFor(composite);
+			ecFormToolkit.createEmptyLabel(composite);
 		}
 
 		public void refresh() {

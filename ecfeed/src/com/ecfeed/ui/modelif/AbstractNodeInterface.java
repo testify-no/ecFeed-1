@@ -18,6 +18,7 @@ import java.util.List;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.widgets.Display;
 
+import com.ecfeed.application.ApplicationContext;
 //import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.adapter.IModelOperation;
@@ -52,6 +53,7 @@ import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.TextAreaDialog;
 //import com.ecfeed.ui.editor.TypeConverter;
+import com.ecfeed.ui.editor.TypeConverter;
 
 public class AbstractNodeInterface {
 
@@ -130,7 +132,17 @@ public class AbstractNodeInterface {
 		try{
 			problemTitle = (String)fNode.accept(new RenameParameterProblemTitleProvider());
 		}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
-		return getOperationExecuter().execute(FactoryRenameOperation.getRenameOperation(fNode, newName), problemTitle);
+		
+		if(ApplicationContext.getSimplifiedUI()){
+			TypeConverter typeConverter = new TypeConverter(newName);
+			newName = typeConverter.convertToValidJaveIdentifier();
+			return getOperationExecuter().execute(FactoryRenameOperation.getRenameOperation(fNode, newName), problemTitle);
+		} else {
+			TypeConverter typeConverter = new TypeConverter(newName);
+			newName = typeConverter.getString();
+			return getOperationExecuter().execute(FactoryRenameOperation.getRenameOperation(fNode, newName), problemTitle);
+		}
+//		return getOperationExecuter().execute(FactoryRenameOperation.getRenameOperation(fNode, newName), problemTitle);
 	}
 
 	public boolean setProperty(NodePropertyDefs.PropertyId propertyId, String value) {

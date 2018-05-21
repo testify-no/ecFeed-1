@@ -142,7 +142,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		EcFormToolkit formObjectToolkit = getEcFormToolkit(); 
 
 
-		formObjectToolkit.createLabel(composite, "Package name");
+		fPackageNameLabel = formObjectToolkit.createLabel(composite, "Package name");
 		fPackageNameText = formObjectToolkit.createGridText(composite, new PackageNameApplier());
 		controlPackageNameDisplay();
 		formObjectToolkit.createEmptyLabel(composite);
