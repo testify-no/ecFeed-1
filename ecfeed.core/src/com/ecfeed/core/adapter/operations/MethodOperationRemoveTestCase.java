@@ -27,7 +27,7 @@ public class MethodOperationRemoveTestCase extends AbstractModelOperation {
 
 		@Override
 		public ITypeAdapter<?> getAdapter(String type) {
-			
+
 			return new ITypeAdapter<Object>() {
 				@Override
 				public boolean isNullAllowed() {
@@ -52,6 +52,10 @@ public class MethodOperationRemoveTestCase extends AbstractModelOperation {
 				@Override
 				public String generateValueAsString(String range) {
 					return null;
+				}
+				@Override
+				public boolean isRandomizable() {
+					return false;
 				}
 			};
 		}

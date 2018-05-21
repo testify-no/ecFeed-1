@@ -19,6 +19,11 @@ public class EclipseTypeAdapterForUserType<T extends Enum<T>> implements ITypeAd
 	}
 
 	@Override
+	public boolean isRandomizable() {
+		return false;
+	}
+
+	@Override
 	public boolean isCompatible(String type){
 		return Arrays.asList(TYPES_CONVERTABLE_TO_USER_TYPE).contains(type);
 	}

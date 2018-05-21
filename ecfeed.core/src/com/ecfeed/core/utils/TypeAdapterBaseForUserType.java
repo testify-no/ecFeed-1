@@ -4,7 +4,6 @@ import java.util.Arrays;
 
 import com.ecfeed.core.adapter.ITypeAdapter;
 
-
 public class TypeAdapterBaseForUserType<T extends Enum<T>> implements ITypeAdapter<T> {
 
 	private final String[] TYPES_CONVERTABLE_TO_USER_TYPE = new String[]{
@@ -25,6 +24,12 @@ public class TypeAdapterBaseForUserType<T extends Enum<T>> implements ITypeAdapt
 	}
 
 	public String convert(String value, boolean isRandomized){
+
+		if (isRandomized) {
+			final String CAN_NOT_CONVERT = "Cannot convert to randomized user type.";
+			ExceptionHelper.reportRuntimeException(CAN_NOT_CONVERT);
+		}		
+
 		return JavaLanguageHelper.isValidJavaIdentifier(value) ? value : null;
 	}
 
@@ -46,6 +51,11 @@ public class TypeAdapterBaseForUserType<T extends Enum<T>> implements ITypeAdapt
 	@Override
 	public String generateValueAsString(String range) {
 		return String.valueOf(generateValue(range));
+	}
+
+	@Override
+	public boolean isRandomizable() {
+		return false;
 	}
 
 }
