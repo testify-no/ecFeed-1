@@ -34,25 +34,33 @@ public class Constraint implements IConstraint<ChoiceNode> {
 		fPremise = premise;
 		fConsequence = consequence;
 	}
-	
+
 	public boolean isAmbiguous(List<List<ChoiceNode>> values) {
-		return fPremise.isAmbiguous(values) || fConsequence.isAmbiguous(values);
+		if (fPremise.isAmbiguous(values)) {
+			return true;
+		}
+		
+		if (fConsequence.isAmbiguous(values)) {
+			return true;
+		}
+		
+		return false;
 	}
 
-	
+
 	@Override
 	public EvaluationResult evaluate(List<ChoiceNode> values) {
 
 		if (fPremise == null) { 
 			return EvaluationResult.TRUE;
 		}
-		
+
 		EvaluationResult premiseEvaluationResult = fPremise.evaluate(values); 
 
 		if (premiseEvaluationResult == EvaluationResult.FALSE) {
 			return EvaluationResult.TRUE;
 		}
-		
+
 		if (premiseEvaluationResult == EvaluationResult.INSUFFICIENT_DATA) {
 			return EvaluationResult.INSUFFICIENT_DATA;
 		}
@@ -62,11 +70,11 @@ public class Constraint implements IConstraint<ChoiceNode> {
 		}
 
 		EvaluationResult consequenceEvaluationResult = fConsequence.evaluate(values);
-		
+
 		if (consequenceEvaluationResult == EvaluationResult.TRUE) {
 			return EvaluationResult.TRUE;
 		}
-		
+
 		if (consequenceEvaluationResult == EvaluationResult.INSUFFICIENT_DATA) {
 			return EvaluationResult.INSUFFICIENT_DATA;
 		}
