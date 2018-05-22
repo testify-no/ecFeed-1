@@ -18,6 +18,8 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.ecfeed.core.utils.MessageStack;
+
 public class AbstractStatementTest {
 
 	private class StatementImplementation extends AbstractStatement{
@@ -46,7 +48,7 @@ public class AbstractStatementTest {
 			return false;
 		}
 		@Override
-		public boolean isAmbiguous(List<List<ChoiceNode>> values) {
+		public boolean isAmbiguous(List<List<ChoiceNode>> values, MessageStack messageStack) {
 			return false;
 		}
 	}

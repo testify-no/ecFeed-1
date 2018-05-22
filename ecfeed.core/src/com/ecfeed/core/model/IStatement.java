@@ -13,11 +13,12 @@ package com.ecfeed.core.model;
 import java.util.List;
 
 import com.ecfeed.core.utils.EvaluationResult;
+import com.ecfeed.core.utils.MessageStack;
 
 public interface IStatement{
 	public EvaluationResult evaluate(List<ChoiceNode> values);
 	public boolean adapt(List<ChoiceNode> values);
 	public boolean compare(IStatement statement);
 	public Object accept(IStatementVisitor visitor) throws Exception;
-	public boolean isAmbiguous(List<List<ChoiceNode>> values);
+	public boolean isAmbiguous(List<List<ChoiceNode>> values, MessageStack outWhyAmbiguous);
 }

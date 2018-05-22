@@ -19,6 +19,7 @@ import java.util.List;
 import org.junit.Test;
 
 import com.ecfeed.core.utils.EvaluationResult;
+import com.ecfeed.core.utils.MessageStack;
 
 public class ConstraintTest {
 	@Test
@@ -177,7 +178,7 @@ public class ConstraintTest {
 		List<List<ChoiceNode>> values = new ArrayList<List<ChoiceNode>>();
 		values.add(choices);
 
-		assertTrue(constraint.isAmbiguous(values));
+		assertTrue(constraint.isAmbiguous(values, new MessageStack()));
 	}
 
 	private void evaluateConstraintWithNullValues(Constraint constraint, ChoiceNode choice1, ChoiceNode choice2) {

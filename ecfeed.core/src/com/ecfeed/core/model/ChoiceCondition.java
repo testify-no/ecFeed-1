@@ -15,6 +15,7 @@ import java.util.List;
 import com.ecfeed.core.utils.EvaluationResult;
 import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.JavaTypeHelper;
+import com.ecfeed.core.utils.MessageStack;
 import com.ecfeed.core.utils.ObjectHelper;
 
 public class ChoiceCondition implements IStatementCondition {
@@ -167,7 +168,11 @@ public class ChoiceCondition implements IStatementCondition {
 	}
 
 	@Override
-	public boolean isAmbiguous(List<List<ChoiceNode>> domain, int parameterIndex, EStatementRelation relation) {
+	public boolean isAmbiguous(
+			List<List<ChoiceNode>> domain, 
+			int parameterIndex, 
+			EStatementRelation relation,
+			MessageStack messageStack) {
 
 		String fRightValue = fRightChoice.getValueString();
 
@@ -194,9 +199,8 @@ public class ChoiceCondition implements IStatementCondition {
 			if (JavaTypeHelper.TYPE_NAME_STRING.equals(substituteType)) {
 				return leftChoiceStr.matches(fRightValue);
 			} else {
-				boolean result = StatementConditionHelper.isAmbiguous(leftChoiceStr,
-						fRightValue, relation, substituteType);
-				return result;
+				return StatementConditionHelper.isAmbiguous(
+						leftChoiceStr, fRightValue, relation, substituteType, messageStack);
 			}
 		}
 
