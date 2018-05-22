@@ -234,7 +234,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		return selectChoicesLabel;
 	}
 
-	private void checkAmbiguousState() {
+	private void checkAndDisplayAmbiguousStateWarning() {
 		
 		List<Constraint> constraints = getCheckedConstraints();
 		List<List<ChoiceNode>> input = getCheckedArguments();
@@ -268,6 +268,9 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		fMainContainer.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		createContent();
+		
+		checkAndDisplayAmbiguousStateWarning();
+		
 		return area;
 	}
 
@@ -313,11 +316,10 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		composite.setLayoutData(gridData);
 
 		Label selectConstraintsLabel = new Label(composite, SWT.NONE);
-		selectConstraintsLabel
-		.setText(Messages.DIALOG_GENERATE_TEST_SUITES_SELECT_CONSTRAINTS_LABEL);
+		selectConstraintsLabel.setText(
+				Messages.DIALOG_GENERATE_TEST_SUITES_SELECT_CONSTRAINTS_LABEL);
 
 		createConstraintsViewer(composite);
-
 		createConstraintsButtons(composite);
 	}
 
@@ -346,8 +348,8 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 				fConstraintsViewer){
 			@Override
 			public void checkStateChanged(CheckStateChangedEvent event) {
-				checkAmbiguousState();
 				super.checkStateChanged(event);
+				checkAndDisplayAmbiguousStateWarning();
 			}
 
 		});
@@ -947,7 +949,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 					&& ((MethodParameterNode) event.getElement()).isExpected()) {
 				fParametersViewer.setChecked(event.getElement(), true);
 			} else {
-				checkAmbiguousState();
+				checkAndDisplayAmbiguousStateWarning();
 				updateOkButtonAndErrorMsg();
 			}
 		}
