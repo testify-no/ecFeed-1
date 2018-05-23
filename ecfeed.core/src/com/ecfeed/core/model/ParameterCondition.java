@@ -57,7 +57,7 @@ public class ParameterCondition implements IStatementCondition {
 			}
 		}
 
-		if (StatementConditionHelper.isRelationMatchQuiet(relation, substituteType, leftChoiceStr, rightChoiceStr)) {
+		if (RelationMatcher.isMatchQuiet(relation, substituteType, leftChoiceStr, rightChoiceStr)) {
 			return EvaluationResult.TRUE;
 		}
 
@@ -181,7 +181,7 @@ public class ParameterCondition implements IStatementCondition {
 
 			for (ChoiceNode left : values) {
 				for (ChoiceNode right : rightSideDomain) {
-					if (StatementConditionHelper.isAmbiguous(
+					if (RangeAmbiguityValidator.isAmbiguous(
 							left.getValueString(),
 							right.getValueString(), 
 							relation, 
