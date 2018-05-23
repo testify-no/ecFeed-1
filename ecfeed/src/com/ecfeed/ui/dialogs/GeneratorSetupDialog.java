@@ -102,7 +102,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 	private ExportTemplateFactory fExportTemplateFactory;
 	private IExportTemplate fExportTemplate;
 	DialogObjectToolkit.FileSelectionComposite fExportFileSelectionComposite;
-	private Label fAmbigousLabel;
+	private Text fAmbigousWarningText;
 
 	public final static int CONSTRAINTS_COMPOSITE = 1;
 	public final static int CHOICES_COMPOSITE = 1 << 1;
@@ -221,18 +221,16 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		updateOkButtonAndErrorMsg();
 	}
 
-	public static final String IS_NOT_AMBIGUOUS = "";
-	public static final String IS_AMBIGUOUS = "%s is ambigous because %s is ambigous.";
+	private Text createAmbiguousWarningText(Composite parent) {
 
-	private Label createAmgiguousWarningLabel(Composite parent) {
-		Label selectChoicesLabel = new Label(parent, SWT.WRAP);
+		Text txt = new Text(parent, SWT.BORDER | SWT.V_SCROLL | SWT.READ_ONLY);
 
-		selectChoicesLabel.setLayoutData(
+		txt.setLayoutData(
 				new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 
-		selectChoicesLabel.setText("                    ");
+		txt.setText("                    ");
 
-		return selectChoicesLabel;
+		return txt;
 	}
 
 	private void checkAndDisplayAmbiguousStateWarning() {
@@ -246,11 +244,9 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 
 			if (constraint.isAmbiguous(input, messageStack)) {
 
-				//				final String message = 
-				//						"Evaluation of constraints is ambigous. Reason: " + 
-				//								messageStack.getLongMessage();
-
-				final String message = "Warning! Evaluation of constraints is ambigous."; 
+				final String message = 
+						"Warning! Evaluation of constraints is ambigous.\n" + 
+								"Reason: " + messageStack.getLongMessage();
 
 				updateAmbiguousWarningLabel(true, message);
 				return;
@@ -263,11 +259,11 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 	private void updateAmbiguousWarningLabel(boolean isAmbiguousCondition, String message) {
 
 		if (!isAmbiguousCondition) {
-			fAmbigousLabel.setText("");
+			fAmbigousWarningText.setText("");
 			return;
 		}
 
-		fAmbigousLabel.setText(message);
+		fAmbigousWarningText.setText(message);
 	}
 
 	@Override
@@ -625,7 +621,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		generatorLabel.setText("Generator");
 
 		createGeneratorViewer(generatorComposite);
-		fAmbigousLabel = createAmgiguousWarningLabel(container);
+		fAmbigousWarningText = createAmbiguousWarningText(container);
 	}
 
 	private void createTestCasesExportComposite(Composite parentComposite) {
