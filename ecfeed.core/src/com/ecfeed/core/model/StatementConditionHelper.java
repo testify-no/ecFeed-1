@@ -191,9 +191,11 @@ public class StatementConditionHelper {
 		return false;
 	}
 
-	static boolean validateEqualCondition(int choicesLength, int constraintsLength,
-			String substituteType, String upper, String lower, String lowerConstraint,
-			String upperConstraint) {
+	private static boolean validateEqualCondition(
+			int choicesLength, int constraintsLength,
+			String substituteType, 
+			String lower, String upper, 
+			String lowerConstraint, String upperConstraint) {
 
 		if (choicesLength == RANGE_VALUE && constraintsLength == RANGE_VALUE) {
 			return GREATER_EQUAL.isMatch(substituteType, upper, lowerConstraint)
@@ -216,7 +218,6 @@ public class StatementConditionHelper {
 
 		return false;
 	}
-
 
 	public static boolean getChoiceRandomized(List<ChoiceNode> choices, MethodParameterNode methodParameterNode) {
 		ChoiceNode choiceNode = getChoiceForMethodParameter(choices, methodParameterNode);
@@ -265,98 +266,123 @@ public class StatementConditionHelper {
 			}
 
 			if (!relation.equals(EQUAL)) {
-				result = StatementConditionHelper.validateOtherthanEqualCondition(relation, substituteType, upper, lower, lowerConstraint, upperConstraint);
+				result = 
+						StatementConditionHelper.validateOtherThanEqualCondition(
+								relation, substituteType, lower, upper, lowerConstraint, upperConstraint);
 			}
 			else {
-				result = validateEqualCondition(choices.length, constraints.length, substituteType, upper, lower, lowerConstraint, upperConstraint);
+				result = 
+						validateEqualCondition(
+								choices.length, constraints.length, substituteType, 
+								lower, upper, 
+								lowerConstraint, upperConstraint);
 			}
 		}
 		return result;
 	}
 
-	// ADR-REF
 	public static final boolean isAmbiguous(
-			String choice, 
-			String constraint, 
+			String choicesTxt, 
+			String constraintsTxt, 
 			EStatementRelation relation, 
 			String substituteType,
-			MessageStack messageStack) {
+			MessageStack outWhyAmbiguous) {
 
-		boolean result = false; 
-		boolean outsideTheRange = false;
-		if(JavaTypeHelper.isNumericTypeName(substituteType)) {		
-			String[] choices = choice.split(":");
-			String[] constraints = constraint.split(":");
-			String lower;
-			String upper;
-
-			lower = choices[0];
-			if (choices.length == SINGLE_VALUE) {
-				upper = lower;
-			}
-			else {
-				upper = choices[1];
-			}
-			String lowerConstraint = constraints[0];
-			String upperConstraint;
-			if (constraints.length == SINGLE_VALUE) {
-				upperConstraint = lowerConstraint;
-				constraints = new String[]{constraints[0],constraints[0]};
-			}
-			else {
-				upperConstraint = constraints[1];
-			}
-
-			if (!relation.equals(EQUAL)) {
-				result = StatementConditionHelper.validateOtherthanEqualCondition(relation, substituteType, upper, lower, lowerConstraint, upperConstraint);
-				boolean a = isRelationMatchQuiet(relation, substituteType, lower, lowerConstraint);
-				boolean b = isRelationMatchQuiet(relation, substituteType, upper, upperConstraint);
-				boolean c = isRelationMatchQuiet(relation, substituteType, lower, upperConstraint);
-				boolean d = isRelationMatchQuiet(relation, substituteType, upper, lowerConstraint);
-				if (a && b && c && d) {
-					outsideTheRange = true;
-				} else
-					outsideTheRange = !a && !b && !c && !d;
-			}
-			else {
-				result = validateEqualCondition(choices.length, constraints.length, substituteType, upper, lower, lowerConstraint, upperConstraint);
-				outsideTheRange = !isAmbiguousEqualCondition(substituteType, lower, upper, lowerConstraint, upperConstraint);
-			}
-
+		if (!JavaTypeHelper.isNumericTypeName(substituteType)) {
+			return false;
 		}
-		return result && (!outsideTheRange);
+
+		String[] choices = createRangeArray(choicesTxt);
+		String[] constraints = createRangeArray(constraintsTxt);
+
+		if (relation.equals(EQUAL)) {
+			return isAmbiguousForEqualRelation(choices, constraints, substituteType);
+		} else {
+			return isAmbiguousForNonEqualRelation(choices, constraints, relation, substituteType);
+		}
 	}
 
-	private static boolean isAmbiguousEqualCondition(
-			String substituteType, String lower, String upper, String lowerConstraint, String upperConstraint) {
+	private static boolean isAmbiguousForNonEqualRelation(
+			String[] choices, 
+			String[] constraints,
+			EStatementRelation relation,
+			String substituteType) {
 
-		if (StringUtils.equals(lower, lowerConstraint) && StringUtils.equals(upper, upperConstraint)) {
-			if (StringUtils.equals(lower, upper) && StringUtils.equals(lowerConstraint, upperConstraint)) {
+		boolean a = isRelationMatchQuiet(relation, substituteType, choices[0], constraints[0]);
+		boolean b = isRelationMatchQuiet(relation, substituteType, choices[1], constraints[1]);
+		boolean c = isRelationMatchQuiet(relation, substituteType, choices[0], constraints[1]);
+		boolean d = isRelationMatchQuiet(relation, substituteType, choices[1], constraints[0]);
+
+		if (a && b && c && d) {
+			return false;
+		} else {
+			return (!(!a && !b && !c && !d));
+		}
+	}
+
+	private static boolean isAmbiguousForEqualRelation(
+			String[] choices, String[] constraints, String substituteType) {
+
+		if (StringUtils.equals(choices[0], constraints[0]) && StringUtils.equals(choices[1], constraints[1])) {
+			if (StringUtils.equals(choices[0], choices[1]) && StringUtils.equals(constraints[0], constraints[1])) {
 				return false;
 			}
 			return true;
 		}
-		if (LESS_THAN.isMatch(substituteType, lower, lowerConstraint) 
-				&& LESS_THAN.isMatch(substituteType, upper, upperConstraint) 
-				&& LESS_THAN.isMatch(substituteType, upper, lowerConstraint)) {
+
+		if (LESS_THAN.isMatch(substituteType, choices[0], constraints[0]) 
+				&& LESS_THAN.isMatch(substituteType, choices[1], constraints[1]) 
+				&& LESS_THAN.isMatch(substituteType, choices[1], constraints[0])) {
 			return false;
 
 		}
-		if (GREATER_THAN.isMatch(substituteType, lower, lowerConstraint)
-				&& GREATER_THAN.isMatch(substituteType, lower, upperConstraint)
-				&& GREATER_THAN.isMatch(substituteType, upper, upperConstraint)) {
+
+		if (GREATER_THAN.isMatch(substituteType, choices[0], constraints[0])
+				&& GREATER_THAN.isMatch(substituteType, choices[0], constraints[1])
+				&& GREATER_THAN.isMatch(substituteType, choices[1], constraints[1])) {
 			return false;
 		}
 
 		return true;
 	}
 
-	public static boolean validateOtherthanEqualCondition(EStatementRelation relation,
-			String substituteType, String upper, String lower, String lowerConstraint,
+	public static String[] createRangeArray(String str) {
+
+		String[] array = str.split(":");
+
+		String lower = array[0];
+		String upper = getUpperRange(array);
+
+		return new String[]{ lower, upper };
+	}
+
+	private static String getUpperRange(String[] array) {
+
+		if (array.length == SINGLE_VALUE) {
+			return array[0];
+		}
+
+		return array[1];
+	}
+
+	private static boolean validateOtherThanEqualCondition(
+			EStatementRelation relation,
+			String substituteType, 
+			String lower,
+			String upper,
+			String lowerConstraint,
 			String upperConstraint) {
 
-		return relation.isMatch(substituteType, lower, upperConstraint)
-				|| relation.isMatch(substituteType, upper, lowerConstraint);
+		if (relation.isMatch(substituteType, lower, upperConstraint)) {
+			return true;
+		}
+
+		if (relation.isMatch(substituteType, upper, lowerConstraint)) {
+			return true;
+		}
+
+		return false;
 	}
+
 }
 
