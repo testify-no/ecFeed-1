@@ -27,14 +27,35 @@ public class RangeAmbiguityValidator {
 		String[] choices = createRangeArray(choicesTxt);
 		String[] constraints = createRangeArray(constraintsTxt);
 
-		if (relation.equals(EQUAL)) {
-			return isAmbiguousForEqualRelation(choices, constraints, substituteType);
-		} else {
-			return isAmbiguousForNonEqualRelation(choices, constraints, relation, substituteType);
+		if (isAmbiguousIntr(choices, constraints, relation, substituteType)) {
+			String message = "Condition is ambiguous for: " +  
+					"Choice: " + choices[0] + ":" + choices[1] +
+					" Constraint: " + constraints[0] + ":" + constraints[1] +
+					relation.toString();
+			outWhyAmbiguous.addMessage(message);
+			return true;
 		}
+		
+		return false;
+	}
+	
+	private static boolean isAmbiguousIntr(
+			String[] choices,
+			String[] constraints,
+			EStatementRelation relation,
+			String substituteType) {
+		
+		if (relation.equals(EQUAL)) {
+			return isAmbiguousForEqualRelation(
+					choices, constraints, substituteType);
+		} else {
+			return isAmbiguousForNonEqualRelation(
+					choices, constraints, relation, substituteType);
+		}
+		
 	}
 
-	public static String[] createRangeArray(String str) {
+	private static String[] createRangeArray(String str) {
 
 		String[] array = str.split(":");
 
@@ -54,7 +75,9 @@ public class RangeAmbiguityValidator {
 	}
 
 	private static boolean isAmbiguousForEqualRelation(
-			String[] choices, String[] constraints, String substituteType) {
+			String[] choices, 
+			String[] constraints, 
+			String substituteType) {
 
 		if (StringUtils.equals(choices[0], constraints[0]) && StringUtils.equals(choices[1], constraints[1])) {
 			if (StringUtils.equals(choices[0], choices[1]) && StringUtils.equals(constraints[0], constraints[1])) {
@@ -92,8 +115,12 @@ public class RangeAmbiguityValidator {
 
 		if (a && b && c && d) {
 			return false;
-		} else {
-			return (!(!a && !b && !c && !d));
+		} 
+		
+		if (a || b || c || d) {
+			return true;
 		}
+		
+		return false;
 	}	
 }
