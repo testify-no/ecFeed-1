@@ -412,14 +412,14 @@ public class ChoiceConditionTest {
 		evaluateRandomizeAmbiguousOne(methodParameterNode, "0:10", EStatementRelation.GREATER_THAN, "1:9", AssertType.TRUE);
 
 		evaluateRandomizeAmbiguousOne(methodParameterNode, "2:2", EStatementRelation.EQUAL, "2:2", AssertType.FALSE);
-		evaluateRandomizeAmbiguousOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "9:100", AssertType.FALSE);
-		evaluateRandomizeAmbiguousOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "10:100", AssertType.FALSE);
+		evaluateRandomizeAmbiguousOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "9:100", AssertType.TRUE);
+		evaluateRandomizeAmbiguousOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "10:100", AssertType.TRUE);
 		evaluateRandomizeAmbiguousOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "11:100", AssertType.FALSE);
 		evaluateRandomizeAmbiguousOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "-10:-1", AssertType.FALSE);
-		evaluateRandomizeAmbiguousOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "-10:0", AssertType.FALSE);
-		evaluateRandomizeAmbiguousOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "-10:1", AssertType.FALSE);
-		evaluateRandomizeAmbiguousOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "-1:11", AssertType.FALSE);
-		evaluateRandomizeAmbiguousOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "1:9", AssertType.FALSE);
+		evaluateRandomizeAmbiguousOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "-10:0", AssertType.TRUE);
+		evaluateRandomizeAmbiguousOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "-10:1", AssertType.TRUE);
+		evaluateRandomizeAmbiguousOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "-1:11", AssertType.TRUE);
+		evaluateRandomizeAmbiguousOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "1:9", AssertType.TRUE);
 
 		evaluateRandomizeAmbiguousOne(methodParameterNode, "2:2", EStatementRelation.LESS_EQUAL, "2:2", AssertType.FALSE);
 		evaluateRandomizeAmbiguousOne(methodParameterNode, "0:10", EStatementRelation.LESS_EQUAL, "9:100", AssertType.TRUE);
