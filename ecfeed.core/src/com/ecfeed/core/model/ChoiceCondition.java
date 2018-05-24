@@ -178,8 +178,6 @@ public class ChoiceCondition implements IStatementCondition {
 			return false;
 		}
 
-		String fRightValue = fRightChoice.getValueString();
-
 		String substituteType = 
 				JavaTypeHelper.getSubstituteType(
 						fParentRelationStatement.getLeftParameter().getType(), 
@@ -198,21 +196,24 @@ public class ChoiceCondition implements IStatementCondition {
 		boolean isRandomizedChoice = StatementConditionHelper.getChoiceRandomized(choices,
 				fParentRelationStatement.getLeftParameter());
 
+		String rightValue = fRightChoice.getValueString();
+
 		if (isRandomizedChoice) {
 			if (isAmbiguousForRandomizedChoice(
-					leftChoiceStr, fRightValue, relation, substituteType)) {
+					leftChoiceStr, rightValue, relation, substituteType)) {
 
 				ChoiceNode leftChoiceNode = 
 						StatementConditionHelper.getChoiceForMethodParameter(choices, leftParameterNode);
 
-				messageStack.addMessage("Constraint: " + fRightValue);
-				messageStack.addMessage("Choice: " + leftChoiceNode.toString());
+				ConditionHelper.addValuesMessageToStack(
+						leftChoiceNode.toString(), relation, fRightChoice.toString(), messageStack);
+
 				return true;
 			}
 			return false;
 		}
 
-		if (RelationMatcher.isMatchQuiet(relation, substituteType, leftChoiceStr, fRightValue)) {
+		if (RelationMatcher.isMatchQuiet(relation, substituteType, leftChoiceStr, rightValue)) {
 			return true;
 		}
 
