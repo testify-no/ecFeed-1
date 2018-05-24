@@ -7,7 +7,6 @@ import static com.ecfeed.core.model.EStatementRelation.LESS_THAN;
 import org.apache.commons.lang3.StringUtils;
 
 import com.ecfeed.core.utils.JavaTypeHelper;
-import com.ecfeed.core.utils.MessageStack;
 
 public class RangeAmbiguityValidator {
 
@@ -17,8 +16,7 @@ public class RangeAmbiguityValidator {
 			String choicesTxt, 
 			String constraintsTxt, 
 			EStatementRelation relation, 
-			String substituteType,
-			MessageStack outWhyAmbiguous) {
+			String substituteType) {
 
 		if (!JavaTypeHelper.isNumericTypeName(substituteType)) {
 			return false;
@@ -28,25 +26,18 @@ public class RangeAmbiguityValidator {
 		String[] constraints = createRangeArray(constraintsTxt);
 
 		if (isAmbiguousIntr(choices, constraints, relation, substituteType)) {
-			String message = "Expression: " +  
-					choices[0] + ":" + choices[1] +
-					relation.toString() +
-					constraints[0] + ":" + constraints[1] +
-					" is ambiguous.";
-			
-			outWhyAmbiguous.addMessage(message);
 			return true;
 		}
-		
+
 		return false;
 	}
-	
+
 	private static boolean isAmbiguousIntr(
 			String[] choices,
 			String[] constraints,
 			EStatementRelation relation,
 			String substituteType) {
-		
+
 		if (relation.equals(EQUAL)) {
 			return isAmbiguousForEqualRelation(
 					choices, constraints, substituteType);
@@ -54,7 +45,7 @@ public class RangeAmbiguityValidator {
 			return isAmbiguousForNonEqualRelation(
 					choices, constraints, relation, substituteType);
 		}
-		
+
 	}
 
 	private static String[] createRangeArray(String str) {
@@ -118,11 +109,11 @@ public class RangeAmbiguityValidator {
 		if (a && b && c && d) {
 			return false;
 		} 
-		
+
 		if (a || b || c || d) {
 			return true;
 		}
-		
+
 		return false;
 	}	
 }

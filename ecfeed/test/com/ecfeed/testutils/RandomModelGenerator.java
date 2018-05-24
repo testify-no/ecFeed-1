@@ -209,7 +209,7 @@ public class RandomModelGenerator {
 	public ConstraintNode generateConstraint(MethodNode method){
 		String name = generateString(REGEX_CONSTRAINT_NODE_NAME);
 
-		Constraint constraint = new Constraint(generatePremise(method), generateConsequence(method));
+		Constraint constraint = new Constraint("constraint", generatePremise(method), generateConsequence(method));
 
 		return new ConstraintNode(name, constraint);
 	}

@@ -246,7 +246,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 
 				final String message = 
 						"Warning! Evaluation of constraints is ambigous.\n" + 
-								"Reason: " + messageStack.getLongMessage();
+								messageStack.getLongMessage();
 
 				updateAmbiguousWarningLabel(true, message);
 				return;

@@ -55,7 +55,7 @@ public class ModelTestUtils {
 		switch(type){
 		case CHOICE: return new ChoiceNode(name, "value");
 		case CLASS: return new ClassNode(name);
-		case CONSTRAINT: return new ConstraintNode(name, new Constraint(new StaticStatement(true), new StaticStatement(true)));
+		case CONSTRAINT: return new ConstraintNode(name, new Constraint(name, new StaticStatement(true), new StaticStatement(true)));
 		case METHOD: return new MethodNode(name);
 		case PARAMETER: return new MethodParameterNode(name, "int", "0", false);
 		case METHOD_PARAMETER: return new MethodParameterNode(name, "int", "0", false);
