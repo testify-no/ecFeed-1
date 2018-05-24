@@ -28,7 +28,10 @@ public class RangeAmbiguityValidatorTest {
 				"1:2", "2", EStatementRelation.EQUAL, JavaTypeHelper.TYPE_NAME_LONG));
 
 		assertTrue(RangeAmbiguityValidator.isAmbiguous(
-				"1:2", "1:1", EStatementRelation.EQUAL, JavaTypeHelper.TYPE_NAME_LONG));		
+				"1:2", "1:1", EStatementRelation.EQUAL, JavaTypeHelper.TYPE_NAME_LONG));
+
+		assertTrue(RangeAmbiguityValidator.isAmbiguous(
+				"0:10", "9:100", EStatementRelation.EQUAL, JavaTypeHelper.TYPE_NAME_LONG));		
 	}
 
 	@Test
@@ -54,6 +57,9 @@ public class RangeAmbiguityValidatorTest {
 
 		assertFalse(RangeAmbiguityValidator.isAmbiguous(
 				"1:2", "0", EStatementRelation.NOT_EQUAL, JavaTypeHelper.TYPE_NAME_LONG));
+
+		assertTrue(RangeAmbiguityValidator.isAmbiguous(
+				"0:10", "9:100", EStatementRelation.NOT_EQUAL, JavaTypeHelper.TYPE_NAME_LONG));		
 	}	
 
 	@Test
@@ -75,7 +81,10 @@ public class RangeAmbiguityValidatorTest {
 				"1:2", "2", EStatementRelation.LESS_THAN, JavaTypeHelper.TYPE_NAME_LONG));
 
 		assertFalse(RangeAmbiguityValidator.isAmbiguous(
-				"1:2", "1:1", EStatementRelation.LESS_THAN, JavaTypeHelper.TYPE_NAME_LONG));		
+				"1:2", "1:1", EStatementRelation.LESS_THAN, JavaTypeHelper.TYPE_NAME_LONG));
+
+		assertTrue(RangeAmbiguityValidator.isAmbiguous(
+				"0:10", "9:100", EStatementRelation.LESS_THAN, JavaTypeHelper.TYPE_NAME_LONG));		
 	}	
 
 	@Test
@@ -100,7 +109,10 @@ public class RangeAmbiguityValidatorTest {
 				"1:2", "1:1", EStatementRelation.GREATER_THAN, JavaTypeHelper.TYPE_NAME_LONG));
 
 		assertFalse(RangeAmbiguityValidator.isAmbiguous(
-				"1:2", "0", EStatementRelation.GREATER_THAN, JavaTypeHelper.TYPE_NAME_LONG));		
+				"1:2", "0", EStatementRelation.GREATER_THAN, JavaTypeHelper.TYPE_NAME_LONG));
+
+		assertTrue(RangeAmbiguityValidator.isAmbiguous(
+				"0:10", "9:100", EStatementRelation.GREATER_THAN, JavaTypeHelper.TYPE_NAME_LONG));		
 	}
 
 	@Test
@@ -125,7 +137,10 @@ public class RangeAmbiguityValidatorTest {
 				"1:2", "1:1", EStatementRelation.LESS_EQUAL, JavaTypeHelper.TYPE_NAME_LONG));
 
 		assertFalse(RangeAmbiguityValidator.isAmbiguous(
-				"1:2", "0", EStatementRelation.LESS_EQUAL, JavaTypeHelper.TYPE_NAME_LONG));		
+				"1:2", "0", EStatementRelation.LESS_EQUAL, JavaTypeHelper.TYPE_NAME_LONG));
+
+		assertTrue(RangeAmbiguityValidator.isAmbiguous(
+				"0:10", "9:100", EStatementRelation.LESS_EQUAL, JavaTypeHelper.TYPE_NAME_LONG));		
 	}	
 
 	@Test
@@ -151,6 +166,9 @@ public class RangeAmbiguityValidatorTest {
 
 		assertFalse(RangeAmbiguityValidator.isAmbiguous(
 				"1:2", "0", EStatementRelation.GREATER_EQUAL, JavaTypeHelper.TYPE_NAME_LONG));
+
+		assertTrue(RangeAmbiguityValidator.isAmbiguous(
+				"0:10", "9:100", EStatementRelation.GREATER_EQUAL, JavaTypeHelper.TYPE_NAME_LONG));		
 	}	
 
 

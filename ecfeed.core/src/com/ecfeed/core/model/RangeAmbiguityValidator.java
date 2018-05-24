@@ -1,6 +1,7 @@
 package com.ecfeed.core.model;
 
 import static com.ecfeed.core.model.EStatementRelation.EQUAL;
+import static com.ecfeed.core.model.EStatementRelation.NOT_EQUAL;
 import static com.ecfeed.core.model.EStatementRelation.GREATER_THAN;
 import static com.ecfeed.core.model.EStatementRelation.LESS_THAN;
 
@@ -17,6 +18,11 @@ public class RangeAmbiguityValidator {
 			String constraintsTxt, 
 			EStatementRelation relation, 
 			String substituteType) {
+
+
+		if (JavaTypeHelper.TYPE_NAME_STRING.equals(substituteType)) {
+			return choicesTxt.matches(constraintsTxt);
+		}
 
 		if (!JavaTypeHelper.isNumericTypeName(substituteType)) {
 			return false;
@@ -38,8 +44,8 @@ public class RangeAmbiguityValidator {
 			EStatementRelation relation,
 			String substituteType) {
 
-		if (relation.equals(EQUAL)) {
-			return isAmbiguousForEqualRelation(
+		if (relation.equals(EQUAL) || relation.equals(NOT_EQUAL)) {
+			return isAmbiguousForEqualityRelations(
 					choices, constraints, substituteType);
 		} else {
 			return isAmbiguousForNonEqualRelation(
@@ -67,7 +73,7 @@ public class RangeAmbiguityValidator {
 		return array[1];
 	}
 
-	private static boolean isAmbiguousForEqualRelation(
+	private static boolean isAmbiguousForEqualityRelations(
 			String[] choices, 
 			String[] constraints, 
 			String substituteType) {
