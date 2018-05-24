@@ -14,24 +14,24 @@ public class RangeAmbiguityValidator {
 	private static final int SINGLE_VALUE = 1;
 
 	public static final boolean isAmbiguous(
-			String choicesTxt, 
-			String constraintsTxt, 
+			String leftRange, 
+			String rightRange, 
 			EStatementRelation relation, 
 			String substituteType) {
 
 
 		if (JavaTypeHelper.TYPE_NAME_STRING.equals(substituteType)) {
-			return choicesTxt.matches(constraintsTxt);
+			return leftRange.matches(rightRange);
 		}
 
 		if (!JavaTypeHelper.isNumericTypeName(substituteType)) {
 			return false;
 		}
 
-		String[] choices = createRangeArray(choicesTxt);
-		String[] constraints = createRangeArray(constraintsTxt);
+		String[] leftValues = createRangeArray(leftRange);
+		String[] rightValues = createRangeArray(rightRange);
 
-		if (isAmbiguousIntr(choices, constraints, relation, substituteType)) {
+		if (isAmbiguousIntr(leftValues, rightValues, relation, substituteType)) {
 			return true;
 		}
 
@@ -39,17 +39,17 @@ public class RangeAmbiguityValidator {
 	}
 
 	private static boolean isAmbiguousIntr(
-			String[] choices,
-			String[] constraints,
+			String[] leftValues,
+			String[] rightValues,
 			EStatementRelation relation,
 			String substituteType) {
 
 		if (relation.equals(EQUAL) || relation.equals(NOT_EQUAL)) {
 			return isAmbiguousForEqualityRelations(
-					choices, constraints, substituteType);
+					leftValues, rightValues, substituteType);
 		} else {
 			return isAmbiguousForNonEqualRelation(
-					choices, constraints, relation, substituteType);
+					leftValues, rightValues, relation, substituteType);
 		}
 
 	}
@@ -74,27 +74,27 @@ public class RangeAmbiguityValidator {
 	}
 
 	private static boolean isAmbiguousForEqualityRelations(
-			String[] choices, 
-			String[] constraints, 
+			String[] leftValues, 
+			String[] rightValues, 
 			String substituteType) {
 
-		if (StringUtils.equals(choices[0], constraints[0]) && StringUtils.equals(choices[1], constraints[1])) {
-			if (StringUtils.equals(choices[0], choices[1]) && StringUtils.equals(constraints[0], constraints[1])) {
+		if (StringUtils.equals(leftValues[0], rightValues[0]) && StringUtils.equals(leftValues[1], rightValues[1])) {
+			if (StringUtils.equals(leftValues[0], leftValues[1]) && StringUtils.equals(rightValues[0], rightValues[1])) {
 				return false;
 			}
 			return true;
 		}
 
-		if (LESS_THAN.isMatch(substituteType, choices[0], constraints[0]) 
-				&& LESS_THAN.isMatch(substituteType, choices[1], constraints[1]) 
-				&& LESS_THAN.isMatch(substituteType, choices[1], constraints[0])) {
+		if (LESS_THAN.isMatch(substituteType, leftValues[0], rightValues[0]) 
+				&& LESS_THAN.isMatch(substituteType, leftValues[1], rightValues[1]) 
+				&& LESS_THAN.isMatch(substituteType, leftValues[1], rightValues[0])) {
 			return false;
 
 		}
 
-		if (GREATER_THAN.isMatch(substituteType, choices[0], constraints[0])
-				&& GREATER_THAN.isMatch(substituteType, choices[0], constraints[1])
-				&& GREATER_THAN.isMatch(substituteType, choices[1], constraints[1])) {
+		if (GREATER_THAN.isMatch(substituteType, leftValues[0], rightValues[0])
+				&& GREATER_THAN.isMatch(substituteType, leftValues[0], rightValues[1])
+				&& GREATER_THAN.isMatch(substituteType, leftValues[1], rightValues[1])) {
 			return false;
 		}
 
@@ -102,15 +102,15 @@ public class RangeAmbiguityValidator {
 	}
 
 	private static boolean isAmbiguousForNonEqualRelation(
-			String[] choices, 
-			String[] constraints,
+			String[] leftValues, 
+			String[] rightValues,
 			EStatementRelation relation,
 			String substituteType) {
 
-		boolean a = RelationMatcher.isMatchQuiet(relation, substituteType, choices[0], constraints[0]);
-		boolean b = RelationMatcher.isMatchQuiet(relation, substituteType, choices[1], constraints[1]);
-		boolean c = RelationMatcher.isMatchQuiet(relation, substituteType, choices[0], constraints[1]);
-		boolean d = RelationMatcher.isMatchQuiet(relation, substituteType, choices[1], constraints[0]);
+		boolean a = RelationMatcher.isMatchQuiet(relation, substituteType, leftValues[0], rightValues[0]);
+		boolean b = RelationMatcher.isMatchQuiet(relation, substituteType, leftValues[1], rightValues[1]);
+		boolean c = RelationMatcher.isMatchQuiet(relation, substituteType, leftValues[0], rightValues[1]);
+		boolean d = RelationMatcher.isMatchQuiet(relation, substituteType, leftValues[1], rightValues[0]);
 
 		if (a && b && c && d) {
 			return false;
