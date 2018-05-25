@@ -154,7 +154,7 @@ public class ParameterCondition implements IStatementCondition {
 	@Override
 	public boolean isAmbiguous(
 			List<List<ChoiceNode>> testDomain, 
-			int parameterIndex, 
+			int leftIndex, 
 			EStatementRelation relation,
 			MessageStack messageStack) {
 
@@ -163,38 +163,50 @@ public class ParameterCondition implements IStatementCondition {
 						fParentRelationStatement.getLeftParameter().getType(), 
 						JavaTypeHelper.getStringTypeName());
 
-		if (substituteType == null || parameterIndex >= testDomain.size()) {
+		if (substituteType == null || leftIndex >= testDomain.size()) {
 			return false;
 		}
 
-		List<ChoiceNode> values = testDomain.get(parameterIndex);
-		int index2 = fRightParameterNode.getMyIndex();
-		List<ChoiceNode> choices = testDomain.get(index2);
+		List<ChoiceNode> leftChoices = testDomain.get(leftIndex);
+		int rightIndex = fRightParameterNode.getMyIndex();
+		List<ChoiceNode> rightChoices = testDomain.get(rightIndex);
 
-		boolean isRandomizedChoice = StatementConditionHelper.getChoiceRandomized(values,
+		boolean isRandomizedChoice = StatementConditionHelper.getChoiceRandomized(leftChoices,
 				fParentRelationStatement.getLeftParameter());
 
 		if (isRandomizedChoice) {
-			if (JavaTypeHelper.TYPE_NAME_STRING.equals(substituteType)) {
-				return false;
-			}
+			return isAmbiguousForRandomized(
+					leftChoices, rightChoices, relation, substituteType, messageStack);					
+		}
 
-			for (ChoiceNode leftChoiceNode : values) {
-				for (ChoiceNode rightChoiceNode : choices) {
-					if (RangeAmbiguityValidator.isAmbiguous(
-							leftChoiceNode.getValueString(),
-							rightChoiceNode.getValueString(), 
-							relation, 
-							substituteType)) {
+		return false;
+	}
 
-						ConditionHelper.addValuesMessageToStack(
-								leftChoiceNode.toString(), relation, rightChoiceNode.toString(), messageStack);
+	private boolean isAmbiguousForRandomized(
+			List<ChoiceNode> leftChoices,
+			List<ChoiceNode> rightChoices,
+			EStatementRelation relation,
+			String substituteType,
+			MessageStack messageStack) {
 
-						return true;
-					}
+		if (JavaTypeHelper.TYPE_NAME_STRING.equals(substituteType)) {
+			return false;
+		}
+
+		for (ChoiceNode leftChoiceNode : leftChoices) {
+			for (ChoiceNode rightChoiceNode : rightChoices) {
+				if (RangeAmbiguityValidator.isAmbiguous(
+						leftChoiceNode.getValueString(),
+						rightChoiceNode.getValueString(), 
+						relation, 
+						substituteType)) {
+
+					ConditionHelper.addValuesMessageToStack(
+							leftChoiceNode.toString(), relation, rightChoiceNode.toString(), messageStack);
+
+					return true;
 				}
 			}
-
 		}
 
 		return false;
