@@ -69,46 +69,77 @@ public class ValueCondition implements IStatementCondition {
 
 	@Override
 	public boolean isAmbiguous(
-			List<List<ChoiceNode>> domain, 
+			List<List<ChoiceNode>> testDomain, 
 			int parameterIndex, 
 			EStatementRelation relation,
 			MessageStack messageStack) {
+
+		if (parameterIndex >= testDomain.size()) {
+			return false;
+		}
 
 		String substituteType = 
 				JavaTypeHelper.getSubstituteType(
 						fParentRelationStatement.getLeftParameter().getType(), 
 						JavaTypeHelper.getStringTypeName());
 
-		if (substituteType == null || parameterIndex >= domain.size()) {
+		if (substituteType == null) {
 			return false;
 		}
 
-		List<ChoiceNode> choices = domain.get(parameterIndex);
+		ChoiceNode leftChoiceNode = getLeftChoiceNode(testDomain, parameterIndex);				
 
-		MethodParameterNode leftParameterNode = fParentRelationStatement.getLeftParameter();
-		String leftChoiceStr = getChoiceString(choices, fParentRelationStatement.getLeftParameter());
+		if (leftChoiceNode.isRandomizedValue()) {
 
-		boolean isRandomizedChoice = 
-				StatementConditionHelper.getChoiceRandomized(choices,fParentRelationStatement.getLeftParameter());
-
-		if (isRandomizedChoice) {
-			if (JavaTypeHelper.TYPE_NAME_STRING.equals(substituteType)) {
-				return false;
-			} else {
-				if (RangeAmbiguityValidator.isAmbiguous(
-						leftChoiceStr, fRightValue, relation, substituteType)) {
-
-					ChoiceNode leftChoiceNode = 
-							StatementConditionHelper.getChoiceForMethodParameter(choices, leftParameterNode);
-
-					ConditionHelper.addValuesMessageToStack(
-							leftChoiceNode.toString(), relation, "value [" + fRightValue + "]", messageStack);
-
-					return true;
-				}
-				return false;
-			}
+			return isAmbiguousForRandomized(
+					leftChoiceNode, relation, substituteType, messageStack);
 		}
+
+		return isAmbiguousForNotRandomized(leftChoiceNode.getValueString(), relation, substituteType);
+	}
+
+	private ChoiceNode getLeftChoiceNode(
+			List<List<ChoiceNode>> testDomain,
+			int parameterIndex) {
+
+		List<ChoiceNode> choices = testDomain.get(parameterIndex);
+		MethodParameterNode leftParameterNode = fParentRelationStatement.getLeftParameter();
+
+		ChoiceNode leftChoiceNode = 
+				StatementConditionHelper.getChoiceForMethodParameter(choices, leftParameterNode);
+
+		return leftChoiceNode;
+
+	}
+
+	private boolean isAmbiguousForRandomized(
+			ChoiceNode leftChoiceNode,
+			EStatementRelation relation,
+			String substituteType,
+			MessageStack messageStack
+			) 
+	{
+		if (JavaTypeHelper.TYPE_NAME_STRING.equals(substituteType)) {
+			return false;
+		} 
+
+		String leftChoiceStr = leftChoiceNode.getValueString();
+
+		if (RangeAmbiguityValidator.isAmbiguous(
+				leftChoiceStr, fRightValue, relation, substituteType)) {
+
+			ConditionHelper.addValuesMessageToStack(
+					leftChoiceNode.toString(), relation, "value [" + fRightValue + "]", messageStack);
+
+			return true;
+		}
+		return false;
+	}
+
+	private boolean isAmbiguousForNotRandomized(
+			String leftChoiceStr,
+			EStatementRelation relation,
+			String substituteType) {
 
 		if (RelationMatcher.isMatchQuiet(
 				relation, substituteType, leftChoiceStr, fRightValue)) {
@@ -194,5 +225,4 @@ public class ValueCondition implements IStatementCondition {
 		return fRightValue;
 	}
 }	
-
 
