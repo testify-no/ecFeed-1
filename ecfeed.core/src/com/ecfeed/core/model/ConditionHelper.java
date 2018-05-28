@@ -22,7 +22,11 @@ public class ConditionHelper {
 		messageStack.addMessage(createMessage("Constraint", constraintName.toString()));
 	}
 
-	private static String createMessage(String name, String value) {
+	public static String createMessage(String name, String value) {
 		return name + " [" + value + "].";
 	}
+	
+	public static String createMessage(String name, String value, String additionalMessage) {
+		return name + " [" + value + "] " + additionalMessage + ".";
+	}	
 }
