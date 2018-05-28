@@ -52,7 +52,7 @@ public class ParameterCondition implements IStatementCondition {
 				return EvaluationResult.convertFromBoolean(leftChoiceStr.matches(rightChoiceStr));
 			}
 			else {
-				boolean result = StatementConditionHelper.isConstraintInChoiceRange(leftChoiceStr, rightChoiceStr, relation, substituteType);
+				boolean result = RangeValidator.isRightRangeInLeftRange(leftChoiceStr, rightChoiceStr, relation, substituteType);
 				return EvaluationResult.convertFromBoolean(result);
 			}
 		}
@@ -195,7 +195,7 @@ public class ParameterCondition implements IStatementCondition {
 
 		for (ChoiceNode leftChoiceNode : leftChoices) {
 			for (ChoiceNode rightChoiceNode : rightChoices) {
-				if (RangeAmbiguityValidator.isAmbiguous(
+				if (RangeValidator.isAmbiguous(
 						leftChoiceNode.getValueString(),
 						rightChoiceNode.getValueString(), 
 						relation, 

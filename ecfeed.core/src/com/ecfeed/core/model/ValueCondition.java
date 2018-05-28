@@ -55,7 +55,7 @@ public class ValueCondition implements IStatementCondition {
 				return EvaluationResult.convertFromBoolean(leftChoiceStr.matches(fRightValue));
 			}
 			else {
-				boolean result = StatementConditionHelper.isConstraintInChoiceRange(leftChoiceStr, fRightValue, relation, substituteType);
+				boolean result = RangeValidator.isRightRangeInLeftRange(leftChoiceStr, fRightValue, relation, substituteType);
 				return EvaluationResult.convertFromBoolean(result);
 			}
 		}
@@ -125,7 +125,7 @@ public class ValueCondition implements IStatementCondition {
 
 		String leftChoiceStr = leftChoiceNode.getValueString();
 
-		if (RangeAmbiguityValidator.isAmbiguous(
+		if (RangeValidator.isAmbiguous(
 				leftChoiceStr, fRightValue, relation, substituteType)) {
 
 			ConditionHelper.addValuesMessageToStack(
