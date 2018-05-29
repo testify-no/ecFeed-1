@@ -83,29 +83,18 @@ public class ValueCondition implements IStatementCondition {
 			return false;
 		}
 
-		ChoiceNode leftChoiceNode = getLeftChoiceNode(testDomain, parameterIndex);				
+		List<ChoiceNode> choicesForParameter = testDomain.get(parameterIndex);
 
-		if (leftChoiceNode.isRandomizedValue()) {
+		for (ChoiceNode choice : choicesForParameter) {
 
-			return isAmbiguousForRandomized(
-					leftChoiceNode, relation, substituteType, messageStack);
+			if (choice.isRandomizedValue()) {
+				if (isAmbiguousForRandomized(choice, relation, substituteType, messageStack)) {
+					return true;
+				}
+			}
 		}
 
 		return false;
-	}
-
-	private ChoiceNode getLeftChoiceNode(
-			List<List<ChoiceNode>> testDomain,
-			int parameterIndex) {
-
-		List<ChoiceNode> choices = testDomain.get(parameterIndex);
-		MethodParameterNode leftParameterNode = fParentRelationStatement.getLeftParameter();
-
-		ChoiceNode leftChoiceNode = 
-				StatementConditionHelper.getChoiceForMethodParameter(choices, leftParameterNode);
-
-		return leftChoiceNode;
-
 	}
 
 	private boolean isAmbiguousForRandomized(
