@@ -72,7 +72,7 @@ public class ValueCondition implements IStatementCondition {
 		for (ChoiceNode choice : choicesForParameter) {
 
 			if (choice.isRandomizedValue()) {
-				if (isAmbiguousForRandomized(choice, relation, substituteType, messageStack)) {
+				if (isRandomizedChoiceAmbiguous(choice, relation, substituteType, messageStack)) {
 					return true;
 				}
 			}
@@ -81,16 +81,22 @@ public class ValueCondition implements IStatementCondition {
 		return false;
 	}
 
-	private boolean isAmbiguousForRandomized(
+	private boolean isRandomizedChoiceAmbiguous(
 			ChoiceNode leftChoiceNode,
 			EStatementRelation relation,
 			String substituteType,
-			MessageStack messageStack
-			) 
-	{
-		if (JavaTypeHelper.TYPE_NAME_STRING.equals(substituteType)) {
+			MessageStack messageStack){
+
+		if (JavaTypeHelper.isStringTypeName(substituteType)) {
+
+			MethodParameterNode methodParameterNode = (MethodParameterNode)leftChoiceNode.getParameter();
+
+			if (fParentRelationStatement.mentions(methodParameterNode)) {
+				return true;
+			}
+
 			return false;
-		} 
+		}
 
 		String leftChoiceStr = leftChoiceNode.getValueString();
 
@@ -102,6 +108,7 @@ public class ValueCondition implements IStatementCondition {
 
 			return true;
 		}
+
 		return false;
 	}
 
