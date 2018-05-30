@@ -160,10 +160,6 @@ public class ParameterCondition implements IStatementCondition {
 
 		String substituteType = ConditionHelper.getSubstituteType(fParentRelationStatement);
 
-		if (JavaTypeHelper.TYPE_NAME_STRING.equals(substituteType)) {
-			return false;
-		}
-
 		List<ChoiceNode> leftChoices = testDomain.get(leftIndex);
 
 		int rightIndex = fRightParameterNode.getMyIndex();
@@ -203,6 +199,17 @@ public class ParameterCondition implements IStatementCondition {
 		if (areBothChoicesFixed(leftChoiceNode, rightChoiceNode)) {
 			return false;
 		}
+
+		if (JavaTypeHelper.isStringTypeName(substituteType)) {
+
+			MethodParameterNode methodParameterNode = (MethodParameterNode)leftChoiceNode.getParameter();
+
+			if (fParentRelationStatement.mentions(methodParameterNode)) {
+				return true;
+			}
+
+			return false;
+		}		
 
 		if (RangeValidator.isAmbiguous(
 				leftChoiceNode.getValueString(),
