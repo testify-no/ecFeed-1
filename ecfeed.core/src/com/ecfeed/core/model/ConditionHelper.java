@@ -21,6 +21,40 @@ public class ConditionHelper {
 		return substituteType;
 	}
 
+	public static boolean isAmbiguousForStringType(
+			ChoiceNode leftChoiceNode,
+			RelationStatement parentRelationStatement) {
+
+		MethodParameterNode methodParameterNode = (MethodParameterNode)leftChoiceNode.getParameter();
+
+		if (parentRelationStatement.mentions(methodParameterNode)) {
+			return true;
+		}
+
+		return false;
+	}	
+
+	public static boolean isRandomizedChoiceAmbiguous(
+			ChoiceNode leftChoiceNode,
+			String rightValue,
+			RelationStatement parentRelationStatement,
+			EStatementRelation relation,
+			String substituteType) {
+
+		if (JavaTypeHelper.isStringTypeName(substituteType)) {
+			return ConditionHelper.isAmbiguousForStringType(leftChoiceNode, parentRelationStatement);
+		}
+
+		if (RangeValidator.isAmbiguous(
+				leftChoiceNode.getValueString(), 
+				rightValue, 
+				relation, 
+				substituteType)) {
+			return true;
+		}
+
+		return false;
+	}	
 	public static void addValuesMessageToStack(
 			String left, EStatementRelation relation, String right, MessageStack messageStack) {
 
