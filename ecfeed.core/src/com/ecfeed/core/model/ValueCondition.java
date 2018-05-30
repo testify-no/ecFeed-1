@@ -76,8 +76,8 @@ public class ValueCondition implements IStatementCondition {
 						choice, fRightValue, fParentRelationStatement, 
 						relation, substituteType)) {
 
-					//					ConditionHelper.addValuesMessageToStack(
-					//							choice.toString(), relation, "value [" + fRightValue + "]", messageStack);
+					ConditionHelper.addValuesMessageToStack(
+							choice.toString(), relation, "value [" + fRightValue + "]", messageStack);
 
 					return true;
 				}
