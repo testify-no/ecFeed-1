@@ -160,43 +160,31 @@ public class ParameterCondition implements IStatementCondition {
 
 		String substituteType = ConditionHelper.getSubstituteType(fParentRelationStatement);
 
+		if (JavaTypeHelper.TYPE_NAME_STRING.equals(substituteType)) {
+			return false;
+		}
+
 		List<ChoiceNode> leftChoices = testDomain.get(leftIndex);
+
 		int rightIndex = fRightParameterNode.getMyIndex();
 		List<ChoiceNode> rightChoices = testDomain.get(rightIndex);
 
-		boolean isRandomizedChoice = StatementConditionHelper.getChoiceRandomized(leftChoices,
-				fParentRelationStatement.getLeftParameter());
-
-		if (isRandomizedChoice) {
-			return isAmbiguousForRandomized(
-					leftChoices, rightChoices, relation, substituteType, messageStack);					
-		}
-
-		return false;
+		return isAmbiguousForLeftAndRightChoices(
+				leftChoices, rightChoices, relation, substituteType, messageStack);					
 	}
 
-	private boolean isAmbiguousForRandomized(
+	private boolean isAmbiguousForLeftAndRightChoices(
 			List<ChoiceNode> leftChoices,
 			List<ChoiceNode> rightChoices,
 			EStatementRelation relation,
 			String substituteType,
 			MessageStack messageStack) {
 
-		if (JavaTypeHelper.TYPE_NAME_STRING.equals(substituteType)) {
-			return false;
-		}
-
 		for (ChoiceNode leftChoiceNode : leftChoices) {
 			for (ChoiceNode rightChoiceNode : rightChoices) {
-				if (RangeValidator.isAmbiguous(
-						leftChoiceNode.getValueString(),
-						rightChoiceNode.getValueString(), 
-						relation, 
-						substituteType)) {
 
-					ConditionHelper.addValuesMessageToStack(
-							leftChoiceNode.toString(), relation, rightChoiceNode.toString(), messageStack);
-
+				if (isChoicesPairAmbiguous(
+						leftChoiceNode, rightChoiceNode, relation, substituteType, messageStack)) {
 					return true;
 				}
 			}
@@ -204,6 +192,46 @@ public class ParameterCondition implements IStatementCondition {
 
 		return false;
 	}
+
+	private boolean isChoicesPairAmbiguous(
+			ChoiceNode leftChoiceNode, 
+			ChoiceNode rightChoiceNode,
+			EStatementRelation relation,
+			String substituteType,
+			MessageStack messageStack) {
+
+		if (areBothChoicesFixed(leftChoiceNode, rightChoiceNode)) {
+			return false;
+		}
+
+		if (RangeValidator.isAmbiguous(
+				leftChoiceNode.getValueString(),
+				rightChoiceNode.getValueString(), 
+				relation, 
+				substituteType)) {
+
+			ConditionHelper.addValuesMessageToStack(
+					leftChoiceNode.toString(), relation, rightChoiceNode.toString(), messageStack);
+
+			return true;
+		}
+
+		return false;
+	}
+
+	private boolean areBothChoicesFixed(ChoiceNode leftChoiceNode, ChoiceNode rightChoiceNode) {
+
+		if (leftChoiceNode.isRandomizedValue()) {
+			return false;
+		}
+
+		if (rightChoiceNode.isRandomizedValue()) {
+			return false;
+		}		
+
+		return true;
+	}
+
 }	
 
 
