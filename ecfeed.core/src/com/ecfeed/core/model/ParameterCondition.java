@@ -204,8 +204,9 @@ public class ParameterCondition implements IStatementCondition {
 				leftChoiceNode, rightChoiceNode.getValueString(),
 				fParentRelationStatement, relation, substituteType)) {
 
-			//			ConditionHelper.addValuesMessageToStack(
-			//			leftChoiceNode.toString(), relation, rightChoiceNode.toString(), messageStack);
+			ConditionHelper.addValuesMessageToStack(
+					leftChoiceNode.toString(), relation, rightChoiceNode.toString(), messageStack);
+
 			return true;
 		}
 
