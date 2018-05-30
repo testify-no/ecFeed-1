@@ -229,6 +229,7 @@ public class ChoiceCondition implements IStatementCondition {
 
 			ConditionHelper.addValuesMessageToStack(
 					leftChoiceNode.toString(), relation, fRightChoice.toString(), messageStack);
+
 			return true;
 		}
 
