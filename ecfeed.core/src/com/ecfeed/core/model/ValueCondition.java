@@ -72,41 +72,16 @@ public class ValueCondition implements IStatementCondition {
 		for (ChoiceNode choice : choicesForParameter) {
 
 			if (choice.isRandomizedValue()) {
-				if (isRandomizedChoiceAmbiguous(choice, relation, substituteType, messageStack)) {
+				if (ConditionHelper.isRandomizedChoiceAmbiguous(
+						choice, fRightValue, fParentRelationStatement, 
+						relation, substituteType)) {
+
+					//					ConditionHelper.addValuesMessageToStack(
+					//							choice.toString(), relation, "value [" + fRightValue + "]", messageStack);
+
 					return true;
 				}
 			}
-		}
-
-		return false;
-	}
-
-	private boolean isRandomizedChoiceAmbiguous(
-			ChoiceNode leftChoiceNode,
-			EStatementRelation relation,
-			String substituteType,
-			MessageStack messageStack){
-
-		if (JavaTypeHelper.isStringTypeName(substituteType)) {
-
-			MethodParameterNode methodParameterNode = (MethodParameterNode)leftChoiceNode.getParameter();
-
-			if (fParentRelationStatement.mentions(methodParameterNode)) {
-				return true;
-			}
-
-			return false;
-		}
-
-		String leftChoiceStr = leftChoiceNode.getValueString();
-
-		if (RangeValidator.isAmbiguous(
-				leftChoiceStr, fRightValue, relation, substituteType)) {
-
-			ConditionHelper.addValuesMessageToStack(
-					leftChoiceNode.toString(), relation, "value [" + fRightValue + "]", messageStack);
-
-			return true;
 		}
 
 		return false;

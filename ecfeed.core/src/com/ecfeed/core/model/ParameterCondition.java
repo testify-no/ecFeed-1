@@ -200,26 +200,12 @@ public class ParameterCondition implements IStatementCondition {
 			return false;
 		}
 
-		if (JavaTypeHelper.isStringTypeName(substituteType)) {
+		if (ConditionHelper.isRandomizedChoiceAmbiguous(
+				leftChoiceNode, rightChoiceNode.getValueString(),
+				fParentRelationStatement, relation, substituteType)) {
 
-			MethodParameterNode methodParameterNode = (MethodParameterNode)leftChoiceNode.getParameter();
-
-			if (fParentRelationStatement.mentions(methodParameterNode)) {
-				return true;
-			}
-
-			return false;
-		}		
-
-		if (RangeValidator.isAmbiguous(
-				leftChoiceNode.getValueString(),
-				rightChoiceNode.getValueString(), 
-				relation, 
-				substituteType)) {
-
-			ConditionHelper.addValuesMessageToStack(
-					leftChoiceNode.toString(), relation, rightChoiceNode.toString(), messageStack);
-
+			//			ConditionHelper.addValuesMessageToStack(
+			//			leftChoiceNode.toString(), relation, rightChoiceNode.toString(), messageStack);
 			return true;
 		}
 
