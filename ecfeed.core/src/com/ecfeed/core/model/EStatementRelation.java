@@ -175,9 +175,9 @@ public enum EStatementRelation{
 		return false;
 	}
 
-	public static boolean isMatch(EStatementRelation relation, double actualValue, double valueToMatch) {
+	public static boolean isMatch(EStatementRelation relation, double leftValue, double rightValue) {
 
-		int compareResult = Double.compare(actualValue, valueToMatch);
+		int compareResult = Double.compare(leftValue, rightValue);
 
 		if (isMatch(relation, compareResult)) {
 			return true;
