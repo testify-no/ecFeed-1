@@ -305,10 +305,10 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 	private String createAmbiguousWarningMessage(MessageStack messageStack) {
 
 		StringBuilder sb = new StringBuilder();
-		
-		final String MESSAGE = "Warning! Evaluation of constraints is ambigous. Generated test suite may contain unexpected results.\n";
+
+		final String MESSAGE = "Warning! Evaluation of constraints is ambiguous. Generated test suite may contain unexpected results.\n";
 		sb.append(MESSAGE);
-		
+
 		if (!messageStack.isEmpty()) {
 			sb.append(messageStack.getLongMessage());
 			sb.append("\n");
@@ -316,7 +316,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 
 		return sb.toString();
 	}
-	
+
 	private void updateAmbiguousWarningLabel(boolean isAmbiguousCondition, String message) {
 
 		if (!isAmbiguousCondition) {
