@@ -237,18 +237,6 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		updateOkButtonAndErrorMsg();
 	}
 
-	private Text createAmbiguousWarningText(Composite parent) {
-
-		Text txt = new Text(parent, SWT.BORDER | SWT.V_SCROLL | SWT.READ_ONLY);
-
-		txt.setLayoutData(
-				new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
-
-		txt.setText("                    ");
-
-		return txt;
-	}
-
 	private void checkAndDisplayAmbiguousStateWarning() {
 
 		List<Constraint> constraints = getCheckedConstraints();
@@ -638,6 +626,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 	}
 
 	private void createGeneratorSelectionComposite(Composite container) {
+
 		Composite generatorComposite = new Composite(container, SWT.NONE);
 		generatorComposite.setLayout(new GridLayout(2, false));
 		generatorComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
@@ -649,7 +638,8 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		generatorLabel.setText("Generator");
 
 		createGeneratorViewer(generatorComposite);
-		fAmbigousWarningText = createAmbiguousWarningText(container);
+
+		fAmbigousWarningText = DialogObjectToolkit.createGridText(container, 60, new String());
 	}
 
 	private void createTestCasesExportComposite(Composite parentComposite) {
