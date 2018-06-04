@@ -61,6 +61,18 @@ public class RelationMatcher {
 
 	private static boolean isMatchForNumericTypes(
 			String typeName, EStatementRelation relation, String leftValue, String rightValue) {
+		
+		if (JavaTypeHelper.isLongTypeName(typeName)) {
+			
+			long leftDouble = (long)JavaTypeHelper.parseLongValue(leftValue);
+			long rightDouble = (long)JavaTypeHelper.parseLongValue(rightValue);
+
+			if (EStatementRelation.isMatch(relation, leftDouble, rightDouble)) {
+				return true;
+			}
+
+			return false;
+		}
 
 		double leftDouble = JavaTypeHelper.convertNumericToDouble(typeName, leftValue);
 		double rightDouble = JavaTypeHelper.convertNumericToDouble(typeName, rightValue);
