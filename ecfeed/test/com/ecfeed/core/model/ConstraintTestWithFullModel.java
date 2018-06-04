@@ -12,11 +12,18 @@ package com.ecfeed.core.model;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
 
+import com.ecfeed.core.generators.algorithms.AbstractAlgorithm;
+import com.ecfeed.core.generators.algorithms.CartesianProductAlgorithm;
+import com.ecfeed.core.generators.algorithms.GeneratorHelper;
+import com.ecfeed.core.generators.api.GeneratorException;
 import com.ecfeed.core.utils.MessageStack;
 
 public class ConstraintTestWithFullModel {
@@ -351,5 +358,118 @@ public class ConstraintTestWithFullModel {
 		}
 	}
 
+	
+	@Test
+	public void constraintShouldEvaluateToTrueForRandomizedStrings() {
+
+		StringBuilder sb = new StringBuilder(); 
+
+		sb.append("<?xml version='1.0' encoding='UTF-8'?>\n");
+		sb.append("<Model name='Constraint' version='2'>\n");
+		sb.append("    <Class name='com.example.test.TestClass'>\n");
+		sb.append("        <Method name='testMethod'>\n");
+		sb.append("            <Parameter name='arg' type='String' isExpected='false' expected='0' linked='false'>\n");
+		sb.append("                <Choice name='choice' value='A' isRandomized='true'/>\n");
+		sb.append("            </Parameter>\n");
+		sb.append("            <Constraint name='constraint'>\n");
+		sb.append("                <Premise>\n");
+		sb.append("                    <StaticStatement value='true'/>\n");
+		sb.append("                </Premise>\n");
+		sb.append("                <Consequence>\n");
+		sb.append("                    <ValueStatement rightValue='A' parameter='arg' relation='='/>\n");
+		sb.append("                </Consequence>\n");
+		sb.append("            </Constraint>\n");
+		sb.append("        </Method>\n");
+		sb.append("    </Class>\n");
+		sb.append("</Model>\n");
+		String xml = sb.toString();
+		xml = xml.replace("'", "\"");
+
+		List<List<ChoiceNode>> cartesianTestResults = generateResults(xml);		
+		assertEquals(1, cartesianTestResults.size());
+	}
+	
+	@Test
+	public void constraintShouldEvaluateToFalseForRandomizedStrings() {
+
+		StringBuilder sb = new StringBuilder(); 
+
+		sb.append("<?xml version='1.0' encoding='UTF-8'?>\n");
+		sb.append("<Model name='Constraint' version='2'>\n");
+		sb.append("    <Class name='com.example.test.TestClass'>\n");
+		sb.append("        <Method name='testMethod'>\n");
+		sb.append("            <Parameter name='arg' type='String' isExpected='false' expected='0' linked='false'>\n");
+		sb.append("                <Choice name='choice' value='A' isRandomized='true'/>\n");
+		sb.append("            </Parameter>\n");
+		sb.append("            <Constraint name='constraint'>\n");
+		sb.append("                <Premise>\n");
+		sb.append("                    <StaticStatement value='true'/>\n");
+		sb.append("                </Premise>\n");
+		sb.append("                <Consequence>\n");
+		sb.append("                    <ValueStatement rightValue='B' parameter='arg' relation='='/>\n");
+		sb.append("                </Consequence>\n");
+		sb.append("            </Constraint>\n");
+		sb.append("        </Method>\n");
+		sb.append("    </Class>\n");
+		sb.append("</Model>\n");
+		String xml = sb.toString();
+		xml = xml.replace("'", "\"");
+
+		List<List<ChoiceNode>> cartesianTestResults = generateResults(xml);
+		assertEquals(0, cartesianTestResults.size());
+	}	
+	
+	@Test
+	public void constraintShouldEvaluateToTrueForRandomizedIntegers() {
+
+		StringBuilder sb = new StringBuilder(); 
+
+		sb.append("<?xml version='1.0' encoding='UTF-8'?>\n");
+		sb.append("<Model name='Constraint' version='2'>\n");
+		sb.append("    <Class name='com.example.test.TestClass'>\n");
+		sb.append("        <Method name='testMethod'>\n");
+		sb.append("            <Parameter name='arg' type='int' isExpected='false' expected='0' linked='false'>\n");
+		sb.append("                <Choice name='choice' value='0:1' isRandomized='true'/>\n");
+		sb.append("            </Parameter>\n");
+		sb.append("            <Constraint name='constraint'>\n");
+		sb.append("                <Premise>\n");
+		sb.append("                    <StaticStatement value='true'/>\n");
+		sb.append("                </Premise>\n");
+		sb.append("                <Consequence>\n");
+		sb.append("                    <ValueStatement rightValue='0' parameter='arg' relation='='/>\n");
+		sb.append("                </Consequence>\n");
+		sb.append("            </Constraint>\n");
+		sb.append("        </Method>\n");
+		sb.append("    </Class>\n");
+		sb.append("</Model>\n");
+		
+		String xml = sb.toString();
+		xml = xml.replace("'", "\"");
+
+		List<List<ChoiceNode>> cartesianTestResults = generateResults(xml);		
+		assertEquals(1, cartesianTestResults.size());
+	}
+
+	private List<List<ChoiceNode>> generateResults(String xml) {
+		
+		RootNode rootNode = ModelTestHelper.createModel(xml);
+		
+		MethodNode methodNode = GeneratorHelper.getMethodByName(rootNode, "testMethod");
+		
+		AbstractAlgorithm<ChoiceNode> cartesianAlgorithm = 
+				new CartesianProductAlgorithm<ChoiceNode>();
+		
+		List<List<ChoiceNode>> cartesianTestResults = new ArrayList<List<ChoiceNode>>();
+		
+		try {
+			cartesianTestResults = 
+					GeneratorHelper.generateTestCasesForMethod(methodNode, cartesianAlgorithm);
+
+		} catch (GeneratorException e) {
+			fail("Exception:" + e.getMessage());
+		}
+		
+		return cartesianTestResults;
+	}
 }
 
