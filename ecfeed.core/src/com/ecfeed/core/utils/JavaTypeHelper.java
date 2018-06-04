@@ -434,7 +434,7 @@ public class JavaTypeHelper {
 		}
 	}
 
-	private static Object parseLongValue(String valueString) {
+	public static Object parseLongValue(String valueString) {
 
 		if(valueString.equals(VALUE_REPRESENTATION_MAX)){
 			return Long.MAX_VALUE;

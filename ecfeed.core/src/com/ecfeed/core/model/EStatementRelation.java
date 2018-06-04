@@ -184,6 +184,16 @@ public enum EStatementRelation{
 		}
 		return false;
 	}
+	
+	public static boolean isMatch(EStatementRelation relation, long leftValue, long rightValue) {
+
+		int compareResult = Long.compare(leftValue, rightValue);
+
+		if (isMatch(relation, compareResult)) {
+			return true;
+		}
+		return false;
+	}
 
 	public static boolean isMatch(EStatementRelation relation, String actualValue, String valueToMatch) {
 
