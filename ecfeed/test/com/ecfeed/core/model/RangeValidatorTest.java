@@ -169,7 +169,28 @@ public class RangeValidatorTest {
 
 		assertTrue(RangeValidator.isAmbiguous(
 				"0:10", "9:100", EStatementRelation.GREATER_EQUAL, JavaTypeHelper.TYPE_NAME_LONG));		
-	}	
+	}
 
+	@Test
+	public void testAmbiguousForEqualAndDoubleWithSpecialValues() {
+
+		assertFalse(RangeValidator.isAmbiguous(
+				"100.0:POSITIVE_INFINITY", "99.0", EStatementRelation.EQUAL, JavaTypeHelper.TYPE_NAME_DOUBLE));
+
+		assertTrue(RangeValidator.isAmbiguous(
+				"100.0:POSITIVE_INFINITY", "150.0", EStatementRelation.EQUAL, JavaTypeHelper.TYPE_NAME_DOUBLE));
+
+		assertTrue(RangeValidator.isAmbiguous(
+				"100.0:200.0", "150.0", EStatementRelation.EQUAL, JavaTypeHelper.TYPE_NAME_DOUBLE));
+
+		assertFalse(RangeValidator.isAmbiguous(
+				"NEGATIVE_INFINITY:100.0", "101.0", EStatementRelation.EQUAL, JavaTypeHelper.TYPE_NAME_DOUBLE));
+
+		assertTrue(RangeValidator.isAmbiguous(
+				"NEGATIVE_INFINITY:100.0", "0.0", EStatementRelation.EQUAL, JavaTypeHelper.TYPE_NAME_DOUBLE));
+
+		assertTrue(RangeValidator.isAmbiguous(
+				"-200.0:100.0", "0.0", EStatementRelation.EQUAL, JavaTypeHelper.TYPE_NAME_DOUBLE));
+	}
 
 }
