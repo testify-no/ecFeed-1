@@ -64,7 +64,7 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 	public void createContents(Composite parent){
 		super.createContents(parent);
 
-		createNameValueEditor(getMainComposite());
+		createNameValueEditorWithoutValueCombo(getMainComposite());
 
 		addCommentsSection();
 
@@ -198,7 +198,8 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		return null;
 	}
 
-	private void createNameValueEditor(Composite parent) {
+	private void createNameValueEditorWithoutValueCombo(Composite parent) {
+
 		fAttributesComposite = getToolkit().createComposite(parent);
 		fAttributesComposite.setLayout(new GridLayout(2, false));
 		fAttributesComposite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
@@ -213,6 +214,8 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 
 		fValueLabel = getFormObjectToolkit().createLabel(fAttributesComposite, "Value");
 		getFormObjectToolkit().paintBorders(fAttributesComposite);
+
+		// fValueCombo created during refresh
 	}
 
 	private class RandomizedApplier implements IValueApplier {
