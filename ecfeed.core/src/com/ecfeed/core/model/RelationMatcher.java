@@ -5,7 +5,8 @@ import com.ecfeed.core.utils.StringHelper;
 
 public class RelationMatcher {
 
-	public static boolean isMatchQuiet(EStatementRelation relation, String typeName, String leftString, String rightString) {
+	public static boolean isMatchQuiet(
+			EStatementRelation relation, String typeName, String leftString, String rightString) {
 
 		boolean result = false;
 		try {
@@ -58,16 +59,17 @@ public class RelationMatcher {
 		return false;
 	}
 
-	private static boolean isMatchForNumericTypes(String typeName, EStatementRelation relation,
-			String actualValue, String valueToMatch) {
+	private static boolean isMatchForNumericTypes(
+			String typeName, EStatementRelation relation, String leftValue, String rightValue) {
 
-		double actual = JavaTypeHelper.convertNumericToDouble(typeName, actualValue);
-		double toMatch = JavaTypeHelper.convertNumericToDouble(typeName, valueToMatch);
+		double leftDouble = JavaTypeHelper.convertNumericToDouble(typeName, leftValue);
+		double rightDouble = JavaTypeHelper.convertNumericToDouble(typeName, rightValue);
 
-		if (EStatementRelation.isMatch(relation, actual, toMatch)) {
+		if (EStatementRelation.isMatch(relation, leftDouble, rightDouble)) {
 			return true;
 		}
+
 		return false;
-	}	
+	}
 
 }

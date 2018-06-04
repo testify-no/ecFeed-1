@@ -3,9 +3,8 @@ package com.ecfeed.core.model;
 import static com.ecfeed.core.model.EStatementRelation.EQUAL;
 import static com.ecfeed.core.model.EStatementRelation.GREATER_EQUAL;
 import static com.ecfeed.core.model.EStatementRelation.LESS_EQUAL;
-import static com.ecfeed.core.model.EStatementRelation.NOT_EQUAL;
-import static com.ecfeed.core.model.EStatementRelation.GREATER_THAN;
 import static com.ecfeed.core.model.EStatementRelation.LESS_THAN;
+import static com.ecfeed.core.model.EStatementRelation.NOT_EQUAL;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -21,7 +20,6 @@ public class RangeValidator {
 			String rightRange, 
 			EStatementRelation relation, 
 			String substituteType) {
-
 
 		if (JavaTypeHelper.TYPE_NAME_STRING.equals(substituteType)) {
 			return leftRange.matches(rightRange);
@@ -76,27 +74,44 @@ public class RangeValidator {
 	}
 
 	private static boolean isAmbiguousForEqualityRelations(
-			String[] leftValues, 
-			String[] rightValues, 
-			String substituteType) {
+			String[] leftRange, String[] rightRange, String substituteType) {
 
-		if (StringUtils.equals(leftValues[0], rightValues[0]) && StringUtils.equals(leftValues[1], rightValues[1])) {
-			if (StringUtils.equals(leftValues[0], leftValues[1]) && StringUtils.equals(rightValues[0], rightValues[1])) {
+		if (areRangesTheSame(leftRange, rightRange)) {
+
+			if (isSingleValue(leftRange)) {
 				return false;
 			}
+
 			return true;
 		}
 
-		if (LESS_THAN.isMatch(substituteType, leftValues[0], rightValues[0]) 
-				&& LESS_THAN.isMatch(substituteType, leftValues[1], rightValues[1]) 
-				&& LESS_THAN.isMatch(substituteType, leftValues[1], rightValues[0])) {
+		if (LESS_THAN.isMatch(substituteType, leftRange[1], rightRange[0])) {
 			return false;
-
 		}
 
-		if (GREATER_THAN.isMatch(substituteType, leftValues[0], rightValues[0])
-				&& GREATER_THAN.isMatch(substituteType, leftValues[0], rightValues[1])
-				&& GREATER_THAN.isMatch(substituteType, leftValues[1], rightValues[1])) {
+		if (LESS_THAN.isMatch(substituteType, rightRange[1], leftRange[0])) {
+			return false;
+		}
+
+		return true;
+	}
+
+	private static boolean isSingleValue(String[] range) {
+
+		if (StringUtils.equals(range[0], range[1])) {
+			return true;
+		}
+
+		return false;
+	}
+
+	private static boolean areRangesTheSame(String[] leftRange, String[] rightRange) {
+
+		if (!StringUtils.equals(leftRange[0], rightRange[0])) {
+			return false;
+		}
+
+		if (!StringUtils.equals(leftRange[1], rightRange[1])) {
 			return false;
 		}
 
@@ -145,16 +160,16 @@ public class RangeValidator {
 
 	private static boolean validateEqualCondition(
 			String[] choices, String[] constraints, String substituteType) {
-		
+
 		String lowerChoice = choices[0]; 
 		String upperChoice = choices[1];
-		
+
 		String lowerConstraint = constraints[0];  
 		String upperConstraint = constraints[1];
 
 		int choicesLength = choices.length;
 		int constraintsLength = constraints.length;
-		
+
 		if (choicesLength == RANGE_VALUE && constraintsLength == RANGE_VALUE) {
 			return GREATER_EQUAL.isMatch(substituteType, upperChoice, lowerConstraint)
 					&& LESS_EQUAL.isMatch(substituteType, lowerChoice, upperConstraint);

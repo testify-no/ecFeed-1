@@ -44,7 +44,7 @@ public class JavaTypeHelper {
 	public static final String[] LONG_SPECIAL_VALUES = INTEGER_SPECIAL_VALUES;
 	public static final String[] BYTE_SPECIAL_VALUES = INTEGER_SPECIAL_VALUES;
 	public static final String[] DOUBLE_SPECIAL_VALUES = FLOAT_SPECIAL_VALUES;
-	
+
 
 	public static final String DEFAULT_EXPECTED_NUMERIC_VALUE = "0";
 	public static final String DEFAULT_EXPECTED_FLOATING_POINT_VALUE = "0.0";
@@ -58,8 +58,8 @@ public class JavaTypeHelper {
 	public static final String DEFAULT_EXPECTED_SHORT_VALUE = DEFAULT_EXPECTED_NUMERIC_VALUE;
 	public static final String DEFAULT_EXPECTED_STRING_VALUE = "";
 	public static final String DEFAULT_EXPECTED_ENUM_VALUE = "VALUE";
-	
-	
+
+
 	private static final String[] SUPPORTED_PRIMITIVE_TYPES = new String[]{
 		TYPE_NAME_INT,
 		TYPE_NAME_BYTE,
@@ -291,10 +291,10 @@ public class JavaTypeHelper {
 			return Long.parseLong(value);
 		}		
 		if (isFloatTypeName(typeName)) {
-			return Float.parseFloat(value);
+			return (double)parseFloatValue(value);
 		}
 		if (isDoubleTypeName(typeName)) {
-			return Double.parseDouble(value);
+			return (double)parseDoubleValue(value);
 		}
 
 		ExceptionHelper.reportRuntimeException("Invalid type in numeric conversion");
