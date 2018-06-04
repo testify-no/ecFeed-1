@@ -70,7 +70,7 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 	public void createContents(Composite parent){
 		super.createContents(parent);
 
-		createNameValueEditor(getMainComposite());
+		createNameValueEditorWithoutValueCombo(getMainComposite());
 
 		addCommentsSection();
 
@@ -218,7 +218,7 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		return null;
 	}
 
-	private void createNameValueEditor(Composite parent) {
+	private void createNameValueEditorWithoutValueCombo(Composite parent) {
 
 		fAttributesComposite = getEcFormToolkit().createGridComposite(parent, 2);
 
