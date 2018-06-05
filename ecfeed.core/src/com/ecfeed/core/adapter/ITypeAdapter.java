@@ -12,9 +12,14 @@ package com.ecfeed.core.adapter;
 
 public interface ITypeAdapter<T> {
 
+	public enum EConversionMode {
+		QUIET,
+		WITH_EXCEPTION
+	}
+
 	public boolean isRandomizable();
 	public boolean isCompatible(String type);
-	public String convert(String value, boolean isRandomized);
+	public String convert(String value, boolean isRandomized, EConversionMode conversionMode);
 	public String getDefaultValue();
 	public boolean isNullAllowed();
 	public T generateValue(String range);

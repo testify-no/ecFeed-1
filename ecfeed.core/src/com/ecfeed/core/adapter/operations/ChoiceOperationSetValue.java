@@ -12,6 +12,7 @@ package com.ecfeed.core.adapter.operations;
 
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.ITypeAdapterProvider;
+import com.ecfeed.core.adapter.ITypeAdapter.EConversionMode;
 import com.ecfeed.core.adapter.java.AdapterConstants;
 import com.ecfeed.core.adapter.java.Messages;
 import com.ecfeed.core.model.AbstractParameterNode;
@@ -134,7 +135,6 @@ public class ChoiceOperationSetValue extends AbstractModelOperation {
 			return null;
 		}
 
-		return fAdapterProvider.getAdapter(type).convert(value, fTarget.isRandomizedValue());
-
+		return fAdapterProvider.getAdapter(type).convert(value, fTarget.isRandomizedValue(), EConversionMode.QUIET);
 	}
 }

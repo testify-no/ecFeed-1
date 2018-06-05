@@ -14,6 +14,7 @@ import java.util.Set;
 
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.ITypeAdapter;
+import com.ecfeed.core.adapter.ITypeAdapter.EConversionMode;
 import com.ecfeed.core.adapter.ITypeAdapterProvider;
 import com.ecfeed.core.adapter.java.Messages;
 import com.ecfeed.core.model.ChoiceNode;
@@ -145,7 +146,12 @@ public class GenericOperationRemoveChoice extends BulkOperation {
 		private void adaptParentChoice(ChoiceNode parentChoiceNode) {
 			if(parentChoiceNode.isAbstract() == false){
 				ITypeAdapter<?> adapter = fAdapterProvider.getAdapter(parentChoiceNode.getParameter().getType());
-				String newValue = adapter.convert(parentChoiceNode.getValueString(), parentChoiceNode.isRandomizedValue());
+				String newValue = 
+						adapter.convert(
+								parentChoiceNode.getValueString(), 
+								parentChoiceNode.isRandomizedValue(),
+								EConversionMode.QUIET);
+
 				if(newValue == null){
 					newValue = adapter.getDefaultValue();
 				}
