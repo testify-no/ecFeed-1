@@ -17,7 +17,7 @@ public class TypeAdapterForDouble extends TypeAdapterFloatingPoint<Double>{
 		} catch(NumberFormatException e) {
 
 			if (conversionMode == EConversionMode.WITH_EXCEPTION) {
-				TypeAdapterHelper.reportRuntimeExceptionCannotConvert(value, "Double");
+				TypeAdapterHelper.reportRuntimeExceptionCannotConvert(value, JavaTypeHelper.TYPE_NAME_DOUBLE);
 				return null;
 			} else {
 				return getDefaultValue();

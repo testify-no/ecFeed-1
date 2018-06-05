@@ -20,7 +20,7 @@ public class TypeAdapterForByte extends TypeAdapterForNumericType<Byte>{
 			if (conversionMode == EConversionMode.QUIET) {
 				return getDefaultValue();
 			} else {
-				TypeAdapterHelper.reportRuntimeExceptionCannotConvert(value, "byte");
+				TypeAdapterHelper.reportRuntimeExceptionCannotConvert(value, JavaTypeHelper.TYPE_NAME_BYTE);
 				return null;
 			}
 		}

@@ -17,7 +17,7 @@ public class TypeAdapterHelper {
 	
 	public static void reportRuntimeExceptionCannotConvert(String value, String typeName) {
 		
-		final String CANNOT_CONVERT_CHAR = "Cannot convert value:" + value + "to " + typeName + ".";
+		final String CANNOT_CONVERT_CHAR = "Cannot convert value [" + value + "] to " + typeName + ".";
 		ExceptionHelper.reportRuntimeException(CANNOT_CONVERT_CHAR);
 	}
 
