@@ -10,7 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.ecfeed.core.utils.JavaTypeHelper;
 
-public class RangeValidator {
+public class RangeHelper {
 
 	private static final int SINGLE_VALUE = 1;
 	private static final int RANGE_VALUE = 2;	

@@ -52,7 +52,7 @@ public class ParameterCondition implements IStatementCondition {
 				return EvaluationResult.convertFromBoolean(leftChoiceStr.matches(rightChoiceStr));
 			}
 			else {
-				boolean result = RangeValidator.isRightRangeInLeftRange(leftChoiceStr, rightChoiceStr, relation, substituteType);
+				boolean result = RangeHelper.isRightRangeInLeftRange(leftChoiceStr, rightChoiceStr, relation, substituteType);
 				return EvaluationResult.convertFromBoolean(result);
 			}
 		}

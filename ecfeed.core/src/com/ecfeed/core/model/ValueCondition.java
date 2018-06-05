@@ -46,7 +46,7 @@ public class ValueCondition implements IStatementCondition {
 				return EvaluationResult.convertFromBoolean(leftChoiceStr.matches(fRightValue));
 			}
 			else {
-				boolean result = RangeValidator.isRightRangeInLeftRange(leftChoiceStr, fRightValue, relation, substituteType);
+				boolean result = RangeHelper.isRightRangeInLeftRange(leftChoiceStr, fRightValue, relation, substituteType);
 				return EvaluationResult.convertFromBoolean(result);
 			}
 		}
