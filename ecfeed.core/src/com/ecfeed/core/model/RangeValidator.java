@@ -124,10 +124,10 @@ public class RangeValidator {
 			EStatementRelation relation,
 			String substituteType) {
 
-		boolean a = RelationMatcher.isMatchQuiet(relation, substituteType, leftValues[0], rightValues[0]);
-		boolean b = RelationMatcher.isMatchQuiet(relation, substituteType, leftValues[1], rightValues[1]);
-		boolean c = RelationMatcher.isMatchQuiet(relation, substituteType, leftValues[0], rightValues[1]);
-		boolean d = RelationMatcher.isMatchQuiet(relation, substituteType, leftValues[1], rightValues[0]);
+		boolean a = RelationMatcher.isRelationMatch(relation, substituteType, leftValues[0], rightValues[0]);
+		boolean b = RelationMatcher.isRelationMatch(relation, substituteType, leftValues[1], rightValues[1]);
+		boolean c = RelationMatcher.isRelationMatch(relation, substituteType, leftValues[0], rightValues[1]);
+		boolean d = RelationMatcher.isRelationMatch(relation, substituteType, leftValues[1], rightValues[0]);
 
 		if (a && b && c && d) {
 			return false;
