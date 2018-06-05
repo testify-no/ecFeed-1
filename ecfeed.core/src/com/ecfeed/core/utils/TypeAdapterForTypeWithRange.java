@@ -1,6 +1,7 @@
 package com.ecfeed.core.utils;
 
 import com.ecfeed.core.adapter.ITypeAdapter;
+import com.ecfeed.core.model.RangeHelper;
 
 public abstract class TypeAdapterForTypeWithRange<T> implements ITypeAdapter<T> {
 
@@ -16,18 +17,18 @@ public abstract class TypeAdapterForTypeWithRange<T> implements ITypeAdapter<T> 
 	@Override
 	public String convert(String value, boolean isRandomized, EConversionMode conversionMode) {
 
-		if (!RandomizedRangeHelper.isRange(value)) {
+		if (!RangeHelper.isRange(value)) {
 
 			String result = convertSingleValue(value, conversionMode);
 
 			if (isRandomized) {
-				result = RandomizedRangeHelper.createRange(result);
+				result = RangeHelper.createRange(result);
 			}
 
 			return result;
 		}
 
-		String[] range = RandomizedRangeHelper.splitToRange(value);
+		String[] range = RangeHelper.splitToRange(value);
 
 		if (!isRandomized) {
 			return range[0];
@@ -36,7 +37,7 @@ public abstract class TypeAdapterForTypeWithRange<T> implements ITypeAdapter<T> 
 		String firstValue = convertSingleValue(range[0], conversionMode);
 		String secondValue = convertSingleValue(range[1], conversionMode);
 
-		return RandomizedRangeHelper.createRange(firstValue, secondValue);
+		return RangeHelper.createRange(firstValue, secondValue);
 	}
 
 }

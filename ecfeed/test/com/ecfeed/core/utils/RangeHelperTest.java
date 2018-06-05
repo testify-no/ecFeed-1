@@ -1,13 +1,61 @@
-package com.ecfeed.core.model;
+package com.ecfeed.core.utils;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import com.ecfeed.core.utils.JavaTypeHelper;
+import com.ecfeed.core.model.EStatementRelation;
+import com.ecfeed.core.model.RangeHelper;
 
-public class RangeValidatorTest {
+
+public class RangeHelperTest {
+
+	@Test
+	public void shouldCheckRange() {
+
+		assertFalse(RangeHelper.isRange("0"));
+		assertFalse(RangeHelper.isRange("0.0"));
+		assertFalse(RangeHelper.isRange("A"));
+		assertFalse(RangeHelper.isRange("A-B"));
+		assertFalse(RangeHelper.isRange("A:B:C"));
+
+		assertTrue(RangeHelper.isRange("0:0"));
+		assertTrue(RangeHelper.isRange("1:4"));
+		assertTrue(RangeHelper.isRange("1.0:4.0"));
+		assertTrue(RangeHelper.isRange("X:Y"));
+		assertTrue(RangeHelper.isRange("abc:XYZ"));
+	}
+
+	@Test
+	public void shouldSplitRange() {
+		String[] range = RangeHelper.splitToRange("x:y");
+		assertEquals("x", range[0]);
+		assertEquals("y", range[1]);
+	}
+
+	@Test(expected = RuntimeException.class)
+	public void shouldThrowWhenSplitingInvalidRange() {
+
+		RangeHelper.splitToRange("x:y:z");
+	}
+
+	@Test(expected = RuntimeException.class)
+	public void shouldThrowWhenSplitingInvalidRange2() {
+
+		RangeHelper.splitToRange("x");
+	}	
+
+	@Test
+	public void shouldCreateRange() {
+		assertEquals("0:0", RangeHelper.createRange("0"));
+	}
+
+	@Test
+	public void shouldCreateRange2() {
+		assertEquals("a:b", RangeHelper.createRange("a", "b"));
+	}
 
 	@Test
 	public void testAmbiguousForEqualAndLong() {
