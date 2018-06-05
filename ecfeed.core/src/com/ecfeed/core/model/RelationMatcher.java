@@ -64,10 +64,10 @@ public class RelationMatcher {
 		
 		if (JavaTypeHelper.isLongTypeName(typeName)) {
 			
-			long leftDouble = (long)JavaTypeHelper.parseLongValue(leftValue);
-			long rightDouble = (long)JavaTypeHelper.parseLongValue(rightValue);
+			long leftLong = (long)JavaTypeHelper.parseLongValue(leftValue);
+			long rightLong = (long)JavaTypeHelper.parseLongValue(rightValue);
 
-			if (EStatementRelation.isMatch(relation, leftDouble, rightDouble)) {
+			if (EStatementRelation.isMatch(relation, leftLong, rightLong)) {
 				return true;
 			}
 

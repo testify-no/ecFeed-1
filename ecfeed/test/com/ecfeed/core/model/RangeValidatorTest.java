@@ -232,12 +232,13 @@ public class RangeValidatorTest {
 
 	@Test
 	public void testForInvalidSpecialValues() {
+
 		testForInvalidSpecialValues(EStatementRelation.EQUAL);
 		testForInvalidSpecialValues(EStatementRelation.NOT_EQUAL);
-		//		testForInvalidSpecialValues(EStatementRelation.LESS_EQUAL);
-		//		testForInvalidSpecialValues(EStatementRelation.LESS_THAN);
-		//		testForInvalidSpecialValues(EStatementRelation.GREATER_EQUAL);
-		//		testForInvalidSpecialValues(EStatementRelation.GREATER_THAN);
+		testForInvalidSpecialValues(EStatementRelation.LESS_EQUAL);
+		testForInvalidSpecialValues(EStatementRelation.LESS_THAN);
+		testForInvalidSpecialValues(EStatementRelation.GREATER_EQUAL);
+		testForInvalidSpecialValues(EStatementRelation.GREATER_THAN);
 	}
 
 	public void testForInvalidSpecialValues(EStatementRelation statementRelation) {
