@@ -32,7 +32,7 @@ public class TypeAdapterForString implements ITypeAdapter<String>{
 	}
 
 	@Override
-	public String convert(String value, boolean isRandomized){
+	public String convert(String value, boolean isRandomized, EConversionMode conversionMode) {
 		return value;
 	}
 

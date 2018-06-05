@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import com.ecfeed.core.adapter.ITypeAdapter.EConversionMode;
+
 public class TypeAdapterForByteTest {
 
 	@Test
@@ -11,7 +13,7 @@ public class TypeAdapterForByteTest {
 
 		TypeAdapterForByte typeAdapterForByte = new TypeAdapterForByte();
 
-		String result = typeAdapterForByte.convert("10", true);
+		String result = typeAdapterForByte.convert("10", true, EConversionMode.QUIET);
 
 		assertEquals("10:10", result);
 	}
@@ -21,7 +23,7 @@ public class TypeAdapterForByteTest {
 
 		TypeAdapterForByte typeAdapterForByte = new TypeAdapterForByte();
 
-		String result = typeAdapterForByte.convert("10", false);
+		String result = typeAdapterForByte.convert("10", false, EConversionMode.QUIET);
 
 		assertEquals("10", result);
 	}	
@@ -31,7 +33,7 @@ public class TypeAdapterForByteTest {
 
 		TypeAdapterForByte typeAdapterForByte = new TypeAdapterForByte();
 
-		String result = typeAdapterForByte.convert("10:12", true);
+		String result = typeAdapterForByte.convert("10:12", true, EConversionMode.QUIET);
 
 		assertEquals("10:12", result);
 	}	
@@ -41,7 +43,7 @@ public class TypeAdapterForByteTest {
 
 		TypeAdapterForByte typeAdapterForByte = new TypeAdapterForByte();
 
-		String result = typeAdapterForByte.convert("10:12", false);
+		String result = typeAdapterForByte.convert("10:12", false, EConversionMode.QUIET);
 
 		assertEquals("10", result);
 	}	
@@ -51,7 +53,7 @@ public class TypeAdapterForByteTest {
 
 		TypeAdapterForByte typeAdapterForByte = new TypeAdapterForByte();
 
-		String result = typeAdapterForByte.convert("ABC", true);
+		String result = typeAdapterForByte.convert("ABC", true, EConversionMode.QUIET);
 
 		assertEquals("0:0", result);
 	}	
@@ -61,17 +63,17 @@ public class TypeAdapterForByteTest {
 
 		TypeAdapterForByte typeAdapterForByte = new TypeAdapterForByte();
 
-		String result = typeAdapterForByte.convert("ABC", false);
+		String result = typeAdapterForByte.convert("ABC", false, EConversionMode.QUIET);
 
 		assertEquals("0", result);
 	}	
-	
+
 	@Test
 	public void shouldConvertInvalidRangeToDefaultRange() {
 
 		TypeAdapterForByte typeAdapterForByte = new TypeAdapterForByte();
 
-		String result = typeAdapterForByte.convert("10:11:12", true);
+		String result = typeAdapterForByte.convert("10:11:12", true, EConversionMode.QUIET);
 
 		assertEquals("0:0", result);
 	}	
@@ -81,9 +83,9 @@ public class TypeAdapterForByteTest {
 
 		TypeAdapterForByte typeAdapterForByte = new TypeAdapterForByte();
 
-		String result = typeAdapterForByte.convert("10:11:12", false);
+		String result = typeAdapterForByte.convert("10:11:12", false, EConversionMode.QUIET);
 
 		assertEquals("0", result);
 	}	
-	
+
 }

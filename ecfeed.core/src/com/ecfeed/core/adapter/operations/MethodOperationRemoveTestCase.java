@@ -38,7 +38,7 @@ public class MethodOperationRemoveTestCase extends AbstractModelOperation {
 					return null;
 				}
 				@Override
-				public String convert(String value, boolean isRandomized) {
+				public String convert(String value, boolean isRandomized, EConversionMode conversionMode) {
 					return value;
 				}
 				@Override

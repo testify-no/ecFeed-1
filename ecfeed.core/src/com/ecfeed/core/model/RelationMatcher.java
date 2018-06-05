@@ -61,9 +61,9 @@ public class RelationMatcher {
 
 	private static boolean isMatchForNumericTypes(
 			String typeName, EStatementRelation relation, String leftValue, String rightValue) {
-		
+
 		if (JavaTypeHelper.isLongTypeName(typeName)) {
-			
+
 			long leftLong = (long)JavaTypeHelper.parseLongValue(leftValue);
 			long rightLong = (long)JavaTypeHelper.parseLongValue(rightValue);
 

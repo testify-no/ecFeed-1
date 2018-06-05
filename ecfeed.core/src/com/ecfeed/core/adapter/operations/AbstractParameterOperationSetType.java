@@ -19,6 +19,7 @@ import java.util.Map;
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.ITypeAdapter;
 import com.ecfeed.core.adapter.ITypeAdapterProvider;
+import com.ecfeed.core.adapter.ITypeAdapter.EConversionMode;
 import com.ecfeed.core.adapter.java.Messages;
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ChoiceNode;
@@ -193,20 +194,25 @@ public class AbstractParameterOperationSetType extends AbstractModelOperation {
 				if(getChoices(choice).isEmpty()){
 					it.remove();
 				}else{
-					String newValue = adapter.convert(choice.getValueString(), choice.isRandomizedValue());
+					String newValue = 
+							adapter.convert(
+									choice.getValueString(), choice.isRandomizedValue(), EConversionMode.QUIET);
+
 					if(newValue == null){
 						newValue = adapter.getDefaultValue();
 					}
 					choice.setValueString(newValue);
 				}
 			}else{
-				String newValue = adapter.convert(choice.getValueString(), choice.isRandomizedValue());
-				
+				String newValue = 
+						adapter.convert(
+								choice.getValueString(), choice.isRandomizedValue(), EConversionMode.QUIET);
+
 				if(newValue == null){
 					it.remove();
 				}else{
 					choice.setValueString(newValue);
-					
+
 					if (!adapter.isRandomizable()) {
 						choice.setRandomizedValue(false);
 					}

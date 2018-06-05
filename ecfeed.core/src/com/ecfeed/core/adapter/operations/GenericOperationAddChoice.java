@@ -13,6 +13,7 @@ package com.ecfeed.core.adapter.operations;
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.ITypeAdapter;
 import com.ecfeed.core.adapter.ITypeAdapterProvider;
+import com.ecfeed.core.adapter.ITypeAdapter.EConversionMode;
 import com.ecfeed.core.adapter.java.Messages;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.ChoicesParentNode;
@@ -102,7 +103,9 @@ public class GenericOperationAddChoice extends BulkOperation {
 
 				String type = fChoicesParentNode.getParameter().getType();
 				ITypeAdapter<?> adapter = fAdapterProvider.getAdapter(type);
-				String newValue = adapter.convert(choice.getValueString(), choice.isRandomizedValue());
+				String newValue = 
+						adapter.convert(
+								choice.getValueString(), choice.isRandomizedValue(), EConversionMode.QUIET);
 
 				if(newValue == null){
 					ModelOperationException.report(Messages.PARTITION_VALUE_PROBLEM(choice.getValueString()));
