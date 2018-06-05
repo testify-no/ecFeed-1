@@ -64,6 +64,14 @@ public class TypeAdapterForBooleanTest {
 		TypeAdapterForBoolean typeAdapterForBoolean = new TypeAdapterForBoolean();
 
 		typeAdapterForBoolean.convert("true", true, EConversionMode.QUIET);
+	}
+
+	@Test(expected = RuntimeException.class)
+	public void shouldThrowWhenInvalidValue() {
+
+		TypeAdapterForBoolean typeAdapterForBoolean = new TypeAdapterForBoolean();
+
+		typeAdapterForBoolean.convert("TrUe", false, EConversionMode.WITH_EXCEPTION);
 	}	
 
 }

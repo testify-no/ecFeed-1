@@ -5,7 +5,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class TypeAdapterForLong extends TypeAdapterForNumericType<Long>{
 
 	@Override
-	public String convertSingleValue(String value){
+	public String convertSingleValue(String value, EConversionMode conversionMode) {
 
 		String result = super.convertSpecialValue(value);
 

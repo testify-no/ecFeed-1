@@ -13,6 +13,12 @@ public class TypeAdapterHelper {
 			JavaTypeHelper.TYPE_NAME_STRING, 
 			JavaTypeHelper.TYPE_NAME_BYTE, 
 			JavaTypeHelper.TYPE_NAME_CHAR
-	};	
+	};
+	
+	public static void reportRuntimeExceptionCannotConvert(String value, String typeName) {
+		
+		final String CANNOT_CONVERT_CHAR = "Cannot convert value:" + value + "to " + typeName + ".";
+		ExceptionHelper.reportRuntimeException(CANNOT_CONVERT_CHAR);
+	}
 
 }

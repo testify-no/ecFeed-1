@@ -88,4 +88,12 @@ public class TypeAdapterForByteTest {
 		assertEquals("0", result);
 	}	
 
+	@Test(expected = RuntimeException.class)
+	public void shouldThrowWhenInvalidValue() {
+
+		TypeAdapterForByte typeAdapterForByte = new TypeAdapterForByte();
+
+		typeAdapterForByte.convert("A", false, EConversionMode.WITH_EXCEPTION);
+	}	
+
 }
