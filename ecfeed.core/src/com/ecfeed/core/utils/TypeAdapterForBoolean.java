@@ -21,7 +21,7 @@ public class TypeAdapterForBoolean implements ITypeAdapter<Boolean>{
 		return Arrays.asList(TYPES_CONVERTABLE_TO_BOOLEAN).contains(type);
 	}
 
-	public String convert(String value, boolean isRandomized){
+	public String convert(String value, boolean isRandomized, EConversionMode conversionMode){
 
 		if (value.toLowerCase().equals(JavaTypeHelper.VALUE_REPRESENTATION_TRUE.toLowerCase())) {
 			return JavaTypeHelper.VALUE_REPRESENTATION_TRUE;

@@ -13,6 +13,7 @@ package com.ecfeed.core.adapter.operations;
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.ITypeAdapter;
 import com.ecfeed.core.adapter.ITypeAdapterProvider;
+import com.ecfeed.core.adapter.ITypeAdapter.EConversionMode;
 import com.ecfeed.core.adapter.java.AdapterConstants;
 import com.ecfeed.core.adapter.java.Messages;
 import com.ecfeed.core.model.ChoiceNode;
@@ -61,7 +62,9 @@ public class MethodOperationAddTestCase extends AbstractModelOperation {
 			if(parameter.isExpected()){
 				String type = parameter.getType();
 				ITypeAdapter<?> adapter = fAdapterProvider.getAdapter(type);
-				String newValue = adapter.convert(choice.getValueString(), choice.isRandomizedValue());
+				String newValue = 
+						adapter.convert(
+								choice.getValueString(), choice.isRandomizedValue(), EConversionMode.QUIET);
 				if(newValue == null){
 					ModelOperationException.report(Messages.TEST_CASE_DATA_INCOMPATIBLE_WITH_METHOD);
 				}

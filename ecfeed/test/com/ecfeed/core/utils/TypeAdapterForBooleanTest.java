@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import com.ecfeed.core.adapter.ITypeAdapter.EConversionMode;
+
 public class TypeAdapterForBooleanTest {
 
 	@Test
@@ -11,7 +13,7 @@ public class TypeAdapterForBooleanTest {
 
 		TypeAdapterForBoolean typeAdapterForBoolean = new TypeAdapterForBoolean();
 
-		String result = typeAdapterForBoolean.convert("10", false);
+		String result = typeAdapterForBoolean.convert("10", false, EConversionMode.QUIET);
 
 		assertEquals("false", result);
 	}
@@ -21,7 +23,7 @@ public class TypeAdapterForBooleanTest {
 
 		TypeAdapterForBoolean typeAdapterForBoolean = new TypeAdapterForBoolean();
 
-		String result = typeAdapterForBoolean.convert("false", false);
+		String result = typeAdapterForBoolean.convert("false", false, EConversionMode.QUIET);
 
 		assertEquals("false", result);
 	}
@@ -31,7 +33,7 @@ public class TypeAdapterForBooleanTest {
 
 		TypeAdapterForBoolean typeAdapterForBoolean = new TypeAdapterForBoolean();
 
-		String result = typeAdapterForBoolean.convert("FaLsE", false);
+		String result = typeAdapterForBoolean.convert("FaLsE", false, EConversionMode.QUIET);
 
 		assertEquals("false", result);
 	}	
@@ -41,7 +43,7 @@ public class TypeAdapterForBooleanTest {
 
 		TypeAdapterForBoolean typeAdapterForBoolean = new TypeAdapterForBoolean();
 
-		String result = typeAdapterForBoolean.convert("true", false);
+		String result = typeAdapterForBoolean.convert("true", false, EConversionMode.QUIET);
 
 		assertEquals("true", result);
 	}
@@ -51,7 +53,7 @@ public class TypeAdapterForBooleanTest {
 
 		TypeAdapterForBoolean typeAdapterForBoolean = new TypeAdapterForBoolean();
 
-		String result = typeAdapterForBoolean.convert("TrUe", false);
+		String result = typeAdapterForBoolean.convert("TrUe", false, EConversionMode.QUIET);
 
 		assertEquals("true", result);
 	}	
@@ -61,7 +63,7 @@ public class TypeAdapterForBooleanTest {
 
 		TypeAdapterForBoolean typeAdapterForBoolean = new TypeAdapterForBoolean();
 
-		typeAdapterForBoolean.convert("true", true);
+		typeAdapterForBoolean.convert("true", true, EConversionMode.QUIET);
 	}	
 
 }

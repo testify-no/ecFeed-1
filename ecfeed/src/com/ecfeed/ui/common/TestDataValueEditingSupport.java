@@ -27,6 +27,7 @@ import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.widgets.Display;
 
 import com.ecfeed.core.adapter.ITypeAdapter;
+import com.ecfeed.core.adapter.ITypeAdapter.EConversionMode;
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.MethodNode;
@@ -181,7 +182,7 @@ public class TestDataValueEditingSupport extends EditingSupport {
 			String valueString = fComboCellEditor.getViewer().getCCombo().getText();
 			String type = parameter.getType();
 			ITypeAdapter<?> adapter = new EclipseTypeAdapterProvider().getAdapter(type);
-			if(adapter.convert(valueString, false) == null){
+			if(adapter.convert(valueString, false, EConversionMode.QUIET) == null){
 				MessageDialog.openError(Display.getCurrent().getActiveShell(),
 						Messages.DIALOG_CHOICE_VALUE_PROBLEM_TITLE,
 						Messages.DIALOG_CHOICE_VALUE_PROBLEM_MESSAGE(valueString));

@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import com.ecfeed.core.adapter.ITypeAdapter.EConversionMode;
+
 public class TypeAdapterForIntTest {
 
 	@Test
@@ -11,7 +13,7 @@ public class TypeAdapterForIntTest {
 
 		TypeAdapterForInt typeAdapterForInt = new TypeAdapterForInt();
 
-		String result = typeAdapterForInt.convert("10", true);
+		String result = typeAdapterForInt.convert("10", true, EConversionMode.QUIET);
 
 		assertEquals("10:10", result);
 	}
@@ -21,7 +23,7 @@ public class TypeAdapterForIntTest {
 
 		TypeAdapterForInt typeAdapterForInt = new TypeAdapterForInt();
 
-		String result = typeAdapterForInt.convert("10", false);
+		String result = typeAdapterForInt.convert("10", false, EConversionMode.QUIET);
 
 		assertEquals("10", result);
 	}
@@ -31,7 +33,7 @@ public class TypeAdapterForIntTest {
 
 		TypeAdapterForInt typeAdapterForInt = new TypeAdapterForInt();
 
-		String result = typeAdapterForInt.convert("10:11", true);
+		String result = typeAdapterForInt.convert("10:11", true, EConversionMode.QUIET);
 
 		assertEquals("10:11", result);
 	}	
@@ -41,7 +43,7 @@ public class TypeAdapterForIntTest {
 
 		TypeAdapterForInt typeAdapterForInt = new TypeAdapterForInt();
 
-		String result = typeAdapterForInt.convert("10:11", false);
+		String result = typeAdapterForInt.convert("10:11", false, EConversionMode.QUIET);
 
 		assertEquals("10", result);
 	}	
@@ -51,7 +53,7 @@ public class TypeAdapterForIntTest {
 
 		TypeAdapterForInt typeAdapterForInt = new TypeAdapterForInt();
 
-		String result = typeAdapterForInt.convert("ABC", true);
+		String result = typeAdapterForInt.convert("ABC", true, EConversionMode.QUIET);
 
 		assertEquals("0:0", result);
 	}	
@@ -61,7 +63,7 @@ public class TypeAdapterForIntTest {
 
 		TypeAdapterForInt typeAdapterForInt = new TypeAdapterForInt();
 
-		String result = typeAdapterForInt.convert("ABC", false);
+		String result = typeAdapterForInt.convert("ABC", false, EConversionMode.QUIET);
 
 		assertEquals("0", result);
 	}	
@@ -71,7 +73,7 @@ public class TypeAdapterForIntTest {
 
 		TypeAdapterForInt typeAdapterForInt = new TypeAdapterForInt();
 
-		String result = typeAdapterForInt.convert("10:11:12", true);
+		String result = typeAdapterForInt.convert("10:11:12", true, EConversionMode.QUIET);
 
 		assertEquals("0:0", result);
 	}	
@@ -81,7 +83,7 @@ public class TypeAdapterForIntTest {
 
 		TypeAdapterForInt typeAdapterForInt = new TypeAdapterForInt();
 
-		String result = typeAdapterForInt.convert("10:11:12", false);
+		String result = typeAdapterForInt.convert("10:11:12", false, EConversionMode.QUIET);
 
 		assertEquals("0", result);
 	}	

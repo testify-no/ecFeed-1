@@ -14,7 +14,7 @@ public abstract class TypeAdapterForTypeWithRange<T> implements ITypeAdapter<T> 
 	}
 
 	@Override
-	public String convert(String value, boolean isRandomized){
+	public String convert(String value, boolean isRandomized, EConversionMode conversionMode){
 
 		if (!RandomizedRangeHelper.isRange(value)) {
 

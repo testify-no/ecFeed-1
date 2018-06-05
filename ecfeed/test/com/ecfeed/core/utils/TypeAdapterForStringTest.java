@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import com.ecfeed.core.adapter.ITypeAdapter.EConversionMode;
+
 public class TypeAdapterForStringTest {
 
 	@Test
@@ -11,7 +13,7 @@ public class TypeAdapterForStringTest {
 
 		TypeAdapterForString typeAdapterForString = new TypeAdapterForString();
 
-		String result = typeAdapterForString.convert("10", true);
+		String result = typeAdapterForString.convert("10", true, EConversionMode.QUIET);
 
 		assertEquals("10", result);
 	}
@@ -21,7 +23,7 @@ public class TypeAdapterForStringTest {
 
 		TypeAdapterForString typeAdapterForString = new TypeAdapterForString();
 
-		String result = typeAdapterForString.convert("10", false);
+		String result = typeAdapterForString.convert("10", false, EConversionMode.QUIET);
 
 		assertEquals("10", result);
 	}
@@ -31,7 +33,7 @@ public class TypeAdapterForStringTest {
 
 		TypeAdapterForString typeAdapterForString= new TypeAdapterForString();
 
-		String result = typeAdapterForString.convert("10:10", true);
+		String result = typeAdapterForString.convert("10:10", true, EConversionMode.QUIET);
 
 		assertEquals("10:10", result);
 	}
@@ -41,7 +43,7 @@ public class TypeAdapterForStringTest {
 
 		TypeAdapterForString typeAdapterForString = new TypeAdapterForString();
 
-		String result = typeAdapterForString.convert("10:10", false);
+		String result = typeAdapterForString.convert("10:10", false, EConversionMode.QUIET);
 
 		assertEquals("10:10", result);
 	}
