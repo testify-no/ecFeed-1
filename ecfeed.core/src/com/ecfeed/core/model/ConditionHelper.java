@@ -45,7 +45,7 @@ public class ConditionHelper {
 			return ConditionHelper.isAmbiguousForStringType(leftChoiceNode, parentRelationStatement);
 		}
 
-		if (RangeValidator.isAmbiguous(
+		if (RangeHelper.isAmbiguous(
 				leftChoiceNode.getValueString(), 
 				rightValue, 
 				relation, 

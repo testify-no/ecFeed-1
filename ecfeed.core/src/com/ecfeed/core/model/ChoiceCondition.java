@@ -164,7 +164,7 @@ public class ChoiceCondition implements IStatementCondition {
 		}
 
 		boolean result = 
-				RangeValidator.isRightRangeInLeftRange(
+				RangeHelper.isRightRangeInLeftRange(
 						leftChoiceStr, fRightValue, relation, substituteType);
 
 		return EvaluationResult.convertFromBoolean(result);
