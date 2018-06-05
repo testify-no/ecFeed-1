@@ -23,6 +23,29 @@ public class TypeAdapterForBoolean implements ITypeAdapter<Boolean>{
 
 	public String convert(String value, boolean isRandomized, EConversionMode conversionMode){
 
+		if (conversionMode == EConversionMode.WITH_EXCEPTION) {
+			return convertForExceptionMode(value);
+		}
+
+		return convertForQuietMode(value);
+	}
+
+	private String convertForExceptionMode(String value) {
+
+		if (value.equals(JavaTypeHelper.VALUE_REPRESENTATION_TRUE)) {
+			return JavaTypeHelper.VALUE_REPRESENTATION_TRUE;
+		}
+
+		if (value.equals(JavaTypeHelper.VALUE_REPRESENTATION_FALSE)) {
+			return JavaTypeHelper.VALUE_REPRESENTATION_FALSE;
+		}
+
+		TypeAdapterHelper.reportRuntimeExceptionCannotConvert(value, "boolean");
+		return null;
+	}
+
+	private String convertForQuietMode(String value) {
+
 		if (value.toLowerCase().equals(JavaTypeHelper.VALUE_REPRESENTATION_TRUE.toLowerCase())) {
 			return JavaTypeHelper.VALUE_REPRESENTATION_TRUE;
 		}

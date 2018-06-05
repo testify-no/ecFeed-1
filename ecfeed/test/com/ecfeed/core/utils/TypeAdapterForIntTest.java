@@ -86,6 +86,14 @@ public class TypeAdapterForIntTest {
 		String result = typeAdapterForInt.convert("10:11:12", false, EConversionMode.QUIET);
 
 		assertEquals("0", result);
+	}
+	
+	@Test(expected = RuntimeException.class)
+	public void shouldThrowWhenInvalidValue() {
+
+		TypeAdapterForInt typeAdapterForInt = new TypeAdapterForInt();
+
+		typeAdapterForInt.convert("AB", false, EConversionMode.WITH_EXCEPTION);
 	}	
 
 }

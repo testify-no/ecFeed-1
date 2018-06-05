@@ -5,7 +5,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class TypeAdapterForShort extends TypeAdapterForNumericType<Short> {
 
 	@Override
-	public String convertSingleValue(String value) {
+	public String convertSingleValue(String value, EConversionMode conversionMode) {
 
 		String result = super.convertSpecialValue(value);
 
@@ -15,9 +15,15 @@ public class TypeAdapterForShort extends TypeAdapterForNumericType<Short> {
 
 		try {
 			return String.valueOf(StringHelper.convertToShort(value));
-		}
-		catch (NumberFormatException e) {
-			return getDefaultValue();
+		} catch (NumberFormatException e) {
+
+			if (conversionMode == EConversionMode.WITH_EXCEPTION) {
+				TypeAdapterHelper.reportRuntimeExceptionCannotConvert(value, "Float");
+				return null;
+			} else {
+				return getDefaultValue();
+			}
+
 		}
 	}
 

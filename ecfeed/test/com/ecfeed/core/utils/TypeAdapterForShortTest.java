@@ -88,4 +88,11 @@ public class TypeAdapterForShortTest {
 		assertEquals("0", result);
 	}	
 
+	@Test(expected = RuntimeException.class)
+	public void shouldThrowWhenInvalidValue() {
+
+		TypeAdapterForShort typeAdapterForShort = new TypeAdapterForShort();
+
+		typeAdapterForShort.convert("AB", false, EConversionMode.WITH_EXCEPTION);
+	}	
 }
