@@ -191,60 +191,78 @@ public class RangeValidatorTest {
 
 		assertTrue(RangeValidator.isAmbiguous(
 				"-200.0:100.0", "0.0", EStatementRelation.EQUAL, JavaTypeHelper.TYPE_NAME_DOUBLE));
-		
+
 		assertFalse(RangeValidator.isAmbiguous(
 				"NEGATIVE_INFINITY:MIN_VALUE", "MAX_VALUE:POSITIVE_INFINITY", EStatementRelation.EQUAL, JavaTypeHelper.TYPE_NAME_DOUBLE));
-		
+
 		assertTrue(RangeValidator.isAmbiguous(
 				"NEGATIVE_INFINITY:MAX_VALUE", "MIN_VALUE:POSITIVE_INFINITY", EStatementRelation.EQUAL, JavaTypeHelper.TYPE_NAME_DOUBLE));
 	}
 
 	@Test
 	public void testAmbiguousForEqualAndLongWithSpecialValues() {
-
-		assertFalse(RangeValidator.isAmbiguous(
-				"100:MAX_VALUE", "99", EStatementRelation.EQUAL, JavaTypeHelper.TYPE_NAME_LONG));
-
-		assertTrue(RangeValidator.isAmbiguous(
-				"100:MAX_VALUE", "150", EStatementRelation.EQUAL, JavaTypeHelper.TYPE_NAME_LONG));
-
-		assertTrue(RangeValidator.isAmbiguous(
-				"100:200", "150", EStatementRelation.EQUAL, JavaTypeHelper.TYPE_NAME_LONG));
-
-		assertFalse(RangeValidator.isAmbiguous(
-				"MIN_VALUE:100", "101", EStatementRelation.EQUAL, JavaTypeHelper.TYPE_NAME_LONG));
-
-		assertTrue(RangeValidator.isAmbiguous(
-				"MIN_VALUE:100", "0", EStatementRelation.EQUAL, JavaTypeHelper.TYPE_NAME_LONG));
-
-		assertTrue(RangeValidator.isAmbiguous(
-				"-200:100", "0", EStatementRelation.EQUAL, JavaTypeHelper.TYPE_NAME_LONG));
+		testAmbiguousForEqualAndLongWithSpecialValues(EStatementRelation.EQUAL);
+		testAmbiguousForEqualAndLongWithSpecialValues(EStatementRelation.NOT_EQUAL);
+		testAmbiguousForEqualAndLongWithSpecialValues(EStatementRelation.LESS_EQUAL);
+		testAmbiguousForEqualAndLongWithSpecialValues(EStatementRelation.LESS_THAN);
+		testAmbiguousForEqualAndLongWithSpecialValues(EStatementRelation.GREATER_EQUAL);
+		testAmbiguousForEqualAndLongWithSpecialValues(EStatementRelation.GREATER_THAN);
 	}
-	
+
+	public void testAmbiguousForEqualAndLongWithSpecialValues(EStatementRelation statementRelation) {
+
+		assertFalse(RangeValidator.isAmbiguous(
+				"100:MAX_VALUE", "99", statementRelation, JavaTypeHelper.TYPE_NAME_LONG));
+
+		assertTrue(RangeValidator.isAmbiguous(
+				"100:MAX_VALUE", "150", statementRelation, JavaTypeHelper.TYPE_NAME_LONG));
+
+		assertTrue(RangeValidator.isAmbiguous(
+				"100:200", "150", statementRelation, JavaTypeHelper.TYPE_NAME_LONG));
+
+		assertFalse(RangeValidator.isAmbiguous(
+				"MIN_VALUE:100", "101", statementRelation, JavaTypeHelper.TYPE_NAME_LONG));
+
+		assertTrue(RangeValidator.isAmbiguous(
+				"MIN_VALUE:100", "0", statementRelation, JavaTypeHelper.TYPE_NAME_LONG));
+
+		assertTrue(RangeValidator.isAmbiguous(
+				"-200:100", "0", statementRelation, JavaTypeHelper.TYPE_NAME_LONG));
+	}
+
 	@Test
 	public void testForInvalidSpecialValues() {
+		testForInvalidSpecialValues(EStatementRelation.EQUAL);
+		testForInvalidSpecialValues(EStatementRelation.NOT_EQUAL);
+		//		testForInvalidSpecialValues(EStatementRelation.LESS_EQUAL);
+		//		testForInvalidSpecialValues(EStatementRelation.LESS_THAN);
+		//		testForInvalidSpecialValues(EStatementRelation.GREATER_EQUAL);
+		//		testForInvalidSpecialValues(EStatementRelation.GREATER_THAN);
+	}
+
+	public void testForInvalidSpecialValues(EStatementRelation statementRelation) {
 
 		boolean wasException;
-		
+
 		wasException = false;
 		try {
 			RangeValidator.isAmbiguous(
-				"NEGATIVE_INFINITY:100", "0", EStatementRelation.EQUAL, JavaTypeHelper.TYPE_NAME_LONG);
+					"NEGATIVE_INFINITY:100", "0", statementRelation, JavaTypeHelper.TYPE_NAME_LONG);
 		} catch (Exception ex) {
 			wasException = true;
 		}
-		
+
 		assertTrue(wasException);
-		
+
 		wasException = false;
 		try {
 			RangeValidator.isAmbiguous(
-				"100:POSITIVE_INFINITY", "0", EStatementRelation.EQUAL, JavaTypeHelper.TYPE_NAME_LONG);
+					"100:POSITIVE_INFINITY", "0", statementRelation, JavaTypeHelper.TYPE_NAME_LONG);
 		} catch (Exception ex) {
 			wasException = true;
 		}
-		
+
 		assertTrue(wasException);
 	}
-	
+
 }
