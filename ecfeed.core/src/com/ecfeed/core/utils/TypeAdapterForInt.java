@@ -5,7 +5,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class TypeAdapterForInt extends TypeAdapterForNumericType<Integer>{
 
 	@Override
-	protected String convertSingleValue(String value) {
+	protected String convertSingleValue(String value, EConversionMode conversionMode) {
 
 		String result = super.convertSpecialValue(value);
 
@@ -16,9 +16,14 @@ public class TypeAdapterForInt extends TypeAdapterForNumericType<Integer>{
 		try {
 			Integer integer = StringHelper.convertToInteger(value);
 			return String.valueOf(integer);
-		}
-		catch (NumberFormatException e) {
-			return getDefaultValue();
+		} catch (NumberFormatException e) {
+
+			if (conversionMode == EConversionMode.WITH_EXCEPTION) {
+				TypeAdapterHelper.reportRuntimeExceptionCannotConvert(value, "Float");
+				return null;
+			} else {
+				return getDefaultValue();
+			}
 		}
 	}
 

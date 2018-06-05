@@ -4,7 +4,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class TypeAdapterForDouble extends TypeAdapterFloatingPoint<Double>{
 	@Override
-	public String convertSingleValue(String value) {
+	public String convertSingleValue(String value, EConversionMode conversionMode) {
 
 		String result = super.convertSpecialValue(value);
 
@@ -15,7 +15,13 @@ public class TypeAdapterForDouble extends TypeAdapterFloatingPoint<Double>{
 		try {
 			return String.valueOf(Double.parseDouble(value));
 		} catch(NumberFormatException e) {
-			return getDefaultValue();
+
+			if (conversionMode == EConversionMode.WITH_EXCEPTION) {
+				TypeAdapterHelper.reportRuntimeExceptionCannotConvert(value, "Double");
+				return null;
+			} else {
+				return getDefaultValue();
+			}
 		}
 	}
 

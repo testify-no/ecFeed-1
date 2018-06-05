@@ -88,5 +88,13 @@ public class TypeAdapterForDoubleTest {
 		String result = typeAdapterForDouble.convert("1.0:2.0:E", false, EConversionMode.QUIET);
 
 		assertEquals("0.0", result);
+	}
+
+	@Test(expected = RuntimeException.class)
+	public void shouldThrowWhenInvalidValue() {
+
+		TypeAdapterForDouble typeAdapterForDouble = new TypeAdapterForDouble();
+
+		typeAdapterForDouble.convert("AB", false, EConversionMode.WITH_EXCEPTION);
 	}	
 }

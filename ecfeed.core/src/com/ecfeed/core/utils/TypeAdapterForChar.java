@@ -19,10 +19,14 @@ public class TypeAdapterForChar extends TypeAdapterForTypeWithRange<Character>{
 	}
 
 	@Override
-	public String convertSingleValue(String value) {
+	public String convertSingleValue(String value, EConversionMode conversionMode) {
 
 		if (value.length() == 1) {
 			return value;
+		}
+		
+		if (conversionMode == EConversionMode.WITH_EXCEPTION) {
+			TypeAdapterHelper.reportRuntimeExceptionCannotConvert(value, "char");
 		}
 
 		return getDefaultValue();

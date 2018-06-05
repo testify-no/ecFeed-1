@@ -88,6 +88,14 @@ public class TypeAdapterForFloatTest {
 		String result = typeAdapterForFloat.convert("1.0:2.0:E", false, EConversionMode.QUIET);
 
 		assertEquals("0.0", result);
+	}
+	
+	@Test(expected = RuntimeException.class)
+	public void shouldThrowWhenInvalidValue() {
+
+		TypeAdapterForFloat typeAdapterForFloat = new TypeAdapterForFloat();
+
+		typeAdapterForFloat.convert("AB", false, EConversionMode.WITH_EXCEPTION);
 	}	
 
 }

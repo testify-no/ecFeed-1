@@ -5,7 +5,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class TypeAdapterForByte extends TypeAdapterForNumericType<Byte>{
 
 	@Override
-	protected String convertSingleValue(String value){
+	protected String convertSingleValue(String value, EConversionMode conversionMode) {
 
 		String result = super.convertSpecialValue(value);
 
@@ -13,14 +13,19 @@ public class TypeAdapterForByte extends TypeAdapterForNumericType<Byte>{
 			return result;
 		}
 
-		try{
+		try {
 			return String.valueOf(StringHelper.convertToByte(value));
-		}
-		catch (NumberFormatException e) {
-			return getDefaultValue();
+		} catch (NumberFormatException e) {
+
+			if (conversionMode == EConversionMode.QUIET) {
+				return getDefaultValue();
+			} else {
+				TypeAdapterHelper.reportRuntimeExceptionCannotConvert(value, "byte");
+				return null;
+			}
 		}
 	}
-	
+
 	@Override
 	protected String[] getSpecialValues() {
 		return NUMERIC_SPECIAL_VALUES;

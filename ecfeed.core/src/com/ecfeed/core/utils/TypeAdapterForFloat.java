@@ -5,7 +5,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class TypeAdapterForFloat extends TypeAdapterFloatingPoint<Float>{
 
 	@Override
-	public String convertSingleValue(String value) {
+	public String convertSingleValue(String value, EConversionMode conversionMode) {
 
 		String result = super.convertSpecialValue(value);
 
@@ -13,13 +13,17 @@ public class TypeAdapterForFloat extends TypeAdapterFloatingPoint<Float>{
 			return result;
 		}
 
-		try{
+		try {
 			return String.valueOf(Float.parseFloat(value));
-		}
-		catch(NumberFormatException e){
-			return getDefaultValue();
-		}
+		} catch(NumberFormatException e) {
 
+			if (conversionMode == EConversionMode.WITH_EXCEPTION) {
+				TypeAdapterHelper.reportRuntimeExceptionCannotConvert(value, "Float");
+				return null;
+			} else {
+				return getDefaultValue();
+			}
+		}
 	}
 
 	@Override

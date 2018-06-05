@@ -97,5 +97,13 @@ public class TypeAdapterForCharTest {
 		String result = typeAdapterForChar.convert("A:B:C", false, EConversionMode.QUIET);
 
 		assertEquals("0", result);
+	}
+	
+	@Test(expected = RuntimeException.class)
+	public void shouldThrowWhenInvalidValue() {
+
+		TypeAdapterForChar typeAdapterForChar = new TypeAdapterForChar();
+
+		typeAdapterForChar.convert("AB", false, EConversionMode.WITH_EXCEPTION);
 	}	
 }
