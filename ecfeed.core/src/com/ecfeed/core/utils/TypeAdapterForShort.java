@@ -18,7 +18,7 @@ public class TypeAdapterForShort extends TypeAdapterForNumericType<Short> {
 		} catch (NumberFormatException e) {
 
 			if (conversionMode == EConversionMode.WITH_EXCEPTION) {
-				TypeAdapterHelper.reportRuntimeExceptionCannotConvert(value, "Float");
+				TypeAdapterHelper.reportRuntimeExceptionCannotConvert(value, JavaTypeHelper.TYPE_NAME_SHORT);
 				return null;
 			} else {
 				return getDefaultValue();

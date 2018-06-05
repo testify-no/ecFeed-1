@@ -40,7 +40,7 @@ public class TypeAdapterForBoolean implements ITypeAdapter<Boolean>{
 			return JavaTypeHelper.VALUE_REPRESENTATION_FALSE;
 		}
 
-		TypeAdapterHelper.reportRuntimeExceptionCannotConvert(value, "boolean");
+		TypeAdapterHelper.reportRuntimeExceptionCannotConvert(value, JavaTypeHelper.TYPE_NAME_BOOLEAN);
 		return null;
 	}
 

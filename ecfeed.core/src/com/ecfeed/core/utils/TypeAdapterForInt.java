@@ -19,7 +19,7 @@ public class TypeAdapterForInt extends TypeAdapterForNumericType<Integer>{
 		} catch (NumberFormatException e) {
 
 			if (conversionMode == EConversionMode.WITH_EXCEPTION) {
-				TypeAdapterHelper.reportRuntimeExceptionCannotConvert(value, "Float");
+				TypeAdapterHelper.reportRuntimeExceptionCannotConvert(value, JavaTypeHelper.TYPE_NAME_INT);
 				return null;
 			} else {
 				return getDefaultValue();
