@@ -8,13 +8,46 @@ import static com.ecfeed.core.model.EStatementRelation.NOT_EQUAL;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.JavaTypeHelper;
 
 public class RangeHelper {
 
 	private static final int SINGLE_VALUE = 1;
 	private static final int RANGE_VALUE = 2;	
+	
+	public static final String DELIMITER = ":";
 
+	public static boolean isRange(String value) {
+
+		String[] values = value.split(DELIMITER);
+
+		if (values.length != 2) {
+			return false;
+		}
+
+		return true;
+	}
+
+	public static String[] splitToRange(String value) {
+
+		String[] range = value.split(DELIMITER);
+
+		if (range.length != 2) {
+			ExceptionHelper.reportRuntimeException("Invalid format of adapted value.");
+		}
+
+		return range;
+	}
+
+	public static String createRange(String value) {
+		return createRange(value, value);
+	}
+
+	public static String createRange(String firstValue, String secondValue) {
+		return firstValue + DELIMITER + secondValue;
+	}	
+	
 	public static final boolean isAmbiguous(
 			String leftRange, 
 			String rightRange, 
