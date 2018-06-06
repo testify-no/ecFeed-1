@@ -314,4 +314,70 @@ public class RangeHelperTest {
 		assertTrue(wasException);
 	}
 
+	@Test
+	public void testCorrectRangeWithOneValueAndInteger() {
+		String[] range = new String[]{ "1", "1" }; 
+		assertTrue(RangeHelper.isRangeCorrect(range));
+	}
+
+	@Test
+	public void testCorrectRangeWithOneValueFloat() {
+		String[] range = new String[]{ "1.0", "1.0" }; 
+		assertTrue(RangeHelper.isRangeCorrect(range));
+	}	
+
+	@Test
+	public void testCorrectRangeWithInteger() {
+		String[] range = new String[]{ "1", "2" }; 
+		assertTrue(RangeHelper.isRangeCorrect(range));
+	}
+
+	@Test
+	public void testCorrectRangeWithFloat() {
+		String[] range = new String[]{ "1.0", "2.0" }; 
+		assertTrue(RangeHelper.isRangeCorrect(range));
+	}	
+
+	@Test
+	public void testNotCorrectRangeWithInteger() {
+		String[] range = new String[]{ "2", "1" }; 
+		assertFalse(RangeHelper.isRangeCorrect(range));
+	}	
+
+	@Test
+	public void testNotCorrectRangeWithFloat() {
+		String[] range = new String[]{ "2.0", "1.0" }; 
+		assertFalse(RangeHelper.isRangeCorrect(range));
+	}
+
+	@Test
+	public void testNotCorrectMixedTypes1() {
+		String[] range = new String[]{ "2.0", "abc" }; 
+		assertFalse(RangeHelper.isRangeCorrect(range));
+	}
+
+	@Test
+	public void testNotCorrectMixedTypes2() {
+		String[] range = new String[]{ "xyz", "1" }; 
+		assertFalse(RangeHelper.isRangeCorrect(range));
+	}
+
+	@Test
+	public void testCorrectStringTypes1() {
+		String[] range = new String[]{ "xyz", "xyz" }; 
+		assertTrue(RangeHelper.isRangeCorrect(range));
+	}
+
+	@Test
+	public void testCorrectStringTypes2() {
+		String[] range = new String[]{ "abc", "def" }; 
+		assertTrue(RangeHelper.isRangeCorrect(range));
+	}
+
+	@Test
+	public void testNotCorrectStringTypes() {
+		String[] range = new String[]{ "def", "abc"}; 
+		assertFalse(RangeHelper.isRangeCorrect(range));
+	}
+	
 }

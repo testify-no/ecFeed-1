@@ -276,6 +276,19 @@ public class JavaTypeHelper {
 		return false;
 	}
 
+	public static boolean isConvertibleToNumber(String text) {
+
+		if (parseDoubleValue(text) != null) {
+			return true;
+		}
+
+		if (parseLongValue(text) != null) {
+			return true;
+		}		
+
+		return false;
+	}
+
 	public static double convertNumericToDouble(String typeName, String value) {
 
 		if (isByteTypeName(typeName)) {
@@ -294,7 +307,7 @@ public class JavaTypeHelper {
 			return (double)parseFloatValue(value);
 		}
 		if (isDoubleTypeName(typeName)) {
-			return (double)parseDoubleValue(value);
+			return parseDoubleValue(value);
 		}
 
 		ExceptionHelper.reportRuntimeException("Invalid type in numeric conversion");
@@ -331,7 +344,7 @@ public class JavaTypeHelper {
 		}
 	}
 
-	public static Object parseBooleanValue(String valueString) {
+	public static Boolean parseBooleanValue(String valueString) {
 
 		if(valueString.toLowerCase().equals(VALUE_REPRESENTATION_TRUE.toLowerCase())){
 			return true;
@@ -342,7 +355,7 @@ public class JavaTypeHelper {
 		return null;
 	}	
 
-	private static Object parseByteValue(String valueString) {
+	private static Byte parseByteValue(String valueString) {
 
 		if(valueString.equals(VALUE_REPRESENTATION_MAX)){
 			return Byte.MAX_VALUE;
@@ -358,7 +371,7 @@ public class JavaTypeHelper {
 		}
 	}
 
-	private static Object parseCharValue(String valueString) {
+	private static Character parseCharValue(String valueString) {
 
 		if(valueString.equals(VALUE_REPRESENTATION_MAX)){
 			return Character.MAX_VALUE;
@@ -375,7 +388,7 @@ public class JavaTypeHelper {
 
 	}
 
-	private static Object parseDoubleValue(String valueString) {
+	private static Double parseDoubleValue(String valueString) {
 
 		if(valueString.equals(VALUE_REPRESENTATION_MAX)){
 			return Double.MAX_VALUE;
@@ -397,7 +410,7 @@ public class JavaTypeHelper {
 		}
 	}
 
-	private static Object parseFloatValue(String valueString) {
+	private static Float parseFloatValue(String valueString) {
 
 		if(valueString.equals(VALUE_REPRESENTATION_MAX)){
 			return Float.MAX_VALUE;
@@ -419,7 +432,7 @@ public class JavaTypeHelper {
 		}
 	}
 
-	private static Object parseIntValue(String valueString) {
+	private static Integer parseIntValue(String valueString) {
 
 		if(valueString.equals(VALUE_REPRESENTATION_MAX)){
 			return Integer.MAX_VALUE;
@@ -435,7 +448,7 @@ public class JavaTypeHelper {
 		}
 	}
 
-	public static Object parseLongValue(String valueString) {
+	public static Long parseLongValue(String valueString) {
 
 		if(valueString.equals(VALUE_REPRESENTATION_MAX)){
 			return Long.MAX_VALUE;
@@ -451,7 +464,7 @@ public class JavaTypeHelper {
 		}
 	}
 
-	private static Object parseShortValue(String valueString) {
+	private static Short parseShortValue(String valueString) {
 
 		if(valueString.equals(VALUE_REPRESENTATION_MAX)){
 			return Short.MAX_VALUE;
@@ -467,7 +480,7 @@ public class JavaTypeHelper {
 		}
 	}
 
-	private static Object parseStringValue(String valueString) {
+	private static String parseStringValue(String valueString) {
 
 		if(valueString.equals(AdapterConstants.VALUE_REPRESENTATION_NULL)){
 			return null;
