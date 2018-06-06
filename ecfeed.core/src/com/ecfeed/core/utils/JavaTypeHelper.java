@@ -31,6 +31,9 @@ public class JavaTypeHelper {
 	public static final String VALUE_REPRESENTATION_FALSE = "false";
 	public static final String VALUE_REPRESENTATION_MIN = "MIN_VALUE";	
 	public static final String VALUE_REPRESENTATION_MAX = "MAX_VALUE";
+	public static final String VALUE_REPRESENTATION_MINUS_MIN = "-MIN_VALUE";	
+	public static final String VALUE_REPRESENTATION_MINUS_MAX = "-MAX_VALUE";
+
 
 	public static final String VALUE_REPRESENTATION_NEGATIVE_INF = "NEGATIVE_INFINITY";	
 	public static final String VALUE_REPRESENTATION_POSITIVE_INF = "POSITIVE_INFINITY";
@@ -393,8 +396,14 @@ public class JavaTypeHelper {
 		if(valueString.equals(VALUE_REPRESENTATION_MAX)){
 			return Double.MAX_VALUE;
 		}
+		if(valueString.equals(VALUE_REPRESENTATION_MINUS_MAX)){
+			return (-1)*Double.MAX_VALUE;
+		}
 		if(valueString.equals(VALUE_REPRESENTATION_MIN)){
 			return Double.MIN_VALUE;
+		}
+		if(valueString.equals(VALUE_REPRESENTATION_MINUS_MIN)){
+			return (-1)*Double.MIN_VALUE;
 		}
 		if(valueString.equals(VALUE_REPRESENTATION_POSITIVE_INF)){
 			return Double.POSITIVE_INFINITY;
