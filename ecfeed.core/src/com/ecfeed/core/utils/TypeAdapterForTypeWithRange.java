@@ -37,7 +37,21 @@ public abstract class TypeAdapterForTypeWithRange<T> implements ITypeAdapter<T> 
 		String firstValue = convertSingleValue(range[0], conversionMode);
 		String secondValue = convertSingleValue(range[1], conversionMode);
 
+		checkRange(range, conversionMode);		
+
 		return RangeHelper.createRange(firstValue, secondValue);
+	}
+
+	private void checkRange(String[] range, EConversionMode conversionMode) {
+
+		if (conversionMode != EConversionMode.WITH_EXCEPTION) {
+			return;
+		}
+
+		if (!RangeHelper.isRangeCorrect(range)) {
+			final String RANGE_IS_INVALID = "Range [" + range[0] + ", " + range[1] + "] is invalid.";
+			ExceptionHelper.reportRuntimeException(RANGE_IS_INVALID);
+		}
 	}
 
 }
