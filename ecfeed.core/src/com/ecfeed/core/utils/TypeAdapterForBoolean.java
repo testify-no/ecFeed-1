@@ -12,6 +12,11 @@ public class TypeAdapterForBoolean implements ITypeAdapter<Boolean>{
 	};
 
 	@Override
+	public String getMyTypeName() {
+		return JavaTypeHelper.TYPE_NAME_BOOLEAN;
+	}
+
+	@Override
 	public boolean isRandomizable() {
 		return false;
 	}

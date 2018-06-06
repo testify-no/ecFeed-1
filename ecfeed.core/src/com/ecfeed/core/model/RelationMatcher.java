@@ -62,22 +62,22 @@ public class RelationMatcher {
 	private static boolean isMatchForNumericTypes(
 			String typeName, EStatementRelation relation, String leftValue, String rightValue) {
 
-		if (JavaTypeHelper.isLongTypeName(typeName)) {
+		if (JavaTypeHelper.isFloatingPointTypeName(typeName)) {
 
-			long leftLong = (long)JavaTypeHelper.parseLongValue(leftValue);
-			long rightLong = (long)JavaTypeHelper.parseLongValue(rightValue);
+			double leftDouble = JavaTypeHelper.convertNumericToDouble(typeName, leftValue);
+			double rightDouble = JavaTypeHelper.convertNumericToDouble(typeName, rightValue);
 
-			if (EStatementRelation.isMatch(relation, leftLong, rightLong)) {
+			if (EStatementRelation.isMatch(relation, leftDouble, rightDouble)) {
 				return true;
 			}
 
 			return false;
 		}
 
-		double leftDouble = JavaTypeHelper.convertNumericToDouble(typeName, leftValue);
-		double rightDouble = JavaTypeHelper.convertNumericToDouble(typeName, rightValue);
+		long leftLong = (long)JavaTypeHelper.parseLongValue(leftValue);
+		long rightLong = (long)JavaTypeHelper.parseLongValue(rightValue);
 
-		if (EStatementRelation.isMatch(relation, leftDouble, rightDouble)) {
+		if (EStatementRelation.isMatch(relation, leftLong, rightLong)) {
 			return true;
 		}
 

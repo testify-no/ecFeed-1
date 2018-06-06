@@ -29,59 +29,14 @@ public class RangeHelper {
 		return true;
 	}
 
-	public static boolean isRangeCorrect(String[] range) {
-
-		if (isSingleValue(range)) {
-			return true;
-		}
-
-		boolean value0Convertible = JavaTypeHelper.isConvertibleToNumber(range[0]);
-		boolean value1Convertible = JavaTypeHelper.isConvertibleToNumber(range[1]);
-
-		if (isMixedRange(value0Convertible, value1Convertible)) {
-			return false;
-		}
-
-		if (value0Convertible && value1Convertible) {
-			return isRangeCorrectForNumbers(range);
-		}
-
-		return isRangeCorrectForStrings(range);
-	}
-
-	private static boolean isMixedRange(
-			boolean value0ConvertibleToNumber, boolean value1ConvertibleToNumber) {
-
-		if (value0ConvertibleToNumber && !value1ConvertibleToNumber) {
-			return true;
-		}
-
-		if (value1ConvertibleToNumber && !value0ConvertibleToNumber) {
-			return true;
-		}
-
-		return false;
-	}
-
-	private static boolean isRangeCorrectForNumbers(String[] range) {
-
-		return isRangeCorrect(range, JavaTypeHelper.TYPE_NAME_DOUBLE);
-	}
-
-	private static boolean isRangeCorrectForStrings(String[] range) {
-
-		return isRangeCorrect(range, JavaTypeHelper.TYPE_NAME_STRING);
-	}
-
-	private static boolean isRangeCorrect(String[] range, String typeName) {
+	public static boolean isRangeCorrect(String[] range, String typeName) {
 
 		if (RelationMatcher.isRelationMatch(
-				EStatementRelation.LESS_THAN, typeName, range[0], range[1])) {
+				EStatementRelation.LESS_EQUAL, typeName, range[0], range[1])) {
 			return true;
 		}
 
 		return false;
-
 	}
 
 	public static String[] splitToRange(String value) {

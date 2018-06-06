@@ -52,4 +52,9 @@ public class TypeAdapterBaseForUserType<T extends Enum<T>> implements ITypeAdapt
 		return false;
 	}
 
+	@Override
+	public String getMyTypeName() {
+		return "USER-TYPE";
+	}
+
 }

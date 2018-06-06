@@ -3,6 +3,12 @@ package com.ecfeed.core.utils;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class TypeAdapterForDouble extends TypeAdapterFloatingPoint<Double>{
+
+	@Override
+	public String getMyTypeName() {
+		return JavaTypeHelper.TYPE_NAME_DOUBLE;
+	}
+
 	@Override
 	public String convertSingleValue(String value, EConversionMode conversionMode) {
 
@@ -29,4 +35,5 @@ public class TypeAdapterForDouble extends TypeAdapterFloatingPoint<Double>{
 	public Double generateValue(String range) {
 		return ThreadLocalRandom.current().nextDouble(getLower(range),getUpper(range));
 	}
+
 }
