@@ -376,13 +376,43 @@ public class RangeHelperTest {
 
 	@Test
 	public void testForDoubleWithMinValue2() {
+		String[] range = new String[]{ "-MIN_VALUE", "0" }; 
+		assertTrue(RangeHelper.isRangeCorrect(range, JavaTypeHelper.TYPE_NAME_DOUBLE));
+	}
+
+	@Test
+	public void testForDoubleWithMinValue3() {
 		String[] range = new String[]{ "0", "MIN_VALUE" }; 
 		assertTrue(RangeHelper.isRangeCorrect(range, JavaTypeHelper.TYPE_NAME_DOUBLE));
-	}	
-	
+	}
+
+	@Test
+	public void testForDoubleWithNegativeInfninity() {
+		String[] range = new String[]{ "NEGATIVE_INFINITY", "0" }; 
+		assertTrue(RangeHelper.isRangeCorrect(range, JavaTypeHelper.TYPE_NAME_DOUBLE));
+	}
+
 	@Test
 	public void testForDoubleWithMinMaxValue1() {
 		String[] range = new String[]{ "MIN_VALUE", "MAX_VALUE" }; 
+		assertTrue(RangeHelper.isRangeCorrect(range, JavaTypeHelper.TYPE_NAME_DOUBLE));
+	}
+
+	@Test
+	public void testForDoubleWithMinMaxValue2() {
+		String[] range = new String[]{ "-MIN_VALUE", "-MAX_VALUE" }; 
+		assertFalse(RangeHelper.isRangeCorrect(range, JavaTypeHelper.TYPE_NAME_DOUBLE));
+	}	
+
+	@Test
+	public void testForDoubleWithMinMaxValue3() {
+		String[] range = new String[]{ "-MAX_VALUE", "-MIN_VALUE" }; 
+		assertTrue(RangeHelper.isRangeCorrect(range, JavaTypeHelper.TYPE_NAME_DOUBLE));
+	}	
+
+	@Test
+	public void testForDoubleWithMinMaxValue4() {
+		String[] range = new String[]{ "NEGATIVE_INFINITY", "-MIN_VALUE" }; 
 		assertTrue(RangeHelper.isRangeCorrect(range, JavaTypeHelper.TYPE_NAME_DOUBLE));
 	}	
 
@@ -397,7 +427,7 @@ public class RangeHelperTest {
 		String[] range = new String[]{ "MIN_VALUE", "MAX_VALUE" }; 
 		assertTrue(RangeHelper.isRangeCorrect(range, JavaTypeHelper.TYPE_NAME_INT));
 	}	
-	
+
 	@Test
 	public void testForIntWithMinValue2() {
 		String[] range = new String[]{ "0", "MIN_VALUE" }; 
