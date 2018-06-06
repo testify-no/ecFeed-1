@@ -24,5 +24,6 @@ public interface ITypeAdapter<T> {
 	public boolean isNullAllowed();
 	public T generateValue(String range);
 	public String generateValueAsString(String range);
+	public String getMyTypeName();
 
 }

@@ -57,6 +57,10 @@ public class MethodOperationRemoveTestCase extends AbstractModelOperation {
 				public boolean isRandomizable() {
 					return false;
 				}
+				@Override
+				public String getMyTypeName() {
+					return null;
+				}
 			};
 		}
 

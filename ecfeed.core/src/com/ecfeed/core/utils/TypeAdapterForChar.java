@@ -14,6 +14,11 @@ public class TypeAdapterForChar extends TypeAdapterForTypeWithRange<Character>{
 	};
 
 	@Override
+	public String getMyTypeName() {
+		return JavaTypeHelper.TYPE_NAME_CHAR;
+	}
+
+	@Override
 	public boolean isCompatible(String type){
 		return Arrays.asList(TYPES_CONVERTABLE_TO_CHAR).contains(type);
 	}
@@ -24,7 +29,7 @@ public class TypeAdapterForChar extends TypeAdapterForTypeWithRange<Character>{
 		if (value.length() == 1) {
 			return value;
 		}
-		
+
 		if (conversionMode == EConversionMode.WITH_EXCEPTION) {
 			TypeAdapterHelper.reportRuntimeExceptionCannotConvert(value, JavaTypeHelper.TYPE_NAME_CHAR);
 		}

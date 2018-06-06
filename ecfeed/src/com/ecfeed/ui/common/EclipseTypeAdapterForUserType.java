@@ -19,6 +19,11 @@ public class EclipseTypeAdapterForUserType<T extends Enum<T>> implements ITypeAd
 	}
 
 	@Override
+	public String getMyTypeName() {
+		return "USER-TYPE";
+	}
+	
+	@Override
 	public boolean isRandomizable() {
 		return false;
 	}
