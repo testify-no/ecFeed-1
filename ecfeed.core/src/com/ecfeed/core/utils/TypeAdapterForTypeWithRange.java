@@ -48,7 +48,7 @@ public abstract class TypeAdapterForTypeWithRange<T> implements ITypeAdapter<T> 
 			return;
 		}
 
-		if (!RangeHelper.isRangeCorrect(range)) {
+		if (!RangeHelper.isRangeCorrect(range, getMyTypeName())) {
 			final String RANGE_IS_INVALID = "Range [" + range[0] + ", " + range[1] + "] is invalid.";
 			ExceptionHelper.reportRuntimeException(RANGE_IS_INVALID);
 		}

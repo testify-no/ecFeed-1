@@ -5,6 +5,11 @@ import java.util.concurrent.ThreadLocalRandom;
 public class TypeAdapterForByte extends TypeAdapterForNumericType<Byte>{
 
 	@Override
+	public String getMyTypeName() {
+		return JavaTypeHelper.TYPE_NAME_BYTE;
+	}
+
+	@Override
 	protected String convertSingleValue(String value, EConversionMode conversionMode) {
 
 		String result = super.convertSpecialValue(value);
@@ -37,4 +42,5 @@ public class TypeAdapterForByte extends TypeAdapterForNumericType<Byte>{
 		ThreadLocalRandom.current().nextBytes(bytes);
 		return bytes[0];
 	}
+
 }

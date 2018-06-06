@@ -22,6 +22,11 @@ public class TypeAdapterForString implements ITypeAdapter<String>{
 	};
 
 	@Override
+	public String getMyTypeName() {
+		return JavaTypeHelper.TYPE_NAME_STRING;
+	}
+
+	@Override
 	public boolean isRandomizable() {
 		return true;
 	}

@@ -5,6 +5,11 @@ import java.util.concurrent.ThreadLocalRandom;
 public class TypeAdapterForFloat extends TypeAdapterFloatingPoint<Float>{
 
 	@Override
+	public String getMyTypeName() {
+		return JavaTypeHelper.TYPE_NAME_FLOAT;
+	}
+
+	@Override
 	public String convertSingleValue(String value, EConversionMode conversionMode) {
 
 		String result = super.convertSpecialValue(value);

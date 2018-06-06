@@ -5,6 +5,11 @@ import java.util.concurrent.ThreadLocalRandom;
 public class TypeAdapterForInt extends TypeAdapterForNumericType<Integer>{
 
 	@Override
+	public String getMyTypeName() {
+		return JavaTypeHelper.TYPE_NAME_INT;
+	}
+
+	@Override
 	protected String convertSingleValue(String value, EConversionMode conversionMode) {
 
 		String result = super.convertSpecialValue(value);
@@ -36,4 +41,5 @@ public class TypeAdapterForInt extends TypeAdapterForNumericType<Integer>{
 	protected String[] getSpecialValues() {
 		return NUMERIC_SPECIAL_VALUES;
 	}
+
 }
