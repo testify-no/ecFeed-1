@@ -42,20 +42,40 @@ public class ParameterCondition implements IStatementCondition {
 		}
 
 		String substituteType = 
-				JavaTypeHelper.getSubstituteType(fParentRelationStatement.getLeftParameter().getType(), fRightParameterNode.getType());
+				JavaTypeHelper.getSubstituteType(
+						fParentRelationStatement.getLeftParameter().getType(), fRightParameterNode.getType());
 
 		EStatementRelation relation = fParentRelationStatement.getRelation();
 
-		boolean isRandomizedChoice = StatementConditionHelper.getChoiceRandomized(choices, fParentRelationStatement.getLeftParameter());
-		if(isRandomizedChoice) {
-			if(JavaTypeHelper.TYPE_NAME_STRING.equals(substituteType)) {
-				return EvaluationResult.convertFromBoolean(leftChoiceStr.matches(rightChoiceStr));
-			}
-			else {
-				boolean result = RangeHelper.isRightRangeInLeftRange(leftChoiceStr, rightChoiceStr, relation, substituteType);
-				return EvaluationResult.convertFromBoolean(result);
-			}
+		boolean isRandomizedChoice = 
+				StatementConditionHelper.getChoiceRandomized(
+						choices, fParentRelationStatement.getLeftParameter());
+
+		if (isRandomizedChoice) {
+			return evaluateForRandomizedChoice(leftChoiceStr, rightChoiceStr, relation, substituteType);
 		}
+
+		return evaluateForConstantChoice(leftChoiceStr, rightChoiceStr, relation, substituteType);
+	}
+
+	private EvaluationResult evaluateForRandomizedChoice(
+			String leftChoiceStr, String rightChoiceStr, EStatementRelation relation, String substituteType) {
+
+		if (JavaTypeHelper.TYPE_NAME_STRING.equals(substituteType)) {
+
+			return EvaluationResult.convertFromBoolean(leftChoiceStr.matches(rightChoiceStr));
+		} else {
+
+			boolean result = 
+					RangeHelper.isRightRangeInLeftRange(
+							leftChoiceStr, rightChoiceStr, relation, substituteType);
+
+			return EvaluationResult.convertFromBoolean(result);
+		}
+	}
+
+	private EvaluationResult evaluateForConstantChoice(
+			String leftChoiceStr, String rightChoiceStr, EStatementRelation relation, String substituteType) {
 
 		if (RelationMatcher.isMatchQuiet(relation, substituteType, leftChoiceStr, rightChoiceStr)) {
 			return EvaluationResult.TRUE;
