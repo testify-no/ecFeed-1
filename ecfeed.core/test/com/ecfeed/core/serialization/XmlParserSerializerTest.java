@@ -333,7 +333,7 @@ public class XmlParserSerializerTest {
 			return Short.toString((short)rand.nextInt());
 		case SerializationConstants.TYPE_NAME_STRING:
 			if(rand.nextInt(5) == 0){
-				return JavaTypeHelper.NULL_VALUE_STRING_REPRESENTATION;
+				return JavaTypeHelper.SPECIAL_VALUE_NULL;
 			}
 			else{
 				return generateRandomString(rand.nextInt(10));

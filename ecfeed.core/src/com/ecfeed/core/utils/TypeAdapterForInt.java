@@ -39,7 +39,7 @@ public class TypeAdapterForInt extends TypeAdapterForNumericType<Integer>{
 
 	@Override
 	protected String[] getSpecialValues() {
-		return JavaTypeHelper.INTEGER_SPECIAL_VALUES;
+		return JavaTypeHelper.SPECIAL_VALUES_FOR_INTEGER;
 	}
 
 }
