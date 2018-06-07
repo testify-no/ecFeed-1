@@ -27,35 +27,42 @@ public class JavaTypeHelper {
 	public static final String TYPE_NAME_SHORT = "short";
 	public static final String TYPE_NAME_STRING = "String";
 
-	public static final String NULL_VALUE_STRING_REPRESENTATION = "/null";
-	public static final String VALUE_REPRESENTATION_TRUE = "true";
-	public static final String VALUE_REPRESENTATION_FALSE = "false";
-	public static final String VALUE_REPRESENTATION_MIN = "MIN_VALUE";	
-	public static final String VALUE_REPRESENTATION_MAX = "MAX_VALUE";
-	public static final String VALUE_REPRESENTATION_MINUS_MIN = "-MIN_VALUE";	
-	public static final String VALUE_REPRESENTATION_MINUS_MAX = "-MAX_VALUE";
+	public static final String SPECIAL_VALUE_NULL = "/null";
+	public static final String SPECIAL_VALUE_TRUE = "true";
+	public static final String SPECIAL_VALUE_FALSE = "false";
+	public static final String SPECIAL_VALUE_MIN = "MIN_VALUE";	
+	public static final String SPECIAL_VALUE_MAX = "MAX_VALUE";
+	public static final String SPECIAL_VALUE_MINUS_MIN = "-MIN_VALUE";	
+	public static final String SPECIAL_VALUE_MINUS_MAX = "-MAX_VALUE";
+	public static final String SPECIAL_VALUE_NEGATIVE_INF = "NEGATIVE_INFINITY";	
+	public static final String SPECIAL_VALUE_POSITIVE_INF = "POSITIVE_INFINITY";
 
 
-	public static final String VALUE_REPRESENTATION_NEGATIVE_INF = "NEGATIVE_INFINITY";	
-	public static final String VALUE_REPRESENTATION_POSITIVE_INF = "POSITIVE_INFINITY";
+	public static final String[] SPECIAL_VALUES_FOR_BOOLEAN = {
+		SPECIAL_VALUE_TRUE, SPECIAL_VALUE_FALSE};
 
-	public static final String[] BOOLEAN_SPECIAL_VALUES = {VALUE_REPRESENTATION_TRUE, VALUE_REPRESENTATION_FALSE};
-	public static final String[] INTEGER_SPECIAL_VALUES = {VALUE_REPRESENTATION_MIN, VALUE_REPRESENTATION_MAX};
-	public static final String[] FLOAT_SPECIAL_VALUES = {
-		VALUE_REPRESENTATION_NEGATIVE_INF, VALUE_REPRESENTATION_POSITIVE_INF,
-		VALUE_REPRESENTATION_MIN, VALUE_REPRESENTATION_MAX,
-		VALUE_REPRESENTATION_MINUS_MIN, VALUE_REPRESENTATION_MINUS_MAX };
+	public static final String[] SPECIAL_VALUES_FOR_INTEGER = {
+		SPECIAL_VALUE_MIN, SPECIAL_VALUE_MAX};
 
-	public static final String[] STRING_SPECIAL_VALUES = {NULL_VALUE_STRING_REPRESENTATION};
-	public static final String[] SHORT_SPECIAL_VALUES = INTEGER_SPECIAL_VALUES;
-	public static final String[] LONG_SPECIAL_VALUES = INTEGER_SPECIAL_VALUES;
-	public static final String[] BYTE_SPECIAL_VALUES = INTEGER_SPECIAL_VALUES;
-	public static final String[] DOUBLE_SPECIAL_VALUES = FLOAT_SPECIAL_VALUES;
+	public static final String[] SPECIAL_VALUES_FOR_FLOAT = {
+		SPECIAL_VALUE_NEGATIVE_INF, SPECIAL_VALUE_POSITIVE_INF,
+		SPECIAL_VALUE_MIN, SPECIAL_VALUE_MAX,
+		SPECIAL_VALUE_MINUS_MIN, SPECIAL_VALUE_MINUS_MAX };
+
+	public static final String[] SPECIAL_VALUES_FOR_STRING = {SPECIAL_VALUE_NULL};
+
+	public static final String[] SPECIAL_VALUES_FOR_SHORT = SPECIAL_VALUES_FOR_INTEGER;
+
+	public static final String[] SPECIAL_VALUES_FOR_LONG = SPECIAL_VALUES_FOR_INTEGER;
+
+	public static final String[] SPECIAL_VALUES_FOR_BYTE = SPECIAL_VALUES_FOR_INTEGER;
+
+	public static final String[] SPECIAL_VALUES_FOR_DOUBLE = SPECIAL_VALUES_FOR_FLOAT;
 
 
 	public static final String DEFAULT_EXPECTED_NUMERIC_VALUE = "0";
 	public static final String DEFAULT_EXPECTED_FLOATING_POINT_VALUE = "0.0";
-	public static final String DEFAULT_EXPECTED_BOOLEAN_VALUE = VALUE_REPRESENTATION_FALSE;
+	public static final String DEFAULT_EXPECTED_BOOLEAN_VALUE = SPECIAL_VALUE_FALSE;
 	public static final String DEFAULT_EXPECTED_CHAR_VALUE = "0";
 	public static final String DEFAULT_EXPECTED_BYTE_VALUE = DEFAULT_EXPECTED_NUMERIC_VALUE;
 	public static final String DEFAULT_EXPECTED_DOUBLE_VALUE = DEFAULT_EXPECTED_FLOATING_POINT_VALUE;
@@ -373,10 +380,10 @@ public class JavaTypeHelper {
 
 	public static Boolean parseBooleanValue(String valueString) {
 
-		if(valueString.toLowerCase().equals(VALUE_REPRESENTATION_TRUE.toLowerCase())){
+		if(valueString.toLowerCase().equals(SPECIAL_VALUE_TRUE.toLowerCase())){
 			return true;
 		}
-		if(valueString.toLowerCase().equals(VALUE_REPRESENTATION_FALSE.toLowerCase())){
+		if(valueString.toLowerCase().equals(SPECIAL_VALUE_FALSE.toLowerCase())){
 			return false;
 		}
 		return null;
@@ -384,10 +391,10 @@ public class JavaTypeHelper {
 
 	private static Byte parseByteValue(String valueString) {
 
-		if(valueString.equals(VALUE_REPRESENTATION_MAX)){
+		if(valueString.equals(SPECIAL_VALUE_MAX)){
 			return Byte.MAX_VALUE;
 		}
-		if(valueString.equals(VALUE_REPRESENTATION_MIN)){
+		if(valueString.equals(SPECIAL_VALUE_MIN)){
 			return Byte.MIN_VALUE;
 		}
 		try {
@@ -399,10 +406,10 @@ public class JavaTypeHelper {
 
 	private static Character parseCharValue(String valueString) {
 
-		if(valueString.equals(VALUE_REPRESENTATION_MAX)){
+		if(valueString.equals(SPECIAL_VALUE_MAX)){
 			return Character.MAX_VALUE;
 		}
-		if(valueString.equals(VALUE_REPRESENTATION_MIN)){
+		if(valueString.equals(SPECIAL_VALUE_MIN)){
 			return Character.MIN_VALUE;
 		}
 		if (valueString.charAt(0) == '\\') {
@@ -417,22 +424,22 @@ public class JavaTypeHelper {
 
 	public static Double parseDoubleValue(String valueString, EConversionMode conversionMode) {
 
-		if(valueString.equals(VALUE_REPRESENTATION_MAX)){
+		if(valueString.equals(SPECIAL_VALUE_MAX)){
 			return Double.MAX_VALUE;
 		}
-		if(valueString.equals(VALUE_REPRESENTATION_MINUS_MAX)){
+		if(valueString.equals(SPECIAL_VALUE_MINUS_MAX)){
 			return (-1)*Double.MAX_VALUE;
 		}
-		if(valueString.equals(VALUE_REPRESENTATION_MIN)){
+		if(valueString.equals(SPECIAL_VALUE_MIN)){
 			return Double.MIN_VALUE;
 		}
-		if(valueString.equals(VALUE_REPRESENTATION_MINUS_MIN)){
+		if(valueString.equals(SPECIAL_VALUE_MINUS_MIN)){
 			return (-1)*Double.MIN_VALUE;
 		}
-		if(valueString.equals(VALUE_REPRESENTATION_POSITIVE_INF)){
+		if(valueString.equals(SPECIAL_VALUE_POSITIVE_INF)){
 			return Double.POSITIVE_INFINITY;
 		}
-		if(valueString.equals(VALUE_REPRESENTATION_NEGATIVE_INF)){
+		if(valueString.equals(SPECIAL_VALUE_NEGATIVE_INF)){
 			return Double.NEGATIVE_INFINITY;
 		}
 
@@ -449,22 +456,22 @@ public class JavaTypeHelper {
 
 	private static Float parseFloatValue(String valueString, EConversionMode conversionMode) {
 
-		if(valueString.equals(VALUE_REPRESENTATION_MAX)){
+		if(valueString.equals(SPECIAL_VALUE_MAX)){
 			return Float.MAX_VALUE;
 		}
-		if(valueString.equals(VALUE_REPRESENTATION_MINUS_MAX)){
+		if(valueString.equals(SPECIAL_VALUE_MINUS_MAX)){
 			return (-1)*Float.MAX_VALUE;
 		}
-		if(valueString.equals(VALUE_REPRESENTATION_MIN)){
+		if(valueString.equals(SPECIAL_VALUE_MIN)){
 			return Float.MIN_VALUE;
 		}
-		if(valueString.equals(VALUE_REPRESENTATION_MINUS_MIN)){
+		if(valueString.equals(SPECIAL_VALUE_MINUS_MIN)){
 			return (-1)*Float.MIN_VALUE;
 		}		
-		if(valueString.equals(VALUE_REPRESENTATION_POSITIVE_INF)){
+		if(valueString.equals(SPECIAL_VALUE_POSITIVE_INF)){
 			return Float.POSITIVE_INFINITY;
 		}
-		if(valueString.equals(VALUE_REPRESENTATION_NEGATIVE_INF)){
+		if(valueString.equals(SPECIAL_VALUE_NEGATIVE_INF)){
 			return Float.NEGATIVE_INFINITY;
 		}
 
@@ -481,10 +488,10 @@ public class JavaTypeHelper {
 
 	private static Integer parseIntValue(String valueString, EConversionMode conversionMode) {
 
-		if(valueString.equals(VALUE_REPRESENTATION_MAX)){
+		if(valueString.equals(SPECIAL_VALUE_MAX)){
 			return Integer.MAX_VALUE;
 		}
-		if(valueString.equals(VALUE_REPRESENTATION_MIN)){
+		if(valueString.equals(SPECIAL_VALUE_MIN)){
 			return Integer.MIN_VALUE;
 		}
 
@@ -501,10 +508,10 @@ public class JavaTypeHelper {
 
 	public static Long parseLongValue(String valueString, EConversionMode conversionMode) {
 
-		if(valueString.equals(VALUE_REPRESENTATION_MAX)){
+		if(valueString.equals(SPECIAL_VALUE_MAX)){
 			return Long.MAX_VALUE;
 		}
-		if(valueString.equals(VALUE_REPRESENTATION_MIN)){
+		if(valueString.equals(SPECIAL_VALUE_MIN)){
 			return Long.MIN_VALUE;
 		}
 
@@ -521,10 +528,10 @@ public class JavaTypeHelper {
 
 	private static Short parseShortValue(String valueString, EConversionMode conversionMode) {
 
-		if(valueString.equals(VALUE_REPRESENTATION_MAX)){
+		if(valueString.equals(SPECIAL_VALUE_MAX)){
 			return Short.MAX_VALUE;
 		}
-		if(valueString.equals(VALUE_REPRESENTATION_MIN)){
+		if(valueString.equals(SPECIAL_VALUE_MIN)){
 			return Short.MIN_VALUE;
 		}
 

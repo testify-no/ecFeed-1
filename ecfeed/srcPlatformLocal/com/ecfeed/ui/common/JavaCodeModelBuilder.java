@@ -109,8 +109,8 @@ public class JavaCodeModelBuilder extends JavaModelAnalyser{
 	// ADR-REF - magic strings
 	protected HashMap<String, String> predefinedBooleanValues() {
 		HashMap<String, String> values = new HashMap<String, String>();
-		values.put("true", JavaTypeHelper.VALUE_REPRESENTATION_TRUE);
-		values.put("false", JavaTypeHelper.VALUE_REPRESENTATION_FALSE);
+		values.put("true", JavaTypeHelper.SPECIAL_VALUE_TRUE);
+		values.put("false", JavaTypeHelper.SPECIAL_VALUE_FALSE);
 		return values;
 	}
 
@@ -127,8 +127,8 @@ public class JavaCodeModelBuilder extends JavaModelAnalyser{
 	// ADR-REF - magic strings
 	protected HashMap<String, String> predefinedIntegerValues() {
 		HashMap<String, String> values = new HashMap<String, String>();
-		values.put("min", JavaTypeHelper.VALUE_REPRESENTATION_MIN);
-		values.put("max", JavaTypeHelper.VALUE_REPRESENTATION_MAX);
+		values.put("min", JavaTypeHelper.SPECIAL_VALUE_MIN);
+		values.put("max", JavaTypeHelper.SPECIAL_VALUE_MAX);
 		return values;
 	}
 
@@ -143,10 +143,10 @@ public class JavaCodeModelBuilder extends JavaModelAnalyser{
 
 	protected HashMap<String, String> predefinedFloatValues() {
 		HashMap<String, String> values = new HashMap<String, String>();
-		values.put("min", JavaTypeHelper.VALUE_REPRESENTATION_MIN);
-		values.put("max", JavaTypeHelper.VALUE_REPRESENTATION_MAX);
-		values.put("positive infinity", JavaTypeHelper.VALUE_REPRESENTATION_POSITIVE_INF);
-		values.put("negative infinity", JavaTypeHelper.VALUE_REPRESENTATION_NEGATIVE_INF);
+		values.put("min", JavaTypeHelper.SPECIAL_VALUE_MIN);
+		values.put("max", JavaTypeHelper.SPECIAL_VALUE_MAX);
+		values.put("positive infinity", JavaTypeHelper.SPECIAL_VALUE_POSITIVE_INF);
+		values.put("negative infinity", JavaTypeHelper.SPECIAL_VALUE_NEGATIVE_INF);
 		return values;
 	}
 
@@ -161,7 +161,7 @@ public class JavaCodeModelBuilder extends JavaModelAnalyser{
 
 	protected HashMap<String, String> predefinedStringValues() {
 		HashMap<String, String> values = new HashMap<String, String>();
-		values.put("null", JavaTypeHelper.NULL_VALUE_STRING_REPRESENTATION);
+		values.put("null", JavaTypeHelper.SPECIAL_VALUE_NULL);
 		return values;
 	}
 

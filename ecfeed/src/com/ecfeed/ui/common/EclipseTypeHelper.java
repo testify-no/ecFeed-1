@@ -25,7 +25,7 @@ public class EclipseTypeHelper {
 
 		switch(typeName){
 		case JavaTypeHelper.TYPE_NAME_BOOLEAN:
-			result.addAll(Arrays.asList(JavaTypeHelper.BOOLEAN_SPECIAL_VALUES));
+			result.addAll(Arrays.asList(JavaTypeHelper.SPECIAL_VALUES_FOR_BOOLEAN));
 			break;
 		case JavaTypeHelper.TYPE_NAME_CHAR:
 			result.addAll(Arrays.asList(JavaTypeHelper.DEFAULT_EXPECTED_CHAR_VALUE));
@@ -34,11 +34,11 @@ public class EclipseTypeHelper {
 		case JavaTypeHelper.TYPE_NAME_INT:
 		case JavaTypeHelper.TYPE_NAME_LONG:
 		case JavaTypeHelper.TYPE_NAME_SHORT:
-			result.addAll(Arrays.asList(JavaTypeHelper.INTEGER_SPECIAL_VALUES));
+			result.addAll(Arrays.asList(JavaTypeHelper.SPECIAL_VALUES_FOR_INTEGER));
 			break;
 		case JavaTypeHelper.TYPE_NAME_DOUBLE:
 		case JavaTypeHelper.TYPE_NAME_FLOAT:
-			result.addAll(Arrays.asList(JavaTypeHelper.FLOAT_SPECIAL_VALUES));
+			result.addAll(Arrays.asList(JavaTypeHelper.SPECIAL_VALUES_FOR_FLOAT));
 			break;
 		case JavaTypeHelper.TYPE_NAME_STRING:
 			result.addAll(Arrays.asList(com.ecfeed.core.utils.CommonConstants.STRING_SPECIAL_VALUES));

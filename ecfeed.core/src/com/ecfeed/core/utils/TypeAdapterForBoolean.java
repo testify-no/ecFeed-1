@@ -37,12 +37,12 @@ public class TypeAdapterForBoolean implements ITypeAdapter<Boolean>{
 
 	private String convertForExceptionMode(String value) {
 
-		if (value.equals(JavaTypeHelper.VALUE_REPRESENTATION_TRUE)) {
-			return JavaTypeHelper.VALUE_REPRESENTATION_TRUE;
+		if (value.equals(JavaTypeHelper.SPECIAL_VALUE_TRUE)) {
+			return JavaTypeHelper.SPECIAL_VALUE_TRUE;
 		}
 
-		if (value.equals(JavaTypeHelper.VALUE_REPRESENTATION_FALSE)) {
-			return JavaTypeHelper.VALUE_REPRESENTATION_FALSE;
+		if (value.equals(JavaTypeHelper.SPECIAL_VALUE_FALSE)) {
+			return JavaTypeHelper.SPECIAL_VALUE_FALSE;
 		}
 
 		TypeAdapterHelper.reportRuntimeExceptionCannotConvert(value, JavaTypeHelper.TYPE_NAME_BOOLEAN);
@@ -51,12 +51,12 @@ public class TypeAdapterForBoolean implements ITypeAdapter<Boolean>{
 
 	private String convertForQuietMode(String value) {
 
-		if (value.toLowerCase().equals(JavaTypeHelper.VALUE_REPRESENTATION_TRUE.toLowerCase())) {
-			return JavaTypeHelper.VALUE_REPRESENTATION_TRUE;
+		if (value.toLowerCase().equals(JavaTypeHelper.SPECIAL_VALUE_TRUE.toLowerCase())) {
+			return JavaTypeHelper.SPECIAL_VALUE_TRUE;
 		}
 
-		if(value.toLowerCase().equals(JavaTypeHelper.VALUE_REPRESENTATION_FALSE.toLowerCase())){
-			return JavaTypeHelper.VALUE_REPRESENTATION_FALSE;
+		if(value.toLowerCase().equals(JavaTypeHelper.SPECIAL_VALUE_FALSE.toLowerCase())){
+			return JavaTypeHelper.SPECIAL_VALUE_FALSE;
 		}
 
 		return getDefaultValue();
