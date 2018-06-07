@@ -113,6 +113,8 @@ public class EclipseModelBuilder extends JavaModelAnalyser{
 			result.addAll(Arrays.asList(JavaTypeHelper.INTEGER_SPECIAL_VALUES));
 			break;
 		case JavaTypeHelper.TYPE_NAME_DOUBLE:
+			result.addAll(Arrays.asList(JavaTypeHelper.DOUBLE_SPECIAL_VALUES));
+			break;
 		case JavaTypeHelper.TYPE_NAME_FLOAT:
 			result.addAll(Arrays.asList(JavaTypeHelper.FLOAT_SPECIAL_VALUES));
 			break;
