@@ -96,5 +96,46 @@ public class TypeAdapterForDoubleTest {
 		TypeAdapterForDouble typeAdapterForDouble = new TypeAdapterForDouble();
 
 		typeAdapterForDouble.convert("AB", false, EConversionMode.WITH_EXCEPTION);
+	}
+
+	@Test
+	public void shouldConvertSpecialValues1() {
+
+		TypeAdapterForDouble typeAdapterForDouble = new TypeAdapterForDouble();
+
+		String result = typeAdapterForDouble.convert("MIN_VALUE:MAX_VALUE", true, EConversionMode.QUIET);
+
+		assertEquals("MIN_VALUE:MAX_VALUE", result);
+	}
+
+	@Test
+	public void shouldConvertSpecialValues2() {
+
+		TypeAdapterForDouble typeAdapterForDouble = new TypeAdapterForDouble();
+
+		String result = typeAdapterForDouble.convert("-MAX_VALUE:-MIN_VALUE", true, EConversionMode.QUIET);
+
+		assertEquals("-MAX_VALUE:-MIN_VALUE", result);
 	}	
+
+	@Test
+	public void shouldConvertSpecialValues3() {
+
+		TypeAdapterForDouble typeAdapterForDouble = new TypeAdapterForDouble();
+
+		String result = typeAdapterForDouble.convert("MIN_VALUE:POSITIVE_INFINITY", true, EConversionMode.QUIET);
+
+		assertEquals("MIN_VALUE:POSITIVE_INFINITY", result);
+	}
+
+	@Test
+	public void shouldConvertSpecialValues4() {
+
+		TypeAdapterForDouble typeAdapterForDouble = new TypeAdapterForDouble();
+
+		String result = typeAdapterForDouble.convert("-MIN_VALUE:0", true, EConversionMode.QUIET);
+
+		assertEquals("-MIN_VALUE:0.0", result);
+	}	
+
 }

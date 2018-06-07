@@ -4,11 +4,6 @@ import java.util.Arrays;
 
 public abstract class TypeAdapterForNumericType<T extends Number> extends TypeAdapterForTypeWithRange<T> {
 
-	protected String[] NUMERIC_SPECIAL_VALUES = new String[]{
-			JavaTypeHelper.VALUE_REPRESENTATION_MAX,
-			JavaTypeHelper.VALUE_REPRESENTATION_MIN
-	};
-
 	public static final String DELIMITER = ":";		
 
 	@Override
