@@ -1,5 +1,6 @@
 package com.ecfeed.core.model;
 
+import com.ecfeed.core.adapter.ITypeAdapter.EConversionMode;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.StringHelper;
 
@@ -64,8 +65,8 @@ public class RelationMatcher {
 
 		if (JavaTypeHelper.isFloatingPointTypeName(typeName)) {
 
-			double leftDouble = JavaTypeHelper.convertNumericToDouble(typeName, leftValue);
-			double rightDouble = JavaTypeHelper.convertNumericToDouble(typeName, rightValue);
+			Double leftDouble = JavaTypeHelper.convertNumericToDouble(typeName, leftValue, EConversionMode.QUIET);
+			Double rightDouble = JavaTypeHelper.convertNumericToDouble(typeName, rightValue, EConversionMode.QUIET);
 
 			if (EStatementRelation.isMatch(relation, leftDouble, rightDouble)) {
 				return true;
@@ -74,8 +75,8 @@ public class RelationMatcher {
 			return false;
 		}
 
-		long leftLong = (long)JavaTypeHelper.parseLongValue(leftValue);
-		long rightLong = (long)JavaTypeHelper.parseLongValue(rightValue);
+		Long leftLong = JavaTypeHelper.parseLongValue(leftValue, EConversionMode.QUIET);
+		Long rightLong = JavaTypeHelper.parseLongValue(rightValue, EConversionMode.QUIET);
 
 		if (EStatementRelation.isMatch(relation, leftLong, rightLong)) {
 			return true;
