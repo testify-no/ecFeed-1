@@ -33,7 +33,7 @@ public class TypeAdapterForByte extends TypeAdapterForNumericType<Byte>{
 
 	@Override
 	protected String[] getSpecialValues() {
-		return NUMERIC_SPECIAL_VALUES;
+		return JavaTypeHelper.BYTE_SPECIAL_VALUES;
 	}
 
 	@Override

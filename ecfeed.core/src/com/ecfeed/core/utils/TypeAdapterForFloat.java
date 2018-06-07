@@ -38,4 +38,9 @@ public class TypeAdapterForFloat extends TypeAdapterFloatingPoint<Float>{
 		return ThreadLocalRandom.current().nextFloat() * (max - min) + min;
 	}
 
+	@Override
+	protected String[] getSpecialValues() {
+		return JavaTypeHelper.FLOAT_SPECIAL_VALUES;
+	}	
+
 }
