@@ -39,7 +39,7 @@ public class TypeAdapterForShort extends TypeAdapterForNumericType<Short> {
 
 	@Override
 	protected String[] getSpecialValues() {
-		return JavaTypeHelper.SHORT_SPECIAL_VALUES;
+		return JavaTypeHelper.SPECIAL_VALUES_FOR_SHORT;
 	}
 
 }

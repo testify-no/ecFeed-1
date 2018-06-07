@@ -54,10 +54,10 @@ public class AbstractFrameworkMethodTest {
 
 	public AbstractFrameworkMethodTest(){
 		INT_ARGS = new ArrayList<String>();
-		INT_ARGS.addAll(Arrays.asList(JavaTypeHelper.INTEGER_SPECIAL_VALUES));
+		INT_ARGS.addAll(Arrays.asList(JavaTypeHelper.SPECIAL_VALUES_FOR_INTEGER));
 		INT_ARGS.addAll(Arrays.asList(new String[]{"-1", "0", "1"}));
 		STRING_ARGS = new ArrayList<String>();
-		STRING_ARGS.addAll(Arrays.asList(JavaTypeHelper.STRING_SPECIAL_VALUES));
+		STRING_ARGS.addAll(Arrays.asList(JavaTypeHelper.SPECIAL_VALUES_FOR_STRING));
 		STRING_ARGS.addAll(Arrays.asList(new String[]{"", "a", "Aa"}));
 		ENUM_ARGS = new ArrayList<String>();
 		for(Enum e : Enum.values()){

@@ -101,7 +101,7 @@ public class EclipseModelBuilder extends JavaModelAnalyser{
 		List<String> result = new ArrayList<String>();
 		switch(typeName){
 		case JavaTypeHelper.TYPE_NAME_BOOLEAN:
-			result.addAll(Arrays.asList(JavaTypeHelper.BOOLEAN_SPECIAL_VALUES));
+			result.addAll(Arrays.asList(JavaTypeHelper.SPECIAL_VALUES_FOR_BOOLEAN));
 			break;
 		case JavaTypeHelper.TYPE_NAME_CHAR:
 			result.addAll(Arrays.asList(JavaTypeHelper.DEFAULT_EXPECTED_CHAR_VALUE));
@@ -110,16 +110,16 @@ public class EclipseModelBuilder extends JavaModelAnalyser{
 		case JavaTypeHelper.TYPE_NAME_INT:
 		case JavaTypeHelper.TYPE_NAME_LONG:
 		case JavaTypeHelper.TYPE_NAME_SHORT:
-			result.addAll(Arrays.asList(JavaTypeHelper.INTEGER_SPECIAL_VALUES));
+			result.addAll(Arrays.asList(JavaTypeHelper.SPECIAL_VALUES_FOR_INTEGER));
 			break;
 		case JavaTypeHelper.TYPE_NAME_DOUBLE:
-			result.addAll(Arrays.asList(JavaTypeHelper.DOUBLE_SPECIAL_VALUES));
+			result.addAll(Arrays.asList(JavaTypeHelper.SPECIAL_VALUES_FOR_DOUBLE));
 			break;
 		case JavaTypeHelper.TYPE_NAME_FLOAT:
-			result.addAll(Arrays.asList(JavaTypeHelper.FLOAT_SPECIAL_VALUES));
+			result.addAll(Arrays.asList(JavaTypeHelper.SPECIAL_VALUES_FOR_FLOAT));
 			break;
 		case JavaTypeHelper.TYPE_NAME_STRING:
-			result.addAll(Arrays.asList(JavaTypeHelper.STRING_SPECIAL_VALUES));
+			result.addAll(Arrays.asList(JavaTypeHelper.SPECIAL_VALUES_FOR_STRING));
 			break;
 		default:
 			result.addAll(enumValues(typeName));
@@ -200,8 +200,8 @@ public class EclipseModelBuilder extends JavaModelAnalyser{
 	// ADR-REF - magic strings
 	protected HashMap<String, String> predefinedBooleanValues() {
 		HashMap<String, String> values = new HashMap<String, String>();
-		values.put("true", JavaTypeHelper.VALUE_REPRESENTATION_TRUE);
-		values.put("false", JavaTypeHelper.VALUE_REPRESENTATION_FALSE);
+		values.put("true", JavaTypeHelper.SPECIAL_VALUE_TRUE);
+		values.put("false", JavaTypeHelper.SPECIAL_VALUE_FALSE);
 		return values;
 	}
 
@@ -218,8 +218,8 @@ public class EclipseModelBuilder extends JavaModelAnalyser{
 	// ADR-REF - magic strings
 	protected HashMap<String, String> predefinedIntegerValues() {
 		HashMap<String, String> values = new HashMap<String, String>();
-		values.put("min", JavaTypeHelper.VALUE_REPRESENTATION_MIN);
-		values.put("max", JavaTypeHelper.VALUE_REPRESENTATION_MAX);
+		values.put("min", JavaTypeHelper.SPECIAL_VALUE_MIN);
+		values.put("max", JavaTypeHelper.SPECIAL_VALUE_MAX);
 		return values;
 	}
 
@@ -234,10 +234,10 @@ public class EclipseModelBuilder extends JavaModelAnalyser{
 
 	protected HashMap<String, String> predefinedFloatValues() {
 		HashMap<String, String> values = new HashMap<String, String>();
-		values.put("min", JavaTypeHelper.VALUE_REPRESENTATION_MIN);
-		values.put("max", JavaTypeHelper.VALUE_REPRESENTATION_MAX);
-		values.put("positive infinity", JavaTypeHelper.VALUE_REPRESENTATION_POSITIVE_INF);
-		values.put("negative infinity", JavaTypeHelper.VALUE_REPRESENTATION_NEGATIVE_INF);
+		values.put("min", JavaTypeHelper.SPECIAL_VALUE_MIN);
+		values.put("max", JavaTypeHelper.SPECIAL_VALUE_MAX);
+		values.put("positive infinity", JavaTypeHelper.SPECIAL_VALUE_POSITIVE_INF);
+		values.put("negative infinity", JavaTypeHelper.SPECIAL_VALUE_NEGATIVE_INF);
 		return values;
 	}
 
@@ -252,7 +252,7 @@ public class EclipseModelBuilder extends JavaModelAnalyser{
 
 	protected HashMap<String, String> predefinedStringValues() {
 		HashMap<String, String> values = new HashMap<String, String>();
-		values.put("null", JavaTypeHelper.NULL_VALUE_STRING_REPRESENTATION);
+		values.put("null", JavaTypeHelper.SPECIAL_VALUE_NULL);
 		return values;
 	}
 

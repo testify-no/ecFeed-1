@@ -33,7 +33,7 @@ public class TypeAdapterForLong extends TypeAdapterForNumericType<Long>{
 
 	@Override
 	protected String[] getSpecialValues() {
-		return JavaTypeHelper.LONG_SPECIAL_VALUES;
+		return JavaTypeHelper.SPECIAL_VALUES_FOR_LONG;
 	}
 
 }
