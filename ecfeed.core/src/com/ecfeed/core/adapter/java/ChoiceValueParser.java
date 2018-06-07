@@ -11,6 +11,7 @@
 package com.ecfeed.core.adapter.java;
 
 import com.ecfeed.core.adapter.ITypeAdapter;
+import com.ecfeed.core.adapter.ITypeAdapter.EConversionMode;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.TypeAdapterProvider;
@@ -65,7 +66,7 @@ public class ChoiceValueParser {
 		}
 
 		if (JavaTypeHelper.isJavaType(typeName)) {
-			return JavaTypeHelper.parseJavaType(convertedValueString, typeName); 
+			return JavaTypeHelper.parseJavaType(convertedValueString, typeName, EConversionMode.QUIET); 
 		}
 		if (fIsExport) {
 			return convertedValueString;

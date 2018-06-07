@@ -12,6 +12,7 @@ package com.ecfeed.core.utils;
 
 import java.util.Arrays;
 
+import com.ecfeed.core.adapter.ITypeAdapter.EConversionMode;
 import com.ecfeed.core.adapter.java.AdapterConstants;
 
 public class JavaTypeHelper {
@@ -40,7 +41,11 @@ public class JavaTypeHelper {
 
 	public static final String[] BOOLEAN_SPECIAL_VALUES = {VALUE_REPRESENTATION_TRUE, VALUE_REPRESENTATION_FALSE};
 	public static final String[] INTEGER_SPECIAL_VALUES = {VALUE_REPRESENTATION_MIN, VALUE_REPRESENTATION_MAX};
-	public static final String[] FLOAT_SPECIAL_VALUES = {VALUE_REPRESENTATION_NEGATIVE_INF, VALUE_REPRESENTATION_MIN, VALUE_REPRESENTATION_MAX, VALUE_REPRESENTATION_POSITIVE_INF};
+	public static final String[] FLOAT_SPECIAL_VALUES = {
+		VALUE_REPRESENTATION_NEGATIVE_INF, VALUE_REPRESENTATION_POSITIVE_INF,
+		VALUE_REPRESENTATION_MIN, VALUE_REPRESENTATION_MAX,
+		VALUE_REPRESENTATION_MINUS_MIN, VALUE_REPRESENTATION_MINUS_MAX };
+
 	public static final String[] STRING_SPECIAL_VALUES = {NULL_VALUE_STRING_REPRESENTATION};
 	public static final String[] SHORT_SPECIAL_VALUES = INTEGER_SPECIAL_VALUES;
 	public static final String[] LONG_SPECIAL_VALUES = INTEGER_SPECIAL_VALUES;
@@ -280,43 +285,63 @@ public class JavaTypeHelper {
 
 	public static boolean isConvertibleToNumber(String text) {
 
-		if (parseDoubleValue(text) != null) {
+		if (parseDoubleValue(text, EConversionMode.QUIET) != null) {
 			return true;
 		}
 
-		if (parseLongValue(text) != null) {
+		if (parseLongValue(text, EConversionMode.QUIET) != null) {
 			return true;
 		}		
 
 		return false;
 	}
 
-	public static double convertNumericToDouble(String typeName, String value) {
+	public static Double convertNumericToDouble(
+			String typeName, String value, EConversionMode conversionMode) {
 
 		if (isByteTypeName(typeName)) {
-			return Byte.parseByte(value);
+			return convertToDouble(parseByteValue(value));
 		}
 		if (isIntTypeName(typeName)) {
-			return Integer.parseInt(value);
+			return convertToDouble(parseIntValue(value, conversionMode));
 		}
 		if (isShortTypeName(typeName)) {
-			return Short.parseShort(value);
+			return convertToDouble(parseShortValue(value, conversionMode));
 		}
 		if (isLongTypeName(typeName)) {
-			return Long.parseLong(value);
+			return convertToDouble(parseLongValue(value, conversionMode));
 		}		
 		if (isFloatTypeName(typeName)) {
-			return (double)parseFloatValue(value);
+			return convertToDouble(parseFloatValue(value, conversionMode));
 		}
 		if (isDoubleTypeName(typeName)) {
-			return parseDoubleValue(value);
+			return convertToDouble(parseDoubleValue(value, conversionMode));
 		}
 
 		ExceptionHelper.reportRuntimeException("Invalid type in numeric conversion");
-		return 0;
+		return null;
 	}
 
-	public static Object parseJavaType(String valueString, String typeName) {
+	private static <T> Double convertToDouble(T valueWithNull) {
+
+		if (valueWithNull == null) {
+			return null;
+		}
+
+		return new Double((double)valueWithNull);
+	}
+
+	private static Double convertToDouble(Float valueWithNull) {
+
+		if (valueWithNull == null) {
+			return null;
+		}
+
+		return new Double(valueWithNull);
+	}	
+
+
+	public static Object parseJavaType(String valueString, String typeName, EConversionMode conversionMode) {
 
 		if(typeName == null || valueString == null){
 			return null;
@@ -330,15 +355,15 @@ public class JavaTypeHelper {
 		case TYPE_NAME_CHAR:
 			return parseCharValue(valueString);
 		case TYPE_NAME_DOUBLE:
-			return parseDoubleValue(valueString);
+			return parseDoubleValue(valueString, conversionMode);
 		case TYPE_NAME_FLOAT:
-			return parseFloatValue(valueString);
+			return parseFloatValue(valueString, conversionMode);
 		case TYPE_NAME_INT:
-			return parseIntValue(valueString);
+			return parseIntValue(valueString, conversionMode);
 		case TYPE_NAME_LONG:
-			return parseLongValue(valueString);
+			return parseLongValue(valueString, conversionMode);
 		case TYPE_NAME_SHORT:
-			return parseShortValue(valueString);
+			return parseShortValue(valueString, conversionMode);
 		case TYPE_NAME_STRING:
 			return parseStringValue(valueString);
 		default:
@@ -365,10 +390,9 @@ public class JavaTypeHelper {
 		if(valueString.equals(VALUE_REPRESENTATION_MIN)){
 			return Byte.MIN_VALUE;
 		}
-		try{
+		try {
 			return Byte.parseByte(valueString);
-		}
-		catch(NumberFormatException e){
+		} catch(NumberFormatException e){
 			return null;
 		}
 	}
@@ -390,7 +414,8 @@ public class JavaTypeHelper {
 
 	}
 
-	private static Double parseDoubleValue(String valueString) {
+
+	public static Double parseDoubleValue(String valueString, EConversionMode conversionMode) {
 
 		if(valueString.equals(VALUE_REPRESENTATION_MAX)){
 			return Double.MAX_VALUE;
@@ -410,37 +435,51 @@ public class JavaTypeHelper {
 		if(valueString.equals(VALUE_REPRESENTATION_NEGATIVE_INF)){
 			return Double.NEGATIVE_INFINITY;
 		}
-		try{
+
+		if (conversionMode == EConversionMode.QUIET) {
+			try {
+				return Double.parseDouble(valueString);
+			} catch(NumberFormatException e){
+				return null;
+			}
+		} else {
 			return Double.parseDouble(valueString);
-		}
-		catch(NumberFormatException e){
-			return null;
 		}
 	}
 
-	private static Float parseFloatValue(String valueString) {
+	private static Float parseFloatValue(String valueString, EConversionMode conversionMode) {
 
 		if(valueString.equals(VALUE_REPRESENTATION_MAX)){
 			return Float.MAX_VALUE;
 		}
+		if(valueString.equals(VALUE_REPRESENTATION_MINUS_MAX)){
+			return (-1)*Float.MAX_VALUE;
+		}
 		if(valueString.equals(VALUE_REPRESENTATION_MIN)){
 			return Float.MIN_VALUE;
 		}
+		if(valueString.equals(VALUE_REPRESENTATION_MINUS_MIN)){
+			return (-1)*Float.MIN_VALUE;
+		}		
 		if(valueString.equals(VALUE_REPRESENTATION_POSITIVE_INF)){
 			return Float.POSITIVE_INFINITY;
 		}
 		if(valueString.equals(VALUE_REPRESENTATION_NEGATIVE_INF)){
 			return Float.NEGATIVE_INFINITY;
 		}
-		try{
+
+		if (conversionMode == EConversionMode.QUIET) {
+			try {
+				return Float.parseFloat(valueString);
+			} catch(NumberFormatException e){
+				return null;
+			}
+		} else {
 			return Float.parseFloat(valueString);
-		}
-		catch(NumberFormatException e){
-			return null;
 		}
 	}
 
-	private static Integer parseIntValue(String valueString) {
+	private static Integer parseIntValue(String valueString, EConversionMode conversionMode) {
 
 		if(valueString.equals(VALUE_REPRESENTATION_MAX)){
 			return Integer.MAX_VALUE;
@@ -448,15 +487,19 @@ public class JavaTypeHelper {
 		if(valueString.equals(VALUE_REPRESENTATION_MIN)){
 			return Integer.MIN_VALUE;
 		}
-		try{
+
+		if (conversionMode == EConversionMode.QUIET) {
+			try {
+				return Integer.parseInt(valueString);
+			} catch(NumberFormatException e){
+				return null;
+			}
+		} else {
 			return Integer.parseInt(valueString);
-		}
-		catch(NumberFormatException e){
-			return null;
 		}
 	}
 
-	public static Long parseLongValue(String valueString) {
+	public static Long parseLongValue(String valueString, EConversionMode conversionMode) {
 
 		if(valueString.equals(VALUE_REPRESENTATION_MAX)){
 			return Long.MAX_VALUE;
@@ -464,15 +507,19 @@ public class JavaTypeHelper {
 		if(valueString.equals(VALUE_REPRESENTATION_MIN)){
 			return Long.MIN_VALUE;
 		}
-		try{
+
+		if (conversionMode == EConversionMode.QUIET) {
+			try {
+				return Long.parseLong(valueString);
+			} catch(NumberFormatException e){
+				return null;
+			} 
+		} else {
 			return Long.parseLong(valueString);
-		}
-		catch(NumberFormatException e){
-			return null;
 		}
 	}
 
-	private static Short parseShortValue(String valueString) {
+	private static Short parseShortValue(String valueString, EConversionMode conversionMode) {
 
 		if(valueString.equals(VALUE_REPRESENTATION_MAX)){
 			return Short.MAX_VALUE;
@@ -480,11 +527,15 @@ public class JavaTypeHelper {
 		if(valueString.equals(VALUE_REPRESENTATION_MIN)){
 			return Short.MIN_VALUE;
 		}
-		try{
+
+		if (conversionMode == EConversionMode.QUIET) {
+			try {
+				return Short.parseShort(valueString);
+			} catch(NumberFormatException e){
+				return null;
+			}
+		} else {
 			return Short.parseShort(valueString);
-		}
-		catch(NumberFormatException e){
-			return null;
 		}
 	}
 
@@ -497,7 +548,7 @@ public class JavaTypeHelper {
 	}
 
 	public static String convertValueString(String valueString, String typeName) {
-		return parseJavaType(valueString, typeName).toString();
+		return parseJavaType(valueString, typeName, EConversionMode.QUIET).toString();
 	}
 
 	public static String getSubstituteType(String typeName1, String typeName2) {
