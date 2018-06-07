@@ -8,7 +8,7 @@ public class TypeAdapterForShort extends TypeAdapterForNumericType<Short> {
 	public String getMyTypeName() {
 		return JavaTypeHelper.TYPE_NAME_SHORT;
 	}
-	
+
 	@Override
 	public String convertSingleValue(String value, EConversionMode conversionMode) {
 
@@ -39,7 +39,7 @@ public class TypeAdapterForShort extends TypeAdapterForNumericType<Short> {
 
 	@Override
 	protected String[] getSpecialValues() {
-		return NUMERIC_SPECIAL_VALUES;
+		return JavaTypeHelper.SHORT_SPECIAL_VALUES;
 	}
 
 }

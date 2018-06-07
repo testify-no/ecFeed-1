@@ -67,7 +67,7 @@ public class TypeAdapterForIntTest {
 
 		assertEquals("0", result);
 	}	
-	
+
 	@Test
 	public void shouldConvertInvalidRangeToDefaultRange() {
 
@@ -87,7 +87,7 @@ public class TypeAdapterForIntTest {
 
 		assertEquals("0", result);
 	}
-	
+
 	@Test(expected = RuntimeException.class)
 	public void shouldThrowWhenInvalidValue() {
 
@@ -96,4 +96,21 @@ public class TypeAdapterForIntTest {
 		typeAdapterForInt.convert("AB", false, EConversionMode.WITH_EXCEPTION);
 	}	
 
+	@Test
+	public void shouldConvertQuietlySpecialValuesMinusMinMax() {
+
+		TypeAdapterForInt typeAdapterForInt = new TypeAdapterForInt();
+
+		String result = typeAdapterForInt.convert("-MAX_VALUE:-MIN_VALUE", true, EConversionMode.QUIET);
+
+		assertEquals("0:0", result);
+	}	
+
+	@Test(expected = RuntimeException.class)
+	public void shouldNotConvertSpecialValuesMinusMinMax() {
+
+		TypeAdapterForInt typeAdapterForInt = new TypeAdapterForInt();
+
+		typeAdapterForInt.convert("-MAX_VALUE:-MIN_VALUE", true, EConversionMode.WITH_EXCEPTION);
+	}	
 }
