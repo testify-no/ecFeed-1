@@ -40,7 +40,10 @@ public class ValueCondition implements IStatementCondition {
 
 		EStatementRelation relation = fParentRelationStatement.getRelation();
 
-		boolean isRandomizedChoice = StatementConditionHelper.getChoiceRandomized(choices, fParentRelationStatement.getLeftParameter());
+		boolean isRandomizedChoice = 
+				StatementConditionHelper.getChoiceRandomized(
+						choices, fParentRelationStatement.getLeftParameter());
+		
 		if(isRandomizedChoice) {
 			if(JavaTypeHelper.TYPE_NAME_STRING.equals(substituteType)) {
 				return EvaluationResult.convertFromBoolean(leftChoiceStr.matches(fRightValue));

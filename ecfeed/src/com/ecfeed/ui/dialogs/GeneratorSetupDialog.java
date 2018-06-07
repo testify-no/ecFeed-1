@@ -261,7 +261,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 
 		StringBuilder sb = new StringBuilder();
 
-		final String MESSAGE = "Warning! Evaluation of constraints is ambiguous. Generated test suite may contain unexpected results.\n";
+		final String MESSAGE = "Warning! Evaluation of constraints is ambiguous due to randomized choices.\nGenerated test suite may contain unexpected results.\n";
 		sb.append(MESSAGE);
 
 		if (!messageStack.isEmpty()) {
