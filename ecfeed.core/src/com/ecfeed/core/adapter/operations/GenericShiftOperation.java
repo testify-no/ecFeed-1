@@ -51,7 +51,7 @@ public class GenericShiftOperation extends AbstractModelOperation {
 	}
 
 	@Override
-	public IModelOperation reverseOperation() {
+	public IModelOperation getReverseOperation() {
 		return new GenericShiftOperation(fCollection, fToBeShifted, -fShiftSize);
 	}
 

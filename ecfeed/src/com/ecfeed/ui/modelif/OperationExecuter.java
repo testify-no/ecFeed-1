@@ -90,7 +90,7 @@ public class OperationExecuter {
 		@Override
 		public IStatus undo(IProgressMonitor monitor, IAdaptable info)
 				throws ExecutionException {
-			return executeOperation(fOperation.reverseOperation(), monitor, info);
+			return executeOperation(fOperation.getReverseOperation(), monitor, info);
 		}
 
 		private IStatus executeOperation(IModelOperation operation, IProgressMonitor monitor, IAdaptable info) {

@@ -138,7 +138,7 @@ public class GenericOperationRename extends AbstractModelOperation {
 	}
 
 	@Override
-	public IModelOperation reverseOperation() {
+	public IModelOperation getReverseOperation() {
 		return new GenericOperationRename(getOwnNode(), getOriginalName());
 	}
 

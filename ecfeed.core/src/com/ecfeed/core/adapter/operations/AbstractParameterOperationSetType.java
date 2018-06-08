@@ -58,7 +58,7 @@ public class AbstractParameterOperationSetType extends AbstractModelOperation {
 		}
 
 		@Override
-		public IModelOperation reverseOperation() {
+		public IModelOperation getReverseOperation() {
 			return new AbstractParameterOperationSetType(fTarget, fNewType, fAdapterProvider);
 		}
 
@@ -164,7 +164,7 @@ public class AbstractParameterOperationSetType extends AbstractModelOperation {
 	}
 
 	@Override
-	public IModelOperation reverseOperation() {
+	public IModelOperation getReverseOperation() {
 		return new ReverseOperation();
 	}
 

@@ -40,7 +40,7 @@ public class MethodOperationAddParameter extends GenericOperationAddParameter {
 		}
 
 		@Override
-		public IModelOperation reverseOperation() {
+		public IModelOperation getReverseOperation() {
 			return new MethodOperationAddParameter(fTarget, fParameter);
 		}
 
@@ -72,7 +72,7 @@ public class MethodOperationAddParameter extends GenericOperationAddParameter {
 	}
 
 	@Override
-	public IModelOperation reverseOperation() {
+	public IModelOperation getReverseOperation() {
 		return new MethodReverseOperation();
 	}
 

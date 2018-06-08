@@ -53,7 +53,7 @@ public class MethodOperationAddParameterTest {
 		assertEquals(addedNode, methodParameterNode);
 
 		try {
-			methodOperationAddParameter.reverseOperation().execute();
+			methodOperationAddParameter.getReverseOperation().execute();
 		} catch (ModelOperationException e) {
 			fail();
 		}

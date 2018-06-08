@@ -46,7 +46,7 @@ public class ModelOperationManager {
 
 	public void undo() throws ModelOperationException{
 		if(fHistoryIndex > 0){
-			IModelOperation operation = fHistory.get(fHistoryIndex - 1).reverseOperation();
+			IModelOperation operation = fHistory.get(fHistoryIndex - 1).getReverseOperation();
 			operation.execute();
 			--fHistoryIndex;
 		}
