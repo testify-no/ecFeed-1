@@ -22,52 +22,32 @@ public class GenericOperationAddParameter extends AbstractModelOperation {
 	private ParametersParentNode fParametersParentNode;
 	private AbstractParameterNode fAbstractParameterNode;
 	private int fNewIndex;
+	private boolean fGenerateUniqueName;
 
-	protected class ReverseOperation extends AbstractModelOperation{
-
-		private int fOriginalIndex;
-		private AbstractParameterNode fReversedParameter;
-		private ParametersParentNode fReversedTarget;
-
-		public ReverseOperation(ParametersParentNode target, AbstractParameterNode parameter) {
-			super("reverse " + OperationNames.ADD_PARAMETER);
-			fReversedTarget = target;
-			fReversedParameter = parameter;
-		}
-
-		@Override
-		public void execute() throws ModelOperationException {
-
-			setOneNodeToSelect(fParametersParentNode);
-			fOriginalIndex = fReversedParameter.getMyIndex();
-			fReversedTarget.removeParameter(fReversedParameter);
-			markModelUpdated();
-		}
-
-		@Override
-		public IModelOperation reverseOperation() {
-			return new GenericOperationAddParameter(fReversedTarget, fReversedParameter, fOriginalIndex);
-		}
-
-	}
-
-	public GenericOperationAddParameter(ParametersParentNode target, AbstractParameterNode parameter, int index) {
+	public GenericOperationAddParameter(
+			ParametersParentNode target, AbstractParameterNode parameter, int index, boolean generateUniqueName) {
+		
 		super(OperationNames.ADD_PARAMETER);
 		fParametersParentNode = target;
 		fAbstractParameterNode = parameter;
 		fNewIndex = (index == -1)? target.getParameters().size() : index;
+		fGenerateUniqueName = generateUniqueName;
 	}
 
-	public GenericOperationAddParameter(ParametersParentNode target, AbstractParameterNode parameter) {
-		this(target, parameter, -1);
+	public GenericOperationAddParameter(
+			ParametersParentNode target, AbstractParameterNode parameter, boolean generateUniqueName) {
+		this(target, parameter, -1, generateUniqueName);
 	}
-
 
 	@Override
 	public void execute() throws ModelOperationException {
 
 		setOneNodeToSelect(fParametersParentNode);
-		generateUniqueParameterName(fAbstractParameterNode);
+
+		if (fGenerateUniqueName) {
+			generateUniqueParameterName(fAbstractParameterNode);
+		}
+		
 		String parameterName = fAbstractParameterNode.getName();
 
 		if(fNewIndex < 0){
@@ -97,4 +77,30 @@ public class GenericOperationAddParameter extends AbstractModelOperation {
 		return new ReverseOperation(fParametersParentNode, fAbstractParameterNode);
 	}
 
+	protected class ReverseOperation extends AbstractModelOperation{
+
+		private int fOriginalIndex;
+		private AbstractParameterNode fReversedParameter;
+		private ParametersParentNode fReversedTarget;
+
+		public ReverseOperation(ParametersParentNode target, AbstractParameterNode parameter) {
+			super("reverse " + OperationNames.ADD_PARAMETER);
+			fReversedTarget = target;
+			fReversedParameter = parameter;
+		}
+
+		@Override
+		public void execute() throws ModelOperationException {
+			setOneNodeToSelect(fParametersParentNode);
+			fOriginalIndex = fReversedParameter.getMyIndex();
+			fReversedTarget.removeParameter(fReversedParameter);
+			markModelUpdated();
+		}
+
+		@Override
+		public IModelOperation reverseOperation() {
+			return new GenericOperationAddParameter(fReversedTarget, fReversedParameter, fOriginalIndex, true);
+		}
+	}
+	
 }

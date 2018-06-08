@@ -29,7 +29,7 @@ public class ReplaceMethodParametersWithGlobalOperation extends BulkOperation{
 			super(OperationNames.REPLACE_PARAMETER_WITH_LINK, true, target, target);
 			MethodNode method = target.getMethod();
 			GlobalParameterNode global = new GlobalParameterNode(target);
-			addOperation(new GenericOperationAddParameter(parent, global));
+			addOperation(new GenericOperationAddParameter(parent, global, true));
 			addOperation(new MethodParameterOperationSetLink(target, global));
 			addOperation(new MethodParameterOperationSetLinked(target, true));
 			for(ConstraintNode constraint : method.getConstraintNodes()){
