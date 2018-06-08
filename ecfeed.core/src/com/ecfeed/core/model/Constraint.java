@@ -228,9 +228,12 @@ public class Constraint implements IConstraint<ChoiceNode> {
 	@SuppressWarnings("unchecked")
 	public Set<AbstractParameterNode> getReferencedParameters() {
 
-		try {
-			Set<AbstractParameterNode> referenced = (Set<AbstractParameterNode>)fPremise.accept(new ReferencedParametersProvider());
-			referenced.addAll((Set<AbstractParameterNode>)fConsequence.accept(new ReferencedParametersProvider()));
+		try{
+			Set<AbstractParameterNode> referenced = 
+					(Set<AbstractParameterNode>)fPremise.accept(new ReferencedParametersProvider());
+			
+			referenced.addAll(
+					(Set<AbstractParameterNode>)fConsequence.accept(new ReferencedParametersProvider()));
 
 			return referenced;
 		} catch(Exception e) {
@@ -388,7 +391,11 @@ public class Constraint implements IConstraint<ChoiceNode> {
 		@Override
 		public Object visit(ParameterCondition condition) throws Exception {
 
-			return new HashSet<MethodParameterNode>();
+			Set<AbstractParameterNode> set = new HashSet<AbstractParameterNode>();
+			
+			set.add(condition.getRightParameterNode());
+			
+			return set;
 		}
 
 		@Override
