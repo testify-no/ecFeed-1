@@ -358,7 +358,7 @@ public class ConstraintTestWithFullModel {
 		}
 	}
 
-	
+
 	@Test
 	public void constraintShouldEvaluateToTrueForRandomizedStrings() {
 
@@ -388,7 +388,7 @@ public class ConstraintTestWithFullModel {
 		List<List<ChoiceNode>> cartesianTestResults = generateResults(xml);		
 		assertEquals(1, cartesianTestResults.size());
 	}
-	
+
 	@Test
 	public void constraintShouldEvaluateToFalseForRandomizedStrings() {
 
@@ -418,7 +418,7 @@ public class ConstraintTestWithFullModel {
 		List<List<ChoiceNode>> cartesianTestResults = generateResults(xml);
 		assertEquals(0, cartesianTestResults.size());
 	}	
-	
+
 	@Test
 	public void constraintShouldEvaluateToTrueForRandomizedIntegers() {
 
@@ -442,7 +442,7 @@ public class ConstraintTestWithFullModel {
 		sb.append("        </Method>\n");
 		sb.append("    </Class>\n");
 		sb.append("</Model>\n");
-		
+
 		String xml = sb.toString();
 		xml = xml.replace("'", "\"");
 
@@ -451,16 +451,16 @@ public class ConstraintTestWithFullModel {
 	}
 
 	private List<List<ChoiceNode>> generateResults(String xml) {
-		
+
 		RootNode rootNode = ModelTestHelper.createModel(xml);
-		
+
 		MethodNode methodNode = GeneratorHelper.getMethodByName(rootNode, "testMethod");
-		
+
 		AbstractAlgorithm<ChoiceNode> cartesianAlgorithm = 
 				new CartesianProductAlgorithm<ChoiceNode>();
-		
+
 		List<List<ChoiceNode>> cartesianTestResults = new ArrayList<List<ChoiceNode>>();
-		
+
 		try {
 			cartesianTestResults = 
 					GeneratorHelper.generateTestCasesForMethod(methodNode, cartesianAlgorithm);
@@ -468,8 +468,53 @@ public class ConstraintTestWithFullModel {
 		} catch (GeneratorException e) {
 			fail("Exception:" + e.getMessage());
 		}
-		
+
 		return cartesianTestResults;
 	}
+
+
+
+	@Test
+	public void constraintShouldNotBeConsistentWhenGlobalParameterIsMissing() {
+
+		StringBuilder sb = new StringBuilder(); 
+
+		sb.append("<?xml version='1.0' encoding='UTF-8'?>\n");
+		sb.append("<Model name='Constraint' version='2'>\n");
+		sb.append("    <Class name='com.example.test.TestClass'>\n");
+		sb.append("        <Method name='testMethod'>\n");
+		sb.append("            <Parameter name='arg' type='int' isExpected='false' expected='0' linked='true' link='arg'>\n");
+		sb.append("            </Parameter>\n");
+		sb.append("            <Constraint name='constraint'>\n");
+		sb.append("                <Premise>\n");
+		sb.append("                    <Statement choice='choice' parameter='arg' relation='='/>\n");
+		sb.append("                </Premise>\n");
+		sb.append("                <Consequence>\n");
+		sb.append("                    <StaticStatement value='true'/>\n");
+		sb.append("                </Consequence>\n");
+		sb.append("            </Constraint>\n");
+		sb.append("        </Method>\n");
+		sb.append("    </Class>\n");
+		sb.append("    <Parameter name='arg' type='int'>\n");
+		sb.append("        <Choice name='choice' value='0' isRandomized='false'/>\n");
+		sb.append("    </Parameter>\n");
+		sb.append("</Model>\n");
+
+		String xml = sb.toString();
+		xml = xml.replace("'", "\"");
+
+		RootNode rootNode = ModelTestHelper.createModel(xml);
+		ClassNode classNode = rootNode.getClasses().get(0);
+		MethodNode methodNode = classNode.getMethods().get(0);
+		ConstraintNode constraintNode = methodNode.getConstraintNodes().get(0);
+
+		assertTrue(constraintNode.isConsistent());
+
+		GlobalParameterNode globalParameterNode = rootNode.getGlobalParameters().get(0);
+		rootNode.removeParameter(globalParameterNode);
+
+		assertFalse(constraintNode.isConsistent());
+	}
+
 }
 
