@@ -33,7 +33,7 @@ public class BulkOperationTest {
 		}
 
 		@Override
-		public IModelOperation reverseOperation() {
+		public IModelOperation getReverseOperation() {
 			return new DummyPrimitiveOperation("reverse " + getName());
 		}
 

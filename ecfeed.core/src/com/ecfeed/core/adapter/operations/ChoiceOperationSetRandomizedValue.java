@@ -65,7 +65,7 @@ public class ChoiceOperationSetRandomizedValue extends AbstractModelOperation {
 	}
 
 	@Override
-	public IModelOperation reverseOperation() {
+	public IModelOperation getReverseOperation() {
 		return new ReverseOperation();
 	}
 
@@ -80,7 +80,7 @@ public class ChoiceOperationSetRandomizedValue extends AbstractModelOperation {
 		}
 
 		@Override
-		public IModelOperation reverseOperation() {
+		public IModelOperation getReverseOperation() {
 			return new ChoiceOperationSetRandomizedValue(fChoiceNode, fNewValue,
 					fAdapterProvider);
 		}

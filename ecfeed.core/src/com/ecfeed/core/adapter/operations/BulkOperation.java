@@ -83,9 +83,8 @@ public class BulkOperation extends AbstractModelOperation {
 				fExecutedOperations.add(operation);
 			} catch(ModelOperationException e) {
 				errors.add(e.getMessage());
-
 				if(fAtomic) {
-					reverseOperation().execute();
+					getReverseOperation().execute();
 					break;
 				}
 			}
@@ -96,7 +95,7 @@ public class BulkOperation extends AbstractModelOperation {
 				operation.check();
 			} catch(ModelOperationException e) {
 				errors.add(e.getMessage());
-				reverseOperation().execute();
+				getReverseOperation().execute();
 				break;
 			}
 		}
@@ -112,7 +111,7 @@ public class BulkOperation extends AbstractModelOperation {
 	}
 
 	@Override
-	public IModelOperation reverseOperation() {
+	public IModelOperation getReverseOperation() {
 		return new BulkOperation(
 				"reverse " + getName(), reverseOperations(), 
 				fAtomic, fNodeToSelectAfterReverseOperation, null);
@@ -130,9 +129,9 @@ public class BulkOperation extends AbstractModelOperation {
 	protected List<IModelOperation> reverseOperations() {
 
 		List<IModelOperation> reverseOperations = new ArrayList<IModelOperation>();
-
-		for (IModelOperation operation : executedOperations()){
-			reverseOperations.add(0, operation.reverseOperation());
+		
+		for(IModelOperation operation : executedOperations()){
+			reverseOperations.add(0, operation.getReverseOperation());
 		}
 
 		return reverseOperations;

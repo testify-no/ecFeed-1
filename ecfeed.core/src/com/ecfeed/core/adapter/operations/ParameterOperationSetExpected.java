@@ -55,7 +55,7 @@ public class ParameterOperationSetExpected extends AbstractModelOperation {
 		}
 
 		@Override
-		public IModelOperation reverseOperation() {
+		public IModelOperation getReverseOperation() {
 			return new ParameterOperationSetExpected(fTarget, fExpected);
 		}
 
@@ -134,7 +134,7 @@ public class ParameterOperationSetExpected extends AbstractModelOperation {
 	}
 
 	@Override
-	public IModelOperation reverseOperation() {
+	public IModelOperation getReverseOperation() {
 		return new ReverseOperation();
 	}
 

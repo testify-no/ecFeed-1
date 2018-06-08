@@ -50,7 +50,7 @@ public class MethodOperationRemoveParameterTest2 {
 		assertEquals(0, methodNode.getParametersCount());
 
 		try {
-			methodOperationRemoveParameter.reverseOperation().execute();
+			methodOperationRemoveParameter.getReverseOperation().execute();
 		} catch (ModelOperationException e) {
 			fail();
 		}

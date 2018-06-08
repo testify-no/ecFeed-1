@@ -68,7 +68,7 @@ public class GenericOperationRemoveChoice extends BulkOperation {
 			}
 
 			@Override
-			public IModelOperation reverseOperation() {
+			public IModelOperation getReverseOperation() {
 				return new RemoveChoiceOperation(fTarget, fChoice, fAdapterProvider);
 			}
 
@@ -180,7 +180,7 @@ public class GenericOperationRemoveChoice extends BulkOperation {
 		}
 
 		@Override
-		public IModelOperation reverseOperation() {
+		public IModelOperation getReverseOperation() {
 			return new ReverseOperation();
 		}
 
