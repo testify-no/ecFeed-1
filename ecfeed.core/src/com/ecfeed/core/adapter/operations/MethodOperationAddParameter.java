@@ -47,7 +47,7 @@ public class MethodOperationAddParameter extends GenericOperationAddParameter {
 	}
 
 	public MethodOperationAddParameter(MethodNode target, MethodParameterNode parameter, int index) {
-		super(target, parameter, index);
+		super(target, parameter, index, true);
 		fRemovedTestCases = new ArrayList<TestCaseNode>(target.getTestCases());
 		fTarget = target;
 		fParameter = parameter;

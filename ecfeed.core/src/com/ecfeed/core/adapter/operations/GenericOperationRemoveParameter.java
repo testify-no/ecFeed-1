@@ -38,7 +38,7 @@ public class GenericOperationRemoveParameter extends AbstractModelOperation{
 
 	@Override
 	public IModelOperation reverseOperation() {
-		return new GenericOperationAddParameter(fTarget, fParameter, fOriginalIndex);
+		return new GenericOperationAddParameter(fTarget, fParameter, fOriginalIndex, false);
 	}
 
 	protected ParametersParentNode getOwnNode(){
