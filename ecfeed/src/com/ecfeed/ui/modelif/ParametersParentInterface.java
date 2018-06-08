@@ -29,7 +29,9 @@ public abstract class ParametersParentInterface extends AbstractNodeInterface {
 	public abstract AbstractParameterNode addNewParameter();
 
 	public boolean addParameter(AbstractParameterNode parameter, int index) {
-		return execute(new GenericOperationAddParameter(getOwnNode(), parameter, index), Messages.DIALOG_CONVERT_METHOD_PROBLEM_TITLE);
+		return execute(
+				new GenericOperationAddParameter(getOwnNode(), parameter, index, true), 
+				Messages.DIALOG_CONVERT_METHOD_PROBLEM_TITLE);
 	}
 
 	protected boolean removeParameters(Collection<? extends AbstractParameterNode> parameters){

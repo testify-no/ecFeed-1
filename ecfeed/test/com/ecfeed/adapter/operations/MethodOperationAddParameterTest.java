@@ -106,10 +106,10 @@ public class MethodOperationAddParameterTest{
 
 	@Test
 	public void methodSignatureTest(boolean sameArgNames, boolean sameArgTypes, boolean sameName, boolean duplicate){
-//		sameArgNames = true;
-//		sameArgTypes = false;
-//		sameName = true;
-//		duplicate = true;
+		//		sameArgNames = true;
+		//		sameArgTypes = false;
+		//		sameName = true;
+		//		duplicate = true;
 
 		String existingMethodName = "existingMethod";
 		String[] existingParameterNames = new String[]{"existingArg1", "existingArg2", "existingArg3"};
