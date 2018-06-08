@@ -51,7 +51,7 @@ public class ModelOperationManagerTest {
 		}
 
 		@Override
-		public IModelOperation reverseOperation() {
+		public IModelOperation getReverseOperation() {
 			return new Operation() {
 				@Override
 				public void execute() throws ModelOperationException {

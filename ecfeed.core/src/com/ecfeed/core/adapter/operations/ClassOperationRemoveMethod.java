@@ -39,7 +39,7 @@ public class ClassOperationRemoveMethod extends AbstractModelOperation {
 	}
 
 	@Override
-	public IModelOperation reverseOperation() {
+	public IModelOperation getReverseOperation() {
 		return new ClassOperationAddMethod(fTarget, fMethod, fCurrentIndex);
 	}
 

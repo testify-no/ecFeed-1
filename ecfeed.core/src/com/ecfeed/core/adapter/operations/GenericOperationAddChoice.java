@@ -90,7 +90,7 @@ public class GenericOperationAddChoice extends BulkOperation {
 		}
 
 		@Override
-		public IModelOperation reverseOperation() {
+		public IModelOperation getReverseOperation() {
 
 			return new GenericOperationRemoveChoice(fChoicesParentNode, fChoice, fAdapterProvider, false);
 		}

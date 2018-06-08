@@ -36,11 +36,11 @@ public class MethodOperationRemoveParameter extends BulkOperation{
 			@Override
 			public void execute() throws ModelOperationException {
 				getMethodTarget().replaceTestCases(fOriginalTestCases);
-				RemoveMethodParameterOperation.super.reverseOperation().execute();
+				RemoveMethodParameterOperation.super.getReverseOperation().execute();
 			}
 
 			@Override
-			public IModelOperation reverseOperation() {
+			public IModelOperation getReverseOperation() {
 				return new MethodOperationRemoveParameter(getMethodTarget(), (MethodParameterNode)getParameter());
 			}
 
@@ -74,7 +74,7 @@ public class MethodOperationRemoveParameter extends BulkOperation{
 		}
 
 		@Override
-		public IModelOperation reverseOperation(){
+		public IModelOperation getReverseOperation(){
 			return new ReverseOperation();
 		}
 

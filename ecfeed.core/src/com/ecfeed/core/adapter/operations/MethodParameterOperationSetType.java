@@ -209,7 +209,7 @@ public class MethodParameterOperationSetType extends BulkOperation {
 			}
 
 			@Override
-			public IModelOperation reverseOperation() {
+			public IModelOperation getReverseOperation() {
 
 				return new SetTypeOperation(fMethodParameterNode, getNewType(), getAdapterProvider());
 			}
@@ -259,7 +259,7 @@ public class MethodParameterOperationSetType extends BulkOperation {
 		}
 
 		@Override
-		public IModelOperation reverseOperation() {
+		public IModelOperation getReverseOperation() {
 			return new ReverseSetTypeOperation();
 		}
 

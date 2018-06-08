@@ -36,7 +36,7 @@ public class RootOperationRemoveClass extends AbstractModelOperation {
 	}
 
 	@Override
-	public IModelOperation reverseOperation() {
+	public IModelOperation getReverseOperation() {
 		return new RootOperationAddNewClass(fTarget, fRemovedClass, fCurrentIndex);
 	}
 

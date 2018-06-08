@@ -38,7 +38,7 @@ public class MethodParameterOperationSetLink extends BulkOperation {
 			}
 
 			@Override
-			public IModelOperation reverseOperation() {
+			public IModelOperation getReverseOperation() {
 				return new SetLinkOperation(fTarget, fNewLink);
 			}
 		}
@@ -63,7 +63,7 @@ public class MethodParameterOperationSetLink extends BulkOperation {
 		}
 
 		@Override
-		public IModelOperation reverseOperation() {
+		public IModelOperation getReverseOperation() {
 			return new ReverseOperation();
 		}
 	}

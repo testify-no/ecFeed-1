@@ -56,7 +56,7 @@ public class MethodParameterOperationSetLinked extends BulkOperation{
 			}
 
 			@Override
-			public IModelOperation reverseOperation() {
+			public IModelOperation getReverseOperation() {
 				return new SetLinkedOperation(fTarget, fLinked);
 			}
 
@@ -129,7 +129,7 @@ public class MethodParameterOperationSetLinked extends BulkOperation{
 		}
 
 		@Override
-		public IModelOperation reverseOperation() {
+		public IModelOperation getReverseOperation() {
 			return new ReverseSetLinkedOperation();
 		}
 	}
