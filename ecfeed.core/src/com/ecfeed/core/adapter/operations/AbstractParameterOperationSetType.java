@@ -18,8 +18,8 @@ import java.util.Map;
 
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.ITypeAdapter;
-import com.ecfeed.core.adapter.ITypeAdapterProvider;
 import com.ecfeed.core.adapter.ITypeAdapter.EConversionMode;
+import com.ecfeed.core.adapter.ITypeAdapterProvider;
 import com.ecfeed.core.adapter.java.Messages;
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ChoiceNode;
@@ -87,6 +87,7 @@ public class AbstractParameterOperationSetType extends AbstractModelOperation {
 
 	@Override
 	public void execute() throws ModelOperationException {
+
 		fCurrentType = fTarget.getType();
 		getOriginalChoices().clear();
 		getOriginalValues().clear();
@@ -175,42 +176,62 @@ public class AbstractParameterOperationSetType extends AbstractModelOperation {
 		}
 	}
 
-	// removed choices that cannot be converted and parents of only non-convertable choices.
-	// convert values of remaining choices.
-	private void adaptChoices(ChoicesParentNode parent){
+	private void adaptChoices(ChoicesParentNode parent) {
+
 		Iterator<ChoiceNode> it = getChoices(parent).iterator();
 		ITypeAdapter<?> adapter = fAdapterProvider.getAdapter(fNewType);
+
 		while(it.hasNext()){
-			ChoiceNode choice = it.next();
-			if(choice.isAbstract()){
-				adaptChoices(choice);
-				if(getChoices(choice).isEmpty()){
-					it.remove();
-				}else{
-					String newValue = 
-							adapter.convert(
-									choice.getValueString(), choice.isRandomizedValue(), EConversionMode.QUIET);
+			adaptOneChoice(it, adapter);
+		}
+	}
 
-					if(newValue == null){
-						newValue = adapter.getDefaultValue();
-					}
-					choice.setValueString(newValue);
-				}
-			}else{
-				String newValue = 
-						adapter.convert(
-								choice.getValueString(), choice.isRandomizedValue(), EConversionMode.QUIET);
+	private void adaptOneChoice(Iterator<ChoiceNode> it, ITypeAdapter<?> adapter) {
 
-				if(newValue == null){
-					it.remove();
-				}else{
-					choice.setValueString(newValue);
+		ChoiceNode choice = it.next();
 
-					if (!adapter.isRandomizable()) {
-						choice.setRandomizedValue(false);
-					}
-				}
-			}
+		if (choice.isAbstract()) {
+			adaptAbstractChoice(choice, adapter, it);
+		} else{
+			adaptValueChoice(choice, adapter, it);
+		}
+	}
+
+	private void adaptAbstractChoice(ChoiceNode choice, ITypeAdapter<?> adapter, Iterator<ChoiceNode> it) {
+
+		adaptChoices(choice);
+
+		if (getChoices(choice).isEmpty()) {
+			it.remove();
+			return;
+		}
+
+		String newValue = 
+				adapter.convert(
+						choice.getValueString(), choice.isRandomizedValue(), EConversionMode.QUIET);
+
+		if (newValue == null) {
+			newValue = adapter.getDefaultValue();
+		}
+
+		choice.setValueString(newValue);
+	}
+
+	private void adaptValueChoice(ChoiceNode choice, ITypeAdapter<?> adapter, Iterator<ChoiceNode> it) {
+
+		String newValue = 
+				adapter.convert(
+						choice.getValueString(), choice.isRandomizedValue(), EConversionMode.QUIET);
+
+		if (newValue == null) {
+			it.remove();
+			return;
+		}
+
+		choice.setValueString(newValue);
+
+		if (!adapter.isRandomizable()) {
+			choice.setRandomizedValue(false);
 		}
 	}
 
