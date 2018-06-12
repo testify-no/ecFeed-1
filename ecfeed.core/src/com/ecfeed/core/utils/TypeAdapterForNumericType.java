@@ -30,12 +30,4 @@ public abstract class TypeAdapterForNumericType<T extends Number> extends TypeAd
 		return String.valueOf(generateValue(range));
 	}
 
-	protected final int getLower(String range) {
-		return Integer.parseInt(range.split(DELIMITER)[0]);
-	}
-
-	protected final int getUpper(String range) {
-		return Integer.parseInt(range.split(DELIMITER)[1]);
-	}
-
 }
