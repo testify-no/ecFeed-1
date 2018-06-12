@@ -2,6 +2,8 @@ package com.ecfeed.core.utils;
 
 import java.util.concurrent.ThreadLocalRandom;
 
+import com.ecfeed.core.model.RangeHelper;
+
 public class TypeAdapterForByte extends TypeAdapterForNumericType<Byte>{
 
 	@Override
@@ -37,10 +39,13 @@ public class TypeAdapterForByte extends TypeAdapterForNumericType<Byte>{
 	}
 
 	@Override
-	public Byte generateValue(String range) {
-		byte[] bytes = new byte[1];
-		ThreadLocalRandom.current().nextBytes(bytes);
-		return bytes[0];
+	public Byte generateValue(String rangeTxt) {
+
+		String[] range = RangeHelper.splitToRange(rangeTxt);
+
+		return (byte) ThreadLocalRandom.current().nextInt(
+				JavaTypeHelper.parseByteValue(range[0], EConversionMode.QUIET), 
+				JavaTypeHelper.parseByteValue(range[1], EConversionMode.QUIET));
 	}
 
 }

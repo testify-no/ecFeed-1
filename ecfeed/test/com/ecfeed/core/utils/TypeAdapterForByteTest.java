@@ -1,6 +1,7 @@
 package com.ecfeed.core.utils;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
@@ -94,6 +95,36 @@ public class TypeAdapterForByteTest {
 		TypeAdapterForByte typeAdapterForByte = new TypeAdapterForByte();
 
 		typeAdapterForByte.convert("A", false, EConversionMode.WITH_EXCEPTION);
-	}	
+	}
+	
+	@Test
+	public void shouldGenerateValue1() {
+
+		TypeAdapterForByte typeAdapterForByte = new TypeAdapterForByte();
+
+		Byte result = typeAdapterForByte.generateValue("3:7");		
+
+		checkRange(result, (byte)3, (byte)7);
+	}
+	
+	@Test
+	public void shouldGenerateValue2() {
+
+		TypeAdapterForByte typeAdapterForByte = new TypeAdapterForByte();
+
+		Byte result = typeAdapterForByte.generateValue("MIN_VALUE:MAX_VALUE");		
+
+		checkRange(result, Byte.MIN_VALUE, Byte.MAX_VALUE);
+	}
+
+	private void checkRange(Byte result, Byte min, Byte max) {
+
+		if (result >= min && result <= max) {
+			return;
+		}
+
+		fail();
+	}
+	
 
 }
