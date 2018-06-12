@@ -2,6 +2,8 @@ package com.ecfeed.core.utils;
 
 import java.util.concurrent.ThreadLocalRandom;
 
+import com.ecfeed.core.model.RangeHelper;
+
 public class TypeAdapterForLong extends TypeAdapterForNumericType<Long>{
 
 	@Override
@@ -27,9 +29,15 @@ public class TypeAdapterForLong extends TypeAdapterForNumericType<Long>{
 	}
 
 	@Override
-	public Long generateValue(String range) {
-		return ThreadLocalRandom.current().nextLong(getLower(range),getUpper(range));
+	public Long generateValue(String rangeTxt) {
+
+		String[] range = RangeHelper.splitToRange(rangeTxt);
+
+		return ThreadLocalRandom.current().nextLong(
+				JavaTypeHelper.parseLongValue(range[0], EConversionMode.QUIET),
+				JavaTypeHelper.parseLongValue(range[1], EConversionMode.QUIET));
 	}
+
 
 	@Override
 	protected String[] getSpecialValues() {
