@@ -1,6 +1,7 @@
 package com.ecfeed.core.utils;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
@@ -137,5 +138,24 @@ public class TypeAdapterForDoubleTest {
 
 		assertEquals("-MIN_VALUE:0.0", result);
 	}	
+
+	@Test
+	public void shouldGenerateValue1() {
+
+		TypeAdapterForDouble typeAdapterForDouble = new TypeAdapterForDouble();
+
+		Double result = typeAdapterForDouble.generateValue("1.6:1.7");		
+
+		checkRange(result, 1.6, 1.7);
+	}
+
+	private void checkRange(Double result, Double min, Double max) {
+
+		if (result >= min && result <= max) {
+			return;
+		}
+
+		fail();
+	}
 
 }
