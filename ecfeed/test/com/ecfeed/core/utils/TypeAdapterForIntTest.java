@@ -165,7 +165,7 @@ public class TypeAdapterForIntTest {
 
 	private void checkRange(Integer result, Integer min, Integer max) {
 
-		if (result >= min && result <= Integer.MAX_VALUE) {
+		if (result >= min && result <= max) {
 			return;
 		}
 
