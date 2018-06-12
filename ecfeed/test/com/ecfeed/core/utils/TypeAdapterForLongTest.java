@@ -51,4 +51,19 @@ public class TypeAdapterForLongTest {
 		fail();
 	}
 
+	@Test(expected = RuntimeException.class)
+	public void shouldFailToGenerateWhenRangeIsInvalid1() {
+
+		TypeAdapterForLong typeAdapterForLong = new TypeAdapterForLong();
+
+		typeAdapterForLong.generateValue("MAX_VALUE:MIN_VALUE");		
+	}	
+
+	@Test(expected = RuntimeException.class)
+	public void shouldFailToGenerateWhenRangeIsInvalid2() {
+
+		TypeAdapterForLong typeAdapterForLong = new TypeAdapterForLong();
+
+		typeAdapterForLong.generateValue("1.0:-1.0");		
+	}	
 }

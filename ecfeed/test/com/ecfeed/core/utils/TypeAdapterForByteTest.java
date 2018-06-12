@@ -136,5 +136,20 @@ public class TypeAdapterForByteTest {
 		fail();
 	}
 	
+	@Test(expected = RuntimeException.class)
+	public void shouldFailToGenerateWhenRangeIsInvalid1() {
+
+		TypeAdapterForByte typeAdapterForByte = new TypeAdapterForByte();
+
+		typeAdapterForByte.generateValue("MAX_VALUE:MIN_VALUE");		
+	}	
+	
+	@Test(expected = RuntimeException.class)
+	public void shouldFailToGenerateWhenRangeIsInvalid2() {
+
+		TypeAdapterForByte typeAdapterForByte = new TypeAdapterForByte();
+
+		typeAdapterForByte.generateValue("1:-1");		
+	}	
 
 }
