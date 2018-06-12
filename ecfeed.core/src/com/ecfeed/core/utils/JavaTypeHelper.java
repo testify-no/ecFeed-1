@@ -389,7 +389,7 @@ public class JavaTypeHelper {
 		return null;
 	}	
 
-	private static Byte parseByteValue(String valueString) {
+	public static Byte parseByteValue(String valueString) {
 
 		if(valueString.equals(SPECIAL_VALUE_MAX)){
 			return Byte.MAX_VALUE;
@@ -404,7 +404,7 @@ public class JavaTypeHelper {
 		}
 	}
 
-	private static Character parseCharValue(String valueString) {
+	public static Character parseCharValue(String valueString) {
 
 		if(valueString.equals(SPECIAL_VALUE_MAX)){
 			return Character.MAX_VALUE;
@@ -454,7 +454,7 @@ public class JavaTypeHelper {
 		}
 	}
 
-	private static Float parseFloatValue(String valueString, EConversionMode conversionMode) {
+	public static Float parseFloatValue(String valueString, EConversionMode conversionMode) {
 
 		if(valueString.equals(SPECIAL_VALUE_MAX)){
 			return Float.MAX_VALUE;
@@ -486,7 +486,7 @@ public class JavaTypeHelper {
 		}
 	}
 
-	private static Integer parseIntValue(String valueString, EConversionMode conversionMode) {
+	public static Integer parseIntValue(String valueString, EConversionMode conversionMode) {
 
 		if(valueString.equals(SPECIAL_VALUE_MAX)){
 			return Integer.MAX_VALUE;
@@ -526,7 +526,7 @@ public class JavaTypeHelper {
 		}
 	}
 
-	private static Short parseShortValue(String valueString, EConversionMode conversionMode) {
+	public static Short parseShortValue(String valueString, EConversionMode conversionMode) {
 
 		if(valueString.equals(SPECIAL_VALUE_MAX)){
 			return Short.MAX_VALUE;
@@ -546,7 +546,7 @@ public class JavaTypeHelper {
 		}
 	}
 
-	private static String parseStringValue(String valueString) {
+	public static String parseStringValue(String valueString) {
 
 		if(valueString.equals(AdapterConstants.VALUE_REPRESENTATION_NULL)){
 			return null;

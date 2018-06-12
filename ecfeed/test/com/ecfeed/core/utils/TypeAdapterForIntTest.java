@@ -1,6 +1,7 @@
 package com.ecfeed.core.utils;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
@@ -113,4 +114,61 @@ public class TypeAdapterForIntTest {
 
 		typeAdapterForInt.convert("-MAX_VALUE:-MIN_VALUE", true, EConversionMode.WITH_EXCEPTION);
 	}	
+
+	@Test
+	public void shouldGenerateValue1() {
+
+		TypeAdapterForInt typeAdapterForInt = new TypeAdapterForInt();
+
+		Integer result = typeAdapterForInt.generateValue("0:MAX_VALUE");
+
+		checkRange(result, 0, Integer.MAX_VALUE);
+	}	
+
+	@Test(expected = RuntimeException.class)
+	public void shouldThrowForInvalidRange() {
+
+		TypeAdapterForInt typeAdapterForInt = new TypeAdapterForInt();
+
+		typeAdapterForInt.generateValue("MIN_VALUE, MAX_VALUE");
+	}
+
+	@Test
+	public void shouldGenerateValue2() {
+
+		TypeAdapterForInt typeAdapterForInt = new TypeAdapterForInt();
+
+		Integer result = typeAdapterForInt.generateValue("MIN_VALUE:MAX_VALUE");
+
+		checkRange(result, Integer.MIN_VALUE, Integer.MAX_VALUE);
+	}
+
+	@Test
+	public void shouldGenerateValue3() {
+
+		TypeAdapterForInt typeAdapterForInt = new TypeAdapterForInt();
+
+		Integer result = typeAdapterForInt.generateValue("-1:1");
+
+		checkRange(result, -1, 1);
+	}	
+
+	@Test
+	public void shouldGenerateValue4() {
+
+		TypeAdapterForInt typeAdapterForInt = new TypeAdapterForInt();
+
+		Integer result = typeAdapterForInt.generateValue("1:100");
+
+		checkRange(result, 0, 100);
+	}
+
+	private void checkRange(Integer result, Integer min, Integer max) {
+
+		if (result >= min && result <= Integer.MAX_VALUE) {
+			return;
+		}
+
+		fail();
+	}
 }
