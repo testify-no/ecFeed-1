@@ -307,7 +307,7 @@ public class JavaTypeHelper {
 			String typeName, String value, EConversionMode conversionMode) {
 
 		if (isByteTypeName(typeName)) {
-			return convertToDouble(parseByteValue(value));
+			return convertToDouble(parseByteValue(value, conversionMode));
 		}
 		if (isIntTypeName(typeName)) {
 			return convertToDouble(parseIntValue(value, conversionMode));
@@ -358,7 +358,7 @@ public class JavaTypeHelper {
 		case TYPE_NAME_BOOLEAN:
 			return parseBooleanValue(valueString);
 		case TYPE_NAME_BYTE:
-			return parseByteValue(valueString);
+			return parseByteValue(valueString, conversionMode);
 		case TYPE_NAME_CHAR:
 			return parseCharValue(valueString);
 		case TYPE_NAME_DOUBLE:
@@ -389,7 +389,7 @@ public class JavaTypeHelper {
 		return null;
 	}	
 
-	public static Byte parseByteValue(String valueString) {
+	public static Byte parseByteValue(String valueString, EConversionMode conversionMode) {
 
 		if(valueString.equals(SPECIAL_VALUE_MAX)){
 			return Byte.MAX_VALUE;
@@ -397,10 +397,15 @@ public class JavaTypeHelper {
 		if(valueString.equals(SPECIAL_VALUE_MIN)){
 			return Byte.MIN_VALUE;
 		}
-		try {
+
+		if (conversionMode == EConversionMode.QUIET) {
+			try {
+				return Byte.parseByte(valueString);
+			} catch(NumberFormatException e){
+				return null;
+			}
+		} else {
 			return Byte.parseByte(valueString);
-		} catch(NumberFormatException e){
-			return null;
 		}
 	}
 
