@@ -1,6 +1,7 @@
 package com.ecfeed.core.utils;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
@@ -96,6 +97,36 @@ public class TypeAdapterForFloatTest {
 		TypeAdapterForFloat typeAdapterForFloat = new TypeAdapterForFloat();
 
 		typeAdapterForFloat.convert("AB", false, EConversionMode.WITH_EXCEPTION);
-	}	
+	}
+	
+	@Test
+	public void shouldGenerateValue1() {
+
+		TypeAdapterForFloat typeAdapterForFloat = new TypeAdapterForFloat();
+
+		Float result = typeAdapterForFloat.generateValue("1.6:1.7");		
+
+		checkRange(result, (float)1.6, (float)1.7);
+	}
+	
+	@Test
+	public void shouldGenerateValue2() {
+
+		TypeAdapterForFloat typeAdapterForFloat = new TypeAdapterForFloat();
+
+		Float result = typeAdapterForFloat.generateValue("MIN_VALUE:MAX_VALUE");		
+
+		checkRange(result, Float.MIN_VALUE, Float.MAX_VALUE);
+	}
+
+	private void checkRange(Float result, Float min, Float max) {
+
+		if (result >= min && result <= max) {
+			return;
+		}
+
+		fail();
+	}
+	
 
 }

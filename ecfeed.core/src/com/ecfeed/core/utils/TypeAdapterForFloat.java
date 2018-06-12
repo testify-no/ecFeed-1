@@ -2,6 +2,8 @@ package com.ecfeed.core.utils;
 
 import java.util.concurrent.ThreadLocalRandom;
 
+import com.ecfeed.core.model.RangeHelper;
+
 public class TypeAdapterForFloat extends TypeAdapterFloatingPoint<Float>{
 
 	@Override
@@ -32,10 +34,13 @@ public class TypeAdapterForFloat extends TypeAdapterFloatingPoint<Float>{
 	}
 
 	@Override
-	public Float generateValue(String range) {
-		int min = getLower(range);
-		int max = getUpper(range);
-		return ThreadLocalRandom.current().nextFloat() * (max - min) + min;
+	public Float generateValue(String rangeTxt) {
+
+		String[] range = RangeHelper.splitToRange(rangeTxt);
+
+		return (float) ThreadLocalRandom.current().nextDouble(
+				JavaTypeHelper.parseFloatValue(range[0], EConversionMode.QUIET),
+				JavaTypeHelper.parseFloatValue(range[1], EConversionMode.QUIET));
 	}
 
 	@Override
