@@ -2,7 +2,10 @@ package com.ecfeed.core.utils;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-public class TypeAdapterForInt extends TypeAdapterForNumericType<Integer>{
+import com.ecfeed.core.adapter.ITypeAdapter.EConversionMode;
+import com.ecfeed.core.model.RangeHelper;
+
+public class TypeAdapterForInt extends TypeAdapterForNumericType<Integer> {
 
 	@Override
 	public String getMyTypeName() {
@@ -31,10 +34,15 @@ public class TypeAdapterForInt extends TypeAdapterForNumericType<Integer>{
 			}
 		}
 	}
-
+	
 	@Override
 	public Integer generateValue(String range) {
-		return ThreadLocalRandom.current().nextInt(getLower(range),getUpper(range));
+		
+		String[] range2 = RangeHelper.splitToRange(range);
+		
+		return ThreadLocalRandom.current().nextInt(
+				JavaTypeHelper.parseIntValue(range2[0], EConversionMode.QUIET),
+				JavaTypeHelper.parseIntValue(range2[1], EConversionMode.QUIET));
 	}
 
 	@Override
