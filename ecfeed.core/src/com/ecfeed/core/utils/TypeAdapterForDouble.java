@@ -2,6 +2,8 @@ package com.ecfeed.core.utils;
 
 import java.util.concurrent.ThreadLocalRandom;
 
+import com.ecfeed.core.model.RangeHelper;
+
 public class TypeAdapterForDouble extends TypeAdapterFloatingPoint<Double>{
 
 	@Override
@@ -33,8 +35,14 @@ public class TypeAdapterForDouble extends TypeAdapterFloatingPoint<Double>{
 	}
 
 	@Override
-	public Double generateValue(String range) {
-		return ThreadLocalRandom.current().nextDouble(getLowerDouble(range),getUpperDouble(range));
+	public Double generateValue(String rangeTxt) {
+
+		String[] range = RangeHelper.splitToRange(rangeTxt);
+
+		return ThreadLocalRandom.current().nextDouble(
+				JavaTypeHelper.parseDoubleValue(range[0], EConversionMode.QUIET),
+				JavaTypeHelper.parseDoubleValue(range[1], EConversionMode.QUIET));
+
 	}
 
 	protected final Double getLowerDouble(String range) {
