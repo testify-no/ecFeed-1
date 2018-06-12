@@ -1,6 +1,7 @@
 package com.ecfeed.core.utils;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
@@ -94,5 +95,35 @@ public class TypeAdapterForShortTest {
 		TypeAdapterForShort typeAdapterForShort = new TypeAdapterForShort();
 
 		typeAdapterForShort.convert("AB", false, EConversionMode.WITH_EXCEPTION);
-	}	
+	}
+
+	@Test
+	public void shouldGenerateValue1() {
+
+		TypeAdapterForShort typeAdapterForShort= new TypeAdapterForShort();
+
+		Short result = typeAdapterForShort.generateValue("1:2");		
+
+		checkRange(result, (short)1, (short)2);
+	}
+
+	@Test
+	public void shouldGenerateValue2() {
+
+		TypeAdapterForShort typeAdapterForShort = new TypeAdapterForShort();
+
+		Short result = typeAdapterForShort.generateValue("MIN_VALUE:MAX_VALUE");		
+
+		checkRange(result, Short.MIN_VALUE, Short.MAX_VALUE);
+	}
+
+	private void checkRange(Short result, Short min, Short max) {
+
+		if (result >= min && result <= max) {
+			return;
+		}
+
+		fail();
+	}
+
 }
