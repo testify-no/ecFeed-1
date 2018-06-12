@@ -36,13 +36,13 @@ public class TypeAdapterForInt extends TypeAdapterForNumericType<Integer> {
 	}
 	
 	@Override
-	public Integer generateValue(String range) {
+	public Integer generateValue(String rangeTxt) {
 		
-		String[] range2 = RangeHelper.splitToRange(range);
+		String[] range = RangeHelper.splitToRange(rangeTxt);
 		
 		return ThreadLocalRandom.current().nextInt(
-				JavaTypeHelper.parseIntValue(range2[0], EConversionMode.QUIET),
-				JavaTypeHelper.parseIntValue(range2[1], EConversionMode.QUIET));
+				JavaTypeHelper.parseIntValue(range[0], EConversionMode.QUIET),
+				JavaTypeHelper.parseIntValue(range[1], EConversionMode.QUIET));
 	}
 
 	@Override
