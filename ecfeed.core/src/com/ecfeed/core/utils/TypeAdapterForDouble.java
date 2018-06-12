@@ -34,8 +34,16 @@ public class TypeAdapterForDouble extends TypeAdapterFloatingPoint<Double>{
 
 	@Override
 	public Double generateValue(String range) {
-		return ThreadLocalRandom.current().nextDouble(getLower(range),getUpper(range));
+		return ThreadLocalRandom.current().nextDouble(getLowerDouble(range),getUpperDouble(range));
 	}
+
+	protected final Double getLowerDouble(String range) {
+		return Double.parseDouble(range.split(DELIMITER)[0]);
+	}
+
+	protected final Double getUpperDouble(String range) {
+		return Double.parseDouble(range.split(DELIMITER)[1]);
+	}	
 
 	@Override
 	protected String[] getSpecialValues() {
