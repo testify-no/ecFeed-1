@@ -100,7 +100,7 @@ public class TypeAdapterForFloatTest {
 
 		assertEquals("0.0", result);
 	}
-	
+
 	@Test(expected = RuntimeException.class)
 	public void shouldThrowWhenInvalidValue() {
 
@@ -108,7 +108,7 @@ public class TypeAdapterForFloatTest {
 
 		typeAdapterForFloat.convert("AB", false, EConversionMode.WITH_EXCEPTION);
 	}
-	
+
 	@Test
 	public void shouldGenerateValue1() {
 
@@ -118,7 +118,7 @@ public class TypeAdapterForFloatTest {
 
 		checkRange(result, (float)1.6, (float)1.7);
 	}
-	
+
 	@Test
 	public void shouldGenerateValue2() {
 
@@ -137,6 +137,20 @@ public class TypeAdapterForFloatTest {
 
 		fail();
 	}
-	
 
+	@Test(expected = RuntimeException.class)
+	public void shouldFailToGenerateWhenRangeIsInvalid1() {
+
+		TypeAdapterForFloat typeAdapterForFloat = new TypeAdapterForFloat();
+
+		typeAdapterForFloat.generateValue("MAX_VALUE:MIN_VALUE");		
+	}	
+
+	@Test(expected = RuntimeException.class)
+	public void shouldFailToGenerateWhenRangeIsInvalid2() {
+
+		TypeAdapterForFloat typeAdapterForFloat = new TypeAdapterForFloat();
+
+		typeAdapterForFloat.generateValue("1.0:-1.0");		
+	}
 }
