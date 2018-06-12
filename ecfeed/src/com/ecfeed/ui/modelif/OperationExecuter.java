@@ -21,14 +21,13 @@ import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.AbstractFormPart;
 
 import com.ecfeed.core.adapter.CachedImplementationStatusResolver;
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.utils.SystemLogger;
+import com.ecfeed.ui.dialogs.basic.ErrorDialog;
 
 public class OperationExecuter {
 
@@ -78,9 +77,7 @@ public class OperationExecuter {
 				return Status.OK_STATUS;
 			} catch (ModelOperationException e) {
 				updateListeners();
-				MessageDialog.openError(Display.getCurrent().getActiveShell(),
-						fErrorMessageTitle,
-						e.getMessage());
+				ErrorDialog.open(fErrorMessageTitle, e.getMessage());
 
 				return operation.modelUpdated()?Status.OK_STATUS:Status.CANCEL_STATUS;
 			}

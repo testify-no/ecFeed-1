@@ -15,7 +15,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxViewerCellEditor;
@@ -24,7 +23,6 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
-import org.eclipse.swt.widgets.Display;
 
 import com.ecfeed.core.adapter.ITypeAdapter;
 import com.ecfeed.core.adapter.ITypeAdapter.EConversionMode;
@@ -33,6 +31,7 @@ import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.utils.JavaTypeHelper;
+import com.ecfeed.ui.dialogs.basic.ErrorDialog;
 
 public class TestDataValueEditingSupport extends EditingSupport {
 	private final TableViewer fViewer;
@@ -182,7 +181,7 @@ public class TestDataValueEditingSupport extends EditingSupport {
 			String type = parameter.getType();
 			ITypeAdapter<?> adapter = new EclipseTypeAdapterProvider().getAdapter(type);
 			if(adapter.convert(valueString, false, EConversionMode.QUIET) == null){
-				MessageDialog.openError(Display.getCurrent().getActiveShell(),
+				ErrorDialog.open(
 						Messages.DIALOG_CHOICE_VALUE_PROBLEM_TITLE,
 						Messages.DIALOG_CHOICE_VALUE_PROBLEM_MESSAGE(valueString));
 				return;
