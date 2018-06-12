@@ -17,6 +17,7 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.net.HttpProperty;
 import com.ecfeed.core.net.IHttpCommunicator;
 import com.ecfeed.core.utils.StringHelper;
@@ -69,6 +70,8 @@ public class VersionCheckerAndRegistratorTest {
 				return createEmptyResponse();
 			}
 		}
+
+		ApplicationContext.setPluginApplication();
 
 		HttpCommunicatorStub httpCommunicatorStub = new HttpCommunicatorStub();
 
