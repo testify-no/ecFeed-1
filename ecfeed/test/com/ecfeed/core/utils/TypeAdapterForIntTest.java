@@ -125,6 +125,14 @@ public class TypeAdapterForIntTest {
 		typeAdapterForInt.convert("-MAX_VALUE:-MIN_VALUE", true, EConversionMode.WITH_EXCEPTION);
 	}	
 
+	@Test(expected = RuntimeException.class)
+	public void shouldNotExpandSingleValueToRange() {
+
+		TypeAdapterForByte typeAdapterForByte = new TypeAdapterForByte();
+
+		typeAdapterForByte.convert("0", true, EConversionMode.WITH_EXCEPTION);
+	}	
+	
 	@Test
 	public void shouldGenerateValue1() {
 
