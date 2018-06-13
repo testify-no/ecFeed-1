@@ -52,9 +52,6 @@ public abstract class ChoicesParentNode extends AbstractNode{
 
 	public abstract AbstractParameterNode getParameter();
 
-	protected void correctNodeValuesAfterChoicesAdd() {
-	}
-
 	public void addChoice(ChoiceNode choice) {
 		addChoice(choice, fChoices.size());
 	}
@@ -62,7 +59,6 @@ public abstract class ChoicesParentNode extends AbstractNode{
 	public void addChoice(ChoiceNode choice, int index) {
 		fChoices.add(index, choice);
 		choice.setParent(this);
-		correctNodeValuesAfterChoicesAdd();
 	}
 
 	public void addChoices(List<ChoiceNode> choices) {
@@ -152,7 +148,6 @@ public abstract class ChoicesParentNode extends AbstractNode{
 		for(ChoiceNode p : newChoices){
 			p.setParent(this);
 		}
-		correctNodeValuesAfterChoicesAdd();
 	}
 
 	protected List<ChoiceNode> getLeafChoices(Collection<ChoiceNode> choices) {
