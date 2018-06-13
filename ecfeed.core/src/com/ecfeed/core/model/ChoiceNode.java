@@ -66,15 +66,6 @@ public class ChoiceNode extends ChoicesParentNode{
 		return getQualifiedName() + " [" + getValueString() + "]";
 	}
 
-	@Override
-	protected void correctNodeValuesAfterChoicesAdd() {
-
-		if (isAbstract()) {
-			setRandomizedValue(false);
-		}
-	}
-
-
 	public String toStringWithParenthesis() {
 
 		if(isAbstract()){
