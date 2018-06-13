@@ -106,7 +106,15 @@ public class TypeAdapterForByteTest {
 
 		typeAdapterForByte.convert("A", false, EConversionMode.WITH_EXCEPTION);
 	}
-	
+
+	@Test(expected = RuntimeException.class)
+	public void shouldNotConvertRangeWhenNotRandomized() {
+
+		TypeAdapterForByte typeAdapterForByte = new TypeAdapterForByte();
+
+		typeAdapterForByte.convert("0:0", false, EConversionMode.WITH_EXCEPTION);
+	}	
+
 	@Test
 	public void shouldGenerateValue1() {
 
@@ -116,7 +124,7 @@ public class TypeAdapterForByteTest {
 
 		checkRange(result, (byte)3, (byte)7);
 	}
-	
+
 	@Test
 	public void shouldGenerateValue2() {
 
@@ -135,7 +143,7 @@ public class TypeAdapterForByteTest {
 
 		fail();
 	}
-	
+
 	@Test(expected = RuntimeException.class)
 	public void shouldFailToGenerateWhenRangeIsInvalid1() {
 
@@ -143,7 +151,7 @@ public class TypeAdapterForByteTest {
 
 		typeAdapterForByte.generateValue("MAX_VALUE:MIN_VALUE");		
 	}	
-	
+
 	@Test(expected = RuntimeException.class)
 	public void shouldFailToGenerateWhenRangeIsInvalid2() {
 
