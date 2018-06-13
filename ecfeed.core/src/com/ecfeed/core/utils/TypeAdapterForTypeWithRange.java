@@ -41,7 +41,12 @@ public abstract class TypeAdapterForTypeWithRange<T> implements ITypeAdapter<T> 
 		String[] range = RangeHelper.splitToRange(value);
 
 		if (!isRandomized) {
-			return range[0];
+			if (conversionMode == EConversionMode.WITH_EXCEPTION) {
+				final String VALUE_IS_INVALID = "Value [" + value + "] is not allowed for not randomized choice.";
+				ExceptionHelper.reportRuntimeException(VALUE_IS_INVALID);			
+			} else {
+				return range[0];
+			}
 		}
 
 		String firstValue = convertSingleValue(range[0], conversionMode);
