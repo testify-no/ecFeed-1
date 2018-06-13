@@ -158,9 +158,8 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		} else {
 			fValueCombo.setEnabled(true);
 		}
-		fRandomizeCheckbox.setSelection(choiceNode.isRandomizedValue());
-		fRandomizeCheckbox.setEnabled(isRandomizeCheckboxEnabled());
-
+		fRandomizeCheckbox.setSelection(isRandomizeCheckboxSelected(choiceNode));
+		fRandomizeCheckbox.setEnabled(isRandomizeCheckboxEnabled(choiceNode));
 		updateValueLabel(choiceNode);
 
 		fAttributesComposite.layout();
@@ -181,15 +180,15 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		}
 	}
 
-	private boolean isRandomizeCheckboxEnabled() {
+	private boolean isRandomizeCheckboxEnabled(ChoiceNode choiceNode) {
 
-		String typeName = fChoiceIf.getParameter().getType();
-
-		if (isChoiceNodeAbstract()) {
+		if (choiceNode.isAbstract()) {
 			return false;
 		}
 
 		EclipseTypeAdapterProvider eclipseTypeAdapterProvider = new EclipseTypeAdapterProvider();
+		String typeName = choiceNode.getParameter().getType();
+
 		ITypeAdapter<?> typeAdapter = eclipseTypeAdapterProvider.getAdapter(typeName);
 
 		if (!typeAdapter.isRandomizable())
@@ -198,9 +197,13 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		return true;
 	}
 
-	private boolean isChoiceNodeAbstract() {
-		ChoiceNode choiceNode = getSelectedChoice();
-		return choiceNode!=null && choiceNode.isAbstract();
+	private boolean isRandomizeCheckboxSelected(ChoiceNode choiceNode) {
+
+		if (choiceNode.isAbstract()) {
+			return false;
+		}
+
+		return choiceNode.isRandomizedValue();
 	}
 
 	private void setValueComboText(ChoiceNode choiceNode) {
