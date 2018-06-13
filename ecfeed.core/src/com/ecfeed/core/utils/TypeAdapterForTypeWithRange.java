@@ -28,33 +28,50 @@ public abstract class TypeAdapterForTypeWithRange<T> implements ITypeAdapter<T> 
 	public String convert(String value, boolean isRandomized, EConversionMode conversionMode) {
 
 		if (!RangeHelper.isRange(value)) {
+			return convertNotRange(value, isRandomized, conversionMode);
+		}
 
-			String result = convertSingleValue(value, conversionMode);
+		return convertRange(value, isRandomized, conversionMode);
+	}
 
-			if (isRandomized) {
-				result = RangeHelper.createRange(result);
-			}
+	private String convertNotRange(String value, boolean isRandomized, EConversionMode conversionMode) {
 
+		String result = convertSingleValue(value, conversionMode);
+
+		if (!isRandomized) {
 			return result;
 		}
 
-		String[] range = RangeHelper.splitToRange(value);
-
-		if (!isRandomized) {
-			if (conversionMode == EConversionMode.WITH_EXCEPTION) {
-				final String VALUE_IS_INVALID = "Value [" + value + "] is not allowed for not randomized choice.";
-				ExceptionHelper.reportRuntimeException(VALUE_IS_INVALID);			
-			} else {
-				return range[0];
-			}
+		if (conversionMode == EConversionMode.QUIET) {
+			return RangeHelper.createRange(result);
 		}
 
-		String firstValue = convertSingleValue(range[0], conversionMode);
-		String secondValue = convertSingleValue(range[1], conversionMode);
+		final String VALUE_IS_INVALID = "Value [" + value + "] is not allowed for randomized choice.";
+		ExceptionHelper.reportRuntimeException(VALUE_IS_INVALID);
+		return null;
+	}
 
-		checkRange(range, conversionMode);		
+	private String convertRange(String value, boolean isRandomized, EConversionMode conversionMode) {
 
-		return RangeHelper.createRange(firstValue, secondValue);
+		String[] range = RangeHelper.splitToRange(value);
+
+		if (isRandomized) {
+
+			String firstValue = convertSingleValue(range[0], conversionMode);
+			String secondValue = convertSingleValue(range[1], conversionMode);
+
+			checkRange(range, conversionMode);		
+
+			return RangeHelper.createRange(firstValue, secondValue);
+		}
+
+		if (conversionMode == EConversionMode.QUIET) {
+			return range[0];
+		}
+
+		final String VALUE_IS_INVALID = "Value [" + value + "] is not allowed for not randomized choice.";
+		ExceptionHelper.reportRuntimeException(VALUE_IS_INVALID);
+		return null;
 	}
 
 	private void checkRange(String[] range, EConversionMode conversionMode) {
