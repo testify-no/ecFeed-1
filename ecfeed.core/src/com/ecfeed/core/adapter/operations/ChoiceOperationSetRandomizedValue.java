@@ -1,67 +1,60 @@
 package com.ecfeed.core.adapter.operations;
 
 import com.ecfeed.core.adapter.IModelOperation;
+import com.ecfeed.core.adapter.ITypeAdapter;
+import com.ecfeed.core.adapter.ITypeAdapter.EConversionMode;
 import com.ecfeed.core.adapter.ITypeAdapterProvider;
-import com.ecfeed.core.adapter.java.Messages;
-import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ChoiceNode;
-import com.ecfeed.core.model.GlobalParameterNode;
-import com.ecfeed.core.model.IParameterVisitor;
-import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelOperationException;
-import com.ecfeed.core.utils.SystemLogger;
 
-public class ChoiceOperationSetRandomizedValue extends AbstractModelOperation {
+public class ChoiceOperationSetRandomizedValue extends AbstractModelOperation { 
 
-	private boolean fNewValue;
+	private boolean fNewRandomized;
+	private boolean fOriginalRandomized;
 	private ChoiceNode fChoiceNode;
 	private ITypeAdapterProvider fAdapterProvider;
 
 
-	public ChoiceOperationSetRandomizedValue(ChoiceNode choiceNode, boolean newValue, ITypeAdapterProvider adapterProvider) {
-		super(OperationNames.SET_PARTITION_VALUE);
-		fNewValue = newValue;
+	public ChoiceOperationSetRandomizedValue(
+			ChoiceNode choiceNode, boolean newRandomized, ITypeAdapterProvider adapterProvider) {
+
+		super(OperationNames.SET_CHOICE_RANDOMIZED_FLAG);
+
+		fNewRandomized = newRandomized;
 		fChoiceNode = choiceNode;
 		fAdapterProvider = adapterProvider;
+
+		fOriginalRandomized = choiceNode.isRandomizedValue();
 	}
 
 	@Override
 	public void execute() throws ModelOperationException {
-
-		boolean convertedValue = validateChoiceValue(fChoiceNode.getParameter().getDescription(), fNewValue);
-		if (convertedValue == false) {
-			ModelOperationException.report(Messages.PARTITION_VALUE_PROBLEM(Boolean.toString(fNewValue)));
-		}
-
-		fChoiceNode.setRandomizedValue(convertedValue);
-		adaptParameter(fChoiceNode.getParameter());
+		adaptChoice(fNewRandomized);
 		markModelUpdated();
 	}
 
-	private void adaptParameter(AbstractParameterNode parameter) {
+	private void adaptChoice(boolean newRandomized) throws ModelOperationException {
+
+		String newValue = adaptChoiceValue(newRandomized);
+		fChoiceNode.setValueString(newValue);
+		fChoiceNode.setRandomizedValue(newRandomized);
+	}
+
+	private String adaptChoiceValue(boolean randomized) throws ModelOperationException {
+
+		String type = fChoiceNode.getParameter().getType();
+
+		ITypeAdapter<?> typeAdapter = fAdapterProvider.getAdapter(type); 
+
 		try {
-			parameter.accept(new ParameterAdapter());
-		} catch (Exception e) {
-			SystemLogger.logCatch(e.getMessage());
-		}
-	}
+			return typeAdapter.convert(
+					fChoiceNode.getValueString(), randomized, EConversionMode.QUIET);
 
-	private class ParameterAdapter implements IParameterVisitor{
-
-		@Override
-		public Object visit(MethodParameterNode parameter) throws Exception {
-			return null;
+		} catch (RuntimeException ex) {
+			ModelOperationException.report(ex.getMessage());
 		}
 
-		@Override
-		public Object visit(GlobalParameterNode node) throws Exception {
-			return null;
-		}
-
-	}
-
-	private boolean validateChoiceValue(String type, boolean fNewValue2) {
-		return type.equalsIgnoreCase("true") || type.equalsIgnoreCase("false");
+		return null;
 	}
 
 	@Override
@@ -76,13 +69,13 @@ public class ChoiceOperationSetRandomizedValue extends AbstractModelOperation {
 
 		@Override
 		public void execute() throws ModelOperationException {
+			adaptChoice(fOriginalRandomized);
 			markModelUpdated();
 		}
 
 		@Override
 		public IModelOperation getReverseOperation() {
-			return new ChoiceOperationSetRandomizedValue(fChoiceNode, fNewValue,
-					fAdapterProvider);
+			return new ChoiceOperationSetRandomizedValue(fChoiceNode, fNewRandomized, fAdapterProvider);
 		}
 
 		@Override
