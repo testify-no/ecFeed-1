@@ -46,6 +46,7 @@ public interface OperationNames {
 	public static final String REMOVE_PARTITION_LABELS = "Remove choice labels";
 	public static final String RENAME_LABEL = "Rename label";
 	public static final String SET_PARTITION_VALUE = "Set choice value";
+	public static final String SET_CHOICE_RANDOMIZED_FLAG = "Set choice randomized flag";
 	public static final String ADD_CLASSES = "Add classes";
 	public static final String ADD_CLASS = "Add class";
 	public static final String REMOVE_CLASS = "Remove class";

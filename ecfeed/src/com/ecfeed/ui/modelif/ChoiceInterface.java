@@ -25,6 +25,7 @@ import com.ecfeed.core.adapter.operations.ChoiceOperationAddLabel;
 import com.ecfeed.core.adapter.operations.ChoiceOperationAddLabels;
 import com.ecfeed.core.adapter.operations.ChoiceOperationRemoveLabels;
 import com.ecfeed.core.adapter.operations.ChoiceOperationRenameLabel;
+import com.ecfeed.core.adapter.operations.ChoiceOperationSetRandomizedValue;
 import com.ecfeed.core.adapter.operations.ChoiceOperationSetValue;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.AbstractParameterNode;
@@ -47,7 +48,9 @@ public class ChoiceInterface extends ChoicesParentInterface {
 
 	public void setValue(String newValue) {
 
-		IModelOperation operation = new ChoiceOperationSetValue(getOwnNode(), newValue, new EclipseTypeAdapterProvider());
+		IModelOperation operation = 
+				new ChoiceOperationSetValue(getOwnNode(), newValue, new EclipseTypeAdapterProvider());
+
 		execute(operation, Messages.DIALOG_SET_CHOICE_VALUE_PROBLEM_TITLE);
 	}
 
@@ -56,8 +59,12 @@ public class ChoiceInterface extends ChoicesParentInterface {
 		return getOwnNode().getValueString();
 	}
 
-	public void setRandomized(boolean choice) {
-		getOwnNode().setRandomizedValue(choice);
+	public void setRandomized(boolean isRandomized) {
+
+		IModelOperation operation = 
+				new ChoiceOperationSetRandomizedValue(getOwnNode(), isRandomized, new EclipseTypeAdapterProvider());
+
+		execute(operation, Messages.DIALOG_SET_CHOICE_RANDOMIZED_PROBLEM_TITLE);
 	}
 
 	public boolean isRandomized() {
