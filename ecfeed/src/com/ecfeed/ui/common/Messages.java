@@ -129,6 +129,7 @@ public class Messages {
 	public static final String DIALOG_RENAME_PAREMETER_PROBLEM_TITLE = "Cannot rename parameter";
 	public static final String DIALOG_RENAME_CHOICE_PROBLEM_TITLE = "Cannot rename choice";
 	public static final String DIALOG_SET_CHOICE_VALUE_PROBLEM_TITLE = "Cannot change choice value";
+	public static final String DIALOG_SET_CHOICE_RANDOMIZED_PROBLEM_TITLE = "Cannot change choice randomized flag";
 	public static final String DIALOG_REMOVE_LABEL_PROBLEM_TITLE = "Cannot remove label";
 	public static final String DIALOG_ADD_LABEL_PROBLEM_TITLE = "Cannot add label";
 	public static final String DIALOG_CHANGE_LABEL_PROBLEM_TITLE = "Cannot change label";
