@@ -308,7 +308,7 @@ public class ChoicesViewer extends TableViewerSection {
 	@Override
 	protected void createTableColumns() {
 		fNameColumn = addColumn("Name", 150, new NodeNameColumnLabelProvider());
-		fRandomizedColumn = addColumn("Randomized", 250, new RandomizedValueLabelProdiver());
+		fRandomizedColumn = addColumn("Randomized", 100, new RandomizedValueLabelProdiver());
 		fRandomizedColumn.setEditingSupport(new RandomizedValueEditingSupport());		
 		fValueColumn = addColumn("Value", 150, new ChoiceValueLabelProvider());
 	}
