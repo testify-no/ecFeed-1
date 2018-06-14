@@ -129,7 +129,7 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		}
 		items.add(fChoiceIf.getValue());
 		fValueCombo.setItems(items.toArray(new String[]{}));
-		setValueComboText(choiceNode);		
+		fValueCombo.setText(getValueComboText(choiceNode));		
 		fValueCombo.addSelectionListener(new ValueSelectedListener());
 		fValueCombo.addFocusListener(new ValueFocusLostListener());
 
@@ -147,6 +147,7 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 	}
 
 	private void updateValueLabel(ChoiceNode choiceNode) {
+
 		String type = fChoiceIf.getParameter().getType();
 		boolean isRandomizedValue = choiceNode.isRandomizedValue();
 
@@ -187,11 +188,12 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		return choiceNode.isRandomizedValue();
 	}
 
-	private void setValueComboText(ChoiceNode choiceNode) {
+	private String getValueComboText(ChoiceNode choiceNode) {
+
 		if (choiceNode.isAbstract()) {
-			fValueCombo.setText(ChoiceNode.ABSTRACT_CHOICE_MARKER);
+			return ChoiceNode.ABSTRACT_CHOICE_MARKER;
 		} else {
-			fValueCombo.setText(fChoiceIf.getValue());
+			return fChoiceIf.getValue();
 		}
 	}
 
@@ -226,36 +228,14 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 
 		@Override
 		public void applyValue() {
+
 			fChoiceIf.setRandomized(fRandomizeCheckbox.getSelection());
+
 			fRandomizeCheckbox.setSelection(fChoiceIf.isRandomized());
-			updateValueLabel(getSelectedChoice());
-			switchValueOnThefly();
+			fValueCombo.setText(fChoiceIf.getValue());
+
+			updateValueLabel(fChoiceIf.getOwnNode());
 		}
-	}
-
-	private void switchValueOnThefly() {
-		boolean isRandomized = fChoiceIf.isRandomized();
-		String fValueComboText = fValueCombo.getText();
-		String type = fChoiceIf.getParameter().getType();
-		if (!type.equals(JavaTypeHelper.TYPE_NAME_STRING)) {
-			if (isRandomized) {
-				fValueComboText = convertFromValueToRange(fValueComboText);
-			} else {
-				fValueComboText = convertFromRangeToValue(fValueComboText);
-			}
-			fValueCombo.setText(fValueComboText);
-			setValueComboToModel();
-		}
-	}
-
-	public static final String DELIMITER = ":";
-
-	private String convertFromValueToRange(String value) {
-		return value+DELIMITER+value;
-	}
-
-	private String convertFromRangeToValue(String value) {
-		return value.split(DELIMITER)[0];
 	}
 
 	@Override
@@ -276,7 +256,7 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			setValueComboToModel();
+			applyValueToModelAndCombo();
 		}
 	}
 
@@ -284,18 +264,14 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 
 		@Override
 		public void focusLost(FocusEvent e) {
-			setValueComboToModel();
+			applyValueToModelAndCombo();
 		}
 	}
 
-	private void setValueComboToModel() {
+	private void applyValueToModelAndCombo() {
+
 		fChoiceIf.setValue(fValueCombo.getText());
-
-		ChoiceNode choiceNode = getSelectedChoice();
-		if (choiceNode != null) {
-			setValueComboText(choiceNode);
-		}
-
+		fValueCombo.setText(getValueComboText(fChoiceIf.getOwnNode()));
 	}
 
 }
