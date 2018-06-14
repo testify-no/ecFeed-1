@@ -56,7 +56,7 @@ public class ChoicesViewer extends TableViewerSection {
 	private IJavaProjectProvider fJavaProjectProvider;
 
 	private ChoicesParentInterface fParentIf;
-	private ChoiceInterface fTableItemIf;
+	private ChoiceInterface fChoiceInterface;
 
 	private boolean fChoiceViewerEnabled;
 
@@ -113,8 +113,8 @@ public class ChoicesViewer extends TableViewerSection {
 			ChoiceNode choice = (ChoiceNode)element;
 
 			if(newName.equals(choice.getName()) == false){
-				fTableItemIf.setOwnNode(choice);
-				fTableItemIf.setName(newName);
+				fChoiceInterface.setOwnNode(choice);
+				fChoiceInterface.setName(newName);
 			}
 		}
 
@@ -173,11 +173,12 @@ public class ChoicesViewer extends TableViewerSection {
 			String valueString = null;
 			if(value instanceof String){
 				valueString = (String)value;
-			} else if(value == null){
+			} else if (value == null){
 				valueString = fCellEditor.getViewer().getCCombo().getText();
 			}
-			fTableItemIf.setOwnNode((ChoiceNode)element);
-			fTableItemIf.setValue(valueString);
+
+			fChoiceInterface.setOwnNode((ChoiceNode)element);
+			fChoiceInterface.setValue(valueString);
 		}
 
 		public void setEnabled(boolean enabled){
@@ -197,7 +198,7 @@ public class ChoicesViewer extends TableViewerSection {
 		}
 	}
 
-	private class RandomizedValueLabelProdiver extends ColumnLabelProvider {
+	private class RandomizedValueLabelProvider extends ColumnLabelProvider {
 		@Override
 		public String getText(Object element){
 			if(element instanceof ChoiceNode){
@@ -268,7 +269,7 @@ public class ChoicesViewer extends TableViewerSection {
 		fJavaProjectProvider = javaProjectProvider;
 
 		fParentIf = new ChoicesParentInterface(getModelUpdateContext(), fJavaProjectProvider);
-		fTableItemIf = new ChoiceInterface(getModelUpdateContext(), fJavaProjectProvider);
+		fChoiceInterface = new ChoiceInterface(getModelUpdateContext(), fJavaProjectProvider);
 
 		fNameEditingSupport = new ChoiceNameEditingSupport();
 		fValueEditingSupport = new ChoiceValueEditingSupport(this);
@@ -327,13 +328,11 @@ public class ChoicesViewer extends TableViewerSection {
 	@Override
 	protected void createTableColumns() {
 		fNameColumn = addColumn("Name", 150, new NodeNameColumnLabelProvider());
-		fRandomizedColumn = addColumn("Randomized", 100, new RandomizedValueLabelProdiver());
+		fRandomizedColumn = addColumn("Randomized", 100, new RandomizedValueLabelProvider());
 		fRandomizedColumn.setEditingSupport(new RandomizedValueEditingSupport());		
 		fValueColumn = addColumn("Value", 150, new ChoiceValueLabelProvider());
 	}
 
-
-	//TODO 555 editing support
 	private class RandomizedValueEditingSupport extends EditingSupport {
 
 		private final String[] EDITOR_ITEMS = {"YES", "NO"};
@@ -360,10 +359,13 @@ public class ChoicesViewer extends TableViewerSection {
 
 		@Override
 		protected void setValue(Object element, Object value) {
-			ChoiceNode node = (ChoiceNode)element;
-			boolean expected = ((int)value == 0) ? true : false;
-			fParentIf.setOwnNode(node);
-			node.setRandomizedValue(expected);
+
+			ChoiceNode choiceNode = (ChoiceNode)element;
+			fChoiceInterface.setOwnNode(choiceNode);
+
+			boolean isRandomized = ((int)value == 0) ? true : false;
+			fChoiceInterface.setRandomized(isRandomized);
+
 			fCellEditor.setFocus();
 		}
 
