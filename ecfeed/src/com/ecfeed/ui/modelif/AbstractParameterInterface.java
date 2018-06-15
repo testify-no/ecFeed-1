@@ -77,17 +77,8 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 		return getOperationExecuter().execute(operation, Messages.DIALOG_RESET_CHOICES_PROBLEM_TITLE);
 	}
 
-	public static boolean hasLimitedValuesSet(String typeName) {
-
-		if (JavaTypeHelper.isBooleanTypeName(typeName)) {
-			return true;
-		}
-
-		return (!JavaTypeHelper.isJavaType(typeName));
-	}
-
 	public static boolean hasLimitedValuesSet(AbstractParameterNode parameter) {
-		return hasLimitedValuesSet(parameter.getType());
+		return JavaTypeHelper.hasLimitedValuesSet(parameter.getType());
 	}
 
 	public static List<String> getSpecialValues(String type) {
