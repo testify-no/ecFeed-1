@@ -14,7 +14,17 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
+import com.ecfeed.core.adapter.ITypeAdapter.EConversionMode;
+
 public class TypeAdapterForLongTest {
+
+	@Test(expected = RuntimeException.class)
+	public void shouldThrowWhenInvalidValue() {
+
+		TypeAdapterForLong typeAdapterForLong = new TypeAdapterForLong();
+
+		typeAdapterForLong.convert("AB", false, EConversionMode.WITH_EXCEPTION);
+	}	
 
 	@Test
 	public void shouldGenerateValue1() {

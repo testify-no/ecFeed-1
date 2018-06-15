@@ -34,7 +34,8 @@ public class TypeAdapterForLong extends TypeAdapterForNumericType<Long>{
 			return String.valueOf(StringHelper.convertToLong(value));
 		}
 		catch(NumberFormatException e){
-			return getDefaultValue();
+
+			return TypeAdapterHelper.handleConversionError(value, getDefaultValue(), conversionMode);
 		}
 	}
 
