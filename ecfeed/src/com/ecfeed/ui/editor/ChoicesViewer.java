@@ -10,7 +10,7 @@
 
 package com.ecfeed.ui.editor;
 
-import java.util.List;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -33,6 +33,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Table;
 
+import com.ecfeed.core.adapter.ITypeAdapter.EConversionMode;
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.ChoicesParentNode;
@@ -237,6 +238,7 @@ public class ChoicesViewer extends TableViewerSection {
 		private ComboBoxViewerCellEditor fCellEditor;
 		private boolean fEnabled;
 
+		// XYX
 		public ChoiceValueEditingSupport(TableViewerSection viewer) {
 			super(viewer.getTableViewer());
 			fEnabled = true;
@@ -247,25 +249,48 @@ public class ChoicesViewer extends TableViewerSection {
 
 		@Override
 		protected CellEditor getCellEditor(Object element) {
-			ChoiceNode node = (ChoiceNode)element;
-			AbstractParameterNode parameter = node.getParameter();
-			if(AbstractParameterInterface.hasLimitedValuesSet(node.getParameter())){
-				fCellEditor.setActivationStyle(ComboBoxCellEditor.DROP_DOWN_ON_KEY_ACTIVATION);
-			} else {
-				fCellEditor.setActivationStyle(SWT.NONE);
+
+			ChoiceNode choiceNode = (ChoiceNode)element;
+			AbstractParameterNode abstractParameterNode = choiceNode.getParameter();
+
+			fCellEditor.setActivationStyle(getActivationStyle(choiceNode));
+
+			Set<String> comboItems = createListOfComboItems(choiceNode, abstractParameterNode);
+			fCellEditor.setInput(comboItems);
+
+			fCellEditor.getViewer().getCCombo().setEditable(
+					AbstractParameterInterface.isBoolean(choiceNode.getParameter().getType()) == false);
+
+			return fCellEditor;
+		}
+
+		private int getActivationStyle(ChoiceNode choiceNode) {
+
+			if (AbstractParameterInterface.hasLimitedValuesSet(choiceNode.getParameter())) {
+				return ComboBoxCellEditor.DROP_DOWN_ON_KEY_ACTIVATION;
 			}
-			List<String> items = AbstractParameterInterface.getSpecialValues(node.getParameter().getType());
-			if(JavaTypeHelper.isUserType(parameter.getType())){
+
+			return SWT.NONE;
+		}
+
+		private Set<String> createListOfComboItems(ChoiceNode choiceNode, AbstractParameterNode parameter) {
+
+			Set<String> items = 
+					new LinkedHashSet<String>(
+							AbstractParameterInterface.getSpecialValues(choiceNode.getParameter().getType()));
+
+			if (JavaTypeHelper.isUserType(parameter.getType())) {
 				Set<String> usedValues = parameter.getLeafChoiceValues();
 				usedValues.removeAll(items);
 				items.addAll(usedValues);
 			}
-			if(items.contains(node.getValueString()) == false){
-				items.add(node.getValueString());
+
+			if (!items.contains(choiceNode.getValueString())) {
+				items.add(choiceNode.getValueString());
 			}
-			fCellEditor.setInput(items);
-			fCellEditor.getViewer().getCCombo().setEditable(AbstractParameterInterface.isBoolean(node.getParameter().getType()) == false);
-			return fCellEditor;
+
+			fChoiceInterface.setOwnNode(choiceNode);
+			return fChoiceInterface.convertItemsToMatchChoice(items, EConversionMode.QUIET);
 		}
 
 		@Override
@@ -300,12 +325,19 @@ public class ChoicesViewer extends TableViewerSection {
 	private class ChoiceValueLabelProvider extends ColumnLabelProvider {
 
 		@Override
-		public String getText(Object element){
-			if(element instanceof ChoiceNode){
-				ChoiceNode choice = (ChoiceNode)element;
-				return choice.isAbstract() ? ChoiceNode.ABSTRACT_CHOICE_MARKER : choice.getValueString();
+		public String getText(Object element) {
+
+			if (!(element instanceof ChoiceNode)) {
+				return "";
 			}
-			return "";
+
+			ChoiceNode choiceNode = (ChoiceNode)element;
+
+			if (choiceNode.isAbstract()) {
+				return ChoiceNode.ABSTRACT_CHOICE_MARKER;
+			}
+
+			return choiceNode.getValueString();
 		}
 	}
 
