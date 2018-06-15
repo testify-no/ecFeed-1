@@ -141,12 +141,16 @@ public class JavaTypeHelper {
 		return TYPE_NAME_STRING;
 	}
 
-	public static boolean hasLimitedValuesSet(String type){
+	public static boolean hasLimitedValuesSet(String type) {
 
-		return isJavaType(type) == false || type.equals(getBooleanTypeName());
+		if (isBooleanTypeName(type)) {
+			return true;
+		}
+
+		return !isJavaType(type);
 	}
 
-	public static String getBooleanTypeName(){
+	public static String getBooleanTypeName() {
 
 		return JavaTypeHelper.TYPE_NAME_BOOLEAN;
 	}
