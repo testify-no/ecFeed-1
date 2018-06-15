@@ -11,8 +11,8 @@ import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.TestCaseNode;
+import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.ui.common.CommonConstants;
-import com.ecfeed.ui.modelif.AbstractParameterInterface;
 
 public class ModelTreeContentProvider extends TreeNodeContentProvider implements ITreeContentProvider {
 
@@ -56,7 +56,8 @@ public class ModelTreeContentProvider extends TreeNodeContentProvider implements
 		if (parentElement instanceof MethodParameterNode) {
 
 			MethodParameterNode parameter = (MethodParameterNode)parentElement;
-			if (parameter.isExpected() && AbstractParameterInterface.isPrimitive(parameter.getType())) {
+			
+			if (parameter.isExpected() && JavaTypeHelper.isJavaType(parameter.getType())) {			
 				return EMPTY_ARRAY;
 			}
 
