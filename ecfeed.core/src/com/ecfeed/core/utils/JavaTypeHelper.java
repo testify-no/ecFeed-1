@@ -74,7 +74,7 @@ public class JavaTypeHelper {
 	public static final String DEFAULT_EXPECTED_ENUM_VALUE = "VALUE";
 
 
-	private static final String[] SUPPORTED_PRIMITIVE_TYPES = new String[]{
+	private static final String[] SUPPORTED_JAVA_TYPES = new String[]{
 		TYPE_NAME_INT,
 		TYPE_NAME_BYTE,
 		TYPE_NAME_SHORT,
@@ -121,7 +121,7 @@ public class JavaTypeHelper {
 
 	public static boolean isJavaType(String typeName) {
 
-		return Arrays.asList(SUPPORTED_PRIMITIVE_TYPES).contains(typeName);
+		return Arrays.asList(SUPPORTED_JAVA_TYPES).contains(typeName);
 	}
 
 	public static boolean isUserType(String typeName) {
@@ -134,7 +134,7 @@ public class JavaTypeHelper {
 
 	public static String[] getSupportedJavaTypes() {
 
-		return SUPPORTED_PRIMITIVE_TYPES;
+		return SUPPORTED_JAVA_TYPES;
 	}
 
 	public static String getStringTypeName() {
