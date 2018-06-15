@@ -40,11 +40,7 @@ public class TypeAdapterForChar extends TypeAdapterForTypeWithRange<Character>{
 			return value;
 		}
 
-		if (conversionMode == EConversionMode.WITH_EXCEPTION) {
-			TypeAdapterHelper.reportRuntimeExceptionCannotConvert(value, JavaTypeHelper.TYPE_NAME_CHAR);
-		}
-
-		return getDefaultValue();
+		return TypeAdapterHelper.handleConversionError(value, getDefaultValue(), conversionMode);
 	}
 
 	@Override

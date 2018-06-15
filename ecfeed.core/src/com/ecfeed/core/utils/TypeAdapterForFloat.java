@@ -32,14 +32,10 @@ public class TypeAdapterForFloat extends TypeAdapterFloatingPoint<Float>{
 
 		try {
 			return String.valueOf(Float.parseFloat(value));
+
 		} catch(NumberFormatException e) {
 
-			if (conversionMode == EConversionMode.WITH_EXCEPTION) {
-				TypeAdapterHelper.reportRuntimeExceptionCannotConvert(value, JavaTypeHelper.TYPE_NAME_FLOAT);
-				return null;
-			} else {
-				return getDefaultValue();
-			}
+			return TypeAdapterHelper.handleConversionError(value, getDefaultValue(), conversionMode);
 		}
 	}
 

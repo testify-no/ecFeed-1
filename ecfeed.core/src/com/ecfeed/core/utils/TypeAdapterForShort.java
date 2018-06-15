@@ -32,15 +32,10 @@ public class TypeAdapterForShort extends TypeAdapterForNumericType<Short> {
 
 		try {
 			return String.valueOf(StringHelper.convertToShort(value));
+
 		} catch (NumberFormatException e) {
 
-			if (conversionMode == EConversionMode.WITH_EXCEPTION) {
-				TypeAdapterHelper.reportRuntimeExceptionCannotConvert(value, JavaTypeHelper.TYPE_NAME_SHORT);
-				return null;
-			} else {
-				return getDefaultValue();
-			}
-
+			return TypeAdapterHelper.handleConversionError(value, getDefaultValue(), conversionMode);
 		}
 	}
 
