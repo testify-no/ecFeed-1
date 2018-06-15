@@ -24,6 +24,7 @@ import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.ChoicesParentNode;
 import com.ecfeed.core.model.MethodNode;
+import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.ui.common.CommonConstants;
 import com.ecfeed.ui.common.EclipseModelBuilder;
 import com.ecfeed.ui.common.EclipseTypeAdapterProvider;
@@ -96,7 +97,8 @@ public class ChoicesParentInterface extends AbstractNodeInterface {
 	}
 
 	public  boolean isBoolean() {
-		return AbstractParameterInterface.isBoolean(getOwnNode().getParameter().getType());
+		String typeName = getOwnNode().getParameter().getType();
+		return JavaTypeHelper.isBooleanTypeName(typeName);
 	}
 
 	@Override

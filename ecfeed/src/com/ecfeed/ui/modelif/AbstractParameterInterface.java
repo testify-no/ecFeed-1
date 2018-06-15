@@ -89,8 +89,8 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 		return execute(operation, Messages.DIALOG_RESET_CHOICES_PROBLEM_TITLE);
 	}
 
-	public static boolean hasLimitedValuesSet(String type) {
-		return !isPrimitive(type) || isBoolean(type);
+	public static boolean hasLimitedValuesSet(String typeName) {
+		return !isPrimitive(typeName) || JavaTypeHelper.isBooleanTypeName(typeName);
 	}
 
 	public static boolean hasLimitedValuesSet(AbstractParameterNode parameter) {
@@ -103,10 +103,6 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 
 	public static boolean isUserType(String type) {
 		return !isPrimitive(type);
-	}
-
-	public static boolean isBoolean(String type){
-		return type.equals(JavaTypeHelper.getBooleanTypeName());
 	}
 
 	public static List<String> getSpecialValues(String type) {

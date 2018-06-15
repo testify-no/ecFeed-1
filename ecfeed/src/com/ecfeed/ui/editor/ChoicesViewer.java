@@ -243,8 +243,8 @@ public class ChoicesViewer extends TableViewerSection {
 			Set<String> comboItems = createListOfComboItems(choiceNode, abstractParameterNode);
 			fCellEditor.setInput(comboItems);
 
-			fCellEditor.getViewer().getCCombo().setEditable(
-					AbstractParameterInterface.isBoolean(choiceNode.getParameter().getType()) == false);
+			boolean isBooleanType = JavaTypeHelper.isBooleanTypeName(choiceNode.getParameter().getType());
+			fCellEditor.getViewer().getCCombo().setEditable(!isBooleanType);
 
 			return fCellEditor;
 		}
