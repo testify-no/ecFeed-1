@@ -26,6 +26,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.adapter.ITypeAdapter;
+import com.ecfeed.core.adapter.ITypeAdapter.EConversionMode;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.MethodParameterNode;
@@ -101,17 +102,14 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 			fChildrenViewer.setInput(selectedChoice);
 			fLabelsViewer.setInput(selectedChoice);
 
-			//
 			if(getSelectedElement() instanceof MethodParameterNode){
 				MethodParameterNode parameter = (MethodParameterNode)getSelectedElement();
 				fExpectedCheckbox.setSelection(parameter.isExpected());
 				fExpectedCheckbox.setEnabled(expectedCheckboxEnabled());
 			}
 
-			//
 			fNameText.setText(selectedChoice.getName());
-
-			refreshValueEditor(selectedChoice);
+			refreshValueAndRandomizedFields(selectedChoice);
 		}
 	}
 
@@ -128,25 +126,31 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		}
 	}
 
-	private void refreshValueEditor(ChoiceNode choiceNode) {
-		String type = fChoiceIf.getParameter().getType();
-		if(fValueCombo != null && fValueCombo.isDisposed() == false){
+	private void refreshValueAndRandomizedFields(ChoiceNode choiceNode) {
+
+		if (fValueCombo != null && fValueCombo.isDisposed() == false) {
 			fValueCombo.dispose();
 		}
-		int style = SWT.DROP_DOWN;
-		if(AbstractParameterInterface.isBoolean(type)){
-			style |= SWT.READ_ONLY;
-		}		
+
+		createValueCombo(choiceNode);
+
+		updateRandomizeCheckBox(choiceNode);
+		updateValueLabel(choiceNode);		
+
+		fAttributesComposite.layout();
+	}
+
+	private void createValueCombo(ChoiceNode choiceNode) {
+
+		String typeName = fChoiceIf.getParameter().getType();
+		int style = calculateValueComboStyle(typeName);
+
 		fValueCombo = new ComboViewer(fAttributesComposite, style).getCombo();
 		fValueCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-		Set<String> items = new LinkedHashSet<String>(AbstractParameterInterface.getSpecialValues(type));
-		if(JavaTypeHelper.isUserType(type)){
-			Set<String> usedValues = fChoiceIf.getParameter().getLeafChoiceValues();
-			usedValues.removeAll(items);
-			items.addAll(usedValues);
-		}
-		items.add(fChoiceIf.getValue());
+
+		Set<String> items = createComboItems(typeName);
 		fValueCombo.setItems(items.toArray(new String[]{}));
+
 		fValueCombo.setText(getValueComboText(choiceNode));		
 		fValueCombo.addSelectionListener(new ValueSelectedListener());
 		fValueCombo.addFocusListener(new ValueFocusLostListener());
@@ -156,11 +160,58 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		} else {
 			fValueCombo.setEnabled(true);
 		}
+	}
+
+	private Set<String> createComboItems(String typeName) {
+
+		Set<String> items = 
+				new LinkedHashSet<String>(AbstractParameterInterface.getSpecialValues(typeName));
+
+		if (JavaTypeHelper.isUserType(typeName)) {
+
+			Set<String> usedValues = fChoiceIf.getParameter().getLeafChoiceValues();
+			usedValues.removeAll(items);
+			items.addAll(usedValues);
+		}
+
+		items.add(fChoiceIf.getValue());
+
+		return convertItems(items);
+	}
+
+	private Set<String> convertItems(Set<String> items) {
+
+		ChoiceNode choiceNode = fChoiceIf.getOwnNode();
+
+		Set<String> newItems = new LinkedHashSet<String>();
+		ITypeAdapter<?> typeAdapter = getTypeAdapter(choiceNode);
+
+		for (String item : items) {
+
+			String newItem = 
+					typeAdapter.convert(item, choiceNode.isRandomizedValue(), EConversionMode.QUIET);
+
+			newItems.add(newItem);
+		}
+
+		return newItems;
+	}
+
+	private static int calculateValueComboStyle(String typeName) {
+
+		int style = SWT.DROP_DOWN;
+
+		if (JavaTypeHelper.isBooleanTypeName(typeName)) {
+			style |= SWT.READ_ONLY;
+		}
+
+		return style;
+	}
+
+	private void updateRandomizeCheckBox(ChoiceNode choiceNode) {
+
 		fRandomizeCheckbox.setSelection(isRandomizeCheckboxSelected(choiceNode));
 		fRandomizeCheckbox.setEnabled(isRandomizeCheckboxEnabled(choiceNode));
-		updateValueLabel(choiceNode);
-
-		fAttributesComposite.layout();
 	}
 
 	private void updateValueLabel(ChoiceNode choiceNode) {
@@ -185,15 +236,20 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 			return false;
 		}
 
-		EclipseTypeAdapterProvider eclipseTypeAdapterProvider = new EclipseTypeAdapterProvider();
-		String typeName = choiceNode.getParameter().getType();
-
-		ITypeAdapter<?> typeAdapter = eclipseTypeAdapterProvider.getAdapter(typeName);
+		ITypeAdapter<?> typeAdapter = getTypeAdapter(choiceNode);
 
 		if (!typeAdapter.isRandomizable())
 			return false;
 
 		return true;
+	}
+
+	private ITypeAdapter<?> getTypeAdapter(ChoiceNode choiceNode) {
+
+		EclipseTypeAdapterProvider eclipseTypeAdapterProvider = new EclipseTypeAdapterProvider();
+		String typeName = choiceNode.getParameter().getType();
+
+		return eclipseTypeAdapterProvider.getAdapter(typeName);
 	}
 
 	private boolean isRandomizeCheckboxSelected(ChoiceNode choiceNode) {
