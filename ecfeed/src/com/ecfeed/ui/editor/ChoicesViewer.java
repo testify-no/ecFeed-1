@@ -224,7 +224,6 @@ public class ChoicesViewer extends TableViewerSection {
 		private ComboBoxViewerCellEditor fCellEditor;
 		private boolean fEnabled;
 
-		// XYX
 		public ChoiceValueEditingSupport(TableViewerSection viewer) {
 			super(viewer.getTableViewer());
 			fEnabled = true;
