@@ -81,7 +81,7 @@ public class ChoicesParentInterface extends AbstractNodeInterface {
 	}
 
 	public boolean isPrimitive() {
-		return AbstractParameterInterface.isPrimitive(getOwnNode().getParameter().getType());
+		return JavaTypeHelper.isJavaType(getOwnNode().getParameter().getType());
 	}
 
 	public boolean isUserType() {
