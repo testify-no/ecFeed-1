@@ -32,14 +32,10 @@ public class TypeAdapterForByte extends TypeAdapterForNumericType<Byte>{
 
 		try {
 			return String.valueOf(StringHelper.convertToByte(value));
+
 		} catch (NumberFormatException e) {
 
-			if (conversionMode == EConversionMode.QUIET) {
-				return getDefaultValue();
-			} else {
-				TypeAdapterHelper.reportRuntimeExceptionCannotConvert(value, JavaTypeHelper.TYPE_NAME_BYTE);
-				return null;
-			}
+			return TypeAdapterHelper.handleConversionError(value, getDefaultValue(), conversionMode);
 		}
 	}
 
