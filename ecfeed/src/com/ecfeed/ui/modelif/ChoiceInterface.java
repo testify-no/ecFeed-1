@@ -11,7 +11,9 @@
 package com.ecfeed.ui.modelif;
 
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IType;
@@ -21,6 +23,8 @@ import org.eclipse.swt.widgets.Display;
 
 import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.adapter.IModelOperation;
+import com.ecfeed.core.adapter.ITypeAdapter;
+import com.ecfeed.core.adapter.ITypeAdapter.EConversionMode;
 import com.ecfeed.core.adapter.operations.ChoiceOperationAddLabel;
 import com.ecfeed.core.adapter.operations.ChoiceOperationAddLabels;
 import com.ecfeed.core.adapter.operations.ChoiceOperationRemoveLabels;
@@ -203,4 +207,35 @@ public class ChoiceInterface extends ChoicesParentInterface {
 		ChoiceNode choiceNode = getOwnNode();
 		return choiceNode.getListOfChildrenChoiceNames();
 	}
+
+	public ITypeAdapter<?> getTypeAdapter() {
+
+		EclipseTypeAdapterProvider eclipseTypeAdapterProvider = new EclipseTypeAdapterProvider();
+
+		ChoiceNode choiceNode = getOwnNode();
+		AbstractParameterNode abstractParameterNode = choiceNode.getParameter();
+		String typeName = abstractParameterNode.getType();
+
+		return eclipseTypeAdapterProvider.getAdapter(typeName);
+	}
+
+	public Set<String> convertItemsToMatchChoice(Set<String> items, EConversionMode conversionMode) {
+
+		ChoiceNode choiceNode = getOwnNode();
+
+		Set<String> newItems = new LinkedHashSet<String>();
+		ITypeAdapter<?> typeAdapter = getTypeAdapter();
+
+		for (String item : items) {
+
+			String newItem = 
+					typeAdapter.convert(item, choiceNode.isRandomizedValue(), conversionMode);
+
+			newItems.add(newItem);
+		}
+
+		return newItems;
+	}
+
+
 }

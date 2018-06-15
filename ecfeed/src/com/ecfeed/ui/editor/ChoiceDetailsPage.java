@@ -30,7 +30,6 @@ import com.ecfeed.core.adapter.ITypeAdapter.EConversionMode;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.utils.JavaTypeHelper;
-import com.ecfeed.ui.common.EclipseTypeAdapterProvider;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.common.utils.SwtObjectHelper;
 import com.ecfeed.ui.modelif.AbstractParameterInterface;
@@ -45,7 +44,7 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 	private Composite fAttributesComposite;
 	private Text fNameText;
 	private Combo fValueCombo;
-	private ChoiceInterface fChoiceIf;
+	private ChoiceInterface fChoiceInterface;
 	private AbstractCommentsSection fCommentsSection;
 
 	private Button fRandomizeCheckbox;
@@ -58,7 +57,7 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 			IFileInfoProvider fileInfoProvider) {
 		super(masterSection, updateContext, fileInfoProvider);
 		fFileInfoProvider = fileInfoProvider;
-		fChoiceIf = new ChoiceInterface(this, fFileInfoProvider);
+		fChoiceInterface = new ChoiceInterface(this, fFileInfoProvider);
 	}
 
 	@Override
@@ -86,7 +85,7 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		super.refresh();
 		ChoiceNode selectedChoice = getSelectedChoice();
 		if(selectedChoice != null){
-			fChoiceIf.setOwnNode(selectedChoice);
+			fChoiceInterface.setOwnNode(selectedChoice);
 
 			String title = getSelectedChoice().toString();
 			getMainSection().setText(title);
@@ -127,7 +126,7 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 
 	private void createValueCombo(ChoiceNode choiceNode) {
 
-		String typeName = fChoiceIf.getParameter().getType();
+		String typeName = fChoiceInterface.getParameter().getType();
 		int style = calculateValueComboStyle(typeName);
 
 		fValueCombo = new ComboViewer(fAttributesComposite, style).getCombo();
@@ -154,32 +153,14 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 
 		if (JavaTypeHelper.isUserType(typeName)) {
 
-			Set<String> usedValues = fChoiceIf.getParameter().getLeafChoiceValues();
+			Set<String> usedValues = fChoiceInterface.getParameter().getLeafChoiceValues();
 			usedValues.removeAll(items);
 			items.addAll(usedValues);
 		}
 
-		items.add(fChoiceIf.getValue());
+		items.add(fChoiceInterface.getValue());
 
-		return convertItems(items);
-	}
-
-	private Set<String> convertItems(Set<String> items) {
-
-		ChoiceNode choiceNode = fChoiceIf.getOwnNode();
-
-		Set<String> newItems = new LinkedHashSet<String>();
-		ITypeAdapter<?> typeAdapter = getTypeAdapter(choiceNode);
-
-		for (String item : items) {
-
-			String newItem = 
-					typeAdapter.convert(item, choiceNode.isRandomizedValue(), EConversionMode.QUIET);
-
-			newItems.add(newItem);
-		}
-
-		return newItems;
+		return fChoiceInterface.convertItemsToMatchChoice(items, EConversionMode.QUIET);
 	}
 
 	private static int calculateValueComboStyle(String typeName) {
@@ -201,7 +182,7 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 
 	private void updateValueLabel(ChoiceNode choiceNode) {
 
-		String type = fChoiceIf.getParameter().getType();
+		String type = fChoiceInterface.getParameter().getType();
 		boolean isRandomizedValue = choiceNode.isRandomizedValue();
 
 		if (isRandomizedValue) {
@@ -221,20 +202,12 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 			return false;
 		}
 
-		ITypeAdapter<?> typeAdapter = getTypeAdapter(choiceNode);
+		ITypeAdapter<?> typeAdapter = fChoiceInterface.getTypeAdapter();
 
 		if (!typeAdapter.isRandomizable())
 			return false;
 
 		return true;
-	}
-
-	private ITypeAdapter<?> getTypeAdapter(ChoiceNode choiceNode) {
-
-		EclipseTypeAdapterProvider eclipseTypeAdapterProvider = new EclipseTypeAdapterProvider();
-		String typeName = choiceNode.getParameter().getType();
-
-		return eclipseTypeAdapterProvider.getAdapter(typeName);
 	}
 
 	private boolean isRandomizeCheckboxSelected(ChoiceNode choiceNode) {
@@ -251,7 +224,7 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		if (choiceNode.isAbstract()) {
 			return ChoiceNode.ABSTRACT_CHOICE_MARKER;
 		} else {
-			return fChoiceIf.getValue();
+			return fChoiceInterface.getValue();
 		}
 	}
 
@@ -287,12 +260,12 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		@Override
 		public void applyValue() {
 
-			fChoiceIf.setRandomized(fRandomizeCheckbox.getSelection());
+			fChoiceInterface.setRandomized(fRandomizeCheckbox.getSelection());
 
-			fRandomizeCheckbox.setSelection(fChoiceIf.isRandomized());
-			fValueCombo.setText(fChoiceIf.getValue());
+			fRandomizeCheckbox.setSelection(fChoiceInterface.isRandomized());
+			fValueCombo.setText(fChoiceInterface.getValue());
 
-			updateValueLabel(fChoiceIf.getOwnNode());
+			updateValueLabel(fChoiceInterface.getOwnNode());
 		}
 	}
 
@@ -305,8 +278,8 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 
 		@Override
 		public void applyValue() {
-			fChoiceIf.setName(fNameText.getText());
-			fNameText.setText(fChoiceIf.getName());
+			fChoiceInterface.setName(fNameText.getText());
+			fNameText.setText(fChoiceInterface.getName());
 		}
 	}
 
@@ -328,8 +301,8 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 
 	private void applyValueToModelAndCombo() {
 
-		fChoiceIf.setValue(fValueCombo.getText());
-		fValueCombo.setText(getValueComboText(fChoiceIf.getOwnNode()));
+		fChoiceInterface.setValue(fValueCombo.getText());
+		fValueCombo.setText(getValueComboText(fChoiceInterface.getOwnNode()));
 	}
 
 }
