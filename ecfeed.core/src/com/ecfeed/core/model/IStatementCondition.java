@@ -25,8 +25,7 @@ public interface IStatementCondition {
 	public Object accept(IStatementVisitor visitor) throws Exception;
 	public boolean mentions(MethodParameterNode methodParameterNode);
 	public boolean isAmbiguous(
-			List<List<ChoiceNode>> leftSideDomain, 
-			int parameterIndex, 
+			List<List<ChoiceNode>> testDomain, 
 			EStatementRelation relation, 
 			MessageStack messageStack);
 }

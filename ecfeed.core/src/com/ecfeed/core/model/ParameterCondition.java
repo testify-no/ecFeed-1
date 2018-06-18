@@ -195,13 +195,13 @@ public class ParameterCondition implements IStatementCondition {
 	@Override
 	public boolean isAmbiguous(
 			List<List<ChoiceNode>> testDomain, 
-			int leftIndex, 
 			EStatementRelation relation,
 			MessageStack messageStack) {
 
 		String substituteType = ConditionHelper.getSubstituteType(fParentRelationStatement);
 
-		List<ChoiceNode> leftChoices = testDomain.get(leftIndex);
+		int leftIndex2 = fParentRelationStatement.getLeftParameter().getMyIndex();
+		List<ChoiceNode> leftChoices = testDomain.get(leftIndex2);
 
 		int rightIndex = fRightParameterNode.getMyIndex();
 		List<ChoiceNode> rightChoices = testDomain.get(rightIndex);
