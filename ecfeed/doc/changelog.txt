@@ -7,6 +7,9 @@
 #                                                                                  
 #-------------------------------------------------------------------------------
 
+Version 1.12.11
+ - bugfixes
+
 Version 1.12.8
  - hot bugfixes (pairwise generator, image file handlers leaks)
  
