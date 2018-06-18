@@ -10,7 +10,7 @@
 
 package com.ecfeed.ui.editor;
 
-import java.util.List;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -32,6 +32,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 
+import com.ecfeed.core.adapter.ITypeAdapter.EConversionMode;
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.ChoicesParentNode;
@@ -55,11 +56,12 @@ public class ChoicesViewer extends TableViewerSection {
 	private IFileInfoProvider fFileInfoProvider;
 
 	private ChoicesParentInterface fParentIf;
-	private ChoiceInterface fTableItemIf;
+	private ChoiceInterface fChoiceInterface;
 
 	private boolean fChoiceViewerEnabled;
 
 	private TableViewerColumn fNameColumn;
+	private TableViewerColumn fRandomizedColumn;
 	private TableViewerColumn fValueColumn;
 
 	private ChoiceNameEditingSupport fNameEditingSupport;
@@ -78,169 +80,17 @@ public class ChoicesViewer extends TableViewerSection {
 
 	private ChoicesParentNode fSelectedParent;
 
-
-	private class ChoiceNameEditingSupport extends EditingSupport{
-
-		private TextCellEditor fNameCellEditor;
-		private boolean fEnabled;
-
-		public ChoiceNameEditingSupport() {
-			super(getTableViewer());
-			fNameCellEditor = new TextCellEditor(getTable());
-			fEnabled = true;
-		}
-
-		@Override
-		protected CellEditor getCellEditor(Object element) {
-			return fNameCellEditor;
-		}
-
-		@Override
-		protected boolean canEdit(Object element) {
-			return fEnabled;
-		}
-
-		@Override
-		protected Object getValue(Object element) {
-			return ((ChoiceNode)element).getName();
-		}
-
-		@Override
-		protected void setValue(Object element, Object value) {
-			String newName = (String)value;
-			ChoiceNode choice = (ChoiceNode)element;
-
-			if(newName.equals(choice.getName()) == false){
-				fTableItemIf.setOwnNode(choice);
-				fTableItemIf.setName(newName);
-			}
-		}
-
-		public void setEnabled(boolean enabled){
-			fEnabled = enabled;
-		}
-	}
-
-	private class ChoiceValueEditingSupport extends EditingSupport {
-		private ComboBoxViewerCellEditor fCellEditor;
-		private boolean fEnabled;
-
-		public ChoiceValueEditingSupport(TableViewerSection viewer) {
-			super(viewer.getTableViewer());
-			fEnabled = true;
-			fCellEditor = new ComboBoxViewerCellEditor(viewer.getTable(), SWT.TRAIL);
-			fCellEditor.setLabelProvider(new LabelProvider());
-			fCellEditor.setContentProvider(new ArrayContentProvider());
-		}
-
-		@Override
-		protected CellEditor getCellEditor(Object element) {
-			ChoiceNode node = (ChoiceNode)element;
-			AbstractParameterNode parameter = node.getParameter();
-			if(AbstractParameterInterface.hasLimitedValuesSet(node.getParameter())){
-				fCellEditor.setActivationStyle(ComboBoxCellEditor.DROP_DOWN_ON_KEY_ACTIVATION);
-			} else {
-				fCellEditor.setActivationStyle(SWT.NONE);
-			}
-			List<String> items = AbstractParameterInterface.getSpecialValues(node.getParameter().getType());
-			if(JavaTypeHelper.isUserType(parameter.getType())){
-				Set<String> usedValues = parameter.getLeafChoiceValues();
-				usedValues.removeAll(items);
-				items.addAll(usedValues);
-			}
-			if(items.contains(node.getValueString()) == false){
-				items.add(node.getValueString());
-			}
-			fCellEditor.setInput(items);
-			fCellEditor.getViewer().getCCombo().setEditable(AbstractParameterInterface.isBoolean(node.getParameter().getType()) == false);
-			return fCellEditor;
-		}
-
-		@Override
-		protected boolean canEdit(Object element) {
-			return fEnabled && (((ChoiceNode)element).isAbstract() == false);
-		}
-
-		@Override
-		protected Object getValue(Object element) {
-			return ((ChoiceNode)element).getValueString();
-		}
-
-		@Override
-		protected void setValue(Object element, Object value) {
-			String valueString = null;
-			if(value instanceof String){
-				valueString = (String)value;
-			} else if(value == null){
-				valueString = fCellEditor.getViewer().getCCombo().getText();
-			}
-			fTableItemIf.setOwnNode((ChoiceNode)element);
-			fTableItemIf.setValue(valueString);
-		}
-
-		public void setEnabled(boolean enabled){
-			fEnabled = enabled;
-		}
-	}
-
-	private class ChoiceValueLabelProvider extends ColumnLabelProvider {
-
-		@Override
-		public String getText(Object element){
-			if(element instanceof ChoiceNode){
-				ChoiceNode choice = (ChoiceNode)element;
-				return choice.isAbstract() ? ChoiceNode.ABSTRACT_CHOICE_MARKER : choice.getValueString();
-			}
-			return "";
-		}
-	}
-
-	private class AddChoiceAdapter extends SelectionAdapter{
-
-		@Override
-		public void widgetSelected(SelectionEvent ev){
-			try {
-				ChoiceNode added = fParentIf.addNewChoice();
-				if(added != null){
-					getTable().setSelection(added.getIndex());
-				}
-
-				setRemoveSelectedStatus();
-			} catch (Exception e) {
-				ExceptionCatchDialog.open("Can not add choice.", e.getMessage());
-			}
-		}
-	}
-
-	private class ReplaceWithDefaultAdapter extends ButtonClickListener {
-
-		@Override
-		public void widgetSelected(SelectionEvent ev) {
-			try {
-				if(fSelectedParent == fSelectedParent.getParameter()){
-					AbstractParameterInterface parameterIf = 
-							(AbstractParameterInterface)NodeInterfaceFactory.getNodeInterface(
-									fSelectedParent, ChoicesViewer.this, fFileInfoProvider);
-					parameterIf.resetChoicesToDefault();
-
-					setRemoveSelectedStatus();
-				}
-			} catch (Exception e) {
-				ExceptionCatchDialog.open("Can not reset with default.", e.getMessage());
-			}
-		}
-	}
-
 	public ChoicesViewer(
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext, 
 			IFileInfoProvider fileInfoProvider) {
+
 		super(sectionContext, updateContext, fileInfoProvider, StyleDistributor.getSectionStyle());
 
 		fFileInfoProvider = fileInfoProvider;
 
 		fParentIf = new ChoicesParentInterface(this, fileInfoProvider);
-		fTableItemIf = new ChoiceInterface(this, fFileInfoProvider);
+		fChoiceInterface = new ChoiceInterface(this, fFileInfoProvider);
 
 		fNameEditingSupport = new ChoiceNameEditingSupport();
 		fValueEditingSupport = new ChoiceValueEditingSupport(this);
@@ -268,15 +118,6 @@ public class ChoicesViewer extends TableViewerSection {
 		addSelectionChangedListener(new SelectionChangedListener());
 	}
 
-	private class SelectionChangedListener implements ISelectionChangedListener {
-
-		@Override
-		public void selectionChanged(SelectionChangedEvent event) {
-			setRemoveSelectedStatus();
-		}
-	}
-
-
 	public void setInput(ChoicesParentNode parent){
 		super.setInput(parent.getChoices());
 		fSelectedParent = parent;
@@ -296,6 +137,8 @@ public class ChoicesViewer extends TableViewerSection {
 	@Override
 	protected void createTableColumns() {
 		fNameColumn = addColumn("Name", 150, new NodeNameColumnLabelProvider());
+		fRandomizedColumn = addColumn("Randomized", 100, new RandomizedValueLabelProvider());
+		fRandomizedColumn.setEditingSupport(new RandomizedValueEditingSupport());		
 		fValueColumn = addColumn("Value", 150, new ChoiceValueLabelProvider());
 	}
 
@@ -332,6 +175,254 @@ public class ChoicesViewer extends TableViewerSection {
 			fRemoveSelectedButton.setEnabled(false);
 		} else {
 			fRemoveSelectedButton.setEnabled(true);
+		}
+	}
+
+	private class ChoiceNameEditingSupport extends EditingSupport{
+
+		private TextCellEditor fNameCellEditor;
+		private boolean fEnabled;
+
+		public ChoiceNameEditingSupport() {
+			super(getTableViewer());
+			fNameCellEditor = new TextCellEditor(getTable());
+			fEnabled = true;
+		}
+
+		@Override
+		protected CellEditor getCellEditor(Object element) {
+			return fNameCellEditor;
+		}
+
+		@Override
+		protected boolean canEdit(Object element) {
+			return fEnabled;
+		}
+
+		@Override
+		protected Object getValue(Object element) {
+			return ((ChoiceNode)element).getName();
+		}
+
+		@Override
+		protected void setValue(Object element, Object value) {
+			String newName = (String)value;
+			ChoiceNode choice = (ChoiceNode)element;
+
+			if(newName.equals(choice.getName()) == false){
+				fChoiceInterface.setOwnNode(choice);
+				fChoiceInterface.setName(newName);
+			}
+		}
+
+		public void setEnabled(boolean enabled){
+			fEnabled = enabled;
+		}
+	}
+
+	private class ChoiceValueEditingSupport extends EditingSupport {
+		private ComboBoxViewerCellEditor fCellEditor;
+		private boolean fEnabled;
+
+		public ChoiceValueEditingSupport(TableViewerSection viewer) {
+			super(viewer.getTableViewer());
+			fEnabled = true;
+			fCellEditor = new ComboBoxViewerCellEditor(viewer.getTable(), SWT.TRAIL);
+			fCellEditor.setLabelProvider(new LabelProvider());
+			fCellEditor.setContentProvider(new ArrayContentProvider());
+		}
+
+		@Override
+		protected CellEditor getCellEditor(Object element) {
+
+			ChoiceNode choiceNode = (ChoiceNode)element;
+			AbstractParameterNode abstractParameterNode = choiceNode.getParameter();
+
+			fCellEditor.setActivationStyle(getActivationStyle(choiceNode));
+
+			Set<String> comboItems = createListOfComboItems(choiceNode, abstractParameterNode);
+			fCellEditor.setInput(comboItems);
+
+			boolean isBooleanType = JavaTypeHelper.isBooleanTypeName(choiceNode.getParameter().getType());
+			fCellEditor.getViewer().getCCombo().setEditable(!isBooleanType);
+
+			return fCellEditor;
+		}
+
+		private int getActivationStyle(ChoiceNode choiceNode) {
+
+			if (AbstractParameterInterface.hasLimitedValuesSet(choiceNode.getParameter())) {
+				return ComboBoxCellEditor.DROP_DOWN_ON_KEY_ACTIVATION;
+			}
+
+			return SWT.NONE;
+		}
+
+		private Set<String> createListOfComboItems(ChoiceNode choiceNode, AbstractParameterNode parameter) {
+
+			Set<String> items = 
+					new LinkedHashSet<String>(
+							AbstractParameterInterface.getSpecialValues(choiceNode.getParameter().getType()));
+
+			if (JavaTypeHelper.isUserType(parameter.getType())) {
+				Set<String> usedValues = parameter.getLeafChoiceValues();
+				usedValues.removeAll(items);
+				items.addAll(usedValues);
+			}
+
+			if (!items.contains(choiceNode.getValueString())) {
+				items.add(choiceNode.getValueString());
+			}
+
+			fChoiceInterface.setOwnNode(choiceNode);
+			return fChoiceInterface.convertItemsToMatchChoice(items, EConversionMode.QUIET);
+		}
+
+		@Override
+		protected boolean canEdit(Object element) {
+			return fEnabled && (((ChoiceNode)element).isAbstract() == false);
+		}
+
+		@Override
+		protected Object getValue(Object element) {
+			return ((ChoiceNode)element).getValueString();
+		}
+
+		@Override
+		protected void setValue(Object element, Object value) {
+			String valueString = null;
+			if(value instanceof String){
+				valueString = (String)value;
+			} else if (value == null){
+				valueString = fCellEditor.getViewer().getCCombo().getText();
+			}
+
+			fChoiceInterface.setOwnNode((ChoiceNode)element);
+			fChoiceInterface.setValue(valueString);
+		}
+
+		public void setEnabled(boolean enabled){
+			fEnabled = enabled;
+		}
+	}
+
+	private class ChoiceValueLabelProvider extends ColumnLabelProvider {
+
+		@Override
+		public String getText(Object element) {
+
+			if (!(element instanceof ChoiceNode)) {
+				return "";
+			}
+
+			ChoiceNode choiceNode = (ChoiceNode)element;
+
+			if (choiceNode.isAbstract()) {
+				return ChoiceNode.ABSTRACT_CHOICE_MARKER;
+			}
+
+			return choiceNode.getValueString();
+		}
+	}
+
+	private class RandomizedValueLabelProvider extends ColumnLabelProvider {
+		@Override
+		public String getText(Object element){
+			if(element instanceof ChoiceNode){
+				ChoiceNode choice = (ChoiceNode)element;
+				return choice.getRandomizedValueStr();
+			}
+			return "";
+		}
+	}
+
+	private class AddChoiceAdapter extends SelectionAdapter{
+
+		@Override
+		public void widgetSelected(SelectionEvent ev){
+			try {
+				ChoiceNode added = fParentIf.addNewChoice();
+				if(added != null){
+					getTable().setSelection(added.getMyIndex());
+				}
+
+				setRemoveSelectedStatus();
+			} catch (Exception e) {
+				ExceptionCatchDialog.open("Can not add choice.", e.getMessage());
+			}
+		}
+	}
+
+	private class ReplaceWithDefaultAdapter extends ButtonClickListener {
+
+		@Override
+		public void widgetSelected(SelectionEvent ev) {
+			try {
+				if(fSelectedParent == fSelectedParent.getParameter()){
+					AbstractParameterInterface parameterIf = 
+							(AbstractParameterInterface)NodeInterfaceFactory.getNodeInterface(
+									fSelectedParent, ChoicesViewer.this, fFileInfoProvider);
+					parameterIf.resetChoicesToDefault();
+
+					setRemoveSelectedStatus();
+				}
+			} catch (Exception e) {
+				ExceptionCatchDialog.open("Can not reset with default.", e.getMessage());
+			}
+		}
+	}
+
+	private class SelectionChangedListener implements ISelectionChangedListener {
+
+		@Override
+		public void selectionChanged(SelectionChangedEvent event) {
+			setRemoveSelectedStatus();
+		}
+	}
+
+	private class RandomizedValueEditingSupport extends EditingSupport {
+
+		private final String[] EDITOR_ITEMS = {"YES", "NO"};
+		private ComboBoxCellEditor fCellEditor;
+
+		public RandomizedValueEditingSupport() {
+			super(getTableViewer());
+		}
+
+		@Override
+		protected CellEditor getCellEditor(Object element) {
+			if(fCellEditor == null){
+				fCellEditor = new ComboBoxCellEditor(getTable(), EDITOR_ITEMS, SWT.READ_ONLY);
+				fCellEditor.setActivationStyle(ComboBoxCellEditor.DROP_DOWN_ON_MOUSE_ACTIVATION);
+			}
+			return fCellEditor;
+		}
+
+		@Override
+		protected Object getValue(Object element) {
+			ChoiceNode node = (ChoiceNode)element;
+			return (node.isRandomizedValue() ? 0 : 1);
+		}
+
+		@Override
+		protected void setValue(Object element, Object value) {
+
+			ChoiceNode choiceNode = (ChoiceNode)element;
+			fChoiceInterface.setOwnNode(choiceNode);
+
+			boolean isRandomized = ((int)value == 0) ? true : false;
+			fChoiceInterface.setRandomized(isRandomized);
+
+			fCellEditor.setFocus();
+		}
+
+		@Override
+		protected boolean canEdit(Object element) {
+			if (element instanceof ChoiceNode) {
+				ChoiceNode choiceNode = (ChoiceNode) element;
+				return choiceNode.isCorrectableToBeRandomizedType();
+			}
+			return false;
 		}
 	}
 

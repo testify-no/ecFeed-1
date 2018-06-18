@@ -59,6 +59,7 @@ import com.ecfeed.core.model.ModelHelper;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.utils.ExceptionHelper;
+import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.CommonConstants;
 import com.ecfeed.ui.common.ImageManager;
@@ -75,7 +76,6 @@ import com.ecfeed.ui.editor.actions.IActionRunner;
 import com.ecfeed.ui.editor.actions.ModelViewerActionProvider;
 import com.ecfeed.ui.editor.actions.TestOnlineAction;
 import com.ecfeed.ui.modelif.AbstractNodeInterface;
-import com.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.IModelUpdateListener;
 import com.ecfeed.ui.modelif.MethodInterface;
@@ -146,7 +146,7 @@ public class ModelMasterSection extends TreeViewerSection{
 
 			if(parentElement instanceof MethodParameterNode){
 				MethodParameterNode parameter = (MethodParameterNode)parentElement;
-				if(parameter.isExpected() && AbstractParameterInterface.isPrimitive(parameter.getType())){
+				if(parameter.isExpected() && JavaTypeHelper.isJavaType(parameter.getType())){
 					return EMPTY_ARRAY;
 				}
 				if(parameter.isLinked()){

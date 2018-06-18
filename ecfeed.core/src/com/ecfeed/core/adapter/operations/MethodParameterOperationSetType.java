@@ -19,6 +19,7 @@ import java.util.Map;
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.ITypeAdapter;
 import com.ecfeed.core.adapter.ITypeAdapterProvider;
+import com.ecfeed.core.adapter.ITypeAdapter.EConversionMode;
 import com.ecfeed.core.model.Messages;
 import com.ecfeed.core.model.AbstractStatement;
 import com.ecfeed.core.model.ChoiceNode;
@@ -95,8 +96,11 @@ public class MethodParameterOperationSetType extends BulkOperation {
 			public Object visit(ExpectedValueStatement statement) throws Exception {
 
 				boolean success = true;
-				ITypeAdapter adapter = getAdapterProvider().getAdapter(getNewType());
-				String newValue = adapter.convert(statement.getCondition().getValueString());
+				ITypeAdapter<?> adapter = getAdapterProvider().getAdapter(getNewType());
+				String newValue = 
+						adapter.convert(
+								statement.getCondition().getValueString(), false, EConversionMode.QUIET);
+
 				fOriginalStatementValues.put(statement, statement.getCondition().getValueString());
 				statement.getCondition().setValueString(newValue);
 				if (JavaTypeHelper.isUserType(getNewType())) {
@@ -205,7 +209,7 @@ public class MethodParameterOperationSetType extends BulkOperation {
 			}
 
 			@Override
-			public IModelOperation reverseOperation() {
+			public IModelOperation getReverseOperation() {
 
 				return new SetTypeOperation(fMethodParameterNode, getNewType(), getAdapterProvider());
 			}
@@ -236,7 +240,7 @@ public class MethodParameterOperationSetType extends BulkOperation {
 
 			MethodNode method = fMethodParameterNode.getMethod();
 			List<String> types = method.getParameterTypes();
-			types.set(fMethodParameterNode.getIndex(), getNewType());
+			types.set(fMethodParameterNode.getMyIndex(), getNewType());
 
 			if (method.getClassNode().getMethod(method.getName(), types) != null && method.getClassNode().getMethod(method.getName(), types) != method) {
 				ModelOperationException.report(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM(method.getClassNode().getName(), method.getName()));
@@ -255,7 +259,7 @@ public class MethodParameterOperationSetType extends BulkOperation {
 		}
 
 		@Override
-		public IModelOperation reverseOperation() {
+		public IModelOperation getReverseOperation() {
 			return new ReverseSetTypeOperation();
 		}
 
@@ -271,15 +275,16 @@ public class MethodParameterOperationSetType extends BulkOperation {
 		private void adaptDefaultValue() {
 
 			fOriginalDefaultValue = fMethodParameterNode.getDefaultValue();
-			ITypeAdapter adapter = getAdapterProvider().getAdapter(getNewType());
-			String defaultValue = adapter.convert(fMethodParameterNode.getDefaultValue());
+			ITypeAdapter<?> adapter = getAdapterProvider().getAdapter(getNewType());
+			String defaultValue = 
+					adapter.convert(fMethodParameterNode.getDefaultValue(), false, EConversionMode.QUIET);
 
 			if (defaultValue == null) {
 				if (fMethodParameterNode.getLeafChoices().size() > 0) {
 					defaultValue = fMethodParameterNode.getLeafChoices().toArray(new ChoiceNode[]{})[0].getValueString();
 				}
 				else{
-					defaultValue = adapter.defaultValue();
+					defaultValue = adapter.getDefaultValue();
 				}
 			}
 			if (JavaTypeHelper.isUserType(getNewType())) {
@@ -300,10 +305,13 @@ public class MethodParameterOperationSetType extends BulkOperation {
 			MethodNode method = fMethodParameterNode.getMethod();
 			if (method != null) {
 				Iterator<TestCaseNode> tcIt = method.getTestCases().iterator();
-				ITypeAdapter adapter = getAdapterProvider().getAdapter(getNewType());
+				ITypeAdapter<?> adapter = getAdapterProvider().getAdapter(getNewType());
 				while (tcIt.hasNext()) {
-					ChoiceNode expectedValue = tcIt.next().getTestData().get(fMethodParameterNode.getIndex());
-					String newValue = adapter.convert(expectedValue.getValueString());
+					ChoiceNode expectedValue = tcIt.next().getTestData().get(fMethodParameterNode.getMyIndex());
+					String newValue = 
+							adapter.convert(
+									expectedValue.getValueString(), false, EConversionMode.QUIET);
+
 					if (JavaTypeHelper.isUserType(getNewType())) {
 						if (fMethodParameterNode.getLeafChoiceValues().contains(newValue) == false) {
 							tcIt.remove();

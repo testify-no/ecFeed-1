@@ -40,7 +40,7 @@ public class FactoryRenameOperation {
 		}
 
 		@Override
-		public IModelOperation reverseOperation() {
+		public IModelOperation getReverseOperation() {
 			return new ClassOperationRename(getOwnNode(), getOriginalName());
 		}
 
@@ -64,7 +64,7 @@ public class FactoryRenameOperation {
 		}
 
 		@Override
-		public IModelOperation reverseOperation() {
+		public IModelOperation getReverseOperation() {
 			return new MethodOperationRename((MethodNode)getOwnNode(), getOriginalName());
 		}
 
@@ -85,7 +85,7 @@ public class FactoryRenameOperation {
 		}
 
 		@Override
-		public IModelOperation reverseOperation() {
+		public IModelOperation getReverseOperation() {
 			return new GlobalParameterOperationRename(getOwnNode(), getOriginalName());
 		}
 
@@ -108,7 +108,7 @@ public class FactoryRenameOperation {
 		}
 
 		@Override
-		public IModelOperation reverseOperation() {
+		public IModelOperation getReverseOperation() {
 			return new MethodParameterOperationRename(getOwnNode(), getOriginalName());
 		}
 
@@ -131,7 +131,7 @@ public class FactoryRenameOperation {
 		}
 
 		@Override
-		public IModelOperation reverseOperation() {
+		public IModelOperation getReverseOperation() {
 			return new ChoiceOperationRename((ChoiceNode)getOwnNode(), getOriginalName());
 		}
 

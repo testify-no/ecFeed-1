@@ -29,6 +29,7 @@ import com.ecfeed.ui.common.EclipseModelBuilder;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.dialogs.TestClassImportDialog;
+import com.ecfeed.ui.dialogs.basic.ErrorDialog;
 
 public class RootInterface extends GlobalParametersParentInterface {
 
@@ -84,7 +85,7 @@ public class RootInterface extends GlobalParametersParentInterface {
 						return classModel;
 					}
 				} catch (ModelOperationException e) {
-					MessageDialog.openError(Display.getCurrent().getActiveShell(),
+					ErrorDialog.open(
 							Messages.DIALOG_ADD_NEW_CLASS_PROBLEM_TITLE,
 							e.getMessage());
 				}

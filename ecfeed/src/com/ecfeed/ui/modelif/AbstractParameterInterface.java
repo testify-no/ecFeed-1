@@ -11,7 +11,6 @@
 package com.ecfeed.ui.modelif;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.jdt.core.IType;
@@ -89,32 +88,12 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 		return execute(operation, Messages.DIALOG_RESET_CHOICES_PROBLEM_TITLE);
 	}
 
-	public static boolean hasLimitedValuesSet(String type) {
-		return !isPrimitive(type) || isBoolean(type);
-	}
-
 	public static boolean hasLimitedValuesSet(AbstractParameterNode parameter) {
-		return hasLimitedValuesSet(parameter.getType());
-	}
-
-	public static boolean isPrimitive(String type) {
-		return Arrays.asList(JavaTypeHelper.getSupportedJavaTypes()).contains(type);
-	}
-
-	public static boolean isUserType(String type) {
-		return !isPrimitive(type);
-	}
-
-	public static boolean isBoolean(String type){
-		return type.equals(JavaTypeHelper.getBooleanTypeName());
+		return JavaTypeHelper.hasLimitedValuesSet(parameter.getType());
 	}
 
 	public static List<String> getSpecialValues(String type) {
 		return new EclipseModelBuilder().getSpecialValues(type);
-	}
-
-	public static String[] supportedPrimitiveTypes() {
-		return JavaTypeHelper.getSupportedJavaTypes();
 	}
 
 	@Override

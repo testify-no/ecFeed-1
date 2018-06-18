@@ -24,11 +24,20 @@ public class ChoiceNode extends ChoicesParentNode{
 	private ChoicesParentNode fParent;
 	private String fValueString;
 	private Set<String> fLabels;
+	private boolean fIsRandomizedValue;
 
 	public ChoiceNode(String name, String value) {
 		super(name);
 		fValueString = value;
 		fLabels = new LinkedHashSet<String>();
+		fIsRandomizedValue = false;
+	}
+
+	public ChoiceNode(String name, String value, boolean isRandomized) {
+		super(name);
+		fValueString = value;
+		fLabels = new LinkedHashSet<String>();
+		fIsRandomizedValue = isRandomized;
 	}
 
 	@Override
@@ -80,6 +89,9 @@ public class ChoiceNode extends ChoicesParentNode{
 		for(String label : fLabels){
 			copy.addLabel(label);
 		}
+
+		copy.setRandomizedValue(fIsRandomizedValue);
+
 		return copy;
 	}
 
@@ -92,6 +104,22 @@ public class ChoiceNode extends ChoicesParentNode{
 			return parentChoice().getQualifiedName() + ":" + getName();
 		}
 		return getName();
+	}
+
+	public boolean isCorrectableToBeRandomizedType() {
+		return fParent.getParameter().isCorrectableToBeRandomizedType() && !isAbstract();
+	}
+
+	public void setRandomizedValue(boolean choice) {
+		fIsRandomizedValue = choice;
+	}
+
+	public boolean isRandomizedValue() {
+		return fIsRandomizedValue;
+	}
+
+	public String getRandomizedValueStr() {
+		return fIsRandomizedValue ? "YES" : "NO";
 	}
 
 	public void setParent(ChoicesParentNode parent){
@@ -154,7 +182,13 @@ public class ChoiceNode extends ChoicesParentNode{
 	}
 
 	public boolean isAbstract(){
-		return getChoices().size() != 0;
+
+		if (getChoices().size() == 0) {
+			return false;
+		}
+
+		return true;
+
 	}
 
 	public boolean isMatchIncludingParents(ChoiceNode choice) {

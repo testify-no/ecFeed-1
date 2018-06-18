@@ -38,7 +38,7 @@ public class MethodParameterOperationSetLink extends BulkOperation {
 			}
 
 			@Override
-			public IModelOperation reverseOperation() {
+			public IModelOperation getReverseOperation() {
 				return new SetLinkOperation(fTarget, fNewLink);
 			}
 		}
@@ -53,8 +53,8 @@ public class MethodParameterOperationSetLink extends BulkOperation {
 		public void execute() throws ModelOperationException {
 			MethodNode method = fTarget.getMethod();
 			List<String> types = method.getParameterTypes();
-			types.set(fTarget.getIndex(), fNewLink.getType());
-			if(method.checkDuplicate(fTarget.getIndex(), fNewLink.getType())){
+			types.set(fTarget.getMyIndex(), fNewLink.getType());
+			if(method.checkDuplicate(fTarget.getMyIndex(), fNewLink.getType())){
 				ModelOperationException.report(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM(method.getClassNode().getName(), method.getName()));
 			}
 
@@ -63,7 +63,7 @@ public class MethodParameterOperationSetLink extends BulkOperation {
 		}
 
 		@Override
-		public IModelOperation reverseOperation() {
+		public IModelOperation getReverseOperation() {
 			return new ReverseOperation();
 		}
 	}

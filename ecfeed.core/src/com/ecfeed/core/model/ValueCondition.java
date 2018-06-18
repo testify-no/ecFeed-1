@@ -14,6 +14,7 @@ import java.util.List;
 
 import com.ecfeed.core.utils.EvaluationResult;
 import com.ecfeed.core.utils.JavaTypeHelper;
+import com.ecfeed.core.utils.MessageStack;
 import com.ecfeed.core.utils.StringHelper;
 
 
@@ -23,7 +24,6 @@ public class ValueCondition implements IStatementCondition {
 	private RelationStatement fParentRelationStatement;
 
 	public ValueCondition(String rightValue, RelationStatement parentRelationStatement) {
-
 		fRightValue = rightValue;
 		fParentRelationStatement = parentRelationStatement;
 	}
@@ -31,27 +31,62 @@ public class ValueCondition implements IStatementCondition {
 	@Override
 	public EvaluationResult evaluate(List<ChoiceNode> choices) {
 
-		String substituteType = 
-				JavaTypeHelper.getSubstituteType(
-						fParentRelationStatement.getLeftParameter().getType(), JavaTypeHelper.getStringTypeName());
-
-		if (substituteType == null) {
-			return EvaluationResult.FALSE;
-		}
-
+		String substituteType = ConditionHelper.getSubstituteType(fParentRelationStatement);
 		String leftChoiceStr = getChoiceString(choices, fParentRelationStatement.getLeftParameter());
+
 		if (leftChoiceStr == null) {
 			return EvaluationResult.INSUFFICIENT_DATA;
 		}
 
 		EStatementRelation relation = fParentRelationStatement.getRelation();
 
+		boolean isRandomizedChoice = 
+				StatementConditionHelper.getChoiceRandomized(
+						choices, fParentRelationStatement.getLeftParameter());
 
-		if (StatementConditionHelper.isRelationMatchQuiet(relation, substituteType, leftChoiceStr, fRightValue)) {
+		if(isRandomizedChoice) {
+			if(JavaTypeHelper.isStringTypeName(substituteType)) {
+				return EvaluationResult.TRUE;
+			}
+			else {
+				boolean result = RangeHelper.isRightRangeInLeftRange(leftChoiceStr, fRightValue, relation, substituteType);
+				return EvaluationResult.convertFromBoolean(result);
+			}
+		}
+
+		if (RelationMatcher.isMatchQuiet(relation, substituteType, leftChoiceStr, fRightValue)) {
 			return EvaluationResult.TRUE;
 		}
 
 		return EvaluationResult.FALSE;
+	}
+
+	@Override
+	public boolean isAmbiguous(List<List<ChoiceNode>> domain, MessageStack messageStack) {
+
+		String substituteType = ConditionHelper.getSubstituteType(fParentRelationStatement);		
+
+		int leftParameterIndex = fParentRelationStatement.getLeftParameter().getMyIndex();
+		List<ChoiceNode> choicesForParameter = domain.get(leftParameterIndex);
+
+		EStatementRelation relation = fParentRelationStatement.getRelation();
+
+		for (ChoiceNode choice : choicesForParameter) {
+
+			if (choice.isRandomizedValue()) {
+				if (ConditionHelper.isRandomizedChoiceAmbiguous(
+						choice, fRightValue, fParentRelationStatement, 
+						relation, substituteType)) {
+
+					ConditionHelper.addValuesMessageToStack(
+							choice.toString(), relation, "value [" + fRightValue + "]", messageStack);
+
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 	private static String getChoiceString(List<ChoiceNode> choices, MethodParameterNode methodParameterNode) {
@@ -130,5 +165,4 @@ public class ValueCondition implements IStatementCondition {
 		return fRightValue;
 	}
 }	
-
 

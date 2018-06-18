@@ -30,6 +30,7 @@ import org.eclipse.swt.widgets.Button;
 
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ParametersParentNode;
+import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.ecfeed.ui.common.NodeViewerColumnLabelProvider;
@@ -130,7 +131,9 @@ public abstract class AbstractParametersViewer extends TableViewerSection {
 		@Override
 		protected CellEditor getCellEditor(Object element) {
 			if(fCellEditor == null){
-				List<String> items = new ArrayList<String>(Arrays.asList(AbstractParameterInterface.supportedPrimitiveTypes()));
+				List<String> items = 
+						new ArrayList<String>(Arrays.asList(JavaTypeHelper.getSupportedJavaTypes()));
+
 				items.add(BROWSE_PARAMETER_TYPE_STRING);
 				fCellEditor = new ComboBoxCellEditor(getTable(), items.toArray(new String[]{}));
 				fCellEditor.setActivationStyle(ComboBoxCellEditor.DROP_DOWN_ON_KEY_ACTIVATION);

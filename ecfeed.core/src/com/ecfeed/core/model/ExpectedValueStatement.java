@@ -13,7 +13,9 @@ package com.ecfeed.core.model;
 import java.util.List;
 
 import com.ecfeed.core.utils.EvaluationResult;
+import com.ecfeed.core.utils.MessageStack;
 
+//ambigous always false
 public class ExpectedValueStatement extends AbstractStatement implements IRelationalStatement{
 
 	MethodParameterNode fParameter;
@@ -143,6 +145,11 @@ public class ExpectedValueStatement extends AbstractStatement implements IRelati
 
 	public boolean isParameterPrimitive(){
 		return fPredicate.isPrimitive(fParameter.getType());
+	}
+
+	@Override
+	public boolean isAmbiguous(List<List<ChoiceNode>> values, MessageStack messageStack) {
+		return false;
 	}
 
 }

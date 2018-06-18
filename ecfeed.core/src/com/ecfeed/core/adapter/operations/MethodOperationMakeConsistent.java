@@ -40,7 +40,7 @@ public class MethodOperationMakeConsistent extends AbstractModelOperation {
 		}
 
 		@Override
-		public IModelOperation reverseOperation() {
+		public IModelOperation getReverseOperation() {
 			return new MethodOperationMakeConsistent(fMethodNode);
 		}
 
@@ -80,7 +80,7 @@ public class MethodOperationMakeConsistent extends AbstractModelOperation {
 	}
 
 	@Override
-	public IModelOperation reverseOperation() {
+	public IModelOperation getReverseOperation() {
 		return new ReverseOperation();
 	}
 

@@ -33,6 +33,7 @@ public class GeneratorTestUtils{
 		public Constraint(Set<String> restrictedValues){
 			fRestrictedValues = restrictedValues;
 		}
+		
 
 		@Override
 		public EvaluationResult evaluate(List<String> values) {

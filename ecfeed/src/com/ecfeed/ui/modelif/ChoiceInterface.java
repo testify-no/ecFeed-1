@@ -11,7 +11,9 @@
 package com.ecfeed.ui.modelif;
 
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IType;
@@ -21,10 +23,13 @@ import org.eclipse.swt.widgets.Display;
 
 import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.adapter.IModelOperation;
+import com.ecfeed.core.adapter.ITypeAdapter;
+import com.ecfeed.core.adapter.ITypeAdapter.EConversionMode;
 import com.ecfeed.core.adapter.operations.ChoiceOperationAddLabel;
 import com.ecfeed.core.adapter.operations.ChoiceOperationAddLabels;
 import com.ecfeed.core.adapter.operations.ChoiceOperationRemoveLabels;
 import com.ecfeed.core.adapter.operations.ChoiceOperationRenameLabel;
+import com.ecfeed.core.adapter.operations.ChoiceOperationSetRandomizedValue;
 import com.ecfeed.core.adapter.operations.ChoiceOperationSetValue;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.AbstractParameterNode;
@@ -36,23 +41,38 @@ import com.ecfeed.ui.common.EclipseTypeAdapterProvider;
 import com.ecfeed.ui.common.JavaModelAnalyser;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.dialogs.basic.ErrorDialog;
 
 public class ChoiceInterface extends ChoicesParentInterface {
 
 	public ChoiceInterface(IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider) {
-		
+
 		super(updateContext, fileInfoProvider);
 	}
 
 	public void setValue(String newValue) {
-		
-		IModelOperation operation = new ChoiceOperationSetValue(getOwnNode(), newValue, new EclipseTypeAdapterProvider());
+
+		IModelOperation operation = 
+				new ChoiceOperationSetValue(getOwnNode(), newValue, new EclipseTypeAdapterProvider());
+
 		execute(operation, Messages.DIALOG_SET_CHOICE_VALUE_PROBLEM_TITLE);
 	}
 
 	public String getValue() {
-		
+
 		return getOwnNode().getValueString();
+	}
+
+	public void setRandomized(boolean isRandomized) {
+
+		IModelOperation operation = 
+				new ChoiceOperationSetRandomizedValue(getOwnNode(), isRandomized, new EclipseTypeAdapterProvider());
+
+		execute(operation, Messages.DIALOG_SET_CHOICE_RANDOMIZED_PROBLEM_TITLE);
+	}
+
+	public boolean isRandomized() {
+		return getOwnNode().isRandomizedValue();
 	}
 
 	@Override
@@ -61,17 +81,17 @@ public class ChoiceInterface extends ChoicesParentInterface {
 	}
 
 	public boolean removeLabels(Collection<String> labels) {
-		
+
 		boolean removeMentioningConstraints = false;
-		
+
 		for (String label : labels) {
-			
+
 			if (getOwnNode().getParameter().mentioningConstraints(label).size() > 0 
 					&& getOwnNode().getParameter().getLabeledChoices(label).size() == 1) {
 				removeMentioningConstraints = true;
 			}
 		}
-		
+
 		if(removeMentioningConstraints){
 			if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(),
 					Messages.DIALOG_REMOVE_LABELS_WARNING_TITLE,
@@ -79,12 +99,12 @@ public class ChoiceInterface extends ChoicesParentInterface {
 				return false;
 			}
 		}
-		
+
 		return execute(new ChoiceOperationRemoveLabels(getOwnNode(), labels), Messages.DIALOG_REMOVE_LABEL_PROBLEM_TITLE);
 	}
 
 	public String addNewLabel() {
-		
+
 		String newLabel = CommonConstants.DEFAULT_NEW_PARTITION_LABEL;
 		int i = 1;
 		while(getOwnNode().getLeafLabels().contains(newLabel)){
@@ -98,13 +118,13 @@ public class ChoiceInterface extends ChoicesParentInterface {
 	}
 
 	public boolean addLabels(List<String> labels) {
-		
+
 		IModelOperation operation = new ChoiceOperationAddLabels(getOwnNode(), labels);
 		return execute(operation, Messages.DIALOG_ADD_LABEL_PROBLEM_TITLE);
 	}
 
 	public boolean addLabel(String newLabel) {
-		
+
 		IModelOperation operation = new ChoiceOperationAddLabel(getOwnNode(), newLabel);
 		return execute(operation, Messages.DIALOG_ADD_LABEL_PROBLEM_TITLE);
 	}
@@ -114,18 +134,18 @@ public class ChoiceInterface extends ChoicesParentInterface {
 	}
 
 	public boolean renameLabel(String label, String newValue) {
-		
+
 		if(label.equals(newValue)){
 			return false;
 		}
-		
+
 		if(getOwnNode().getInheritedLabels().contains(newValue)) {
-			MessageDialog.openError(Display.getCurrent().getActiveShell(),
+			ErrorDialog.open(
 					Messages.DIALOG_RENAME_LABELS_ERROR_TITLE,
 					Messages.DIALOG_LABEL_IS_ALREADY_INHERITED);
 			return false;
 		}
-		
+
 		if(getOwnNode().getLeafLabels().contains(newValue)) {
 			if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(),
 					Messages.DIALOG_RENAME_LABELS_WARNING_TITLE,
@@ -140,7 +160,7 @@ public class ChoiceInterface extends ChoicesParentInterface {
 
 	@Override
 	public boolean goToImplementationEnabled(){
-		
+
 		if (JavaTypeHelper.isJavaType(getOwnNode().getParameter().getType())) {
 			return false;
 		}
@@ -154,10 +174,10 @@ public class ChoiceInterface extends ChoicesParentInterface {
 
 	@Override
 	public void goToImplementation() {
-		
+
 		try{
 			IType type = JavaModelAnalyser.getIType(getParameter().getType());
-			
+
 			if (type != null && getOwnNode().isAbstract() == false) {
 				for (IField field : type.getFields()) {
 					if (field.getElementName().equals(getOwnNode().getValueString())) {
@@ -189,4 +209,35 @@ public class ChoiceInterface extends ChoicesParentInterface {
 		ChoiceNode choiceNode = getOwnNode();
 		return choiceNode.getListOfChildrenChoiceNames();
 	}
+
+	public ITypeAdapter<?> getTypeAdapter() {
+
+		EclipseTypeAdapterProvider eclipseTypeAdapterProvider = new EclipseTypeAdapterProvider();
+
+		ChoiceNode choiceNode = getOwnNode();
+		AbstractParameterNode abstractParameterNode = choiceNode.getParameter();
+		String typeName = abstractParameterNode.getType();
+
+		return eclipseTypeAdapterProvider.getAdapter(typeName);
+	}
+
+	public Set<String> convertItemsToMatchChoice(Set<String> items, EConversionMode conversionMode) {
+
+		ChoiceNode choiceNode = getOwnNode();
+
+		Set<String> newItems = new LinkedHashSet<String>();
+		ITypeAdapter<?> typeAdapter = getTypeAdapter();
+
+		for (String item : items) {
+
+			String newItem = 
+					typeAdapter.convert(item, choiceNode.isRandomizedValue(), conversionMode);
+
+			newItems.add(newItem);
+		}
+
+		return newItems;
+	}
+
+
 }

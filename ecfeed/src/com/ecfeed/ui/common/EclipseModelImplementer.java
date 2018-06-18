@@ -142,6 +142,30 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 
 		if (!parameterDefinitionImplemented(parameter)) {
 			return implementParameterWithChildChoice(parameter, choiceNode);
+
+			//<<<<<<< HEAD
+			//
+			//		if (!parameterDefinitionImplemented(parameter)) {
+			//			return implementParameterWithChildChoice(parameter, choiceNode);
+			//=======
+			//		if(parameterDefinitionImplemented(parameter) == false){
+			//			if(parameterDefinitionImplementable(parameter)){
+			//				implementParameterDefinition(parameter, new HashSet<String>(Arrays.asList(new String[]{choiceNode.getValueString()})));
+			//			}
+			//			else{
+			//				return false;
+			//			}
+			//		}
+			//		else{
+			//			if(choiceNode.isAbstract()){
+			//				implementChoicesDefinitions(unimplementedChoices(choiceNode.getLeafChoices()));
+			//			}
+			//			else{
+			//				if(implementable(choiceNode) && getImplementationStatus(choiceNode) != EImplementationStatus.IMPLEMENTED){
+			//					implementChoicesDefinitions(Arrays.asList(choiceNode));
+			//				}
+			//			}
+			//>>>>>>> dev_R_1_12_randomize_choice_value_refactoring
 		}
 
 		implementChoiceWithChildren(choiceNode);
@@ -237,6 +261,16 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 
 	@Override
 	protected void implementChoiceDefinition(ChoiceNode node) throws CoreException, EcException {
+
+		//		<<<<<<< HEAD
+		//
+		//		if (isImplementableNode(node) && getImplementationStatus(node) != EImplementationStatus.IMPLEMENTED) {
+		//			implementChoiceNodes(Arrays.asList(new ChoiceNode[]{node}));
+		//			=======
+		//		if(implementable(node) && getImplementationStatus(node) != EImplementationStatus.IMPLEMENTED){
+		//			implementChoicesDefinitions(Arrays.asList(node));
+		//			
+		//		>>>>>>> dev_R_1_12_randomize_choice_value_refactoring
 
 		if (isImplementableNode(node) && getImplementationStatus(node) != EImplementationStatus.IMPLEMENTED) {
 			implementChoiceNodes(Arrays.asList(new ChoiceNode[]{node}));

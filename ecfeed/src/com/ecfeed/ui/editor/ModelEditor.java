@@ -38,7 +38,6 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -63,6 +62,7 @@ import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.CommonConstants;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.dialogs.basic.ErrorDialog;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.utils.EclipseHelper;
 //import com.ecfeed.utils.Sleak;
@@ -81,7 +81,7 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 	public class SourceEditorInput implements IEditorInput{
 
 		@Override
-		@SuppressWarnings({ "rawtypes", "unchecked" })
+		@SuppressWarnings({ "rawtypes" })
 		public Object getAdapter(Class adapter) {
 			return null;
 		}
@@ -266,8 +266,7 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 			serializer.serialize(fModel);
 		}
 		catch(Exception e){
-			MessageDialog.openError(Display.getCurrent().getActiveShell(),
-					"Error", "Could not serialize the file:" + e.getMessage());
+			ErrorDialog.open("Error", "Could not serialize the file:" + e.getMessage());
 		}
 
 		fSourcePageEditor.refreshContent(outputStream.toString());

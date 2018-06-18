@@ -52,7 +52,7 @@ public class ParameterOperationSetExpected extends AbstractModelOperation {
 		}
 
 		@Override
-		public IModelOperation reverseOperation() {
+		public IModelOperation getReverseOperation() {
 			return new ParameterOperationSetExpected(fTarget, fExpected);
 		}
 
@@ -100,7 +100,7 @@ public class ParameterOperationSetExpected extends AbstractModelOperation {
 
 		MethodNode methodNode = fTarget.getMethod(); 
 		if(methodNode != null){
-			int index = fTarget.getIndex();
+			int index = fTarget.getMyIndex();
 			ListIterator<TestCaseNode> tcIt = methodNode.getTestCases().listIterator();
 			while(tcIt.hasNext()){
 				TestCaseNode testCase = tcIt.next();
@@ -128,7 +128,7 @@ public class ParameterOperationSetExpected extends AbstractModelOperation {
 	}
 
 	@Override
-	public IModelOperation reverseOperation() {
+	public IModelOperation getReverseOperation() {
 		return new ReverseOperation();
 	}
 

@@ -50,7 +50,7 @@ public class MethodOperationAddConstraint extends AbstractModelOperation {
 	}
 
 	@Override
-	public IModelOperation reverseOperation() {
+	public IModelOperation getReverseOperation() {
 		return new MethodOperationRemoveConstraint(fMethodNode, fConstraint);
 	}
 

@@ -19,14 +19,19 @@ import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import com.ecfeed.core.adapter.ITypeAdapter;
+import com.ecfeed.core.adapter.ITypeAdapter.EConversionMode;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.SwtObjectHelper;
 import com.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.ecfeed.ui.modelif.ChoiceInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
@@ -39,10 +44,12 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 	private Composite fAttributesComposite;
 	private Text fNameText;
 	private Combo fValueCombo;
-
-	private ChoiceInterface fChoiceIf;
+	private ChoiceInterface fChoiceInterface;
 	private AbstractCommentsSection fCommentsSection;
 
+	private Button fRandomizeCheckbox;
+
+	private Label fValueLabel;
 
 	public ChoiceDetailsPage(
 			ModelMasterSection masterSection, 
@@ -50,14 +57,14 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 			IFileInfoProvider fileInfoProvider) {
 		super(masterSection, updateContext, fileInfoProvider);
 		fFileInfoProvider = fileInfoProvider;
-		fChoiceIf = new ChoiceInterface(this, fFileInfoProvider);
+		fChoiceInterface = new ChoiceInterface(this, fFileInfoProvider);
 	}
 
 	@Override
 	public void createContents(Composite parent){
 		super.createContents(parent);
 
-		createNameValueEditor(getMainComposite());
+		createNameValueEditorWithoutValueCombo(getMainComposite());
 
 		addCommentsSection();
 
@@ -78,7 +85,7 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		super.refresh();
 		ChoiceNode selectedChoice = getSelectedChoice();
 		if(selectedChoice != null){
-			fChoiceIf.setOwnNode(selectedChoice);
+			fChoiceInterface.setOwnNode(selectedChoice);
 
 			String title = getSelectedChoice().toString();
 			getMainSection().setText(title);
@@ -86,10 +93,13 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 			fCommentsSection.setInput(selectedChoice);
 			fChildrenViewer.setInput(selectedChoice);
 			fLabelsViewer.setInput(selectedChoice);
+
+
 			fNameText.setText(selectedChoice.getName());
-			refreshValueEditor(selectedChoice);
+			refreshValueAndRandomizedFields(selectedChoice);
 		}
 	}
+
 
 	private void addCommentsSection() {
 
@@ -100,26 +110,32 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		}
 	}
 
-	private void refreshValueEditor(ChoiceNode choiceNode) {
-		String type = fChoiceIf.getParameter().getType();
-		if(fValueCombo != null && fValueCombo.isDisposed() == false){
+	private void refreshValueAndRandomizedFields(ChoiceNode choiceNode) {
+
+		if (fValueCombo != null && fValueCombo.isDisposed() == false) {
 			fValueCombo.dispose();
 		}
-		int style = SWT.DROP_DOWN;
-		if(AbstractParameterInterface.isBoolean(type)){
-			style |= SWT.READ_ONLY;
-		}
+
+		createValueCombo(choiceNode);
+
+		updateRandomizeCheckBox(choiceNode);
+		updateValueLabel(choiceNode);		
+
+		fAttributesComposite.layout();
+	}
+
+	private void createValueCombo(ChoiceNode choiceNode) {
+
+		String typeName = fChoiceInterface.getParameter().getType();
+		int style = calculateValueComboStyle(typeName);
+
 		fValueCombo = new ComboViewer(fAttributesComposite, style).getCombo();
 		fValueCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-		Set<String> items = new LinkedHashSet<String>(AbstractParameterInterface.getSpecialValues(type));
-		if(JavaTypeHelper.isUserType(type)){
-			Set<String> usedValues = fChoiceIf.getParameter().getLeafChoiceValues();
-			usedValues.removeAll(items);
-			items.addAll(usedValues);
-		}
-		items.add(fChoiceIf.getValue());
+
+		Set<String> items = createComboItems(typeName);
 		fValueCombo.setItems(items.toArray(new String[]{}));
-		setValueComboText(choiceNode);
+
+		fValueCombo.setText(getValueComboText(choiceNode));		
 		fValueCombo.addSelectionListener(new ValueSelectedListener());
 		fValueCombo.addFocusListener(new ValueFocusLostListener());
 
@@ -128,15 +144,87 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		} else {
 			fValueCombo.setEnabled(true);
 		}
-
-		fAttributesComposite.layout();
 	}
 
-	private void setValueComboText(ChoiceNode choiceNode) {
-		if (choiceNode.isAbstract()) {
-			fValueCombo.setText(ChoiceNode.ABSTRACT_CHOICE_MARKER);
+	private Set<String> createComboItems(String typeName) {
+
+		Set<String> items = 
+				new LinkedHashSet<String>(AbstractParameterInterface.getSpecialValues(typeName));
+
+		if (JavaTypeHelper.isUserType(typeName)) {
+
+			Set<String> usedValues = fChoiceInterface.getParameter().getLeafChoiceValues();
+			usedValues.removeAll(items);
+			items.addAll(usedValues);
+		}
+
+		items.add(fChoiceInterface.getValue());
+
+		return fChoiceInterface.convertItemsToMatchChoice(items, EConversionMode.QUIET);
+	}
+
+	private static int calculateValueComboStyle(String typeName) {
+
+		int style = SWT.DROP_DOWN;
+
+		if (JavaTypeHelper.isBooleanTypeName(typeName)) {
+			style |= SWT.READ_ONLY;
+		}
+
+		return style;
+	}
+
+	private void updateRandomizeCheckBox(ChoiceNode choiceNode) {
+
+		fRandomizeCheckbox.setSelection(isRandomizeCheckboxSelected(choiceNode));
+		fRandomizeCheckbox.setEnabled(isRandomizeCheckboxEnabled(choiceNode));
+	}
+
+	private void updateValueLabel(ChoiceNode choiceNode) {
+
+		String type = fChoiceInterface.getParameter().getType();
+		boolean isRandomizedValue = choiceNode.isRandomizedValue();
+
+		if (isRandomizedValue) {
+			if (type.equals(JavaTypeHelper.TYPE_NAME_STRING)) {
+				fValueLabel.setText("Regex");
+			} else {
+				fValueLabel.setText("Range");
+			}
 		} else {
-			fValueCombo.setText(fChoiceIf.getValue());
+			fValueLabel.setText("Value");
+		}
+	}
+
+	private boolean isRandomizeCheckboxEnabled(ChoiceNode choiceNode) {
+
+		if (choiceNode.isAbstract()) {
+			return false;
+		}
+
+		ITypeAdapter<?> typeAdapter = fChoiceInterface.getTypeAdapter();
+
+		if (!typeAdapter.isRandomizable())
+			return false;
+
+		return true;
+	}
+
+	private boolean isRandomizeCheckboxSelected(ChoiceNode choiceNode) {
+
+		if (choiceNode.isAbstract()) {
+			return false;
+		}
+
+		return choiceNode.isRandomizedValue();
+	}
+
+	private String getValueComboText(ChoiceNode choiceNode) {
+
+		if (choiceNode.isAbstract()) {
+			return ChoiceNode.ABSTRACT_CHOICE_MARKER;
+		} else {
+			return fChoiceInterface.getValue();
 		}
 	}
 
@@ -147,7 +235,8 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		return null;
 	}
 
-	private void createNameValueEditor(Composite parent) {
+	private void createNameValueEditorWithoutValueCombo(Composite parent) {
+
 		fAttributesComposite = getToolkit().createComposite(parent);
 		fAttributesComposite.setLayout(new GridLayout(2, false));
 		fAttributesComposite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
@@ -155,8 +244,29 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		getFormObjectToolkit().createLabel(fAttributesComposite, "Name");
 		fNameText = getFormObjectToolkit().createGridText(fAttributesComposite, new NameApplier());
 
-		getFormObjectToolkit().createLabel(fAttributesComposite, "Value");
+		fRandomizeCheckbox = 
+				getFormObjectToolkit().createGridCheckBox(
+						fAttributesComposite, "Randomize value", new RandomizedApplier());
+		SwtObjectHelper.setHorizontalSpan(fRandomizeCheckbox, 3);
+
+		fValueLabel = getFormObjectToolkit().createLabel(fAttributesComposite, "Value");
 		getFormObjectToolkit().paintBorders(fAttributesComposite);
+
+		// fValueCombo created during refresh
+	}
+
+	private class RandomizedApplier implements IValueApplier {
+
+		@Override
+		public void applyValue() {
+
+			fChoiceInterface.setRandomized(fRandomizeCheckbox.getSelection());
+
+			fRandomizeCheckbox.setSelection(fChoiceInterface.isRandomized());
+			fValueCombo.setText(fChoiceInterface.getValue());
+
+			updateValueLabel(fChoiceInterface.getOwnNode());
+		}
 	}
 
 	@Override
@@ -168,8 +278,8 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 
 		@Override
 		public void applyValue() {
-			fChoiceIf.setName(fNameText.getText());
-			fNameText.setText(fChoiceIf.getName());
+			fChoiceInterface.setName(fNameText.getText());
+			fNameText.setText(fChoiceInterface.getName());
 		}
 	}
 
@@ -177,7 +287,7 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			setValueComboToModel();
+			applyValueToModelAndCombo();
 		}
 	}
 
@@ -185,19 +295,14 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 
 		@Override
 		public void focusLost(FocusEvent e) {
-			setValueComboToModel();
+			applyValueToModelAndCombo();
 		}
-
 	}
 
-	private void setValueComboToModel() {
-		fChoiceIf.setValue(fValueCombo.getText());
+	private void applyValueToModelAndCombo() {
 
-		ChoiceNode choiceNode = getSelectedChoice();
-		if (choiceNode != null) {
-			setValueComboText(choiceNode);
-		}
-
+		fChoiceInterface.setValue(fValueCombo.getText());
+		fValueCombo.setText(getValueComboText(fChoiceInterface.getOwnNode()));
 	}
 
 }

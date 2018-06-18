@@ -18,12 +18,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.ecfeed.core.model.AbstractStatement;
-import com.ecfeed.core.model.EStatementOperator;
-import com.ecfeed.core.model.IStatement;
-import com.ecfeed.core.model.IStatementVisitor;
-import com.ecfeed.core.model.MethodNode;
-import com.ecfeed.core.model.StatementArray;
+import com.ecfeed.core.utils.MessageStack;
 
 public class AbstractStatementTest {
 
@@ -50,6 +45,10 @@ public class AbstractStatementTest {
 		}
 		@Override
 		public boolean mentions(int methodParameterIndex) {
+			return false;
+		}
+		@Override
+		public boolean isAmbiguous(List<List<ChoiceNode>> values, MessageStack messageStack) {
 			return false;
 		}
 	}

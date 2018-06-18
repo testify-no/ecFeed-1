@@ -70,10 +70,10 @@ public class FactoryAddChildOperation implements IModelVisitor{
 		GlobalParameterNode globalParameter = new GlobalParameterNode(abstractParameterNode);
 
 		if(fIndex == -1) {
-			return new GenericOperationAddParameter(rootNode, globalParameter);
+			return new GenericOperationAddParameter(rootNode, globalParameter, true);
 		}
 
-		return new GenericOperationAddParameter(rootNode, globalParameter, fIndex);
+		return new GenericOperationAddParameter(rootNode, globalParameter, fIndex, true);
 	}
 
 	private Object createOperationAddClass(RootNode rootNode) {
@@ -109,9 +109,9 @@ public class FactoryAddChildOperation implements IModelVisitor{
 		}else if(fChild instanceof AbstractParameterNode){
 			GlobalParameterNode globalParameter = new GlobalParameterNode((AbstractParameterNode)fChild);
 			if(fIndex == -1){
-				return new GenericOperationAddParameter(node, globalParameter);
+				return new GenericOperationAddParameter(node, globalParameter, true);
 			}
-			return new GenericOperationAddParameter(node, globalParameter, fIndex);
+			return new GenericOperationAddParameter(node, globalParameter, fIndex, true);
 		}
 
 		reportOperationNotSupportedException();
@@ -122,7 +122,7 @@ public class FactoryAddChildOperation implements IModelVisitor{
 	public Object visit(MethodNode node) throws Exception {
 		if(fChild instanceof GlobalParameterNode){
 			GlobalParameterNode globalParameter = (GlobalParameterNode)fChild;
-			String defaultValue = fAdapterProvider.getAdapter(globalParameter.getType()).defaultValue();
+			String defaultValue = fAdapterProvider.getAdapter(globalParameter.getType()).getDefaultValue();
 			MethodParameterNode parameter = new MethodParameterNode(globalParameter, defaultValue, false);
 
 			if(fIndex == -1){

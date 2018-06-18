@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Display;
@@ -29,6 +28,7 @@ import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.utils.BooleanHolder;
 import com.ecfeed.core.utils.IntegerHolder;
+import com.ecfeed.ui.dialogs.basic.ErrorDialog;
 
 public class CoverageCalculator {
 
@@ -88,10 +88,10 @@ public class CoverageCalculator {
 
 		try {
 			CalculatorRunnable runnable = new CalculatorRunnable();
-			
+
 			progressDialog.open();
 			progressDialog.run(true, true, runnable);
-			
+
 			if (runnable.getIsCancelled()) {
 				return false;
 			} else {
@@ -100,13 +100,12 @@ public class CoverageCalculator {
 			}
 
 		} catch (InvocationTargetException e) {
-			MessageDialog.openError(
-					Display.getDefault().getActiveShell(), 
+			ErrorDialog.open(
 					"Exception", 
 					"Invocation: " + e.getCause());
 			return false;
 		} catch (InterruptedException e) {
-			MessageDialog.openError(Display.getDefault().getActiveShell(), "Exception", "Interrupted: " + e.getMessage());
+			ErrorDialog.open("Exception", "Interrupted: " + e.getMessage());
 			e.printStackTrace();
 			return false;
 		}
@@ -132,8 +131,7 @@ public class CoverageCalculator {
 		try {
 			progressDialog.run(true, true, runnable);
 		} catch (InvocationTargetException | InterruptedException e) {
-			MessageDialog.openError(
-					Display.getDefault().getActiveShell(), 
+			ErrorDialog.open(
 					"Exception", 
 					"Invocation: " + e.getCause());
 		}
@@ -338,70 +336,70 @@ public class CoverageCalculator {
 	}
 
 	private class CalculatorRunnable implements IRunnableWithProgress {
-		
+
 		private boolean fIsCanceled;
 		// if true - add occurences, else substract them
-		
+
 		@Override
 		public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-			
+
 			int n = 0;
 			IntegerHolder cnt = new IntegerHolder(0);
 			BooleanHolder isSubCancelled = new BooleanHolder(false);
-			
+
 			List<Map<List<OrderedChoice>, Integer>> coveredTuples = new ArrayList<>();
 
 			monitor.beginTask("Calculating Coverage", fCurrentlyChangedCases.size() * fNMax);
 
 			while (!monitor.isCanceled() && n < fNMax) {
-				
+
 				Map<List<OrderedChoice>, Integer> mapForN = new HashMap<>();
 
 				ArrayList<List<OrderedChoice>> convertedCases = new ArrayList<>();
-				
+
 				for (List<ChoiceNode> tcase: fCurrentlyChangedCases) {
-					
+
 					displaySubTaskMessage(n, cnt, isSubCancelled, monitor);
 					if (isSubCancelled.get()) {
 						fIsCanceled = true;
 						break;
 					}
-					
+
 					convertedCases.add(convertToOrdered(tcase));
 				}
-				
+
 				for (List<OrderedChoice> converted: convertedCases) {
-					
+
 					displaySubTaskMessage(n, cnt, isSubCancelled, monitor);
 					if (isSubCancelled.get()) {
 						fIsCanceled = true;
 						break;
 					}
-					
+
 					Tuples<OrderedChoice> tuples = new Tuples<OrderedChoice>(converted, n + 1);
-					
+
 					for (List<OrderedChoice> pnode : tuples.getAll()) {
-						
+
 						displaySubTaskMessage(n, cnt, isSubCancelled, monitor);
 						if (isSubCancelled.get()) {
 							fIsCanceled = true;
 							break;
 						}
-						
+
 						addTuplesToMap(mapForN, pnode);
 					}
-					
+
 					monitor.worked(1);
 				}
-				
+
 				if (!monitor.isCanceled()) {
-					
+
 					displaySubTaskMessage(n, cnt, isSubCancelled, monitor);
 					if (isSubCancelled.get()) {
 						fIsCanceled = true;
 						break;
 					}
-					
+
 					coveredTuples.add(mapForN);
 					n++;
 				}
@@ -410,27 +408,27 @@ public class CoverageCalculator {
 			n = 0;
 			if (!fIsCanceled) {
 				for (Map<List<OrderedChoice>, Integer> map : coveredTuples) {
-					
+
 					displaySubTaskMessage(n, cnt, isSubCancelled, monitor);
 					if (isSubCancelled.get()) {
 						fIsCanceled = true;
 						break;
 					}
-					
+
 					mergeOccurrenceMaps(fTuples.get(n), map, fAddingFlag);
 					fTuplesCovered[n] = fTuples.get(n).size();
 					fResults[n] = (((double) fTuplesCovered[n]) / ((double) fTotalWork[n])) * 100;
 					n++;
 				}
 			}
-			
+
 			monitor.done();
 		}
-		
+
 		public boolean getIsCancelled() {
 			return fIsCanceled;
 		}
-		
+
 		private void displaySubTaskMessage(
 				int pass, IntegerHolder cnt, BooleanHolder isSubCancelled, IProgressMonitor monitor) {
 
@@ -439,7 +437,7 @@ public class CoverageCalculator {
 			if (cnt.get()%64 != 0) {
 				return;
 			}
-			
+
 			monitor.subTask("Calculating coverage - pass:" + pass + " , item:" + cnt.get());
 
 			if (monitor.isCanceled()) {
@@ -447,7 +445,7 @@ public class CoverageCalculator {
 				return;
 			}
 		}
-		
+
 	}
 
 	/*

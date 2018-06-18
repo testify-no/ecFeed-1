@@ -41,6 +41,7 @@ import static com.ecfeed.core.serialization.ect.SerializationConstants.TYPE_NAME
 import static com.ecfeed.core.serialization.ect.SerializationConstants.VALUE_ATTRIBUTE;
 import static com.ecfeed.core.serialization.ect.SerializationConstants.VALUE_ATTRIBUTE_NAME;
 import static com.ecfeed.core.serialization.ect.SerializationConstants.VERSION_ATTRIBUTE;
+import static com.ecfeed.core.serialization.ect.SerializationConstants.NODE_IS_RADOMIZED_ATTRIBUTE;
 import nu.xom.Attribute;
 import nu.xom.Element;
 import nu.xom.Elements;
@@ -363,6 +364,10 @@ public abstract class XomBuilder implements IModelVisitor {
 
 		encodeAndAddAttribute(targetChoiceElement, new Attribute(VALUE_ATTRIBUTE, legalValue), fWhiteCharConverter);
 
+		boolean isRandomizedValue = ((ChoiceNode)node).isRandomizedValue();
+		targetChoiceElement.addAttribute(new Attribute(NODE_IS_RADOMIZED_ATTRIBUTE, String.valueOf(isRandomizedValue)));
+
+		
 		for (String label : node.getLabels()) {
 			Element labelElement = new Element(LABEL_NODE_NAME);
 			encodeAndAddAttribute(labelElement, new Attribute(LABEL_ATTRIBUTE_NAME, label), fWhiteCharConverter);
@@ -375,14 +380,14 @@ public abstract class XomBuilder implements IModelVisitor {
 
 		return targetChoiceElement;
 	}
-
+	
 	private Element createAbstractElement(String nodeTag, AbstractNode node) {
 
 		Element targetAbstractElement = new Element(nodeTag);
 		Attribute nameAttr = new Attribute(NODE_NAME_ATTRIBUTE, node.getName());
 		encodeAndAddAttribute(targetAbstractElement, nameAttr, fWhiteCharConverter);
 		appendComments(targetAbstractElement, node);
-
+		
 		return targetAbstractElement;
 	}
 
@@ -428,6 +433,11 @@ public abstract class XomBuilder implements IModelVisitor {
 			Element element, Attribute attribute, WhiteCharConverter whiteCharConverter) {
 
 		attribute.setValue(whiteCharConverter.encode(attribute.getValue()));
+		element.addAttribute(attribute);
+	}
+	
+	public static void addIsRandomizedValue(Element element, Attribute attribute) {
+		attribute.setValue(Boolean.FALSE.toString());
 		element.addAttribute(attribute);
 	}
 

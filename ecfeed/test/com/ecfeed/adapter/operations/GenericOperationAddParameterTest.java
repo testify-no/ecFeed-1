@@ -66,10 +66,10 @@ public class GenericOperationAddParameterTest{
 
 		IModelOperation operation;
 		if(indexValue == EIndexValue.NO_VALUE){
-			operation = new GenericOperationAddParameter(parent, parameter);
+			operation = new GenericOperationAddParameter(parent, parameter, true);
 		}
 		else{
-			operation = new GenericOperationAddParameter(parent, parameter, index);
+			operation = new GenericOperationAddParameter(parent, parameter, index, true);
 		}
 
 		try{
@@ -101,10 +101,10 @@ public class GenericOperationAddParameterTest{
 		MethodParameterNode parameter = new MethodParameterNode("arg", "int", "0", false);
 
 		if(indexValue != EIndexValue.NO_VALUE){
-			operation = new GenericOperationAddParameter(parent, parameter, index);
+			operation = new GenericOperationAddParameter(parent, parameter, index, true);
 		}
 		else{
-			operation = new GenericOperationAddParameter(parent, parameter);
+			operation = new GenericOperationAddParameter(parent, parameter, true);
 		}
 		try{
 			opManager.execute(operation);
@@ -136,7 +136,7 @@ public class GenericOperationAddParameterTest{
 			for(int i = 0; i < numOfOperations; ++i){
 				int index = rand.nextInt(parent.getParameters().size() + 1);
 				MethodParameterNode parameter = new MethodParameterNode("arg" + i, "int", "0", rand.nextBoolean());
-				IModelOperation operation = new GenericOperationAddParameter(parent, parameter, index);
+				IModelOperation operation = new GenericOperationAddParameter(parent, parameter, index, true);
 				operationManager.execute(operation);
 				assertTrue(parent.getParameters().contains(parameter));
 				assertTrue(parent.getParameters().indexOf(parameter) == index);

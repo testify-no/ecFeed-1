@@ -49,7 +49,7 @@ public class GenericShiftOperation extends AbstractModelOperation {
 	}
 
 	@Override
-	public IModelOperation reverseOperation() {
+	public IModelOperation getReverseOperation() {
 		return new GenericShiftOperation(fCollection, fShifted, -fShift);
 	}
 
@@ -137,7 +137,7 @@ public class GenericShiftOperation extends AbstractModelOperation {
 		if(shift == 0){
 			return false;
 		}
-		int newIndex = (borderNode(shifted, shift) != null) ? borderNode(shifted, shift).getIndex() + shift : -1;
+		int newIndex = (borderNode(shifted, shift) != null) ? borderNode(shifted, shift).getMyIndex() + shift : -1;
 		return newIndex >= 0 && newIndex < shifted.get(0).getMaxIndex();
 	}
 
@@ -145,7 +145,7 @@ public class GenericShiftOperation extends AbstractModelOperation {
 		if(nodes.size() == 0) return null;
 		AbstractNode minIndexNode = nodes.get(0);
 		for(AbstractNode node : nodes){
-			minIndexNode = node.getIndex() < minIndexNode.getIndex() ? node : minIndexNode; 
+			minIndexNode = node.getMyIndex() < minIndexNode.getMyIndex() ? node : minIndexNode; 
 		}
 		return minIndexNode;
 	}
@@ -154,7 +154,7 @@ public class GenericShiftOperation extends AbstractModelOperation {
 		if(nodes.size() == 0) return null;
 		AbstractNode maxIndexNode = nodes.get(0);
 		for(AbstractNode node : nodes){
-			maxIndexNode = node.getIndex() > maxIndexNode.getIndex() ? node : maxIndexNode; 
+			maxIndexNode = node.getMyIndex() > maxIndexNode.getMyIndex() ? node : maxIndexNode; 
 		}
 		return maxIndexNode;
 	}

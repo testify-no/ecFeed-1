@@ -40,14 +40,14 @@ public class MethodOperationAddParameter extends GenericOperationAddParameter {
 		}
 
 		@Override
-		public IModelOperation reverseOperation() {
+		public IModelOperation getReverseOperation() {
 			return new MethodOperationAddParameter(fTarget, fParameter);
 		}
 
 	}
 
 	public MethodOperationAddParameter(MethodNode target, MethodParameterNode parameter, int index) {
-		super(target, parameter, index);
+		super(target, parameter, index, true);
 		fRemovedTestCases = new ArrayList<TestCaseNode>(target.getTestCases());
 		fTarget = target;
 		fParameter = parameter;
@@ -72,7 +72,7 @@ public class MethodOperationAddParameter extends GenericOperationAddParameter {
 	}
 
 	@Override
-	public IModelOperation reverseOperation() {
+	public IModelOperation getReverseOperation() {
 		return new MethodReverseOperation();
 	}
 

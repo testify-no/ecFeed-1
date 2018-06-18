@@ -13,6 +13,7 @@ package com.ecfeed.core.model;
 import java.util.List;
 
 import com.ecfeed.core.utils.EvaluationResult;
+import com.ecfeed.core.utils.MessageStack;
 
 public class StaticStatement extends AbstractStatement {
 
@@ -100,6 +101,11 @@ public class StaticStatement extends AbstractStatement {
 
 	public void setValue(boolean value) {
 		fValue = EvaluationResult.convertFromBoolean(value);
+	}
+
+	@Override
+	public boolean isAmbiguous(List<List<ChoiceNode>> values, MessageStack messageStack) {
+		return false;
 	}
 
 }

@@ -15,12 +15,13 @@ import java.util.List;
 import com.ecfeed.core.utils.EvaluationResult;
 import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.JavaTypeHelper;
+import com.ecfeed.core.utils.MessageStack;
 import com.ecfeed.core.utils.ObjectHelper;
 
 public class ChoiceCondition implements IStatementCondition {
 
 	private ChoiceNode fRightChoice;
-	RelationStatement fParentRelationStatement;
+	private RelationStatement fParentRelationStatement;
 
 	public ChoiceCondition(ChoiceNode rightChoice, RelationStatement parentRelationStatement) {
 
@@ -34,7 +35,7 @@ public class ChoiceCondition implements IStatementCondition {
 		ChoiceNode choice = 
 				StatementConditionHelper.getChoiceForMethodParameter(
 						choices, fParentRelationStatement.getLeftParameter());
-		
+
 		if (choice == null) {
 			return EvaluationResult.INSUFFICIENT_DATA;
 		}
@@ -109,23 +110,64 @@ public class ChoiceCondition implements IStatementCondition {
 
 	private EvaluationResult evaluateChoice(ChoiceNode actualLeftChoice) {
 
+		String substituteType = getSubstituteType(actualLeftChoice);
+
+		boolean isRandomizedChoice = 
+				StatementConditionHelper.getChoiceRandomized(
+						actualLeftChoice, 
+						fParentRelationStatement.getLeftParameter());
+
+		if(isRandomizedChoice) {
+			return evaluateForRandomizedChoice(
+					actualLeftChoice.getValueString(), 
+					substituteType);
+		}
+
+		return evaluateForConstantChoice(actualLeftChoice, substituteType);
+	}
+
+	private String getSubstituteType(ChoiceNode leftChoice) {
+
+		String typeName = leftChoice.getParameter().getType();
+		return JavaTypeHelper.getSubstituteType(typeName);
+	}
+
+	private EvaluationResult evaluateForConstantChoice(
+			ChoiceNode actualLeftChoice,
+			String substituteType) {
+
 		EStatementRelation relation = fParentRelationStatement.getRelation();
+
 		if (relation == EStatementRelation.EQUAL || relation == EStatementRelation.NOT_EQUAL) {
 			return evaluateEqualityIncludingParents(relation, actualLeftChoice);
 		}
 
-		String typeName1 = actualLeftChoice.getParameter().getType();
-		String substituteType = JavaTypeHelper.getSubstituteType(typeName1);
-
 		String actualLeftValue = JavaTypeHelper.convertValueString(actualLeftChoice.getValueString(), substituteType);
 		String rightValue = JavaTypeHelper.convertValueString(fRightChoice.getValueString(), substituteType);
 
-
-		if (StatementConditionHelper.isRelationMatchQuiet(relation, substituteType, actualLeftValue, rightValue)) {
+		if (RelationMatcher.isMatchQuiet(relation, substituteType, actualLeftValue, rightValue)) {
 			return EvaluationResult.TRUE;
 		}
 
-		return EvaluationResult.FALSE;
+		return EvaluationResult.FALSE;		
+	}
+
+	private EvaluationResult evaluateForRandomizedChoice(
+			String leftChoiceStr,
+			String substituteType) {
+
+		EStatementRelation relation = fParentRelationStatement.getRelation();
+		String fRightValue = fRightChoice.getValueString();
+
+		if (JavaTypeHelper.isStringTypeName(substituteType)) {
+			return EvaluationResult.TRUE;
+		}
+
+		boolean result = 
+				RangeHelper.isRightRangeInLeftRange(
+						leftChoiceStr, fRightValue, relation, substituteType);
+
+		return EvaluationResult.convertFromBoolean(result);
 	}
 
 	private EvaluationResult evaluateEqualityIncludingParents(EStatementRelation relation, ChoiceNode choice) {
@@ -148,6 +190,49 @@ public class ChoiceCondition implements IStatementCondition {
 			ExceptionHelper.reportRuntimeException("Invalid relation.");
 			return EvaluationResult.FALSE;
 		}
+	}
+
+	@Override
+	public boolean isAmbiguous(List<List<ChoiceNode>> testDomain, MessageStack messageStack) {
+
+		String substituteType = ConditionHelper.getSubstituteType(fParentRelationStatement);
+
+		int leftParameterIndex = fParentRelationStatement.getLeftParameter().getMyIndex();
+		List<ChoiceNode> choicesForParameter = testDomain.get(leftParameterIndex);
+
+		EStatementRelation relation = fParentRelationStatement.getRelation();
+
+		for (ChoiceNode leftChoiceNode : choicesForParameter) {
+
+			if (isChoiceAmbiguous(leftChoiceNode, relation, substituteType, messageStack)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private boolean isChoiceAmbiguous(
+			ChoiceNode leftChoiceNode,
+			EStatementRelation relation,
+			String substituteType,
+			MessageStack messageStack) {
+
+		if (!leftChoiceNode.isRandomizedValue()) {
+			return false;
+		}
+
+		if (ConditionHelper.isRandomizedChoiceAmbiguous(
+				leftChoiceNode, fRightChoice.getValueString(), 
+				fParentRelationStatement, relation, substituteType)) {
+
+			ConditionHelper.addValuesMessageToStack(
+					leftChoiceNode.toString(), relation, fRightChoice.toString(), messageStack);
+
+			return true;
+		}
+
+		return false;
 	}
 
 }

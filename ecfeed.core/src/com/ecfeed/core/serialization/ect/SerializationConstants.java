@@ -39,6 +39,7 @@ public class SerializationConstants {
 	public static final String PROPERTY_ATTRIBUTE_TYPE = "type";
 	public static final String PROPERTY_ATTRIBUTE_VALUE = "value";
 	public static final String NODE_NAME_ATTRIBUTE = "name";
+	public static final String NODE_IS_RADOMIZED_ATTRIBUTE = "isRandomized";
 	public static final String VERSION_ATTRIBUTE = "version";
 	public static final String QUALIFIED_NAME_ATTRIBUTE = "qualifiedName";
 	public static final String TYPE_NAME_ATTRIBUTE = "type";

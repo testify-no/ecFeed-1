@@ -57,12 +57,14 @@ import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.ChoicesParentNode;
 import com.ecfeed.core.model.Constraint;
 import com.ecfeed.core.model.ConstraintNode;
+import com.ecfeed.core.model.EStatementRelation;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelHelper;
 import com.ecfeed.core.serialization.export.ExportTemplateFactory;
 import com.ecfeed.core.serialization.export.IExportTemplate;
 import com.ecfeed.core.utils.JavaTypeHelper;
+import com.ecfeed.core.utils.MessageStack;
 import com.ecfeed.core.utils.StringHolder;
 import com.ecfeed.ui.common.ApplyValueMode;
 import com.ecfeed.ui.common.CommonConstants;
@@ -100,6 +102,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 	private ExportTemplateFactory fExportTemplateFactory;
 	private IExportTemplate fExportTemplate;
 	DialogObjectToolkit.FileSelectionComposite fExportFileSelectionComposite;
+	private Text fAmbigousWarningText;
 
 	public final static int CONSTRAINTS_COMPOSITE = 1;
 	public final static int CHOICES_COMPOSITE = 1 << 1;
@@ -211,11 +214,56 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 				}
 			}
 		}
-
 		createButton(parent, IDialogConstants.CANCEL_ID,
 				IDialogConstants.CANCEL_LABEL, false);
 
+
 		updateOkButtonAndErrorMsg();
+	}
+
+	private void checkAndDisplayAmbiguousStateWarning() {
+
+		List<Constraint> constraints = getCheckedConstraints();
+		List<List<ChoiceNode>> input = getCheckedArguments();
+
+		MessageStack messageStack = new MessageStack();
+
+		for (Constraint constraint : constraints) {
+
+			if (constraint.isAmbiguous(input, messageStack)) {
+
+				final String message = createAmbiguousWarningMessage(messageStack); 
+				updateAmbiguousWarningLabel(true, message);
+				return;
+			}
+		}
+
+		updateAmbiguousWarningLabel(false, null);
+	}
+
+	private String createAmbiguousWarningMessage(MessageStack messageStack) {
+
+		StringBuilder sb = new StringBuilder();
+
+		final String MESSAGE = "Warning! Evaluation of constraints is ambiguous due to randomized choices.\nGenerated test suite may contain unexpected results.\n";
+		sb.append(MESSAGE);
+
+		if (!messageStack.isEmpty()) {
+			sb.append(messageStack.getLongMessage());
+			sb.append("\n");
+		}
+
+		return sb.toString();
+	}
+
+	private void updateAmbiguousWarningLabel(boolean isAmbiguousCondition, String message) {
+
+		if (!isAmbiguousCondition) {
+			fAmbigousWarningText.setText("");
+			return;
+		}
+
+		fAmbigousWarningText.setText(message);
 	}
 
 	@Override
@@ -228,6 +276,9 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		fMainContainer.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		createContent();
+
+		checkAndDisplayAmbiguousStateWarning();
+
 		return area;
 	}
 
@@ -273,11 +324,10 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		composite.setLayoutData(gridData);
 
 		Label selectConstraintsLabel = new Label(composite, SWT.NONE);
-		selectConstraintsLabel
-		.setText(Messages.DIALOG_GENERATE_TEST_SUITES_SELECT_CONSTRAINTS_LABEL);
+		selectConstraintsLabel.setText(
+				Messages.DIALOG_GENERATE_TEST_SUITES_SELECT_CONSTRAINTS_LABEL);
 
 		createConstraintsViewer(composite);
-
 		createConstraintsButtons(composite);
 	}
 
@@ -303,7 +353,14 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 				new GridData(SWT.FILL, SWT.FILL, true, true));
 		fConstraintsViewer.setInput(fMethod);
 		fConstraintsViewer.addCheckStateListener(new TreeCheckStateListener(
-				fConstraintsViewer));
+				fConstraintsViewer){
+			@Override
+			public void checkStateChanged(CheckStateChangedEvent event) {
+				super.checkStateChanged(event);
+				checkAndDisplayAmbiguousStateWarning();
+			}
+
+		});
 		fConstraintsViewer.expandAll();
 		for (String constraint : fMethod.getConstraintsNames()) {
 			fConstraintsViewer.setSubtreeChecked(constraint, true);
@@ -370,7 +427,6 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 
 		fParametersViewer.setInput(fMethod);
 		fParametersViewer.addCheckStateListener(new ChoiceTreeCheckStateListener(fParametersViewer));
-
 		for (MethodParameterNode parameter : fMethod.getMethodParameters()) {
 			fParametersViewer.expandAll();
 			fParametersViewer.setSubtreeChecked(parameter, true);
@@ -427,7 +483,15 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		if (!validateTargetFileText(message)) {
 			return false;
 		}
+		// ADR-REF
+		if (isAmbiguous(null, null)) {
+			System.out.println("Ambiguous state, todo");
+		}
 		return true;
+	}
+
+	private boolean isAmbiguous(EStatementRelation statementRelation, String leftValue) {
+		return false;
 	}
 
 	private boolean validateTestSuiteName(StringHolder message) {
@@ -449,7 +513,6 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 	}
 
 	private boolean validateMethodParameters(boolean onlyExecutable, StringHolder message) {
-
 		for (MethodParameterNode parameter : fMethod.getMethodParameters()) {
 			if (!validateOneParameter(parameter, onlyExecutable, message)) {
 				return false;
@@ -547,6 +610,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 	}
 
 	private void createGeneratorSelectionComposite(Composite container) {
+
 		Composite generatorComposite = new Composite(container, SWT.NONE);
 		generatorComposite.setLayout(new GridLayout(2, false));
 		generatorComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
@@ -558,10 +622,11 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		generatorLabel.setText("Generator");
 
 		createGeneratorViewer(generatorComposite);
+
+		fAmbigousWarningText = DialogObjectToolkit.createGridText(container, 60, new String());
 	}
 
 	private void createTestCasesExportComposite(Composite parentComposite) {
-
 		Composite advancedButtonComposite = 
 				DialogObjectToolkit.createGridComposite(parentComposite, 1);
 
@@ -817,7 +882,6 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 				constraints.add((Constraint) obj);
 			}
 		}
-
 		fConstraints = constraints;
 	}
 
@@ -839,6 +903,36 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		}
 	}
 
+	private List<Constraint> getCheckedConstraints() {
+		Object[] checkedObjects = fConstraintsViewer.getCheckedElements();
+		List<Constraint> constraints = new ArrayList<Constraint>();
+		for (Object obj : checkedObjects) {
+			if (obj instanceof Constraint) {
+				constraints.add((Constraint) obj);
+			}
+		}
+		return constraints;
+	}
+
+	private List<List<ChoiceNode>> getCheckedArguments() {
+		List<MethodParameterNode> parameters = fMethod.getMethodParameters();
+		ArrayList<List<ChoiceNode>> algorithmInput = new ArrayList<>();
+		for (int i = 0; i < parameters.size(); i++) {
+			List<ChoiceNode> choices = new ArrayList<ChoiceNode>();
+			if (parameters.get(i).isExpected()) {
+				choices.add(expectedValueChoice(parameters.get(i)));
+			} else {
+				for (ChoiceNode choice : parameters.get(i).getLeafChoicesWithCopies()) {
+					if (fParametersViewer.getChecked(choice)) {
+						choices.add(choice);
+					}
+				}
+			}
+			algorithmInput.add(choices);
+		}
+		return algorithmInput;
+	}
+
 	private ChoiceNode expectedValueChoice(MethodParameterNode c) {
 		ChoiceNode p = new ChoiceNode("", c.getDefaultValue());
 		p.setParent(c);
@@ -858,7 +952,6 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		public ChoiceTreeCheckStateListener(CheckboxTreeViewer treeViewer) {
 			super(treeViewer);
 		}
-
 		@Override
 		public void checkStateChanged(CheckStateChangedEvent event) {
 			super.checkStateChanged(event);
@@ -866,6 +959,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 					&& ((MethodParameterNode) event.getElement()).isExpected()) {
 				fParametersViewer.setChecked(event.getElement(), true);
 			} else {
+				checkAndDisplayAmbiguousStateWarning();
 				updateOkButtonAndErrorMsg();
 			}
 		}

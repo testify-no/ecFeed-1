@@ -12,6 +12,7 @@ package com.ecfeed.core.adapter.operations;
 
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.ITypeAdapter;
+import com.ecfeed.core.adapter.ITypeAdapter.EConversionMode;
 import com.ecfeed.core.adapter.java.Messages;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelOperationException;
@@ -19,11 +20,11 @@ import com.ecfeed.core.model.ModelOperationException;
 public class ParameterOperationSetDefaultValue extends AbstractModelOperation {
 
 	private MethodParameterNode fTarget;
-	private ITypeAdapter fTypeAdapter;
+	private ITypeAdapter<?> fTypeAdapter;
 	private String fNewValue;
 	private String fOriginalValue;
 
-	public ParameterOperationSetDefaultValue(MethodParameterNode target, String newValue, ITypeAdapter typeAdapter) {
+	public ParameterOperationSetDefaultValue(MethodParameterNode target, String newValue, ITypeAdapter<?> typeAdapter) {
 		super(OperationNames.SET_DEFAULT_VALUE);
 		fTarget = target;
 		fNewValue = newValue;
@@ -33,7 +34,7 @@ public class ParameterOperationSetDefaultValue extends AbstractModelOperation {
 
 	@Override
 	public void execute() throws ModelOperationException {
-		String convertedValue = fTypeAdapter.convert(fNewValue);
+		String convertedValue = fTypeAdapter.convert(fNewValue, false, EConversionMode.QUIET);
 		if(convertedValue == null){
 			ModelOperationException.report(Messages.CATEGORY_DEFAULT_VALUE_REGEX_PROBLEM);
 		}
@@ -42,7 +43,7 @@ public class ParameterOperationSetDefaultValue extends AbstractModelOperation {
 	}
 
 	@Override
-	public IModelOperation reverseOperation() {
+	public IModelOperation getReverseOperation() {
 		return new ParameterOperationSetDefaultValue(fTarget, fOriginalValue, fTypeAdapter);
 	}
 

@@ -13,6 +13,7 @@ package com.ecfeed.core.adapter.operations;
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.ITypeAdapter;
 import com.ecfeed.core.adapter.ITypeAdapterProvider;
+import com.ecfeed.core.adapter.ITypeAdapter.EConversionMode;
 import com.ecfeed.core.adapter.java.Messages;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.ChoicesParentNode;
@@ -89,18 +90,21 @@ public class GenericOperationAddChoice extends BulkOperation {
 		}
 
 		@Override
-		public IModelOperation reverseOperation() {
+		public IModelOperation getReverseOperation() {
 
 			return new GenericOperationRemoveChoice(fChoicesParentNode, fChoice, fAdapterProvider, false);
 		}
 
+		//TODO 13
 		private void validateChoiceValue(ChoiceNode choice) throws ModelOperationException {
 
 			if (choice.isAbstract() == false) {
 
 				String type = fChoicesParentNode.getParameter().getType();
-				ITypeAdapter adapter = fAdapterProvider.getAdapter(type);
-				String newValue = adapter.convert(choice.getValueString());
+				ITypeAdapter<?> adapter = fAdapterProvider.getAdapter(type);
+				String newValue = 
+						adapter.convert(
+								choice.getValueString(), choice.isRandomizedValue(), EConversionMode.QUIET);
 
 				if(newValue == null){
 					ModelOperationException.report(Messages.PARTITION_VALUE_PROBLEM(choice.getValueString()));

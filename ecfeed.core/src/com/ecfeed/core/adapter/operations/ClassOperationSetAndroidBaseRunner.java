@@ -33,7 +33,7 @@ public class ClassOperationSetAndroidBaseRunner extends AbstractModelOperation {
 	}
 
 	@Override
-	public IModelOperation reverseOperation() {
+	public IModelOperation getReverseOperation() {
 		return new ClassOperationSetAndroidBaseRunner(fTarget, fOriginalValue);
 	}
 

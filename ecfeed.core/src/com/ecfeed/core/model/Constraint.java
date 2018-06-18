@@ -15,24 +15,64 @@ import java.util.List;
 import java.util.Set;
 
 import com.ecfeed.core.generators.api.IConstraint;
-import com.ecfeed.core.model.ChoiceCondition;
-import com.ecfeed.core.model.LabelCondition;
 import com.ecfeed.core.utils.EvaluationResult;
+import com.ecfeed.core.utils.MessageStack;
 
 public class Constraint implements IConstraint<ChoiceNode> {
 
 	private final int fId;
 	private static int fLastId = 0;
 
+	private String fName;
 	private AbstractStatement fPremise;
 	private AbstractStatement fConsequence;
 
 
-	public Constraint(AbstractStatement premise, AbstractStatement consequence) {
+	public Constraint(String name, AbstractStatement premise, AbstractStatement consequence) {
 
 		fId = fLastId++;
+
+		if (name == null) {
+			fName = "constraint";
+		}
+		fName = name;
 		fPremise = premise;
 		fConsequence = consequence;
+	}
+
+	public String getName() {
+		return fName;
+	}
+
+	public void setName(String name) {
+		fName = name;
+	}	
+
+	public boolean isAmbiguous(
+			List<List<ChoiceNode>> testDomain, 
+			MessageStack outWhyAmbiguous) {
+
+		if (isAmbiguousForPremiseOrConsequence(testDomain, outWhyAmbiguous)) {
+			ConditionHelper.addConstraintNameToMesageStack(getName(), outWhyAmbiguous);
+			return true;
+		}
+
+		return false;
+
+	}
+
+	private boolean isAmbiguousForPremiseOrConsequence(
+			List<List<ChoiceNode>> testDomain, MessageStack outWhyAmbiguous) {
+
+		if (fPremise.isAmbiguous(testDomain, outWhyAmbiguous)) {
+			return true;
+		}
+
+		if (fConsequence.isAmbiguous(testDomain, outWhyAmbiguous)) {
+			return true;
+		}
+
+		return false;
 	}
 
 	@Override
@@ -41,13 +81,13 @@ public class Constraint implements IConstraint<ChoiceNode> {
 		if (fPremise == null) { 
 			return EvaluationResult.TRUE;
 		}
-		
+
 		EvaluationResult premiseEvaluationResult = fPremise.evaluate(values); 
 
 		if (premiseEvaluationResult == EvaluationResult.FALSE) {
 			return EvaluationResult.TRUE;
 		}
-		
+
 		if (premiseEvaluationResult == EvaluationResult.INSUFFICIENT_DATA) {
 			return EvaluationResult.INSUFFICIENT_DATA;
 		}
@@ -57,11 +97,11 @@ public class Constraint implements IConstraint<ChoiceNode> {
 		}
 
 		EvaluationResult consequenceEvaluationResult = fConsequence.evaluate(values);
-		
+
 		if (consequenceEvaluationResult == EvaluationResult.TRUE) {
 			return EvaluationResult.TRUE;
 		}
-		
+
 		if (consequenceEvaluationResult == EvaluationResult.INSUFFICIENT_DATA) {
 			return EvaluationResult.INSUFFICIENT_DATA;
 		}
@@ -174,7 +214,7 @@ public class Constraint implements IConstraint<ChoiceNode> {
 		AbstractStatement premise = fPremise.getCopy();
 		AbstractStatement consequence = fConsequence.getCopy();
 
-		return new Constraint(premise, consequence);
+		return new Constraint(new String(fName), premise, consequence);
 	}
 
 	public boolean updateRefrences(MethodNode method) {
@@ -204,8 +244,11 @@ public class Constraint implements IConstraint<ChoiceNode> {
 	public Set<AbstractParameterNode> getReferencedParameters() {
 
 		try{
-			Set<AbstractParameterNode> referenced = (Set<AbstractParameterNode>)fPremise.accept(new ReferencedParametersProvider());
-			referenced.addAll((Set<AbstractParameterNode>)fConsequence.accept(new ReferencedParametersProvider()));
+			Set<AbstractParameterNode> referenced = 
+					(Set<AbstractParameterNode>)fPremise.accept(new ReferencedParametersProvider());
+			
+			referenced.addAll(
+					(Set<AbstractParameterNode>)fConsequence.accept(new ReferencedParametersProvider()));
 
 			return referenced;
 		}
@@ -365,7 +408,11 @@ public class Constraint implements IConstraint<ChoiceNode> {
 		@Override
 		public Object visit(ParameterCondition condition) throws Exception {
 
-			return new HashSet<MethodParameterNode>();
+			Set<AbstractParameterNode> set = new HashSet<AbstractParameterNode>();
+			
+			set.add(condition.getRightParameterNode());
+			
+			return set;
 		}
 
 		@Override
@@ -447,5 +494,4 @@ public class Constraint implements IConstraint<ChoiceNode> {
 		}
 
 	}
-
 }

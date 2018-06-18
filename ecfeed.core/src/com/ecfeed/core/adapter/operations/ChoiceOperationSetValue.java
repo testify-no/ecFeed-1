@@ -11,7 +11,9 @@
 package com.ecfeed.core.adapter.operations;
 
 import com.ecfeed.core.adapter.IModelOperation;
+import com.ecfeed.core.adapter.ITypeAdapter;
 import com.ecfeed.core.adapter.ITypeAdapterProvider;
+import com.ecfeed.core.adapter.ITypeAdapter.EConversionMode;
 import com.ecfeed.core.adapter.java.AdapterConstants;
 import com.ecfeed.core.adapter.java.Messages;
 import com.ecfeed.core.model.AbstractParameterNode;
@@ -87,7 +89,7 @@ public class ChoiceOperationSetValue extends AbstractModelOperation {
 		}
 
 		@Override
-		public IModelOperation reverseOperation() {
+		public IModelOperation getReverseOperation() {
 			return new ChoiceOperationSetValue(fTarget, fNewValue, fAdapterProvider);
 		}
 	}
@@ -102,7 +104,8 @@ public class ChoiceOperationSetValue extends AbstractModelOperation {
 
 	@Override
 	public void execute() throws ModelOperationException {
-		String convertedValue = validateChoiceValue(fTarget.getParameter().getType(), fNewValue);
+
+		String convertedValue = adaptChoiceValue(fTarget.getParameter().getType(), fNewValue);
 		if(convertedValue == null){
 			ModelOperationException.report(Messages.PARTITION_VALUE_PROBLEM(fNewValue));
 		}
@@ -118,7 +121,7 @@ public class ChoiceOperationSetValue extends AbstractModelOperation {
 	}
 
 	@Override
-	public IModelOperation reverseOperation() {
+	public IModelOperation getReverseOperation() {
 		return new ReverseOperation();
 	}
 
@@ -127,9 +130,19 @@ public class ChoiceOperationSetValue extends AbstractModelOperation {
 		return "setValue[" + fTarget + "](" + fNewValue + ")";
 	}
 
-	private String validateChoiceValue(String type, String value) {
-		if (value.length() > AdapterConstants.MAX_PARTITION_VALUE_STRING_LENGTH) return null;
+	private String adaptChoiceValue(String type, String value) throws ModelOperationException {
 
-		return fAdapterProvider.getAdapter(type).convert(value);
+		if (value.length() > AdapterConstants.MAX_PARTITION_VALUE_STRING_LENGTH) {
+			return null;
+		}
+
+		ITypeAdapter<?> typeAdapter = fAdapterProvider.getAdapter(type); 
+		
+		try {
+			return typeAdapter.convert(value, fTarget.isRandomizedValue(), EConversionMode.WITH_EXCEPTION);
+		} catch (RuntimeException ex) {
+			ModelOperationException.report(ex.getMessage());
+		}
+		return null;
 	}
 }

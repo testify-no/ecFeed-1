@@ -32,6 +32,11 @@ public class ApplicationContext {
 		fIsStandaloneApplication = true;
 	}
 
+	public static void setPluginApplication() {
+
+		fIsStandaloneApplication = false;
+	}	
+
 	public static void setExportTargetFile(String exportFileName) {
 
 		fExportFileName = exportFileName;

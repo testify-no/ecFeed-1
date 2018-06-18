@@ -20,6 +20,7 @@ import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.NodePropertyDefs;
+import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.common.utils.SwtObjectHelper;
 import com.ecfeed.ui.modelif.AbstractParameterInterface;
@@ -104,7 +105,7 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 
 			getMainSection().setText(parameter.toString());
 			fNameText.setText(parameter.getName());
-			fTypeCombo.setItems(AbstractParameterInterface.supportedPrimitiveTypes());
+			fTypeCombo.setItems(JavaTypeHelper.getSupportedJavaTypes());
 			fTypeCombo.setText(parameter.getType());
 
 			refreshWebParameterSection();

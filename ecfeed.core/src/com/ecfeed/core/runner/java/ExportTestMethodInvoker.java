@@ -19,6 +19,7 @@ import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.runner.ITestMethodInvoker;
+import com.ecfeed.core.utils.ExceptionHelper;
 
 public class ExportTestMethodInvoker implements ITestMethodInvoker {
 
@@ -54,7 +55,16 @@ public class ExportTestMethodInvoker implements ITestMethodInvoker {
 
 		for (int cnt = 0; cnt < fMethodNode.getParametersCount(); ++cnt) {
 			MethodParameterNode methodParameterNode = fMethodParameters.get(cnt);
-			choiceNodes.add(new ChoiceNode(methodParameterNode.getName(), arguments[cnt].toString()));
+
+			Object argument = arguments[cnt];
+
+			if (argument == null) {
+				final String message = "Argument " + cnt + " must not be null when creating a test case.";
+				ExceptionHelper.reportRuntimeException(message);
+			}
+
+			ChoiceNode choiceNode = new ChoiceNode(methodParameterNode.getName(), arguments[cnt].toString());
+			choiceNodes.add(choiceNode);
 		}
 
 		TestCaseNode testCaseNode = new TestCaseNode("name", choiceNodes); 

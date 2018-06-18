@@ -14,9 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ecfeed.core.utils.EvaluationResult;
+import com.ecfeed.core.utils.MessageStack;
 
 public class StatementArray extends AbstractStatement {
-
 	private EStatementOperator fOperator;
 	private List<AbstractStatement> fStatements;
 
@@ -240,4 +240,15 @@ public class StatementArray extends AbstractStatement {
 		addStatement(statement, fStatements.size());
 	}
 
+	@Override
+	public boolean isAmbiguous(List<List<ChoiceNode>> values, MessageStack messageStack) {
+
+		for (AbstractStatement statement : fStatements) {
+			if (statement.isAmbiguous(values, messageStack)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
 }

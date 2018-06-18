@@ -13,6 +13,9 @@ package com.ecfeed.core.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.codec.binary.StringUtils;
+
+import com.ecfeed.core.utils.EvaluationResult;
 import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.StringHelper;
@@ -26,14 +29,50 @@ class StatementRelationNames {
 	static final String RELATION_GREATER_EQUAL = ">=";
 }
 
-public enum EStatementRelation {
+public enum EStatementRelation{
 
-	EQUAL(StatementRelationNames.RELATION_EQUAL), 
-	NOT_EQUAL(StatementRelationNames.RELATION_NOT_EQUAL),
-	LESS_THAN(StatementRelationNames.RELATION_LESS_THAN), 
-	LESS_EQUAL(StatementRelationNames.RELATION_LESS_EQUAL),
-	GREATER_THAN(StatementRelationNames.RELATION_GREATER_THAN),
-	GREATER_EQUAL(StatementRelationNames.RELATION_GREATER_EQUAL);
+	EQUAL(StatementRelationNames.RELATION_EQUAL) {
+		@Override
+		public boolean isMatch(String typeName, String leftString, String rightString) {
+			return StringUtils.equals(leftString, rightString);
+		}
+	}, 
+	NOT_EQUAL(StatementRelationNames.RELATION_NOT_EQUAL) {
+		@Override
+		public boolean isMatch(String typeName, String leftString, String rightString) {
+			return RelationMatcher.isRelationMatch(this, typeName, leftString, rightString);
+		}
+	},
+	LESS_THAN(StatementRelationNames.RELATION_LESS_THAN) {
+		@Override
+		public boolean isMatch(String typeName, String leftString, String rightString) {
+			return RelationMatcher.isRelationMatch(this, typeName, leftString, rightString);
+		}
+	}, 
+	LESS_EQUAL(StatementRelationNames.RELATION_LESS_EQUAL) {
+		@Override
+		public boolean isMatch(String typeName, String leftString, String rightString) {
+			return RelationMatcher.isRelationMatch(this, typeName, leftString, rightString);
+		}
+	},
+	GREATER_THAN(StatementRelationNames.RELATION_GREATER_THAN) {
+		@Override
+		public boolean isMatch(String typeName, String leftString, String rightString) {
+			return RelationMatcher.isRelationMatch(this, typeName, leftString, rightString);
+		}
+	},
+	GREATER_EQUAL(StatementRelationNames.RELATION_GREATER_EQUAL) {
+		@Override
+		public boolean isMatch(String typeName, String leftString, String rightString) {
+			return RelationMatcher.isRelationMatch(this, typeName, leftString, rightString);
+		}
+	};
+
+	public abstract boolean isMatch(String typeName, String leftString, String rightString);
+
+	public EvaluationResult evalAsEvaluationResult(String typeName, String leftString, String rightString) {
+		return EvaluationResult.convertFromBoolean(this.isMatch(typeName, leftString, rightString));
+	}
 
 	private String fName;
 
@@ -138,9 +177,19 @@ public enum EStatementRelation {
 		return false;
 	}
 
-	public static boolean isMatch(EStatementRelation relation, double actualValue, double valueToMatch) {
+	public static boolean isMatch(EStatementRelation relation, double leftValue, double rightValue) {
 
-		int compareResult = Double.compare(actualValue, valueToMatch);
+		int compareResult = Double.compare(leftValue, rightValue);
+
+		if (isMatch(relation, compareResult)) {
+			return true;
+		}
+		return false;
+	}
+	
+	public static boolean isMatch(EStatementRelation relation, long leftValue, long rightValue) {
+
+		int compareResult = Long.compare(leftValue, rightValue);
 
 		if (isMatch(relation, compareResult)) {
 			return true;

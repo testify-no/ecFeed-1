@@ -69,7 +69,7 @@ public class ClassOperationAddMethod extends AbstractModelOperation{
 	}
 
 	@Override
-	public IModelOperation reverseOperation() {
+	public IModelOperation getReverseOperation() {
 		return new ClassOperationRemoveMethod(fClassNode, fMethod);
 	}
 
