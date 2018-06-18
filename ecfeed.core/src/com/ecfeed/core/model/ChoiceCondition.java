@@ -159,8 +159,8 @@ public class ChoiceCondition implements IStatementCondition {
 		EStatementRelation relation = fParentRelationStatement.getRelation();
 		String fRightValue = fRightChoice.getValueString();
 
-		if (JavaTypeHelper.TYPE_NAME_STRING.equals(substituteType)) {
-			return EvaluationResult.convertFromBoolean(leftChoiceStr.matches(fRightValue));
+		if (JavaTypeHelper.isStringTypeName(substituteType)) {
+			return EvaluationResult.TRUE;
 		}
 
 		boolean result = 

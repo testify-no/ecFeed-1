@@ -31,19 +31,32 @@ public class ParameterCondition implements IStatementCondition {
 	@Override
 	public EvaluationResult evaluate(List<ChoiceNode> choices) {
 
-		String leftChoiceStr = getChoiceString(choices, fParentRelationStatement.getLeftParameter());
-		if (leftChoiceStr == null) {
-			return EvaluationResult.INSUFFICIENT_DATA;
+		String substituteType = 
+				JavaTypeHelper.getSubstituteType(
+						fParentRelationStatement.getLeftParameter().getType(), fRightParameterNode.getType());
+
+		ChoiceNode rightChoiceNode = getChoiceNode(choices, fRightParameterNode);
+
+		if (JavaTypeHelper.isStringTypeName(substituteType) 
+				&& rightChoiceNode.isRandomizedValue() == true) {
+
+			return EvaluationResult.TRUE;
 		}
+
+		return evaluateForLeftAndRightString(choices, substituteType);
+	}
+
+	private EvaluationResult evaluateForLeftAndRightString(List<ChoiceNode> choices, String substituteType) {
 
 		String rightChoiceStr = getChoiceString(choices, fRightParameterNode);
 		if (rightChoiceStr == null) {
 			return EvaluationResult.INSUFFICIENT_DATA;
 		}
 
-		String substituteType = 
-				JavaTypeHelper.getSubstituteType(
-						fParentRelationStatement.getLeftParameter().getType(), fRightParameterNode.getType());
+		String leftChoiceStr = getChoiceString(choices, fParentRelationStatement.getLeftParameter());
+		if (leftChoiceStr == null) {
+			return EvaluationResult.INSUFFICIENT_DATA;
+		}
 
 		EStatementRelation relation = fParentRelationStatement.getRelation();
 
@@ -56,14 +69,16 @@ public class ParameterCondition implements IStatementCondition {
 		}
 
 		return evaluateForConstantChoice(leftChoiceStr, rightChoiceStr, relation, substituteType);
+
 	}
 
 	private EvaluationResult evaluateForRandomizedChoice(
 			String leftChoiceStr, String rightChoiceStr, EStatementRelation relation, String substituteType) {
 
-		if (JavaTypeHelper.TYPE_NAME_STRING.equals(substituteType)) {
+		if (JavaTypeHelper.isStringTypeName(substituteType)) {
 
-			return EvaluationResult.convertFromBoolean(leftChoiceStr.matches(rightChoiceStr));
+			return EvaluationResult.TRUE;
+
 		} else {
 
 			boolean result = 
@@ -86,7 +101,7 @@ public class ParameterCondition implements IStatementCondition {
 
 	private static String getChoiceString(List<ChoiceNode> choices, MethodParameterNode methodParameterNode) {
 
-		ChoiceNode choiceNode = StatementConditionHelper.getChoiceForMethodParameter(choices, methodParameterNode);
+		ChoiceNode choiceNode = getChoiceNode(choices, methodParameterNode);
 
 		if (choiceNode == null) {
 			return null;
@@ -94,6 +109,12 @@ public class ParameterCondition implements IStatementCondition {
 
 		return choiceNode.getValueString();
 	}
+
+	private static ChoiceNode getChoiceNode(List<ChoiceNode> choices, MethodParameterNode methodParameterNode) {
+
+		return StatementConditionHelper.getChoiceForMethodParameter(choices, methodParameterNode);
+	}
+
 
 	@Override
 	public boolean adapt(List<ChoiceNode> values) {
