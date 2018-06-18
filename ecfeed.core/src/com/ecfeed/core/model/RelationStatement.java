@@ -92,7 +92,7 @@ public class RelationStatement extends AbstractStatement implements IRelationalS
 	public boolean isAmbiguous(List<List<ChoiceNode>> testDomain, MessageStack messageStack) {
 
 		try {
-			if (fRightCondition.isAmbiguous(testDomain, fRelation, messageStack)) {
+			if (fRightCondition.isAmbiguous(testDomain, messageStack)) {
 				ConditionHelper.addRelStatementToMesageStack(this, messageStack);
 				return true;
 			}
