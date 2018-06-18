@@ -390,7 +390,7 @@ public class ConstraintTestWithFullModel {
 	}
 
 	@Test
-	public void constraintShouldEvaluateToFalseForRandomizedStrings() {
+	public void constraintShouldEvaluateToTrueForRandomizedStringsAndValueCondition() {
 
 		StringBuilder sb = new StringBuilder(); 
 
@@ -416,7 +416,107 @@ public class ConstraintTestWithFullModel {
 		xml = xml.replace("'", "\"");
 
 		List<List<ChoiceNode>> cartesianTestResults = generateResults(xml);
-		assertEquals(0, cartesianTestResults.size());
+		assertEquals(1, cartesianTestResults.size());
+	}
+
+	@Test
+	public void constraintShouldEvaluateToTrueForRandomizedStringsAndChoiceCondition() {
+
+		StringBuilder sb = new StringBuilder(); 
+
+		sb.append("<?xml version='1.0' encoding='UTF-8'?>\n");
+		sb.append("<Model name='ChangeRandomized' version='2'>\n");
+		sb.append("    <Class name='com.example.test.TestClass'>\n");
+		sb.append("        <Method name='testMethod'>\n");
+		sb.append("            <Parameter name='arg' type='String' isExpected='false' expected='0' linked='false'>\n");
+		sb.append("                <Choice name='choice1' value='1' isRandomized='true'/>\n");
+		sb.append("                <Choice name='choice2' value='2' isRandomized='true'/>\n");
+		sb.append("            </Parameter>\n");
+		sb.append("            <Constraint name='constraint'>\n");
+		sb.append("                <Premise>\n");
+		sb.append("                    <StaticStatement value='true'/>\n");
+		sb.append("                </Premise>\n");
+		sb.append("                <Consequence>\n");
+		sb.append("                    <Statement choice='choice1' parameter='arg' relation='='/>\n");
+		sb.append("                </Consequence>\n");
+		sb.append("            </Constraint>\n");
+		sb.append("        </Method>\n");
+		sb.append("    </Class>\n");
+		sb.append("</Model>\n");		
+
+		String xml = sb.toString();
+		xml = xml.replace("'", "\"");
+
+		List<List<ChoiceNode>> cartesianTestResults = generateResults(xml);
+		assertEquals(2, cartesianTestResults.size());
+	}	
+
+	@Test
+	public void constraintShouldEvaluateToTrueForRandomizedStringsAndParameterCondition1() {
+
+		StringBuilder sb = new StringBuilder(); 
+
+		sb.append("<?xml version='1.0' encoding='UTF-8'?>\n");
+		sb.append("<Model name='ChangeRandomized' version='2'>\n");
+		sb.append("    <Class name='com.example.test.TestClass'>\n");
+		sb.append("        <Method name='testMethod'>\n");
+		sb.append("            <Parameter name='arg1' type='String' isExpected='false' expected='0' linked='false'>\n");
+		sb.append("                <Choice name='choice1' value='1' isRandomized='true'/>\n");
+		sb.append("            </Parameter>\n");
+		sb.append("            <Parameter name='arg2' type='String' isExpected='false' expected='0' linked='false'>\n");
+		sb.append("                <Choice name='choice' value='2' isRandomized='false'/>\n");
+		sb.append("            </Parameter>\n");
+		sb.append("            <Constraint name='constraint'>\n");
+		sb.append("                <Premise>\n");
+		sb.append("                    <StaticStatement value='true'/>\n");
+		sb.append("                </Premise>\n");
+		sb.append("                <Consequence>\n");
+		sb.append("                    <ParameterStatement rightParameter='arg2' parameter='arg1' relation='='/>\n");
+		sb.append("                </Consequence>\n");
+		sb.append("            </Constraint>\n");
+		sb.append("        </Method>\n");
+		sb.append("    </Class>\n");
+		sb.append("</Model>\n");
+
+		String xml = sb.toString();
+		xml = xml.replace("'", "\"");
+
+		List<List<ChoiceNode>> cartesianTestResults = generateResults(xml);
+		assertEquals(1, cartesianTestResults.size());
+	}	
+
+	@Test
+	public void constraintShouldEvaluateToTrueForRandomizedStringsAndParameterCondition2() {
+
+		StringBuilder sb = new StringBuilder(); 
+
+		sb.append("<?xml version='1.0' encoding='UTF-8'?>\n");
+		sb.append("<Model name='ChangeRandomized' version='2'>\n");
+		sb.append("    <Class name='com.example.test.TestClass'>\n");
+		sb.append("        <Method name='testMethod'>\n");
+		sb.append("            <Parameter name='arg1' type='String' isExpected='false' expected='0' linked='false'>\n");
+		sb.append("                <Choice name='choice1' value='1' isRandomized='false'/>\n");
+		sb.append("            </Parameter>\n");
+		sb.append("            <Parameter name='arg2' type='String' isExpected='false' expected='0' linked='false'>\n");
+		sb.append("                <Choice name='choice' value='2' isRandomized='true'/>\n");
+		sb.append("            </Parameter>\n");
+		sb.append("            <Constraint name='constraint'>\n");
+		sb.append("                <Premise>\n");
+		sb.append("                    <StaticStatement value='true'/>\n");
+		sb.append("                </Premise>\n");
+		sb.append("                <Consequence>\n");
+		sb.append("                    <ParameterStatement rightParameter='arg2' parameter='arg1' relation='='/>\n");
+		sb.append("                </Consequence>\n");
+		sb.append("            </Constraint>\n");
+		sb.append("        </Method>\n");
+		sb.append("    </Class>\n");
+		sb.append("</Model>\n");
+
+		String xml = sb.toString();
+		xml = xml.replace("'", "\"");
+
+		List<List<ChoiceNode>> cartesianTestResults = generateResults(xml);
+		assertEquals(1, cartesianTestResults.size());
 	}	
 
 	@Test
@@ -513,7 +613,7 @@ public class ConstraintTestWithFullModel {
 
 		assertFalse(constraintNode.isConsistent());
 	}
-	
+
 	@Test
 	public void constraintShouldNotBeConsistentWhenParameter2IsMissing() {
 
@@ -540,7 +640,7 @@ public class ConstraintTestWithFullModel {
 		sb.append("        </Method>\n");
 		sb.append("    </Class>\n");
 		sb.append("</Model>\n");
-		
+
 		String xml = sb.toString();
 		xml = xml.replace("'", "\"");
 
@@ -549,11 +649,11 @@ public class ConstraintTestWithFullModel {
 		MethodNode methodNode = classNode.getMethods().get(0);
 		MethodParameterNode methodParameterNode2 = methodNode.getMethodParameter(1);
 		ConstraintNode constraintNode = methodNode.getConstraintNodes().get(0);
-		
+
 		assertTrue(constraintNode.isConsistent());
-		
+
 		methodNode.removeParameter(methodParameterNode2);
-		
+
 		assertFalse(constraintNode.isConsistent());
 	}
 
