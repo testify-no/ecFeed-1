@@ -58,6 +58,10 @@ public class ConditionHelper {
 	public static void addValuesMessageToStack(
 			String left, EStatementRelation relation, String right, MessageStack messageStack) {
 
+		if (messageStack == null) {
+			return;
+		}
+
 		messageStack.addMessage(createMessage("Values", left + relation.toString() + right));
 	}
 

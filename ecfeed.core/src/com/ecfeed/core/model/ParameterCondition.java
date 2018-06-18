@@ -31,19 +31,43 @@ public class ParameterCondition implements IStatementCondition {
 	@Override
 	public EvaluationResult evaluate(List<ChoiceNode> choices) {
 
+		if (isLeftChoiceRandomizedString(choices)) {
+			return EvaluationResult.TRUE; 
+		}
+
+		if (isRightChoiceRandomizedString(choices)) {
+			return EvaluationResult.TRUE;
+		}
+
 		String substituteType = 
 				JavaTypeHelper.getSubstituteType(
 						fParentRelationStatement.getLeftParameter().getType(), fRightParameterNode.getType());
 
-		ChoiceNode rightChoiceNode = getChoiceNode(choices, fRightParameterNode);
+		return evaluateForLeftAndRightString(choices, substituteType);
+	}
 
-		if (JavaTypeHelper.isStringTypeName(substituteType) 
-				&& rightChoiceNode.isRandomizedValue() == true) {
+	private boolean isLeftChoiceRandomizedString(List<ChoiceNode> choices) {
 
-			return EvaluationResult.TRUE;
+		return isChoiceRandomizedString(choices, fParentRelationStatement.getLeftParameter());
+	}
+
+	private boolean isRightChoiceRandomizedString(List<ChoiceNode> choices) {
+
+		return isChoiceRandomizedString(choices, fRightParameterNode);
+	}
+
+	private boolean isChoiceRandomizedString(
+			List<ChoiceNode> choices, MethodParameterNode methodParameterNode) {
+
+		ChoiceNode leftChoiceNode = getChoiceNode(choices, methodParameterNode);
+
+		if (JavaTypeHelper.isStringTypeName(methodParameterNode.getType())
+				&& leftChoiceNode.isRandomizedValue()) {
+
+			return true;
 		}
 
-		return evaluateForLeftAndRightString(choices, substituteType);
+		return false;
 	}
 
 	private EvaluationResult evaluateForLeftAndRightString(List<ChoiceNode> choices, String substituteType) {
@@ -193,9 +217,7 @@ public class ParameterCondition implements IStatementCondition {
 	}
 
 	@Override
-	public boolean isAmbiguous(
-			List<List<ChoiceNode>> domain, 
-			MessageStack messageStack) {
+	public boolean isAmbiguous(List<List<ChoiceNode>> domain, MessageStack messageStack) {
 
 		String substituteType = ConditionHelper.getSubstituteType(fParentRelationStatement);
 
