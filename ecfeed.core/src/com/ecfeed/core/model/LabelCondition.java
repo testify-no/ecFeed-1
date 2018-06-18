@@ -111,10 +111,7 @@ public class LabelCondition implements IStatementCondition {
 	}
 
 	@Override
-	public boolean isAmbiguous(
-			List<List<ChoiceNode>> domain, 
-			EStatementRelation relation,
-			MessageStack messageStack) {
+	public boolean isAmbiguous(List<List<ChoiceNode>> domain, MessageStack messageStack) {
 		return false;
 	}
 

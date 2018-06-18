@@ -193,15 +193,14 @@ public class ChoiceCondition implements IStatementCondition {
 	}
 
 	@Override
-	public boolean isAmbiguous(
-			List<List<ChoiceNode>> testDomain, 
-			EStatementRelation relation,
-			MessageStack messageStack) {
+	public boolean isAmbiguous(List<List<ChoiceNode>> testDomain, MessageStack messageStack) {
 
 		String substituteType = ConditionHelper.getSubstituteType(fParentRelationStatement);
 
-		int leftIndex2 = fParentRelationStatement.getLeftParameter().getMyIndex();
-		List<ChoiceNode> choicesForParameter = testDomain.get(leftIndex2);
+		int leftParameterIndex = fParentRelationStatement.getLeftParameter().getMyIndex();
+		List<ChoiceNode> choicesForParameter = testDomain.get(leftParameterIndex);
+
+		EStatementRelation relation = fParentRelationStatement.getRelation();
 
 		for (ChoiceNode leftChoiceNode : choicesForParameter) {
 
