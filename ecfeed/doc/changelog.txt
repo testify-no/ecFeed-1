@@ -7,6 +7,9 @@
 #                                                                                  
 #-------------------------------------------------------------------------------
 
+Version 1.12.11
+ - bugfixes (removed constraints when changed expected parameter type)
+
 Version 1.12.10
  - fixed image decorators on MacOS
  - handling enums with String
