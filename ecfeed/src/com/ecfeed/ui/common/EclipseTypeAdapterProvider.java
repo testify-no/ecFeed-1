@@ -343,10 +343,10 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 			return result;
 		}
 	}
-	
+
 	//TODO refactor
 	public class ITypeRandomizedAdapter {
-	//	ITypeAdapter iTypeAdapter;
+		//	ITypeAdapter iTypeAdapter;
 		String type;
 		public String convert(String value, boolean isRandomized) {
 			if (!isRandomized) {
@@ -358,7 +358,7 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 			}
 			return null;
 		}
-		
+
 		boolean isValueCorrectness(String value) {
 			//match regex
 			//
@@ -368,9 +368,9 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 				// is correctness values[0]
 			}
 			return false;
-			
+
 		}
-		
+
 		public ITypeAdapter getAdapter(String type){
 			if(JavaTypeHelper.isJavaType(type) == false){
 				type = USER_TYPE;
@@ -395,7 +395,7 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 			case JavaTypeHelper.TYPE_NAME_STRING:
 				return new StringTypeAdapter();
 			default:
-				return new UserTypeTypeAdapter(type);
+				return new UserTypeAdapter(type);
 			}
 		}
 	}
