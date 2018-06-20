@@ -462,7 +462,6 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 
 		fParametersViewer.setInput(fMethod);
 		fParametersViewer.addCheckStateListener(new ChoiceTreeCheckStateListener(fParametersViewer));
-		//here
 		for (MethodParameterNode parameter : fMethod.getMethodParameters()) {
 			fParametersViewer.expandAll();
 			fParametersViewer.setSubtreeChecked(parameter, true);
