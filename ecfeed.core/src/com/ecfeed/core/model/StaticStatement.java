@@ -15,7 +15,7 @@ import java.util.List;
 import com.ecfeed.core.utils.EvaluationResult;
 
 public class StaticStatement extends AbstractStatement {
-	//ambigous: return false
+
 	public static final String STATIC_STATEMENT_TRUE_VALUE = "true";
 	public static final String STATIC_STATEMENT_FALSE_VALUE = "false";
 	public static final String STATIC_STATEMENT_NULL_VALUE = "null";

@@ -19,7 +19,6 @@ import com.ecfeed.core.utils.StringHelper;
 
 public class ValueCondition implements IStatementCondition {
 
-	//with one, cannot be range (probably)
 	private String fRightValue;
 	private RelationStatement fParentRelationStatement;
 
