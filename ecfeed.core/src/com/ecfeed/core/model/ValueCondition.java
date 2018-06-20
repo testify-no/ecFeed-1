@@ -62,47 +62,52 @@ public class ValueCondition implements IStatementCondition {
 			}
 			else {
 				upperConstraint = constraints[1];
-			}/*
+			}
 			
-			switch (substituteType) {
-			case "=": 
-				result = isValueInRange(lower, lowerConstraint, upperConstraint)
-				|| isValueInRange(upper, lowerConstraint, upperConstraint);
-				break;
-			case "<":
-				result = isValueInRange(lower, lowerConstraint, upperConstraint-1)
-				|| isValueInRange(upper, lowerConstraint, upperConstraint-1);
-				break;
-			case ">":
-				break;
-			}*/
+			//after migrate to Java8:
+			/*
+			 * BiFunction<Integer, Integer, Boolean> resultFunction = (x,y) -> StatementConditionHelper.isRelationMatchQuiet(relation, substituteType, x, y);
+			 * resultFunction.apply(lower, lowerConstraint);
+			 */
 			
-			result = 
-			StatementConditionHelper.isRelationMatchQuiet(relation, substituteType, lower, lowerConstraint)
-			||
-			StatementConditionHelper.isRelationMatchQuiet(relation, substituteType, lower, upperConstraint)
-			||
-			StatementConditionHelper.isRelationMatchQuiet(relation, substituteType, upper, lowerConstraint)
-			||
-			StatementConditionHelper.isRelationMatchQuiet(relation, substituteType, upper, upperConstraint);
+			// get an info about is ambigious from these 4 cases
+			
+			//TODO refactor
+			
+			if (!relation.equals(EStatementRelation.EQUAL)) {
+				result = StatementConditionHelper.isRelationMatchQuiet(
+						relation, substituteType, lower, lowerConstraint)
+						|| StatementConditionHelper.isRelationMatchQuiet(
+								relation, substituteType, lower,
+								upperConstraint)
+						|| StatementConditionHelper.isRelationMatchQuiet(
+								relation, substituteType, upper,
+								lowerConstraint)
+						|| StatementConditionHelper.isRelationMatchQuiet(
+								relation, substituteType, upper,
+								upperConstraint);
+			}
+			else {
+				if(choices.length == 2 && constraints.length == 2)
+				result = (StatementConditionHelper.isRelationMatch(EStatementRelation.GREATER_EQUAL, substituteType, lower, lowerConstraint) 
+				&& StatementConditionHelper.isRelationMatch(EStatementRelation.LESS_EQUAL, substituteType, lower, upperConstraint))
+						|| (StatementConditionHelper.isRelationMatch(EStatementRelation.GREATER_EQUAL, substituteType, upper, lowerConstraint)
+								&& StatementConditionHelper.isRelationMatch(EStatementRelation.LESS_EQUAL, substituteType, upper, upperConstraint));
+				else if(choices.length == 2 && constraints.length == 1) {
+					result = StatementConditionHelper.isRelationMatch(EStatementRelation.GREATER_EQUAL, substituteType, lower, lowerConstraint)
+							&& StatementConditionHelper.isRelationMatch(EStatementRelation.GREATER_EQUAL, substituteType, upper, lowerConstraint);
+				}
+				else if(choices.length == 1 && constraints.length == 2) {
+					result = StatementConditionHelper.isRelationMatch(EStatementRelation.GREATER_EQUAL, substituteType, lower, lowerConstraint)
+							&& StatementConditionHelper.isRelationMatch(EStatementRelation.LESS_EQUAL, substituteType, lower, upperConstraint);
+				}
+				else if(choices.length == 1 && constraints.length == 1) {
+					result = StatementConditionHelper.isRelationMatch(EStatementRelation.EQUAL, substituteType, lower, lowerConstraint);
+				}
+			}
+
 		}
 		return result;
-	}
-	
-	private static boolean isValueInRange(int value, int min, int max) {
-		return value>=min || value <=max;
-	}
-	
-	private static boolean isValueInRange(long value, long min, long max) {
-		return value>=min || value <=max;
-	}
-	
-	private static boolean isValueInRange(float value, float min, float max) {
-		return Float.compare(value, min) > 0 || Float.compare(value, max) < 0;
-	}
-	
-	private static boolean isValueInRange(double value, double min, double max) {
-		return Double.compare(value, min) > 0 || Double.compare(value, max) < 0;
 	}
 	
 	@Override
