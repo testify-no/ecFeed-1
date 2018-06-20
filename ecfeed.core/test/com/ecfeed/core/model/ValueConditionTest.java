@@ -383,28 +383,26 @@ public class ValueConditionTest {
 //		evaluateRandomizedOne(methodParameterNode, "a-z", EStatementRelation.EQUAL, "x", AssertType.FALSE);
 	}
 	
+	@Test
+	public void evaluateForAmbigousInteger() {
+		evaluateForAmbigousIntegerTypes(JavaTypeHelper.TYPE_NAME_INT);
+	}
 
-	// TODO - UNCOMMENT TESTS
-//	@Test
-//	public void evaluateForAmbigousInteger() {
-//		evaluateForAmbigousIntegerTypes(JavaTypeHelper.TYPE_NAME_INT);
-//	}
-//
-//	@Test
-//	public void evaluateForAmbigousLong() {
-//		evaluateForAmbigousIntegerTypes(JavaTypeHelper.TYPE_NAME_LONG);
-//	}	
-//
-//	@Test
-//	public void evaluateForAmbigousShort() {
-//		evaluateForAmbigousIntegerTypes(JavaTypeHelper.TYPE_NAME_SHORT);
-//	}	
-//
-//	@Test
-//	public void evaluateFoAmbigousdByte() {
-//		evaluateForAmbigousIntegerTypes(JavaTypeHelper.TYPE_NAME_BYTE);
-//	}	
-//	
+	@Test
+	public void evaluateForAmbigousLong() {
+		evaluateForAmbigousIntegerTypes(JavaTypeHelper.TYPE_NAME_LONG);
+	}	
+
+	@Test
+	public void evaluateForAmbigousShort() {
+		evaluateForAmbigousIntegerTypes(JavaTypeHelper.TYPE_NAME_SHORT);
+	}	
+
+	@Test
+	public void evaluateFoAmbigousdByte() {
+		evaluateForAmbigousIntegerTypes(JavaTypeHelper.TYPE_NAME_BYTE);
+	}	
+	
 	
 	
 	
