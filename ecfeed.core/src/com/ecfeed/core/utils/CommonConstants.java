@@ -6,9 +6,7 @@ public class CommonConstants {
 	public static final String[] STRING_SPECIAL_VALUES = {NULL_VALUE_STRING_REPRESENTATION};
 
 	public static final String DEFAULT_NEW_TEST_SUITE_NAME = "default suite";
-	
 	public static final String ECT_EDITOR_ID = "com.ecfeed.ui.EctEditor";
-
 	public static final String ICONS_FOLDER_NAME = "icons";
 
 	public static final String EQUIVALENCE_CLASS_FILE_EXTENSION = "ect";
@@ -23,7 +21,6 @@ public class CommonConstants {
 	public static final String DEFAULT_NEW_CONSTRAINT_NAME = "constraint";
 	public static final String DEFAULT_NEW_PARTITION_NAME = "choice";
 	public static final String DEFAULT_NEW_PARTITION_LABEL = "label";
-
 
 	public static final String MAX_VALUE_STRING_REPRESENTATION = "MAX_VALUE";
 	public static final String MIN_VALUE_STRING_REPRESENTATION = "MIN_VALUE";
@@ -40,11 +37,11 @@ public class CommonConstants {
 	public static final String[] BYTE_SPECIAL_VALUES = INTEGER_SPECIAL_VALUES;
 	public static final String[] DOUBLE_SPECIAL_VALUES = FLOAT_SPECIAL_VALUES;
 
-
 	public static final String DEFAULT_EXPECTED_NUMERIC_VALUE = "0";
 	public static final String DEFAULT_EXPECTED_FLOATING_POINT_VALUE = "0.0";
 	public static final String DEFAULT_EXPECTED_BOOLEAN_VALUE = BOOLEAN_FALSE_STRING_REPRESENTATION;
 	public static final String DEFAULT_EXPECTED_CHAR_VALUE = "0";
+
 	public static final String DEFAULT_EXPECTED_BYTE_VALUE = DEFAULT_EXPECTED_NUMERIC_VALUE;
 	public static final String DEFAULT_EXPECTED_DOUBLE_VALUE = DEFAULT_EXPECTED_FLOATING_POINT_VALUE;
 	public static final String DEFAULT_EXPECTED_FLOAT_VALUE = DEFAULT_EXPECTED_FLOATING_POINT_VALUE;
