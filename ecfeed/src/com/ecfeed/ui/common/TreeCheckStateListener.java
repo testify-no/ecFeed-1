@@ -28,7 +28,6 @@ public class TreeCheckStateListener implements ICheckStateListener{
 	public void checkStateChanged(CheckStateChangedEvent event) {
 		Object element = event.getElement();
 		boolean checked = event.getChecked();
-
 		if (checked) {
 			setAllCheckedState(element);
 		} else {

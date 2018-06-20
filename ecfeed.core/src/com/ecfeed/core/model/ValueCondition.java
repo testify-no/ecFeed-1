@@ -24,7 +24,6 @@ public class ValueCondition implements IStatementCondition {
 	private RelationStatement fParentRelationStatement;
 
 	public ValueCondition(String rightValue, RelationStatement parentRelationStatement) {
- 
 		fRightValue = rightValue;
 		fParentRelationStatement = parentRelationStatement;
 	}
