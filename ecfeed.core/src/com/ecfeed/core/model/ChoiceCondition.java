@@ -168,9 +168,12 @@ public class ChoiceCondition implements IStatementCondition {
 
 	@Override
 	public boolean isAmbiguous(List<List<ChoiceNode>> domain, int parameterIndex, EStatementRelation relation) {
+
 		String fRightValue = fRightChoice.getValueString();
-		String substituteType = JavaTypeHelper.getSubstituteType(fParentRelationStatement
-				.getLeftParameter().getType(), JavaTypeHelper.getStringTypeName());
+
+		String substituteType = 
+				JavaTypeHelper.getSubstituteType(
+						fParentRelationStatement.getLeftParameter().getType(), JavaTypeHelper.getStringTypeName());
 
 		if (substituteType == null || parameterIndex >= domain.size()) {
 			return false;
@@ -197,8 +200,7 @@ public class ChoiceCondition implements IStatementCondition {
 			}
 		}
 
-		if (StatementConditionHelper.isRelationMatchQuiet(relation, substituteType, leftChoiceStr,
-				fRightValue)) {
+		if (StatementConditionHelper.isRelationMatchQuiet(relation, substituteType, leftChoiceStr, fRightValue)) {
 			return true;
 		}
 

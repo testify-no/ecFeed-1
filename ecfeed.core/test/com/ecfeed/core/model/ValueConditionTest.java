@@ -73,7 +73,7 @@ public class ValueConditionTest {
 						methodParameterNode, statementRelation, value);
 
 		ChoiceNode choiceNode = new ChoiceNode("Label" + choiceValue, choiceValue);
-		choiceNode.setRandomizeValue(true);
+		choiceNode.setRandomizedValue(true);
 		
 
 		EvaluationResult result = statement.evaluate(createList(choiceNode));
@@ -100,7 +100,7 @@ public class ValueConditionTest {
 						methodParameterNode, statementRelation, value);
 
 		ChoiceNode choiceNode = new ChoiceNode("Label" + choiceValue, choiceValue);
-		choiceNode.setRandomizeValue(true);
+		choiceNode.setRandomizedValue(true);
 		
 		
 		EvaluationResult result = EvaluationResult.convertFromBoolean(

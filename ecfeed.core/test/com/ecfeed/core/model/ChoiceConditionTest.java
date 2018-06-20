@@ -70,13 +70,13 @@ public class ChoiceConditionTest {
 		ChoiceNode rightChoiceNode = new ChoiceNode("Label" + rightChoiceValue , rightChoiceValue);
 		rightChoiceNode.setParent(leftMethodParameterNode);
 
-		rightChoiceNode.setRandomizeValue(true);
+		rightChoiceNode.setRandomizedValue(true);
 		RelationStatement statement = 
 				RelationStatement.createStatementWithChoiceCondition(
 						leftMethodParameterNode, statementRelation, rightChoiceNode);
 
 		ChoiceNode leftChoiceNode = new ChoiceNode("Label" + leftChoiceValue, leftChoiceValue);
-		leftChoiceNode.setRandomizeValue(true);
+		leftChoiceNode.setRandomizedValue(true);
 		
 		leftChoiceNode.setParent(leftMethodParameterNode);
 
@@ -102,13 +102,13 @@ public class ChoiceConditionTest {
 		ChoiceNode rightChoiceNode = new ChoiceNode("Label" + rightChoiceValue , rightChoiceValue);
 		rightChoiceNode.setParent(leftMethodParameterNode);
 
-		rightChoiceNode.setRandomizeValue(true);
+		rightChoiceNode.setRandomizedValue(true);
 		RelationStatement statement = 
 				RelationStatement.createStatementWithChoiceCondition(
 						leftMethodParameterNode, statementRelation, rightChoiceNode);
 
 		ChoiceNode leftChoiceNode = new ChoiceNode("Label" + leftChoiceValue, leftChoiceValue);
-		leftChoiceNode.setRandomizeValue(true);
+		leftChoiceNode.setRandomizedValue(true);
 		
 		leftChoiceNode.setParent(leftMethodParameterNode);
 

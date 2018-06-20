@@ -364,7 +364,7 @@ public abstract class XomBuilder implements IModelVisitor {
 
 		encodeAndAddAttribute(targetChoiceElement, new Attribute(VALUE_ATTRIBUTE, legalValue), fWhiteCharConverter);
 
-		boolean isRandomizedValue = ((ChoiceNode)node).isRandomizeValue();
+		boolean isRandomizedValue = ((ChoiceNode)node).isRandomizedValue();
 		targetChoiceElement.addAttribute(new Attribute(NODE_IS_RADOMIZED_ATTRIBUTE, String.valueOf(isRandomizedValue)));
 
 		
