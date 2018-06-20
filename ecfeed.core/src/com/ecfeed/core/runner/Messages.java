@@ -53,7 +53,7 @@ public class Messages {
 	public static String CANNOT_PARSE_PARAMETER(String parameterType, String parameterValue)
 	{return "Cannot parse value " + parameterValue + " for type " + parameterType;}
 	public static String CANNOT_START_ANDROID_INSTRUMENTATION_PROCESS(String processName, String message)
-	{return "Can not start Android instrumentation process: " + processName + " cause: " + message;}
+	{return "Cannot start Android instrumentation process: " + processName + " cause: " + message;}
 	public static String IO_EXCEPITON_OCCURED(String message)
 	{return "IOException occured: " + message;}	
 	public static String INTERRUPTED_EXCEPTION_OCCURED(String message)
@@ -61,10 +61,10 @@ public class Messages {
 	public static String INVALID_NUMBER_OF_PARAMS_ARGS(int parameters, int arguments)
 	{return "Invalid number of parameters (" + parameters + ") and arguments (" + arguments + ")";}
 	public static String CAN_NOT_READ_ANDROID_MANIFEST(String file)
-	{return "Can not read Android Manifest from file: " + file;}	
+	{return "Cannot read Android Manifest from file: " + file;}	
 	public static String CAN_NOT_OPEN_ANDROID_MANIFEST(String file)
-	{return "Can not open Android Manifest file: " + file;}	
+	{return "Cannot open Android Manifest file: " + file;}	
 	public static String CAN_NOT_SERIALIZE_TO_ANDROID_MANIFEST(String file)
-	{return "Can not serialize data to Android Manifest file: " + file;}	
+	{return "Cannot serialize data to Android Manifest file: " + file;}	
 
 }
