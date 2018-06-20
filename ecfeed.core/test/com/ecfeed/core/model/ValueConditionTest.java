@@ -104,7 +104,7 @@ public class ValueConditionTest {
 		
 		
 		EvaluationResult result = EvaluationResult.convertFromBoolean(
-				statement.isAmgibous(Arrays.asList(createList(choiceNode))));
+				statement.isAmbiguous(Arrays.asList(createList(choiceNode))));
 
 		
 		if (assertResult == AssertType.TRUE) {

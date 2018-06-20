@@ -147,7 +147,7 @@ public class ExpectedValueStatement extends AbstractStatement implements IRelati
 	}
 
 	@Override
-	public boolean isAmgibous(List<List<ChoiceNode>> values) {
+	public boolean isAmbiguous(List<List<ChoiceNode>> values) {
 		// TODO Auto-generated method stub
 		return false;
 	}

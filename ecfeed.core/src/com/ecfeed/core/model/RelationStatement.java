@@ -94,7 +94,7 @@ public class RelationStatement extends AbstractStatement implements IRelationalS
 	}*/
 
 	@Override
-	public boolean isAmgibous(List<List<ChoiceNode>> values) {
+	public boolean isAmbiguous(List<List<ChoiceNode>> values) {
 		boolean result;
 		try {
 			int index = fLeftParameter.getIndex();
