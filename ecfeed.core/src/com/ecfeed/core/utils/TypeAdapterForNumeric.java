@@ -19,7 +19,7 @@ public abstract class TypeAdapterForNumeric<T extends Number> implements ITypeAd
 	}
 
 	@Override
-	public String convert(String value){
+	public String convert(String value, boolean isRandomized){
 		return Arrays.asList(NUMERIC_SPECIAL_VALUES).contains(value) ? value : null;
 	}
 
@@ -32,6 +32,7 @@ public abstract class TypeAdapterForNumeric<T extends Number> implements ITypeAd
 	public boolean isNullAllowed() {
 		return false;
 	}
+
 	@Override
 	public String generateValueAsString(String range) {
 		return String.valueOf(generateValue(range));
@@ -43,6 +44,11 @@ public abstract class TypeAdapterForNumeric<T extends Number> implements ITypeAd
 
 	protected final int getUpper(String range) {
 		return Integer.parseInt(range.split(DELIMITER)[1]);
+	}
+
+	// ADR-REF - move to a common file - ValueFieldHelper ?
+	protected String generateRange(String numericValue) {
+		return numericValue + ":" + numericValue;
 	}
 
 }

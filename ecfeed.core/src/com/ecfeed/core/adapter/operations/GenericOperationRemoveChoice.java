@@ -146,14 +146,14 @@ public class GenericOperationRemoveChoice extends BulkOperation {
 			}
 		}
 
-		private void adaptParentChoice(ChoiceNode parent) {
-			if(parent.isAbstract() == false){
-				ITypeAdapter<?> adapter = fAdapterProvider.getAdapter(parent.getParameter().getType());
-				String newValue = adapter.convert(parent.getValueString());
+		private void adaptParentChoice(ChoiceNode parentChoiceNode) {
+			if(parentChoiceNode.isAbstract() == false){
+				ITypeAdapter<?> adapter = fAdapterProvider.getAdapter(parentChoiceNode.getParameter().getType());
+				String newValue = adapter.convert(parentChoiceNode.getValueString(), parentChoiceNode.isRandomizedValue());
 				if(newValue == null){
 					newValue = adapter.getDefaultValue();
 				}
-				parent.setValueString(newValue);
+				parentChoiceNode.setValueString(newValue);
 			}
 		}
 

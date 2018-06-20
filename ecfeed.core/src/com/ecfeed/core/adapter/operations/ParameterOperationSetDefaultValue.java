@@ -33,11 +33,8 @@ public class ParameterOperationSetDefaultValue extends AbstractModelOperation {
 
 	@Override
 	public void execute() throws ModelOperationException {
-
-		setOneNodeToSelect(fTarget);
-		String convertedValue = fTypeAdapter.convert(fNewValue);
-
-		if (convertedValue == null) {
+		String convertedValue = fTypeAdapter.convert(fNewValue, false);
+		if(convertedValue == null){
 			ModelOperationException.report(Messages.CATEGORY_DEFAULT_VALUE_REGEX_PROBLEM);
 		}
 

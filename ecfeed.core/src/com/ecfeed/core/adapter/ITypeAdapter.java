@@ -13,7 +13,7 @@ package com.ecfeed.core.adapter;
 public interface ITypeAdapter<T> {
 
 	public boolean isCompatible(String type);
-	public String convert(String value);
+	public String convert(String value, boolean isRandomized);
 	public String getDefaultValue();
 	public boolean isNullAllowed();
 	public T generateValue(String range);

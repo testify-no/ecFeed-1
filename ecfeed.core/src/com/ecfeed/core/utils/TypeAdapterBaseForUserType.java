@@ -24,7 +24,7 @@ public class TypeAdapterBaseForUserType<T extends Enum<T>> implements ITypeAdapt
 		return Arrays.asList(TYPES_CONVERTABLE_TO_USER_TYPE).contains(type);
 	}
 
-	public String convert(String value){
+	public String convert(String value, boolean isRandomized){
 		return JavaLanguageHelper.isValidJavaIdentifier(value) ? value : null;
 	}
 
