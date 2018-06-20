@@ -147,7 +147,7 @@ public class TestCasesExportHelper {
 
 		final String MIN_WIDTH_OPERATOR_PATTERN = 
 				"\\(\\s*\\-?\\w*\\s*\\)\\.min_width((\\(\\s*\\-?\\d*\\s*\\))|(\\(\\s*\\d+\\s*\\,\\s*\\w*\\s*\\)))";
-		
+
 		String result = template;
 		Matcher matcher = Pattern.compile(MIN_WIDTH_OPERATOR_PATTERN).matcher(template);
 
@@ -339,6 +339,7 @@ public class TestCasesExportHelper {
 	}
 
 	private static String convertValue(ChoiceNode choice) {
+
 		AbstractParameterNode parameter = choice.getParameter();
 		if (parameter == null) {
 			return null;
@@ -350,7 +351,7 @@ public class TestCasesExportHelper {
 		}
 
 		ChoiceValueParser choiceValueParser = new ChoiceValueParser(null, true);
-		Object parsedObject = choiceValueParser.parseValue(choice.getValueString(), argType);
+		Object parsedObject = choiceValueParser.parseValue(choice.getValueString(), choice.isRandomizedValue(), argType);
 		if (parsedObject == null) {
 			return null;
 		}
