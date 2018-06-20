@@ -13,12 +13,9 @@ import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.SystemLogger;
 
 public class ChoiceOperationSetRandomizeValue extends AbstractModelOperation {
-	private boolean fNewValue;
-	//	private boolean fOriginalValue;
-	//	private boolean fOriginalDefaultValue;
-	private ChoiceNode fChoiceNode;
 
-	//BooleanTypeAdapter
+	private boolean fNewValue;
+	private ChoiceNode fChoiceNode;
 	private ITypeAdapterProvider fAdapterProvider;
 
 
@@ -27,19 +24,16 @@ public class ChoiceOperationSetRandomizeValue extends AbstractModelOperation {
 		fNewValue = newValue;
 		fChoiceNode = choiceNode;
 		fAdapterProvider = adapterProvider;
-//		fOriginalValue = fChoiceNode.isRandomizeValue();
 	}
 
 	@Override
 	public void execute() throws ModelOperationException {
-		//		String convertedValue = validateChoiceValue(fTarget.getParameter().getType(), fNewValue);
-		//		if(convertedValue == null){
-		//			ModelOperationException.report(Messages.PARTITION_VALUE_PROBLEM(Boolean.toString(fNewValue)));
-		//		}
+
 		boolean convertedValue = validateChoiceValue(fChoiceNode.getParameter().getDescription(), fNewValue);
 		if (convertedValue == false) {
 			ModelOperationException.report(Messages.PARTITION_VALUE_PROBLEM(Boolean.toString(fNewValue)));
 		}
+
 		fChoiceNode.setRandomizeValue(convertedValue);
 		adaptParameter(fChoiceNode.getParameter());
 		markModelUpdated();
@@ -57,12 +51,6 @@ public class ChoiceOperationSetRandomizeValue extends AbstractModelOperation {
 
 		@Override
 		public Object visit(MethodParameterNode parameter) throws Exception {
-			//fOriginalDefaultValue = parameter.getDefaultValue();
-			if(parameter != null && JavaTypeHelper.isUserType(parameter.getType())){
-				if(parameter.getLeafChoiceValues().contains(parameter.getDefaultValue()) == false){
-					//parameter.setDefaultValueString(fNewValue);
-				}
-			}
 			return null;
 		}
 
@@ -87,26 +75,6 @@ public class ChoiceOperationSetRandomizeValue extends AbstractModelOperation {
 			super(ChoiceOperationSetRandomizeValue.this.getName());
 		}
 
-//		private class ReverseParameterAdapter implements IParameterVisitor {
-//
-//			@Override
-//			public Object visit(MethodParameterNode parameter) throws Exception {
-//				return null;
-//			}
-//
-//			@Override
-//			public Object visit(GlobalParameterNode parameter) throws Exception {
-//				return null;
-//			}
-//
-//		}
-
-//		private void adaptParameter(AbstractParameterNode parameter) {
-//			try{
-//				parameter.accept(new ReverseParameterAdapter());
-//			}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
-//		}
-
 		@Override
 		public void execute() throws ModelOperationException {
 			markModelUpdated();
@@ -120,7 +88,6 @@ public class ChoiceOperationSetRandomizeValue extends AbstractModelOperation {
 
 		@Override
 		public String getName() {
-			// TODO Auto-generated method stub
 			return null;
 		}
 
