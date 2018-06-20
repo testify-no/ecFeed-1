@@ -58,12 +58,15 @@ import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.ChoicesParentNode;
 import com.ecfeed.core.model.Constraint;
 import com.ecfeed.core.model.ConstraintNode;
+import com.ecfeed.core.model.EStatementRelation;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelHelper;
 import com.ecfeed.core.model.ModelSizeHelper;
+import com.ecfeed.core.model.RelationStatement;
 import com.ecfeed.core.serialization.export.ExportTemplateFactory;
 import com.ecfeed.core.serialization.export.IExportTemplate;
+import com.ecfeed.core.utils.EvaluationResult;
 import com.ecfeed.core.utils.IValueApplier;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.StringHolder;
@@ -236,11 +239,21 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		updateOkButtonAndErrorMsg();
 	}
 	
+	public static final String IS_NOT_AMBIGOUS = "";
+	public static final String IS_AMBIGOUS = "%s is ambigous because %s is ambigous.";
+	
 	private Label createAmgibousWarningLabel(Composite parent) {
-		return DialogObjectToolkit.createLabel(parent, "");
+		Label selectChoicesLabel = new Label(parent, SWT.WRAP);
+
+		selectChoicesLabel.setLayoutData(
+				new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+
+		selectChoicesLabel.setText("qqq");
+
+		return selectChoicesLabel;
 	}
 	
-	//todo update when choice/constrain listeren is in action
+	//todo update when choice/constrain listener is in action
 	private void updateAmbigousWarningLabel(boolean isAmbigousCondition) {
 		if(isAmbigousCondition) {
 			ambigousLabel.setText("todo"); //String.Format
@@ -402,7 +415,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 
 		fParametersViewer.setInput(fMethod);
 		fParametersViewer.addCheckStateListener(new ChoiceTreeCheckStateListener(fParametersViewer));
-
+		//here
 		for (MethodParameterNode parameter : fMethod.getMethodParameters()) {
 			fParametersViewer.expandAll();
 			fParametersViewer.setSubtreeChecked(parameter, true);
@@ -459,7 +472,30 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		if (!validateTargetFileText(message)) {
 			return false;
 		}
+		
+		if (isAmbigous(null, null)) {
+			//todo
+		}
 		return true;
+	}
+
+	private boolean isAmbigous(EStatementRelation statementRelation, String leftValue) {
+		for (ConstraintNode constaintNode: fMethod.getConstraintNodes()) {
+			//check value conditions for all nodes, constrains and param. methods
+		}
+		
+		RelationStatement statement;
+		EvaluationResult isAmbigous = EvaluationResult.FALSE;
+		for(MethodParameterNode methodParameterNode : fMethod.getMethodParameters()) {
+			statement = RelationStatement.createStatementWithValueCondition(
+							methodParameterNode, statementRelation, leftValue);
+			isAmbigous = statement.isAmgibous(methodParameterNode.getChoices());
+			if(isAmbigous.equals(EvaluationResult.TRUE)) {
+				return true;
+				//info - about object - is necessary
+			}
+		}
+		return false;
 	}
 
 	private boolean validateTestSuiteName(StringHolder message) {
@@ -480,8 +516,9 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		return true;
 	}
 
+	
+	//here ambigous
 	private boolean validateMethodParameters(boolean onlyExecutable, StringHolder message) {
-
 		for (MethodParameterNode parameter : fMethod.getMethodParameters()) {
 			if (!validateOneParameter(parameter, onlyExecutable, message)) {
 				return false;
@@ -513,6 +550,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		return true;
 	}
 
+	//todo here maybe
 	private boolean validateChoices(
 			MethodParameterNode parameter, boolean onlyExecutable, StringHolder message) {
 		boolean checkedChoiceFound = false;
@@ -863,7 +901,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 			} else {
 				for (ChoiceNode choice : parameters.get(i).getLeafChoicesWithCopies()) {
 					if (fParametersViewer.getChecked(choice)) {
-						choices.add(choice);
+			//			choices.add(choice);
 					}
 				}
 			}
@@ -891,6 +929,9 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 			super(treeViewer);
 		}
 
+		//here, check is ambigous
+		//todo
+		//
 		@Override
 		public void checkStateChanged(CheckStateChangedEvent event) {
 			super.checkStateChanged(event);
