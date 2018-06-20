@@ -63,10 +63,6 @@ public class AdaptiveRandomAlgorithm<E> extends AbstractAlgorithm<E> implements 
 			return false;
 		}
 
-		@Override
-		public boolean isAmbigous(List<E> values) {
-			return false;
-		}
 	}
 
 	public AdaptiveRandomAlgorithm(int depth, int candidatesSize, 

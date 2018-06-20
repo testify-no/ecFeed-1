@@ -45,11 +45,6 @@ public class TestSuiteGenerationSupport {
 	private boolean fHasData;
 
 	private class ExpectedValueReplacer implements IConstraint<ChoiceNode>{
-
-		@Override
-		public boolean isAmbigous(java.util.List<ChoiceNode> values) {
-			return false;
-		}
 		
 		@Override
 		public EvaluationResult evaluate(List<ChoiceNode> values) {

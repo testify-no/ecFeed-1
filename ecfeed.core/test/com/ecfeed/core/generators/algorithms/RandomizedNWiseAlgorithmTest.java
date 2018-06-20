@@ -132,10 +132,7 @@ public class RandomizedNWiseAlgorithmTest {
 				return false;
 			}
 
-			@Override
-			public boolean isAmbigous(List<Integer> values) {
-				return false;
-			}
+			
 		};
 
 		Collection<IConstraint<Integer>> constraints = new HashSet<IConstraint<Integer>>();
