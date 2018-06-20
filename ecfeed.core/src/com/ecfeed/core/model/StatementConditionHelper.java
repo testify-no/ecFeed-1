@@ -216,7 +216,7 @@ public class StatementConditionHelper {
 			return false;
 		}
 
-		return choiceNode.isRandomizeValue();
+		return choiceNode.isRandomizedValue();
 	}
 
 	public static boolean getChoiceRandomized(ChoiceNode choice, MethodParameterNode methodParameterNode) {

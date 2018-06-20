@@ -155,7 +155,7 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		} else {
 			fValueCombo.setEnabled(true);
 		}
-		fRandomizeCheckbox.setSelection(choiceNode.isRandomizeValue());
+		fRandomizeCheckbox.setSelection(choiceNode.isRandomizedValue());
 		fRandomizeCheckbox.setEnabled(isRandomizeCheckboxEnabled());
 
 		updateValueLabel(choiceNode);
@@ -165,7 +165,7 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 
 	private void updateValueLabel(ChoiceNode choiceNode) {
 		String type = fChoiceIf.getParameter().getType();
-		boolean isRandomizedValue = choiceNode.isRandomizeValue();
+		boolean isRandomizedValue = choiceNode.isRandomizedValue();
 
 		if (isRandomizedValue) {
 			if (type.equals(JavaTypeHelper.TYPE_NAME_STRING)) {
@@ -228,15 +228,15 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 
 		@Override
 		public void applyValue() {
-			fChoiceIf.setRandomize(fRandomizeCheckbox.getSelection());
-			fRandomizeCheckbox.setSelection(fChoiceIf.isRandomize());
+			fChoiceIf.setRandomized(fRandomizeCheckbox.getSelection());
+			fRandomizeCheckbox.setSelection(fChoiceIf.isRandomized());
 			updateValueLabel(getSelectedChoice());
 			switchValueOnThefly();
 		}
 	}
 
 	private void switchValueOnThefly() {
-		boolean isRandomized = fChoiceIf.isRandomize();
+		boolean isRandomized = fChoiceIf.isRandomized();
 		String fValueComboText = fValueCombo.getText();
 		String type = fChoiceIf.getParameter().getType();
 		if (!type.equals(JavaTypeHelper.TYPE_NAME_STRING)) {
