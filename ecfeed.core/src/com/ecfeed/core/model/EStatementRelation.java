@@ -33,44 +33,44 @@ public enum EStatementRelation{
 
 	EQUAL(StatementRelationNames.RELATION_EQUAL) {
 		@Override
-		public EvaluationResult eval(String typeName, String leftString, String rightString) {
-			return EvaluationResult.convertFromBoolean(StringUtils.equals(leftString, rightString));
+		public boolean eval(String typeName, String leftString, String rightString) {
+			return StringUtils.equals(leftString, rightString);
 		}
 	}, 
 	NOT_EQUAL(StatementRelationNames.RELATION_NOT_EQUAL) {
 		@Override
-		public EvaluationResult eval(String typeName, String leftString, String rightString) {
-			return EvaluationResult.convertFromBoolean(StatementConditionHelper.isRelationMatch(this, typeName, leftString, rightString));
+		public boolean eval(String typeName, String leftString, String rightString) {
+			return StatementConditionHelper.isRelationMatch(this, typeName, leftString, rightString);
 		}
 	},
 	LESS_THAN(StatementRelationNames.RELATION_LESS_THAN) {
 		@Override
-		public EvaluationResult eval(String typeName, String leftString, String rightString) {
-			return EvaluationResult.convertFromBoolean(StatementConditionHelper.isRelationMatch(this, typeName, leftString, rightString));
+		public boolean eval(String typeName, String leftString, String rightString) {
+			return StatementConditionHelper.isRelationMatch(this, typeName, leftString, rightString);
 		}
 	}, 
 	LESS_EQUAL(StatementRelationNames.RELATION_LESS_EQUAL) {
 		@Override
-		public EvaluationResult eval(String typeName, String leftString, String rightString) {
-			return EvaluationResult.convertFromBoolean(StatementConditionHelper.isRelationMatch(this, typeName, leftString, rightString));
+		public boolean eval(String typeName, String leftString, String rightString) {
+			return StatementConditionHelper.isRelationMatch(this, typeName, leftString, rightString);
 		}
 	},
 	GREATER_THAN(StatementRelationNames.RELATION_GREATER_THAN) {
 		@Override
-		public EvaluationResult eval(String typeName, String leftString, String rightString) {
-			return EvaluationResult.convertFromBoolean(StatementConditionHelper.isRelationMatch(this, typeName, leftString, rightString));
+		public boolean eval(String typeName, String leftString, String rightString) {
+			return StatementConditionHelper.isRelationMatch(this, typeName, leftString, rightString);
 		}
 	},
 	GREATER_EQUAL(StatementRelationNames.RELATION_GREATER_EQUAL) {
 		@Override
-		public EvaluationResult eval(String typeName, String leftString, String rightString) {
-			return EvaluationResult.convertFromBoolean(StatementConditionHelper.isRelationMatch(this, typeName, leftString, rightString));
+		public boolean eval(String typeName, String leftString, String rightString) {
+			return StatementConditionHelper.isRelationMatch(this, typeName, leftString, rightString);
 		}
 	};
 
-	abstract public EvaluationResult eval(String typeName, String leftString, String rightString);
-	public boolean evalAsBoolean(String typeName, String leftString, String rightString) {
-		return this.eval(typeName, leftString, rightString).getAsPrimitiveBoolean();
+	abstract public boolean eval(String typeName, String leftString, String rightString);
+	public EvaluationResult evalAsEvaluationResult(String typeName, String leftString, String rightString) {
+		return EvaluationResult.convertFromBoolean(this.eval(typeName, leftString, rightString));
 	}
 	
 	private String fName;
