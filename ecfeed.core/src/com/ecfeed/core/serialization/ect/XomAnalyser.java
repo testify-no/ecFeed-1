@@ -20,19 +20,19 @@ import static com.ecfeed.core.serialization.ect.SerializationConstants.CONSTRAIN
 import static com.ecfeed.core.serialization.ect.SerializationConstants.CONSTRAINT_STATEMENT_ARRAY_NODE_NAME;
 import static com.ecfeed.core.serialization.ect.SerializationConstants.CONSTRAINT_STATIC_STATEMENT_NODE_NAME;
 import static com.ecfeed.core.serialization.ect.SerializationConstants.DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME;
+import static com.ecfeed.core.serialization.ect.SerializationConstants.EXPECTED_PARAMETER_NODE_NAME;
 import static com.ecfeed.core.serialization.ect.SerializationConstants.METHOD_NODE_NAME;
+import static com.ecfeed.core.serialization.ect.SerializationConstants.NODE_IS_RADOMIZED_ATTRIBUTE;
 import static com.ecfeed.core.serialization.ect.SerializationConstants.PARAMETER_IS_EXPECTED_ATTRIBUTE_NAME;
 import static com.ecfeed.core.serialization.ect.SerializationConstants.PARAMETER_IS_LINKED_ATTRIBUTE_NAME;
 import static com.ecfeed.core.serialization.ect.SerializationConstants.PARAMETER_LINK_ATTRIBUTE_NAME;
 import static com.ecfeed.core.serialization.ect.SerializationConstants.ROOT_NODE_NAME;
 import static com.ecfeed.core.serialization.ect.SerializationConstants.RUN_ON_ANDROID_ATTRIBUTE_NAME;
 import static com.ecfeed.core.serialization.ect.SerializationConstants.TEST_CASE_NODE_NAME;
-import static com.ecfeed.core.serialization.ect.SerializationConstants.TEST_SUITE_NAME_ATTRIBUTE;
 import static com.ecfeed.core.serialization.ect.SerializationConstants.TEST_PARAMETER_NODE_NAME;
-import static com.ecfeed.core.serialization.ect.SerializationConstants.EXPECTED_PARAMETER_NODE_NAME;
+import static com.ecfeed.core.serialization.ect.SerializationConstants.TEST_SUITE_NAME_ATTRIBUTE;
 import static com.ecfeed.core.serialization.ect.SerializationConstants.TYPE_NAME_ATTRIBUTE;
 import static com.ecfeed.core.serialization.ect.SerializationConstants.VALUE_ATTRIBUTE;
-import static com.ecfeed.core.serialization.ect.SerializationConstants.NODE_IS_RADOMIZED_ATTRIBUTE;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -47,7 +47,6 @@ import com.ecfeed.core.adapter.java.JavaPrimitiveTypePredicate;
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.AbstractStatement;
 import com.ecfeed.core.model.ChoiceNode;
-import com.ecfeed.core.model.RelationStatement;
 import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.Constraint;
 import com.ecfeed.core.model.ConstraintNode;
@@ -59,6 +58,7 @@ import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelVersionDistributor;
 import com.ecfeed.core.model.NodePropertyDefs;
+import com.ecfeed.core.model.RelationStatement;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.StatementArray;
 import com.ecfeed.core.model.StaticStatement;
@@ -67,6 +67,7 @@ import com.ecfeed.core.serialization.ParserException;
 import com.ecfeed.core.serialization.WhiteCharConverter;
 import com.ecfeed.core.utils.BooleanHelper;
 import com.ecfeed.core.utils.BooleanHolder;
+import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.core.utils.StringHolder;
 
@@ -699,7 +700,7 @@ public abstract class XomAnalyser {
 	protected boolean getIsRandomizedValue(Element element, String attributeName) throws ParserException {
 		String isRandomizedValue = element.getAttributeValue(attributeName);
 		if (isRandomizedValue == null) {
-			isRandomizedValue = "false";
+			isRandomizedValue = JavaTypeHelper.VALUE_REPRESENTATION_FALSE;
 		}
 		return Boolean.parseBoolean(fWhiteCharConverter.decode(isRandomizedValue));
 	}
