@@ -85,7 +85,8 @@ public class ParameterConditionTest {
 			assertEquals(EvaluationResult.FALSE, result);
 		}
 	}
-	
+
+	//todo evaulate multi statements as cartesian product, with all-false-pass tests and all-false-pass with some positive calls
 	private void evaluateRandomizedMultiple(MethodParameterNode leftMethodParameterNode,
 			MethodParameterNode rightMethodParameterNode, String leftChoiceValue,
 			EStatementRelation statementRelation, String rightChoiceValue, AssertType assertResult) {
@@ -108,14 +109,6 @@ public class ParameterConditionTest {
 		} else {
 			assertEquals(EvaluationResult.FALSE, result);
 		}
-	}
-	
-
-	
-	//todo evaulate multi statements as cartesian product, with all-false-pass tests and all-false-pass with some positive calls
-	
-	private List<ChoiceNode> createSmth() {
-		return null;
 	}
 	
 	private List<ChoiceNode> createList(ChoiceNode... choiceNodes) {

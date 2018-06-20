@@ -113,8 +113,12 @@ public class ChoiceConditionTest {
 		
 		leftChoiceNode.setParent(leftMethodParameterNode);
 
-		EvaluationResult result = 
-				EvaluationResult.convertFromBoolean(statement.isAmgibous(createListList(leftChoiceNode)));
+//<<<<<<< HEAD:ecfeed.core/test/com/ecfeed/core/model/ChoiceConditionTest.java
+//		EvaluationResult result = 
+//				EvaluationResult.convertFromBoolean(statement.isAmgibous(createListList(leftChoiceNode)));
+//=======
+		EvaluationResult result = EvaluationResult.convertFromBoolean(statement.isAmgibous(Arrays.asList(createList(leftChoiceNode))));
+//>>>>>>> 34bde98... Ambigous, tests, clean code, label.:ecfeed/test/com/ecfeed/core/model/ChoiceConditionTest.java
 
 		if (assertResult == AssertType.TRUE) {
 			assertEquals(EvaluationResult.TRUE, result);
@@ -124,7 +128,7 @@ public class ChoiceConditionTest {
 	}
 
 	private List<ChoiceNode> createList(ChoiceNode choiceNode1) {
-		return Arrays.asList(new ChoiceNode[]{choiceNode1});
+		return Arrays.asList(choiceNode1);
 	}
 	
 	private List<List<ChoiceNode>> createListList(ChoiceNode choiceNode1) {
