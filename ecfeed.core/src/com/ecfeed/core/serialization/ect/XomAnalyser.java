@@ -699,7 +699,6 @@ public abstract class XomAnalyser {
 	protected boolean getIsRandomizedValue(Element element, String attributeName) throws ParserException {
 		String isRandomizedValue = element.getAttributeValue(attributeName);
 		if (isRandomizedValue == null) {
-			// if file version doesn't have randomized value support
 			return false;
 		}
 		return Boolean.parseBoolean(fWhiteCharConverter.decode(isRandomizedValue));

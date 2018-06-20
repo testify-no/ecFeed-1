@@ -79,11 +79,9 @@ public class ValueCondition implements IStatementCondition {
 
 		String leftChoiceStr = getChoiceString(values, fParentRelationStatement.getLeftParameter());
 
-
-		//	EStatementRelation relation = fParentRelationStatement.getRelation();
-
 		boolean isRandomizedChoice = StatementConditionHelper.getChoiceRandomized(values,
 				fParentRelationStatement.getLeftParameter());
+
 		if (isRandomizedChoice) {
 			if (JavaTypeHelper.TYPE_NAME_STRING.equals(substituteType)) {
 				return false;
