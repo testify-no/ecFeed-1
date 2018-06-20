@@ -120,8 +120,6 @@ public class TestSuiteGenerationSupport {
 		fHasData = generate() && !fCanceled;
 	}
 	
-	//TODO
-	//copy/base on generate method maybe
 	protected boolean generate(){
 
 		SetupDialogGenerateTestSuite dialog = 

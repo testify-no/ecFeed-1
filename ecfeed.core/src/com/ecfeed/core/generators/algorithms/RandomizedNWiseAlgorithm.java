@@ -309,7 +309,6 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 		return (new Tuples<Integer>(dimentions, N)).getAll();
 	}
 
-	//todo, ambigous
 	private Map<Boolean, Set<List<DimensionedItem<E>>>> getAllNTuples() throws GeneratorException {
 
 		Set<List<Integer>> allCombs = getAllDimCombs();
@@ -342,7 +341,6 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 				for (DimensionedItem<E> var : tuple)
 					fullTuple.set(var.getDimension(), var.getItem());
 
-				//todo, evaluate constraint
 				EvaluationResult check = checkConstraintsOnExtendedNTuple(fullTuple);
 
 				if (check == EvaluationResult.INSUFFICIENT_DATA) {
