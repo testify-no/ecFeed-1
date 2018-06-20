@@ -69,6 +69,9 @@ public enum EStatementRelation{
 	};
 
 	abstract public EvaluationResult eval(String typeName, String leftString, String rightString);
+	public boolean evalAsBoolean(String typeName, String leftString, String rightString) {
+		return this.eval(typeName, leftString, rightString).getAsPrimitiveBoolean();
+	}
 	
 	private String fName;
 
