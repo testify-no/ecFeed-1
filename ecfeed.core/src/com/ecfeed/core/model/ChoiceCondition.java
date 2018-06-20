@@ -165,9 +165,51 @@ public class ChoiceCondition implements IStatementCondition {
 	}
 
 	@Override
-	public EvaluationResult isAmgibous(List<ChoiceNode> values) {
-		// TODO Auto-generated method stub
-		return null;
+	public EvaluationResult isAmgibous(List<ChoiceNode> choices) {
+		String fRightValue = fRightChoice.getValueString();
+		String substituteType = JavaTypeHelper.getSubstituteType(fParentRelationStatement
+				.getLeftParameter().getType(), JavaTypeHelper.getStringTypeName());
+
+		if (substituteType == null) {
+			return EvaluationResult.FALSE;
+		}
+
+		String leftChoiceStr = getChoiceString(choices, fParentRelationStatement.getLeftParameter());
+
+		if (leftChoiceStr == null) {
+			return EvaluationResult.INSUFFICIENT_DATA;
+		}
+		EStatementRelation relation = fParentRelationStatement.getRelation();
+		
+		boolean isRandomizedChoice = StatementConditionHelper.getChoiceRandomized(choices,
+				fParentRelationStatement.getLeftParameter());
+		if (isRandomizedChoice) {
+			if (JavaTypeHelper.TYPE_NAME_STRING.equals(substituteType)) {
+				return EvaluationResult.convertFromBoolean(leftChoiceStr.matches(fRightValue));
+			} else {
+				boolean result = StatementConditionHelper.isAmbigous(leftChoiceStr,
+						fRightValue, relation, substituteType);
+				return EvaluationResult.convertFromBoolean(result);
+			}
+		}
+
+		if (StatementConditionHelper.isRelationMatchQuiet(relation, substituteType, leftChoiceStr,
+				fRightValue)) {
+			return EvaluationResult.TRUE;
+		}
+
+		return EvaluationResult.FALSE;
+	}
+	
+	private static String getChoiceString(List<ChoiceNode> choices, MethodParameterNode methodParameterNode) {
+
+		ChoiceNode choiceNode = StatementConditionHelper.getChoiceForMethodParameter(choices, methodParameterNode);
+
+		if (choiceNode == null) {
+			return null;
+		}
+
+		return choiceNode.getValueString();
 	}
 
 }
