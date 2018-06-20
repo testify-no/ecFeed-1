@@ -153,7 +153,7 @@ public class ParameterCondition implements IStatementCondition {
 	}
 
 	@Override
-	public EvaluationResult isAmgibous(List<ChoiceNode> values) {
+	public EvaluationResult isAmbigous(List<ChoiceNode> values) {
 		// TODO Auto-generated method stub
 		return null;
 	}

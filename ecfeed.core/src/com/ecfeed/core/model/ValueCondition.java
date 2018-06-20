@@ -70,7 +70,7 @@ public class ValueCondition implements IStatementCondition {
 	}
 
 	@Override
-	public EvaluationResult isAmgibous(List<ChoiceNode> choices) {
+	public EvaluationResult isAmbigous(List<ChoiceNode> choices) {
 		String substituteType = JavaTypeHelper.getSubstituteType(fParentRelationStatement
 				.getLeftParameter().getType(), JavaTypeHelper.getStringTypeName());
 
