@@ -17,9 +17,12 @@ import com.ecfeed.core.utils.StringHelper;
 
 public class StatementConditionHelper {
 
-	private static String TYPE_INFO_CHOICE = "choice";
-	private static String TYPE_INFO_PARAMETER = "parameter";
-	private static String TYPE_INFO_LABEL = "label";
+	private static final String TYPE_INFO_CHOICE = "choice";
+	private static final String TYPE_INFO_PARAMETER = "parameter";
+	private static final String TYPE_INFO_LABEL = "label";
+	
+	private static final int SINGLE_VALUE = 1;
+	private static final int RANGE_VALUE = 2;
 
 	public static ChoiceNode getChoiceForMethodParameter(List<ChoiceNode> choices, MethodParameterNode methodParameterNode) {
 
@@ -127,12 +130,6 @@ public class StatementConditionHelper {
 
 		return result;
 	}
-
-	
-	private static boolean isRangeOrRegex(String leftString, String rightString) {
-		
-		return true;
-	}
 	
 	public static boolean isRelationMatch(
 			EStatementRelation relation, String typeName, String leftString, String rightString) {
@@ -186,6 +183,82 @@ public class StatementConditionHelper {
 			return true;
 		}
 		return false;
+	}
+
+	static boolean validateEqualCondition(int choicesLength, int constraintsLength, String substituteType,
+			String upper, String lower, String lowerConstraint, String upperConstraint) {
+		boolean result = false;
+		if(choicesLength == RANGE_VALUE && constraintsLength == RANGE_VALUE)
+		result = 
+				isRelationMatch(EStatementRelation.GREATER_EQUAL, substituteType, upper, lowerConstraint)
+				&& isRelationMatch(EStatementRelation.LESS_EQUAL, substituteType, lower, upperConstraint);
+		else if(choicesLength == RANGE_VALUE && constraintsLength == 1) {
+			result = isRelationMatch(EStatementRelation.GREATER_EQUAL, substituteType, lower, lowerConstraint)
+					&& isRelationMatch(EStatementRelation.GREATER_EQUAL, substituteType, upper, lowerConstraint);
+		}
+		else if(choicesLength == SINGLE_VALUE && constraintsLength == RANGE_VALUE) {
+			result = isRelationMatch(EStatementRelation.GREATER_EQUAL, substituteType, lower, lowerConstraint)
+					&& isRelationMatch(EStatementRelation.LESS_EQUAL, substituteType, lower, upperConstraint);
+		}
+		else if(choicesLength == SINGLE_VALUE && constraintsLength == SINGLE_VALUE) {
+			result = isRelationMatch(EStatementRelation.EQUAL, substituteType, lower, lowerConstraint);
+		}
+		return result;
+	}
+
+	public static boolean getChoiceRandomized(List<ChoiceNode> choices, MethodParameterNode methodParameterNode) {
+		ChoiceNode choiceNode = getChoiceForMethodParameter(choices, methodParameterNode);
+	
+		if (choiceNode == null) {
+			return false;
+		}
+	
+		return choiceNode.isRandomizeValue();
+	}
+
+	public static boolean isConstraintInChoiceRange(String choice, String constraint, EStatementRelation relation, String substituteType) {
+		boolean result = false;
+		if(JavaTypeHelper.isNumericTypeName(substituteType)) {		
+			String[] choices = choice.split(":");
+			String[] constraints = constraint.split(":");
+			String lower;
+			String upper;
+			
+			lower = choices[0];
+			if (choices.length == 1) {
+				upper = lower;
+			}
+			else {
+				 upper = choices[1];
+			}
+			
+			//TODO
+			//call the methods from StatemenetConditionHelper
+			//e.g.: 	private static boolean isMatchForNumericTypes(
+			//String typeName, EStatementRelation relation, String actualValue, String valueToMatch) {
+	
+			
+			String lowerConstraint = constraints[0];
+			String upperConstraint;
+			if (constraints.length == 1) {
+				upperConstraint = lowerConstraint;
+			}
+			else {
+				upperConstraint = constraints[1];
+			}
+			
+			// get an info about is ambigious from these 4 cases
+			
+			
+			if (!relation.equals(EStatementRelation.EQUAL)) {
+				result = ValueCondition.validateOtherthanEqualCondition(relation, choices.length, constraints.length, substituteType, upper, lower, lowerConstraint, upperConstraint);
+			}
+			else {
+				result = validateEqualCondition(choices.length, constraints.length, substituteType, upper, lower, lowerConstraint, upperConstraint);
+			}
+	
+		}
+		return result;
 	}	
 }
 

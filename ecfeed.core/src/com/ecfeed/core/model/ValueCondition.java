@@ -28,91 +28,25 @@ public class ValueCondition implements IStatementCondition {
 		fParentRelationStatement = parentRelationStatement;
 	}
 
-	//TODO refactor + isAmbiguous
-	private static boolean isConstraintInChoiceRange(String choice, String constraint, EStatementRelation relation, String substituteType) {
-		boolean result = false;
-		if(substituteType.equals("int") || substituteType.equals("long")) {		
-			
-			String[] choices = choice.split(":");
-			String[] constraints = constraint.split(":");
-			
-			String lower;
-			String upper;
-			
-			lower = choices[0];
-			
-			if (choices.length == 1) {
-				upper = lower;
-			}
-			else {
-				 upper = choices[1];
-			}
-			
-			//TODO
-			//call the methods from StatemenetConditionHelper
-			//e.g.: 	private static boolean isMatchForNumericTypes(
-			//String typeName, EStatementRelation relation, String actualValue, String valueToMatch) {
-
-			
-			String lowerConstraint = constraints[0];
-			String upperConstraint;
-			
-			if (constraints.length == 1) {
-				upperConstraint = lowerConstraint;
-			}
-			else {
-				upperConstraint = constraints[1];
-			}
-			
-			//after migrate to Java8:
-			/*
-			 * BiFunction<Integer, Integer, Boolean> resultFunction = (x,y) -> StatementConditionHelper.isRelationMatchQuiet(relation, substituteType, x, y);
-			 * resultFunction.apply(lower, lowerConstraint);
-			 */
-			
-			// get an info about is ambigious from these 4 cases
-			
-			//TODO refactor
-			
-			if (!relation.equals(EStatementRelation.EQUAL)) {
-				result = StatementConditionHelper.isRelationMatchQuiet(
-						relation, substituteType, lower, lowerConstraint)
-						|| StatementConditionHelper.isRelationMatchQuiet(
-								relation, substituteType, lower,
-								upperConstraint)
-						|| StatementConditionHelper.isRelationMatchQuiet(
-								relation, substituteType, upper,
-								lowerConstraint)
-						|| StatementConditionHelper.isRelationMatchQuiet(
-								relation, substituteType, upper,
-								upperConstraint);
-			}
-			else {
-				if(choices.length == 2 && constraints.length == 2)
-				result = 
-						StatementConditionHelper.isRelationMatch(EStatementRelation.GREATER_EQUAL, substituteType, upper, lowerConstraint)
-						&& StatementConditionHelper.isRelationMatch(EStatementRelation.LESS_EQUAL, substituteType, lower, upperConstraint);
-				/*
-				(StatementConditionHelper.isRelationMatch(EStatementRelation.GREATER_EQUAL, substituteType, lower, lowerConstraint) 
-				&& StatementConditionHelper.isRelationMatch(EStatementRelation.LESS_EQUAL, substituteType, lower, upperConstraint))
-						|| (StatementConditionHelper.isRelationMatch(EStatementRelation.GREATER_EQUAL, substituteType, upper, lowerConstraint)
-								&& StatementConditionHelper.isRelationMatch(EStatementRelation.LESS_EQUAL, substituteType, upper, upperConstraint));
-				*/
-				else if(choices.length == 2 && constraints.length == 1) {
-					result = StatementConditionHelper.isRelationMatch(EStatementRelation.GREATER_EQUAL, substituteType, lower, lowerConstraint)
-							&& StatementConditionHelper.isRelationMatch(EStatementRelation.GREATER_EQUAL, substituteType, upper, lowerConstraint);
-				}
-				else if(choices.length == 1 && constraints.length == 2) {
-					result = StatementConditionHelper.isRelationMatch(EStatementRelation.GREATER_EQUAL, substituteType, lower, lowerConstraint)
-							&& StatementConditionHelper.isRelationMatch(EStatementRelation.LESS_EQUAL, substituteType, lower, upperConstraint);
-				}
-				else if(choices.length == 1 && constraints.length == 1) {
-					result = StatementConditionHelper.isRelationMatch(EStatementRelation.EQUAL, substituteType, lower, lowerConstraint);
-				}
-			}
-
-		}
-		return result;
+	public static final boolean isAmbigous(String left, EStatementRelation relation, String right) {
+		
+		
+		return false;
+	}
+	
+	static boolean validateOtherthanEqualCondition(EStatementRelation relation, int choicesLength, int constraintsLength, String substituteType,
+			String upper, String lower, String lowerConstraint, String upperConstraint) {
+		return StatementConditionHelper.isRelationMatchQuiet(
+				relation, substituteType, lower, lowerConstraint)
+				|| StatementConditionHelper.isRelationMatchQuiet(
+						relation, substituteType, lower,
+						upperConstraint)
+				|| StatementConditionHelper.isRelationMatchQuiet(
+						relation, substituteType, upper,
+						lowerConstraint)
+				|| StatementConditionHelper.isRelationMatchQuiet(
+						relation, substituteType, upper,
+						upperConstraint);
 	}
 	
 	@Override
@@ -138,13 +72,13 @@ public class ValueCondition implements IStatementCondition {
 		
 		EStatementRelation relation = fParentRelationStatement.getRelation();
 		
-		boolean isRandomizedChoice = getChoiceRandomized(choices, fParentRelationStatement.getLeftParameter());
+		boolean isRandomizedChoice = StatementConditionHelper.getChoiceRandomized(choices, fParentRelationStatement.getLeftParameter());
 		if(isRandomizedChoice) {
-			if("String".equals(substituteType)) {
-				//check does string match with regex
+			if(JavaTypeHelper.TYPE_NAME_STRING.equals(substituteType)) {
+				return EvaluationResult.convertFromBoolean(leftChoiceStr.matches(fRightValue));
 			}
 			else {
-				boolean result = isConstraintInChoiceRange(leftChoiceStr, fRightValue, relation, substituteType);
+				boolean result = StatementConditionHelper.isConstraintInChoiceRange(leftChoiceStr, fRightValue, relation, substituteType);
 				return EvaluationResult.convertFromBoolean(result);
 			}
 		}
@@ -156,17 +90,6 @@ public class ValueCondition implements IStatementCondition {
 		return EvaluationResult.FALSE;
 	}
 
-	//TODO on thy fly version, needs to be refactored
-	private static boolean getChoiceRandomized(List<ChoiceNode> choices, MethodParameterNode methodParameterNode) {
-		ChoiceNode choiceNode = StatementConditionHelper.getChoiceForMethodParameter(choices, methodParameterNode);
-
-		if (choiceNode == null) {
-			return false;
-		}
-
-		return choiceNode.isRandomizeValue();
-	}
-	
 	private static String getChoiceString(List<ChoiceNode> choices, MethodParameterNode methodParameterNode) {
 
 		ChoiceNode choiceNode = StatementConditionHelper.getChoiceForMethodParameter(choices, methodParameterNode);
