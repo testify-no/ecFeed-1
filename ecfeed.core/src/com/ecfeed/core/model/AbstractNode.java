@@ -29,7 +29,7 @@ public abstract class AbstractNode{
 		this.fName = name;
 	}
 
-	public int getIndex(){
+	public int getMyIndex(){
 		if(getParent() == null){
 			return -1;
 		}

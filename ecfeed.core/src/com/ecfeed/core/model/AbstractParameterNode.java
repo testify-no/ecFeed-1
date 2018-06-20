@@ -42,7 +42,7 @@ public abstract class AbstractParameterNode extends ChoicesParentNode {
 	}
 
 	@Override
-	public int getIndex(){
+	public int getMyIndex(){
 		if(getParametersParent() == null){
 			return -1;
 		}

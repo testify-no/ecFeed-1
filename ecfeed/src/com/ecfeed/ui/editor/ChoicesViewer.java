@@ -234,7 +234,7 @@ public class ChoicesViewer extends TableViewerSection {
 			}
 
 			try {
-				table.setSelection(choiceNode.getIndex());
+				table.setSelection(choiceNode.getMyIndex());
 			} catch (Exception e) {}
 		}
 	}

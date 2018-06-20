@@ -258,7 +258,7 @@ public class MethodParameterOperationSetType extends BulkOperation {
 		private void checkForDuplicateSignature(MethodNode oldMethodNode) throws ModelOperationException {
 
 			List<String> types = oldMethodNode.getParameterTypes();
-			types.set(fMethodParameterNode.getIndex(), getNewType());
+			types.set(fMethodParameterNode.getMyIndex(), getNewType());
 
 			MethodNode newMethodNode = oldMethodNode.getClassNode().getMethod(oldMethodNode.getName(), types);
 
@@ -328,7 +328,7 @@ public class MethodParameterOperationSetType extends BulkOperation {
 				ITypeAdapter<?> adapter = getTypeAdapterProvider().getAdapter(getNewType());
 				
 				while (tcIt.hasNext()) {
-					ChoiceNode expectedValue = tcIt.next().getTestData().get(fMethodParameterNode.getIndex());
+					ChoiceNode expectedValue = tcIt.next().getTestData().get(fMethodParameterNode.getMyIndex());
 					String newValue = adapter.convert(expectedValue.getValueString());
 					if (JavaTypeHelper.isUserType(getNewType())) {
 						if (fMethodParameterNode.getLeafChoiceValues().contains(newValue) == false) {

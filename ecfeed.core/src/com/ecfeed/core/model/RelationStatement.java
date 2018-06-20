@@ -16,9 +16,7 @@ import com.ecfeed.core.utils.EvaluationResult;
 import com.ecfeed.core.utils.SystemLogger;
 
 public class RelationStatement extends AbstractStatement implements IRelationalStatement{
-	/*
-	 * 
-	 */
+	
 	private MethodParameterNode fLeftParameter;
 	private EStatementRelation fRelation;
 	private IStatementCondition fRightCondition;
@@ -89,16 +87,12 @@ public class RelationStatement extends AbstractStatement implements IRelationalS
 		return result;
 	}
 
-	/*	private int getParameterPosition() {
-		return fLeftParameter.getIndex();
-	}*/
-
 	@Override
 	public boolean isAmbiguous(List<List<ChoiceNode>> values) {
+		
 		boolean result;
 		try {
-			int index = fLeftParameter.getIndex();
-			//			List<ChoiceNode> input = values.get(index);
+			int index = fLeftParameter.getMyIndex();
 			result = fRightCondition.isAmbiguous(values, index, fRelation);
 		}
 		catch (Exception e) {

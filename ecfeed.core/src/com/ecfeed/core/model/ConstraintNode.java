@@ -21,7 +21,7 @@ public class ConstraintNode extends AbstractNode{
 	private Constraint fConstraint;
 
 	@Override
-	public int getIndex() {
+	public int getMyIndex() {
 		if (getMethod() == null) {
 			return -1;
 		}

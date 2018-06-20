@@ -18,7 +18,7 @@ public class TestCaseNode extends AbstractNode {
 	List<ChoiceNode> fTestData;
 
 	@Override
-	public int getIndex(){
+	public int getMyIndex(){
 		if(getMethod() == null){
 			return -1;
 		}
