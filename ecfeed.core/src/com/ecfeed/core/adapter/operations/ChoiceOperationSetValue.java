@@ -22,7 +22,7 @@ import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.SystemLogger;
-//import com.ecfeed.core.utils.ValueFieldHelper;
+import com.ecfeed.core.utils.ValueFieldHelper;
 
 public class ChoiceOperationSetValue extends AbstractModelOperation {
 
@@ -83,8 +83,7 @@ public class ChoiceOperationSetValue extends AbstractModelOperation {
 		}
 		else {
 
-			return fAdapterProvider.getAdapter(type).convert(value);
-			//			return ValueFieldHelper.adapt(type, value, fTarget.isRandomizeValue(), fAdapterProvider);
+			return ValueFieldHelper.adapt(type, value, fTarget.isRandomizeValue(), fAdapterProvider);
 
 			//fAdapterProvider;
 			//			/return "nothing";
