@@ -88,8 +88,6 @@ public class TestSuiteGenerationSupport {
 			fGeneratedData = generated;
 		}
 
-		//HERE, ambigous
-		//todo, mock(?) generator
 		@Override
 		public void run(IProgressMonitor progressMonitor)
 				throws InvocationTargetException, InterruptedException {

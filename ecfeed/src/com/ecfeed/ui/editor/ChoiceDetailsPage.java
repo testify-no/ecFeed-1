@@ -46,6 +46,7 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 	private Combo fValueCombo;
 	private ChoiceInterface fChoiceIf;
 	private AbstractCommentsSection fCommentsSection;
+
 	private Button fExpectedCheckbox;
 	private Button fRandomizeCheckbox;
 	private MethodParameterInterface fParameterIf;
@@ -246,7 +247,6 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 			fValueCombo.setText(fValueComboText);
 			setValueComboToModel();
 		}
-		//refresh maybe?
 	}
 
 	public static final String DELIMITER = ":";
