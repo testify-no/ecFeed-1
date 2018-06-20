@@ -287,8 +287,17 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 	}
 	
 	private void checkAmbigousState() {
-		getCheckedConstraints();
-		getCheckedArguments();
+		List<Constraint> constraints = getCheckedConstraints();
+		List<List<ChoiceNode>> input = getCheckedArguments();
+		
+		for (Constraint constraint : constraints) {
+		/*	if(constraint.isAmbigous(input)) {
+				updateAmbigousWarningLabel(true);
+				return;
+			}*/
+		}
+		updateAmbigousWarningLabel(false);
+		
 		//do something with it
 		System.out.println("done");
 	}
@@ -296,10 +305,10 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 	//todo update when choice/constrain listener is in action
 	private void updateAmbigousWarningLabel(boolean isAmbigousCondition) {
 		if(isAmbigousCondition) {
-			ambigousLabel.setText("todo"); //String.Format
+			ambigousLabel.setText("ambigous is near"); //String.Format
 		}
 		else {
-			ambigousLabel.setText("");
+			ambigousLabel.setText("abcd");
 		}
 	}
 

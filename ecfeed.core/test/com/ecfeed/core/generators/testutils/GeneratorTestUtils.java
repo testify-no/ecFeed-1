@@ -33,6 +33,11 @@ public class GeneratorTestUtils{
 		public Constraint(Set<String> restrictedValues){
 			fRestrictedValues = restrictedValues;
 		}
+		
+		@Override
+		public boolean isAmbigous(List<String> values) {
+			return true;
+		}
 
 		@Override
 		public EvaluationResult evaluate(List<String> values) {
