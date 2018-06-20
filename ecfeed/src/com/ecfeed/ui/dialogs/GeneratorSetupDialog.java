@@ -521,8 +521,9 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		if (!validateTargetFileText(message)) {
 			return false;
 		}
+		// ADR-REF
 		if (isAmbiguous(null, null)) {
-			System.out.println("Ambigous state, todo");
+			System.out.println("Ambiguous state, todo");
 		}
 		return true;
 	}
