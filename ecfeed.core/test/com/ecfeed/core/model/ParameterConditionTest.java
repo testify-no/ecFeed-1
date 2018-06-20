@@ -57,8 +57,10 @@ public class ParameterConditionTest {
 	}
 
 	private List<ChoiceNode> createList(ChoiceNode choiceNode1, ChoiceNode choiceNode2) {
-		return Arrays.asList(new ChoiceNode[]{choiceNode1, choiceNode2});
+		return Arrays.asList(choiceNode1, choiceNode2);
 	}
+	
+	//todo evaulate multi statements as cartesian product, with all-false-pass tests and all-false-pass with some positive calls
 
 	@Test
 	public void evaluateForStrings() {
