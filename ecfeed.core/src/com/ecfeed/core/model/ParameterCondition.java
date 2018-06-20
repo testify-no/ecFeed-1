@@ -155,10 +155,43 @@ public class ParameterCondition implements IStatementCondition {
 
 	@Override
 	public boolean isAmbigous(List<ChoiceNode> values, EStatementRelation relation) {
-		// TODO Auto-generated method stub
+		String substituteType = JavaTypeHelper.getSubstituteType(fParentRelationStatement
+				.getLeftParameter().getType(), JavaTypeHelper.getStringTypeName());
+
+		if (substituteType == null) {
+			return false;
+		}
+		
+		String leftChoiceStr = getChoiceString(values, fParentRelationStatement.getLeftParameter());
+
+
+		for (ChoiceNode what : fRightParameterNode.getLeafChoices()) {
+			
+		}
+		
+	//	EStatementRelation relation = fParentRelationStatement.getRelation();
+		
+//		boolean isRandomizedChoice = StatementConditionHelper.getChoiceRandomized(values,
+//				fParentRelationStatement.getLeftParameter());
+//		if (isRandomizedChoice) {
+//			if (JavaTypeHelper.TYPE_NAME_STRING.equals(substituteType)) {
+//				return false;
+//			} else {
+//				boolean result = StatementConditionHelper.isAmbigous(leftChoiceStr,
+//						fRightValue, relation, substituteType);
+//				return result;
+//			}
+//		}
+//
+//		if (StatementConditionHelper.isRelationMatchQuiet(relation, substituteType, leftChoiceStr,
+//				fRightValue)) {
+//			return true;
+//		}
+
 		return false;
 	}
-
+	
+	
 }	
 
 
