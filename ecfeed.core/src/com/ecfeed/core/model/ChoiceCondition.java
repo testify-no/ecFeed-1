@@ -181,6 +181,10 @@ public class ChoiceCondition implements IStatementCondition {
 
 	//	EStatementRelation relation = fParentRelationStatement.getRelation();
 		
+		if(relation.equals(EStatementRelation.EQUAL) || relation.equals(EStatementRelation.NOT_EQUAL)) {
+			return false;
+		}
+		
 		boolean isRandomizedChoice = StatementConditionHelper.getChoiceRandomized(choices,
 				fParentRelationStatement.getLeftParameter());
 		if (isRandomizedChoice) {
