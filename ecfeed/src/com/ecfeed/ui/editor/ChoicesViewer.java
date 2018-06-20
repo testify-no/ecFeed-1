@@ -162,7 +162,7 @@ public class ChoicesViewer extends TableViewerSection {
 		protected boolean canEdit(Object element) {
 			return fEnabled && (((ChoiceNode)element).isAbstract() == false);
 		}
-		
+
 		@Override
 		protected Object getValue(Object element) {
 			return ((ChoiceNode)element).getValueString();
@@ -202,12 +202,12 @@ public class ChoicesViewer extends TableViewerSection {
 		public String getText(Object element){
 			if(element instanceof ChoiceNode){
 				ChoiceNode choice = (ChoiceNode)element;
-				return choice.getRandomizedValue();
+				return choice.getRandomizedValueStr();
 			}
 			return "";
 		}
 	}
-	
+
 	private class AddChoiceAdapter extends SelectionAdapter{
 
 		@Override
@@ -337,8 +337,8 @@ public class ChoicesViewer extends TableViewerSection {
 		fRandomizedColumn.setEditingSupport(new RandomizedValueEditingSupport());		
 		fValueColumn = addColumn("Value", 150, new ChoiceValueLabelProvider());
 	}
-	
-	
+
+
 	//TODO 555 editing support
 	private class RandomizedValueEditingSupport extends EditingSupport {
 
