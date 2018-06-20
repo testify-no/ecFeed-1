@@ -9,7 +9,6 @@ import com.ecfeed.core.model.GlobalParameterNode;
 import com.ecfeed.core.model.IParameterVisitor;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelOperationException;
-import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.SystemLogger;
 
 public class ChoiceOperationSetRandomizeValue extends AbstractModelOperation {

@@ -27,7 +27,7 @@ import com.ecfeed.core.utils.ValueFieldHelper;
 public class ChoiceOperationSetValue extends AbstractModelOperation {
 
 	private String fNewValue;
-	private String fOriginalValue;
+//	private String fOriginalValue;
 	private String fOriginalDefaultValue;
 	private ChoiceNode fTarget;
 	private ITypeAdapterProvider fAdapterProvider;
@@ -37,10 +37,10 @@ public class ChoiceOperationSetValue extends AbstractModelOperation {
 		super(OperationNames.SET_PARTITION_VALUE);
 		fTarget = target;
 		fNewValue = newValue;
-		fOriginalValue = fTarget.getValueString();
+//		fOriginalValue = fTarget.getValueString();
 		fAdapterProvider = adapterProvider;
 	}
-
+	
 	@Override
 	public void execute() throws ModelOperationException {
 
@@ -82,19 +82,11 @@ public class ChoiceOperationSetValue extends AbstractModelOperation {
 			return fAdapterProvider.getAdapter(type).convert(value);
 		}
 		else {
-
 			return ValueFieldHelper.adapt(type, value, fTarget.isRandomizeValue(), fAdapterProvider);
-
-			//fAdapterProvider;
-			//			/return "nothing";
 		}
 
-		//fTarget.isRandomizeValue()
-
-
 	}
-
-
+	
 	private class ParameterAdapter implements IParameterVisitor{
 
 		@Override
@@ -144,8 +136,11 @@ public class ChoiceOperationSetValue extends AbstractModelOperation {
 		@Override
 		public void execute() throws ModelOperationException {
 
-			setOneNodeToSelect(fTarget);
-			fTarget.setValueString(fOriginalValue);
+			String convertedValue = validateChoiceValue(fTarget.getParameter().getType(), fNewValue);
+			if(convertedValue == null){
+				ModelOperationException.report(Messages.PARTITION_VALUE_PROBLEM(fNewValue));
+			}
+			fTarget.setValueString(convertedValue);
 			adaptParameter(fTarget.getParameter());
 			markModelUpdated();
 		}
