@@ -199,7 +199,7 @@ public class XmlParserSerializerTest {
 			method.addConstraint(labelConstraintNode);
 			method.addConstraint(choiceConstraintNode);
 			method.addConstraint(expectedConstraintNode);
-			
+
 			ByteArrayOutputStream ostream = new ByteArrayOutputStream();
 			IModelSerializer serializer = new EctSerializer(ostream, version);
 			serializer.serialize(root);
@@ -326,7 +326,7 @@ public class XmlParserSerializerTest {
 			return Short.toString((short)rand.nextInt());
 		case SerializationConstants.TYPE_NAME_STRING:
 			if(rand.nextInt(5) == 0){
-				return com.ecfeed.core.utils.CommonConstants.NULL_VALUE_STRING_REPRESENTATION;
+				return JavaTypeHelper.NULL_VALUE_STRING_REPRESENTATION;
 			}
 			else{
 				return generateRandomString(rand.nextInt(10));

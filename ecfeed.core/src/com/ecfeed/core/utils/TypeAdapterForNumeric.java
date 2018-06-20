@@ -7,8 +7,8 @@ import com.ecfeed.core.adapter.ITypeAdapter;
 public abstract class TypeAdapterForNumeric<T extends Number> implements ITypeAdapter<T>{
 
 	private String[] NUMERIC_SPECIAL_VALUES = new String[]{
-			CommonConstants.MAX_VALUE_STRING_REPRESENTATION,
-			CommonConstants.MIN_VALUE_STRING_REPRESENTATION
+			JavaTypeHelper.VALUE_REPRESENTATION_MAX,
+			JavaTypeHelper.VALUE_REPRESENTATION_MIN
 	};
 
 	public static final String DELIMITER = ":";		
@@ -25,7 +25,7 @@ public abstract class TypeAdapterForNumeric<T extends Number> implements ITypeAd
 
 	@Override
 	public String getDefaultValue(){
-		return CommonConstants.DEFAULT_EXPECTED_NUMERIC_VALUE;
+		return JavaTypeHelper.DEFAULT_EXPECTED_NUMERIC_VALUE;
 	}
 
 	@Override
