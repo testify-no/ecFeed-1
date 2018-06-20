@@ -73,15 +73,6 @@ public class ChoiceOperationSetValue extends AbstractModelOperation {
 		return new ReverseOperation();
 	}
 
-	//	private String validateChoiceValue(String type, String value) {
-	//
-	//		if (value.length() > AdapterConstants.MAX_PARTITION_VALUE_STRING_LENGTH) {
-	//			return null;
-	//		}
-	//
-	//		return fAdapterProvider.getAdapter(type).convert(value);
-	//	}
-
 	private String validateChoiceValue(String type, String value) throws ModelOperationException {
 		if (value.length() > AdapterConstants.MAX_PARTITION_VALUE_STRING_LENGTH) {
 			return null;
@@ -175,7 +166,6 @@ public class ChoiceOperationSetValue extends AbstractModelOperation {
 		}
 
 	}
-
 
 	@Override
 	public String toString(){
