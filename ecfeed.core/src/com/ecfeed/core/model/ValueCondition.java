@@ -28,27 +28,6 @@ public class ValueCondition implements IStatementCondition {
 		fParentRelationStatement = parentRelationStatement;
 	}
 
-	public static final boolean isAmbigous(String left, EStatementRelation relation, String right) {
-		
-		
-		return false;
-	}
-	
-	static boolean validateOtherthanEqualCondition(EStatementRelation relation, int choicesLength, int constraintsLength, String substituteType,
-			String upper, String lower, String lowerConstraint, String upperConstraint) {
-		return StatementConditionHelper.isRelationMatchQuiet(
-				relation, substituteType, lower, lowerConstraint)
-				|| StatementConditionHelper.isRelationMatchQuiet(
-						relation, substituteType, lower,
-						upperConstraint)
-				|| StatementConditionHelper.isRelationMatchQuiet(
-						relation, substituteType, upper,
-						lowerConstraint)
-				|| StatementConditionHelper.isRelationMatchQuiet(
-						relation, substituteType, upper,
-						upperConstraint);
-	}
-	
 	@Override
 	public EvaluationResult evaluate(List<ChoiceNode> choices) {
 
@@ -90,6 +69,46 @@ public class ValueCondition implements IStatementCondition {
 		return EvaluationResult.FALSE;
 	}
 
+	@Override
+	public EvaluationResult isAmgibous(List<ChoiceNode> choices) {
+		String substituteType = JavaTypeHelper.getSubstituteType(fParentRelationStatement
+				.getLeftParameter().getType(), JavaTypeHelper.getStringTypeName());
+
+		if (substituteType == null) {
+			return EvaluationResult.FALSE;
+		}
+
+		String leftChoiceStr = getChoiceString(choices, fParentRelationStatement.getLeftParameter());
+
+		if (leftChoiceStr == null) {
+			return EvaluationResult.INSUFFICIENT_DATA;
+		}
+		// TODO 433
+
+		EStatementRelation relation = fParentRelationStatement.getRelation();
+		
+		
+
+		boolean isRandomizedChoice = StatementConditionHelper.getChoiceRandomized(choices,
+				fParentRelationStatement.getLeftParameter());
+		if (isRandomizedChoice) {
+			if (JavaTypeHelper.TYPE_NAME_STRING.equals(substituteType)) {
+				return EvaluationResult.convertFromBoolean(leftChoiceStr.matches(fRightValue));
+			} else {
+				boolean result = StatementConditionHelper.isAmbigous(leftChoiceStr,
+						fRightValue, relation, substituteType);
+				return EvaluationResult.convertFromBoolean(result);
+			}
+		}
+
+		if (StatementConditionHelper.isRelationMatchQuiet(relation, substituteType, leftChoiceStr,
+				fRightValue)) {
+			return EvaluationResult.TRUE;
+		}
+
+		return EvaluationResult.FALSE;
+	}
+	
 	private static String getChoiceString(List<ChoiceNode> choices, MethodParameterNode methodParameterNode) {
 
 		ChoiceNode choiceNode = StatementConditionHelper.getChoiceForMethodParameter(choices, methodParameterNode);

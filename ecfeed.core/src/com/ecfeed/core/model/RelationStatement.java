@@ -86,6 +86,19 @@ public class RelationStatement extends AbstractStatement implements IRelationalS
 
 		return result;
 	}
+	
+	@Override
+	public EvaluationResult isAmgibous(List<ChoiceNode> values) {
+		EvaluationResult result;
+		try {
+			result = fRightCondition.isAmgibous(values);
+		}
+		catch (Exception e) {
+			SystemLogger.logCatch(e.getMessage());
+			return EvaluationResult.FALSE;
+		}
+		return result;
+	}
 
 	@Override
 	public void setRelation(EStatementRelation relation) {

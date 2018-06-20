@@ -102,4 +102,10 @@ public class StaticStatement extends AbstractStatement {
 		fValue = EvaluationResult.convertFromBoolean(value);
 	}
 
+	@Override
+	public EvaluationResult isAmgibous(List<ChoiceNode> values) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
