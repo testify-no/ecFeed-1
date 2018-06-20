@@ -15,8 +15,9 @@ import com.ecfeed.core.utils.TypeAdapterProvider;
 
 public class EclipseTypeAdapterProvider extends TypeAdapterProvider{
 
+	@SuppressWarnings("rawtypes")
 	@Override
-	protected ITypeAdapter getTypeAdapterBaseForUserType(String type) {
+	protected ITypeAdapter<?> getTypeAdapterBaseForUserType(String type) {
 		return new EclipseTypeAdapterForUserType(type);
 	}
 }
