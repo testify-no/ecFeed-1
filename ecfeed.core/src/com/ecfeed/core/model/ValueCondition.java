@@ -46,8 +46,6 @@ public class ValueCondition implements IStatementCondition {
 		if (leftChoiceStr == null) {
 			return EvaluationResult.INSUFFICIENT_DATA;
 		}
-		//TODO 433
-
 		
 		EStatementRelation relation = fParentRelationStatement.getRelation();
 		
