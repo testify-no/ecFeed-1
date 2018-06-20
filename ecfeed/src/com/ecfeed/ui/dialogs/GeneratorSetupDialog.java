@@ -254,7 +254,9 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 	}
 	
 	private void checkAmbigousState() {
-		//checkAmbigousStateHere
+		getCheckedConstraints();
+		getCheckedArguments();
+		//do something with it
 		System.out.println("done");
 	}
 	
