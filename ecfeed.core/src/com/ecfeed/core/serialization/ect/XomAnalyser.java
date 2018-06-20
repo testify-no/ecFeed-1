@@ -610,6 +610,7 @@ public abstract class XomAnalyser {
 		String name = getElementName(element);
 		String value = getAttributeValue(element, VALUE_ATTRIBUTE);
 
+		//here
 		boolean isRandomized = getIsRandomizedValue(element, NODE_IS_RADOMIZED_ATTRIBUTE);
 		
 		
@@ -700,7 +701,8 @@ public abstract class XomAnalyser {
 	protected boolean getIsRandomizedValue(Element element, String attributeName) throws ParserException {
 		String isRandomizedValue = element.getAttributeValue(attributeName);
 		if (isRandomizedValue == null) {
-			isRandomizedValue = JavaTypeHelper.VALUE_REPRESENTATION_FALSE;
+			// if file version doesn't have randomized value support
+			return false;
 		}
 		return Boolean.parseBoolean(fWhiteCharConverter.decode(isRandomizedValue));
 	}
