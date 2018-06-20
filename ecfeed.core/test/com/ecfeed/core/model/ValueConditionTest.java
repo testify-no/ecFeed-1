@@ -132,7 +132,6 @@ public class ValueConditionTest {
 		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.GREATER_EQUAL, "-1:11", AssertType.TRUE);
 		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.GREATER_EQUAL, "1:9", AssertType.TRUE);
 		
-//		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.GREATER_THAN, "0:10", AssertType.TRUE);
 		evaluateRandomizedOne(methodParameterNode, "2:2", EStatementRelation.GREATER_THAN, "2:2", AssertType.FALSE);
 		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.GREATER_THAN, "9:100", AssertType.TRUE);
 		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.GREATER_THAN, "10:100", AssertType.FALSE);
@@ -143,9 +142,8 @@ public class ValueConditionTest {
 		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.GREATER_THAN, "-1:11", AssertType.TRUE);
 		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.GREATER_THAN, "1:9", AssertType.TRUE);
 		
-//		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "0:10", AssertType.TRUE);
 		evaluateRandomizedOne(methodParameterNode, "2:2", EStatementRelation.EQUAL, "2:2", AssertType.TRUE);
-//		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "9:100", AssertType.TRUE);
+		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "9:100", AssertType.TRUE);
 		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "10:100", AssertType.TRUE);
 		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "11:100", AssertType.FALSE);
 		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "-10:-1", AssertType.FALSE);
@@ -154,7 +152,6 @@ public class ValueConditionTest {
 //		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "-1:11", AssertType.TRUE);
 //		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "1:9", AssertType.TRUE);
 		
-//		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.LESS_EQUAL, "0:10", AssertType.TRUE);
 		evaluateRandomizedOne(methodParameterNode, "2:2", EStatementRelation.LESS_EQUAL, "2:2", AssertType.TRUE);
 		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.LESS_EQUAL, "9:100", AssertType.TRUE);
 		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.LESS_EQUAL, "10:100", AssertType.TRUE);
@@ -165,7 +162,6 @@ public class ValueConditionTest {
 		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.LESS_EQUAL, "-1:11", AssertType.TRUE);
 		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.LESS_EQUAL, "1:9", AssertType.TRUE);
 		
-//		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.LESS_THAN, "0:10", AssertType.TRUE);
 		evaluateRandomizedOne(methodParameterNode, "2:2", EStatementRelation.LESS_THAN, "2:2", AssertType.FALSE);
 		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.LESS_THAN, "9:100", AssertType.TRUE);
 		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.LESS_THAN, "10:100", AssertType.TRUE);
@@ -176,13 +172,6 @@ public class ValueConditionTest {
 		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.LESS_THAN, "-1:11", AssertType.TRUE);
 		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.LESS_THAN, "1:9", AssertType.TRUE);
 		
-		
-		
-		
-		
-		
-		
-//		evaluateRandomizedOne(methodParameterNode, "-5:15", EStatementRelation.GREATER_THAN, ":0150", AssertType.TRUE);
 		evaluateRandomizedOne(methodParameterNode, "a", EStatementRelation.GREATER_EQUAL, "1", AssertType.FALSE);
 		evaluateRandomizedOne(methodParameterNode, "a", EStatementRelation.GREATER_EQUAL, "1", AssertType.FALSE);
 		evaluateRandomizedOne(methodParameterNode, "a", EStatementRelation.GREATER_EQUAL, "1", AssertType.FALSE);
