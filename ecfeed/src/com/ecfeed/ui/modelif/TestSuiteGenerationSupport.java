@@ -117,8 +117,10 @@ public class TestSuiteGenerationSupport {
 	public void proceed(){
 		fHasData = generate() && !fCanceled;
 	}
-
-	protected boolean generate() {
+	
+	//TODO
+	//copy/base on generate method maybe
+	protected boolean generate(){
 
 		SetupDialogGenerateTestSuite dialog = 
 				SetupDialogGenerateTestSuite.create(
