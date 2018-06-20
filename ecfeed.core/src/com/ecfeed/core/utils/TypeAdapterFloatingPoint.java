@@ -3,14 +3,14 @@ package com.ecfeed.core.utils;
 import java.util.Arrays;
 
 public abstract class TypeAdapterFloatingPoint<T extends Number> extends TypeAdapterForNumeric<T>{
-	
+
 	private String[] FLOATING_POINT_SPECIAL_VALUES = new String[]{
 			CommonConstants.POSITIVE_INFINITY_STRING_REPRESENTATION,
 			CommonConstants.NEGATIVE_INFINITY_STRING_REPRESENTATION
 	};
 
 	@Override
-	public boolean compatible(String type){
+	public boolean isCompatible(String type){
 		return Arrays.asList(TypeAdapterHelper.TYPES_CONVERTABLE_TO_NUMBERS).contains(type);
 	}
 
@@ -24,7 +24,7 @@ public abstract class TypeAdapterFloatingPoint<T extends Number> extends TypeAda
 	}
 
 	@Override
-	public String defaultValue(){
+	public String getDefaultValue(){
 		return CommonConstants.DEFAULT_EXPECTED_FLOATING_POINT_VALUE;
 	}
 }

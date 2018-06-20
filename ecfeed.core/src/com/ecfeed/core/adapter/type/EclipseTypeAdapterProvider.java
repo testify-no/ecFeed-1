@@ -31,7 +31,7 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider {
 
 	private class BooleanTypeAdapter implements ITypeAdapter {
 		@Override
-		public boolean compatible(String type) {
+		public boolean isCompatible(String type) {
 			return Arrays.asList(TYPES_CONVERTABLE_TO_BOOLEAN).contains(type);
 		}
 
@@ -50,7 +50,7 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider {
 		}
 
 		@Override
-		public String defaultValue() {
+		public String getDefaultValue() {
 			return CommonConstants.DEFAULT_EXPECTED_BOOLEAN_VALUE;
 		}
 
@@ -74,7 +74,7 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider {
 
 	private class StringTypeAdapter implements ITypeAdapter {
 		@Override
-		public boolean compatible(String type) {
+		public boolean isCompatible(String type) {
 			return Arrays.asList(TYPES_CONVERTABLE_TO_STRING).contains(type);
 		}
 
@@ -83,7 +83,7 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider {
 		}
 
 		@Override
-		public String defaultValue() {
+		public String getDefaultValue() {
 			return CommonConstants.DEFAULT_EXPECTED_STRING_VALUE;
 		}
 
@@ -114,7 +114,7 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider {
 		}
 
 		@Override
-		public boolean compatible(String type) {
+		public boolean isCompatible(String type) {
 			return Arrays.asList(TYPES_CONVERTABLE_TO_USER_TYPE).contains(type);
 		}
 
@@ -128,7 +128,7 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider {
 		}
 
 		@Override
-		public String defaultValue() {
+		public String getDefaultValue() {
 			return EclipseTypeHelper.getDefaultExpectedValue(fType);
 		}
 
@@ -152,7 +152,7 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider {
 
 	private class CharTypeAdapter implements ITypeAdapter {
 		@Override
-		public boolean compatible(String type) {
+		public boolean isCompatible(String type) {
 			return Arrays.asList(TYPES_CONVERTABLE_TO_CHAR).contains(type);
 		}
 
@@ -177,7 +177,7 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider {
 		}
 
 		@Override
-		public String defaultValue() {
+		public String getDefaultValue() {
 			return CommonConstants.DEFAULT_EXPECTED_CHAR_VALUE;
 		}
 
@@ -206,7 +206,7 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider {
 				CommonConstants.MIN_VALUE_STRING_REPRESENTATION };
 
 		@Override
-		public boolean compatible(String type) {
+		public boolean isCompatible(String type) {
 			return Arrays.asList(TYPES_CONVERTABLE_TO_NUMBERS).contains(type);
 		}
 
@@ -217,7 +217,7 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider {
 		}
 
 		@Override
-		public String defaultValue() {
+		public String getDefaultValue() {
 			return CommonConstants.DEFAULT_EXPECTED_NUMERIC_VALUE;
 		}
 
@@ -233,7 +233,7 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider {
 				CommonConstants.NEGATIVE_INFINITY_STRING_REPRESENTATION };
 
 		@Override
-		public boolean compatible(String type) {
+		public boolean isCompatible(String type) {
 			return Arrays.asList(TYPES_CONVERTABLE_TO_NUMBERS).contains(type);
 		}
 
@@ -248,7 +248,7 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider {
 		}
 
 		@Override
-		public String defaultValue() {
+		public String getDefaultValue() {
 			return CommonConstants.DEFAULT_EXPECTED_FLOATING_POINT_VALUE;
 		}
 	}

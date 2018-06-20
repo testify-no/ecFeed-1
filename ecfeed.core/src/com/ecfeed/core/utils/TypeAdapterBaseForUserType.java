@@ -19,7 +19,7 @@ public class TypeAdapterBaseForUserType<T extends Enum<T>> implements ITypeAdapt
 	}
 
 	@Override
-	public boolean compatible(String type){
+	public boolean isCompatible(String type){
 
 		return Arrays.asList(TYPES_CONVERTABLE_TO_USER_TYPE).contains(type);
 	}
@@ -29,7 +29,7 @@ public class TypeAdapterBaseForUserType<T extends Enum<T>> implements ITypeAdapt
 	}
 
 	@Override
-	public String defaultValue() {
+	public String getDefaultValue() {
 		return null;
 	}
 

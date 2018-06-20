@@ -14,7 +14,7 @@ public abstract class TypeAdapterForNumeric<T extends Number> implements ITypeAd
 	public static final String DELIMITER = ":";		
 
 	@Override
-	public boolean compatible(String type){
+	public boolean isCompatible(String type){
 		return Arrays.asList(TypeAdapterHelper.TYPES_CONVERTABLE_TO_NUMBERS).contains(type);
 	}
 
@@ -24,7 +24,7 @@ public abstract class TypeAdapterForNumeric<T extends Number> implements ITypeAd
 	}
 
 	@Override
-	public String defaultValue(){
+	public String getDefaultValue(){
 		return CommonConstants.DEFAULT_EXPECTED_NUMERIC_VALUE;
 	}
 
