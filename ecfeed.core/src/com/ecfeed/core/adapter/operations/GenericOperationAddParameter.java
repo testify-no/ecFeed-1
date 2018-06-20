@@ -39,7 +39,7 @@ public class GenericOperationAddParameter extends AbstractModelOperation {
 		public void execute() throws ModelOperationException {
 
 			setOneNodeToSelect(fParametersParentNode);
-			fOriginalIndex = fReversedParameter.getIndex();
+			fOriginalIndex = fReversedParameter.getMyIndex();
 			fReversedTarget.removeParameter(fReversedParameter);
 			markModelUpdated();
 		}

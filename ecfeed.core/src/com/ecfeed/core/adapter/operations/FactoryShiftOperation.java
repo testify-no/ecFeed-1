@@ -230,8 +230,8 @@ public class FactoryShiftOperation{
 	}
 
 	private static int calculateShift(List<? extends AbstractNode> shifted, int newIndex) {
-		int shift = newIndex - minIndexNode(shifted).getIndex();
-		if(minIndexNode(shifted).getIndex() < newIndex){
+		int shift = newIndex - minIndexNode(shifted).getMyIndex();
+		if(minIndexNode(shifted).getMyIndex() < newIndex){
 			shift -= 1;
 		}
 		return shift;
@@ -240,7 +240,7 @@ public class FactoryShiftOperation{
 	private static AbstractNode minIndexNode(List<? extends AbstractNode> nodes){
 		AbstractNode minIndexNode = nodes.get(0);
 		for(AbstractNode node : nodes){
-			minIndexNode = node.getIndex() < minIndexNode.getIndex() ? node : minIndexNode;
+			minIndexNode = node.getMyIndex() < minIndexNode.getMyIndex() ? node : minIndexNode;
 		}
 		return minIndexNode;
 	}

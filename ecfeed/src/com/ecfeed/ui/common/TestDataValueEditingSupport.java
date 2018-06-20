@@ -174,7 +174,7 @@ public class TestDataValueEditingSupport extends EditingSupport {
 		ChoiceNode current = (ChoiceNode)element;
 
 		MethodParameterNode parameter = fMethod.getMethodParameter(current);
-		int index = parameter.getIndex();
+		int index = parameter.getMyIndex();
 		ChoiceNode newValue = null;
 
 		if(parameter.isExpected()){

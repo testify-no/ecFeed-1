@@ -124,7 +124,7 @@ public class AbstractParameterOperationSetType extends AbstractModelOperation {
 							for(AbstractParameterNode parameter: methodNode.getParameters()){
 								MethodParameterNode param = (MethodParameterNode)parameter;
 								if(param.isLinked() && param.getLink().equals(target)){
-									types.set(parameter.getIndex(), fNewType);
+									types.set(parameter.getMyIndex(), fNewType);
 								}			
 							}
 							methods.put(methodNode, types);
