@@ -11,10 +11,12 @@
 package com.ecfeed.core.adapter;
 
 public interface ITypeAdapter<T> {
-	public boolean compatible(String type);
+
+	public boolean isCompatible(String type);
 	public String convert(String value);
-	public String defaultValue();
+	public String getDefaultValue();
 	public boolean isNullAllowed();
 	public T generateValue(String range);
 	public String generateValueAsString(String range);
+
 }

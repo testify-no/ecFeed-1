@@ -7,9 +7,9 @@ import com.ecfeed.core.utils.JavaLanguageHelper;
 import com.ecfeed.core.utils.JavaTypeHelper;
 
 public class EclipseTypeAdapterForUserType<T extends Enum<T>> implements ITypeAdapter<T> {
-	
+
 	private String fType;
-	
+
 	private final String[] TYPES_CONVERTABLE_TO_USER_TYPE = new String[]{
 			JavaTypeHelper.TYPE_NAME_STRING 
 	};
@@ -19,7 +19,7 @@ public class EclipseTypeAdapterForUserType<T extends Enum<T>> implements ITypeAd
 	}
 
 	@Override
-	public boolean compatible(String type){
+	public boolean isCompatible(String type){
 		return Arrays.asList(TYPES_CONVERTABLE_TO_USER_TYPE).contains(type);
 	}
 
@@ -28,7 +28,7 @@ public class EclipseTypeAdapterForUserType<T extends Enum<T>> implements ITypeAd
 	}
 
 	@Override
-	public String defaultValue() {
+	public String getDefaultValue() {
 		return EclipseTypeHelper.getDefaultExpectedValue(fType);
 	}
 

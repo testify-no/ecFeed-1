@@ -298,7 +298,7 @@ public class MethodParameterOperationSetType extends BulkOperation {
 					newDefaultValue = fMethodParameterNode.getLeafChoices().toArray(new ChoiceNode[]{})[0].getValueString();
 				}
 				else{
-					newDefaultValue = adapter.defaultValue();
+					newDefaultValue = adapter.getDefaultValue();
 				}
 			}
 

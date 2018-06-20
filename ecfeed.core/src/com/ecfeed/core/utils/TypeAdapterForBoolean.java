@@ -6,13 +6,13 @@ import java.util.concurrent.ThreadLocalRandom;
 import com.ecfeed.core.adapter.ITypeAdapter;
 
 public class TypeAdapterForBoolean implements ITypeAdapter<Boolean>{
-	
+
 	private final String[] TYPES_CONVERTABLE_TO_BOOLEAN = new String[]{
 			JavaTypeHelper.TYPE_NAME_STRING
 	};
-	
+
 	@Override
-	public boolean compatible(String type){
+	public boolean isCompatible(String type){
 		return Arrays.asList(TYPES_CONVERTABLE_TO_BOOLEAN).contains(type);
 	}
 
@@ -27,7 +27,7 @@ public class TypeAdapterForBoolean implements ITypeAdapter<Boolean>{
 	}
 
 	@Override
-	public String defaultValue() {
+	public String getDefaultValue() {
 		return CommonConstants.DEFAULT_EXPECTED_BOOLEAN_VALUE;
 	}
 

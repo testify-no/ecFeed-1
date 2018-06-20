@@ -151,7 +151,7 @@ public class GenericOperationRemoveChoice extends BulkOperation {
 				ITypeAdapter adapter = fAdapterProvider.getAdapter(parent.getParameter().getType());
 				String newValue = adapter.convert(parent.getValueString());
 				if(newValue == null){
-					newValue = adapter.defaultValue();
+					newValue = adapter.getDefaultValue();
 				}
 				parent.setValueString(newValue);
 			}
