@@ -25,7 +25,7 @@ public class ChoiceNode extends ChoicesParentNode{
 	private String fValueString;
 	private Set<String> fLabels;
 	private boolean fIsRandomizedValue;
-	
+
 	public ChoiceNode(String name, String value) {
 		super(name);
 		fValueString = value;
@@ -39,7 +39,7 @@ public class ChoiceNode extends ChoicesParentNode{
 		fLabels = new LinkedHashSet<String>();
 		fIsRandomizedValue = isRandomized;
 	}
-	
+
 	@Override
 	public AbstractParameterNode getParameter() {
 		if(fParent != null){
@@ -66,6 +66,15 @@ public class ChoiceNode extends ChoicesParentNode{
 		return getQualifiedName() + " [" + getValueString() + "]";
 	}
 
+	@Override
+	protected void correctNodeValuesAfterChoicesAdd() {
+
+		if (isAbstract()) {
+			setRandomizedValue(false);
+		}
+	}
+
+
 	public String toStringWithParenthesis() {
 
 		if(isAbstract()){
@@ -89,9 +98,9 @@ public class ChoiceNode extends ChoicesParentNode{
 		for(String label : fLabels){
 			copy.addLabel(label);
 		}
-		
+
 		copy.setRandomizedValue(fIsRandomizedValue);
-		
+
 		return copy;
 	}
 
@@ -109,19 +118,19 @@ public class ChoiceNode extends ChoicesParentNode{
 	public boolean isCorrectableToBeRandomizedType() {
 		return fParent.getParameter().isCorrectableToBeRandomizedType() && !isAbstract();
 	}
-	
+
 	public void setRandomizedValue(boolean choice) {
 		fIsRandomizedValue = choice;
 	}
-	
+
 	public boolean isRandomizedValue() {
 		return fIsRandomizedValue;
 	}
-	
-	public String getRandomizedValue() {
+
+	public String getRandomizedValueStr() {
 		return fIsRandomizedValue ? "YES" : "NO";
 	}
-	
+
 	public void setParent(ChoicesParentNode parent){
 		super.setParent(parent);
 		fParent = parent;
@@ -182,11 +191,13 @@ public class ChoiceNode extends ChoicesParentNode{
 	}
 
 	public boolean isAbstract(){
-		boolean isAbstract = getChoices().size() != 0;
-		if (isAbstract) {
-			setRandomizedValue(false);
+
+		if (getChoices().size() == 0) {
+			return false;
 		}
-		return isAbstract;
+
+		return true;
+
 	}
 
 	public boolean isMatchIncludingParents(ChoiceNode choice) {
