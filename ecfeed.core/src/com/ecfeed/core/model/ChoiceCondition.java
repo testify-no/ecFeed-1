@@ -18,6 +18,7 @@ import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.ObjectHelper;
 
 public class ChoiceCondition implements IStatementCondition {
+	
 	//with one param, can be range
 	private ChoiceNode fRightChoice;
 	RelationStatement fParentRelationStatement;

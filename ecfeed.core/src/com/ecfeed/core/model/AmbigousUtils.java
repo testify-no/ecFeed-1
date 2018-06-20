@@ -15,4 +15,8 @@ class AmbigousUtils {
 	boolean isAmbigous(List<IStatementCondition> leftConditions, EStatementRelation relation, List<IStatementCondition> rightConditions) {
 		return false;
 	}
+	
+	boolean isAmbigous(List<IStatementCondition> leftConditions, EStatementRelation relation, IStatementCondition rightCondition) {
+		return isAmbigous(rightCondition, relation, leftConditions);
+	}
 }
