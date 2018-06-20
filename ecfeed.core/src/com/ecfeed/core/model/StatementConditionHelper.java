@@ -139,13 +139,7 @@ public class StatementConditionHelper {
 
 		if (typeName == null) {
 			return false;
-		}
-		//TODO 443 3
-	//	EclipseTypeAdapterProvider.
-		
-
-		
-		
+		}		
 		
 		if (relation == EStatementRelation.EQUAL && StringHelper.isEqual(leftString, rightString)) {
 			return true;

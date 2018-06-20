@@ -150,9 +150,9 @@ public class ValueConditionTest {
 		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "11:100", AssertType.FALSE);
 		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "-10:-1", AssertType.FALSE);
 		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "-10:0", AssertType.TRUE);
-//		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "-10:1", AssertType.TRUE);
-//		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "-1:11", AssertType.TRUE);
-//		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "1:9", AssertType.TRUE);
+		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "-10:1", AssertType.TRUE);
+		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "-1:11", AssertType.TRUE);
+		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "1:9", AssertType.TRUE);	// last test todo
 		
 //		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.LESS_EQUAL, "0:10", AssertType.TRUE);
 		evaluateRandomizedOne(methodParameterNode, "2:2", EStatementRelation.LESS_EQUAL, "2:2", AssertType.TRUE);
