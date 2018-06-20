@@ -28,6 +28,22 @@ public class ValueCondition implements IStatementCondition {
 		fParentRelationStatement = parentRelationStatement;
 	}
 
+	//TODO refactor
+	private static boolean isConstraintInChoiceRange(String choice, String constraint, String relation, String substituteType) {
+		if(substituteType.equals("int") || substituteType.equals("long")) {		
+			
+			String[] choices = choice.split(":");
+			String[] constraints = constraint.split(":");
+			
+			long lower = Long.parseLong(choices[0]);
+			long upper = Long.parseLong(choices[1]);
+			
+			
+			
+		}
+		return true;
+	}
+	
 	@Override
 	public EvaluationResult evaluate(List<ChoiceNode> choices) {
 
@@ -40,10 +56,24 @@ public class ValueCondition implements IStatementCondition {
 		}
 
 		String leftChoiceStr = getChoiceString(choices, fParentRelationStatement.getLeftParameter());
+		
+
+		
 		if (leftChoiceStr == null) {
 			return EvaluationResult.INSUFFICIENT_DATA;
 		}
 		//TODO 433
+		boolean isRandomizedChoice = getChoiceRandomized(choices, fParentRelationStatement.getLeftParameter());
+		if(isRandomizedChoice) {
+			if("String".equals(substituteType)) {
+				//check does string match with regex
+			}
+			else {
+				leftChoiceStr.split(":"); //choice
+				fRightValue.split(":");	  //constraint
+			}
+		}
+		
 		EStatementRelation relation = fParentRelationStatement.getRelation();
 
 
@@ -54,6 +84,17 @@ public class ValueCondition implements IStatementCondition {
 		return EvaluationResult.FALSE;
 	}
 
+	//TODO on thy fly version, needs to be refactored
+	private static boolean getChoiceRandomized(List<ChoiceNode> choices, MethodParameterNode methodParameterNode) {
+		ChoiceNode choiceNode = StatementConditionHelper.getChoiceForMethodParameter(choices, methodParameterNode);
+
+		if (choiceNode == null) {
+			return false;
+		}
+
+		return choiceNode.isRandomizeValue();
+	}
+	
 	private static String getChoiceString(List<ChoiceNode> choices, MethodParameterNode methodParameterNode) {
 
 		ChoiceNode choiceNode = StatementConditionHelper.getChoiceForMethodParameter(choices, methodParameterNode);
