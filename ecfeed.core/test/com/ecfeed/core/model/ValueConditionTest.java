@@ -21,7 +21,6 @@ import org.junit.Test;
 import com.ecfeed.core.utils.EvaluationResult;
 import com.ecfeed.core.utils.JavaTypeHelper;
 
-//TODO: validate ranges
 public class ValueConditionTest {
 
 	enum AssertType {
@@ -86,10 +85,128 @@ public class ValueConditionTest {
 		}
 	}
 	
-	
-	//TODO 
-	//change/split integer to long, int, short, byte
 	public void evaluateForRangeIntegerTypes(String parameterType) {
+		MethodParameterNode methodParameterNode = new MethodParameterNode("par1", parameterType, "", false);
+
+		evaluateRandomizedOne(methodParameterNode, "1", EStatementRelation.EQUAL,     "1", AssertType.TRUE);
+		evaluateRandomizedOne(methodParameterNode, "1", EStatementRelation.NOT_EQUAL, "1", AssertType.FALSE);
+		evaluateRandomizedOne(methodParameterNode, "1", EStatementRelation.EQUAL, "2", AssertType.FALSE);
+		evaluateRandomizedOne(methodParameterNode, "1", EStatementRelation.NOT_EQUAL, "2", AssertType.TRUE);
+
+		evaluateRandomizedOne(methodParameterNode, "1", EStatementRelation.LESS_THAN,     "2", AssertType.TRUE);
+		evaluateRandomizedOne(methodParameterNode, "1", EStatementRelation.LESS_EQUAL,    "2", AssertType.TRUE);
+		evaluateRandomizedOne(methodParameterNode, "1", EStatementRelation.GREATER_THAN,  "2", AssertType.FALSE);
+		evaluateRandomizedOne(methodParameterNode, "1", EStatementRelation.GREATER_EQUAL, "2", AssertType.FALSE);
+		//left choice -> 1
+		//right value -> 2
+
+		evaluateRandomizedOne(methodParameterNode, "99999", EStatementRelation.LESS_THAN, "100000", AssertType.TRUE); 
+
+		evaluateRandomizedOne(methodParameterNode, "1", EStatementRelation.EQUAL,         "a", AssertType.FALSE);
+		evaluateRandomizedOne(methodParameterNode, "1", EStatementRelation.NOT_EQUAL,     "a", AssertType.TRUE);
+		evaluateRandomizedOne(methodParameterNode, "1", EStatementRelation.LESS_THAN,     "a", AssertType.FALSE);
+		evaluateRandomizedOne(methodParameterNode, "1", EStatementRelation.LESS_EQUAL,    "a", AssertType.FALSE);
+		evaluateRandomizedOne(methodParameterNode, "1", EStatementRelation.GREATER_THAN,  "a", AssertType.FALSE);
+		evaluateRandomizedOne(methodParameterNode, "1", EStatementRelation.GREATER_EQUAL, "a", AssertType.FALSE);
+
+		evaluateRandomizedOne(methodParameterNode, "a", EStatementRelation.EQUAL,         "1", AssertType.FALSE);
+		evaluateRandomizedOne(methodParameterNode, "a", EStatementRelation.NOT_EQUAL,     "1", AssertType.TRUE);
+		evaluateRandomizedOne(methodParameterNode, "a", EStatementRelation.LESS_THAN,     "1", AssertType.FALSE);
+		evaluateRandomizedOne(methodParameterNode, "a", EStatementRelation.LESS_EQUAL,    "1", AssertType.FALSE);
+		evaluateRandomizedOne(methodParameterNode, "a", EStatementRelation.GREATER_THAN,  "1", AssertType.FALSE);
+		evaluateRandomizedOne(methodParameterNode, "a", EStatementRelation.GREATER_EQUAL, "1", AssertType.FALSE);
+		
+		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.GREATER_EQUAL, "0:10", AssertType.TRUE);
+		evaluateRandomizedOne(methodParameterNode, "2:2", EStatementRelation.GREATER_EQUAL, "2:2", AssertType.TRUE);
+		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.GREATER_EQUAL, "9:100", AssertType.TRUE);
+		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.GREATER_EQUAL, "10:100", AssertType.TRUE);
+		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.GREATER_EQUAL, "11:100", AssertType.FALSE);
+		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.GREATER_EQUAL, "-10:-1", AssertType.TRUE);
+		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.GREATER_EQUAL, "-10:0", AssertType.TRUE);
+		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.GREATER_EQUAL, "-10:1", AssertType.TRUE);
+		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.GREATER_EQUAL, "-1:11", AssertType.TRUE);
+		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.GREATER_EQUAL, "1:9", AssertType.TRUE);
+		
+		evaluateRandomizedOne(methodParameterNode, "2:2", EStatementRelation.GREATER_THAN, "2:2", AssertType.FALSE);
+		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.GREATER_THAN, "9:100", AssertType.TRUE);
+		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.GREATER_THAN, "10:100", AssertType.FALSE);
+		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.GREATER_THAN, "11:100", AssertType.FALSE);
+		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.GREATER_THAN, "-10:-1", AssertType.TRUE);
+		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.GREATER_THAN, "-10:0", AssertType.TRUE);
+		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.GREATER_THAN, "-10:1", AssertType.TRUE);
+		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.GREATER_THAN, "-1:11", AssertType.TRUE);
+		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.GREATER_THAN, "1:9", AssertType.TRUE);
+		
+		evaluateRandomizedOne(methodParameterNode, "2:2", EStatementRelation.EQUAL, "2:2", AssertType.TRUE);
+		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "9:100", AssertType.TRUE);
+		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "10:100", AssertType.TRUE);
+		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "11:100", AssertType.FALSE);
+		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "-10:-1", AssertType.FALSE);
+		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "-10:0", AssertType.TRUE);
+		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "-10:1", AssertType.TRUE);
+		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "-1:11", AssertType.TRUE);
+		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "1:9", AssertType.TRUE);
+		
+		evaluateRandomizedOne(methodParameterNode, "2:2", EStatementRelation.LESS_EQUAL, "2:2", AssertType.TRUE);
+		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.LESS_EQUAL, "9:100", AssertType.TRUE);
+		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.LESS_EQUAL, "10:100", AssertType.TRUE);
+		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.LESS_EQUAL, "11:100", AssertType.TRUE);
+		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.LESS_EQUAL, "-10:-1", AssertType.FALSE);
+		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.LESS_EQUAL, "-10:0", AssertType.TRUE);
+		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.LESS_EQUAL, "-10:1", AssertType.TRUE);
+		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.LESS_EQUAL, "-1:11", AssertType.TRUE);
+		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.LESS_EQUAL, "1:9", AssertType.TRUE);
+		
+		evaluateRandomizedOne(methodParameterNode, "2:2", EStatementRelation.LESS_THAN, "2:2", AssertType.FALSE);
+		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.LESS_THAN, "9:100", AssertType.TRUE);
+		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.LESS_THAN, "10:100", AssertType.TRUE);
+		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.LESS_THAN, "11:100", AssertType.TRUE);
+		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.LESS_THAN, "-10:-1", AssertType.FALSE);
+		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.LESS_THAN, "-10:0", AssertType.FALSE);
+		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.LESS_THAN, "-10:1", AssertType.TRUE);
+		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.LESS_THAN, "-1:11", AssertType.TRUE);
+		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.LESS_THAN, "1:9", AssertType.TRUE);
+		
+		evaluateRandomizedOne(methodParameterNode, "a", EStatementRelation.GREATER_EQUAL, "1", AssertType.FALSE);
+		evaluateRandomizedOne(methodParameterNode, "a", EStatementRelation.GREATER_EQUAL, "1", AssertType.FALSE);
+		evaluateRandomizedOne(methodParameterNode, "a", EStatementRelation.GREATER_EQUAL, "1", AssertType.FALSE);
+		evaluateRandomizedOne(methodParameterNode, "a", EStatementRelation.GREATER_EQUAL, "1", AssertType.FALSE);
+		evaluateRandomizedOne(methodParameterNode, "a", EStatementRelation.GREATER_EQUAL, "1", AssertType.FALSE);
+		
+
+		
+		//tests from randomize-choice-value document
+		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.LESS_THAN, "1:2", AssertType.TRUE);
+		evaluateRandomizedOne(methodParameterNode, "1:10", EStatementRelation.LESS_THAN, "2", AssertType.TRUE);
+		evaluateRandomizedOne(methodParameterNode, "1:10", EStatementRelation.GREATER_THAN, "2", AssertType.TRUE);
+		evaluateRandomizedOne(methodParameterNode, "5:10", EStatementRelation.LESS_THAN, "1:4", AssertType.FALSE);
+		evaluateRandomizedOne(methodParameterNode, "5:10", EStatementRelation.LESS_THAN, "1", AssertType.FALSE);
+//		evaluateRandomizedOne(methodParameterNode, "a-z", EStatementRelation.LESS_THAN, "a-z", AssertType.FALSE);
+//		evaluateRandomizedOne(methodParameterNode, "a-z", EStatementRelation.EQUAL, "a-z", AssertType.FALSE);
+//		evaluateRandomizedOne(methodParameterNode, "a-z", EStatementRelation.EQUAL, "x", AssertType.FALSE);
+	}
+	
+	@Test
+	public void evaluateForRandomizedInteger() {
+		evaluateForRangeIntegerTypes(JavaTypeHelper.TYPE_NAME_INT);
+	}
+
+	@Test
+	public void evaluateForRandomizedLong() {
+		evaluateForRangeIntegerTypes(JavaTypeHelper.TYPE_NAME_LONG);
+	}	
+
+	@Test
+	public void evaluateForRandomizedShort() {
+		evaluateForRangeIntegerTypes(JavaTypeHelper.TYPE_NAME_SHORT);
+	}	
+
+	@Test
+	public void evaluateForRandomizedByte() {
+		evaluateForRangeIntegerTypes(JavaTypeHelper.TYPE_NAME_BYTE);
+	}	
+	
+	public void evaluateForAmbigousIntegerTypes(String parameterType) {
 		MethodParameterNode methodParameterNode = new MethodParameterNode("par1", parameterType, "", false);
 
 		evaluateRandomizedOne(methodParameterNode, "1", EStatementRelation.EQUAL,     "1", AssertType.TRUE);
@@ -152,7 +269,7 @@ public class ValueConditionTest {
 		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "-10:0", AssertType.TRUE);
 		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "-10:1", AssertType.TRUE);
 		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "-1:11", AssertType.TRUE);
-		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "1:9", AssertType.TRUE);	// last test todo
+		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.EQUAL, "1:9", AssertType.TRUE);
 		
 //		evaluateRandomizedOne(methodParameterNode, "0:10", EStatementRelation.LESS_EQUAL, "0:10", AssertType.TRUE);
 		evaluateRandomizedOne(methodParameterNode, "2:2", EStatementRelation.LESS_EQUAL, "2:2", AssertType.TRUE);
@@ -201,27 +318,27 @@ public class ValueConditionTest {
 //		evaluateRandomizedOne(methodParameterNode, "a-z", EStatementRelation.EQUAL, "a-z", AssertType.FALSE);
 //		evaluateRandomizedOne(methodParameterNode, "a-z", EStatementRelation.EQUAL, "x", AssertType.FALSE);
 	}
+	
+	
+	@Test
+	public void evaluateForAmbigousInteger() {
+		evaluateForRangeIntegerTypes(JavaTypeHelper.TYPE_NAME_INT);
+	}
 
-	// TODO UNCOMMENT TESTS AFTER MERGE
-//	@Test
-//	public void evaluateForRandomizedInteger() {
-//		evaluateForRangeIntegerTypes(JavaTypeHelper.TYPE_NAME_INT);
-//	}
-//
-//	@Test
-//	public void evaluateForRandomizedLong() {
-//		evaluateForRangeIntegerTypes(JavaTypeHelper.TYPE_NAME_LONG);
-//	}	
-//
-//	@Test
-//	public void evaluateForRandomizedShort() {
-//		evaluateForRangeIntegerTypes(JavaTypeHelper.TYPE_NAME_SHORT);
-//	}	
-//
-//	@Test
-//	public void evaluateForRandomizedByte() {
-//		evaluateForRangeIntegerTypes(JavaTypeHelper.TYPE_NAME_BYTE);
-//	}	
+	@Test
+	public void evaluateForAmbigousLong() {
+		evaluateForRangeIntegerTypes(JavaTypeHelper.TYPE_NAME_LONG);
+	}	
+
+	@Test
+	public void evaluateForAmbigousShort() {
+		evaluateForRangeIntegerTypes(JavaTypeHelper.TYPE_NAME_SHORT);
+	}	
+
+	@Test
+	public void evaluateFoAmbigousdByte() {
+		evaluateForRangeIntegerTypes(JavaTypeHelper.TYPE_NAME_BYTE);
+	}	
 	
 	
 	
