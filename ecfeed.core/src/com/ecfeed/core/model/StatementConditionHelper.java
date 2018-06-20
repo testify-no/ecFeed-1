@@ -12,6 +12,9 @@ package com.ecfeed.core.model;
 
 import java.util.List;
 
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
+
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.StringHelper;
 
@@ -175,8 +178,8 @@ public class StatementConditionHelper {
 		return false;
 	}
 
-	private static boolean isMatchForNumericTypes(
-			String typeName, EStatementRelation relation, String actualValue, String valueToMatch) {
+	private static boolean isMatchForNumericTypes(String typeName, EStatementRelation relation,
+			String actualValue, String valueToMatch) {
 
 		double actual = JavaTypeHelper.convertNumericToDouble(typeName, actualValue);
 		double toMatch = JavaTypeHelper.convertNumericToDouble(typeName, valueToMatch);
@@ -205,6 +208,7 @@ public class StatementConditionHelper {
 		}
 		return result;
 	}
+	
 
 	public static boolean getChoiceRandomized(List<ChoiceNode> choices, MethodParameterNode methodParameterNode) {
 		ChoiceNode choiceNode = getChoiceForMethodParameter(choices, methodParameterNode);
@@ -269,7 +273,7 @@ public class StatementConditionHelper {
 	}
 
 	public static final boolean isAmbigous(String choice, String constraint, EStatementRelation relation, String substituteType)  {
-		boolean result = false;
+		boolean result = false; 
 		boolean outsideTheRange = false;
 		if(JavaTypeHelper.isNumericTypeName(substituteType)) {		
 			String[] choices = choice.split(":");
@@ -295,17 +299,50 @@ public class StatementConditionHelper {
 			
 			if (!relation.equals(EStatementRelation.EQUAL)) {
 				result = StatementConditionHelper.validateOtherthanEqualCondition(relation, substituteType, upper, lower, lowerConstraint, upperConstraint);
-				outsideTheRange = isRelationMatchQuiet(relation, substituteType, lower, lowerConstraint) || isRelationMatchQuiet(relation, substituteType, upper, upperConstraint);
+				boolean a = isRelationMatchQuiet(relation, substituteType, lower, lowerConstraint);
+				boolean b = isRelationMatchQuiet(relation, substituteType, upper, upperConstraint);
+				boolean c = isRelationMatchQuiet(relation, substituteType, lower, upperConstraint);
+				boolean d = isRelationMatchQuiet(relation, substituteType, upper, lowerConstraint);
+				if (a && b && c && d) {
+					outsideTheRange = true;
+				} else
+				outsideTheRange = !a && !b && !c && !d;
 			}
 			else {
 				result = validateEqualCondition(choices.length, constraints.length, substituteType, upper, lower, lowerConstraint, upperConstraint);
-				outsideTheRange = isRelationMatchQuiet(relation, substituteType, lower, lowerConstraint) || isRelationMatchQuiet(relation, substituteType, upper, upperConstraint);
+				outsideTheRange = !isAmbigousEqualCondition(substituteType, lower, upper, lowerConstraint, upperConstraint);
+						
+						/*!isRelationMatchQuiet(relation, substituteType, lower, lowerConstraint) 
+						||
+						!isRelationMatchQuiet(relation, substituteType, upper, upperConstraint);*/
 			}
 	
 		}
-		return result && (result == outsideTheRange);
+		return result && (!outsideTheRange);
 	}
 
+	private static boolean isAmbigousEqualCondition(String substituteType, String lower, String upper, String lowerConstraint, String upperConstraint) {
+		if (StringUtils.equals(lower, lowerConstraint) && StringUtils.equals(upper, upperConstraint)) {
+			if (StringUtils.equals(lower, upper) && StringUtils.equals(lowerConstraint, upperConstraint)) {
+				return false;
+			}
+			return true;
+		}
+		if (LESS_THAN.eval(substituteType, lower, lowerConstraint).getAsPrimitiveBoolean() 
+				&& LESS_THAN.eval(substituteType, upper, upperConstraint).getAsPrimitiveBoolean() 
+				&& LESS_THAN.eval(substituteType, upper, lowerConstraint).getAsPrimitiveBoolean()) {
+			return false;
+			
+		}
+		if (GREATER_THAN.evalAsBoolean(substituteType, lower, lowerConstraint)
+				&& GREATER_THAN.evalAsBoolean(substituteType, lower, upperConstraint)
+				&& GREATER_THAN.evalAsBoolean(substituteType, upper, upperConstraint)) {
+			return false;
+		}
+		
+		return true;
+	}
+	
 	public static boolean validateOtherthanEqualCondition(EStatementRelation relation,
 			String substituteType, String upper, String lower, String lowerConstraint,
 			String upperConstraint) {
