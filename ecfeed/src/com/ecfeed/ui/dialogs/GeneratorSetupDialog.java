@@ -67,7 +67,6 @@ import com.ecfeed.core.model.RelationStatement;
 import com.ecfeed.core.serialization.export.ExportTemplateFactory;
 import com.ecfeed.core.serialization.export.IExportTemplate;
 import com.ecfeed.core.utils.CommonConstants;
-import com.ecfeed.core.utils.EvaluationResult;
 import com.ecfeed.core.utils.IValueApplier;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.StringHolder;
@@ -943,7 +942,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 			} else {
 				for (ChoiceNode choice : parameters.get(i).getLeafChoicesWithCopies()) {
 					if (fParametersViewer.getChecked(choice)) {
-			//			choices.add(choice);
+						choices.add(choice);
 					}
 				}
 			}
