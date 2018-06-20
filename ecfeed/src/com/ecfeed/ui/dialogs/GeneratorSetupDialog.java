@@ -286,6 +286,11 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		return selectChoicesLabel;
 	}
 	
+	private void checkAmbigousState() {
+		//checkAmbigousStateHere
+		System.out.println("done");
+	}
+	
 	//todo update when choice/constrain listener is in action
 	private void updateAmbigousWarningLabel(boolean isAmbigousCondition) {
 		if(isAmbigousCondition) {
@@ -381,7 +386,14 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 				new GridData(SWT.FILL, SWT.FILL, true, true));
 		fConstraintsViewer.setInput(fMethod);
 		fConstraintsViewer.addCheckStateListener(new TreeCheckStateListener(
-				fConstraintsViewer));
+				fConstraintsViewer){
+			@Override
+			public void checkStateChanged(CheckStateChangedEvent event) {
+				checkAmbigousState();
+				super.checkStateChanged(event);
+			}
+			
+		});
 		fConstraintsViewer.expandAll();
 		for (String constraint : fMethod.getConstraintsNames()) {
 			fConstraintsViewer.setSubtreeChecked(constraint, true);
@@ -928,10 +940,9 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 				constraints.add((Constraint) obj);
 			}
 		}
-
 		fConstraints = constraints;
 	}
-
+	
 	private void saveAlgorithmInput() {
 		List<MethodParameterNode> parameters = fMethod.getMethodParameters();
 		fAlgorithmInput = new ArrayList<List<ChoiceNode>>();
@@ -942,12 +953,42 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 			} else {
 				for (ChoiceNode choice : parameters.get(i).getLeafChoicesWithCopies()) {
 					if (fParametersViewer.getChecked(choice)) {
-						choices.add(choice); //?
+						choices.add(choice);
 					}
 				}
 			}
 			fAlgorithmInput.add(choices);
 		}
+	}
+	
+	private List<Constraint> getCheckedConstraints() {
+		Object[] checkedObjects = fConstraintsViewer.getCheckedElements();
+		List<Constraint> constraints = new ArrayList<Constraint>();
+		for (Object obj : checkedObjects) {
+			if (obj instanceof Constraint) {
+				constraints.add((Constraint) obj);
+			}
+		}
+		return constraints;
+	}
+
+	private List<List<ChoiceNode>> getCheckedArguments() {
+		List<MethodParameterNode> parameters = fMethod.getMethodParameters();
+		ArrayList<List<ChoiceNode>> algorithmInput = new ArrayList<>();
+		for (int i = 0; i < parameters.size(); i++) {
+			List<ChoiceNode> choices = new ArrayList<ChoiceNode>();
+			if (parameters.get(i).isExpected()) {
+				choices.add(expectedValueChoice(parameters.get(i)));
+			} else {
+				for (ChoiceNode choice : parameters.get(i).getLeafChoicesWithCopies()) {
+					if (fParametersViewer.getChecked(choice)) {
+						choices.add(choice);
+					}
+				}
+			}
+			algorithmInput.add(choices);
+		}
+		return algorithmInput;
 	}
 
 	private ChoiceNode expectedValueChoice(MethodParameterNode c) {
@@ -969,10 +1010,6 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		public ChoiceTreeCheckStateListener(CheckboxTreeViewer treeViewer) {
 			super(treeViewer);
 		}
-
-		//here, check is ambigous
-		//todo
-		//
 		@Override
 		public void checkStateChanged(CheckStateChangedEvent event) {
 			super.checkStateChanged(event);
@@ -980,9 +1017,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 					&& ((MethodParameterNode) event.getElement()).isExpected()) {
 				fParametersViewer.setChecked(event.getElement(), true);
 			} else {
-				//maybe check only after OK
-				//check constraints here(?) parameternodes
-				System.out.println(event.getElement());
+				checkAmbigousState();
 				updateOkButtonAndErrorMsg();
 			}
 		}
