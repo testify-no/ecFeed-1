@@ -17,7 +17,7 @@ public class TypeAdapterForBoolean implements ITypeAdapter<Boolean>{
 	}
 
 	// ADR-REF - use string helper
-	public String convert(String value){
+	public String convert(String value, boolean isRandomized){
 		if(value.toLowerCase().equals(JavaTypeHelper.VALUE_REPRESENTATION_TRUE.toLowerCase())){
 			return JavaTypeHelper.VALUE_REPRESENTATION_TRUE;
 		}

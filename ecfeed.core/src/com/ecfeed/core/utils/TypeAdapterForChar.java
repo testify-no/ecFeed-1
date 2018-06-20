@@ -20,7 +20,7 @@ public class TypeAdapterForChar implements ITypeAdapter<Character>{
 		return Arrays.asList(TYPES_CONVERTABLE_TO_CHAR).contains(type);
 	}
 
-	public String convert(String value){			
+	public String convert(String value, boolean isRandomized){			
 		if(value.length() == 1){
 			return value;
 		}

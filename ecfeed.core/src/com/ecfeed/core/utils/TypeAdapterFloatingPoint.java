@@ -15,11 +15,16 @@ public abstract class TypeAdapterFloatingPoint<T extends Number> extends TypeAda
 	}
 
 	@Override
-	public String convert(String value){
-		String result = super.convert(value);
+	public String convert(String value, boolean isRandomized){
+		String result = super.convert(value, isRandomized);
 		if(result == null){
 			result = Arrays.asList(FLOATING_POINT_SPECIAL_VALUES).contains(value) ? value : null;
 		}
+		
+		if (isRandomized) {
+			result = generateRange(result);
+		}
+
 		return result;
 	}
 
