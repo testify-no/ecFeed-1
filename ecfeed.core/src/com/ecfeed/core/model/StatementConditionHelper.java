@@ -15,6 +15,8 @@ import java.util.List;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.StringHelper;
 
+import static com.ecfeed.core.model.EStatementRelation.*;
+
 public class StatementConditionHelper {
 
 	private static final String TYPE_INFO_CHOICE = "choice";
@@ -184,23 +186,21 @@ public class StatementConditionHelper {
 		return false;
 	}
 
-	static boolean validateEqualCondition(int choicesLength, int constraintsLength, String substituteType,
-			String upper, String lower, String lowerConstraint, String upperConstraint) {
+	static boolean validateEqualCondition(int choicesLength, int constraintsLength,
+			String substituteType, String upper, String lower, String lowerConstraint,
+			String upperConstraint) {
 		boolean result = false;
-		if(choicesLength == RANGE_VALUE && constraintsLength == RANGE_VALUE)
-		result = 
-				isRelationMatch(EStatementRelation.GREATER_EQUAL, substituteType, upper, lowerConstraint)
-				&& isRelationMatch(EStatementRelation.LESS_EQUAL, substituteType, lower, upperConstraint);
-		else if(choicesLength == RANGE_VALUE && constraintsLength == 1) {
-			result = isRelationMatch(EStatementRelation.GREATER_EQUAL, substituteType, lower, lowerConstraint)
-					&& isRelationMatch(EStatementRelation.GREATER_EQUAL, substituteType, upper, lowerConstraint);
-		}
-		else if(choicesLength == SINGLE_VALUE && constraintsLength == RANGE_VALUE) {
-			result = isRelationMatch(EStatementRelation.GREATER_EQUAL, substituteType, lower, lowerConstraint)
-					&& isRelationMatch(EStatementRelation.LESS_EQUAL, substituteType, lower, upperConstraint);
-		}
-		else if(choicesLength == SINGLE_VALUE && constraintsLength == SINGLE_VALUE) {
-			result = isRelationMatch(EStatementRelation.EQUAL, substituteType, lower, lowerConstraint);
+		if (choicesLength == RANGE_VALUE && constraintsLength == RANGE_VALUE)
+			result = GREATER_EQUAL.evalAsBoolean(substituteType, upper, lowerConstraint)
+					&& LESS_EQUAL.evalAsBoolean(substituteType, lower, upperConstraint);
+		else if (choicesLength == RANGE_VALUE && constraintsLength == SINGLE_VALUE) {
+			result = GREATER_EQUAL.evalAsBoolean(substituteType, lower, lowerConstraint)
+					&& GREATER_EQUAL.evalAsBoolean(substituteType, upper, lowerConstraint);
+		} else if (choicesLength == SINGLE_VALUE && constraintsLength == RANGE_VALUE) {
+			result = GREATER_EQUAL.evalAsBoolean(substituteType, lower, lowerConstraint)
+					&& LESS_EQUAL.evalAsBoolean(substituteType, lower, upperConstraint);
+		} else if (choicesLength == SINGLE_VALUE && constraintsLength == SINGLE_VALUE) {
+			result = EQUAL.evalAsBoolean(substituteType, lower, lowerConstraint);
 		}
 		return result;
 	}
