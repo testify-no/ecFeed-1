@@ -54,7 +54,7 @@ public class AbstractStatementTest {
 			return false;
 		}
 		@Override
-		public boolean isAmgibous(List<ChoiceNode> values) {
+		public boolean isAmgibous(List<List<ChoiceNode>> values) {
 			return false;
 		}
 	}

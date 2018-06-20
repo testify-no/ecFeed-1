@@ -165,17 +165,18 @@ public class ChoiceCondition implements IStatementCondition {
 		}
 	}
 
-	// return false;
-	// evaluate checks only object references, it's always the same choice, so checking ranges doesn't make sense
-	public boolean isAmbigous(List<ChoiceNode> choices, EStatementRelation relation) {
+	@Override
+	public boolean isAmbigous(List<List<ChoiceNode>> domain, int parameterIndex, EStatementRelation relation) {
 		String fRightValue = fRightChoice.getValueString();
 		String substituteType = JavaTypeHelper.getSubstituteType(fParentRelationStatement
 				.getLeftParameter().getType(), JavaTypeHelper.getStringTypeName());
 
-		if (substituteType == null) {
+		if (substituteType == null || parameterIndex >= domain.size()) {
 			return false;
 		}
-
+		
+		List<ChoiceNode> choices = domain.get(parameterIndex);		
+		
 		String leftChoiceStr = getChoiceString(choices, fParentRelationStatement.getLeftParameter());
 
 

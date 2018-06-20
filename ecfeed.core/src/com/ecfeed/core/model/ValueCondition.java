@@ -68,14 +68,16 @@ public class ValueCondition implements IStatementCondition {
 	}
 
 	@Override
-	public boolean isAmbigous(List<ChoiceNode> values, EStatementRelation relation) {
+	public boolean isAmbigous(List<List<ChoiceNode>> domain, int parameterIndex, EStatementRelation relation) {
 		String substituteType = JavaTypeHelper.getSubstituteType(fParentRelationStatement
 				.getLeftParameter().getType(), JavaTypeHelper.getStringTypeName());
 
-		if (substituteType == null) {
+		if (substituteType == null || parameterIndex >= domain.size()) {
 			return false;
 		}
-
+		
+		List<ChoiceNode> values = domain.get(parameterIndex);
+		
 		String leftChoiceStr = getChoiceString(values, fParentRelationStatement.getLeftParameter());
 
 
@@ -85,7 +87,7 @@ public class ValueCondition implements IStatementCondition {
 				fParentRelationStatement.getLeftParameter());
 		if (isRandomizedChoice) {
 			if (JavaTypeHelper.TYPE_NAME_STRING.equals(substituteType)) {
-				return leftChoiceStr.matches(fRightValue);
+				return false;
 			} else {
 				boolean result = StatementConditionHelper.isAmbigous(leftChoiceStr,
 						fRightValue, relation, substituteType);

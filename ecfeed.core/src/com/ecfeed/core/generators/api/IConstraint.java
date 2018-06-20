@@ -29,5 +29,4 @@ public interface IConstraint<E> {
 	public EvaluationResult evaluate(List<E> values);
 	public boolean adapt(List<E> values);
 	public boolean mentions(int dimension);
-	public boolean isAmbigous(List<E> values);
 }

@@ -19,5 +19,5 @@ public interface IStatement{
 	public boolean adapt(List<ChoiceNode> values);
 	public boolean compare(IStatement statement);
 	public Object accept(IStatementVisitor visitor) throws Exception;
-	public boolean isAmgibous(List<ChoiceNode> values);
+	public boolean isAmgibous(List<List<ChoiceNode>> values);
 }
