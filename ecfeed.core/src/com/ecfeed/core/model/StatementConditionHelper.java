@@ -128,13 +128,25 @@ public class StatementConditionHelper {
 		return result;
 	}
 
+	
+	private static boolean isRangeOrRegex(String leftString, String rightString) {
+		
+		return true;
+	}
+	
 	public static boolean isRelationMatch(
 			EStatementRelation relation, String typeName, String leftString, String rightString) {
 
 		if (typeName == null) {
 			return false;
 		}
+		//TODO 443 3
+	//	EclipseTypeAdapterProvider.
+		
 
+		
+		
+		
 		if (relation == EStatementRelation.EQUAL && StringHelper.isEqual(leftString, rightString)) {
 			return true;
 		}

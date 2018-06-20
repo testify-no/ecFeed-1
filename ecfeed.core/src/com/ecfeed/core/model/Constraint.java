@@ -40,6 +40,7 @@ public class Constraint implements IConstraint<ChoiceNode> {
 		
 		EvaluationResult premiseEvaluationResult = fPremise.evaluate(values); 
 
+		//here
 		if (premiseEvaluationResult == EvaluationResult.FALSE) {
 			return EvaluationResult.TRUE;
 		}
