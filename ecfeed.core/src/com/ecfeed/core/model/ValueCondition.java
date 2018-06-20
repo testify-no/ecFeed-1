@@ -19,6 +19,7 @@ import com.ecfeed.core.utils.StringHelper;
 
 public class ValueCondition implements IStatementCondition {
 
+	//with one, cannot be range
 	private String fRightValue;
 	private RelationStatement fParentRelationStatement;
 
@@ -68,39 +69,37 @@ public class ValueCondition implements IStatementCondition {
 	}
 
 	@Override
-	public EvaluationResult isAmbigous(List<ChoiceNode> choices) {
+	public boolean isAmbigous(List<ChoiceNode> values, EStatementRelation relation) {
 		String substituteType = JavaTypeHelper.getSubstituteType(fParentRelationStatement
 				.getLeftParameter().getType(), JavaTypeHelper.getStringTypeName());
 
 		if (substituteType == null) {
-			return EvaluationResult.FALSE;
+			return false;
 		}
 
-		String leftChoiceStr = getChoiceString(choices, fParentRelationStatement.getLeftParameter());
+		String leftChoiceStr = getChoiceString(values, fParentRelationStatement.getLeftParameter());
 
-		if (leftChoiceStr == null) {
-			return EvaluationResult.INSUFFICIENT_DATA;
-		}
-		EStatementRelation relation = fParentRelationStatement.getRelation();
+
+	//	EStatementRelation relation = fParentRelationStatement.getRelation();
 		
-		boolean isRandomizedChoice = StatementConditionHelper.getChoiceRandomized(choices,
+		boolean isRandomizedChoice = StatementConditionHelper.getChoiceRandomized(values,
 				fParentRelationStatement.getLeftParameter());
 		if (isRandomizedChoice) {
 			if (JavaTypeHelper.TYPE_NAME_STRING.equals(substituteType)) {
-				return EvaluationResult.convertFromBoolean(leftChoiceStr.matches(fRightValue));
+				return leftChoiceStr.matches(fRightValue);
 			} else {
 				boolean result = StatementConditionHelper.isAmbigous(leftChoiceStr,
 						fRightValue, relation, substituteType);
-				return EvaluationResult.convertFromBoolean(result);
+				return result;
 			}
 		}
 
 		if (StatementConditionHelper.isRelationMatchQuiet(relation, substituteType, leftChoiceStr,
 				fRightValue)) {
-			return EvaluationResult.TRUE;
+			return true;
 		}
 
-		return EvaluationResult.FALSE;
+		return false;
 	}
 	
 	private static String getChoiceString(List<ChoiceNode> choices, MethodParameterNode methodParameterNode) {

@@ -47,7 +47,9 @@ public class ParameterConditionTest {
 		ChoiceNode leftChoiceNode = new ChoiceNode("Label" + leftChoiceValue, leftChoiceValue);
 		ChoiceNode rightChoiceNode = new ChoiceNode("Label" + rightChoiceValue, rightChoiceValue);
 
-		EvaluationResult result = statement.evaluate(createList(leftChoiceNode, rightChoiceNode));
+		ChoiceNode whatChoiceNode = new ChoiceNode("Label" + 3, "3");
+		
+		EvaluationResult result = statement.evaluate(createList(leftChoiceNode, rightChoiceNode, whatChoiceNode));
 
 		if (assertResult == AssertType.TRUE) {
 			assertEquals(EvaluationResult.TRUE, result);
@@ -99,25 +101,25 @@ public class ParameterConditionTest {
 		ChoiceNode rightChoiceNode = new ChoiceNode("Label" + rightChoiceValue, rightChoiceValue,
 				true);
 
-//		EvaluationResult result = statement.evaluate(leftChoiceNodes, rightChoiceNodes);
-//
-//		if (assertResult == AssertType.TRUE) {
-//			assertEquals(EvaluationResult.TRUE, result);
-//		} else {
-//			assertEquals(EvaluationResult.FALSE, result);
-//		}
+		EvaluationResult result = null; //statement.evaluate(leftChoiceNodes, rightChoiceNodes);
+
+		if (assertResult == AssertType.TRUE) {
+			assertEquals(EvaluationResult.TRUE, result);
+		} else {
+			assertEquals(EvaluationResult.FALSE, result);
+		}
 	}
 	
 
 	
 	//todo evaulate multi statements as cartesian product, with all-false-pass tests and all-false-pass with some positive calls
 	
-//	private List<ChoiceNode> createSmth() {
-//		return null;
-//	}
+	private List<ChoiceNode> createSmth() {
+		return null;
+	}
 	
-	private List<ChoiceNode> createList(ChoiceNode choiceNode1, ChoiceNode choiceNode2) {
-		return Arrays.asList(choiceNode1, choiceNode2);
+	private List<ChoiceNode> createList(ChoiceNode... choiceNodes) {
+		return Arrays.asList(choiceNodes);
 	}
 
 	@Test

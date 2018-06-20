@@ -485,12 +485,12 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		}
 		
 		RelationStatement statement;
-		EvaluationResult isAmbigous = EvaluationResult.FALSE;
+		boolean isAmbigous = false;
 		for(MethodParameterNode methodParameterNode : fMethod.getMethodParameters()) {
 			statement = RelationStatement.createStatementWithValueCondition(
 							methodParameterNode, statementRelation, leftValue);
 			isAmbigous = statement.isAmgibous(methodParameterNode.getChoices());
-			if(isAmbigous.equals(EvaluationResult.TRUE)) {
+			if(isAmbigous) {
 				return true;
 				//info - about object - is necessary
 			}

@@ -16,7 +16,9 @@ import com.ecfeed.core.utils.EvaluationResult;
 import com.ecfeed.core.utils.SystemLogger;
 
 public class RelationStatement extends AbstractStatement implements IRelationalStatement{
-
+	/*
+	 * 
+	 */
 	private MethodParameterNode fLeftParameter;
 	private EStatementRelation fRelation;
 	private IStatementCondition fRightCondition;
@@ -88,14 +90,14 @@ public class RelationStatement extends AbstractStatement implements IRelationalS
 	}
 	
 	@Override
-	public EvaluationResult isAmgibous(List<ChoiceNode> values) {
-		EvaluationResult result;
+	public boolean isAmgibous(List<ChoiceNode> values) {
+		boolean result;
 		try {
-			result = fRightCondition.isAmbigous(values);
+			result = fRightCondition.isAmbigous(values, fRelation);
 		}
 		catch (Exception e) {
 			SystemLogger.logCatch(e.getMessage());
-			return EvaluationResult.FALSE;
+			return false;
 		}
 		return result;
 	}
