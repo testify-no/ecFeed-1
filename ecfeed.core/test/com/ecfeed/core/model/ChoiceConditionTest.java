@@ -13,7 +13,6 @@ package com.ecfeed.core.model;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -131,14 +130,6 @@ public class ChoiceConditionTest {
 		return Arrays.asList(choiceNode1);
 	}
 	
-	private List<List<ChoiceNode>> createListList(ChoiceNode choiceNode1) {
-		List<ChoiceNode> choices = Arrays.asList(new ChoiceNode[]{choiceNode1});
-		List<List<ChoiceNode>> llchoices = new ArrayList<List<ChoiceNode>>();
-		llchoices.add(choices);
-
-		return llchoices;
-	}	
-
 	@Test
 	public void evaluateForStrings() {
 
