@@ -10,8 +10,10 @@
 
 package com.ecfeed.core.adapter.java;
 
+import com.ecfeed.core.adapter.ITypeAdapter;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.utils.JavaTypeHelper;
+import com.ecfeed.core.utils.TypeAdapterProvider;
 
 public class ChoiceValueParser {
 	private ModelClassLoader fLoader;
@@ -43,24 +45,33 @@ public class ChoiceValueParser {
 	public Object parseValue(ChoiceNode choice){
 
 		if(choice.getParameter() != null){
-			return parseValue(choice.getValueString(), choice.getParameter().getType());
+			return parseValue(choice.getValueString(), choice.isRandomizedValue(), choice.getParameter().getType());
 		}
 		return null;
 	}
 
-	public Object parseValue(String valueString, String typeName) {
+	public Object parseValue(String valueString, boolean isRandomized, String typeName) {
 
-		if(typeName == null || valueString == null){
+		if (typeName == null || valueString == null) {
 			return null;
 		}
-		if (JavaTypeHelper.isJavaType(typeName)) {
-			return JavaTypeHelper.parseJavaType(valueString, typeName); 
-		}
-		if (fIsExport) {
-			return valueString;
+
+		String convertedValueString = valueString;
+
+		if (isRandomized) {
+			TypeAdapterProvider typeAdapterProvider = new TypeAdapterProvider();
+			ITypeAdapter<?> typeAdapter = typeAdapterProvider.getAdapter(typeName);
+			convertedValueString = typeAdapter.generateValueAsString(valueString);  
 		}
 
-		return parseUserTypeValue(valueString, typeName);
+		if (JavaTypeHelper.isJavaType(typeName)) {
+			return JavaTypeHelper.parseJavaType(convertedValueString, typeName); 
+		}
+		if (fIsExport) {
+			return convertedValueString;
+		}
+
+		return parseUserTypeValue(convertedValueString, typeName);
 	}
 
 }
