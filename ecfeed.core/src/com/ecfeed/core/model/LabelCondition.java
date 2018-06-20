@@ -110,9 +110,8 @@ public class LabelCondition implements IStatementCondition {
 	}
 
 	@Override
-	public EvaluationResult isAmbigous(List<ChoiceNode> values) {
-		// TODO Auto-generated method stub
-		return null;
+	public boolean isAmbigous(List<ChoiceNode> values, EStatementRelation relation) {
+		return false;
 	}
 
 }
