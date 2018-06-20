@@ -18,14 +18,6 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.ecfeed.core.model.AbstractStatement;
-import com.ecfeed.core.model.EStatementOperator;
-import com.ecfeed.core.model.IStatement;
-import com.ecfeed.core.model.IStatementVisitor;
-import com.ecfeed.core.model.MethodNode;
-import com.ecfeed.core.model.StatementArray;
-import com.ecfeed.core.utils.EvaluationResult;
-
 public class AbstractStatementTest {
 
 	private class StatementImplementation extends AbstractStatement{

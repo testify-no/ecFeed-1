@@ -95,8 +95,10 @@ public class MethodParameterOperationSetType extends BulkOperation {
 			public Object visit(ExpectedValueStatement statement) throws Exception {
 
 				boolean success = true;
-				ITypeAdapter typeAdapter = getTypeAdapterProvider().getAdapter(getNewType());
-				String newValue = typeAdapter.convert(statement.getCondition().getValueString());
+				
+				ITypeAdapter<?> adapter = getTypeAdapterProvider().getAdapter(getNewType());
+				String newValue = adapter.convert(statement.getCondition().getValueString());
+
 				fOriginalStatementValues.put(statement, statement.getCondition().getValueString());
 				statement.getCondition().setValueString(newValue);
 				if (JavaTypeHelper.isUserType(getNewType())) {
@@ -290,7 +292,8 @@ public class MethodParameterOperationSetType extends BulkOperation {
 			String newType = getNewType();
 
 			fOriginalDefaultValue = fMethodParameterNode.getDefaultValue();
-			ITypeAdapter adapter = getTypeAdapterProvider().getAdapter(newType);
+
+			ITypeAdapter<?> adapter = getTypeAdapterProvider().getAdapter(newType);
 			String newDefaultValue = adapter.convert(fMethodParameterNode.getDefaultValue());
 
 			if (newDefaultValue == null) {
@@ -321,7 +324,9 @@ public class MethodParameterOperationSetType extends BulkOperation {
 			MethodNode method = fMethodParameterNode.getMethod();
 			if (method != null) {
 				Iterator<TestCaseNode> tcIt = method.getTestCases().iterator();
-				ITypeAdapter adapter = getTypeAdapterProvider().getAdapter(getNewType());
+
+				ITypeAdapter<?> adapter = getTypeAdapterProvider().getAdapter(getNewType());
+				
 				while (tcIt.hasNext()) {
 					ChoiceNode expectedValue = tcIt.next().getTestData().get(fMethodParameterNode.getIndex());
 					String newValue = adapter.convert(expectedValue.getValueString());

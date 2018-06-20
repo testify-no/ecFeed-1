@@ -26,8 +26,9 @@ public class MethodOperationRemoveTestCase extends AbstractModelOperation {
 	private class DummyAdapterProvider implements ITypeAdapterProvider{
 
 		@Override
-		public ITypeAdapter getAdapter(String type) {
-			return new ITypeAdapter() {
+		public ITypeAdapter<?> getAdapter(String type) {
+			
+			return new ITypeAdapter<Object>() {
 				@Override
 				public boolean isNullAllowed() {
 					return false;

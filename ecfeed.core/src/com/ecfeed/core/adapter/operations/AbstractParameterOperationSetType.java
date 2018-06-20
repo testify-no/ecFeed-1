@@ -185,7 +185,7 @@ public class AbstractParameterOperationSetType extends AbstractModelOperation {
 	// convert values of remaining choices.
 	private void adaptChoices(ChoicesParentNode parent){
 		Iterator<ChoiceNode> it = getChoices(parent).iterator();
-		ITypeAdapter adapter = fAdapterProvider.getAdapter(fNewType);
+		ITypeAdapter<?> adapter = fAdapterProvider.getAdapter(fNewType);
 		while(it.hasNext()){
 			ChoiceNode choice = it.next();
 			if(choice.isAbstract()){

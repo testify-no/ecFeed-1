@@ -86,30 +86,30 @@ public class ParameterConditionTest {
 		}
 	}
 
-	//todo evaulate multi statements as cartesian product, with all-false-pass tests and all-false-pass with some positive calls
-	private void evaluateRandomizedMultiple(MethodParameterNode leftMethodParameterNode,
-			MethodParameterNode rightMethodParameterNode, String leftChoiceValue,
-			EStatementRelation statementRelation, String rightChoiceValue, AssertType assertResult) {
-
-		MethodNode methodNode = new MethodNode("TestMethod");
-		methodNode.addParameter(leftMethodParameterNode);
-		methodNode.addParameter(rightMethodParameterNode);
-
-		RelationStatement statement = RelationStatement.createStatementWithParameterCondition(
-				leftMethodParameterNode, statementRelation, rightMethodParameterNode);
-
-		ChoiceNode leftChoiceNode = new ChoiceNode("Label" + leftChoiceValue, leftChoiceValue, true);
-		ChoiceNode rightChoiceNode = new ChoiceNode("Label" + rightChoiceValue, rightChoiceValue,
-				true);
-
-		EvaluationResult result = null; //statement.evaluate(leftChoiceNodes, rightChoiceNodes);
-
-		if (assertResult == AssertType.TRUE) {
-			assertEquals(EvaluationResult.TRUE, result);
-		} else {
-			assertEquals(EvaluationResult.FALSE, result);
-		}
-	}
+	//TODO evaulate multi statements as cartesian product, with all-false-pass tests and all-false-pass with some positive calls
+//	private void evaluateRandomizedMultiple(MethodParameterNode leftMethodParameterNode,
+//			MethodParameterNode rightMethodParameterNode, String leftChoiceValue,
+//			EStatementRelation statementRelation, String rightChoiceValue, AssertType assertResult) {
+//
+//		MethodNode methodNode = new MethodNode("TestMethod");
+//		methodNode.addParameter(leftMethodParameterNode);
+//		methodNode.addParameter(rightMethodParameterNode);
+//
+//		RelationStatement statement = RelationStatement.createStatementWithParameterCondition(
+//				leftMethodParameterNode, statementRelation, rightMethodParameterNode);
+//
+//		ChoiceNode leftChoiceNode = new ChoiceNode("Label" + leftChoiceValue, leftChoiceValue, true);
+//		ChoiceNode rightChoiceNode = new ChoiceNode("Label" + rightChoiceValue, rightChoiceValue,
+//				true);
+//
+//		EvaluationResult result = null; //statement.evaluate(leftChoiceNodes, rightChoiceNodes);
+//
+//		if (assertResult == AssertType.TRUE) {
+//			assertEquals(EvaluationResult.TRUE, result);
+//		} else {
+//			assertEquals(EvaluationResult.FALSE, result);
+//		}
+//	}
 	
 	private List<ChoiceNode> createList(ChoiceNode... choiceNodes) {
 		return Arrays.asList(choiceNodes);

@@ -12,8 +12,6 @@ package com.ecfeed.core.model;
 
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.ecfeed.core.utils.EvaluationResult;
 import com.ecfeed.core.utils.SystemLogger;
 
@@ -90,17 +88,17 @@ public class RelationStatement extends AbstractStatement implements IRelationalS
 
 		return result;
 	}
-	
-/*	private int getParameterPosition() {
+
+	/*	private int getParameterPosition() {
 		return fLeftParameter.getIndex();
 	}*/
-	
+
 	@Override
 	public boolean isAmgibous(List<List<ChoiceNode>> values) {
 		boolean result;
 		try {
 			int index = fLeftParameter.getIndex();
-//			List<ChoiceNode> input = values.get(index);
+			//			List<ChoiceNode> input = values.get(index);
 			result = fRightCondition.isAmbigous(values, index, fRelation);
 		}
 		catch (Exception e) {
