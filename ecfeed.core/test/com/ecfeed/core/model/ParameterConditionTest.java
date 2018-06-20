@@ -28,7 +28,7 @@ public class ParameterConditionTest {
 		FALSE,
 	}
 
-	public void evaluateOne(
+	private void evaluateOne(
 			MethodParameterNode leftMethodParameterNode,
 			MethodParameterNode rightMethodParameterNode,
 			String leftChoiceValue,
@@ -56,7 +56,7 @@ public class ParameterConditionTest {
 		}
 	}
 	
-	public void evaluateRandomizedOne(
+	private void evaluateRandomizedOne(
 			MethodParameterNode leftMethodParameterNode,
 			MethodParameterNode rightMethodParameterNode,
 			String leftChoiceValue,
@@ -84,13 +84,41 @@ public class ParameterConditionTest {
 		}
 	}
 	
-	//private create
+	private void evaluateRandomizedMultiple(MethodParameterNode leftMethodParameterNode,
+			MethodParameterNode rightMethodParameterNode, String leftChoiceValue,
+			EStatementRelation statementRelation, String rightChoiceValue, AssertType assertResult) {
 
+		MethodNode methodNode = new MethodNode("TestMethod");
+		methodNode.addParameter(leftMethodParameterNode);
+		methodNode.addParameter(rightMethodParameterNode);
+
+		RelationStatement statement = RelationStatement.createStatementWithParameterCondition(
+				leftMethodParameterNode, statementRelation, rightMethodParameterNode);
+
+		ChoiceNode leftChoiceNode = new ChoiceNode("Label" + leftChoiceValue, leftChoiceValue, true);
+		ChoiceNode rightChoiceNode = new ChoiceNode("Label" + rightChoiceValue, rightChoiceValue,
+				true);
+
+//		EvaluationResult result = statement.evaluate(leftChoiceNodes, rightChoiceNodes);
+//
+//		if (assertResult == AssertType.TRUE) {
+//			assertEquals(EvaluationResult.TRUE, result);
+//		} else {
+//			assertEquals(EvaluationResult.FALSE, result);
+//		}
+	}
+	
+
+	
+	//todo evaulate multi statements as cartesian product, with all-false-pass tests and all-false-pass with some positive calls
+	
+//	private List<ChoiceNode> createSmth() {
+//		return null;
+//	}
+	
 	private List<ChoiceNode> createList(ChoiceNode choiceNode1, ChoiceNode choiceNode2) {
 		return Arrays.asList(choiceNode1, choiceNode2);
 	}
-	
-	//todo evaulate multi statements as cartesian product, with all-false-pass tests and all-false-pass with some positive calls
 
 	@Test
 	public void evaluateForStrings() {
