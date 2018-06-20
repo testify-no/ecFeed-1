@@ -28,7 +28,7 @@ public class ValueCondition implements IStatementCondition {
 		fParentRelationStatement = parentRelationStatement;
 	}
 
-	//TODO refactor
+	//TODO refactor + isAmbiguous
 	private static boolean isConstraintInChoiceRange(String choice, String constraint, String relation, String substituteType) {
 		boolean result = false;
 		if(substituteType.equals("int") || substituteType.equals("long")) {		
@@ -39,13 +39,22 @@ public class ValueCondition implements IStatementCondition {
 			long lower = Long.parseLong(choices[0]);
 			long upper = Long.parseLong(choices[1]);
 			long lowerConstraint = Long.parseLong(constraints[0]);
-		//	long upperConstraint = Long.parseLong(constraints[1]);
-			
+			long upperConstraint;
+			if (constraints.length == 2) {
+				upperConstraint = Long.parseLong(constraints[1]);
+			}
+			else {
+				upperConstraint = Long.parseLong(constraints[0]);
+			}
 			
 			switch (substituteType) {
-			case "=":
-				result = false;
+			case "=": 
+				result = isValueInInterval(lower, lowerConstraint, upperConstraint)
+				|| isValueInInterval(upper, lowerConstraint, upperConstraint);
+				break;
 			case "<":
+				result = isValueInInterval(lower, lowerConstraint, upperConstraint-1)
+				|| isValueInInterval(lower, lowerConstraint, upperConstraint-1);
 				break;
 			case ">":
 				break;
@@ -53,6 +62,22 @@ public class ValueCondition implements IStatementCondition {
 
 		}
 		return result;
+	}
+	
+	private static boolean isValueInInterval(int value, int min, int max) {
+		return value>=min || value <=max;
+	}
+	
+	private static boolean isValueInInterval(long value, long min, long max) {
+		return value>=min || value <=max;
+	}
+	
+	private static boolean isValueInInterval(float value, float min, float max) {
+		return Float.compare(value, min) > 0 || Float.compare(value, max) < 0;
+	}
+	
+	private static boolean isValueInInterval(double value, double min, double max) {
+		return Double.compare(value, min) > 0 || Double.compare(value, max) < 0;
 	}
 	
 	@Override
