@@ -18,10 +18,9 @@ import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.ObjectHelper;
 
 public class ChoiceCondition implements IStatementCondition {
-	
-	//with one param, can be range
+
 	private ChoiceNode fRightChoice;
-	RelationStatement fParentRelationStatement;
+	private RelationStatement fParentRelationStatement;
 
 	public ChoiceCondition(ChoiceNode rightChoice, RelationStatement parentRelationStatement) {
 
@@ -35,7 +34,7 @@ public class ChoiceCondition implements IStatementCondition {
 		ChoiceNode choice = 
 				StatementConditionHelper.getChoiceForMethodParameter(
 						choices, fParentRelationStatement.getLeftParameter());
-		
+
 		if (choice == null) {
 			return EvaluationResult.INSUFFICIENT_DATA;
 		}
@@ -115,8 +114,11 @@ public class ChoiceCondition implements IStatementCondition {
 		String typeName1 = actualLeftChoice.getParameter().getType();
 		String substituteType = JavaTypeHelper.getSubstituteType(typeName1);
 		EStatementRelation relation = fParentRelationStatement.getRelation();
-		
-		boolean isRandomizedChoice = StatementConditionHelper.getChoiceRandomized(actualLeftChoice, fParentRelationStatement.getLeftParameter());
+
+		boolean isRandomizedChoice = 
+				StatementConditionHelper.getChoiceRandomized(
+						actualLeftChoice, fParentRelationStatement.getLeftParameter());
+
 		if(isRandomizedChoice) {
 			if(JavaTypeHelper.TYPE_NAME_STRING.equals(substituteType)) {
 				return EvaluationResult.convertFromBoolean(leftChoiceStr.matches(fRightValue));
@@ -131,7 +133,6 @@ public class ChoiceCondition implements IStatementCondition {
 			return evaluateEqualityIncludingParents(relation, actualLeftChoice);
 		}
 
-		
 		String actualLeftValue = JavaTypeHelper.convertValueString(actualLeftChoice.getValueString(), substituteType);
 		String rightValue = JavaTypeHelper.convertValueString(fRightChoice.getValueString(), substituteType);
 
@@ -174,20 +175,18 @@ public class ChoiceCondition implements IStatementCondition {
 		if (substituteType == null || parameterIndex >= domain.size()) {
 			return false;
 		}
-		
+
 		List<ChoiceNode> choices = domain.get(parameterIndex);		
-		
+
 		String leftChoiceStr = getChoiceString(choices, fParentRelationStatement.getLeftParameter());
 
-
-	//	EStatementRelation relation = fParentRelationStatement.getRelation();
-		
 		if(relation.equals(EStatementRelation.EQUAL) || relation.equals(EStatementRelation.NOT_EQUAL)) {
 			return false;
 		}
-		
+
 		boolean isRandomizedChoice = StatementConditionHelper.getChoiceRandomized(choices,
 				fParentRelationStatement.getLeftParameter());
+
 		if (isRandomizedChoice) {
 			if (JavaTypeHelper.TYPE_NAME_STRING.equals(substituteType)) {
 				return leftChoiceStr.matches(fRightValue);
@@ -205,7 +204,7 @@ public class ChoiceCondition implements IStatementCondition {
 
 		return false;
 	}
-	
+
 	private static String getChoiceString(List<ChoiceNode> choices, MethodParameterNode methodParameterNode) {
 
 		ChoiceNode choiceNode = StatementConditionHelper.getChoiceForMethodParameter(choices, methodParameterNode);
