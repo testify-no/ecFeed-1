@@ -26,8 +26,8 @@ public class JavaTypeHelper {
 	public static final String TYPE_NAME_SHORT = "short";
 	public static final String TYPE_NAME_STRING = "String";
 
-	private static final String VALUE_REPRESENTATION_TRUE = "true";
-	private static final String VALUE_REPRESENTATION_FALSE = "false";
+	public static final String VALUE_REPRESENTATION_TRUE = "true";
+	public static final String VALUE_REPRESENTATION_FALSE = "false";
 	private static final String VALUE_REPRESENTATION_MAX = "MAX_VALUE";
 	private static final String VALUE_REPRESENTATION_MIN = "MIN_VALUE";
 	public static final String VALUE_REPRESENTATION_POSITIVE_INF = "POSITIVE_INFINITY";
