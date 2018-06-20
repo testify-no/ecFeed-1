@@ -49,12 +49,12 @@ public class ValueCondition implements IStatementCondition {
 			
 			switch (substituteType) {
 			case "=": 
-				result = isValueInInterval(lower, lowerConstraint, upperConstraint)
-				|| isValueInInterval(upper, lowerConstraint, upperConstraint);
+				result = isValueInRange(lower, lowerConstraint, upperConstraint)
+				|| isValueInRange(upper, lowerConstraint, upperConstraint);
 				break;
 			case "<":
-				result = isValueInInterval(lower, lowerConstraint, upperConstraint-1)
-				|| isValueInInterval(lower, lowerConstraint, upperConstraint-1);
+				result = isValueInRange(lower, lowerConstraint, upperConstraint-1)
+				|| isValueInRange(lower, lowerConstraint, upperConstraint-1);
 				break;
 			case ">":
 				break;
@@ -64,19 +64,19 @@ public class ValueCondition implements IStatementCondition {
 		return result;
 	}
 	
-	private static boolean isValueInInterval(int value, int min, int max) {
+	private static boolean isValueInRange(int value, int min, int max) {
 		return value>=min || value <=max;
 	}
 	
-	private static boolean isValueInInterval(long value, long min, long max) {
+	private static boolean isValueInRange(long value, long min, long max) {
 		return value>=min || value <=max;
 	}
 	
-	private static boolean isValueInInterval(float value, float min, float max) {
+	private static boolean isValueInRange(float value, float min, float max) {
 		return Float.compare(value, min) > 0 || Float.compare(value, max) < 0;
 	}
 	
-	private static boolean isValueInInterval(double value, double min, double max) {
+	private static boolean isValueInRange(double value, double min, double max) {
 		return Double.compare(value, min) > 0 || Double.compare(value, max) < 0;
 	}
 	
@@ -109,9 +109,8 @@ public class ValueCondition implements IStatementCondition {
 				//check does string match with regex
 			}
 			else {
-				isConstraintInChoiceRange(leftChoiceStr, fRightValue, relation.getName(), substituteType);
-					
-				
+				boolean result = isConstraintInChoiceRange(leftChoiceStr, fRightValue, relation.getName(), substituteType);
+				return EvaluationResult.convertFromBoolean(result);
 			}
 		}
 
