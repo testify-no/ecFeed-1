@@ -251,7 +251,7 @@ public class StatementConditionHelper {
 			
 			
 			if (!relation.equals(EStatementRelation.EQUAL)) {
-				result = ValueCondition.validateOtherthanEqualCondition(relation, choices.length, constraints.length, substituteType, upper, lower, lowerConstraint, upperConstraint);
+				result = StatementConditionHelper.validateOtherthanEqualCondition(relation, substituteType, upper, lower, lowerConstraint, upperConstraint);
 			}
 			else {
 				result = validateEqualCondition(choices.length, constraints.length, substituteType, upper, lower, lowerConstraint, upperConstraint);
@@ -259,6 +259,70 @@ public class StatementConditionHelper {
 	
 		}
 		return result;
-	}	
+	}
+	
+	private static boolean isAmbigous(EStatementRelation relation, String substituteType, String upper,
+			String lower, String lowerConstraint, String upperConstraint) {
+		
+		
+		return false;
+	}
+
+	public static final boolean isAmbigous(String choice, String constraint, EStatementRelation relation, String substituteType)  {
+		boolean result = false;
+		boolean outsideTheRange = false;
+		if(JavaTypeHelper.isNumericTypeName(substituteType)) {		
+			String[] choices = choice.split(":");
+			String[] constraints = constraint.split(":");
+			String lower;
+			String upper;
+			
+			lower = choices[0];
+			if (choices.length == 1) {
+				upper = lower;
+			}
+			else {
+				 upper = choices[1];
+			}
+			String lowerConstraint = constraints[0];
+			String upperConstraint;
+			if (constraints.length == 1) {
+				upperConstraint = lowerConstraint;
+			}
+			else {
+				upperConstraint = constraints[1];
+			}
+			
+			if (!relation.equals(EStatementRelation.EQUAL)) {
+				result = StatementConditionHelper.validateOtherthanEqualCondition(relation, substituteType, upper, lower, lowerConstraint, upperConstraint);
+				outsideTheRange = isRelationMatchQuiet(relation, substituteType, lower, lowerConstraint) || isRelationMatchQuiet(relation, substituteType, upper, upperConstraint);
+			}
+			else {
+				result = validateEqualCondition(choices.length, constraints.length, substituteType, upper, lower, lowerConstraint, upperConstraint);
+				outsideTheRange = isRelationMatchQuiet(relation, substituteType, lower, lowerConstraint) || isRelationMatchQuiet(relation, substituteType, upper, upperConstraint);
+			}
+	
+		}
+		return result && (result == outsideTheRange);
+	}
+
+	public static boolean validateOtherthanEqualCondition(EStatementRelation relation,
+			String substituteType, String upper, String lower, String lowerConstraint,
+			String upperConstraint) {
+		return relation.eval(substituteType, lower, upperConstraint).getAsPrimitiveBoolean()
+				|| relation.eval(substituteType, upper, lowerConstraint).getAsPrimitiveBoolean();
+	
+				//
+				//isRelationMatchQuiet(relation, substituteType, lower, lowerConstraint)||
+			
+				/*
+				isRelationMatchQuiet(relation, substituteType, lower, upperConstraint)
+				|| isRelationMatchQuiet(relation, substituteType, upper, lowerConstraint);
+		*/
+		
+		
+		
+				//|| isRelationMatchQuiet(relation, substituteType, upper, upperConstraint); //useless?
+	}
 }
 

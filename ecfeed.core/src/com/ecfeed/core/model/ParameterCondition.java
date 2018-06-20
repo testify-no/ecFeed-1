@@ -152,6 +152,12 @@ public class ParameterCondition implements IStatementCondition {
 		return fRightParameterNode;
 	}
 
+	@Override
+	public EvaluationResult isAmgibous(List<ChoiceNode> values) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }	
 
 
