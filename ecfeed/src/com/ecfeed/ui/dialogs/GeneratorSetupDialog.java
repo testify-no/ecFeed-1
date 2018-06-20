@@ -981,8 +981,8 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 					&& ((MethodParameterNode) event.getElement()).isExpected()) {
 				fParametersViewer.setChecked(event.getElement(), true);
 			} else {
-				//maybe check only after click OK
-				//check constraints here(?) parameternodes, gimme any help, example, something :|
+				//maybe check only after OK
+				//check constraints here(?) parameternodes
 				System.out.println(event.getElement());
 				updateOkButtonAndErrorMsg();
 			}
