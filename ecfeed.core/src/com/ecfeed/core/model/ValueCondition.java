@@ -40,15 +40,15 @@ public class ValueCondition implements IStatementCondition {
 		}
 
 		String leftChoiceStr = getChoiceString(choices, fParentRelationStatement.getLeftParameter());
-		
 
-		
+
+
 		if (leftChoiceStr == null) {
 			return EvaluationResult.INSUFFICIENT_DATA;
 		}
-		
+
 		EStatementRelation relation = fParentRelationStatement.getRelation();
-		
+
 		boolean isRandomizedChoice = StatementConditionHelper.getChoiceRandomized(choices, fParentRelationStatement.getLeftParameter());
 		if(isRandomizedChoice) {
 			if(JavaTypeHelper.TYPE_NAME_STRING.equals(substituteType)) {
@@ -68,28 +68,28 @@ public class ValueCondition implements IStatementCondition {
 	}
 
 	@Override
-	public boolean isAmbigous(List<List<ChoiceNode>> domain, int parameterIndex, EStatementRelation relation) {
+	public boolean isAmbiguous(List<List<ChoiceNode>> domain, int parameterIndex, EStatementRelation relation) {
 		String substituteType = JavaTypeHelper.getSubstituteType(fParentRelationStatement
 				.getLeftParameter().getType(), JavaTypeHelper.getStringTypeName());
 
 		if (substituteType == null || parameterIndex >= domain.size()) {
 			return false;
 		}
-		
+
 		List<ChoiceNode> values = domain.get(parameterIndex);
-		
+
 		String leftChoiceStr = getChoiceString(values, fParentRelationStatement.getLeftParameter());
 
 
-	//	EStatementRelation relation = fParentRelationStatement.getRelation();
-		
+		//	EStatementRelation relation = fParentRelationStatement.getRelation();
+
 		boolean isRandomizedChoice = StatementConditionHelper.getChoiceRandomized(values,
 				fParentRelationStatement.getLeftParameter());
 		if (isRandomizedChoice) {
 			if (JavaTypeHelper.TYPE_NAME_STRING.equals(substituteType)) {
 				return false;
 			} else {
-				boolean result = StatementConditionHelper.isAmbigous(leftChoiceStr,
+				boolean result = StatementConditionHelper.isAmbiguous(leftChoiceStr,
 						fRightValue, relation, substituteType);
 				return result;
 			}
@@ -102,7 +102,7 @@ public class ValueCondition implements IStatementCondition {
 
 		return false;
 	}
-	
+
 	private static String getChoiceString(List<ChoiceNode> choices, MethodParameterNode methodParameterNode) {
 
 		ChoiceNode choiceNode = StatementConditionHelper.getChoiceForMethodParameter(choices, methodParameterNode);

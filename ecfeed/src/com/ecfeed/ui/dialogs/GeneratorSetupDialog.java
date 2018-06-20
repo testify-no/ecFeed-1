@@ -82,7 +82,7 @@ import com.ecfeed.ui.dialogs.basic.InfoDialog;
 public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 	private Combo fTestSuiteCombo;
 	private Combo fGeneratorCombo;
-	private Button fOkButton;	//on constraints, ambigous
+	private Button fOkButton;
 	private MethodNode fMethod;
 	private String fTestSuiteName;
 	private CheckboxTreeViewer fParametersViewer;
@@ -266,13 +266,12 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		}
 
 		createButton(parent, IDialogConstants.CANCEL_ID, DialogHelper.getCancelLabel(), false);
-		
 		updateOkButtonAndErrorMsg();
 	}
-	
+
 	public static final String IS_NOT_AMBIGOUS = "";
 	public static final String IS_AMBIGOUS = "%s is ambigous because %s is ambigous.";
-	
+
 	private Label createAmgibousWarningLabel(Composite parent) {
 		Label selectChoicesLabel = new Label(parent, SWT.WRAP);
 
@@ -283,24 +282,24 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 
 		return selectChoicesLabel;
 	}
-	
+
 	private void checkAmbigousState() { 
 		List<Constraint> constraints = getCheckedConstraints();
 		List<List<ChoiceNode>> input = getCheckedArguments();
-		
+
 		//constain's name
 		//and statement
 		for (Constraint constraint : constraints) {
-			if(constraint.isAmbigous(input)) {
+			if(constraint.isAmbiguous(input)) {
 				updateAmbigousWarningLabel(true);
 				return;
 			}
 		}
 		updateAmbigousWarningLabel(false);
 	}
-	
-	private void updateAmbigousWarningLabel(boolean isAmbigousCondition) {
-		if(isAmbigousCondition) {
+
+	private void updateAmbigousWarningLabel(boolean isAmbiguousCondition) {
+		if(isAmbiguousCondition) {
 			ambigousLabel.setText(String.format(IS_AMBIGOUS, "constraintsname", "somethingfromstatement")); //String.Format
 		}
 		else {
@@ -399,7 +398,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 				checkAmbigousState();
 				super.checkStateChanged(event);
 			}
-			
+
 		});
 		fConstraintsViewer.expandAll();
 		for (String constraint : fMethod.getConstraintsNames()) {
@@ -523,29 +522,14 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		if (!validateTargetFileText(message)) {
 			return false;
 		}
-		if (isAmbigous(null, null)) {
+		if (isAmbiguous(null, null)) {
 			System.out.println("Ambigous state, todo");
 		}
 		return true;
 	}
 
-	private boolean isAmbigous(EStatementRelation statementRelation, String leftValue) {
-	/*	for (ConstraintNode constaintNode: fMethod.getConstraintNodes()) {
-			//check value conditions for all nodes, constrains and param. methods
-		}
-		
-		RelationStatement statement;
-		boolean isAmbigous = false;
-		for(MethodParameterNode methodParameterNode : fMethod.getMethodParameters()) {
-			statement = RelationStatement.createStatementWithValueCondition(
-							methodParameterNode, statementRelation, leftValue);
-			isAmbigous = statement.isAmgibous(methodParameterNode.getChoices());
-			if(isAmbigous) {
-				return true;
-				//info - about object - is necessary
-			}
-		}
-*/		return false;
+	private boolean isAmbiguous(EStatementRelation statementRelation, String leftValue) {
+		return false;
 	}
 
 	private boolean validateTestSuiteName(StringHolder message) {
@@ -679,7 +663,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		generatorLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
 				false, 1, 1));
 		generatorLabel.setText("Generator");
-		
+
 		createGeneratorViewer(generatorComposite);
 		ambigousLabel = createAmgibousWarningLabel(container);
 	}
@@ -945,7 +929,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		}
 		fConstraints = constraints;
 	}
-	
+
 	private void saveAlgorithmInput() {
 		List<MethodParameterNode> parameters = fMethod.getMethodParameters();
 		fAlgorithmInput = new ArrayList<List<ChoiceNode>>();
@@ -963,7 +947,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 			fAlgorithmInput.add(choices);
 		}
 	}
-	
+
 	private List<Constraint> getCheckedConstraints() {
 		Object[] checkedObjects = fConstraintsViewer.getCheckedElements();
 		List<Constraint> constraints = new ArrayList<Constraint>();

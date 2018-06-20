@@ -167,7 +167,7 @@ public class ChoiceCondition implements IStatementCondition {
 	}
 
 	@Override
-	public boolean isAmbigous(List<List<ChoiceNode>> domain, int parameterIndex, EStatementRelation relation) {
+	public boolean isAmbiguous(List<List<ChoiceNode>> domain, int parameterIndex, EStatementRelation relation) {
 		String fRightValue = fRightChoice.getValueString();
 		String substituteType = JavaTypeHelper.getSubstituteType(fParentRelationStatement
 				.getLeftParameter().getType(), JavaTypeHelper.getStringTypeName());
@@ -191,7 +191,7 @@ public class ChoiceCondition implements IStatementCondition {
 			if (JavaTypeHelper.TYPE_NAME_STRING.equals(substituteType)) {
 				return leftChoiceStr.matches(fRightValue);
 			} else {
-				boolean result = StatementConditionHelper.isAmbigous(leftChoiceStr,
+				boolean result = StatementConditionHelper.isAmbiguous(leftChoiceStr,
 						fRightValue, relation, substituteType);
 				return result;
 			}
