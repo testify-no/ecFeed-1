@@ -18,9 +18,8 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.Signature;
 
+import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.SystemLogger;
-import com.ecfeed.ui.common.CommonConstants;
-import com.ecfeed.ui.common.JavaModelAnalyser;
 
 public class JavaCodeEnumHelper {
 
@@ -49,7 +48,7 @@ public class JavaCodeEnumHelper {
 
 	public static String defaultEnumExpectedValue(String type) {
 
-		String value = CommonConstants.DEFAULT_EXPECTED_ENUM_VALUE;
+		String value = JavaTypeHelper.DEFAULT_EXPECTED_ENUM_VALUE;
 
 		List<String> enumValues = enumValues(type);
 		if(enumValues.size() > 0){

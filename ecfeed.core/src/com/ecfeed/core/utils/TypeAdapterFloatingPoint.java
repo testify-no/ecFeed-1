@@ -5,8 +5,8 @@ import java.util.Arrays;
 public abstract class TypeAdapterFloatingPoint<T extends Number> extends TypeAdapterForNumeric<T>{
 
 	private String[] FLOATING_POINT_SPECIAL_VALUES = new String[]{
-			CommonConstants.POSITIVE_INFINITY_STRING_REPRESENTATION,
-			CommonConstants.NEGATIVE_INFINITY_STRING_REPRESENTATION
+			JavaTypeHelper.VALUE_REPRESENTATION_POSITIVE_INF,
+			JavaTypeHelper.VALUE_REPRESENTATION_NEGATIVE_INF
 	};
 
 	@Override
@@ -25,7 +25,7 @@ public abstract class TypeAdapterFloatingPoint<T extends Number> extends TypeAda
 
 	@Override
 	public String getDefaultValue(){
-		return CommonConstants.DEFAULT_EXPECTED_FLOATING_POINT_VALUE;
+		return JavaTypeHelper.DEFAULT_EXPECTED_FLOATING_POINT_VALUE;
 	}
 }
 

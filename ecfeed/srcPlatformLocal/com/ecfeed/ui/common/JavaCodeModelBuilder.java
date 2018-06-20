@@ -26,9 +26,6 @@ import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.SystemLogger;
-import com.ecfeed.ui.common.CommonConstants;
-import com.ecfeed.ui.common.EclipseTypeHelper;
-import com.ecfeed.ui.common.Messages;
 
 public class JavaCodeModelBuilder extends JavaModelAnalyser{
 
@@ -108,13 +105,16 @@ public class JavaCodeModelBuilder extends JavaModelAnalyser{
 		return choices;
 	}
 
+
+	// ADR-REF - magic strings
 	protected HashMap<String, String> predefinedBooleanValues() {
 		HashMap<String, String> values = new HashMap<String, String>();
-		values.put("true", CommonConstants.BOOLEAN_TRUE_STRING_REPRESENTATION);
-		values.put("false", CommonConstants.BOOLEAN_FALSE_STRING_REPRESENTATION);
+		values.put("true", JavaTypeHelper.VALUE_REPRESENTATION_TRUE);
+		values.put("false", JavaTypeHelper.VALUE_REPRESENTATION_FALSE);
 		return values;
 	}
 
+	// ADR-REF - magic strings
 	protected ArrayList<ChoiceNode> defaultIntegerChoices() {
 		ArrayList<ChoiceNode> choices = new ArrayList<ChoiceNode>();
 		HashMap<String, String> values = predefinedIntegerValues();
@@ -124,10 +124,11 @@ public class JavaCodeModelBuilder extends JavaModelAnalyser{
 		return choices;
 	}
 
+	// ADR-REF - magic strings
 	protected HashMap<String, String> predefinedIntegerValues() {
 		HashMap<String, String> values = new HashMap<String, String>();
-		values.put("min", CommonConstants.MIN_VALUE_STRING_REPRESENTATION);
-		values.put("max", CommonConstants.MAX_VALUE_STRING_REPRESENTATION);
+		values.put("min", JavaTypeHelper.VALUE_REPRESENTATION_MIN);
+		values.put("max", JavaTypeHelper.VALUE_REPRESENTATION_MAX);
 		return values;
 	}
 
@@ -142,10 +143,10 @@ public class JavaCodeModelBuilder extends JavaModelAnalyser{
 
 	protected HashMap<String, String> predefinedFloatValues() {
 		HashMap<String, String> values = new HashMap<String, String>();
-		values.put("min", CommonConstants.MIN_VALUE_STRING_REPRESENTATION);
-		values.put("max", CommonConstants.MAX_VALUE_STRING_REPRESENTATION);
-		values.put("positive infinity", CommonConstants.POSITIVE_INFINITY_STRING_REPRESENTATION);
-		values.put("negative infinity", CommonConstants.NEGATIVE_INFINITY_STRING_REPRESENTATION);
+		values.put("min", JavaTypeHelper.VALUE_REPRESENTATION_MIN);
+		values.put("max", JavaTypeHelper.VALUE_REPRESENTATION_MAX);
+		values.put("positive infinity", JavaTypeHelper.VALUE_REPRESENTATION_POSITIVE_INF);
+		values.put("negative infinity", JavaTypeHelper.VALUE_REPRESENTATION_NEGATIVE_INF);
 		return values;
 	}
 
@@ -160,7 +161,7 @@ public class JavaCodeModelBuilder extends JavaModelAnalyser{
 
 	protected HashMap<String, String> predefinedStringValues() {
 		HashMap<String, String> values = new HashMap<String, String>();
-		values.put("null", com.ecfeed.core.utils.CommonConstants.NULL_VALUE_STRING_REPRESENTATION);
+		values.put("null", JavaTypeHelper.NULL_VALUE_STRING_REPRESENTATION);
 		return values;
 	}
 
