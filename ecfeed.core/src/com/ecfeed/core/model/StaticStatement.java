@@ -103,7 +103,7 @@ public class StaticStatement extends AbstractStatement {
 	}
 
 	@Override
-	public boolean isAmgibous(List<List<ChoiceNode>> values) {
+	public boolean isAmbiguous(List<List<ChoiceNode>> values) {
 		return false;
 	}
 

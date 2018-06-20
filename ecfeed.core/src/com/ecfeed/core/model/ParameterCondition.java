@@ -18,7 +18,6 @@ import com.ecfeed.core.utils.JavaTypeHelper;
 
 public class ParameterCondition implements IStatementCondition {
 
-	//cartesian
 	private MethodParameterNode fRightParameterNode;
 	private RelationStatement fParentRelationStatement;
 
@@ -152,10 +151,13 @@ public class ParameterCondition implements IStatementCondition {
 	}
 
 	@Override
-	public boolean isAmbiguous(List<List<ChoiceNode>> domain, int parameterIndex,
-			EStatementRelation relation) {
-		String substituteType = JavaTypeHelper.getSubstituteType(fParentRelationStatement
-				.getLeftParameter().getType(), JavaTypeHelper.getStringTypeName());
+	public boolean isAmbiguous(
+			List<List<ChoiceNode>> domain, int parameterIndex, EStatementRelation relation) {
+
+		String substituteType = 
+				JavaTypeHelper.getSubstituteType(
+						fParentRelationStatement.getLeftParameter().getType(), 
+						JavaTypeHelper.getStringTypeName());
 
 		if (substituteType == null || parameterIndex >= domain.size()) {
 			return false;
@@ -173,9 +175,6 @@ public class ParameterCondition implements IStatementCondition {
 				return false;
 			}
 
-			//			String leftChoiceStr = getChoiceString(values,
-			//					fParentRelationStatement.getLeftParameter());
-
 			for (ChoiceNode left : values) {
 				for (ChoiceNode right : rightSideDomain) {
 					if (StatementConditionHelper.isAmbiguous(left.getValueString(),
@@ -185,17 +184,8 @@ public class ParameterCondition implements IStatementCondition {
 				}
 			}
 
-			/*
-			 * else { boolean result =
-			 * StatementConditionHelper.isAmbiguous(leftChoiceStr, fRightValue,
-			 * relation, substituteType); return result; } }
-			 */
-			/*
-			 * if (StatementConditionHelper.isRelationMatchQuiet(relation,
-			 * substituteType, leftChoiceStr, fRightValue)) { return true; }
-			 */
-
 		}
+
 		return false;
 	}
 }	
