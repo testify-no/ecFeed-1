@@ -30,6 +30,7 @@ public class ValueCondition implements IStatementCondition {
 
 	//TODO refactor
 	private static boolean isConstraintInChoiceRange(String choice, String constraint, String relation, String substituteType) {
+		boolean result = false;
 		if(substituteType.equals("int") || substituteType.equals("long")) {		
 			
 			String[] choices = choice.split(":");
@@ -37,11 +38,21 @@ public class ValueCondition implements IStatementCondition {
 			
 			long lower = Long.parseLong(choices[0]);
 			long upper = Long.parseLong(choices[1]);
+			long lowerConstraint = Long.parseLong(constraints[0]);
+		//	long upperConstraint = Long.parseLong(constraints[1]);
 			
 			
-			
+			switch (substituteType) {
+			case "=":
+				result = false;
+			case "<":
+				break;
+			case ">":
+				break;
+			}
+
 		}
-		return true;
+		return result;
 	}
 	
 	@Override
@@ -63,19 +74,21 @@ public class ValueCondition implements IStatementCondition {
 			return EvaluationResult.INSUFFICIENT_DATA;
 		}
 		//TODO 433
+
+		
+		EStatementRelation relation = fParentRelationStatement.getRelation();
+		
 		boolean isRandomizedChoice = getChoiceRandomized(choices, fParentRelationStatement.getLeftParameter());
 		if(isRandomizedChoice) {
 			if("String".equals(substituteType)) {
 				//check does string match with regex
 			}
 			else {
-				leftChoiceStr.split(":"); //choice
-				fRightValue.split(":");	  //constraint
+				isConstraintInChoiceRange(leftChoiceStr, fRightValue, relation.getName(), substituteType);
+					
+				
 			}
 		}
-		
-		EStatementRelation relation = fParentRelationStatement.getRelation();
-
 
 		if (StatementConditionHelper.isRelationMatchQuiet(relation, substituteType, leftChoiceStr, fRightValue)) {
 			return EvaluationResult.TRUE;
