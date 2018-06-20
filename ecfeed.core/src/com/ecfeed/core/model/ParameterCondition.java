@@ -18,6 +18,7 @@ import com.ecfeed.core.utils.JavaTypeHelper;
 
 public class ParameterCondition implements IStatementCondition {
 
+	//cartesian
 	private MethodParameterNode fRightParameterNode;
 	private RelationStatement fParentRelationStatement;
 

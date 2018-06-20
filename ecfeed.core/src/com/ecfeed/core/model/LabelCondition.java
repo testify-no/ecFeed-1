@@ -92,7 +92,7 @@ public class LabelCondition implements IStatementCondition {
 	}
 
 	private EvaluationResult evaluateContainsLabel(ChoiceNode choice) {
-
+		
 		boolean containsLabel = choice.getAllLabels().contains(fRightLabel);
 
 		EStatementRelation relation = fParentRelationStatement.getRelation(); 
