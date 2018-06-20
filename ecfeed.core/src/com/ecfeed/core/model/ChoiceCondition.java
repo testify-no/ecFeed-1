@@ -165,7 +165,7 @@ public class ChoiceCondition implements IStatementCondition {
 	}
 
 	@Override
-	public EvaluationResult isAmgibous(List<ChoiceNode> choices) {
+	public EvaluationResult isAmbigous(List<ChoiceNode> choices) {
 		String fRightValue = fRightChoice.getValueString();
 		String substituteType = JavaTypeHelper.getSubstituteType(fParentRelationStatement
 				.getLeftParameter().getType(), JavaTypeHelper.getStringTypeName());
