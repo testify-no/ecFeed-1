@@ -10,6 +10,7 @@
 
 package com.ecfeed.core.model;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -216,6 +217,10 @@ public class StatementConditionHelper {
 		}
 	
 		return choiceNode.isRandomizeValue();
+	}
+	
+	public static boolean getChoiceRandomized(ChoiceNode choice, MethodParameterNode methodParameterNode) {
+		return getChoiceRandomized(Arrays.asList(choice), methodParameterNode);
 	}
 
 	public static boolean isConstraintInChoiceRange(String choice, String constraint, EStatementRelation relation, String substituteType) {
