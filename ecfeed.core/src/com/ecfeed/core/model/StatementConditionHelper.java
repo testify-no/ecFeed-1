@@ -12,7 +12,6 @@ package com.ecfeed.core.model;
 
 import java.util.List;
 
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.ecfeed.core.utils.JavaTypeHelper;
@@ -228,7 +227,7 @@ public class StatementConditionHelper {
 			String upper;
 			
 			lower = choices[0];
-			if (choices.length == 1) {
+			if (choices.length == SINGLE_VALUE) {
 				upper = lower;
 			}
 			else {
@@ -243,15 +242,12 @@ public class StatementConditionHelper {
 			
 			String lowerConstraint = constraints[0];
 			String upperConstraint;
-			if (constraints.length == 1) {
+			if (constraints.length == SINGLE_VALUE) {
 				upperConstraint = lowerConstraint;
 			}
 			else {
 				upperConstraint = constraints[1];
 			}
-			
-			// get an info about is ambigious from these 4 cases
-			
 			
 			if (!relation.equals(EQUAL)) {
 				result = StatementConditionHelper.validateOtherthanEqualCondition(relation, substituteType, upper, lower, lowerConstraint, upperConstraint);
@@ -259,16 +255,8 @@ public class StatementConditionHelper {
 			else {
 				result = validateEqualCondition(choices.length, constraints.length, substituteType, upper, lower, lowerConstraint, upperConstraint);
 			}
-	
 		}
 		return result;
-	}
-	
-	private static boolean isAmbigous(EStatementRelation relation, String substituteType, String upper,
-			String lower, String lowerConstraint, String upperConstraint) {
-		
-		
-		return false;
 	}
 
 	public static final boolean isAmbigous(String choice, String constraint, EStatementRelation relation, String substituteType)  {
@@ -281,7 +269,7 @@ public class StatementConditionHelper {
 			String upper;
 			
 			lower = choices[0];
-			if (choices.length == 1) {
+			if (choices.length == SINGLE_VALUE) {
 				upper = lower;
 			}
 			else {
@@ -289,7 +277,7 @@ public class StatementConditionHelper {
 			}
 			String lowerConstraint = constraints[0];
 			String upperConstraint;
-			if (constraints.length == 1) {
+			if (constraints.length == SINGLE_VALUE) {
 				upperConstraint = lowerConstraint;
 			}
 			else {
