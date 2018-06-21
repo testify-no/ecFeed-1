@@ -23,11 +23,6 @@ public class TypeAdapterForBoolean implements ITypeAdapter<Boolean>{
 
 	public String convert(String value, boolean isRandomized){
 
-		if (isRandomized) {
-			final String CAN_NOT_CONVERT = "Cannot convert to randomized boolean.";
-			ExceptionHelper.reportRuntimeException(CAN_NOT_CONVERT);
-		}
-
 		if (value.toLowerCase().equals(JavaTypeHelper.VALUE_REPRESENTATION_TRUE.toLowerCase())) {
 			return JavaTypeHelper.VALUE_REPRESENTATION_TRUE;
 		}

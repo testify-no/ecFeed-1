@@ -24,12 +24,6 @@ public class TypeAdapterBaseForUserType<T extends Enum<T>> implements ITypeAdapt
 	}
 
 	public String convert(String value, boolean isRandomized){
-
-		if (isRandomized) {
-			final String CAN_NOT_CONVERT = "Cannot convert to randomized user type.";
-			ExceptionHelper.reportRuntimeException(CAN_NOT_CONVERT);
-		}		
-
 		return JavaLanguageHelper.isValidJavaIdentifier(value) ? value : null;
 	}
 
