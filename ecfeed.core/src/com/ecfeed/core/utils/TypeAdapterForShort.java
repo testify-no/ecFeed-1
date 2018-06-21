@@ -4,21 +4,16 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class TypeAdapterForShort extends TypeAdapterForNumeric<Short>{
 	@Override
-	public String convert(String value, boolean isRandomized){
+	public String convert(String value, boolean isRandomized) {
+
 		String result = super.convert(value, isRandomized);
-		if(result == null){
-			try{
+
+		if (result == null) {
+			try {
 				result = String.valueOf(StringHelper.convertToShort(value));
 			}
-			catch(NumberFormatException e){
-				if(value.length() == 1){
-					int charValue = (int)value.charAt(0);
-					if((charValue > Short.MAX_VALUE) == false){
-						result = Integer.toString(charValue);
-					}
-				} else {
-					result = null;
-				}
+			catch (NumberFormatException e) {
+				result = getDefaultValue();
 			}
 		}
 

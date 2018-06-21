@@ -17,7 +17,11 @@ public class ValueFieldHelper {
 	}
 
 	//TODO and refactor next time
-	public static String adapt(String type, String value, boolean isRandomized, ITypeAdapterProvider iTypeAdapterProvider) throws ModelOperationException {
+	public static String adapt(
+			String type, 
+			String value, 
+			boolean isRandomized, 
+			ITypeAdapterProvider iTypeAdapterProvider) throws ModelOperationException {
 		
 		ITypeAdapter<?> typeAdapter = iTypeAdapterProvider.getAdapter(type);
 		

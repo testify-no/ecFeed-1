@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Model name="MethodParameterOperationSetTypeTest" version="2">
+    <Class name="com.ecfeed.adapter.operations.MethodParameterOperationSetTypeTest">
+        <Properties>
+            <Property name="runOnAndroid" type="boolean" value="false"/>
+        </Properties>
+        <Method name="testMethod">
+            <Properties>
+                <Property name="methodRunner" type="String" value="Java Runner"/>
+                <Property name="wbMapBrowserToParam" type="boolean" value="false"/>
+                <Property name="wbBrowser" type="String" value="Chrome"/>
+                <Property name="wbMapStartUrlToParam" type="boolean" value="false"/>
+            </Properties>
+            <Parameter name="ident" type="String" isExpected="false" expected="0" linked="false">
+                <Properties>
+                    <Property name="wbIsOptional" type="boolean" value="false"/>
+                </Properties>
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="Z990243" value="Z990243"/>
+                <Choice name="Z990254" value="Z990254"/>
+            </Parameter>
+            <Parameter name="id" type="String" isExpected="false" expected="0" linked="false">
+                <Properties>
+                    <Property name="wbIsOptional" type="boolean" value="false"/>
+                </Properties>
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="choice" value=""/>
+            </Parameter>
+            <Parameter name="startMaaned" type="String" isExpected="false" expected="0" linked="false">
+                <Properties>
+                    <Property name="wbIsOptional" type="boolean" value="false"/>
+                </Properties>
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="2013-08" value="2013-08"/>
+            </Parameter>
+            <Parameter name="sluttMaaned" type="String" isExpected="false" expected="0" linked="false">
+                <Properties>
+                    <Property name="wbIsOptional" type="boolean" value="false"/>
+                </Properties>
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="2014-01" value="2014-01"/>
+            </Parameter>
+            <Parameter name="filter" type="String" isExpected="false" expected="0" linked="false">
+                <Properties>
+                    <Property name="wbIsOptional" type="boolean" value="false"/>
+                </Properties>
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="BidragsforskuddA-Inntekt" value="BidragsforskuddA-Inntekt"/>
+                <Choice name="BidragA-Inntekt" value="BidragA-Inntekt"/>
+                <Choice name="OppfostringsbidragA-Inntekt" value="OppfostringsbidragA-Inntekt"/>
+            </Parameter>
+            <Parameter name="formaal" type="String" isExpected="false" expected="0" linked="false">
+                <Properties>
+                    <Property name="wbIsOptional" type="boolean" value="false"/>
+                </Properties>
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="bidragsforskudd" value="Bidragsforskudd"/>
+                <Choice name="sykepenger" value="Sykepenger"/>
+                <Choice name="bidrag" value="Bidrag"/>
+                <Choice name="Oppfostringsbidrag" value="Oppfostringsbidrag"/>
+            </Parameter>
+            <Parameter name="feilmelding" type="String" isExpected="true" expected="" linked="false">
+                <Properties>
+                    <Property name="wbIsOptional" type="boolean" value="false"/>
+                </Properties>
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+            </Parameter>
+            <Parameter name="anotherParameter" type="String" isExpected="true" expected="" linked="false">
+                <Properties>
+                    <Property name="wbIsOptional" type="boolean" value="false"/>
+                </Properties>
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+            </Parameter>
+            <Constraint name="SecondConstraint">
+                <Premise>
+                    <StatementArray operator="and">
+                        <Statement choice="Z990243" parameter="ident" relation="="/>
+                        <Statement choice="2014-01" parameter="sluttMaaned" relation="="/>
+                    </StatementArray>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="anotherParameter" value="434"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="AnyConstraint">
+                <Premise>
+                    <StatementArray operator="and">
+                        <Statement choice="2013-08" parameter="startMaaned" relation="="/>
+                        <Statement choice="BidragsforskuddA-Inntekt" parameter="filter" relation="="/>
+                    </StatementArray>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="anotherParameter" value="sdgsdgs"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="Mangler\stilgang\stil\sBidragsforskuddA-Inntekt">
+                <Premise>
+                    <StatementArray operator="and">
+                        <Statement choice="Z990243" parameter="ident" relation="="/>
+                        <Statement choice="BidragsforskuddA-Inntekt" parameter="filter" relation="="/>
+                        <Statement choice="bidragsforskudd" parameter="formaal" relation="="/>
+                    </StatementArray>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="feilmelding" value="Bruker\shar\sikke\stilgang\stil\sfilter\sBidragsforskudd\sa-inntekt"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="Sykepenger\sog\sBidragsforskudd\sa-inntekt">
+                <Premise>
+                    <StatementArray operator="and">
+                        <Statement choice="Z990254" parameter="ident" relation="="/>
+                        <Statement choice="BidragsforskuddA-Inntekt" parameter="filter" relation="="/>
+                        <Statement choice="sykepenger" parameter="formaal" relation="="/>
+                    </StatementArray>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="feilmelding" value="Sykepenger\ser\sikke\set\sgyldig\sformål\sfor\sfilter\sBidragsforskudd\sa-inntekt"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="Mangler\stilgang\stil\sBidrag\sa-inntekt">
+                <Premise>
+                    <StatementArray operator="and">
+                        <Statement choice="Z990243" parameter="ident" relation="="/>
+                        <Statement choice="BidragA-Inntekt" parameter="filter" relation="="/>
+                        <Statement choice="bidrag" parameter="formaal" relation="="/>
+                    </StatementArray>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="feilmelding" value="Bruker\shar\sikke\stilgang\stil\sfilter\sBidrag\sa-inntekt"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="Sykepenger\sog\sBidrag\sa-inntekt">
+                <Premise>
+                    <StatementArray operator="and">
+                        <Statement choice="Z990254" parameter="ident" relation="="/>
+                        <Statement choice="BidragA-Inntekt" parameter="filter" relation="="/>
+                        <Statement choice="sykepenger" parameter="formaal" relation="="/>
+                    </StatementArray>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="feilmelding" value="Sykepenger\ser\sikke\set\sgyldig\sformål\sfor\sfilter\sBidrag\sa-inntekt"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="AnotherConstraint">
+                <Premise>
+                    <StatementArray operator="and">
+                        <Statement choice="sykepenger" parameter="formaal" relation="="/>
+                        <Statement choice="BidragA-Inntekt" parameter="filter" relation="="/>
+                        <Statement choice="Z990243" parameter="ident" relation="="/>
+                    </StatementArray>
+                </Premise>
+                <Consequence>
+                    <ExpectedValueStatement parameter="anotherParameter" value="AFSDFsd"/>
+                </Consequence>
+            </Constraint>
+        </Method>
+        <Method name="uselessMethod">
+            <Properties>
+                <Property name="methodRunner" type="String" value="Java Runner"/>
+                <Property name="wbMapBrowserToParam" type="boolean" value="false"/>
+                <Property name="wbBrowser" type="String" value="Chrome"/>
+                <Property name="wbMapStartUrlToParam" type="boolean" value="false"/>
+            </Properties>
+            <Parameter name="arg1" type="String" isExpected="false" expected="0" linked="false">
+                <Properties>
+                    <Property name="wbIsOptional" type="boolean" value="false"/>
+                </Properties>
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+            </Parameter>
+        </Method>
+    </Class>
+</Model>
+

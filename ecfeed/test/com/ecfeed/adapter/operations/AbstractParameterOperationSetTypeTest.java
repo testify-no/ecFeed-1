@@ -10,7 +10,6 @@
 package com.ecfeed.adapter.operations;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -159,7 +158,7 @@ public class AbstractParameterOperationSetTypeTest{
 			assertEquals("int", parameter.getType());
 			assertTrue(parameter.getChoices().contains(choice1));
 			assertEquals(convertableValue, choice11.getValueString());
-			assertFalse(parameter.getChoices().contains(choice2));
+			assertTrue(parameter.getChoices().contains(choice2));
 			assertTrue(choice1.getChoices().contains(choice11));
 			assertTrue(choice1.getChoices().contains(choice12));
 			assertTrue(choice12.getValueString() != null);
@@ -183,7 +182,7 @@ public class AbstractParameterOperationSetTypeTest{
 			assertEquals("int", parameter.getType());
 			assertTrue(parameter.getChoices().contains(choice1));
 			assertEquals(convertableValue, choice11.getValueString());
-			assertFalse(parameter.getChoices().contains(choice2));
+			assertTrue(parameter.getChoices().contains(choice2));
 			assertTrue(choice1.getChoices().contains(choice11));
 			assertTrue(choice1.getChoices().contains(choice12));
 		}catch(ModelOperationException e){

@@ -6,14 +6,14 @@ import org.junit.Test;
 
 // ADR-REF - add tests for methods and other adapters 
 
-public class TypeAdapterForIntTest {
+public class TypeAdapterForShortTest {
 
 	@Test
 	public void shouldConvertNumericToRandomizedRange() {
 
-		TypeAdapterForInt typeAdapterForInt = new TypeAdapterForInt();
+		TypeAdapterForShort typeAdapterForShort = new TypeAdapterForShort();
 
-		String result = typeAdapterForInt.convert("10", true);
+		String result = typeAdapterForShort.convert("10", true);
 
 		assertEquals("10:10", result);
 	}
@@ -21,9 +21,9 @@ public class TypeAdapterForIntTest {
 	@Test
 	public void shouldConvertNumericValue() {
 
-		TypeAdapterForInt typeAdapterForInt = new TypeAdapterForInt();
+		TypeAdapterForShort typeAdapterForShort = new TypeAdapterForShort();
 
-		String result = typeAdapterForInt.convert("10", false);
+		String result = typeAdapterForShort.convert("10", false);
 
 		assertEquals("10", result);
 	}	
@@ -31,9 +31,9 @@ public class TypeAdapterForIntTest {
 	@Test
 	public void shouldConvertNonNumericValue() {
 
-		TypeAdapterForInt typeAdapterForInt = new TypeAdapterForInt();
+		TypeAdapterForShort typeAdapterForShort = new TypeAdapterForShort();
 
-		String result = typeAdapterForInt.convert("ABC", false);
+		String result = typeAdapterForShort.convert("ABC", false);
 
 		assertEquals("0", result);
 	}	
