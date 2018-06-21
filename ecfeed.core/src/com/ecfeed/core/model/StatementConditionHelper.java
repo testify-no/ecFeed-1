@@ -114,19 +114,6 @@ public class StatementConditionHelper {
 		return removeTypeInfo(string, TYPE_INFO_CHOICE);
 	}
 
-	private static boolean containsTypeInfo(String string, String typeDescription) {
-
-		if (string.contains("[" + typeDescription + "]")) {
-			return true;
-		}
-
-		return false;
-	}
-
-	private static String removeTypeInfo(String string, String typeDescription) {
-		return StringHelper.removeFromPostfix("[" + typeDescription + "]", string);
-	}
-
 	public static boolean isRelationMatchQuiet(EStatementRelation relation, String typeName, String leftString, String rightString) {
 
 		boolean result = false;
@@ -180,46 +167,6 @@ public class StatementConditionHelper {
 		return false;
 	}
 
-	private static boolean isMatchForNumericTypes(String typeName, EStatementRelation relation,
-			String actualValue, String valueToMatch) {
-
-		double actual = JavaTypeHelper.convertNumericToDouble(typeName, actualValue);
-		double toMatch = JavaTypeHelper.convertNumericToDouble(typeName, valueToMatch);
-
-		if (EStatementRelation.isMatch(relation, actual, toMatch)) {
-			return true;
-		}
-		return false;
-	}
-
-	private static boolean validateEqualCondition(
-			int choicesLength, int constraintsLength,
-			String substituteType, 
-			String lower, String upper, 
-			String lowerConstraint, String upperConstraint) {
-
-		if (choicesLength == RANGE_VALUE && constraintsLength == RANGE_VALUE) {
-			return GREATER_EQUAL.isMatch(substituteType, upper, lowerConstraint)
-					&& LESS_EQUAL.isMatch(substituteType, lower, upperConstraint);
-		}
-
-		if (choicesLength == RANGE_VALUE && constraintsLength == SINGLE_VALUE) {
-			return GREATER_EQUAL.isMatch(substituteType, lower, lowerConstraint)
-					&& GREATER_EQUAL.isMatch(substituteType, upper, lowerConstraint);
-		} 
-
-		if (choicesLength == SINGLE_VALUE && constraintsLength == RANGE_VALUE) {
-			return GREATER_EQUAL.isMatch(substituteType, lower, lowerConstraint)
-					&& LESS_EQUAL.isMatch(substituteType, lower, upperConstraint);
-		} 
-
-		if (choicesLength == SINGLE_VALUE && constraintsLength == SINGLE_VALUE) {
-			return EQUAL.isMatch(substituteType, lower, lowerConstraint);
-		}
-
-		return false;
-	}
-
 	public static boolean getChoiceRandomized(List<ChoiceNode> choices, MethodParameterNode methodParameterNode) {
 		ChoiceNode choiceNode = getChoiceForMethodParameter(choices, methodParameterNode);
 
@@ -234,7 +181,6 @@ public class StatementConditionHelper {
 		return getChoiceRandomized(Arrays.asList(choice), methodParameterNode);
 	}
 
-	// ADR-REF
 	public static boolean isConstraintInChoiceRange(String choice, String constraint, EStatementRelation relation, String substituteType) {
 		boolean result = false;
 		if(JavaTypeHelper.isNumericTypeName(substituteType)) {		
@@ -355,6 +301,59 @@ public class StatementConditionHelper {
 		String upper = getUpperRange(array);
 
 		return new String[]{ lower, upper };
+	}
+
+	private static boolean containsTypeInfo(String string, String typeDescription) {
+
+		if (string.contains("[" + typeDescription + "]")) {
+			return true;
+		}
+
+		return false;
+	}
+
+	private static String removeTypeInfo(String string, String typeDescription) {
+		return StringHelper.removeFromPostfix("[" + typeDescription + "]", string);
+	}
+
+	private static boolean validateEqualCondition(
+			int choicesLength, int constraintsLength,
+			String substituteType, 
+			String lower, String upper, 
+			String lowerConstraint, String upperConstraint) {
+
+		if (choicesLength == RANGE_VALUE && constraintsLength == RANGE_VALUE) {
+			return GREATER_EQUAL.isMatch(substituteType, upper, lowerConstraint)
+					&& LESS_EQUAL.isMatch(substituteType, lower, upperConstraint);
+		}
+
+		if (choicesLength == RANGE_VALUE && constraintsLength == SINGLE_VALUE) {
+			return GREATER_EQUAL.isMatch(substituteType, lower, lowerConstraint)
+					&& GREATER_EQUAL.isMatch(substituteType, upper, lowerConstraint);
+		} 
+
+		if (choicesLength == SINGLE_VALUE && constraintsLength == RANGE_VALUE) {
+			return GREATER_EQUAL.isMatch(substituteType, lower, lowerConstraint)
+					&& LESS_EQUAL.isMatch(substituteType, lower, upperConstraint);
+		} 
+
+		if (choicesLength == SINGLE_VALUE && constraintsLength == SINGLE_VALUE) {
+			return EQUAL.isMatch(substituteType, lower, lowerConstraint);
+		}
+
+		return false;
+	}
+
+	private static boolean isMatchForNumericTypes(String typeName, EStatementRelation relation,
+			String actualValue, String valueToMatch) {
+
+		double actual = JavaTypeHelper.convertNumericToDouble(typeName, actualValue);
+		double toMatch = JavaTypeHelper.convertNumericToDouble(typeName, valueToMatch);
+
+		if (EStatementRelation.isMatch(relation, actual, toMatch)) {
+			return true;
+		}
+		return false;
 	}
 
 	private static String getUpperRange(String[] array) {
