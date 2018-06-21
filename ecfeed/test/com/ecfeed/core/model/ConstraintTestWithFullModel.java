@@ -165,6 +165,37 @@ public class ConstraintTestWithFullModel {
 	}
 	
 	@Test
+	public void shouldBeAmbiguousForTheSecondRandomizedIntAndValueCondition() {
+
+		StringBuilder sb = new StringBuilder(); 
+
+		sb.append("<?xml version='1.0' encoding='UTF-8'?>\n");
+		sb.append("<Model name='Constraints2' version='2'>\n");
+		sb.append("    <Class name='com.example.test.TestClass'>\n");
+		sb.append("        <Method name='testMethod'>\n");
+		sb.append("            <Parameter name='arg1' type='int' isExpected='false' expected='0' linked='false'>\n");
+		sb.append("                <Choice name='choice1' value='1' isRandomized='false'/>\n");
+		sb.append("                <Choice name='choice2' value='1:2' isRandomized='true'/>\n");
+		sb.append("            </Parameter>\n");
+		sb.append("            <Constraint name='constraint'>\n");
+		sb.append("                <Premise>\n");
+		sb.append("                    <ValueStatement rightValue='1' parameter='arg1' relation='='/>\n");
+		sb.append("                </Premise>\n");
+		sb.append("                <Consequence>\n");
+		sb.append("                    <StaticStatement value='true'/>\n");
+		sb.append("                </Consequence>\n");
+		sb.append("            </Constraint>\n");
+		sb.append("        </Method>\n");
+		sb.append("    </Class>\n");
+		sb.append("</Model>\n");		
+		
+		String xml = sb.toString();
+		xml = xml.replace("'", "\"");
+
+		testForIsAmbiguousConstraint(xml, true);
+	}	
+	
+	@Test
 	public void shouldNotBeAmbiguousForNotRandomizedIntAndParameterCondition() {
 
 		StringBuilder sb = new StringBuilder(); 
