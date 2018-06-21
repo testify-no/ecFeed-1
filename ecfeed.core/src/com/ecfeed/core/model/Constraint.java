@@ -54,7 +54,7 @@ public class Constraint implements IConstraint<ChoiceNode> {
 	public boolean isAmbiguous(List<List<ChoiceNode>> values, MessageStack outWhyAmbiguous) {
 
 		if (isAmbiguousIntr(values, outWhyAmbiguous)) {
-			outWhyAmbiguous.addMessage("Constraint [" + getName() + "].");
+			ConditionHelper.addConstraintNameToMesageStack(getName(), outWhyAmbiguous);
 			return true;
 		}
 		return false;
