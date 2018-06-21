@@ -199,14 +199,7 @@ public class ChoiceCondition implements IStatementCondition {
 			EStatementRelation relation,
 			MessageStack messageStack) {
 
-		String substituteType = 
-				JavaTypeHelper.getSubstituteType(
-						fParentRelationStatement.getLeftParameter().getType(), 
-						JavaTypeHelper.getStringTypeName());
-
-		if (substituteType == null) {
-			return false;
-		}
+		String substituteType = ConditionHelper.getSubstituteType(fParentRelationStatement);
 
 		List<ChoiceNode> choicesForParameter = testDomain.get(parameterIndex);
 

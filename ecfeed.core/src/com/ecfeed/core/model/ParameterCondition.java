@@ -158,14 +158,7 @@ public class ParameterCondition implements IStatementCondition {
 			EStatementRelation relation,
 			MessageStack messageStack) {
 
-		String substituteType = 
-				JavaTypeHelper.getSubstituteType(
-						fParentRelationStatement.getLeftParameter().getType(), 
-						JavaTypeHelper.getStringTypeName());
-
-		if (substituteType == null || leftIndex >= testDomain.size()) {
-			return false;
-		}
+		String substituteType = ConditionHelper.getSubstituteType(fParentRelationStatement);
 
 		List<ChoiceNode> leftChoices = testDomain.get(leftIndex);
 		int rightIndex = fRightParameterNode.getMyIndex();
