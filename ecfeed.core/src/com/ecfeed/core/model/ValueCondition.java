@@ -74,10 +74,6 @@ public class ValueCondition implements IStatementCondition {
 			EStatementRelation relation,
 			MessageStack messageStack) {
 
-		if (parameterIndex >= testDomain.size()) {
-			return false;
-		}
-
 		String substituteType = 
 				JavaTypeHelper.getSubstituteType(
 						fParentRelationStatement.getLeftParameter().getType(), 
@@ -95,7 +91,7 @@ public class ValueCondition implements IStatementCondition {
 					leftChoiceNode, relation, substituteType, messageStack);
 		}
 
-		return isAmbiguousForNotRandomized(leftChoiceNode.getValueString(), relation, substituteType);
+		return false;
 	}
 
 	private ChoiceNode getLeftChoiceNode(
@@ -133,19 +129,6 @@ public class ValueCondition implements IStatementCondition {
 
 			return true;
 		}
-		return false;
-	}
-
-	private boolean isAmbiguousForNotRandomized(
-			String leftChoiceStr,
-			EStatementRelation relation,
-			String substituteType) {
-
-		if (RelationMatcher.isMatchQuiet(
-				relation, substituteType, leftChoiceStr, fRightValue)) {
-			return true;
-		}
-
 		return false;
 	}
 
