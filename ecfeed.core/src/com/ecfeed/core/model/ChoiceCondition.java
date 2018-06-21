@@ -164,7 +164,7 @@ public class ChoiceCondition implements IStatementCondition {
 		}
 
 		boolean result = 
-				StatementConditionHelper.isConstraintInChoiceRange(
+				RangeValidator.isRightRangeInLeftRange(
 						leftChoiceStr, fRightValue, relation, substituteType);
 
 		return EvaluationResult.convertFromBoolean(result);
@@ -247,7 +247,7 @@ public class ChoiceCondition implements IStatementCondition {
 			EStatementRelation relation,
 			String substituteType) {
 
-		return RangeAmbiguityValidator.isAmbiguous(
+		return RangeValidator.isAmbiguous(
 				leftChoiceStr, rightValue, relation, substituteType);
 	}
 
