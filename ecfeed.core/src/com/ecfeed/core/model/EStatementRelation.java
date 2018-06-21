@@ -38,40 +38,40 @@ public enum EStatementRelation{
 	NOT_EQUAL(StatementRelationNames.RELATION_NOT_EQUAL) {
 		@Override
 		public boolean isMatch(String typeName, String leftString, String rightString) {
-			return StatementConditionHelper.isRelationMatch(this, typeName, leftString, rightString);
+			return RelationMatcher.isRelationMatch(this, typeName, leftString, rightString);
 		}
 	},
 	LESS_THAN(StatementRelationNames.RELATION_LESS_THAN) {
 		@Override
 		public boolean isMatch(String typeName, String leftString, String rightString) {
-			return StatementConditionHelper.isRelationMatch(this, typeName, leftString, rightString);
+			return RelationMatcher.isRelationMatch(this, typeName, leftString, rightString);
 		}
 	}, 
 	LESS_EQUAL(StatementRelationNames.RELATION_LESS_EQUAL) {
 		@Override
 		public boolean isMatch(String typeName, String leftString, String rightString) {
-			return StatementConditionHelper.isRelationMatch(this, typeName, leftString, rightString);
+			return RelationMatcher.isRelationMatch(this, typeName, leftString, rightString);
 		}
 	},
 	GREATER_THAN(StatementRelationNames.RELATION_GREATER_THAN) {
 		@Override
 		public boolean isMatch(String typeName, String leftString, String rightString) {
-			return StatementConditionHelper.isRelationMatch(this, typeName, leftString, rightString);
+			return RelationMatcher.isRelationMatch(this, typeName, leftString, rightString);
 		}
 	},
 	GREATER_EQUAL(StatementRelationNames.RELATION_GREATER_EQUAL) {
 		@Override
 		public boolean isMatch(String typeName, String leftString, String rightString) {
-			return StatementConditionHelper.isRelationMatch(this, typeName, leftString, rightString);
+			return RelationMatcher.isRelationMatch(this, typeName, leftString, rightString);
 		}
 	};
 
 	public abstract boolean isMatch(String typeName, String leftString, String rightString);
-	
+
 	public EvaluationResult evalAsEvaluationResult(String typeName, String leftString, String rightString) {
 		return EvaluationResult.convertFromBoolean(this.isMatch(typeName, leftString, rightString));
 	}
-	
+
 	private String fName;
 
 	private EStatementRelation(String name) {

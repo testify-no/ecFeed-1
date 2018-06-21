@@ -12,15 +12,12 @@ package com.ecfeed.core.model;
 
 import static com.ecfeed.core.model.EStatementRelation.EQUAL;
 import static com.ecfeed.core.model.EStatementRelation.GREATER_EQUAL;
-import static com.ecfeed.core.model.EStatementRelation.GREATER_THAN;
 import static com.ecfeed.core.model.EStatementRelation.LESS_EQUAL;
-import static com.ecfeed.core.model.EStatementRelation.LESS_THAN;
 
 import java.util.Arrays;
 import java.util.List;
 
 import com.ecfeed.core.utils.JavaTypeHelper;
-import com.ecfeed.core.utils.MessageStack;
 import com.ecfeed.core.utils.StringHelper;
 
 public class StatementConditionHelper {
@@ -114,59 +111,6 @@ public class StatementConditionHelper {
 		return removeTypeInfo(string, TYPE_INFO_CHOICE);
 	}
 
-	public static boolean isRelationMatchQuiet(EStatementRelation relation, String typeName, String leftString, String rightString) {
-
-		boolean result = false;
-		try {
-			result = isRelationMatch(relation, typeName, leftString, rightString);
-		} catch (Exception e) {
-		}
-
-		return result;
-	}
-
-	public static boolean isRelationMatch(
-			EStatementRelation relation, String typeName, String leftString, String rightString) {
-
-		if (typeName == null) {
-			return false;
-		}		
-
-		if (relation == EStatementRelation.EQUAL && StringHelper.isEqual(leftString, rightString)) {
-			return true;
-		}
-		if (relation == EStatementRelation.NOT_EQUAL && !StringHelper.isEqual(leftString, rightString)) {
-			return true;
-		}		
-
-		if (JavaTypeHelper.isNumericTypeName(typeName)) {
-			if (isMatchForNumericTypes(typeName, relation, leftString, rightString)) {
-				return true;
-			}
-			return false;
-		}
-
-		if (JavaTypeHelper.isTypeWithChars(typeName)) {
-			if (EStatementRelation.isMatch(relation, leftString, rightString)) {
-				return true;
-			}
-			return false;
-		}
-
-		if (JavaTypeHelper.isBooleanTypeName(typeName)) {
-			if (EStatementRelation.isEqualityMatchForBooleans(relation, leftString, rightString)) {
-				return true;
-			}
-			return false;
-		}		
-
-		if (EStatementRelation.isEqualityMatch(relation, leftString, rightString)) {
-			return true;
-		}
-
-		return false;
-	}
-
 	public static boolean getChoiceRandomized(List<ChoiceNode> choices, MethodParameterNode methodParameterNode) {
 		ChoiceNode choiceNode = getChoiceForMethodParameter(choices, methodParameterNode);
 
@@ -228,81 +172,6 @@ public class StatementConditionHelper {
 		return result;
 	}
 
-	public static final boolean isAmbiguous(
-			String choicesTxt, 
-			String constraintsTxt, 
-			EStatementRelation relation, 
-			String substituteType,
-			MessageStack outWhyAmbiguous) {
-
-		if (!JavaTypeHelper.isNumericTypeName(substituteType)) {
-			return false;
-		}
-
-		String[] choices = createRangeArray(choicesTxt);
-		String[] constraints = createRangeArray(constraintsTxt);
-
-		if (relation.equals(EQUAL)) {
-			return isAmbiguousForEqualRelation(choices, constraints, substituteType);
-		} else {
-			return isAmbiguousForNonEqualRelation(choices, constraints, relation, substituteType);
-		}
-	}
-
-	private static boolean isAmbiguousForNonEqualRelation(
-			String[] choices, 
-			String[] constraints,
-			EStatementRelation relation,
-			String substituteType) {
-
-		boolean a = isRelationMatchQuiet(relation, substituteType, choices[0], constraints[0]);
-		boolean b = isRelationMatchQuiet(relation, substituteType, choices[1], constraints[1]);
-		boolean c = isRelationMatchQuiet(relation, substituteType, choices[0], constraints[1]);
-		boolean d = isRelationMatchQuiet(relation, substituteType, choices[1], constraints[0]);
-
-		if (a && b && c && d) {
-			return false;
-		} else {
-			return (!(!a && !b && !c && !d));
-		}
-	}
-
-	private static boolean isAmbiguousForEqualRelation(
-			String[] choices, String[] constraints, String substituteType) {
-
-		if (StringHelper.isEqual(choices[0], constraints[0]) && StringHelper.isEqual(choices[1], constraints[1])) {
-			if (StringHelper.isEqual(choices[0], choices[1]) && StringHelper.isEqual(constraints[0], constraints[1])) {
-				return false;
-			}
-			return true;
-		}
-
-		if (LESS_THAN.isMatch(substituteType, choices[0], constraints[0]) 
-				&& LESS_THAN.isMatch(substituteType, choices[1], constraints[1]) 
-				&& LESS_THAN.isMatch(substituteType, choices[1], constraints[0])) {
-			return false;
-
-		}
-
-		if (GREATER_THAN.isMatch(substituteType, choices[0], constraints[0])
-				&& GREATER_THAN.isMatch(substituteType, choices[0], constraints[1])
-				&& GREATER_THAN.isMatch(substituteType, choices[1], constraints[1])) {
-			return false;
-		}
-
-		return true;
-	}
-
-	public static String[] createRangeArray(String str) {
-
-		String[] array = str.split(":");
-
-		String lower = array[0];
-		String upper = getUpperRange(array);
-
-		return new String[]{ lower, upper };
-	}
-
 	private static boolean containsTypeInfo(String string, String typeDescription) {
 
 		if (string.contains("[" + typeDescription + "]")) {
@@ -342,27 +211,6 @@ public class StatementConditionHelper {
 		}
 
 		return false;
-	}
-
-	private static boolean isMatchForNumericTypes(String typeName, EStatementRelation relation,
-			String actualValue, String valueToMatch) {
-
-		double actual = JavaTypeHelper.convertNumericToDouble(typeName, actualValue);
-		double toMatch = JavaTypeHelper.convertNumericToDouble(typeName, valueToMatch);
-
-		if (EStatementRelation.isMatch(relation, actual, toMatch)) {
-			return true;
-		}
-		return false;
-	}
-
-	private static String getUpperRange(String[] array) {
-
-		if (array.length == SINGLE_VALUE) {
-			return array[0];
-		}
-
-		return array[1];
 	}
 
 	private static boolean validateOtherThanEqualCondition(

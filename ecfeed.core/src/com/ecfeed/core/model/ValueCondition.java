@@ -60,7 +60,7 @@ public class ValueCondition implements IStatementCondition {
 			}
 		}
 
-		if (StatementConditionHelper.isRelationMatchQuiet(relation, substituteType, leftChoiceStr, fRightValue)) {
+		if (RelationMatcher.isMatchQuiet(relation, substituteType, leftChoiceStr, fRightValue)) {
 			return EvaluationResult.TRUE;
 		}
 
@@ -94,13 +94,13 @@ public class ValueCondition implements IStatementCondition {
 			if (JavaTypeHelper.TYPE_NAME_STRING.equals(substituteType)) {
 				return false;
 			} else {
-				return StatementConditionHelper.isAmbiguous(
+				return RangeAmbiguityValidator.isAmbiguous(
 						leftChoiceStr, fRightValue, relation, substituteType, messageStack);
 			}
 		}
 
-		if (StatementConditionHelper.isRelationMatchQuiet(relation, substituteType, leftChoiceStr,
-				fRightValue)) {
+		if (RelationMatcher.isMatchQuiet(
+				relation, substituteType, leftChoiceStr, fRightValue)) {
 			return true;
 		}
 
