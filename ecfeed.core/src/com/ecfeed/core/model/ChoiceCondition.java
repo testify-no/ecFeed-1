@@ -225,15 +225,37 @@ public class ChoiceCondition implements IStatementCondition {
 			return false;
 		}
 
+		if (isRandomizedChoiceAmbiguous(leftChoiceNode, relation, substituteType)) {
+
+			ConditionHelper.addValuesMessageToStack(
+					leftChoiceNode.toString(), relation, fRightChoice.toString(), messageStack);
+			return true;
+		}
+
+		return false;
+	}
+
+	private boolean isRandomizedChoiceAmbiguous(
+			ChoiceNode leftChoiceNode,
+			EStatementRelation relation,
+			String substituteType) {
+
+		if (JavaTypeHelper.isStringTypeName(substituteType)) {
+
+			MethodParameterNode methodParameterNode = (MethodParameterNode)leftChoiceNode.getParameter();
+
+			if (fParentRelationStatement.mentions(methodParameterNode)) {
+				return true;
+			}
+
+			return false;
+		}
+
 		if (RangeValidator.isAmbiguous(
 				leftChoiceNode.getValueString(), 
 				fRightChoice.getValueString(), 
 				relation, 
 				substituteType)) {
-
-			ConditionHelper.addValuesMessageToStack(
-					leftChoiceNode.toString(), relation, fRightChoice.toString(), messageStack);
-
 			return true;
 		}
 
