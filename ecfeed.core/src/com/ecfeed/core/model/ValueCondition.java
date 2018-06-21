@@ -68,8 +68,11 @@ public class ValueCondition implements IStatementCondition {
 
 	@Override
 	public boolean isAmbiguous(List<List<ChoiceNode>> domain, int parameterIndex, EStatementRelation relation) {
-		String substituteType = JavaTypeHelper.getSubstituteType(fParentRelationStatement
-				.getLeftParameter().getType(), JavaTypeHelper.getStringTypeName());
+
+		String substituteType = 
+				JavaTypeHelper.getSubstituteType(
+						fParentRelationStatement.getLeftParameter().getType(), 
+						JavaTypeHelper.getStringTypeName());
 
 		if (substituteType == null || parameterIndex >= domain.size()) {
 			return false;

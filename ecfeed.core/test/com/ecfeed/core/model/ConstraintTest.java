@@ -12,21 +12,12 @@ package com.ecfeed.core.model;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-//import static org.junit.Assert.assertEquals;
-
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
 
-import com.ecfeed.core.model.AbstractStatement;
-import com.ecfeed.core.model.ChoiceNode;
-import com.ecfeed.core.model.RelationStatement;
-import com.ecfeed.core.model.Constraint;
-import com.ecfeed.core.model.EStatementRelation;
-import com.ecfeed.core.model.MethodParameterNode;
-import com.ecfeed.core.model.StaticStatement;
 import com.ecfeed.core.utils.EvaluationResult;
 
 public class ConstraintTest {
@@ -117,7 +108,7 @@ public class ConstraintTest {
 
 		evaluateConstraintWithNullValues(constraint, choice1, choice2);			
 	}
-	
+
 	@Test
 	public void testTupleWithNullsForParameterCondition() {
 
@@ -135,7 +126,7 @@ public class ConstraintTest {
 		evaluateConstraintWithNullValues(constraint, choice1, choice2);			
 	}
 
-	
+
 	@Test
 	public void testTupleWithNullConsequenceForChoiceCondition() {
 
@@ -149,11 +140,11 @@ public class ConstraintTest {
 				RelationStatement.createStatementWithChoiceCondition(
 						parameter1, EStatementRelation.EQUAL, choice11);
 
-		
+
 		MethodParameterNode parameter2 = new MethodParameterNode("parameter2", "type", "0", false);
 		ChoiceNode choice2 = new ChoiceNode("choice2", "value2");
 		choice2.setParent(parameter2);
-		
+
 		AbstractStatement consequence = 
 				RelationStatement.createStatementWithChoiceCondition(
 						parameter2, EStatementRelation.EQUAL, choice2);
@@ -163,7 +154,7 @@ public class ConstraintTest {
 		methodNode.addParameter(parameter2);
 		parameter1.setParent(methodNode);
 		parameter2.setParent(methodNode);
-		
+
 		Constraint constraint = new Constraint(premise, consequence);
 
 		List<ChoiceNode> values = new ArrayList<ChoiceNode>();
@@ -171,8 +162,24 @@ public class ConstraintTest {
 		values.add(null);
 		assertTrue(constraint.evaluate(values) == EvaluationResult.TRUE);
 	}
-	
-	
+
+	@Test
+	public void testIsAmbiguous() {
+
+		RootNode rootNode = ModelTestHelper.createModel(ModelXmlRandomized1.getXml());
+		ClassNode classNode = rootNode.getClasses().get(0);
+		MethodNode methodNode = classNode.getMethods().get(0);
+
+		Constraint constraint = (Constraint)methodNode.getAllConstraints().get(0);
+		AbstractParameterNode abstractParameterNode = methodNode.getParameter(0);
+
+		List<ChoiceNode> choices = abstractParameterNode.getChoices();
+		List<List<ChoiceNode>> values = new ArrayList<List<ChoiceNode>>();
+		values.add(choices);
+
+		assertTrue(constraint.isAmbiguous(values));
+	}
+
 	private void evaluateConstraintWithNullValues(Constraint constraint, ChoiceNode choice1, ChoiceNode choice2) {
 
 		List<ChoiceNode> values = new ArrayList<ChoiceNode>();
@@ -245,4 +252,51 @@ public class ConstraintTest {
 		return premise;
 	}
 
+	private static class ModelXmlRandomized1 {
+
+		public static final String getXml() {
+
+			StringBuilder sb = new StringBuilder(); 
+
+			sb.append("<?xml version='1.0' encoding='UTF-8'?>\n");
+			sb.append("<Model name='RandomizedValues' version='2'>\n");
+			sb.append("    <Class name='com.example.test.TestClass'>\n");
+			sb.append("        <Properties>\n");
+			sb.append("            <Property name='runOnAndroid' type='boolean' value='false'/>\n");
+			sb.append("        </Properties>\n");
+			sb.append("        <Method name='testMethod'>\n");
+			sb.append("            <Properties>\n");
+			sb.append("                <Property name='methodRunner' type='String' value='Java Runner'/>\n");
+			sb.append("                <Property name='wbMapBrowserToParam' type='boolean' value='false'/>\n");
+			sb.append("                <Property name='wbBrowser' type='String' value='Chrome'/>\n");
+			sb.append("                <Property name='wbMapStartUrlToParam' type='boolean' value='false'/>\n");
+			sb.append("            </Properties>\n");
+			sb.append("            <Parameter name='arg' type='int' isExpected='false' expected='0' linked='false'>\n");
+			sb.append("                <Properties>\n");
+			sb.append("                    <Property name='wbIsOptional' type='boolean' value='false'/>\n");
+			sb.append("                </Properties>\n");
+			sb.append("                <Comments>\n");
+			sb.append("                    <TypeComments/>\n");
+			sb.append("                </Comments>\n");
+			sb.append("                <Choice name='choice' value='1:3' isRandomized='true'/>\n");
+			sb.append("            </Parameter>\n");
+			sb.append("            <Constraint name='constraint'>\n");
+			sb.append("                <Premise>\n");
+			sb.append("                    <ValueStatement rightValue='2' parameter='arg' relation='='/>\n");
+			sb.append("                </Premise>\n");
+			sb.append("                <Consequence>\n");
+			sb.append("                    <StaticStatement value='true'/>\n");
+			sb.append("                </Consequence>\n");
+			sb.append("            </Constraint>\n");
+			sb.append("        </Method>\n");
+			sb.append("    </Class>\n");
+			sb.append("</Model>\n");
+
+			String xml = sb.toString();
+			xml = xml.replace("'", "\"");
+
+			return xml;
+		}
+
+	}
 }
