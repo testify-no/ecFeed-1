@@ -2,9 +2,9 @@ package com.ecfeed.core.utils;
 
 import java.util.Arrays;
 
-public abstract class TypeAdapterFloatingPoint<T extends Number> extends TypeAdapterForNumeric<T>{
+public abstract class TypeAdapterFloatingPoint<T extends Number> extends TypeAdapterForNumericType<T>{
 
-	private String[] FLOATING_POINT_SPECIAL_VALUES = new String[]{
+	protected String[] FLOATING_POINT_SPECIAL_VALUES = new String[]{
 			JavaTypeHelper.VALUE_REPRESENTATION_POSITIVE_INF,
 			JavaTypeHelper.VALUE_REPRESENTATION_NEGATIVE_INF
 	};
@@ -15,35 +15,31 @@ public abstract class TypeAdapterFloatingPoint<T extends Number> extends TypeAda
 	}
 
 	@Override
-	public String convert(String value, boolean isRandomized) {
+	protected String convertSingleValue(String value) {
 
-		String result = super.convert(value, isRandomized);
+		String result = super.convertSpecialValue(value);
 
-		if (result == null) {
-
-			result = Arrays.asList(FLOATING_POINT_SPECIAL_VALUES).contains(value) ? value : null;
-			
-			if (result == null) {
-				
-				try {
-					Float number = Float.parseFloat(value);
-					result = number.toString();
-				} catch (Throwable ex) {
-					result = getDefaultValue();
-				}
-			}
+		if (result != null) {
+			return result;
 		}
 
-		if (isRandomized) {
-			result = generateRange(result);
+		try {
+			Float number = Float.parseFloat(value);
+			return number.toString();
 		}
-
-		return result;
+		catch (NumberFormatException e) {
+			return getDefaultValue();
+		}
 	}
 
 	@Override
 	public String getDefaultValue(){
 		return JavaTypeHelper.DEFAULT_EXPECTED_FLOATING_POINT_VALUE;
 	}
+
+	@Override
+	protected String[] getSpecialValues() {
+		return FLOATING_POINT_SPECIAL_VALUES;
+	}	
 }
 

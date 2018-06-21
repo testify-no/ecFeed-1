@@ -4,9 +4,7 @@ import java.util.Arrays;
 
 import nl.flotsam.xeger.Xeger;
 
-import com.ecfeed.core.adapter.ITypeAdapter;
-
-public class TypeAdapterForChar implements ITypeAdapter<Character>{
+public class TypeAdapterForChar extends TypeAdapterForTypeWithRange<Character>{
 
 	private final String[] TYPES_CONVERTABLE_TO_CHAR = new String[]{
 			JavaTypeHelper.TYPE_NAME_STRING, 
@@ -20,19 +18,11 @@ public class TypeAdapterForChar implements ITypeAdapter<Character>{
 		return Arrays.asList(TYPES_CONVERTABLE_TO_CHAR).contains(type);
 	}
 
-	public String convert(String value, boolean isRandomized){
+	@Override
+	public String convertSingleValue(String value) {
 
 		if (value.length() == 1) {
-
-			if (isRandomized) {
-				return generateRange(value);
-			}
-
 			return value;
-		}
-
-		if (isRandomized) { 
-			return generateRange(getDefaultValue());
 		}
 
 		return getDefaultValue();
@@ -58,9 +48,9 @@ public class TypeAdapterForChar implements ITypeAdapter<Character>{
 		return String.valueOf(generateValue(range));
 	}
 
-	// ADR-REF - move to a common file - ValueFieldHelper ?
-	protected String generateRange(String numericValue) {
-		return numericValue + ":" + numericValue;
+	@Override
+	protected String[] getSpecialValues() {
+		return null;
 	}
 
 }

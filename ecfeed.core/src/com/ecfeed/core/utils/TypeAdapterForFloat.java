@@ -5,20 +5,21 @@ import java.util.concurrent.ThreadLocalRandom;
 public class TypeAdapterForFloat extends TypeAdapterFloatingPoint<Float>{
 
 	@Override
-	public String convert(String value, boolean isRandomized) {
+	public String convertSingleValue(String value) {
 
-		String result = super.convert(value, isRandomized);
+		String result = super.convertSpecialValue(value);
 
-		if (result == null) {
-			try{
-				result = String.valueOf(Float.parseFloat(value));
-			}
-			catch(NumberFormatException e){
-				result = getDefaultValue();
-			}
+		if (result != null) {
+			return result;
 		}
 
-		return result;
+		try{
+			return String.valueOf(Float.parseFloat(value));
+		}
+		catch(NumberFormatException e){
+			return getDefaultValue();
+		}
+
 	}
 
 	@Override
@@ -27,4 +28,5 @@ public class TypeAdapterForFloat extends TypeAdapterFloatingPoint<Float>{
 		int max = getUpper(range);
 		return ThreadLocalRandom.current().nextFloat() * (max - min) + min;
 	}
+
 }
