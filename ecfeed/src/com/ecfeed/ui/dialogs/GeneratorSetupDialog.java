@@ -103,7 +103,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 	private ExportTemplateFactory fExportTemplateFactory;
 	private IExportTemplate fExportTemplate;
 	DialogObjectToolkit.FileSelectionComposite fExportFileSelectionComposite;
-	private Label ambigousLabel;
+	private Label fAmbigousLabel;
 
 	public final static int CONSTRAINTS_COMPOSITE = 1;
 	public final static int CHOICES_COMPOSITE = 1 << 1;
@@ -250,7 +250,8 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		return selectChoicesLabel;
 	}
 
-	private void checkAmbiguousState() { 
+	private void checkAmbiguousState() {
+		
 		List<Constraint> constraints = getCheckedConstraints();
 		List<List<ChoiceNode>> input = getCheckedArguments();
 
@@ -263,13 +264,13 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 
 		updateAmbiguousWarningLabel(false);
 	}
-
+	
 	private void updateAmbiguousWarningLabel(boolean isAmbiguousCondition) {
 		if(isAmbiguousCondition) {
-			ambigousLabel.setText(String.format(IS_AMBIGUOUS, "constraintsname", "somethingfromstatement"));
+			fAmbigousLabel.setText(String.format(IS_AMBIGUOUS, "constraintsname", "somethingfromstatement"));
 		}
 		else {
-			ambigousLabel.setText("                    ");
+			fAmbigousLabel.setText("                    ");
 		}
 	}
 
@@ -626,7 +627,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		generatorLabel.setText("Generator");
 
 		createGeneratorViewer(generatorComposite);
-		ambigousLabel = createAmgiguousWarningLabel(container);
+		fAmbigousLabel = createAmgiguousWarningLabel(container);
 	}
 
 	private void createTestCasesExportComposite(Composite parentComposite) {

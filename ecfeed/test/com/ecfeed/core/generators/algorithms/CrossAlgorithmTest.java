@@ -12,7 +12,6 @@ package com.ecfeed.core.generators.algorithms;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -23,10 +22,8 @@ import org.junit.Test;
 import com.ecfeed.core.generators.api.GeneratorException;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.MethodNode;
+import com.ecfeed.core.model.ModelTestHelper;
 import com.ecfeed.core.model.RootNode;
-import com.ecfeed.core.serialization.IModelParser;
-import com.ecfeed.core.serialization.ParserException;
-import com.ecfeed.core.serialization.ect.EctParser;
 
 public class CrossAlgorithmTest {
 
@@ -38,13 +35,7 @@ public class CrossAlgorithmTest {
 
 	private void compareAlgorithms(String modelXml, String methodName, int N) {
 
-		RootNode rootNode;
-		try {
-			rootNode = createModel(modelXml);
-		} catch (ParserException e) {
-			fail("Can not create model.");
-			return;
-		}
+		RootNode rootNode = ModelTestHelper.createModel(modelXml);
 
 		MethodNode methodNode = GeneratorHelper.getMethodByName(rootNode, methodName);
 
@@ -98,13 +89,6 @@ public class CrossAlgorithmTest {
 
 			assertTrue(subTuplesCartesian.equals(subTuplesNWise));
 		}
-	}
-
-	private static RootNode createModel(String modelXml) throws ParserException {
-
-		IModelParser parser = new EctParser();
-		ByteArrayInputStream istream = new ByteArrayInputStream(modelXml.getBytes());
-		return parser.parseModel(istream);
 	}
 
 }
