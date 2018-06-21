@@ -93,9 +93,9 @@ public class RelationStatement extends AbstractStatement implements IRelationalS
 
 		try {
 			int index = fLeftParameter.getMyIndex();
+
 			if (fRightCondition.isAmbiguous(values, index, fRelation, messageStack)) {
-				final String message = "Relation [" + this.toString() + "].";
-				messageStack.addMessage(message);
+				ConditionHelper.addRelStatementToMesageStack(this, messageStack);
 				return true;
 			}
 			return false;

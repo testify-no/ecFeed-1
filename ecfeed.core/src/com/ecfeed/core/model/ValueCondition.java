@@ -100,12 +100,10 @@ public class ValueCondition implements IStatementCondition {
 
 					ChoiceNode leftChoiceNode = 
 							StatementConditionHelper.getChoiceForMethodParameter(choices, leftParameterNode);
-					
-					String message = 
-							"Condition [" + leftChoiceNode.toString() + 
-							relation.toString() + fRightValue + "].";
-					
-					messageStack.addMessage(message);
+
+					ConditionHelper.addValuesMessageToStack(
+							leftChoiceNode.toString(), relation, "value [" + fRightValue + "]", messageStack);
+
 					return true;
 				}
 				return false;

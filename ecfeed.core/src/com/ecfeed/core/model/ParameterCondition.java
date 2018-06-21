@@ -179,13 +179,16 @@ public class ParameterCondition implements IStatementCondition {
 				return false;
 			}
 
-			for (ChoiceNode left : values) {
-				for (ChoiceNode right : choices) {
+			for (ChoiceNode leftChoiceNode : values) {
+				for (ChoiceNode rightChoiceNode : choices) {
 					if (RangeAmbiguityValidator.isAmbiguous(
-							left.getValueString(),
-							right.getValueString(), 
+							leftChoiceNode.getValueString(),
+							rightChoiceNode.getValueString(), 
 							relation, 
 							substituteType)) {
+
+						ConditionHelper.addValuesMessageToStack(
+								leftChoiceNode.toString(), relation, rightChoiceNode.toString(), messageStack);
 
 						return true;
 					}
