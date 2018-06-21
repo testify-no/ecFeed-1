@@ -20,6 +20,7 @@ import org.junit.Test;
 
 import com.ecfeed.core.utils.EvaluationResult;
 import com.ecfeed.core.utils.JavaTypeHelper;
+import com.ecfeed.core.utils.MessageStack;
 
 public class ChoiceConditionTest {
 
@@ -114,7 +115,7 @@ public class ChoiceConditionTest {
 
 		EvaluationResult result = 
 				EvaluationResult.convertFromBoolean(
-						statement.isAmbiguous(Arrays.asList(createList(leftChoiceNode))));
+						statement.isAmbiguous(Arrays.asList(createList(leftChoiceNode)), new MessageStack()));
 
 		if (assertResult == AssertType.TRUE) {
 			assertEquals(EvaluationResult.TRUE, result);

@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.ecfeed.core.utils.JavaTypeHelper;
+import com.ecfeed.core.utils.MessageStack;
 import com.ecfeed.core.utils.StringHelper;
 
 public class StatementConditionHelper {
@@ -275,7 +276,13 @@ public class StatementConditionHelper {
 	}
 
 	// ADR-REF
-	public static final boolean isAmbiguous(String choice, String constraint, EStatementRelation relation, String substituteType)  {
+	public static final boolean isAmbiguous(
+			String choice, 
+			String constraint, 
+			EStatementRelation relation, 
+			String substituteType,
+			MessageStack messageStack) {
+
 		boolean result = false; 
 		boolean outsideTheRange = false;
 		if(JavaTypeHelper.isNumericTypeName(substituteType)) {		

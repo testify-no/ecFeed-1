@@ -18,6 +18,7 @@ import com.ecfeed.core.generators.api.IConstraint;
 import com.ecfeed.core.model.ChoiceCondition;
 import com.ecfeed.core.model.LabelCondition;
 import com.ecfeed.core.utils.EvaluationResult;
+import com.ecfeed.core.utils.MessageStack;
 
 public class Constraint implements IConstraint<ChoiceNode> {
 
@@ -31,12 +32,17 @@ public class Constraint implements IConstraint<ChoiceNode> {
 		fConsequence = consequence;
 	}
 
-	public boolean isAmbiguous(List<List<ChoiceNode>> values) {
-		if (fPremise.isAmbiguous(values)) {
+	public boolean isAmbiguous(List<List<ChoiceNode>> values, MessageStack outWhyAmbiguous) {
+		
+		if (fPremise.isAmbiguous(values, outWhyAmbiguous)) {
+			final String PREMISE_AMBIGUOUS = "Premise is ambiguous."; 
+			outWhyAmbiguous.addMessage(PREMISE_AMBIGUOUS);
 			return true;
 		}
 		
-		if (fConsequence.isAmbiguous(values)) {
+		if (fConsequence.isAmbiguous(values, outWhyAmbiguous)) {
+			final String CONSEQUENCE_AMBIGUOUS = "Consequence is ambiguous."; 
+			outWhyAmbiguous.addMessage(CONSEQUENCE_AMBIGUOUS);
 			return true;
 		}
 		
