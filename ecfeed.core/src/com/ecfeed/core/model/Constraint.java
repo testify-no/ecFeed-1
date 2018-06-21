@@ -18,6 +18,7 @@ import com.ecfeed.core.generators.api.IConstraint;
 import com.ecfeed.core.model.ChoiceCondition;
 import com.ecfeed.core.model.LabelCondition;
 import com.ecfeed.core.utils.EvaluationResult;
+import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.MessageStack;
 
 public class Constraint implements IConstraint<ChoiceNode> {
@@ -51,16 +52,30 @@ public class Constraint implements IConstraint<ChoiceNode> {
 		fName = name;
 	}	
 
-	public boolean isAmbiguous(List<List<ChoiceNode>> values, MessageStack outWhyAmbiguous) {
+	public boolean isAmbiguous(
+			List<List<ChoiceNode>> values, 
+			MessageStack outWhyAmbiguous) {
 
-		if (isAmbiguousIntr(values, outWhyAmbiguous)) {
+		boolean isAmbiguousForRanges = false; 
+		if (isAmbiguousForRanges(values, outWhyAmbiguous)) {
+			isAmbiguousForRanges = true;
 			ConditionHelper.addConstraintNameToMesageStack(getName(), outWhyAmbiguous);
+		}
+
+		boolean isAmbiguousForStrings = false; 
+		if (isAmbiguousForStrings(values, outWhyAmbiguous)) {
+			isAmbiguousForStrings = true;
+			ConditionHelper.addConstraintNameToMesageStack(getName(), outWhyAmbiguous);
+		}		
+
+		if (isAmbiguousForRanges || isAmbiguousForStrings) {
 			return true;
 		}
+
 		return false;
 	}
 
-	public boolean isAmbiguousIntr(List<List<ChoiceNode>> testDomain, MessageStack outWhyAmbiguous) {
+	public boolean isAmbiguousForRanges(List<List<ChoiceNode>> testDomain, MessageStack outWhyAmbiguous) {
 
 		if (fPremise.isAmbiguous(testDomain, outWhyAmbiguous)) {
 			return true;
@@ -73,6 +88,58 @@ public class Constraint implements IConstraint<ChoiceNode> {
 		return false;
 	}
 
+	public boolean isAmbiguousForStrings(
+			List<List<ChoiceNode>> testDomain, 
+			MessageStack outWhyAmbiguous) {
+
+		for(List<ChoiceNode> actualParametersOfMethod : testDomain) {
+			if (isAmbiguousForActualStringParameters(actualParametersOfMethod, outWhyAmbiguous)){
+				return true;
+			}
+		}
+
+		return false;
+	}	
+
+	private boolean isAmbiguousForActualStringParameters(
+			List<ChoiceNode> actualParametersOfMethod,
+			MessageStack outWhyAmbiguous) {
+
+		for (ChoiceNode choiceNode : actualParametersOfMethod) {
+			if (isAmbiguousForChoiceOfTypeString(choiceNode, outWhyAmbiguous)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private boolean isAmbiguousForChoiceOfTypeString(ChoiceNode choiceNode, MessageStack outWhyAmbiguous) {
+
+		if (!JavaTypeHelper.isStringTypeName(choiceNode.getParameter().getType())) {
+			return false;
+		}
+
+		if (!choiceNode.isRandomizedValue()) {
+			return false;
+		}
+
+		MethodParameterNode methodParameterNode = (MethodParameterNode)choiceNode.getParameter(); 
+		if (!mentionsParameter(methodParameterNode)) {
+			return false;
+		}
+
+		String message = 
+				ConditionHelper.createMessage(
+						"Randomized choice", 
+						choiceNode.toString(), 
+						"is used with parameter [" +
+								methodParameterNode.getName() +
+						"] of type String");		
+
+		outWhyAmbiguous.addMessage(message);
+		return true;
+	}
 
 	@Override
 	public EvaluationResult evaluate(List<ChoiceNode> values) {
