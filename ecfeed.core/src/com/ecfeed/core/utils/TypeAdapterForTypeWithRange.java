@@ -8,6 +8,10 @@ public abstract class TypeAdapterForTypeWithRange<T> implements ITypeAdapter<T> 
 
 	protected abstract String[] getSpecialValues();
 
+	@Override
+	public boolean isRandomizable() {
+		return true;
+	}
 
 	@Override
 	public String convert(String value, boolean isRandomized){

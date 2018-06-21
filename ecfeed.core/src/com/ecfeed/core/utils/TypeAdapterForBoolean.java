@@ -12,19 +12,31 @@ public class TypeAdapterForBoolean implements ITypeAdapter<Boolean>{
 	};
 
 	@Override
+	public boolean isRandomizable() {
+		return false;
+	}
+
+	@Override
 	public boolean isCompatible(String type){
 		return Arrays.asList(TYPES_CONVERTABLE_TO_BOOLEAN).contains(type);
 	}
 
-	// ADR-REF - use string helper
 	public String convert(String value, boolean isRandomized){
-		if(value.toLowerCase().equals(JavaTypeHelper.VALUE_REPRESENTATION_TRUE.toLowerCase())){
+
+		if (isRandomized) {
+			final String CAN_NOT_CONVERT = "Cannot convert to randomized boolean.";
+			ExceptionHelper.reportRuntimeException(CAN_NOT_CONVERT);
+		}
+
+		if (value.toLowerCase().equals(JavaTypeHelper.VALUE_REPRESENTATION_TRUE.toLowerCase())) {
 			return JavaTypeHelper.VALUE_REPRESENTATION_TRUE;
 		}
-		else if(value.toLowerCase().equals(JavaTypeHelper.VALUE_REPRESENTATION_FALSE.toLowerCase())){
+
+		if(value.toLowerCase().equals(JavaTypeHelper.VALUE_REPRESENTATION_FALSE.toLowerCase())){
 			return JavaTypeHelper.VALUE_REPRESENTATION_FALSE;
-		};
-		return null;
+		}
+
+		return getDefaultValue();
 	}
 
 	@Override

@@ -22,6 +22,11 @@ public class TypeAdapterForString implements ITypeAdapter<String>{
 	};
 
 	@Override
+	public boolean isRandomizable() {
+		return true;
+	}
+
+	@Override
 	public boolean isCompatible(String type){
 		return Arrays.asList(TYPES_CONVERTABLE_TO_STRING).contains(type);
 	}
@@ -43,18 +48,18 @@ public class TypeAdapterForString implements ITypeAdapter<String>{
 
 	@Override
 	public String generateValue(String regex) {
-		
+
 		String result = null;
-		
+
 		try {
 			Xeger xeger = new Xeger(regex);
-		
+
 			result = xeger.generate();
 		} catch (Throwable ex) {
 			final String CAN_NOT_GENERATE = "Cannot generate value from expression: " + regex + " (Xeger problem).";
 			ExceptionHelper.reportRuntimeException(CAN_NOT_GENERATE);
 		}
-		
+
 		return result;
 	}
 
@@ -62,4 +67,5 @@ public class TypeAdapterForString implements ITypeAdapter<String>{
 	public String generateValueAsString(String range) {
 		return generateValue(range);
 	}
+
 }

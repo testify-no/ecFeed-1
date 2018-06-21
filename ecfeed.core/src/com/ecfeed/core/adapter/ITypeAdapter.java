@@ -12,6 +12,7 @@ package com.ecfeed.core.adapter;
 
 public interface ITypeAdapter<T> {
 
+	public boolean isRandomizable();
 	public boolean isCompatible(String type);
 	public String convert(String value, boolean isRandomized);
 	public String getDefaultValue();
