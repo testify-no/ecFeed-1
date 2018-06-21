@@ -111,7 +111,7 @@ public class ChoiceCondition implements IStatementCondition {
 	private EvaluationResult evaluateChoice(ChoiceNode actualLeftChoice) {
 
 		String substituteType = getSubstituteType(actualLeftChoice);
-		
+
 		boolean isRandomizedChoice = 
 				StatementConditionHelper.getChoiceRandomized(
 						actualLeftChoice, 
@@ -125,19 +125,19 @@ public class ChoiceCondition implements IStatementCondition {
 
 		return evaluateForConstantChoice(actualLeftChoice, substituteType);
 	}
-	
+
 	private String getSubstituteType(ChoiceNode leftChoice) {
-		
+
 		String typeName = leftChoice.getParameter().getType();
 		return JavaTypeHelper.getSubstituteType(typeName);
 	}
-	
+
 	private EvaluationResult evaluateForConstantChoice(
 			ChoiceNode actualLeftChoice,
 			String substituteType) {
-		
+
 		EStatementRelation relation = fParentRelationStatement.getRelation();
-		
+
 		if (relation == EStatementRelation.EQUAL || relation == EStatementRelation.NOT_EQUAL) {
 			return evaluateEqualityIncludingParents(relation, actualLeftChoice);
 		}
@@ -151,14 +151,14 @@ public class ChoiceCondition implements IStatementCondition {
 
 		return EvaluationResult.FALSE;		
 	}
-	
+
 	private EvaluationResult evaluateForRandomizedChoice(
 			String leftChoiceStr,
 			String substituteType) {
 
 		EStatementRelation relation = fParentRelationStatement.getRelation();
 		String fRightValue = fRightChoice.getValueString();
-		
+
 		if (JavaTypeHelper.TYPE_NAME_STRING.equals(substituteType)) {
 			return EvaluationResult.convertFromBoolean(leftChoiceStr.matches(fRightValue));
 		}
@@ -232,10 +232,6 @@ public class ChoiceCondition implements IStatementCondition {
 				return true;
 			}
 			return false;
-		}
-
-		if (RelationMatcher.isMatchQuiet(relation, substituteType, leftChoiceStr, rightValue)) {
-			return true;
 		}
 
 		return false;

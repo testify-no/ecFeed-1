@@ -164,39 +164,6 @@ public class ConstraintTest {
 		assertTrue(constraint.evaluate(values) == EvaluationResult.TRUE);
 	}
 
-	@Test
-	public void testIsAmbiguousForRanges() {
-
-		RootNode rootNode = ModelTestHelper.createModel(ModelXmlRandomized1.getXml());
-		ClassNode classNode = rootNode.getClasses().get(0);
-		MethodNode methodNode = classNode.getMethods().get(0);
-
-		Constraint constraint = (Constraint)methodNode.getAllConstraints().get(0);
-		AbstractParameterNode abstractParameterNode = methodNode.getParameter(0);
-
-		List<ChoiceNode> choices = abstractParameterNode.getChoices();
-		List<List<ChoiceNode>> values = new ArrayList<List<ChoiceNode>>();
-		values.add(choices);
-
-		assertTrue(constraint.isAmbiguous(values, new MessageStack()));
-	}
-
-	@Test
-	public void testIsAmbiguousForStrings() {
-
-		RootNode rootNode = ModelTestHelper.createModel(ModelXmlRandomizedWithStringParam.getXml());
-		ClassNode classNode = rootNode.getClasses().get(0);
-		MethodNode methodNode = classNode.getMethods().get(0);
-
-		Constraint constraint = (Constraint)methodNode.getAllConstraints().get(0);
-		AbstractParameterNode abstractParameterNode = methodNode.getParameter(0);
-
-		List<ChoiceNode> choices = abstractParameterNode.getChoices();
-		List<List<ChoiceNode>> values = new ArrayList<List<ChoiceNode>>();
-		values.add(choices);
-
-		assertTrue(constraint.isAmbiguous(values, new MessageStack()));
-	}	
 
 	private void evaluateConstraintWithNullValues(Constraint constraint, ChoiceNode choice1, ChoiceNode choice2) {
 
@@ -270,6 +237,23 @@ public class ConstraintTest {
 		return premise;
 	}
 
+	@Test
+	public void testIsAmbiguousForRanges() {
+
+		RootNode rootNode = ModelTestHelper.createModel(ModelXmlRandomized1.getXml());
+		ClassNode classNode = rootNode.getClasses().get(0);
+		MethodNode methodNode = classNode.getMethods().get(0);
+
+		Constraint constraint = (Constraint)methodNode.getAllConstraints().get(0);
+		AbstractParameterNode abstractParameterNode = methodNode.getParameter(0);
+
+		List<ChoiceNode> choices = abstractParameterNode.getChoices();
+		List<List<ChoiceNode>> values = new ArrayList<List<ChoiceNode>>();
+		values.add(choices);
+
+		assertTrue(constraint.isAmbiguous(values, new MessageStack()));
+	}
+
 	private static class ModelXmlRandomized1 {
 
 		public static final String getXml() {
@@ -279,23 +263,8 @@ public class ConstraintTest {
 			sb.append("<?xml version='1.0' encoding='UTF-8'?>\n");
 			sb.append("<Model name='RandomizedValues' version='2'>\n");
 			sb.append("    <Class name='com.example.test.TestClass'>\n");
-			sb.append("        <Properties>\n");
-			sb.append("            <Property name='runOnAndroid' type='boolean' value='false'/>\n");
-			sb.append("        </Properties>\n");
 			sb.append("        <Method name='testMethod'>\n");
-			sb.append("            <Properties>\n");
-			sb.append("                <Property name='methodRunner' type='String' value='Java Runner'/>\n");
-			sb.append("                <Property name='wbMapBrowserToParam' type='boolean' value='false'/>\n");
-			sb.append("                <Property name='wbBrowser' type='String' value='Chrome'/>\n");
-			sb.append("                <Property name='wbMapStartUrlToParam' type='boolean' value='false'/>\n");
-			sb.append("            </Properties>\n");
 			sb.append("            <Parameter name='arg' type='int' isExpected='false' expected='0' linked='false'>\n");
-			sb.append("                <Properties>\n");
-			sb.append("                    <Property name='wbIsOptional' type='boolean' value='false'/>\n");
-			sb.append("                </Properties>\n");
-			sb.append("                <Comments>\n");
-			sb.append("                    <TypeComments/>\n");
-			sb.append("                </Comments>\n");
 			sb.append("                <Choice name='choice' value='1:3' isRandomized='true'/>\n");
 			sb.append("            </Parameter>\n");
 			sb.append("            <Constraint name='constraint'>\n");
@@ -318,6 +287,23 @@ public class ConstraintTest {
 
 	}
 
+	@Test
+	public void testIsAmbiguousForStrings() {
+
+		RootNode rootNode = ModelTestHelper.createModel(ModelXmlRandomizedWithStringParam.getXml());
+		ClassNode classNode = rootNode.getClasses().get(0);
+		MethodNode methodNode = classNode.getMethods().get(0);
+
+		Constraint constraint = (Constraint)methodNode.getAllConstraints().get(0);
+		AbstractParameterNode abstractParameterNode = methodNode.getParameter(0);
+
+		List<ChoiceNode> choices = abstractParameterNode.getChoices();
+		List<List<ChoiceNode>> values = new ArrayList<List<ChoiceNode>>();
+		values.add(choices);
+
+		assertTrue(constraint.isAmbiguous(values, new MessageStack()));
+	}	
+
 	private static class ModelXmlRandomizedWithStringParam {
 
 		public static final String getXml() {
@@ -327,23 +313,8 @@ public class ConstraintTest {
 			sb.append("<?xml version='1.0' encoding='UTF-8'?>\n");
 			sb.append("<Model name='Constraints01' version='2'>\n");
 			sb.append("    <Class name='com.example.test.TestClass'>\n");
-			sb.append("        <Properties>\n");
-			sb.append("            <Property name='runOnAndroid' type='boolean' value='false'/>\n");
-			sb.append("        </Properties>\n");
 			sb.append("        <Method name='testMethod'>\n");
-			sb.append("            <Properties>\n");
-			sb.append("                <Property name='methodRunner' type='String' value='Java Runner'/>\n");
-			sb.append("                <Property name='wbMapBrowserToParam' type='boolean' value='false'/>\n");
-			sb.append("                <Property name='wbBrowser' type='String' value='Chrome'/>\n");
-			sb.append("                <Property name='wbMapStartUrlToParam' type='boolean' value='false'/>\n");
-			sb.append("            </Properties>\n");
 			sb.append("            <Parameter name='arg' type='String' isExpected='false' expected='0' linked='false'>\n");
-			sb.append("                <Properties>\n");
-			sb.append("                    <Property name='wbIsOptional' type='boolean' value='false'/>\n");
-			sb.append("                </Properties>\n");
-			sb.append("                <Comments>\n");
-			sb.append("                    <TypeComments/>\n");
-			sb.append("                </Comments>\n");
 			sb.append("                <Choice name='choiceAorB' value='[A,B]' isRandomized='true'/>\n");
 			sb.append("            </Parameter>\n");
 			sb.append("            <Constraint name='equalsA'>\n");
@@ -366,5 +337,54 @@ public class ConstraintTest {
 
 	}
 
+	@Test
+	public void shouldNotBeAmbiguousForNotRandomizedInt() {
+
+		RootNode rootNode = ModelTestHelper.createModel(ModelXmlNotRandomizedInteger.getXml());
+		ClassNode classNode = rootNode.getClasses().get(0);
+		MethodNode methodNode = classNode.getMethods().get(0);
+
+		Constraint constraint = (Constraint)methodNode.getAllConstraints().get(0);
+		AbstractParameterNode abstractParameterNode = methodNode.getParameter(0);
+
+		List<ChoiceNode> choices = abstractParameterNode.getChoices();
+		List<List<ChoiceNode>> values = new ArrayList<List<ChoiceNode>>();
+		values.add(choices);
+
+		assertFalse(constraint.isAmbiguous(values, new MessageStack()));
+	}	
+
+	private static class ModelXmlNotRandomizedInteger {
+
+		public static final String getXml() {
+
+			StringBuilder sb = new StringBuilder(); 
+
+			sb.append("<?xml version='1.0' encoding='UTF-8'?>\n");
+			sb.append("<Model name='Constraints02' version='2'>\n");
+			sb.append("    <Class name='com.example.test.TestClass'>\n");
+			sb.append("        <Method name='testMethod'>\n");
+			sb.append("            <Parameter name='arg' type='int' isExpected='false' expected='0' linked='false'>\n");
+			sb.append("                <Choice name='choice' value='0' isRandomized='false'/>\n");
+			sb.append("            </Parameter>\n");
+			sb.append("            <Constraint name='constraint'>\n");
+			sb.append("                <Premise>\n");
+			sb.append("                    <Statement choice='choice' parameter='arg' relation='='/>\n");
+			sb.append("                </Premise>\n");
+			sb.append("                <Consequence>\n");
+			sb.append("                    <StaticStatement value='true'/>\n");
+			sb.append("                </Consequence>\n");
+			sb.append("            </Constraint>\n");
+			sb.append("        </Method>\n");
+			sb.append("    </Class>\n");
+			sb.append("</Model>\n");
+
+			String xml = sb.toString();
+			xml = xml.replace("'", "\"");
+
+			return xml;
+		}
+
+	}
 
 }
