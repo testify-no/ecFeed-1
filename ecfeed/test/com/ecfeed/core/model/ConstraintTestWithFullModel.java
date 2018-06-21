@@ -84,7 +84,7 @@ public class ConstraintTestWithFullModel {
 	}	
 
 	@Test
-	public void shouldNotBeAmbiguousForNotRandomizedInt() {
+	public void shouldNotBeAmbiguousForNotRandomizedIntAndChoiceCondition() {
 
 		StringBuilder sb = new StringBuilder(); 
 
@@ -111,29 +111,38 @@ public class ConstraintTestWithFullModel {
 		xml = xml.replace("'", "\"");
 
 		testForIsAmbiguousConstraint(xml, false);
+	}
+
+	@Test
+	public void shouldBeAmbiguousForRandomizedIntAndChoiceCondition2() {
+
+		StringBuilder sb = new StringBuilder(); 
+
+		sb.append("<?xml version='1.0' encoding='UTF-8'?>\n");
+		sb.append("<Model name='Constraints2' version='2'>\n");
+		sb.append("    <Class name='com.example.test.TestClass'>\n");
+		sb.append("        <Method name='testMethod'>\n");
+		sb.append("            <Parameter name='arg1' type='int' isExpected='false' expected='0' linked='false'>\n");
+		sb.append("                <Choice name='choice1' value='1' isRandomized='false'/>\n");
+		sb.append("                <Choice name='choice2' value='1:2' isRandomized='true'/>\n");
+		sb.append("            </Parameter>\n");
+		sb.append("            <Constraint name='constraint'>\n");
+		sb.append("                <Premise>\n");
+		sb.append("                    <Statement choice='choice1' parameter='arg1' relation='='/>\n");
+		sb.append("                </Premise>\n");
+		sb.append("                <Consequence>\n");
+		sb.append("                    <StaticStatement value='true'/>\n");
+		sb.append("                </Consequence>\n");
+		sb.append("            </Constraint>\n");
+		sb.append("        </Method>\n");
+		sb.append("    </Class>\n");
+		sb.append("</Model>\n");
+
+		String xml = sb.toString();
+		xml = xml.replace("'", "\"");
+
+		testForIsAmbiguousConstraint(xml, true);
 	}	
-
-
-	private void testForIsAmbiguousConstraint(String model, boolean isTrueExpected) {
-
-		RootNode rootNode = ModelTestHelper.createModel(model);
-		ClassNode classNode = rootNode.getClasses().get(0);
-		MethodNode methodNode = classNode.getMethods().get(0);
-
-		Constraint constraint = (Constraint)methodNode.getAllConstraints().get(0);
-		AbstractParameterNode abstractParameterNode = methodNode.getParameter(0);
-
-		List<ChoiceNode> choices = abstractParameterNode.getChoices();
-		List<List<ChoiceNode>> values = new ArrayList<List<ChoiceNode>>();
-		values.add(choices);
-
-		if (isTrueExpected) {
-			assertTrue(constraint.isAmbiguous(values, new MessageStack()));
-		} else {
-			assertFalse(constraint.isAmbiguous(values, new MessageStack()));
-		}
-	}	
-
 
 	@Test
 	public void shouldNotBeAmbiguousForNotRandomizedIntAndValueCondition() {
@@ -163,7 +172,7 @@ public class ConstraintTestWithFullModel {
 
 		testForIsAmbiguousConstraint(xml, false);
 	}
-	
+
 	@Test
 	public void shouldBeAmbiguousForTheSecondRandomizedIntAndValueCondition() {
 
@@ -188,13 +197,13 @@ public class ConstraintTestWithFullModel {
 		sb.append("        </Method>\n");
 		sb.append("    </Class>\n");
 		sb.append("</Model>\n");		
-		
+
 		String xml = sb.toString();
 		xml = xml.replace("'", "\"");
 
 		testForIsAmbiguousConstraint(xml, true);
 	}	
-	
+
 	@Test
 	public void shouldNotBeAmbiguousForNotRandomizedIntAndParameterCondition() {
 
@@ -221,13 +230,32 @@ public class ConstraintTestWithFullModel {
 		sb.append("        </Method>\n");
 		sb.append("    </Class>\n");
 		sb.append("</Model>\n");
-		
+
 		String xml = sb.toString();
 		xml = xml.replace("'", "\"");
 
 		testForIsAmbiguousConstraint(xml, false);
 	}	
-	
+
+	private void testForIsAmbiguousConstraint(String model, boolean isTrueExpected) {
+
+		RootNode rootNode = ModelTestHelper.createModel(model);
+		ClassNode classNode = rootNode.getClasses().get(0);
+		MethodNode methodNode = classNode.getMethods().get(0);
+
+		Constraint constraint = (Constraint)methodNode.getAllConstraints().get(0);
+		AbstractParameterNode abstractParameterNode = methodNode.getParameter(0);
+
+		List<ChoiceNode> choices = abstractParameterNode.getChoices();
+		List<List<ChoiceNode>> values = new ArrayList<List<ChoiceNode>>();
+		values.add(choices);
+
+		if (isTrueExpected) {
+			assertTrue(constraint.isAmbiguous(values, new MessageStack()));
+		} else {
+			assertFalse(constraint.isAmbiguous(values, new MessageStack()));
+		}
+	}	
 
 }
 
