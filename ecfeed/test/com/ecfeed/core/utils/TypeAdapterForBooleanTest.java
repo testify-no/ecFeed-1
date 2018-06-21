@@ -56,8 +56,8 @@ public class TypeAdapterForBooleanTest {
 		assertEquals("true", result);
 	}	
 
-	@Test(expected = RuntimeException.class)
-	public void shouldThrowWhenRandomized() {
+	@Test
+	public void shouldNotThrowWhenRandomized() {
 
 		TypeAdapterForBoolean typeAdapterForBoolean = new TypeAdapterForBoolean();
 
