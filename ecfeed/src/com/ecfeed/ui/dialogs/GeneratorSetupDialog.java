@@ -67,6 +67,7 @@ import com.ecfeed.core.serialization.export.ExportTemplateFactory;
 import com.ecfeed.core.serialization.export.IExportTemplate;
 import com.ecfeed.core.utils.IValueApplier;
 import com.ecfeed.core.utils.JavaTypeHelper;
+import com.ecfeed.core.utils.MessageStack;
 import com.ecfeed.core.utils.StringHolder;
 import com.ecfeed.ui.common.ApplyValueMode;
 import com.ecfeed.ui.common.CommonConstants;
@@ -251,27 +252,38 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 	}
 
 	private void checkAndDisplayAmbiguousStateWarning() {
-		
+
 		List<Constraint> constraints = getCheckedConstraints();
 		List<List<ChoiceNode>> input = getCheckedArguments();
 
+		MessageStack messageStack = new MessageStack();
+
 		for (Constraint constraint : constraints) {
-			if(constraint.isAmbiguous(input)) {
-				updateAmbiguousWarningLabel(true);
+
+			if (constraint.isAmbiguous(input, messageStack)) {
+
+				//				final String message = 
+				//						"Evaluation of constraints is ambigous. Reason: " + 
+				//								messageStack.getLongMessage();
+
+				final String message = "Warning! Evaluation of constraints is ambigous."; 
+
+				updateAmbiguousWarningLabel(true, message);
 				return;
 			}
 		}
 
-		updateAmbiguousWarningLabel(false);
+		updateAmbiguousWarningLabel(false, null);
 	}
-	
-	private void updateAmbiguousWarningLabel(boolean isAmbiguousCondition) {
-		if(isAmbiguousCondition) {
-			fAmbigousLabel.setText(String.format(IS_AMBIGUOUS, "constraintsname", "somethingfromstatement"));
+
+	private void updateAmbiguousWarningLabel(boolean isAmbiguousCondition, String message) {
+
+		if (!isAmbiguousCondition) {
+			fAmbigousLabel.setText("");
+			return;
 		}
-		else {
-			fAmbigousLabel.setText("                    ");
-		}
+
+		fAmbigousLabel.setText(message);
 	}
 
 	@Override
@@ -284,9 +296,9 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		fMainContainer.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		createContent();
-		
+
 		checkAndDisplayAmbiguousStateWarning();
-		
+
 		return area;
 	}
 

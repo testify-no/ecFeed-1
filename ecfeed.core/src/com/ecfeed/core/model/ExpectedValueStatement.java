@@ -13,6 +13,7 @@ package com.ecfeed.core.model;
 import java.util.List;
 
 import com.ecfeed.core.utils.EvaluationResult;
+import com.ecfeed.core.utils.MessageStack;
 
 //ambigous always false
 public class ExpectedValueStatement extends AbstractStatement implements IRelationalStatement{
@@ -147,8 +148,7 @@ public class ExpectedValueStatement extends AbstractStatement implements IRelati
 	}
 
 	@Override
-	public boolean isAmbiguous(List<List<ChoiceNode>> values) {
-		// TODO Auto-generated method stub
+	public boolean isAmbiguous(List<List<ChoiceNode>> values, MessageStack messageStack) {
 		return false;
 	}
 

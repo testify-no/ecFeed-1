@@ -14,6 +14,7 @@ import java.util.List;
 
 import com.ecfeed.core.utils.EvaluationResult;
 import com.ecfeed.core.utils.JavaTypeHelper;
+import com.ecfeed.core.utils.MessageStack;
 
 
 public class ParameterCondition implements IStatementCondition {
@@ -152,7 +153,10 @@ public class ParameterCondition implements IStatementCondition {
 
 	@Override
 	public boolean isAmbiguous(
-			List<List<ChoiceNode>> domain, int parameterIndex, EStatementRelation relation) {
+			List<List<ChoiceNode>> domain, 
+			int parameterIndex, 
+			EStatementRelation relation,
+			MessageStack messageStack) {
 
 		String substituteType = 
 				JavaTypeHelper.getSubstituteType(
@@ -177,8 +181,13 @@ public class ParameterCondition implements IStatementCondition {
 
 			for (ChoiceNode left : values) {
 				for (ChoiceNode right : rightSideDomain) {
-					if (StatementConditionHelper.isAmbiguous(left.getValueString(),
-							right.getValueString(), relation, substituteType)) {
+					if (StatementConditionHelper.isAmbiguous(
+							left.getValueString(),
+							right.getValueString(), 
+							relation, 
+							substituteType,
+							messageStack)) {
+
 						return true;
 					}
 				}

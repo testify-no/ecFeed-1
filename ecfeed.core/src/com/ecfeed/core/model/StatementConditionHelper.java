@@ -16,6 +16,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
 import com.ecfeed.core.utils.JavaTypeHelper;
+import com.ecfeed.core.utils.MessageStack;
 import com.ecfeed.core.utils.StringHelper;
 
 import static com.ecfeed.core.model.EStatementRelation.*;
@@ -274,7 +275,13 @@ public class StatementConditionHelper {
 	}
 
 	// ADR-REF
-	public static final boolean isAmbiguous(String choice, String constraint, EStatementRelation relation, String substituteType)  {
+	public static final boolean isAmbiguous(
+			String choice, 
+			String constraint, 
+			EStatementRelation relation, 
+			String substituteType,
+			MessageStack messageStack) {
+
 		boolean result = false; 
 		boolean outsideTheRange = false;
 		if(JavaTypeHelper.isNumericTypeName(substituteType)) {		
