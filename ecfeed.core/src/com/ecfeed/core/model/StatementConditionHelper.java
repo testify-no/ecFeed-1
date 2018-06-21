@@ -295,6 +295,7 @@ public class StatementConditionHelper {
 			String upperConstraint;
 			if (constraints.length == SINGLE_VALUE) {
 				upperConstraint = lowerConstraint;
+				constraints = new String[]{constraints[0],constraints[0]};
 			}
 			else {
 				upperConstraint = constraints[1];
