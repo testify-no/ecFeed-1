@@ -91,16 +91,20 @@ public class RelationStatement extends AbstractStatement implements IRelationalS
 	@Override
 	public boolean isAmbiguous(List<List<ChoiceNode>> values, MessageStack messageStack) {
 		
-		boolean result;
+
 		try {
 			int index = fLeftParameter.getMyIndex();
-			result = fRightCondition.isAmbiguous(values, index, fRelation, messageStack);
+			if (fRightCondition.isAmbiguous(values, index, fRelation, messageStack)) {
+				final String message = "Relation: " + this.toString() + " is ambiguous.";
+				messageStack.addMessage(message);
+				return true;
+			}
+			return false;
 		}
 		catch (Exception e) {
 			SystemLogger.logCatch(e.getMessage());
 			return false;
 		}
-		return result;
 	}
 
 	@Override

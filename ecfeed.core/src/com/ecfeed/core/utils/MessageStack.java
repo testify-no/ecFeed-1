@@ -18,9 +18,16 @@ public class MessageStack {
 		
 		StringBuilder sb = new StringBuilder();
 		
+		boolean first = true;
+		
 		for (String message : fMessages) {
+			
+			if (!first) {
+				sb.append(" >> ");
+			}
+			
 			sb.append(message);
-			sb.append(" ");
+			first = false;
 		}
 		
 		return sb.toString();
