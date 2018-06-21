@@ -14,6 +14,14 @@ public class MessageStack {
 		fMessages.add(0, message);
 	}
 
+	public boolean isEmpty() {
+		
+		if (fMessages.isEmpty())
+			return true;
+		
+		return false;
+	}
+	
 	public String getLongMessage() {
 
 		StringBuilder sb = new StringBuilder();
