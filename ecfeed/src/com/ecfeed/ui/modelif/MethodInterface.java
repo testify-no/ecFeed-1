@@ -130,8 +130,12 @@ public class MethodInterface extends ParametersParentInterface {
 	}
 
 	public ConstraintNode addNewConstraint() {
-		Constraint constraint = new Constraint(new StaticStatement(true),
-				new StaticStatement(true));
+		Constraint constraint = 
+				new Constraint(
+						CommonConstants.DEFAULT_NEW_CONSTRAINT_NAME,
+						new StaticStatement(true),
+						new StaticStatement(true));
+		
 		ConstraintNode node = new ConstraintNode(
 				CommonConstants.DEFAULT_NEW_CONSTRAINT_NAME, constraint);
 		if (addNewConstraint(node)) {

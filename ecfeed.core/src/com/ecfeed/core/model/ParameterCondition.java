@@ -153,7 +153,7 @@ public class ParameterCondition implements IStatementCondition {
 
 	@Override
 	public boolean isAmbiguous(
-			List<List<ChoiceNode>> domain, 
+			List<List<ChoiceNode>> testDomain, 
 			int parameterIndex, 
 			EStatementRelation relation,
 			MessageStack messageStack) {
@@ -163,13 +163,13 @@ public class ParameterCondition implements IStatementCondition {
 						fParentRelationStatement.getLeftParameter().getType(), 
 						JavaTypeHelper.getStringTypeName());
 
-		if (substituteType == null || parameterIndex >= domain.size()) {
+		if (substituteType == null || parameterIndex >= testDomain.size()) {
 			return false;
 		}
 
-		List<ChoiceNode> values = domain.get(parameterIndex);
+		List<ChoiceNode> values = testDomain.get(parameterIndex);
 		int index2 = fRightParameterNode.getMyIndex();
-		List<ChoiceNode> rightSideDomain = domain.get(index2);
+		List<ChoiceNode> choices = testDomain.get(index2);
 
 		boolean isRandomizedChoice = StatementConditionHelper.getChoiceRandomized(values,
 				fParentRelationStatement.getLeftParameter());
@@ -180,13 +180,12 @@ public class ParameterCondition implements IStatementCondition {
 			}
 
 			for (ChoiceNode left : values) {
-				for (ChoiceNode right : rightSideDomain) {
+				for (ChoiceNode right : choices) {
 					if (RangeAmbiguityValidator.isAmbiguous(
 							left.getValueString(),
 							right.getValueString(), 
 							relation, 
-							substituteType,
-							messageStack)) {
+							substituteType)) {
 
 						return true;
 					}

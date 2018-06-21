@@ -17,7 +17,7 @@ import com.ecfeed.core.utils.MessageStack;
 import com.ecfeed.core.utils.SystemLogger;
 
 public class RelationStatement extends AbstractStatement implements IRelationalStatement{
-	
+
 	private MethodParameterNode fLeftParameter;
 	private EStatementRelation fRelation;
 	private IStatementCondition fRightCondition;
@@ -90,12 +90,11 @@ public class RelationStatement extends AbstractStatement implements IRelationalS
 
 	@Override
 	public boolean isAmbiguous(List<List<ChoiceNode>> values, MessageStack messageStack) {
-		
 
 		try {
 			int index = fLeftParameter.getMyIndex();
 			if (fRightCondition.isAmbiguous(values, index, fRelation, messageStack)) {
-				final String message = "Relation: " + this.toString() + " is ambiguous.";
+				final String message = "Relation [" + this.toString() + "].";
 				messageStack.addMessage(message);
 				return true;
 			}

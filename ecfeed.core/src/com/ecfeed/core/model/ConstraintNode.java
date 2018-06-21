@@ -34,6 +34,12 @@ public class ConstraintNode extends AbstractNode{
 	}
 
 	@Override
+	public void setName(String name) {
+		super.setName(name);
+		fConstraint.setName(name);
+	}
+
+	@Override
 	public ConstraintNode makeClone() {
 		ConstraintNode copy = new ConstraintNode(getName(), fConstraint.getCopy());
 		copy.setProperties(getProperties());
@@ -65,11 +71,11 @@ public class ConstraintNode extends AbstractNode{
 	}
 
 	public EvaluationResult evaluate(List<ChoiceNode> values) {
-		
+
 		if (fConstraint != null) {
 			return fConstraint.evaluate(values);
 		}
-		
+
 		return EvaluationResult.FALSE;
 	}
 

@@ -25,31 +25,50 @@ public class Constraint implements IConstraint<ChoiceNode> {
 	private final int fId;
 	private static int fLastId = 0;
 
+	private String fName;
 	private AbstractStatement fPremise;
 	private AbstractStatement fConsequence;
 
 
-	public Constraint(AbstractStatement premise, AbstractStatement consequence) {
+	public Constraint(String name, AbstractStatement premise, AbstractStatement consequence) {
 
 		fId = fLastId++;
+
+		if (name == null) {
+			fName = "constraint";
+		}
+		fName = name;
 		fPremise = premise;
 		fConsequence = consequence;
 	}
 
+	public String getName() {
+		return fName;
+	}
+
+	public void setName(String name) {
+		fName = name;
+	}	
+
 	public boolean isAmbiguous(List<List<ChoiceNode>> values, MessageStack outWhyAmbiguous) {
-		
-		if (fPremise.isAmbiguous(values, outWhyAmbiguous)) {
-			final String PREMISE_AMBIGUOUS = "Premise is ambiguous."; 
-			outWhyAmbiguous.addMessage(PREMISE_AMBIGUOUS);
+
+		if (isAmbiguousIntr(values, outWhyAmbiguous)) {
+			outWhyAmbiguous.addMessage("Constraint [" + getName() + "].");
 			return true;
 		}
-		
-		if (fConsequence.isAmbiguous(values, outWhyAmbiguous)) {
-			final String CONSEQUENCE_AMBIGUOUS = "Consequence is ambiguous."; 
-			outWhyAmbiguous.addMessage(CONSEQUENCE_AMBIGUOUS);
+		return false;
+	}
+
+	public boolean isAmbiguousIntr(List<List<ChoiceNode>> testDomain, MessageStack outWhyAmbiguous) {
+
+		if (fPremise.isAmbiguous(testDomain, outWhyAmbiguous)) {
 			return true;
 		}
-		
+
+		if (fConsequence.isAmbiguous(testDomain, outWhyAmbiguous)) {
+			return true;
+		}
+
 		return false;
 	}
 
@@ -193,7 +212,7 @@ public class Constraint implements IConstraint<ChoiceNode> {
 		AbstractStatement premise = fPremise.getCopy();
 		AbstractStatement consequence = fConsequence.getCopy();
 
-		return new Constraint(premise, consequence);
+		return new Constraint(new String(fName), premise, consequence);
 	}
 
 	public boolean updateRefrences(MethodNode method) {
