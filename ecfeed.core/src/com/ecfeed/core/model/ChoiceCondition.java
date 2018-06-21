@@ -174,10 +174,6 @@ public class ChoiceCondition implements IStatementCondition {
 			EStatementRelation relation,
 			MessageStack messageStack) {
 
-		if (relation.equals(EStatementRelation.EQUAL) || relation.equals(EStatementRelation.NOT_EQUAL)) {
-			return false;
-		}
-
 		String substituteType = 
 				JavaTypeHelper.getSubstituteType(
 						fParentRelationStatement.getLeftParameter().getType(), 
