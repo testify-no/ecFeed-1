@@ -174,11 +174,16 @@ public class ChoiceCondition implements IStatementCondition {
 			EStatementRelation relation,
 			MessageStack messageStack) {
 
+		if (relation.equals(EStatementRelation.EQUAL) || relation.equals(EStatementRelation.NOT_EQUAL)) {
+			return false;
+		}
+
 		String fRightValue = fRightChoice.getValueString();
 
 		String substituteType = 
 				JavaTypeHelper.getSubstituteType(
-						fParentRelationStatement.getLeftParameter().getType(), JavaTypeHelper.getStringTypeName());
+						fParentRelationStatement.getLeftParameter().getType(), 
+						JavaTypeHelper.getStringTypeName());
 
 		if (substituteType == null || parameterIndex >= domain.size()) {
 			return false;
@@ -186,22 +191,25 @@ public class ChoiceCondition implements IStatementCondition {
 
 		List<ChoiceNode> choices = domain.get(parameterIndex);		
 
-		String leftChoiceStr = getChoiceString(choices, fParentRelationStatement.getLeftParameter());
+		MethodParameterNode leftParameterNode = fParentRelationStatement.getLeftParameter();
+		String leftChoiceStr = getChoiceString(choices, leftParameterNode);
 
-		if(relation.equals(EStatementRelation.EQUAL) || relation.equals(EStatementRelation.NOT_EQUAL)) {
-			return false;
-		}
 
 		boolean isRandomizedChoice = StatementConditionHelper.getChoiceRandomized(choices,
 				fParentRelationStatement.getLeftParameter());
 
 		if (isRandomizedChoice) {
-			if (JavaTypeHelper.TYPE_NAME_STRING.equals(substituteType)) {
-				return leftChoiceStr.matches(fRightValue);
-			} else {
-				return RangeAmbiguityValidator.isAmbiguous(
-						leftChoiceStr, fRightValue, relation, substituteType, messageStack);
+			if (isAmbiguousForRandomizedChoice(
+					leftChoiceStr, fRightValue, relation, substituteType)) {
+
+				ChoiceNode leftChoiceNode = 
+						StatementConditionHelper.getChoiceForMethodParameter(choices, leftParameterNode);
+
+				messageStack.addMessage("Constraint: " + fRightValue);
+				messageStack.addMessage("Choice: " + leftChoiceNode.toString());
+				return true;
 			}
+			return false;
 		}
 
 		if (RelationMatcher.isMatchQuiet(relation, substituteType, leftChoiceStr, fRightValue)) {
@@ -209,6 +217,20 @@ public class ChoiceCondition implements IStatementCondition {
 		}
 
 		return false;
+	}
+
+	private static boolean isAmbiguousForRandomizedChoice(
+			String leftChoiceStr,
+			String rightValue,
+			EStatementRelation relation,
+			String substituteType) {
+
+		if (JavaTypeHelper.TYPE_NAME_STRING.equals(substituteType)) {
+			return leftChoiceStr.matches(rightValue);
+		}
+
+		return RangeAmbiguityValidator.isAmbiguous(
+				leftChoiceStr, rightValue, relation, substituteType);
 	}
 
 	private static String getChoiceString(List<ChoiceNode> choices, MethodParameterNode methodParameterNode) {
