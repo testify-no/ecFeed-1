@@ -14,11 +14,7 @@ public class TypeAdapterForInt extends TypeAdapterForNumeric<Integer>{
 				result = String.valueOf(StringHelper.convertToInteger(value));
 			}
 			catch (NumberFormatException e) {
-				if (value.length() == 1) {
-					result = Integer.toString((int)value.charAt(0));
-				} else {
-					result = null;
-				}
+				result = getDefaultValue();
 			}
 		}
 

@@ -159,7 +159,7 @@ public class ModelLogger {
 		printObjectLine(methodParameterNode, fieldName, indent);
 
 		boolean isLinked = methodParameterNode.isLinked();
-		printFieldLine("boolean[isLinked], " + isLinked, indent + indentIncrement);
+		printFieldLine(methodParameterNode.getType() + " [isLinked]=" + isLinked, indent + indentIncrement);
 
 		if (isLinked) {
 			GlobalParameterNode globalParameterNode = methodParameterNode.getLink();

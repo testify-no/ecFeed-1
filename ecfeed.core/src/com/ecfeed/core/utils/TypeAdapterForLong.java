@@ -12,7 +12,7 @@ public class TypeAdapterForLong extends TypeAdapterForNumeric<Long>{
 				result = String.valueOf(StringHelper.convertToLong(value));
 			}
 			catch(NumberFormatException e){
-				result = null;
+				result = getDefaultValue();
 			}
 		}
 

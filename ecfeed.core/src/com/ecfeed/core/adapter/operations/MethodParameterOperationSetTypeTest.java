@@ -18,6 +18,7 @@ import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.ConstraintNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
+import com.ecfeed.core.model.ModelLogger;
 import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.serialization.IModelParser;
@@ -65,8 +66,15 @@ public class MethodParameterOperationSetTypeTest {
 
 		String[] constraintsAfterExecute = constraints.stream()
 				.map(ConstraintNode::getName).toArray(String[]::new);
+		
 		assertTrue(Arrays
-				.equals(new String[] { "SecondConstraint", "AnyConstraint",
+				.equals(new String[] { 
+						"SecondConstraint", 
+						"AnyConstraint",
+						"Mangler tilgang til BidragsforskuddA-Inntekt",
+						"Sykepenger og Bidragsforskudd a-inntekt",
+						"Mangler tilgang til Bidrag a-inntekt",
+						"Sykepenger og Bidrag a-inntekt",
 						"AnotherConstraint" }, constraintsAfterExecute));
 		istream.close();
 	}
@@ -102,19 +110,30 @@ public class MethodParameterOperationSetTypeTest {
 				methodParameterNode, "long", typeAdapterProvider);
 
 		List<ConstraintNode> constraints = method.getConstraintNodes();
+		
 		assertTrue(Arrays.equals(
 				constraintsNames,
 				constraints.stream().map(ConstraintNode::getName)
 						.toArray(String[]::new)));
 
+		ModelLogger.printModel("Przed zmiana", model);
+		
 		operation.execute();
+		
+		
 
 		String[] constraintsAfterExecute = constraints.stream()
 				.map(ConstraintNode::getName).toArray(String[]::new);
-		assertTrue(Arrays.equals(new String[] { "SecondConstraint",
+		
+		ModelLogger.printModel("Po zmiane", model);		
+		
+		assertTrue(Arrays.equals(new String[] { 
+				"SecondConstraint",
+				"AnyConstraint",
 				"Mangler tilgang til BidragsforskuddA-Inntekt",
 				"Sykepenger og Bidragsforskudd a-inntekt",
 				"Mangler tilgang til Bidrag a-inntekt",
-				"Sykepenger og Bidrag a-inntekt" }, constraintsAfterExecute));
+				"Sykepenger og Bidrag a-inntekt",
+				"AnotherConstraint"}, constraintsAfterExecute));
 	}
 }
