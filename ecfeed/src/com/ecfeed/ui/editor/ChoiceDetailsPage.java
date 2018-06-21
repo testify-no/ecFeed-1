@@ -25,6 +25,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import com.ecfeed.application.ApplicationContext;
+import com.ecfeed.core.adapter.ITypeAdapter;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.MethodParameterNode;
@@ -33,6 +34,7 @@ import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.ui.common.ComboSelectionListener;
 import com.ecfeed.ui.common.FocusLostListener;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
+import com.ecfeed.ui.common.EclipseTypeAdapterProvider;
 import com.ecfeed.ui.common.utils.SwtObjectHelper;
 import com.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.ecfeed.ui.modelif.ChoiceInterface;
@@ -180,17 +182,25 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 	}
 
 	private boolean isRandomizeCheckboxEnabled() {
+
 		String typeName = fChoiceIf.getParameter().getType();
-		return !isChoiceNodeAbstract() && isCorrectableType(typeName);
+
+		if (isChoiceNodeAbstract()) {
+			return false;
+		}
+
+		EclipseTypeAdapterProvider eclipseTypeAdapterProvider = new EclipseTypeAdapterProvider();
+		ITypeAdapter<?> typeAdapter = eclipseTypeAdapterProvider.getAdapter(typeName);
+
+		if (!typeAdapter.isRandomizable())
+			return false;
+
+		return true;
 	}
 
 	private boolean isChoiceNodeAbstract() {
 		ChoiceNode choiceNode = getSelectedChoice();
 		return choiceNode!=null && choiceNode.isAbstract();
-	}
-
-	private boolean isCorrectableType(String typeName) {
-		return JavaTypeHelper.isNumericTypeName(typeName) || JavaTypeHelper.isStringTypeName(typeName);
 	}
 
 	private void setValueComboText(ChoiceNode choiceNode) {
