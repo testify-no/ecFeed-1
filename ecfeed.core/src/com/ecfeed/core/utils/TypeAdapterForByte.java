@@ -2,29 +2,28 @@ package com.ecfeed.core.utils;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-public class TypeAdapterForByte extends TypeAdapterForNumeric<Byte>{
+public class TypeAdapterForByte extends TypeAdapterForNumericType<Byte>{
 
-	// ADR-REF
 	@Override
-	public String convert(String value, boolean isRandomized){
+	protected String convertSingleValue(String value){
 
-		String result = super.convert(value, isRandomized);
+		String result = super.convertSpecialValue(value);
 
-		if (result == null) {
-
-			try{
-				result = String.valueOf(StringHelper.convertToByte(value));
-			}
-			catch (NumberFormatException e) {
-				result = getDefaultValue();
-			}
+		if (result != null) {
+			return result;
 		}
 
-		if (isRandomized) {
-			result = generateRange(result);
+		try{
+			return String.valueOf(StringHelper.convertToByte(value));
 		}
-
-		return result;
+		catch (NumberFormatException e) {
+			return getDefaultValue();
+		}
+	}
+	
+	@Override
+	protected String[] getSpecialValues() {
+		return NUMERIC_SPECIAL_VALUES;
 	}
 
 	@Override

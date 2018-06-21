@@ -4,19 +4,19 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class TypeAdapterForDouble extends TypeAdapterFloatingPoint<Double>{
 	@Override
-	public String convert(String value, boolean isRandomized) {
+	public String convertSingleValue(String value) {
 
-		String result = super.convert(value, isRandomized);
+		String result = super.convertSpecialValue(value);
 
-		if (result == null) {
-			try {
-				result = String.valueOf(Double.parseDouble(value));
-			} catch(NumberFormatException e) {
-				result = getDefaultValue();
-			}
+		if (result != null) {
+			return result;
 		}
 
-		return result;
+		try {
+			return String.valueOf(Double.parseDouble(value));
+		} catch(NumberFormatException e) {
+			return getDefaultValue();
+		}
 	}
 
 	@Override

@@ -2,31 +2,32 @@ package com.ecfeed.core.utils;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-public class TypeAdapterForShort extends TypeAdapterForNumeric<Short>{
+public class TypeAdapterForShort extends TypeAdapterForNumericType<Short> {
+
 	@Override
-	public String convert(String value, boolean isRandomized) {
+	public String convertSingleValue(String value) {
 
-		String result = super.convert(value, isRandomized);
+		String result = super.convertSpecialValue(value);
 
-		if (result == null) {
-			try {
-				result = String.valueOf(StringHelper.convertToShort(value));
-			}
-			catch (NumberFormatException e) {
-				result = getDefaultValue();
-			}
+		if (result != null) {
+			return result;
 		}
 
-		// ADR-REF similar code in adapters
-		if (isRandomized) {
-			result = generateRange(result);
+		try {
+			return String.valueOf(StringHelper.convertToShort(value));
 		}
-
-		return result;
+		catch (NumberFormatException e) {
+			return getDefaultValue();
+		}
 	}
 
 	@Override
 	public Short generateValue(String range) {
 		return (short)ThreadLocalRandom.current().nextInt(getLower(range),getUpper(range));
+	}
+
+	@Override
+	protected String[] getSpecialValues() {
+		return NUMERIC_SPECIAL_VALUES;
 	}
 }
