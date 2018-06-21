@@ -1,35 +1,36 @@
 package com.ecfeed.core.model;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.MessageStack;
 
-public class StatementConditionHelperTest {
+public class RangeAmbiguityValidatorTest {
 
 	@Test
 	public void testAmbiguousForEqualAndLong() {
 
 		MessageStack messageStack = new MessageStack();
 
-		assertFalse(StatementConditionHelper.isAmbiguous(
+		assertFalse(RangeAmbiguityValidator.isAmbiguous(
 				"0:0", "0:0", EStatementRelation.EQUAL, JavaTypeHelper.TYPE_NAME_LONG, messageStack));
 
-		assertFalse(StatementConditionHelper.isAmbiguous(
+		assertFalse(RangeAmbiguityValidator.isAmbiguous(
 				"0:0", "0", EStatementRelation.EQUAL, JavaTypeHelper.TYPE_NAME_LONG, messageStack));
 
-		assertFalse(StatementConditionHelper.isAmbiguous(
+		assertFalse(RangeAmbiguityValidator.isAmbiguous(
 				"1:2", "0:0", EStatementRelation.EQUAL, JavaTypeHelper.TYPE_NAME_LONG, messageStack));
 
-		assertFalse(StatementConditionHelper.isAmbiguous(
+		assertFalse(RangeAmbiguityValidator.isAmbiguous(
 				"1:2", "3:3", EStatementRelation.EQUAL, JavaTypeHelper.TYPE_NAME_LONG, messageStack));
 
-		assertTrue(StatementConditionHelper.isAmbiguous(
+		assertTrue(RangeAmbiguityValidator.isAmbiguous(
 				"1:2", "2", EStatementRelation.EQUAL, JavaTypeHelper.TYPE_NAME_LONG, messageStack));
 
-		assertTrue(StatementConditionHelper.isAmbiguous(
+		assertTrue(RangeAmbiguityValidator.isAmbiguous(
 				"1:2", "1:1", EStatementRelation.EQUAL, JavaTypeHelper.TYPE_NAME_LONG, messageStack));		
 	}
 
@@ -38,25 +39,25 @@ public class StatementConditionHelperTest {
 
 		MessageStack messageStack = new MessageStack();
 
-		assertFalse(StatementConditionHelper.isAmbiguous(
+		assertFalse(RangeAmbiguityValidator.isAmbiguous(
 				"0:0", "0:0", EStatementRelation.NOT_EQUAL, JavaTypeHelper.TYPE_NAME_LONG, messageStack));
 
-		assertFalse(StatementConditionHelper.isAmbiguous(
+		assertFalse(RangeAmbiguityValidator.isAmbiguous(
 				"0:0", "0", EStatementRelation.NOT_EQUAL, JavaTypeHelper.TYPE_NAME_LONG, messageStack));
 
-		assertFalse(StatementConditionHelper.isAmbiguous(
+		assertFalse(RangeAmbiguityValidator.isAmbiguous(
 				"1:2", "0:0", EStatementRelation.NOT_EQUAL, JavaTypeHelper.TYPE_NAME_LONG, messageStack));
 
-		assertFalse(StatementConditionHelper.isAmbiguous(
+		assertFalse(RangeAmbiguityValidator.isAmbiguous(
 				"1:2", "3:3", EStatementRelation.NOT_EQUAL, JavaTypeHelper.TYPE_NAME_LONG, messageStack));
 
-		assertTrue(StatementConditionHelper.isAmbiguous(
+		assertTrue(RangeAmbiguityValidator.isAmbiguous(
 				"1:2", "2", EStatementRelation.NOT_EQUAL, JavaTypeHelper.TYPE_NAME_LONG, messageStack));
 
-		assertTrue(StatementConditionHelper.isAmbiguous(
+		assertTrue(RangeAmbiguityValidator.isAmbiguous(
 				"1:2", "1:1", EStatementRelation.NOT_EQUAL, JavaTypeHelper.TYPE_NAME_LONG, messageStack));
 
-		assertFalse(StatementConditionHelper.isAmbiguous(
+		assertFalse(RangeAmbiguityValidator.isAmbiguous(
 				"1:2", "0", EStatementRelation.NOT_EQUAL, JavaTypeHelper.TYPE_NAME_LONG, messageStack));
 	}	
 
@@ -65,22 +66,22 @@ public class StatementConditionHelperTest {
 
 		MessageStack messageStack = new MessageStack();
 
-		assertFalse(StatementConditionHelper.isAmbiguous(
+		assertFalse(RangeAmbiguityValidator.isAmbiguous(
 				"0:0", "0:0", EStatementRelation.LESS_THAN, JavaTypeHelper.TYPE_NAME_LONG, messageStack));
 
-		assertFalse(StatementConditionHelper.isAmbiguous(
+		assertFalse(RangeAmbiguityValidator.isAmbiguous(
 				"0:0", "0", EStatementRelation.LESS_THAN, JavaTypeHelper.TYPE_NAME_LONG, messageStack));
 
-		assertFalse(StatementConditionHelper.isAmbiguous(
+		assertFalse(RangeAmbiguityValidator.isAmbiguous(
 				"1:2", "0:0", EStatementRelation.LESS_THAN, JavaTypeHelper.TYPE_NAME_LONG, messageStack));
 
-		assertFalse(StatementConditionHelper.isAmbiguous(
+		assertFalse(RangeAmbiguityValidator.isAmbiguous(
 				"1:2", "3:3", EStatementRelation.LESS_THAN, JavaTypeHelper.TYPE_NAME_LONG, messageStack));
 
-		assertTrue(StatementConditionHelper.isAmbiguous(
+		assertTrue(RangeAmbiguityValidator.isAmbiguous(
 				"1:2", "2", EStatementRelation.LESS_THAN, JavaTypeHelper.TYPE_NAME_LONG, messageStack));
 
-		assertFalse(StatementConditionHelper.isAmbiguous(
+		assertFalse(RangeAmbiguityValidator.isAmbiguous(
 				"1:2", "1:1", EStatementRelation.LESS_THAN, JavaTypeHelper.TYPE_NAME_LONG, messageStack));		
 	}	
 
@@ -89,25 +90,25 @@ public class StatementConditionHelperTest {
 
 		MessageStack messageStack = new MessageStack();
 
-		assertFalse(StatementConditionHelper.isAmbiguous(
+		assertFalse(RangeAmbiguityValidator.isAmbiguous(
 				"0:0", "0:0", EStatementRelation.GREATER_THAN, JavaTypeHelper.TYPE_NAME_LONG, messageStack));
 
-		assertFalse(StatementConditionHelper.isAmbiguous(
+		assertFalse(RangeAmbiguityValidator.isAmbiguous(
 				"0:0", "0", EStatementRelation.GREATER_THAN, JavaTypeHelper.TYPE_NAME_LONG, messageStack));
 
-		assertFalse(StatementConditionHelper.isAmbiguous(
+		assertFalse(RangeAmbiguityValidator.isAmbiguous(
 				"1:2", "0:0", EStatementRelation.GREATER_THAN, JavaTypeHelper.TYPE_NAME_LONG, messageStack));
 
-		assertFalse(StatementConditionHelper.isAmbiguous(
+		assertFalse(RangeAmbiguityValidator.isAmbiguous(
 				"1:2", "3:3", EStatementRelation.GREATER_THAN, JavaTypeHelper.TYPE_NAME_LONG, messageStack));
 
-		assertFalse(StatementConditionHelper.isAmbiguous(
+		assertFalse(RangeAmbiguityValidator.isAmbiguous(
 				"1:2", "2", EStatementRelation.GREATER_THAN, JavaTypeHelper.TYPE_NAME_LONG, messageStack));
 
-		assertTrue(StatementConditionHelper.isAmbiguous(
+		assertTrue(RangeAmbiguityValidator.isAmbiguous(
 				"1:2", "1:1", EStatementRelation.GREATER_THAN, JavaTypeHelper.TYPE_NAME_LONG, messageStack));
 
-		assertFalse(StatementConditionHelper.isAmbiguous(
+		assertFalse(RangeAmbiguityValidator.isAmbiguous(
 				"1:2", "0", EStatementRelation.GREATER_THAN, JavaTypeHelper.TYPE_NAME_LONG, messageStack));		
 	}
 
@@ -116,25 +117,25 @@ public class StatementConditionHelperTest {
 
 		MessageStack messageStack = new MessageStack();
 
-		assertFalse(StatementConditionHelper.isAmbiguous(
+		assertFalse(RangeAmbiguityValidator.isAmbiguous(
 				"0:0", "0:0", EStatementRelation.LESS_EQUAL, JavaTypeHelper.TYPE_NAME_LONG, messageStack));
 
-		assertFalse(StatementConditionHelper.isAmbiguous(
+		assertFalse(RangeAmbiguityValidator.isAmbiguous(
 				"0:0", "0", EStatementRelation.LESS_EQUAL, JavaTypeHelper.TYPE_NAME_LONG, messageStack));
 
-		assertFalse(StatementConditionHelper.isAmbiguous(
+		assertFalse(RangeAmbiguityValidator.isAmbiguous(
 				"1:2", "0:0", EStatementRelation.LESS_EQUAL, JavaTypeHelper.TYPE_NAME_LONG, messageStack));
 
-		assertFalse(StatementConditionHelper.isAmbiguous(
+		assertFalse(RangeAmbiguityValidator.isAmbiguous(
 				"1:2", "3:3", EStatementRelation.LESS_EQUAL, JavaTypeHelper.TYPE_NAME_LONG, messageStack));
 
-		assertFalse(StatementConditionHelper.isAmbiguous(
+		assertFalse(RangeAmbiguityValidator.isAmbiguous(
 				"1:2", "2", EStatementRelation.LESS_EQUAL, JavaTypeHelper.TYPE_NAME_LONG, messageStack));
 
-		assertTrue(StatementConditionHelper.isAmbiguous(
+		assertTrue(RangeAmbiguityValidator.isAmbiguous(
 				"1:2", "1:1", EStatementRelation.LESS_EQUAL, JavaTypeHelper.TYPE_NAME_LONG, messageStack));
 
-		assertFalse(StatementConditionHelper.isAmbiguous(
+		assertFalse(RangeAmbiguityValidator.isAmbiguous(
 				"1:2", "0", EStatementRelation.LESS_EQUAL, JavaTypeHelper.TYPE_NAME_LONG, messageStack));		
 	}	
 
@@ -143,26 +144,27 @@ public class StatementConditionHelperTest {
 
 		MessageStack messageStack = new MessageStack();
 
-		assertFalse(StatementConditionHelper.isAmbiguous(
+		assertFalse(RangeAmbiguityValidator.isAmbiguous(
 				"0:0", "0:0", EStatementRelation.GREATER_EQUAL, JavaTypeHelper.TYPE_NAME_LONG, messageStack));
 
-		assertFalse(StatementConditionHelper.isAmbiguous(
+		assertFalse(RangeAmbiguityValidator.isAmbiguous(
 				"0:0", "0", EStatementRelation.GREATER_EQUAL, JavaTypeHelper.TYPE_NAME_LONG, messageStack));
 
-		assertFalse(StatementConditionHelper.isAmbiguous(
+		assertFalse(RangeAmbiguityValidator.isAmbiguous(
 				"1:2", "0:0", EStatementRelation.GREATER_EQUAL, JavaTypeHelper.TYPE_NAME_LONG, messageStack));
 
-		assertFalse(StatementConditionHelper.isAmbiguous(
+		assertFalse(RangeAmbiguityValidator.isAmbiguous(
 				"1:2", "3:3", EStatementRelation.GREATER_EQUAL, JavaTypeHelper.TYPE_NAME_LONG, messageStack));
 
-		assertTrue(StatementConditionHelper.isAmbiguous(
+		assertTrue(RangeAmbiguityValidator.isAmbiguous(
 				"1:2", "2", EStatementRelation.GREATER_EQUAL, JavaTypeHelper.TYPE_NAME_LONG, messageStack));
 
-		assertFalse(StatementConditionHelper.isAmbiguous(
+		assertFalse(RangeAmbiguityValidator.isAmbiguous(
 				"1:2", "1:1", EStatementRelation.GREATER_EQUAL, JavaTypeHelper.TYPE_NAME_LONG, messageStack));
 
-		assertFalse(StatementConditionHelper.isAmbiguous(
+		assertFalse(RangeAmbiguityValidator.isAmbiguous(
 				"1:2", "0", EStatementRelation.GREATER_EQUAL, JavaTypeHelper.TYPE_NAME_LONG, messageStack));
 	}	
+
 
 }

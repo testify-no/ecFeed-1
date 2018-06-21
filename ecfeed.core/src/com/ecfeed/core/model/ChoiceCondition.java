@@ -138,7 +138,7 @@ public class ChoiceCondition implements IStatementCondition {
 		String rightValue = JavaTypeHelper.convertValueString(fRightChoice.getValueString(), substituteType);
 
 
-		if (StatementConditionHelper.isRelationMatchQuiet(relation, substituteType, actualLeftValue, rightValue)) {
+		if (RelationMatcher.isMatchQuiet(relation, substituteType, actualLeftValue, rightValue)) {
 			return EvaluationResult.TRUE;
 		}
 
@@ -199,12 +199,12 @@ public class ChoiceCondition implements IStatementCondition {
 			if (JavaTypeHelper.TYPE_NAME_STRING.equals(substituteType)) {
 				return leftChoiceStr.matches(fRightValue);
 			} else {
-				return StatementConditionHelper.isAmbiguous(
+				return RangeAmbiguityValidator.isAmbiguous(
 						leftChoiceStr, fRightValue, relation, substituteType, messageStack);
 			}
 		}
 
-		if (StatementConditionHelper.isRelationMatchQuiet(relation, substituteType, leftChoiceStr, fRightValue)) {
+		if (RelationMatcher.isMatchQuiet(relation, substituteType, leftChoiceStr, fRightValue)) {
 			return true;
 		}
 
