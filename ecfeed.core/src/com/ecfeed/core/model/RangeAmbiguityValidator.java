@@ -27,6 +27,26 @@ public class RangeAmbiguityValidator {
 		String[] choices = createRangeArray(choicesTxt);
 		String[] constraints = createRangeArray(constraintsTxt);
 
+		if (isAmbiguousIntr(choices, constraints, relation, substituteType)) {
+			String message = "Expression: " +  
+					choices[0] + ":" + choices[1] +
+					relation.toString() +
+					constraints[0] + ":" + constraints[1] +
+					" is ambiguous.";
+			
+			outWhyAmbiguous.addMessage(message);
+			return true;
+		}
+		
+		return false;
+	}
+	
+	private static boolean isAmbiguousIntr(
+			String[] choices,
+			String[] constraints,
+			EStatementRelation relation,
+			String substituteType) {
+		
 		if (relation.equals(EQUAL)) {
 			return isAmbiguousForEqualRelation(choices, constraints, substituteType);
 		} else {
