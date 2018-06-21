@@ -222,10 +222,6 @@ public class ChoiceCondition implements IStatementCondition {
 			EStatementRelation relation,
 			String substituteType) {
 
-		if (JavaTypeHelper.TYPE_NAME_STRING.equals(substituteType)) {
-			return leftChoiceStr.matches(rightValue);
-		}
-
 		return RangeAmbiguityValidator.isAmbiguous(
 				leftChoiceStr, rightValue, relation, substituteType);
 	}
