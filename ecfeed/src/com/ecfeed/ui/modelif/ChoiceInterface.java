@@ -32,6 +32,7 @@ import com.ecfeed.ui.common.EclipseTypeAdapterProvider;
 import com.ecfeed.ui.common.ImplementationAdapter;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
+import com.ecfeed.ui.dialogs.basic.ErrorDialog;
 
 public class ChoiceInterface extends ChoicesParentInterface {
 
@@ -126,7 +127,7 @@ public class ChoiceInterface extends ChoicesParentInterface {
 		}
 
 		if(getOwnNode().getInheritedLabels().contains(newValue)) {
-			MessageDialog.openError(Display.getCurrent().getActiveShell(),
+			ErrorDialog.open(
 					Messages.DIALOG_RENAME_LABELS_ERROR_TITLE,
 					Messages.DIALOG_LABEL_IS_ALREADY_INHERITED);
 			return false;

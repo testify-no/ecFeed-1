@@ -15,7 +15,6 @@ import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
 import com.ecfeed.core.adapter.IModelOperation;
@@ -33,6 +32,7 @@ import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.dialogs.TestClassImportDialog;
 import com.ecfeed.ui.dialogs.TestClassSelectionDialog;
 import com.ecfeed.ui.dialogs.UserTypeSelectionDialog;
+import com.ecfeed.ui.dialogs.basic.ErrorDialog;
 import com.ecfeed.ui.modelif.OperationExecuter;
 
 
@@ -109,7 +109,7 @@ public class ImplementationAdapter {
 						return classModel;
 					}
 				} catch (ModelOperationException e) {
-					MessageDialog.openError(Display.getCurrent().getActiveShell(),
+					ErrorDialog.open(
 							Messages.DIALOG_ADD_NEW_CLASS_PROBLEM_TITLE,
 							e.getMessage());
 				}

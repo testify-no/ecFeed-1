@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Display;
@@ -29,6 +28,7 @@ import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.utils.BooleanHolder;
 import com.ecfeed.core.utils.IntegerHolder;
+import com.ecfeed.ui.dialogs.basic.ErrorDialog;
 
 public class CoverageCalculator {
 
@@ -100,13 +100,12 @@ public class CoverageCalculator {
 			}
 
 		} catch (InvocationTargetException e) {
-			MessageDialog.openError(
-					Display.getDefault().getActiveShell(), 
+			ErrorDialog.open(
 					"Exception", 
 					"Invocation: " + e.getCause());
 			return false;
 		} catch (InterruptedException e) {
-			MessageDialog.openError(Display.getDefault().getActiveShell(), "Exception", "Interrupted: " + e.getMessage());
+			ErrorDialog.open("Exception", "Interrupted: " + e.getMessage());
 			e.printStackTrace();
 			return false;
 		}
@@ -132,8 +131,7 @@ public class CoverageCalculator {
 		try {
 			progressDialog.run(true, true, runnable);
 		} catch (InvocationTargetException | InterruptedException e) {
-			MessageDialog.openError(
-					Display.getDefault().getActiveShell(), 
+			ErrorDialog.open(
 					"Exception", 
 					"Invocation: " + e.getCause());
 		}

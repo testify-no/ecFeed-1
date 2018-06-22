@@ -13,13 +13,12 @@ package com.ecfeed.ui.editor.actions;
 import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelectionProvider;
-import org.eclipse.swt.widgets.Display;
 
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
+import com.ecfeed.ui.dialogs.basic.ErrorDialog;
 import com.ecfeed.ui.modelif.AbstractNodeInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.NodeClipboard;
@@ -83,7 +82,7 @@ public class PasteAction extends ModelModifyingAction {
 		String errorMessage = parentIf.canAddChildren(childrenToAdd);
 
 		if (errorMessage != null) {
-			MessageDialog.openError(Display.getDefault().getActiveShell(), Messages.CAN_NOT_PASTE_CHOICES, errorMessage);
+			ErrorDialog.open(Messages.CAN_NOT_PASTE_CHOICES, errorMessage);
 			return;
 		}
 
