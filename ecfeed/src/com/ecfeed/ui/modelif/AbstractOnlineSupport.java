@@ -18,7 +18,6 @@ import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -184,7 +183,7 @@ public abstract class AbstractOnlineSupport {
 		try {
 			progressDialog.run(true, true, runnable);
 		} catch (InvocationTargetException | InterruptedException e) {
-			MessageDialog.openError(Display.getDefault().getActiveShell(),
+			ErrorDialog.open(
 					Messages.DIALOG_TEST_EXECUTION_PROBLEM_TITLE,
 					e.getMessage());
 		}

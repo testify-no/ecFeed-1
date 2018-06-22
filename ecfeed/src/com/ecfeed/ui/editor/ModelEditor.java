@@ -21,9 +21,7 @@ import java.io.OutputStream;
 import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.core.commands.operations.ObjectUndoContext;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
@@ -41,6 +39,7 @@ import com.ecfeed.core.utils.CommonConstants;
 import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.Pair;
 import com.ecfeed.ui.common.Messages;
+import com.ecfeed.ui.dialogs.basic.ErrorDialog;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.utils.EclipseHelper;
 import com.ecfeed.utils.ModelEditorPlatformAdapter;
@@ -184,8 +183,7 @@ public class ModelEditor extends FormEditor
 			serializer.serialize(fModel);
 		}
 		catch(Exception e){
-			MessageDialog.openError(Display.getCurrent().getActiveShell(),
-					"Error", "Could not serialize the file:" + e.getMessage());
+			ErrorDialog.open("Error", "Could not serialize the file:" + e.getMessage());
 		}
 
 		fSourcePageEditor.refreshContent(outputStream.toString());

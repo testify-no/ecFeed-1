@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Display;
@@ -36,6 +35,7 @@ import com.ecfeed.ui.common.utils.EclipseProjectHelper;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.SetupDialogExecuteOnline;
 import com.ecfeed.ui.dialogs.SetupDialogOnline;
+import com.ecfeed.ui.dialogs.basic.ErrorDialog;
 
 public class OnlineTestRunningSupport extends AbstractOnlineSupport {
 
@@ -107,7 +107,7 @@ public class OnlineTestRunningSupport extends AbstractOnlineSupport {
 			displayTestStatusDialog();
 
 		} catch (InvocationTargetException | InterruptedException | RuntimeException e) {
-			MessageDialog.openError(Display.getCurrent().getActiveShell(), Messages.DIALOG_TEST_EXECUTION_PROBLEM_TITLE, e.getMessage());
+			ErrorDialog.open(Messages.DIALOG_TEST_EXECUTION_PROBLEM_TITLE, e.getMessage());
 		}
 
 

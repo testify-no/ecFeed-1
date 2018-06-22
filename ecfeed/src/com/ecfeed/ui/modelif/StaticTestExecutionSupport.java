@@ -17,7 +17,6 @@ import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Display;
@@ -37,6 +36,7 @@ import com.ecfeed.ui.common.utils.ConsoleManager;
 import com.ecfeed.ui.common.utils.EclipseProjectHelper;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.TestResultsHolder;
+import com.ecfeed.ui.dialogs.basic.ErrorDialog;
 
 public class StaticTestExecutionSupport {
 
@@ -120,16 +120,16 @@ public class StaticTestExecutionSupport {
 			dialog.open();
 			dialog.run(true, true, new ExecuteRunnable());
 		}catch(InvocationTargetException e){
-			MessageDialog.openError(Display.getCurrent().getActiveShell(), Messages.DIALOG_TEST_EXECUTION_PROBLEM_TITLE, e.getTargetException().getMessage());
+			ErrorDialog.open(Messages.DIALOG_TEST_EXECUTION_PROBLEM_TITLE, e.getTargetException().getMessage());
 		} catch (InterruptedException e) {
-			MessageDialog.openError(Display.getCurrent().getActiveShell(), Messages.DIALOG_TEST_EXECUTION_PROBLEM_TITLE, e.getMessage());
+			ErrorDialog.open(Messages.DIALOG_TEST_EXECUTION_PROBLEM_TITLE, e.getMessage());
 		}
 		if(fFailedTests.size() > 0){
 			String message = "Following tests were not successfull\n\n";
 			for(TestCaseNode testCase : fFailedTests){
 				message += testCase.toString() + "\n";
 			}
-			MessageDialog.openError(Display.getCurrent().getActiveShell(), Messages.DIALOG_TEST_EXECUTION_REPORT_TITLE, message);
+			ErrorDialog.open(Messages.DIALOG_TEST_EXECUTION_REPORT_TITLE, message);
 		}
 		fTestInformer.displayTestStatusDialog();
 

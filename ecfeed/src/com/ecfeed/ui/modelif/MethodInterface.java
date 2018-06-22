@@ -156,7 +156,7 @@ public class MethodInterface extends ParametersParentInterface {
 	public TestCaseNode addTestCase() {
 		for (MethodParameterNode parameter : getOwnNode().getMethodParameters()) {
 			if (!parameter.isExpected() && parameter.getChoices().isEmpty()) {
-				MessageDialog.openError(Display.getDefault().getActiveShell(),
+				ErrorDialog.open(
 						Messages.DIALOG_ADD_TEST_CASE_PROBLEM_TITLE,
 						Messages.DIALOG_TEST_CASE_WITH_EMPTY_CATEGORY_MESSAGE);
 				return null;
@@ -205,8 +205,7 @@ public class MethodInterface extends ParametersParentInterface {
 					.getTestCases(oldName), newName),
 					Messages.DIALOG_RENAME_TEST_SUITE_PROBLEM);
 		} catch (ModelOperationException e) {
-			MessageDialog.openError(Display.getCurrent().getActiveShell(),
-					Messages.DIALOG_RENAME_TEST_SUITE_PROBLEM, e.getMessage());
+			ErrorDialog.open(Messages.DIALOG_RENAME_TEST_SUITE_PROBLEM, e.getMessage());
 		}
 	}
 
@@ -350,7 +349,7 @@ public class MethodInterface extends ParametersParentInterface {
 
 	private boolean isValidClassConfiguration(ClassNode classNode) {
 		if (classNode.getRunOnAndroid() && emptyAndroidBaseRunner(classNode)) {
-			MessageDialog.openError(Display.getDefault().getActiveShell(),
+			ErrorDialog.open(
 					Messages.DIALOG_MISSING_ANDROID_RUNNER_TITLE, Messages
 					.DIALOG_MISSING_ANDROID_RUNNER_INFO(classNode
 							.getName()));
