@@ -81,6 +81,116 @@ public class ChoicesViewer extends TableViewerSection {
 	private ChoicesParentNode fSelectedParent;
 
 
+	public ChoicesViewer(
+			ISectionContext sectionContext,
+			IMainTreeProvider mainTreeProvider,
+			IModelUpdateContext updateContext, 
+			IJavaProjectProvider javaProjectProvider) {
+		super(sectionContext, updateContext, javaProjectProvider, StyleDistributor.getSectionStyle());
+
+		fJavaProjectProvider = javaProjectProvider;
+
+		fParentIf = new ChoicesParentInterface(getModelUpdateContext(), fJavaProjectProvider);
+		fChoiceInterface = new ChoiceInterface(getModelUpdateContext(), fJavaProjectProvider);
+
+		fNameEditingSupport = new ChoiceNameEditingSupport();
+		fValueEditingSupport = new ChoiceValueEditingSupport(this);
+
+		fNameColumn.setEditingSupport(fNameEditingSupport);
+		fValueColumn.setEditingSupport(fValueEditingSupport);
+
+		getSection().setText("Choices");
+		fAddChoicesButton = addButton("Add choice", new AddChoiceAdapter());
+		fRemoveSelectedButton = 
+				addButton("Remove selected", 
+						new ActionSelectionAdapter(
+								new DeleteAction(
+										getViewer(), 
+										getModelUpdateContext()), 
+										Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
+
+		fReplaceWithDefaultButton = addButton("Reset with default", new ReplaceWithDefaultAdapter());
+
+		addDoubleClickListener(new SelectNodeDoubleClickListener(mainTreeProvider));
+		fActionGroupingProvider = 
+				new MainActionGrouppingProvider(
+						getTableViewer(), 
+						getModelUpdateContext(), 
+						javaProjectProvider,
+						new EditorSaveWorker());
+		
+		fDragListener = new ModelNodeDragListener(getViewer());
+		fDropListener = new ModelNodeDropListener(getViewer(), getModelUpdateContext(), javaProjectProvider);
+		getViewer().addDragSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, fDragListener);
+		getViewer().addDropSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, fDropListener);
+
+		addSelectionChangedListener(new SelectionChangedListener());
+	}
+
+	public void setInput(ChoicesParentNode parent){
+		super.setInput(parent.getChoices());
+		fSelectedParent = parent;
+		fParentIf.setOwnNode(parent);
+		if(parent == parent.getParameter()){
+			fReplaceWithDefaultButton.setVisible(true);
+		}else{
+			fReplaceWithDefaultButton.setVisible(false);
+		}
+	}
+
+	@Override
+	public void setVisible(boolean visible){
+		this.getSection().setVisible(visible);
+	}
+
+	@Override
+	protected void createTableColumns() {
+		fNameColumn = addColumn("Name", 150, new NodeNameColumnLabelProvider());
+		fRandomizedColumn = addColumn("Randomized", 100, new RandomizedValueLabelProvider());
+		fRandomizedColumn.setEditingSupport(new RandomizedValueEditingSupport());		
+		fValueColumn = addColumn("Value", 150, new ChoiceValueLabelProvider());
+	}
+
+	public void setEditEnabled(boolean enabled) {
+		fChoiceViewerEnabled = enabled;
+
+		fNameEditingSupport.setEnabled(enabled);
+		fValueEditingSupport.setEnabled(enabled);
+		fAddChoicesButton.setEnabled(enabled);
+		setRemoveSelectedStatus();
+		fDragListener.setEnabled(enabled);
+		fDropListener.setEnabled(enabled);
+//		if(enabled){
+//			setActionGrouppingProvider(fActionGroupingProvider);
+//		}else{
+//			setActionGrouppingProvider(null);
+//		}
+	}
+
+	public void setReplaceButtonEnabled(boolean isEnabled){
+		fReplaceWithDefaultButton.setEnabled(isEnabled);
+	}
+
+	private void setRemoveSelectedStatus() {
+
+		if (fRemoveSelectedButton.isDisposed()) {
+			return;
+		}
+
+		if (!fChoiceViewerEnabled) {
+			fRemoveSelectedButton.setEnabled(false);
+			return;
+		}
+
+		ISelectionProvider selectionProvider = getViewer();
+
+		if (selectionProvider.getSelection().isEmpty()) {
+			fRemoveSelectedButton.setEnabled(false);
+		} else {
+			fRemoveSelectedButton.setEnabled(true);
+		}
+	}
+	
 	private class ChoiceNameEditingSupport extends EditingSupport{
 
 		private TextCellEditor fNameCellEditor;
@@ -185,6 +295,7 @@ public class ChoicesViewer extends TableViewerSection {
 			fEnabled = enabled;
 		}
 	}
+	
 
 	private class ChoiceValueLabelProvider extends ColumnLabelProvider {
 
@@ -258,85 +369,13 @@ public class ChoicesViewer extends TableViewerSection {
 			}
 		}
 	}
-
-	public ChoicesViewer(
-			ISectionContext sectionContext,
-			IMainTreeProvider mainTreeProvider,
-			IModelUpdateContext updateContext, 
-			IJavaProjectProvider javaProjectProvider) {
-		super(sectionContext, updateContext, javaProjectProvider, StyleDistributor.getSectionStyle());
-
-		fJavaProjectProvider = javaProjectProvider;
-
-		fParentIf = new ChoicesParentInterface(getModelUpdateContext(), fJavaProjectProvider);
-		fChoiceInterface = new ChoiceInterface(getModelUpdateContext(), fJavaProjectProvider);
-
-		fNameEditingSupport = new ChoiceNameEditingSupport();
-		fValueEditingSupport = new ChoiceValueEditingSupport(this);
-
-		fNameColumn.setEditingSupport(fNameEditingSupport);
-		fValueColumn.setEditingSupport(fValueEditingSupport);
-
-		getSection().setText("Choices");
-		fAddChoicesButton = addButton("Add choice", new AddChoiceAdapter());
-		fRemoveSelectedButton = 
-				addButton("Remove selected", 
-						new ActionSelectionAdapter(
-								new DeleteAction(
-										getViewer(), 
-										getModelUpdateContext()), 
-								Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
-
-		fReplaceWithDefaultButton = addButton("Reset with default", new ReplaceWithDefaultAdapter());
-
-		addDoubleClickListener(new SelectNodeDoubleClickListener(mainTreeProvider));
-		fActionGroupingProvider = 
-				new MainActionGrouppingProvider(
-						getTableViewer(), 
-						getModelUpdateContext(), 
-						javaProjectProvider,
-						new EditorSaveWorker());
-
-		registerContextMenuAndKeyShortcuts(fActionGroupingProvider);
-		fDragListener = new ModelNodeDragListener(getViewer());
-		fDropListener = new ModelNodeDropListener(getViewer(), getModelUpdateContext(), javaProjectProvider);
-		getViewer().addDragSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, fDragListener);
-		getViewer().addDropSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, fDropListener);
-
-		addSelectionChangedListener(new SelectionChangedListener());
-	}
-
+	
 	private class SelectionChangedListener implements ISelectionChangedListener {
 
 		@Override
 		public void selectionChanged(SelectionChangedEvent event) {
 			setRemoveSelectedStatus();
 		}
-	}
-
-
-	public void setInput(ChoicesParentNode parent){
-		super.setInput(parent.getChoices());
-		fSelectedParent = parent;
-		fParentIf.setOwnNode(parent);
-		if(parent == parent.getParameter()){
-			fReplaceWithDefaultButton.setVisible(true);
-		}else{
-			fReplaceWithDefaultButton.setVisible(false);
-		}
-	}
-
-	@Override
-	public void setVisible(boolean visible){
-		this.getSection().setVisible(visible);
-	}
-
-	@Override
-	protected void createTableColumns() {
-		fNameColumn = addColumn("Name", 150, new NodeNameColumnLabelProvider());
-		fRandomizedColumn = addColumn("Randomized", 100, new RandomizedValueLabelProvider());
-		fRandomizedColumn.setEditingSupport(new RandomizedValueEditingSupport());		
-		fValueColumn = addColumn("Value", 150, new ChoiceValueLabelProvider());
 	}
 
 	private class RandomizedValueEditingSupport extends EditingSupport {
@@ -384,46 +423,4 @@ public class ChoicesViewer extends TableViewerSection {
 			return false;
 		}
 	}
-
-
-	public void setEditEnabled(boolean enabled) {
-		fChoiceViewerEnabled = enabled;
-
-		fNameEditingSupport.setEnabled(enabled);
-		fValueEditingSupport.setEnabled(enabled);
-		fAddChoicesButton.setEnabled(enabled);
-		setRemoveSelectedStatus();
-		fDragListener.setEnabled(enabled);
-		fDropListener.setEnabled(enabled);
-		if(enabled){
-			registerContextMenuAndKeyShortcuts(fActionGroupingProvider);
-		}else{
-			registerContextMenuAndKeyShortcuts(null);
-		}
-	}
-
-	public void setReplaceButtonEnabled(boolean isEnabled){
-		fReplaceWithDefaultButton.setEnabled(isEnabled);
-	}
-
-	private void setRemoveSelectedStatus() {
-
-		if (fRemoveSelectedButton.isDisposed()) {
-			return;
-		}
-
-		if (!fChoiceViewerEnabled) {
-			fRemoveSelectedButton.setEnabled(false);
-			return;
-		}
-
-		ISelectionProvider selectionProvider = getViewer();
-
-		if (selectionProvider.getSelection().isEmpty()) {
-			fRemoveSelectedButton.setEnabled(false);
-		} else {
-			fRemoveSelectedButton.setEnabled(true);
-		}
-	}
-
 }
