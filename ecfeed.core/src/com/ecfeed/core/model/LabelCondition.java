@@ -13,6 +13,7 @@ package com.ecfeed.core.model;
 import java.util.List;
 
 import com.ecfeed.core.utils.EvaluationResult;
+import com.ecfeed.core.utils.MessageStack;
 
 public class LabelCondition implements IStatementCondition {
 
@@ -107,6 +108,11 @@ public class LabelCondition implements IStatementCondition {
 			return EvaluationResult.FALSE;
 		}
 
+	}
+
+	@Override
+	public boolean isAmbiguous(List<List<ChoiceNode>> domain, MessageStack messageStack) {
+		return false;
 	}
 
 }

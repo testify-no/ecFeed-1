@@ -13,6 +13,7 @@ package com.ecfeed.core.model;
 import java.util.List;
 
 import com.ecfeed.core.utils.EvaluationResult;
+import com.ecfeed.core.utils.MessageStack;
 
 public interface IStatementCondition {
 	public Object getCondition();
@@ -23,5 +24,6 @@ public interface IStatementCondition {
 	public boolean compare(IStatementCondition condition);
 	public Object accept(IStatementVisitor visitor) throws Exception;
 	public boolean mentions(MethodParameterNode methodParameterNode);
+	public boolean isAmbiguous(List<List<ChoiceNode>> domain, MessageStack messageStack);
 }
 

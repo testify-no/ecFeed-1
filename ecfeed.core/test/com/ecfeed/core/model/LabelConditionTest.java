@@ -24,6 +24,8 @@ import com.ecfeed.core.utils.JavaTypeHelper;
 
 public class LabelConditionTest {
 
+	//nothing?
+	
 	@Test
 	public void evaluateTest(){
 		ChoiceNode q = new ChoiceNode("q", "0");

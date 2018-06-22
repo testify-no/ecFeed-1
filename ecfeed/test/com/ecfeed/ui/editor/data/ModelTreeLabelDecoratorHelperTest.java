@@ -24,6 +24,7 @@ import org.eclipse.swt.graphics.PaletteData;
 import org.eclipse.swt.widgets.Display;
 import org.junit.Test;
 
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.model.ModelVersionDistributor;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.utils.SystemHelper;
@@ -36,6 +37,8 @@ public class ModelTreeLabelDecoratorHelperTest {
 	@Test
 	public void shouldReturnTheSameImageWhenThereAreNoDecorators() {
 
+		ApplicationContext.setApplicationTypeLocalPlugin();
+		
 		if (!operatingSystemOk()) {
 			return;
 		}

@@ -11,17 +11,22 @@
 package com.ecfeed.ui.modelif;
 
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
 import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.adapter.IModelOperation;
+import com.ecfeed.core.adapter.ITypeAdapter;
+import com.ecfeed.core.adapter.ITypeAdapter.EConversionMode;
 import com.ecfeed.core.adapter.operations.ChoiceOperationAddLabel;
 import com.ecfeed.core.adapter.operations.ChoiceOperationAddLabels;
 import com.ecfeed.core.adapter.operations.ChoiceOperationRemoveLabels;
 import com.ecfeed.core.adapter.operations.ChoiceOperationRenameLabel;
+import com.ecfeed.core.adapter.operations.ChoiceOperationSetRandomizedValue;
 import com.ecfeed.core.adapter.operations.ChoiceOperationSetValue;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.AbstractParameterNode;
@@ -32,6 +37,7 @@ import com.ecfeed.ui.common.EclipseTypeAdapterProvider;
 import com.ecfeed.ui.common.ImplementationAdapter;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
+import com.ecfeed.ui.dialogs.basic.ErrorDialog;
 
 public class ChoiceInterface extends ChoicesParentInterface {
 
@@ -42,13 +48,26 @@ public class ChoiceInterface extends ChoicesParentInterface {
 
 	public void setValue(String newValue) {
 
-		IModelOperation operation = new ChoiceOperationSetValue(getOwnNode(), newValue, new EclipseTypeAdapterProvider());
+		IModelOperation operation = 
+				new ChoiceOperationSetValue(getOwnNode(), newValue, new EclipseTypeAdapterProvider());
 		getOperationExecuter().execute(operation, Messages.DIALOG_SET_CHOICE_VALUE_PROBLEM_TITLE);
 	}
 
 	public String getValue() {
 
 		return getOwnNode().getValueString();
+	}
+
+	public void setRandomized(boolean isRandomized) {
+
+		IModelOperation operation = 
+				new ChoiceOperationSetRandomizedValue(getOwnNode(), isRandomized, new EclipseTypeAdapterProvider());
+
+		getOperationExecuter().execute(operation, Messages.DIALOG_SET_CHOICE_RANDOMIZED_PROBLEM_TITLE);
+	}
+	
+	public boolean isRandomized() {
+		return getOwnNode().isRandomizedValue();
 	}
 
 	@Override
@@ -118,7 +137,7 @@ public class ChoiceInterface extends ChoicesParentInterface {
 		}
 
 		if(getOwnNode().getInheritedLabels().contains(newValue)) {
-			MessageDialog.openError(Display.getCurrent().getActiveShell(),
+			ErrorDialog.open(
 					Messages.DIALOG_RENAME_LABELS_ERROR_TITLE,
 					Messages.DIALOG_LABEL_IS_ALREADY_INHERITED);
 			return false;
@@ -175,4 +194,35 @@ public class ChoiceInterface extends ChoicesParentInterface {
 		ChoiceNode choiceNode = getOwnNode();
 		return choiceNode.getListOfChildrenChoiceNames();
 	}
+
+	public ITypeAdapter<?> getTypeAdapter() {
+
+		EclipseTypeAdapterProvider eclipseTypeAdapterProvider = new EclipseTypeAdapterProvider();
+
+		ChoiceNode choiceNode = getOwnNode();
+		AbstractParameterNode abstractParameterNode = choiceNode.getParameter();
+		String typeName = abstractParameterNode.getType();
+
+		return eclipseTypeAdapterProvider.getAdapter(typeName);
+	}
+
+	public Set<String> convertItemsToMatchChoice(Set<String> items, EConversionMode conversionMode) {
+
+		ChoiceNode choiceNode = getOwnNode();
+
+		Set<String> newItems = new LinkedHashSet<String>();
+		ITypeAdapter<?> typeAdapter = getTypeAdapter();
+
+		for (String item : items) {
+
+			String newItem = 
+					typeAdapter.convert(item, choiceNode.isRandomizedValue(), conversionMode);
+
+			newItems.add(newItem);
+		}
+
+		return newItems;
+	}
+
+
 }

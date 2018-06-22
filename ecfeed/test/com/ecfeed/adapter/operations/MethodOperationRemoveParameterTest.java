@@ -121,7 +121,7 @@ public class MethodOperationRemoveParameterTest{
 		TestCaseNode tc1 = new TestCaseNode("default", testData1);
 		target.addTestCase(tc1);
 
-		ConstraintNode dummyConstraint = new ConstraintNode("dummy", new Constraint(new StaticStatement(true), new StaticStatement(true)));
+		ConstraintNode dummyConstraint = new ConstraintNode("dummy", new Constraint("dummy", new StaticStatement(true), new StaticStatement(true)));
 		AbstractStatement consequence;
 		if(removedParameterExpected){
 			ChoiceNode condition = new ChoiceNode("int", "7");
@@ -133,7 +133,7 @@ public class MethodOperationRemoveParameterTest{
 					RelationStatement.createStatementWithChoiceCondition(
 							removedParameter, EStatementRelation.EQUAL, removedChoice);
 		}
-		ConstraintNode removedConstraint = new ConstraintNode("removed constraint", new Constraint(new StaticStatement(true), consequence));
+		ConstraintNode removedConstraint = new ConstraintNode("removed constraint", new Constraint("removed constraint", new StaticStatement(true), consequence));
 		target.addConstraint(dummyConstraint);
 		target.addConstraint(removedConstraint);
 

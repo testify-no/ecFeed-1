@@ -14,6 +14,7 @@ import java.util.Set;
 
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.ITypeAdapter;
+import com.ecfeed.core.adapter.ITypeAdapter.EConversionMode;
 import com.ecfeed.core.adapter.ITypeAdapterProvider;
 import com.ecfeed.core.adapter.java.Messages;
 import com.ecfeed.core.model.ChoiceNode;
@@ -67,7 +68,7 @@ public class GenericOperationRemoveChoice extends BulkOperation {
 			}
 
 			@Override
-			public IModelOperation reverseOperation() {
+			public IModelOperation getReverseOperation() {
 				return new RemoveChoiceOperation(fTarget, fChoice, fAdapterProvider);
 			}
 
@@ -130,14 +131,14 @@ public class GenericOperationRemoveChoice extends BulkOperation {
 			fAdapterProvider = adapterProvider;
 			fTarget = target;
 			fChoice = choice;
-			fOriginalIndex = fChoice.getIndex();
+			fOriginalIndex = fChoice.getMyIndex();
 		}
 
 		@Override
 		public void execute() throws ModelOperationException {
 
 			setOneNodeToSelect(fTarget);
-			fOriginalIndex = fChoice.getIndex();
+			fOriginalIndex = fChoice.getMyIndex();
 			validateOperation();
 			fTarget.removeChoice(fChoice);
 			adaptParameter();
@@ -146,14 +147,19 @@ public class GenericOperationRemoveChoice extends BulkOperation {
 			}
 		}
 
-		private void adaptParentChoice(ChoiceNode parent) {
-			if(parent.isAbstract() == false){
-				ITypeAdapter adapter = fAdapterProvider.getAdapter(parent.getParameter().getType());
-				String newValue = adapter.convert(parent.getValueString());
+		private void adaptParentChoice(ChoiceNode parentChoiceNode) {
+			if(parentChoiceNode.isAbstract() == false){
+				ITypeAdapter<?> adapter = fAdapterProvider.getAdapter(parentChoiceNode.getParameter().getType());
+				String newValue = 
+						adapter.convert(
+								parentChoiceNode.getValueString(), 
+								parentChoiceNode.isRandomizedValue(),
+								EConversionMode.QUIET);
+
 				if(newValue == null){
-					newValue = adapter.defaultValue();
+					newValue = adapter.getDefaultValue();
 				}
-				parent.setValueString(newValue);
+				parentChoiceNode.setValueString(newValue);
 			}
 		}
 
@@ -174,7 +180,7 @@ public class GenericOperationRemoveChoice extends BulkOperation {
 		}
 
 		@Override
-		public IModelOperation reverseOperation() {
+		public IModelOperation getReverseOperation() {
 			return new ReverseOperation();
 		}
 

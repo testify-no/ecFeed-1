@@ -610,7 +610,7 @@ public class SeleniumTestMethodInvoker implements ITestMethodInvoker {
 			return false;
 		}
 		if (fBrowserDefined) {
-			reportException("Web browser was already defined. Can not redefine.", methodParameterNode);
+			reportException("Web browser was already defined. Cannot redefine.", methodParameterNode);
 
 		}
 		if (!NodePropertyDefs.isValidBrowser(choiceName)) {

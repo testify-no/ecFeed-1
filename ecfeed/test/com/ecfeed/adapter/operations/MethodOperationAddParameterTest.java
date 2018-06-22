@@ -57,10 +57,10 @@ public class MethodOperationAddParameterTest{
 		expectedChoice2.setParent(expectedParameter);
 		parentMethod.addParameter(normalParameter);
 		parentMethod.addParameter(expectedParameter);
-		TestCaseNode testCase1 = new TestCaseNode("default", Arrays.asList(new ChoiceNode[]{choice1, expectedChoice1}));
-		TestCaseNode testCase2 = new TestCaseNode("default", Arrays.asList(new ChoiceNode[]{choice1, expectedChoice2}));
-		TestCaseNode testCase3 = new TestCaseNode("default", Arrays.asList(new ChoiceNode[]{choice2, expectedChoice1}));
-		TestCaseNode testCase4 = new TestCaseNode("default", Arrays.asList(new ChoiceNode[]{choice2, expectedChoice2}));
+		TestCaseNode testCase1 = new TestCaseNode("default", Arrays.asList(choice1, expectedChoice1));
+		TestCaseNode testCase2 = new TestCaseNode("default", Arrays.asList(choice1, expectedChoice2));
+		TestCaseNode testCase3 = new TestCaseNode("default", Arrays.asList(choice2, expectedChoice1));
+		TestCaseNode testCase4 = new TestCaseNode("default", Arrays.asList(choice2, expectedChoice2));
 		parentMethod.addTestCase(testCase1);
 		parentMethod.addTestCase(testCase2);
 		parentMethod.addTestCase(testCase3);
@@ -106,10 +106,10 @@ public class MethodOperationAddParameterTest{
 
 	@Test
 	public void methodSignatureTest(boolean sameArgNames, boolean sameArgTypes, boolean sameName, boolean duplicate){
-//		sameArgNames = true;
-//		sameArgTypes = false;
-//		sameName = true;
-//		duplicate = true;
+		//		sameArgNames = true;
+		//		sameArgTypes = false;
+		//		sameName = true;
+		//		duplicate = true;
 
 		String existingMethodName = "existingMethod";
 		String[] existingParameterNames = new String[]{"existingArg1", "existingArg2", "existingArg3"};

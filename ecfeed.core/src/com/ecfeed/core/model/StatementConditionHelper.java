@@ -10,16 +10,16 @@
 
 package com.ecfeed.core.model;
 
+import java.util.Arrays;
 import java.util.List;
 
-import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.StringHelper;
 
 public class StatementConditionHelper {
 
-	private static String TYPE_INFO_CHOICE = "choice";
-	private static String TYPE_INFO_PARAMETER = "parameter";
-	private static String TYPE_INFO_LABEL = "label";
+	private static final String TYPE_INFO_CHOICE = "choice";
+	private static final String TYPE_INFO_PARAMETER = "parameter";
+	private static final String TYPE_INFO_LABEL = "label";
 
 	public static ChoiceNode getChoiceForMethodParameter(List<ChoiceNode> choices, MethodParameterNode methodParameterNode) {
 
@@ -104,6 +104,20 @@ public class StatementConditionHelper {
 		return removeTypeInfo(string, TYPE_INFO_CHOICE);
 	}
 
+	public static boolean getChoiceRandomized(List<ChoiceNode> choices, MethodParameterNode methodParameterNode) {
+		ChoiceNode choiceNode = getChoiceForMethodParameter(choices, methodParameterNode);
+
+		if (choiceNode == null) {
+			return false;
+		}
+
+		return choiceNode.isRandomizedValue();
+	}
+
+	public static boolean getChoiceRandomized(ChoiceNode choice, MethodParameterNode methodParameterNode) {
+		return getChoiceRandomized(Arrays.asList(choice), methodParameterNode);
+	}
+
 	private static boolean containsTypeInfo(String string, String typeDescription) {
 
 		if (string.contains("[" + typeDescription + "]")) {
@@ -117,69 +131,5 @@ public class StatementConditionHelper {
 		return StringHelper.removeFromPostfix("[" + typeDescription + "]", string);
 	}
 
-	public static boolean isRelationMatchQuiet(EStatementRelation relation, String typeName, String leftString, String rightString) {
-
-		boolean result = false;
-		try {
-			result = isRelationMatch(relation, typeName, leftString, rightString);
-		} catch (Exception e) {
-		}
-
-		return result;
-	}
-
-	public static boolean isRelationMatch(
-			EStatementRelation relation, String typeName, String leftString, String rightString) {
-
-		if (typeName == null) {
-			return false;
-		}
-
-		if (relation == EStatementRelation.EQUAL && StringHelper.isEqual(leftString, rightString)) {
-			return true;
-		}
-		if (relation == EStatementRelation.NOT_EQUAL && !StringHelper.isEqual(leftString, rightString)) {
-			return true;
-		}		
-
-		if (JavaTypeHelper.isNumericTypeName(typeName)) {
-			if (isMatchForNumericTypes(typeName, relation, leftString, rightString)) {
-				return true;
-			}
-			return false;
-		}
-
-		if (JavaTypeHelper.isTypeWithChars(typeName)) {
-			if (EStatementRelation.isMatch(relation, leftString, rightString)) {
-				return true;
-			}
-			return false;
-		}
-
-		if (JavaTypeHelper.isBooleanTypeName(typeName)) {
-			if (EStatementRelation.isEqualityMatchForBooleans(relation, leftString, rightString)) {
-				return true;
-			}
-			return false;
-		}		
-
-		if (EStatementRelation.isEqualityMatch(relation, leftString, rightString)) {
-			return true;
-		}
-
-		return false;
-	}
-
-	private static boolean isMatchForNumericTypes(
-			String typeName, EStatementRelation relation, String actualValue, String valueToMatch) {
-
-		double actual = JavaTypeHelper.convertNumericToDouble(typeName, actualValue);
-		double toMatch = JavaTypeHelper.convertNumericToDouble(typeName, valueToMatch);
-
-		if (EStatementRelation.isMatch(relation, actual, toMatch)) {
-			return true;
-		}
-		return false;
-	}	
 }
 

@@ -39,7 +39,7 @@ public class StatementOperationReplaceChild extends AbstractModelOperation {
 	}
 
 	@Override
-	public IModelOperation reverseOperation() {
+	public IModelOperation getReverseOperation() {
 		return new StatementOperationReplaceChild(fTarget, fNewChild, fCurrentChild);
 	}
 

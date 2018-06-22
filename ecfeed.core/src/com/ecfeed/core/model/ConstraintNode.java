@@ -21,7 +21,7 @@ public class ConstraintNode extends AbstractNode{
 	private Constraint fConstraint;
 
 	@Override
-	public int getIndex() {
+	public int getMyIndex() {
 		if (getMethod() == null) {
 			return -1;
 		}
@@ -31,6 +31,12 @@ public class ConstraintNode extends AbstractNode{
 	@Override
 	public String toString() {
 		return getName() + ": " + getConstraint().toString();
+	}
+
+	@Override
+	public void setName(String name) {
+		super.setName(name);
+		fConstraint.setName(name);
 	}
 
 	@Override
@@ -65,11 +71,11 @@ public class ConstraintNode extends AbstractNode{
 	}
 
 	public EvaluationResult evaluate(List<ChoiceNode> values) {
-		
+
 		if (fConstraint != null) {
 			return fConstraint.evaluate(values);
 		}
-		
+
 		return EvaluationResult.FALSE;
 	}
 
@@ -141,11 +147,11 @@ public class ConstraintNode extends AbstractNode{
 
 	public boolean isConsistent() {
 
-		if (!parametersConsistent()) {
+		if (!areParametersConsistent()) {
 			return false;
 		}
 
-		if (!choicesConsistent()) {
+		if (!areChoicesConsistent()) {
 			return false;
 		}
 
@@ -156,44 +162,102 @@ public class ConstraintNode extends AbstractNode{
 		return true;
 	}
 
-	private boolean parametersConsistent() {
-		Set<AbstractParameterNode> referencedParameters = getConstraint().getReferencedParameters(); 
-		for (AbstractParameterNode parameter : referencedParameters) { // wow it really does point to global instead of pointing to method param WHICH would then point to global, if linked...
-			boolean isLinked = false;
+	private boolean areParametersConsistent() {
 
-			List<AbstractParameterNode> methodParameters = getMethod().getParameters(); 
-			for (AbstractParameterNode param : methodParameters) {
-				MethodParameterNode methodParam = (MethodParameterNode) param;
-				if (methodParam.isLinked() && methodParam.getLink().equals(parameter)) {
-					isLinked = true;
-					break;
-				}
-			}
+		final Set<AbstractParameterNode> referencedParameters = getConstraint().getReferencedParameters();
+		final List<AbstractParameterNode> methodParameters = getMethod().getParameters();
 
-			if (!isLinked && !methodParameters.contains(parameter)) {
+		for (AbstractParameterNode referencedParameter : referencedParameters) {
+			if (!isParameterConsistent(referencedParameter, methodParameters)) {
 				return false;
 			}
 		}
+
 		return true;
 	}
 
-	private boolean choicesConsistent() {
-		for (ChoiceNode choice : getConstraint().getReferencedChoices()) {
-			AbstractParameterNode parameter = choice.getParameter();
-			if (parameter == null || parameter.getChoice(choice.getQualifiedName()) == null) {
-				if (false == (parameter instanceof MethodParameterNode && ((MethodParameterNode)parameter).isExpected())) {
-					return false;
-				}
+	private boolean isParameterConsistent(
+
+			AbstractParameterNode argParameter,
+			List<AbstractParameterNode> methodParameters) {
+
+		for (AbstractParameterNode param : methodParameters) {
+			MethodParameterNode methodParam = (MethodParameterNode) param;
+
+			if (methodParam.isLinked() && methodParam.getLink().equals(argParameter)) {
+				return true;
 			}
-			//check if the choices parent parameter is still part of the method
-			if (parameter.getMethods().contains(getMethod()) == false) {
+		}
+
+		if (!methodParameters.contains(argParameter)) {
+			return false;
+		}
+
+		return true;
+	}
+
+	private boolean areChoicesConsistent() {
+
+		Set<ChoiceNode> referencedChoices = getConstraint().getReferencedChoices();
+
+		for (ChoiceNode choiceNode : referencedChoices) {
+
+			if (!isChoiceConsistent(choiceNode)) {
 				return false;
 			}
-			// of course 2nd parameter is linked, so... Also, above 2nd parameter passed equals 
-			// because it points to same link...
-			// looks like we have to check by name or something?
 		}
+
 		return true;
+	}
+
+	private boolean isChoiceConsistent(ChoiceNode choiceNode) {
+
+		if (choiceNode.getQualifiedName() == null) {
+			return false;
+		}
+
+		if (!isOkForExpectedParameter(choiceNode)) {
+			return false;
+		}
+
+		AbstractParameterNode parameter = choiceNode.getParameter();
+		List<MethodNode> parameterMethods = parameter.getMethods();
+
+		if (parameterMethods == null) {
+			return false;
+		}
+
+		MethodNode methodNode = getMethod();
+
+		if (parameterMethods.contains(methodNode) == false) {
+			return false;
+		}
+
+		return true;
+	}
+
+	private static boolean isOkForExpectedParameter(ChoiceNode choiceNode) {
+
+		AbstractParameterNode parameter = choiceNode.getParameter();
+
+		if (parameter == null && !isMethodParameterNodeExpected(parameter)) {
+			return false;
+		}
+
+		return true;
+	}
+
+	private static boolean isMethodParameterNodeExpected(AbstractParameterNode parameter) {
+
+		if (!(parameter instanceof MethodParameterNode)) {
+			return false;
+		}
+
+		if (((MethodParameterNode)parameter).isExpected()) {
+			return true;
+		}
+
+		return false;
 	}
 
 	private boolean constraintsConsistent() {

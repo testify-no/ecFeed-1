@@ -25,14 +25,14 @@ public class ModelOperationException extends Exception {
 	private static Stack<Boolean> fLoggingStates = new Stack<Boolean>();
 
 
-	private ModelOperationException(String message){
+	protected ModelOperationException(String message) {
 		super(message);
-	}
-
-	public static void report(String message) throws ModelOperationException {
 		if (fLoggingEnabledState) {
 			SystemLogger.logThrow(message);
 		}
+	}
+
+	public static void report(String message) throws ModelOperationException {
 		throw new ModelOperationException(message);
 	}
 

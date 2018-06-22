@@ -41,6 +41,7 @@ import com.ecfeed.ui.common.JavaCodeModelBuilder;
 import com.ecfeed.ui.common.ImplementationAdapter;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
+import com.ecfeed.ui.dialogs.basic.ErrorDialog;
 
 public class ClassInterface extends GlobalParametersParentInterface {
 
@@ -91,8 +92,7 @@ public class ClassInterface extends GlobalParametersParentInterface {
 
 	public boolean setQualifiedName(String newName){
 		if (!PackageClassHelper.hasPackageName(newName)){
-			MessageDialog.openError(
-					Display.getDefault().getActiveShell(), 
+			ErrorDialog.open(
 					Messages.DIALOG_RENAME_CLASS_TITLE, 
 					Messages.DIALOG_RENAME_CLASS_MESSAGE_PACKAGE_NOT_EMPTY);
 			return false;

@@ -53,7 +53,7 @@ public class RootOperationAddNewClass extends AbstractModelOperation {
 	}
 
 	@Override
-	public IModelOperation reverseOperation() {
+	public IModelOperation getReverseOperation() {
 		return new RootOperationRemoveClass(fRootNode, fclassToAdd);
 	}
 

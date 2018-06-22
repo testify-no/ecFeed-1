@@ -227,6 +227,23 @@ public class MethodNode extends ParametersParentNode {
 		return names;
 	}
 
+	public List<List<ChoiceNode>> getTestDomain() {
+
+		List<List<ChoiceNode>> testDomain = new ArrayList<List<ChoiceNode>>();
+
+		int parameterCount = getParametersCount();
+
+		for (int parameterIndex = 0; parameterIndex < parameterCount; parameterIndex++) {
+
+			AbstractParameterNode abstractParameterNode = getParameter(parameterIndex);
+
+			List<ChoiceNode> choicesForParameter = abstractParameterNode.getChoices();
+			testDomain.add(choicesForParameter);
+		}
+
+		return testDomain;
+	}	
+
 	public List<TestCaseNode> getTestCases(){
 		return fTestCases;
 	}

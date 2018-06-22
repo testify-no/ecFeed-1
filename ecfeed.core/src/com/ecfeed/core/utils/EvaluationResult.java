@@ -14,5 +14,4 @@ public enum EvaluationResult {
 
 		return EvaluationResult.FALSE;
 	}
-
 }

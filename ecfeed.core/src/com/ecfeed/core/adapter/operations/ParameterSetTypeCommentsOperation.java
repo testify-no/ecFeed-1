@@ -35,7 +35,7 @@ public class ParameterSetTypeCommentsOperation extends AbstractModelOperation {
 	}
 
 	@Override
-	public IModelOperation reverseOperation() {
+	public IModelOperation getReverseOperation() {
 		return new ParameterSetTypeCommentsOperation(fTarget, fCurrentComments);
 	}
 

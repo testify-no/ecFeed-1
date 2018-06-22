@@ -130,6 +130,8 @@ public class RandomizedNWiseAlgorithmTest {
 			public boolean mentions(int dimension) {
 				return false;
 			}
+
+			
 		};
 
 		Collection<IConstraint<Integer>> constraints = new HashSet<IConstraint<Integer>>();

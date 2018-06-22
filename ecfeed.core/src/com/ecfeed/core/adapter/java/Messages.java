@@ -19,7 +19,7 @@ public class Messages {
 				"Choice value must fit to type and range of the represented parameter.\n" +
 				"Choices of user defined type must follow Java enum defining rules.";
 	}
-	public static final String PROBLEM_WITH_BULK_OPERATION(String operation){return "Can not perform operation: " + operation;}
+	public static final String PROBLEM_WITH_BULK_OPERATION(String operation){return "Cannot perform operation: " + operation;}
 	public static final String NEGATIVE_INDEX_PROBLEM = "The index of the element must be non-negative";
 	public static final String TOO_HIGH_INDEX_PROBLEM = "The index of the element is too high";
 	public static final String NAME_DUPLICATE_PROBLEM = "Two elements with the same name are not allowed for this parent";

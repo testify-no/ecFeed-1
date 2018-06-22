@@ -20,16 +20,17 @@ import static com.ecfeed.core.serialization.ect.SerializationConstants.CONSTRAIN
 import static com.ecfeed.core.serialization.ect.SerializationConstants.CONSTRAINT_STATEMENT_ARRAY_NODE_NAME;
 import static com.ecfeed.core.serialization.ect.SerializationConstants.CONSTRAINT_STATIC_STATEMENT_NODE_NAME;
 import static com.ecfeed.core.serialization.ect.SerializationConstants.DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME;
+import static com.ecfeed.core.serialization.ect.SerializationConstants.EXPECTED_PARAMETER_NODE_NAME;
 import static com.ecfeed.core.serialization.ect.SerializationConstants.METHOD_NODE_NAME;
+import static com.ecfeed.core.serialization.ect.SerializationConstants.NODE_IS_RADOMIZED_ATTRIBUTE;
 import static com.ecfeed.core.serialization.ect.SerializationConstants.PARAMETER_IS_EXPECTED_ATTRIBUTE_NAME;
 import static com.ecfeed.core.serialization.ect.SerializationConstants.PARAMETER_IS_LINKED_ATTRIBUTE_NAME;
 import static com.ecfeed.core.serialization.ect.SerializationConstants.PARAMETER_LINK_ATTRIBUTE_NAME;
 import static com.ecfeed.core.serialization.ect.SerializationConstants.ROOT_NODE_NAME;
 import static com.ecfeed.core.serialization.ect.SerializationConstants.RUN_ON_ANDROID_ATTRIBUTE_NAME;
 import static com.ecfeed.core.serialization.ect.SerializationConstants.TEST_CASE_NODE_NAME;
-import static com.ecfeed.core.serialization.ect.SerializationConstants.TEST_SUITE_NAME_ATTRIBUTE;
 import static com.ecfeed.core.serialization.ect.SerializationConstants.TEST_PARAMETER_NODE_NAME;
-import static com.ecfeed.core.serialization.ect.SerializationConstants.EXPECTED_PARAMETER_NODE_NAME;
+import static com.ecfeed.core.serialization.ect.SerializationConstants.TEST_SUITE_NAME_ATTRIBUTE;
 import static com.ecfeed.core.serialization.ect.SerializationConstants.TYPE_NAME_ATTRIBUTE;
 import static com.ecfeed.core.serialization.ect.SerializationConstants.VALUE_ATTRIBUTE;
 
@@ -46,7 +47,6 @@ import com.ecfeed.core.adapter.java.JavaPrimitiveTypePredicate;
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.AbstractStatement;
 import com.ecfeed.core.model.ChoiceNode;
-import com.ecfeed.core.model.RelationStatement;
 import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.Constraint;
 import com.ecfeed.core.model.ConstraintNode;
@@ -58,6 +58,7 @@ import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelVersionDistributor;
 import com.ecfeed.core.model.NodePropertyDefs;
+import com.ecfeed.core.model.RelationStatement;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.StatementArray;
 import com.ecfeed.core.model.StaticStatement;
@@ -431,7 +432,7 @@ public abstract class XomAnalyser {
 			ParserException.report(Messages.MALFORMED_CONSTRAINT_NODE_DEFINITION(method.getName(), name));
 		}
 
-		ConstraintNode targetConstraint = new ConstraintNode(name, new Constraint(premise, consequence));
+		ConstraintNode targetConstraint = new ConstraintNode(name, new Constraint(name, premise, consequence));
 
 		targetConstraint.setDescription(parseComments(element));
 
@@ -608,7 +609,11 @@ public abstract class XomAnalyser {
 		String name = getElementName(element);
 		String value = getAttributeValue(element, VALUE_ATTRIBUTE);
 
+		boolean isRandomized = getIsRandomizedValue(element, NODE_IS_RADOMIZED_ATTRIBUTE);
+
+
 		ChoiceNode choice = new ChoiceNode(name, value);
+		choice.setRandomizedValue(isRandomized);
 		choice.setDescription(parseComments(element));
 
 		for (Element child : getIterableChildren(element)) {
@@ -647,10 +652,10 @@ public abstract class XomAnalyser {
 	}
 
 	protected static List<Element> getIterableChildren(Element element, String name) {
-		
+
 		List<Element> elements = getIterableChildren(element);
 		Iterator<Element> it = elements.iterator();
-		
+
 		while (it.hasNext()) {
 			if (it.next().getLocalName().equals(name) == false) {
 				it.remove();
@@ -658,23 +663,23 @@ public abstract class XomAnalyser {
 		}
 		return elements;
 	}
-	
+
 	protected static List<Element> getIterableChildren(Element element, String[] names) {
-		
+
 		List<String> listOfNames = Arrays.asList(names);
-		
+
 		List<Element> elements = getIterableChildren(element);
 		Iterator<Element> it = elements.iterator();
-		
+
 		while (it.hasNext()) {
 			if (!listOfNames.contains(it.next().getLocalName())) {
 				it.remove();
 			}
 		}
-		
+
 		return elements;
 	}
-	
+
 	protected String getElementName(Element element) throws ParserException {
 		String name = element.getAttributeValue(SerializationConstants.NODE_NAME_ATTRIBUTE);
 		if (name == null) {
@@ -689,6 +694,14 @@ public abstract class XomAnalyser {
 			ParserException.report(Messages.MISSING_ATTRIBUTE(element, attributeName));
 		}
 		return fWhiteCharConverter.decode(value);
+	}
+
+	protected boolean getIsRandomizedValue(Element element, String attributeName) throws ParserException {
+		String isRandomizedValue = element.getAttributeValue(attributeName);
+		if (isRandomizedValue == null) {
+			return false;
+		}
+		return Boolean.parseBoolean(fWhiteCharConverter.decode(isRandomizedValue));
 	}
 
 	protected EStatementRelation getRelation(String relationName) throws ParserException {
@@ -764,5 +777,4 @@ public abstract class XomAnalyser {
 	private static String getValueFromPropertyElem(Element property) {
 		return property.getAttributeValue(SerializationConstants.PROPERTY_ATTRIBUTE_VALUE);
 	}	
-
 }

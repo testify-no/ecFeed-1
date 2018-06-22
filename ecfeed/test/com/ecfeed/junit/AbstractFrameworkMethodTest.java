@@ -9,7 +9,8 @@
  *******************************************************************************/
 package com.ecfeed.junit;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.lang.reflect.Method;
 import java.net.URL;
@@ -23,8 +24,7 @@ import com.ecfeed.core.adapter.java.ChoiceValueParser;
 import com.ecfeed.core.adapter.java.ModelClassLoader;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.MethodParameterNode;
-import com.ecfeed.junit.AbstractFrameworkMethod;
-import com.ecfeed.ui.common.CommonConstants;
+import com.ecfeed.core.utils.JavaTypeHelper;
 
 public class AbstractFrameworkMethodTest {
 
@@ -54,10 +54,10 @@ public class AbstractFrameworkMethodTest {
 
 	public AbstractFrameworkMethodTest(){
 		INT_ARGS = new ArrayList<String>();
-		INT_ARGS.addAll(Arrays.asList(CommonConstants.INTEGER_SPECIAL_VALUES));
+		INT_ARGS.addAll(Arrays.asList(JavaTypeHelper.SPECIAL_VALUES_FOR_INTEGER));
 		INT_ARGS.addAll(Arrays.asList(new String[]{"-1", "0", "1"}));
 		STRING_ARGS = new ArrayList<String>();
-		STRING_ARGS.addAll(Arrays.asList(com.ecfeed.core.utils.CommonConstants.STRING_SPECIAL_VALUES));
+		STRING_ARGS.addAll(Arrays.asList(JavaTypeHelper.SPECIAL_VALUES_FOR_STRING));
 		STRING_ARGS.addAll(Arrays.asList(new String[]{"", "a", "Aa"}));
 		ENUM_ARGS = new ArrayList<String>();
 		for(Enum e : Enum.values()){

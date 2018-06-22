@@ -11,7 +11,9 @@
 package com.ecfeed.core.adapter.operations;
 
 import com.ecfeed.core.adapter.IModelOperation;
+import com.ecfeed.core.adapter.ITypeAdapter;
 import com.ecfeed.core.adapter.ITypeAdapterProvider;
+import com.ecfeed.core.adapter.ITypeAdapter.EConversionMode;
 import com.ecfeed.core.adapter.java.AdapterConstants;
 import com.ecfeed.core.adapter.java.Messages;
 import com.ecfeed.core.model.AbstractParameterNode;
@@ -29,78 +31,19 @@ public class ChoiceOperationSetValue extends AbstractModelOperation {
 	private String fOriginalValue;
 	private String fOriginalDefaultValue;
 	private ChoiceNode fTarget;
+
 	private ITypeAdapterProvider fAdapterProvider;
-
-	public ChoiceOperationSetValue(ChoiceNode target, String newValue, ITypeAdapterProvider adapterProvider) {
-
-		super(OperationNames.SET_PARTITION_VALUE);
-		fTarget = target;
-		fNewValue = newValue;
-		fOriginalValue = fTarget.getValueString();
-		fAdapterProvider = adapterProvider;
-	}
-
-	@Override
-	public void execute() throws ModelOperationException {
-
-		setOneNodeToSelect(fTarget);
-
-		String convertedValue = validateChoiceValue(fTarget.getParameter().getType(), fNewValue);
-
-		if(convertedValue == null){
-			ModelOperationException.report(Messages.PARTITION_VALUE_PROBLEM(fNewValue));
-		}
-
-		fTarget.setValueString(convertedValue);
-		adaptParameter(fTarget.getParameter());
-
-		markModelUpdated();
-	}
-
-	private void adaptParameter(AbstractParameterNode parameter) {
-
-		try {
-			parameter.accept(new ParameterAdapter());
-		}catch(Exception e) { 
-			SystemLogger.logCatch(e.getMessage());
-		}
-	}
-
-	@Override
-	public IModelOperation reverseOperation() {
-
-		return new ReverseOperation();
-	}
-
-	@Override
-	public String toString() {
-
-		return "setValue[" + fTarget + "](" + fNewValue + ")";
-	}
-
-	private String validateChoiceValue(String type, String value) {
-
-		if (value.length() > AdapterConstants.MAX_PARTITION_VALUE_STRING_LENGTH) {
-			return null;
-		}
-
-		return fAdapterProvider.getAdapter(type).convert(value);
-	}
-
 
 	private class ParameterAdapter implements IParameterVisitor{
 
 		@Override
 		public Object visit(MethodParameterNode parameter) throws Exception {
-
 			fOriginalDefaultValue = parameter.getDefaultValue();
-
-			if (parameter != null && JavaTypeHelper.isUserType(parameter.getType())) {
-				if (parameter.getLeafChoiceValues().contains(parameter.getDefaultValue()) == false) {
+			if(parameter != null && JavaTypeHelper.isUserType(parameter.getType())){
+				if(parameter.getLeafChoiceValues().contains(parameter.getDefaultValue()) == false){
 					parameter.setDefaultValueString(fNewValue);
 				}
 			}
-
 			return null;
 		}
 
@@ -111,13 +54,12 @@ public class ChoiceOperationSetValue extends AbstractModelOperation {
 
 	}
 
-	private class ReverseOperation extends AbstractModelOperation {
+	private class ReverseOperation extends AbstractModelOperation{
 
 		private class ReverseParameterAdapter implements IParameterVisitor{
 
 			@Override
 			public Object visit(MethodParameterNode parameter) throws Exception {
-
 				parameter.setDefaultValueString(fOriginalDefaultValue);
 				return null;
 			}
@@ -130,33 +72,77 @@ public class ChoiceOperationSetValue extends AbstractModelOperation {
 		}
 
 		public ReverseOperation() {
-
 			super(ChoiceOperationSetValue.this.getName());
 		}
 
 		@Override
 		public void execute() throws ModelOperationException {
-
-			setOneNodeToSelect(fTarget);
 			fTarget.setValueString(fOriginalValue);
 			adaptParameter(fTarget.getParameter());
 			markModelUpdated();
 		}
 
 		private void adaptParameter(AbstractParameterNode parameter) {
-
-			try {
+			try{
 				parameter.accept(new ReverseParameterAdapter());
-			} catch(Exception e) {
-				SystemLogger.logCatch(e.getMessage());
-			}
+			}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
 		}
 
 		@Override
-		public IModelOperation reverseOperation() {
+		public IModelOperation getReverseOperation() {
 			return new ChoiceOperationSetValue(fTarget, fNewValue, fAdapterProvider);
 		}
-
 	}
 
+	public ChoiceOperationSetValue(ChoiceNode target, String newValue, ITypeAdapterProvider adapterProvider){
+		super(OperationNames.SET_PARTITION_VALUE);
+		fTarget = target;
+		fNewValue = newValue;
+		fOriginalValue = fTarget.getValueString();
+		fAdapterProvider = adapterProvider;
+	}
+
+	@Override
+	public void execute() throws ModelOperationException {
+
+		String convertedValue = adaptChoiceValue(fTarget.getParameter().getType(), fNewValue);
+		if(convertedValue == null){
+			ModelOperationException.report(Messages.PARTITION_VALUE_PROBLEM(fNewValue));
+		}
+		fTarget.setValueString(convertedValue);
+		adaptParameter(fTarget.getParameter());
+		markModelUpdated();
+	}
+
+	private void adaptParameter(AbstractParameterNode parameter) {
+		try{
+			parameter.accept(new ParameterAdapter());
+		}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
+	}
+
+	@Override
+	public IModelOperation getReverseOperation() {
+		return new ReverseOperation();
+	}
+
+	@Override
+	public String toString(){
+		return "setValue[" + fTarget + "](" + fNewValue + ")";
+	}
+
+	private String adaptChoiceValue(String type, String value) throws ModelOperationException {
+
+		if (value.length() > AdapterConstants.MAX_PARTITION_VALUE_STRING_LENGTH) {
+			return null;
+		}
+
+		ITypeAdapter<?> typeAdapter = fAdapterProvider.getAdapter(type); 
+		
+		try {
+			return typeAdapter.convert(value, fTarget.isRandomizedValue(), EConversionMode.WITH_EXCEPTION);
+		} catch (RuntimeException ex) {
+			ModelOperationException.report(ex.getMessage());
+		}
+		return null;
+	}
 }

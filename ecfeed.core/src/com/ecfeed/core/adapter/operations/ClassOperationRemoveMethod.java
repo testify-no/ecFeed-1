@@ -26,14 +26,14 @@ public class ClassOperationRemoveMethod extends AbstractModelOperation {
 		super(OperationNames.REMOVE_METHOD);
 		fTarget = target;
 		fMethod = method;
-		fCurrentIndex = fMethod.getIndex();
+		fCurrentIndex = fMethod.getMyIndex();
 	}
 
 	@Override
 	public void execute() throws ModelOperationException {
 
 		setOneNodeToSelect(fTarget);
-		fCurrentIndex = fMethod.getIndex();
+		fCurrentIndex = fMethod.getMyIndex();
 
 		if (fTarget.removeMethod(fMethod) == false) {
 			ModelOperationException.report(Messages.UNEXPECTED_PROBLEM_WHILE_REMOVING_ELEMENT);
@@ -43,7 +43,7 @@ public class ClassOperationRemoveMethod extends AbstractModelOperation {
 	}
 
 	@Override
-	public IModelOperation reverseOperation() {
+	public IModelOperation getReverseOperation() {
 		return new ClassOperationAddMethod(fTarget, fMethod, fCurrentIndex);
 	}
 

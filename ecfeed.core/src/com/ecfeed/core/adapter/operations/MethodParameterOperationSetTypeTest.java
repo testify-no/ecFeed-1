@@ -1,6 +1,5 @@
 package com.ecfeed.core.adapter.operations;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -11,21 +10,21 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Stream;
 
 import org.junit.Test;
 
 import com.ecfeed.core.adapter.ITypeAdapterProvider;
-import com.ecfeed.core.adapter.type.EclipseTypeAdapterProvider;
 import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.ConstraintNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
+import com.ecfeed.core.model.ModelLogger;
 import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.serialization.IModelParser;
 import com.ecfeed.core.serialization.ParserException;
 import com.ecfeed.core.serialization.ect.EctParser;
+import com.ecfeed.core.utils.TypeAdapterProvider;
 
 public class MethodParameterOperationSetTypeTest {
 	@Test
@@ -53,7 +52,7 @@ public class MethodParameterOperationSetTypeTest {
 		MethodParameterNode methodParameterNode = method
 				.getMethodParameter("feilmelding");
 
-		ITypeAdapterProvider typeAdapterProvider = new EclipseTypeAdapterProvider();
+		ITypeAdapterProvider typeAdapterProvider = new TypeAdapterProvider();
 		BulkOperation operation = new MethodParameterOperationSetType(
 				methodParameterNode, "long", typeAdapterProvider);
 
@@ -67,8 +66,15 @@ public class MethodParameterOperationSetTypeTest {
 
 		String[] constraintsAfterExecute = constraints.stream()
 				.map(ConstraintNode::getName).toArray(String[]::new);
+		
 		assertTrue(Arrays
-				.equals(new String[] { "SecondConstraint", "AnyConstraint",
+				.equals(new String[] { 
+						"SecondConstraint", 
+						"AnyConstraint",
+						"Mangler tilgang til BidragsforskuddA-Inntekt",
+						"Sykepenger og Bidragsforskudd a-inntekt",
+						"Mangler tilgang til Bidrag a-inntekt",
+						"Sykepenger og Bidrag a-inntekt",
 						"AnotherConstraint" }, constraintsAfterExecute));
 		istream.close();
 	}
@@ -99,24 +105,35 @@ public class MethodParameterOperationSetTypeTest {
 		MethodParameterNode methodParameterNode = method
 				.getMethodParameter("anotherParameter");
 
-		ITypeAdapterProvider typeAdapterProvider = new EclipseTypeAdapterProvider();
+		ITypeAdapterProvider typeAdapterProvider = new TypeAdapterProvider();
 		BulkOperation operation = new MethodParameterOperationSetType(
 				methodParameterNode, "long", typeAdapterProvider);
 
 		List<ConstraintNode> constraints = method.getConstraintNodes();
+		
 		assertTrue(Arrays.equals(
 				constraintsNames,
 				constraints.stream().map(ConstraintNode::getName)
 						.toArray(String[]::new)));
 
+		ModelLogger.printModel("Przed zmiana", model);
+		
 		operation.execute();
+		
+		
 
 		String[] constraintsAfterExecute = constraints.stream()
 				.map(ConstraintNode::getName).toArray(String[]::new);
-		assertTrue(Arrays.equals(new String[] { "SecondConstraint",
+		
+		ModelLogger.printModel("Po zmiane", model);		
+		
+		assertTrue(Arrays.equals(new String[] { 
+				"SecondConstraint",
+				"AnyConstraint",
 				"Mangler tilgang til BidragsforskuddA-Inntekt",
 				"Sykepenger og Bidragsforskudd a-inntekt",
 				"Mangler tilgang til Bidrag a-inntekt",
-				"Sykepenger og Bidrag a-inntekt" }, constraintsAfterExecute));
+				"Sykepenger og Bidrag a-inntekt",
+				"AnotherConstraint"}, constraintsAfterExecute));
 	}
 }

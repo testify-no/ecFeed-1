@@ -13,6 +13,7 @@ package com.ecfeed.core.model;
 import java.util.List;
 
 import com.ecfeed.core.utils.EvaluationResult;
+import com.ecfeed.core.utils.MessageStack;
 import com.ecfeed.core.utils.SystemLogger;
 
 public class RelationStatement extends AbstractStatement implements IRelationalStatement{
@@ -85,6 +86,22 @@ public class RelationStatement extends AbstractStatement implements IRelationalS
 		}
 
 		return result;
+	}
+
+	@Override
+	public boolean isAmbiguous(List<List<ChoiceNode>> testDomain, MessageStack messageStack) {
+
+		try {
+			if (fRightCondition.isAmbiguous(testDomain, messageStack)) {
+				ConditionHelper.addRelStatementToMesageStack(this, messageStack);
+				return true;
+			}
+			return false;
+		}
+		catch (Exception e) {
+			SystemLogger.logCatch(e.getMessage());
+			return false;
+		}
 	}
 
 	@Override

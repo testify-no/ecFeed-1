@@ -26,23 +26,40 @@ public class MethodOperationRemoveTestCase extends AbstractModelOperation {
 	private class DummyAdapterProvider implements ITypeAdapterProvider{
 
 		@Override
-		public ITypeAdapter getAdapter(String type) {
-			return new ITypeAdapter() {
+		public ITypeAdapter<?> getAdapter(String type) {
+
+			return new ITypeAdapter<Object>() {
 				@Override
 				public boolean isNullAllowed() {
 					return false;
 				}
 				@Override
-				public String defaultValue() {
+				public String getDefaultValue() {
 					return null;
 				}
 				@Override
-				public String convert(String value) {
+				public String convert(String value, boolean isRandomized, EConversionMode conversionMode) {
 					return value;
 				}
 				@Override
-				public boolean compatible(String type) {
+				public boolean isCompatible(String type) {
 					return true;
+				}
+				@Override
+				public Object generateValue(String range) {
+					return null;
+				}
+				@Override
+				public String generateValueAsString(String range) {
+					return null;
+				}
+				@Override
+				public boolean isRandomizable() {
+					return false;
+				}
+				@Override
+				public String getMyTypeName() {
+					return null;
 				}
 			};
 		}
@@ -53,20 +70,19 @@ public class MethodOperationRemoveTestCase extends AbstractModelOperation {
 		super(OperationNames.REMOVE_TEST_CASE);
 		fMethodNode = target;
 		fTestCase = testCase;
-		fIndex = testCase.getIndex();
+		fIndex = testCase.getMyIndex();
 	}
 
 	@Override
 	public void execute() throws ModelOperationException {
-
 		setOneNodeToSelect(fMethodNode);
-		fIndex = fTestCase.getIndex();
+		fIndex = fTestCase.getMyIndex();
 		fMethodNode.removeTestCase(fTestCase);
 		markModelUpdated();
 	}
 
 	@Override
-	public IModelOperation reverseOperation() {
+	public IModelOperation getReverseOperation() {
 		return new MethodOperationAddTestCase(fMethodNode, fTestCase, new DummyAdapterProvider(), fIndex);
 	}
 

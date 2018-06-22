@@ -18,7 +18,6 @@ import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -29,10 +28,11 @@ import com.ecfeed.core.generators.api.IGenerator;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
-import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.core.utils.EvaluationResult;
+import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.GeneratorProgressMonitorDialog;
 import com.ecfeed.ui.dialogs.SetupDialogGenerateTestSuite;
+import com.ecfeed.ui.dialogs.basic.ErrorDialog;
 
 public class TestSuiteGenerationSupport {
 
@@ -45,7 +45,7 @@ public class TestSuiteGenerationSupport {
 	private boolean fHasData;
 
 	private class ExpectedValueReplacer implements IConstraint<ChoiceNode>{
-
+		
 		@Override
 		public EvaluationResult evaluate(List<ChoiceNode> values) {
 			return EvaluationResult.TRUE;
@@ -56,7 +56,7 @@ public class TestSuiteGenerationSupport {
 			for(ChoiceNode p : values){
 				MethodParameterNode parameter = fTarget.getMethodParameters().get(values.indexOf(p));
 				if(parameter.isExpected()){
-					values.set(p.getParameter().getIndex(), p.makeClone());
+					values.set(p.getParameter().getMyIndex(), p.makeClone());
 				}
 			}
 			return true;
@@ -117,8 +117,8 @@ public class TestSuiteGenerationSupport {
 	public void proceed(){
 		fHasData = generate() && !fCanceled;
 	}
-
-	protected boolean generate() {
+	
+	protected boolean generate(){
 
 		SetupDialogGenerateTestSuite dialog = 
 				SetupDialogGenerateTestSuite.create(
@@ -167,11 +167,11 @@ public class TestSuiteGenerationSupport {
 			progressDialog.open();
 			progressDialog.run(true, true, runnable);
 		} catch (InvocationTargetException e) {
-			MessageDialog.openError(getActiveShell(), "Exception", e.getMessage());
+			ErrorDialog.open("Exception", e.getMessage());
 			fCanceled = true;
 		}catch (InterruptedException e) {
 			fCanceled = true;
-			MessageDialog.openError(getActiveShell(), "Exception", e.getMessage());
+			ErrorDialog.open("Exception", e.getMessage());
 			e.printStackTrace();
 		}
 		fCanceled |= progressDialog.getProgressMonitor().isCanceled();
