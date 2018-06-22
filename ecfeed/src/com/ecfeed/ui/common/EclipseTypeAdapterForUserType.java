@@ -2,6 +2,7 @@ package com.ecfeed.ui.common;
 
 import java.util.Arrays;
 
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.adapter.ITypeAdapter;
 import com.ecfeed.core.utils.JavaLanguageHelper;
 import com.ecfeed.core.utils.JavaTypeHelper;
@@ -34,11 +35,17 @@ public class EclipseTypeAdapterForUserType<T extends Enum<T>> implements ITypeAd
 	}
 
 	public String convert(String value, boolean isRandomized, EConversionMode conversionMode) {
-		return JavaLanguageHelper.isValidJavaIdentifier(value) ? value : null;
+		return JavaLanguageHelper.isValidJavaIdentifier(value) ? value : getDefaultValue();
 	}
 
 	@Override
 	public String getDefaultValue() {
+		
+		if (ApplicationContext.isApplicationTypeLocalStandalone()
+				|| ApplicationContext.isApplicationTypeRemoteRap()) {
+						return JavaTypeHelper.DEFAULT_EXPECTED_ENUM_VALUE;
+		}
+			
 		return EclipseTypeHelper.getDefaultExpectedValue(fType);
 	}
 
