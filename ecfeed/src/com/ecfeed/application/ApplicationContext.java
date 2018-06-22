@@ -87,6 +87,11 @@ public class ApplicationContext {
 		return false;
 	}
 
+	public static void setApplicationTypeLocalPlugin() {
+
+		fApplicationType = ApplicationType.LOCAL_PLUGIN;
+	}
+	
 	public static void setApplicationTypeLocalStandalone() {
 
 		fApplicationType = ApplicationType.LOCAL_STANDALONE;
