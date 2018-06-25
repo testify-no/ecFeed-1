@@ -26,10 +26,10 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import com.ecfeed.android.utils.AndroidBaseRunnerHelper;
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ClassNode;
-import com.ecfeed.core.utils.ApplicationContext;
 import com.ecfeed.core.utils.EcException;
 import com.ecfeed.core.utils.IValueApplier;
 import com.ecfeed.core.utils.SystemLogger;

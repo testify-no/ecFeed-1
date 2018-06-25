@@ -30,7 +30,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 
-import com.ecfeed.core.utils.ApplicationContext;
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.utils.IValueApplier;
 import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.ui.common.ApplyValueMode;

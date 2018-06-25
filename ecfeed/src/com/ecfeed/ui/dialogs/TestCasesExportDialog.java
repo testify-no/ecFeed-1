@@ -28,11 +28,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.serialization.export.ExportTemplateFactory;
 import com.ecfeed.core.serialization.export.IExportTemplate;
-import com.ecfeed.core.utils.ApplicationContext;
 import com.ecfeed.core.utils.DiskFileHelper;
 import com.ecfeed.core.utils.IValueApplier;
 import com.ecfeed.core.utils.StringHelper;

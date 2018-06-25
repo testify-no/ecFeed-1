@@ -10,7 +10,7 @@
 
 package com.ecfeed.ui.editor.actions;
 
-import com.ecfeed.core.utils.ApplicationContext;
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.utils.IWorker;
 
 public class SaveAction extends DescribedAction {

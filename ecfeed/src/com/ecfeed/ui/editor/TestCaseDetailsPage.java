@@ -18,10 +18,10 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.TestCaseNode;
-import com.ecfeed.core.utils.ApplicationContext;
 import com.ecfeed.core.utils.EcException;
 import com.ecfeed.ui.common.ComboSelectionListener;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;

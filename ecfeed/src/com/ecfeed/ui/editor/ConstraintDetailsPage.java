@@ -20,10 +20,10 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ConstraintNode;
 import com.ecfeed.core.model.MethodNode;
-import com.ecfeed.core.utils.ApplicationContext;
 import com.ecfeed.ui.common.AbstractSelectionAdapter;
 import com.ecfeed.ui.common.FocusLostListener;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;

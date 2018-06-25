@@ -17,7 +17,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.QualifiedName;
 
 import com.ecfeed.android.external.IProjectHelper;
-import com.ecfeed.core.utils.ApplicationContext;
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.utils.DiskFileHelper;
 import com.ecfeed.core.utils.EcException;
 import com.ecfeed.core.utils.ExceptionHelper;

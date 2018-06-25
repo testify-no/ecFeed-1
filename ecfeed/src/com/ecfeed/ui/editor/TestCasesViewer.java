@@ -26,10 +26,10 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Tree;
 
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.TestCaseNode;
-import com.ecfeed.core.utils.ApplicationContext;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.TestCasesViewerContentProvider;
 import com.ecfeed.ui.common.TestCasesViewerLabelProvider;

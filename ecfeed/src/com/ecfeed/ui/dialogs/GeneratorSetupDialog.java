@@ -42,6 +42,7 @@ import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.adapter.IImplementationStatusResolver;
 import com.ecfeed.core.generators.DoubleParameter;
@@ -63,7 +64,6 @@ import com.ecfeed.core.model.ModelHelper;
 import com.ecfeed.core.model.ModelSizeHelper;
 import com.ecfeed.core.serialization.export.ExportTemplateFactory;
 import com.ecfeed.core.serialization.export.IExportTemplate;
-import com.ecfeed.core.utils.ApplicationContext;
 import com.ecfeed.core.utils.CommonConstants;
 import com.ecfeed.core.utils.IValueApplier;
 import com.ecfeed.core.utils.JavaTypeHelper;

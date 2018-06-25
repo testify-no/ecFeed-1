@@ -20,7 +20,7 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.ui.part.FileEditorInput;
 
-import com.ecfeed.core.utils.ApplicationContext;
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 

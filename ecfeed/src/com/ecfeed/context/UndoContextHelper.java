@@ -13,8 +13,8 @@ package com.ecfeed.context;
 import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.core.commands.operations.ObjectUndoContext;
 
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.application.SessionDataStore;
-import com.ecfeed.core.utils.ApplicationContext;
 import com.ecfeed.core.utils.SessionAttributes;
 import com.ecfeed.ui.editor.ModelEditorHelper;
 

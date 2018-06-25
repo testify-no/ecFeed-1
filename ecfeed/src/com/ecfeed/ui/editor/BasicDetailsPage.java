@@ -33,9 +33,9 @@ import org.eclipse.ui.forms.IFormPart;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.widgets.Section;
 
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.adapter.IModelImplementer;
 import com.ecfeed.core.model.AbstractNode;
-import com.ecfeed.core.utils.ApplicationContext;
 import com.ecfeed.ui.common.EclipseModelImplementer;
 import com.ecfeed.ui.common.ImageManager;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;

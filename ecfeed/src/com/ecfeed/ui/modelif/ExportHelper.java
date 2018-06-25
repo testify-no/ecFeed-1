@@ -17,11 +17,11 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Collection;
 
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.application.SessionDataStore;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.serialization.export.IExportTemplate;
-import com.ecfeed.core.utils.ApplicationContext;
 import com.ecfeed.core.utils.SessionAttributes;
 import com.ecfeed.serialization.export.TestCasesExporter;
 import com.ecfeed.ui.dialogs.basic.ErrorDialog;

@@ -33,8 +33,8 @@ import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.Section;
 
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.model.ChoiceNode;
-import com.ecfeed.core.utils.ApplicationContext;
 import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.core.utils.SystemHelper;
 import com.ecfeed.ui.common.AbstractSelectionAdapter;

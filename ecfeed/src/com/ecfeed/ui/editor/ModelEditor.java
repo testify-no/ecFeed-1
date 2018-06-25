@@ -30,13 +30,13 @@ import org.eclipse.ui.IPersistableElement;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.editor.FormEditor;
 
+import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.adapter.ModelOperationManager;
 import com.ecfeed.core.model.ModelOperationException;
 import com.ecfeed.core.model.ModelVersionDistributor;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.serialization.IModelSerializer;
 import com.ecfeed.core.serialization.ect.EctSerializer;
-import com.ecfeed.core.utils.ApplicationContext;
 import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.Pair;
 import com.ecfeed.ui.common.CommonConstants;

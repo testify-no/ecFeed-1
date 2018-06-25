@@ -26,9 +26,9 @@ public class SystemLogger {
 
 	public static void setLogToFileAndOutput() {
 
-		if (ApplicationContext.isApplicationTypeRemoteRap()) {
-			return;
-		}
+//		if (ApplicationContext.isApplicationTypeRemoteRap()) {
+//			return;
+//		}
 
 		fLogToFile = true;
 	}
