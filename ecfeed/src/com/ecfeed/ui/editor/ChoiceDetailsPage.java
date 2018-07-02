@@ -13,7 +13,6 @@ package com.ecfeed.ui.editor;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.eclipse.core.commands.IParameter;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
@@ -49,15 +48,6 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 	private ChoiceInterface fChoiceIf;
 	private AbstractCommentsSection fCommentsSection;
 	private Button fExpectedCheckbox;
-	private boolean fIsRandomizedChecked = false;
-
-	public ChoiceDetailsPage(
-			IMainTreeProvider mainTreeProvider,
-			ChoiceInterface choiceInterface,
-			IModelUpdateContext updateContext, 
-			IJavaProjectProvider javaProjectProvider) {
-		this(mainTreeProvider, choiceInterface, updateContext, javaProjectProvider, null);
-	}
 
 	public ChoiceDetailsPage(
 			IMainTreeProvider mainTreeProvider,
@@ -141,7 +131,7 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		int style = SWT.DROP_DOWN;
 		if(AbstractParameterInterface.isBoolean(type)){
 			style |= SWT.READ_ONLY;
-		}
+		}		
 		fValueCombo = new ComboViewer(fAttributesComposite, style).getCombo();
 		fValueCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		Set<String> items = new LinkedHashSet<String>(AbstractParameterInterface.getSpecialValues(type));
@@ -172,7 +162,12 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 
 	private boolean isRandomizeCheckboxEnabled() {
 		String typeName = fChoiceIf.getParameter().getType();
-		return isCorrectableType(typeName);
+		return !isChoiceNodeAbstract() && isCorrectableType(typeName);
+	}
+
+	private boolean isChoiceNodeAbstract() {
+		ChoiceNode choiceNode = getSelectedChoice();
+		return choiceNode!=null && choiceNode.isAbstract();
 	}
 
 	private boolean isCorrectableType(String typeName) {

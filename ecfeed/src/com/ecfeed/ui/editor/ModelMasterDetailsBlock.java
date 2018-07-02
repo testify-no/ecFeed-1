@@ -169,7 +169,8 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 						fMainTreeProvider,
 						new ChoiceInterface(fUpdateContext, fJavaProjectProvider),
 						fUpdateContext, 
-						fJavaProjectProvider));
+						fJavaProjectProvider,
+						fEcFormToolkit));
 
 		selectNode(fModel);
 	}
