@@ -13,6 +13,8 @@ package com.ecfeed.core.model;
 import java.util.List;
 import java.util.Set;
 
+import com.ecfeed.core.utils.JavaTypeHelper;
+
 public abstract class AbstractParameterNode extends ChoicesParentNode {
 
 	private String fType;
@@ -55,6 +57,10 @@ public abstract class AbstractParameterNode extends ChoicesParentNode {
 		return -1;
 	}
 
+	public boolean isCorrectableToBeRandomizedType() {
+		return JavaTypeHelper.isNumericTypeName(fType) || JavaTypeHelper.isStringTypeName(fType);
+	}
+	
 	public String getType() {
 		return fType;
 	}

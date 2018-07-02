@@ -99,12 +99,29 @@ public class ChoiceNode extends ChoicesParentNode{
 		return getName();
 	}
 
+	public boolean isCorrectableToBeRandomizedType() {
+		return fParent.getParameter().isCorrectableToBeRandomizedType() && !isAbstract();
+	}
+	
 	public void setRandomizeValue(boolean choice) {
+		//TODO
+		//refresh value here? from arg to arg1:arg2 and inversely
+		//older concept, to remove
+/*		if(fParent.getParameter().isCorrectableToBeRandomizedType() && !isAbstract()) {
+			fIsRandomizeValue = choice;
+		}
+		else {
+			fIsRandomizeValue = false;
+		}*/
 		fIsRandomizeValue = choice;
 	}
 	
 	public boolean isRandomizeValue() {
 		return fIsRandomizeValue;
+	}
+	
+	public String getRandomizeValue() {
+		return fIsRandomizeValue ? "YES" : "NO";
 	}
 	
 	public void setParent(ChoicesParentNode parent){
