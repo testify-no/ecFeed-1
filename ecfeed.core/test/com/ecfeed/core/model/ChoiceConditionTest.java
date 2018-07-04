@@ -113,12 +113,7 @@ public class ChoiceConditionTest {
 		
 		leftChoiceNode.setParent(leftMethodParameterNode);
 
-//<<<<<<< HEAD:ecfeed.core/test/com/ecfeed/core/model/ChoiceConditionTest.java
-//		EvaluationResult result = 
-//				EvaluationResult.convertFromBoolean(statement.isAmgibous(createListList(leftChoiceNode)));
-//=======
 		EvaluationResult result = EvaluationResult.convertFromBoolean(statement.isAmgibous(Arrays.asList(createList(leftChoiceNode))));
-//>>>>>>> 34bde98... Ambigous, tests, clean code, label.:ecfeed/test/com/ecfeed/core/model/ChoiceConditionTest.java
 
 		if (assertResult == AssertType.TRUE) {
 			assertEquals(EvaluationResult.TRUE, result);
