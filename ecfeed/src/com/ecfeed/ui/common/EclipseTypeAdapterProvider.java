@@ -12,6 +12,8 @@ package com.ecfeed.ui.common;
 
 import java.util.Arrays;
 
+import nl.flotsam.xeger.Xeger;
+
 import com.ecfeed.core.adapter.ITypeAdapter;
 import com.ecfeed.core.adapter.ITypeAdapterProvider;
 import com.ecfeed.core.utils.CommonConstants;
@@ -116,13 +118,13 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 		}
 
 		@Override
-		public String generateValue(String range) {
-			return null;
+		public String generateValue(String regex) {
+			return new Xeger(regex).generate();
 		}
 
 		@Override
 		public String generateValueAsString(String range) {
-			return String.valueOf(generateValue(range));
+			return generateValue(range);
 		}
 	}
 
