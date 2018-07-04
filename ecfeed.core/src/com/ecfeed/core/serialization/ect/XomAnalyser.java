@@ -67,7 +67,6 @@ import com.ecfeed.core.serialization.ParserException;
 import com.ecfeed.core.serialization.WhiteCharConverter;
 import com.ecfeed.core.utils.BooleanHelper;
 import com.ecfeed.core.utils.BooleanHolder;
-import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.core.utils.StringHolder;
 
