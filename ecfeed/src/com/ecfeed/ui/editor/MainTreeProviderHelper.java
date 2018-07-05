@@ -13,7 +13,9 @@ public class MainTreeProviderHelper {
 		mainTreeProvider.markDirty();
 		mainTreeProvider.refresh();
 
-		MainTreeProviderHelper.selectAndExpandNodes(mainTreeProvider, fNodesToSelect);
+		if (fNodesToSelect != null) {
+			MainTreeProviderHelper.selectAndExpandNodes(mainTreeProvider, fNodesToSelect);
+		}
 	}
 
 	private static void selectAndExpandNodes(
