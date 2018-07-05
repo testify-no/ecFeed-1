@@ -10,15 +10,17 @@
 
 package com.ecfeed.core.model;
 
+import static com.ecfeed.core.model.EStatementRelation.EQUAL;
+import static com.ecfeed.core.model.EStatementRelation.GREATER_EQUAL;
+import static com.ecfeed.core.model.EStatementRelation.GREATER_THAN;
+import static com.ecfeed.core.model.EStatementRelation.LESS_EQUAL;
+import static com.ecfeed.core.model.EStatementRelation.LESS_THAN;
+
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.StringHelper;
-
-import static com.ecfeed.core.model.EStatementRelation.*;
 
 public class StatementConditionHelper {
 
@@ -321,8 +323,8 @@ public class StatementConditionHelper {
 	private static boolean isAmbiguousEqualCondition(
 			String substituteType, String lower, String upper, String lowerConstraint, String upperConstraint) {
 
-		if (StringUtils.equals(lower, lowerConstraint) && StringUtils.equals(upper, upperConstraint)) {
-			if (StringUtils.equals(lower, upper) && StringUtils.equals(lowerConstraint, upperConstraint)) {
+		if (StringHelper.isEqual(lower, lowerConstraint) && StringHelper.isEqual(upper, upperConstraint)) {
+			if (StringHelper.isEqual(lower, upper) && StringHelper.isEqual(lowerConstraint, upperConstraint)) {
 				return false;
 			}
 			return true;
