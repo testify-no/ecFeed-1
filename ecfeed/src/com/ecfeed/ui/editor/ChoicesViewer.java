@@ -43,8 +43,6 @@ import com.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.editor.actions.DeleteAction;
-import com.ecfeed.ui.editor.actions.IActionGrouppingProvider;
-import com.ecfeed.ui.editor.actions.MainActionGrouppingProvider;
 import com.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.ecfeed.ui.modelif.ChoiceInterface;
 import com.ecfeed.ui.modelif.ChoicesParentInterface;
@@ -74,8 +72,6 @@ public class ChoicesViewer extends TableViewerSection {
 
 	private ModelNodeDropListener fDropListener;
 	private ModelNodeDragListener fDragListener;
-
-	private IActionGrouppingProvider fActionGroupingProvider;
 
 	private Button fReplaceWithDefaultButton;
 
@@ -113,12 +109,6 @@ public class ChoicesViewer extends TableViewerSection {
 		fReplaceWithDefaultButton = addButton("Reset with default", new ReplaceWithDefaultAdapter());
 
 		addDoubleClickListener(new SelectNodeDoubleClickListener(mainTreeProvider));
-		fActionGroupingProvider = 
-				new MainActionGrouppingProvider(
-						getTableViewer(), 
-						getModelUpdateContext(), 
-						javaProjectProvider,
-						new EditorSaveWorker());
 		
 		fDragListener = new ModelNodeDragListener(getViewer());
 		fDropListener = new ModelNodeDropListener(getViewer(), getModelUpdateContext(), javaProjectProvider);
@@ -161,11 +151,6 @@ public class ChoicesViewer extends TableViewerSection {
 		setRemoveSelectedStatus();
 		fDragListener.setEnabled(enabled);
 		fDropListener.setEnabled(enabled);
-//		if(enabled){
-//			setActionGrouppingProvider(fActionGroupingProvider);
-//		}else{
-//			setActionGrouppingProvider(null);
-//		}
 	}
 
 	public void setReplaceButtonEnabled(boolean isEnabled){

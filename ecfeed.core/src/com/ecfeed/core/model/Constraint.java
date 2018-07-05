@@ -20,9 +20,6 @@ import com.ecfeed.core.utils.MessageStack;
 
 public class Constraint implements IConstraint<ChoiceNode> {
 
-	private final int fId;
-	private static int fLastId = 0;
-
 	private String fName;
 
 	private AbstractStatement fPremise;
@@ -30,8 +27,6 @@ public class Constraint implements IConstraint<ChoiceNode> {
 
 
 	public Constraint(String name, AbstractStatement premise, AbstractStatement consequence) {
-
-		fId = fLastId++;
 
 		if (name == null) {
 			fName = "constraint";

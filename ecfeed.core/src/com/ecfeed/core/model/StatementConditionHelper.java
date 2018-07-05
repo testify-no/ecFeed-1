@@ -20,8 +20,6 @@ public class StatementConditionHelper {
 	private static final String TYPE_INFO_CHOICE = "choice";
 	private static final String TYPE_INFO_PARAMETER = "parameter";
 	private static final String TYPE_INFO_LABEL = "label";
-	private static final int SINGLE_VALUE = 1;
-	private static final int RANGE_VALUE = 2;
 
 	public static ChoiceNode getChoiceForMethodParameter(List<ChoiceNode> choices, MethodParameterNode methodParameterNode) {
 
