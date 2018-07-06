@@ -71,7 +71,9 @@ public class TypeAdapterForString implements ITypeAdapter<String>{
 
 			result = xeger.generate();
 		} catch (Throwable ex) {
-			final String CAN_NOT_GENERATE = "Cannot generate value from expression: " + regex + " (Xeger problem).";
+			final String CAN_NOT_GENERATE = 
+					"Cannot generate value from expression: " + regex + 
+					" (Xeger problem). Reason:" + ex.getClass().getName() + ", Message:" + ex.getMessage();
 			ExceptionHelper.reportRuntimeException(CAN_NOT_GENERATE);
 		}
 
