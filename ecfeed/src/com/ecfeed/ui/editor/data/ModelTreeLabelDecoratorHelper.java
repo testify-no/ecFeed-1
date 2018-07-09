@@ -357,7 +357,7 @@ public class ModelTreeLabelDecoratorHelper  {
 		}
 
 		private static Image getImageFromManager(String file) {
-			return ImageManager.getInstance().getImage(file);
+			return ImageManager.getSessionInstance().getImage(file);
 		}
 
 	}

@@ -11,13 +11,15 @@
 package com.ecfeed.ui.modelif;
 
 import com.ecfeed.core.model.MethodNode;
+import com.ecfeed.ui.common.Messages;
+import com.ecfeed.ui.dialogs.TestResultsHolder;
 
 public class ExecutionTestInformer extends AbstractTestInformer {
 	
 
 	public ExecutionTestInformer(MethodNode methodNode, TestResultsHolder testResultsHolder)
 	{
-		super(methodNode, testResultsHolder);
+		super(methodNode, testResultsHolder, Messages.EXECUTING_TEST_WITH_PARAMETERS);
 	}
 	
 	@Override

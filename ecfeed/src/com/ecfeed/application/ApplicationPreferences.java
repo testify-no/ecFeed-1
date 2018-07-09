@@ -20,12 +20,11 @@ import com.ecfeed.ui.dialogs.basic.ErrorDialog;
 
 public class ApplicationPreferences {
 
-	private static String AUTOMATICALLY_CHECK_FOR_UPDATES = "updates.automaticalCheck";
-	private static String CHECK_BETA_VERSIONS = "updates.checkBetaVersions";
-	private static String IGNORE_STANDARD_VERSION_TO = "updates.ignoreStandardVersionTo";
-	private static String IGNORE_BETA_VERSION_TO = "updates.ignoreBetaVersionTo";
-
-	private static String INITIAL_VERSION = "1.0.0";
+	private final static String AUTOMATICALLY_CHECK_FOR_UPDATES = "updates.automaticalCheck";
+	private final static String CHECK_BETA_VERSIONS = "updates.checkBetaVersions";
+	private final static String IGNORE_STANDARD_VERSION_TO = "updates.ignoreStandardVersionTo";
+	private final static String IGNORE_BETA_VERSION_TO = "updates.ignoreBetaVersionTo";
+	private final static String INITIAL_VERSION = "1.0.0";
 
 
 	public static void setPreferenceValue(String key, String value) {

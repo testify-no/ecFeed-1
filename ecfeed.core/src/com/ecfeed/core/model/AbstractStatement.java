@@ -17,15 +17,8 @@ import com.ecfeed.core.utils.EvaluationResult;
 public abstract class AbstractStatement implements IStatement {
 
 	AbstractStatement fParent = null;
-	private static int fLastId = 0;
-	private final int fId;
 
 	public AbstractStatement() {
-		fId = fLastId++;
-	}
-
-	public int getId() {
-		return fId;
 	}
 
 	public abstract String getLeftOperandName();
@@ -82,16 +75,6 @@ public abstract class AbstractStatement implements IStatement {
 	@Override
 	public EvaluationResult evaluate(List<ChoiceNode> values) {
 		return EvaluationResult.FALSE;
-	}
-
-	@Override
-	public boolean equals(Object obj){
-
-		if (!(obj instanceof AbstractStatement)) {
-			return false;
-		}
-
-		return fId == ((AbstractStatement)obj).getId();
 	}
 
 	@Override

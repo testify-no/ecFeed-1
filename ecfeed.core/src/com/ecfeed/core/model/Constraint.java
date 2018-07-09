@@ -20,17 +20,13 @@ import com.ecfeed.core.utils.MessageStack;
 
 public class Constraint implements IConstraint<ChoiceNode> {
 
-	private final int fId;
-	private static int fLastId = 0;
-
 	private String fName;
+
 	private AbstractStatement fPremise;
 	private AbstractStatement fConsequence;
 
 
 	public Constraint(String name, AbstractStatement premise, AbstractStatement consequence) {
-
-		fId = fLastId++;
 
 		if (name == null) {
 			fName = "constraint";
@@ -92,7 +88,7 @@ public class Constraint implements IConstraint<ChoiceNode> {
 			return EvaluationResult.INSUFFICIENT_DATA;
 		}
 
-		if(fConsequence == null) {
+		if (fConsequence == null) {
 			return EvaluationResult.FALSE;
 		}
 
@@ -133,33 +129,17 @@ public class Constraint implements IConstraint<ChoiceNode> {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-
-		if (!(obj instanceof Constraint)) {
-			return false;
-		}
-
-		if (fId == ((Constraint)obj).getId()) {
-			return true;
-		}
-
-		return false;
-	}
-
-	@Override
 	public boolean mentions(int dimension) {
+
 		if (fPremise.mentions(dimension)) {
 			return true;
 		}
+
 		if (fConsequence.mentions(dimension)) {
 			return true;
-		}		
+		}
+
 		return false;
-	}
-
-	public int getId(){
-
-		return fId;
 	}
 
 	public AbstractStatement getPremise() {
@@ -202,6 +182,7 @@ public class Constraint implements IConstraint<ChoiceNode> {
 		if (fPremise.mentionsParameterAndOrderRelation(parameter)) {
 			return true;
 		}
+
 		if (fConsequence.mentionsParameterAndOrderRelation(parameter)) {
 			return true;
 		}
@@ -219,7 +200,7 @@ public class Constraint implements IConstraint<ChoiceNode> {
 
 	public boolean updateRefrences(MethodNode method) {
 
-		if(fPremise.updateReferences(method) && fConsequence.updateReferences(method)) {
+		if (fPremise.updateReferences(method) && fConsequence.updateReferences(method)) {
 			return true;
 		}
 
@@ -229,13 +210,12 @@ public class Constraint implements IConstraint<ChoiceNode> {
 	@SuppressWarnings("unchecked")
 	public Set<ChoiceNode> getReferencedChoices() {
 
-		try{
+		try {
 			Set<ChoiceNode> referenced = (Set<ChoiceNode>)fPremise.accept(new ReferencedChoicesProvider());
 			referenced.addAll((Set<ChoiceNode>)fConsequence.accept(new ReferencedChoicesProvider()));
 
 			return referenced;
-		}
-		catch(Exception e){
+		} catch(Exception e) {
 			return new HashSet<ChoiceNode>();
 		}
 	}
@@ -251,8 +231,7 @@ public class Constraint implements IConstraint<ChoiceNode> {
 					(Set<AbstractParameterNode>)fConsequence.accept(new ReferencedParametersProvider()));
 
 			return referenced;
-		}
-		catch(Exception e){
+		} catch(Exception e) {
 			return new HashSet<AbstractParameterNode>();
 		}
 	}
@@ -260,13 +239,12 @@ public class Constraint implements IConstraint<ChoiceNode> {
 	@SuppressWarnings("unchecked")
 	public Set<String> getReferencedLabels(MethodParameterNode parameter) {
 
-		try{
+		try {
 			Set<String> referenced = (Set<String>)fPremise.accept(new ReferencedLabelsProvider(parameter));
 			referenced.addAll((Set<String>)fConsequence.accept(new ReferencedLabelsProvider(parameter)));
 
 			return referenced;
-		}
-		catch(Exception e){
+		} catch(Exception e) {
 			return new HashSet<String>();
 		}
 	}
@@ -297,7 +275,7 @@ public class Constraint implements IConstraint<ChoiceNode> {
 
 			Set<ChoiceNode> set = new HashSet<ChoiceNode>();
 
-			for(AbstractStatement s : statement.getStatements()) {
+			for (AbstractStatement s : statement.getStatements()) {
 				set.addAll((Set<ChoiceNode>)s.accept(this));
 			}
 
@@ -309,7 +287,7 @@ public class Constraint implements IConstraint<ChoiceNode> {
 
 			Set<ChoiceNode> result = new HashSet<>();
 
-			if(statement.isParameterPrimitive()){
+			if (statement.isParameterPrimitive()) {
 				result.add(statement.getCondition());
 			}
 

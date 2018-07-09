@@ -50,10 +50,12 @@ public class ModelMasterSection extends TreeViewerSection {
 
 
 	public ModelMasterSection(ModelMasterDetailsBlock parentBlock, IJavaProjectProvider javaProjectProvider) {
+
 		super(parentBlock.getMasterSectionContext(), 
 				parentBlock.getModelUpdateContext(), 
 				javaProjectProvider, 
-				StyleDistributor.getSectionStyle());
+				StyleDistributor.getSectionStyle(), 
+				true);
 
 		fMasterDetailsBlock = parentBlock;
 
@@ -62,9 +64,10 @@ public class ModelMasterSection extends TreeViewerSection {
 						getTreeViewer(), 
 						getModelUpdateContext(), 
 						javaProjectProvider, 
-						false);
+						false,
+						new EditorSaveWorker());
 
-		setActionGrouppingProvider(modelViewerActionProvider);		
+		registerContextMenuAndKeyShortcuts(modelViewerActionProvider);		
 
 		getTreeViewer().addDragSupport(
 				DND.DROP_COPY|DND.DROP_MOVE|DND.DROP_LINK,

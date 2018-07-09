@@ -6,10 +6,9 @@ import static com.ecfeed.core.model.EStatementRelation.LESS_EQUAL;
 import static com.ecfeed.core.model.EStatementRelation.LESS_THAN;
 import static com.ecfeed.core.model.EStatementRelation.NOT_EQUAL;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.JavaTypeHelper;
+import com.ecfeed.core.utils.StringHelper;
 
 public class RangeHelper {
 
@@ -141,7 +140,7 @@ public class RangeHelper {
 
 	private static boolean isSingleValue(String[] range) {
 
-		if (StringUtils.equals(range[0], range[1])) {
+		if (StringHelper.isEqual(range[0], range[1])) {
 			return true;
 		}
 
@@ -150,11 +149,11 @@ public class RangeHelper {
 
 	private static boolean areRangesTheSame(String[] leftRange, String[] rightRange) {
 
-		if (!StringUtils.equals(leftRange[0], rightRange[0])) {
+		if (!StringHelper.isEqual(leftRange[0], rightRange[0])) {
 			return false;
 		}
 
-		if (!StringUtils.equals(leftRange[1], rightRange[1])) {
+		if (!StringHelper.isEqual(leftRange[1], rightRange[1])) {
 			return false;
 		}
 

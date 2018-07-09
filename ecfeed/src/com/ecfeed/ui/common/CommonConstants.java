@@ -34,3 +34,4 @@ public class CommonConstants {
 	public static final int MAX_DISPLAYED_TEST_CASES_PER_SUITE = 500;
 	public static final int MAX_DISPLAYED_CHILDREN_PER_NODE = 1000;
 }
+

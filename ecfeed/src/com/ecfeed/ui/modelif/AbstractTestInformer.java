@@ -22,7 +22,8 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.runner.RunnerException;
 import com.ecfeed.ui.common.Messages;
-import com.ecfeed.ui.dialogs.basic.AdvancedStatisticsButtonDialog;
+import com.ecfeed.ui.dialogs.AdvancedStatisticsButtonDialog;
+import com.ecfeed.ui.dialogs.TestResultsHolder;
 import com.ecfeed.ui.plugin.Activator;
 
 public abstract class AbstractTestInformer {
@@ -33,11 +34,16 @@ public abstract class AbstractTestInformer {
 	private List<Status> fUnsuccesfullExecutionStatuses;
 	private MethodNode fmethodNode;
 	private TestResultsHolder ftestResultsHolder;
+	private String fBeginMessage;
 	
-	public AbstractTestInformer(MethodNode methodNode, TestResultsHolder testResultsHolder){
+	public AbstractTestInformer(
+			MethodNode methodNode, 
+			TestResultsHolder testResultsHolder,
+			String beginMessage) {
 		fmethodNode = methodNode;
 		ftestResultsHolder = testResultsHolder;
 		fUnsuccesfullExecutionStatuses = new ArrayList<>();
+		fBeginMessage = beginMessage;
 	}
 
 	protected abstract void setTestProgressMessage();
@@ -56,7 +62,7 @@ public abstract class AbstractTestInformer {
 
 	protected void beginTestExecution(int totalWork) {
 		fTotalWork = totalWork;
-		fProgressMonitor.beginTask(Messages.EXECUTING_TEST_WITH_PARAMETERS, totalWork);
+		fProgressMonitor.beginTask(fBeginMessage, totalWork);
 	}
 
 	protected void incrementTotalTestcases(){

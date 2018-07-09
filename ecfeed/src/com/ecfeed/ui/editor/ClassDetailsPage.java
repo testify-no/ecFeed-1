@@ -33,6 +33,7 @@ import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.utils.EcException;
 import com.ecfeed.core.utils.IValueApplier;
 import com.ecfeed.core.utils.SystemLogger;
+import com.ecfeed.ui.common.ComboSelectionListener;
 import com.ecfeed.ui.common.utils.EclipseProjectHelper;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.common.utils.SwtObjectHelper;

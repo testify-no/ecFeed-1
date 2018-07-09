@@ -11,28 +11,32 @@
 package com.ecfeed.ui.editor.actions;
 
 import com.ecfeed.application.ApplicationContext;
-import com.ecfeed.ui.editor.ModelEditorHelper;
+import com.ecfeed.core.utils.IWorker;
 
 public class SaveAction extends DescribedAction {
 
-	public SaveAction() {
+	private IWorker fSaveWorker;
+
+	public SaveAction(IWorker saveWorker) {
 		super(ActionId.SAVE);
+		fSaveWorker = saveWorker;
 	}
 
 	@Override
 	public void run() {
-		ModelEditorHelper.saveActiveEditor();
+
+		fSaveWorker.doWork();
 	}
 
 	@Override
 	public boolean isEnabled() {
-		
+
 		if (ApplicationContext.isApplicationTypeLocal()) {
 			return true;
 		}
-		
+
 		return false;
 	}
-	
+
 }
 

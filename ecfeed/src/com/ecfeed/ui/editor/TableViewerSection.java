@@ -33,7 +33,7 @@ public abstract class TableViewerSection extends ViewerSection {
 			IModelUpdateContext updateContext, 
 			IJavaProjectProvider javaProjectProvider,
 			int style) {
-		super(sectionContext, updateContext, javaProjectProvider, style);
+		super(sectionContext, updateContext, javaProjectProvider, style, false);
 	}
 
 	@Override

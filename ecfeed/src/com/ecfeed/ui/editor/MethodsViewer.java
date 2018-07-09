@@ -73,9 +73,9 @@ public class MethodsViewer extends TableViewerSection {
 
 		addSelectionChangedListener(new SelectionChangedListener());
 
-		setActionGrouppingProvider(
+		registerContextMenuAndKeyShortcuts(
 				new MainActionGrouppingProvider(
-						getTableViewer(), getModelUpdateContext(), javaProjectProvider));
+						getTableViewer(), getModelUpdateContext(), javaProjectProvider, new EditorSaveWorker()));
 
 		getViewer().addDragSupport(
 				DND.DROP_COPY|DND.DROP_MOVE, 

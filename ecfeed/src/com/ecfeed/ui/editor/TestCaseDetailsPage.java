@@ -23,6 +23,7 @@ import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.utils.EcException;
+import com.ecfeed.ui.common.ComboSelectionListener;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.modelif.IModelUpdateContext;

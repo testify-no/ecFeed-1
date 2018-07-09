@@ -29,25 +29,25 @@ public class NodePropertyDefElemType {
 	private static final String UNMAPPED = "Unmapped";
 	private static final String CHECKBOX = "Checkbox";
 
-	public static NodePropertyDef elementType = 
+	public static final NodePropertyDef elementType = 
 			new NodePropertyDef(
 					WB_ELEMENT_TYPE, JavaTypeHelper.TYPE_NAME_STRING, EMPTY_STR,
 					new String[]{EMPTY_STR, TEXT, CHECKBOX, PAGE_ELEMENT, PAGE_URL, DELAY, BROWSER });
 
 
-	private static NodePropertyValueSet VALUE_SET_FOR_STRING = 
+	private static final NodePropertyValueSet VALUE_SET_FOR_STRING = 
 			new NodePropertyValueSet(UNMAPPED, new String[] {UNMAPPED, TEXT, SELECT, RADIO, PAGE_ELEMENT, PAGE_URL, BROWSER});
 
-	private static NodePropertyValueSet VALUE_SET_FOR_CHAR = 
+	private static final NodePropertyValueSet VALUE_SET_FOR_CHAR = 
 			new NodePropertyValueSet(UNMAPPED, new String[] {UNMAPPED, TEXT, PAGE_ELEMENT});
 
-	private static NodePropertyValueSet VALUE_SET_FOR_BOOLEAN = 
+	private static final NodePropertyValueSet VALUE_SET_FOR_BOOLEAN = 
 			new NodePropertyValueSet(UNMAPPED, new String[] {UNMAPPED, CHECKBOX, BUTTON, PAGE_ELEMENT});
 
-	private static NodePropertyValueSet VALUE_SET_FOR_NUMERIC_TYPES = 
+	private static final NodePropertyValueSet VALUE_SET_FOR_NUMERIC_TYPES = 
 			new NodePropertyValueSet(UNMAPPED, new String[] {UNMAPPED, TEXT, DELAY, PAGE_ELEMENT});
 
-	private static NodePropertyValueSet VALUE_SET_FOR_EXPECTED_PARAMETER = 
+	private static final NodePropertyValueSet VALUE_SET_FOR_EXPECTED_PARAMETER = 
 			new NodePropertyValueSet(UNMAPPED, new String[] {UNMAPPED, TEXT, PAGE_URL});	
 
 

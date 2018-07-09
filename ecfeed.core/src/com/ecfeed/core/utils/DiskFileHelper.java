@@ -80,6 +80,12 @@ public class DiskFileHelper {
 		return StringHelper.removeFromPostfix(fileName, pathWithFileName);
 	}
 
+	public static String extractPathWithoutSeparator(String pathWithFileName) {
+		String pathWithSeparator = extractPathWithSeparator(pathWithFileName);
+		String pathWithoutSeparator = StringHelper.removeFromPostfix(FILE_SEPARATOR, pathWithSeparator);
+		return pathWithoutSeparator;
+	}
+
 	public static String extractFileNameWithoutExtension(String fileNameWithExtension) {
 		return StringHelper.getFirstToken(fileNameWithExtension, EXTENSION_SEPARATOR);
 	}
@@ -140,6 +146,47 @@ public class DiskFileHelper {
 		if (!file.delete()) {
 			ExceptionHelper.reportRuntimeException("Can not delete file: " + pathWithFileName + " .");
 		}
+	}
+
+	public static void deleteFilesFromFolder(String folderName) {
+
+		File[] files = getFilesFromFolder(folderName);
+
+		for (File file : files) {
+			deleteFile(file);
+		}
+	}
+
+	private static void deleteFile(File file) {
+
+		if (!file.isFile()) {
+			return;
+		}
+
+		if (!file.delete()) {
+			ExceptionHelper.reportRuntimeException("Can not delete file: " + file.getAbsolutePath());
+		}
+	}
+
+	public static File[] getFilesFromFolder(String folderName) {
+
+		File folderFile = new File(folderName);
+		File[] files = folderFile.listFiles();
+		return files;
+	}
+
+	public static void deleteEmptyFolder(String folder) {
+
+		File file = new File(folder);
+
+		if (!file.isDirectory()) {
+			return; 
+		}
+
+		if (!file.delete()) {
+			ExceptionHelper.reportRuntimeException("Can not delete folder: " + folder);
+		}
+
 	}
 
 	public static void saveStringToFile(String pathWithFileName, String newContents) {

@@ -23,87 +23,82 @@ import com.ecfeed.core.utils.SystemHelper;
 
 public class ActionDescriptionProvider {
 
-	public static final String COPY_ACTION_ID = ActionFactory.COPY.getId();
-	public static final String CUT_ACTION_ID = ActionFactory.CUT.getId();
-	public static final String PASTE_ACTION_ID = ActionFactory.PASTE.getId();
-	public static final String INSERT_ACTION_ID = "insert";
-	public static final String DELETE_ACTION_ID = ActionFactory.DELETE.getId();
-	public static final String SELECT_ALL_ACTION_ID = ActionFactory.SELECT_ALL.getId();
-	public static final String UNDO_ACTION_ID = ActionFactory.UNDO.getId();
-	public static final String REDO_ACTION_ID = ActionFactory.REDO.getId();
-	public static final String MOVE_UP_ACTION_ID = "moveUp";
-	public static final String MOVE_DOWN_ACTION_ID = "moveDown";
-	public static final String EXPAND_ACTION_ID = "expand";
-	public static final String COLLAPSE_ACTION_ID = "collapse";
-	public static final String EXPAND_COLLAPSE_ACTION_ID = "expand/collapse";
-	public static final String JAVADOC_EXPORT_ACTION_ID = "javadoc.export";
-	public static final String JAVADOC_IMPORT_ACTION_ID = "javadoc.import";
-	public static final String JAVADOC_EXPORT_TYPE_ACTION_ID = "javadoc.exportType";
-	public static final String JAVADOC_IMPORT_TYPE_ACTION_ID = "javadoc.importType";
-	public static final String SAVE_ACTION_ID = "save";
-	public static final String ABOUT_ACTION_ID = "about";
-	public static final String CHECK_FOR_UPDATES_ACTION_ID = "checkForUpdates";
+	private static final String COPY_ACTION_ID = ActionFactory.COPY.getId();
+	private static final String CUT_ACTION_ID = ActionFactory.CUT.getId();
+	private static final String PASTE_ACTION_ID = ActionFactory.PASTE.getId();
+	private static final String INSERT_ACTION_ID = "insert";
+	private static final String DELETE_ACTION_ID = ActionFactory.DELETE.getId();
+	private static final String SELECT_ALL_ACTION_ID = ActionFactory.SELECT_ALL.getId();
+	private static final String UNDO_ACTION_ID = ActionFactory.UNDO.getId();
+	private static final String REDO_ACTION_ID = ActionFactory.REDO.getId();
+	private static final String MOVE_UP_ACTION_ID = "moveUp";
+	private static final String MOVE_DOWN_ACTION_ID = "moveDown";
+	private static final String EXPAND_ACTION_ID = "expand";
+	private static final String COLLAPSE_ACTION_ID = "collapse";
+	private static final String EXPAND_COLLAPSE_ACTION_ID = "expand/collapse";
+	private static final String SAVE_ACTION_ID = "save";
+	private static final String ABOUT_ACTION_ID = "about";
+	private static final String CHECK_FOR_UPDATES_ACTION_ID = "checkForUpdates";
 
-	public static final String COPY_ACTION_NAME = "Copy";
-	public static final String COPY_ACTION_SHORTCUT = "Ctrl+C";
-	public static final String COPY_ACTION_MAC_SHORTCUT = "Cmd+C";
+	private static final String COPY_ACTION_NAME = "Copy";
+	private static final String COPY_ACTION_SHORTCUT = "Ctrl+C";
+	private static final String COPY_ACTION_MAC_SHORTCUT = "Cmd+C";
 
-	public static final String CUT_ACTION_NAME = "Cut";
-	public static final String CUT_ACTION_SHORTCUT = "Ctrl+X";
-	public static final String CUT_ACTION_MAC_SHORTCUT = "Cmd+X";
+	private static final String CUT_ACTION_NAME = "Cut";
+	private static final String CUT_ACTION_SHORTCUT = "Ctrl+X";
+	private static final String CUT_ACTION_MAC_SHORTCUT = "Cmd+X";
 
-	public static final String PASTE_ACTION_NAME = "Paste";
-	public static final String PASTE_ACTION_SHORTCUT = "Ctrl+V";
-	public static final String PASTE_ACTION_MAC_SHORTCUT = "Cmd+V";
+	private static final String PASTE_ACTION_NAME = "Paste";
+	private static final String PASTE_ACTION_SHORTCUT = "Ctrl+V";
+	private static final String PASTE_ACTION_MAC_SHORTCUT = "Cmd+V";
 
-	public static final String INSERT_ACTION_NAME = "Insert";
-	public static final String INSERT_ACTION_SHORTCUT = "Ctrl+I";
-	public static final String INSERT_ACTION_MAC_SHORTCUT = "Cmd+I";
+	private static final String INSERT_ACTION_NAME = "Insert";
+	private static final String INSERT_ACTION_SHORTCUT = "Ins";
+	private static final String INSERT_ACTION_MAC_SHORTCUT = "Ins";
 
-	public static final String DELETE_ACTION_NAME = "Delete";
-	public static final String DELETE_ACTION_SHORTCUT = "Ctrl+D";
-	public static final String DELETE_ACTION_MAC_SHORTCUT = "Cmd+D";
+	private static final String DELETE_ACTION_NAME = "Delete";
+	private static final String DELETE_ACTION_SHORTCUT = "Del";
+	private static final String DELETE_ACTION_MAC_SHORTCUT = "Del";
 
-	public static final String SELECT_ALL_ACTION_NAME = "Select All";
-	public static final String SELECT_ALL_ACTION_SHORTCUT = "Ctrl+A";
-	public static final String SELECT_ALL_ACTION_MAC_SHORTCUT = "Cmd+A";
+	private static final String SELECT_ALL_ACTION_NAME = "Select All";
+	private static final String SELECT_ALL_ACTION_SHORTCUT = "Ctrl+A";
+	private static final String SELECT_ALL_ACTION_MAC_SHORTCUT = "Cmd+A";
 
-	public static final String UNDO_ACTION_NAME = "Undo";
-	public static final String UNDO_ACTION_SHORTCUT = "Ctrl+Z";
-	public static final String UNDO_ACTION_MAC_SHORTCUT = "Cmd+Z";
+	private static final String UNDO_ACTION_NAME = "Undo";
+	private static final String UNDO_ACTION_SHORTCUT = "Ctrl+Z";
+	private static final String UNDO_ACTION_MAC_SHORTCUT = "Cmd+Z";
 
-	public static final String REDO_ACTION_NAME = "Redo";
-	public static final String REDO_ACTION_SHORTCUT = "Ctrl+Shift+Z";
-	public static final String REDO_ACTION_MAC_SHORTCUT = "Cmd+Shift+Z";
+	private static final String REDO_ACTION_NAME = "Redo";
+	private static final String REDO_ACTION_SHORTCUT = "Ctrl+Shift+Z";
+	private static final String REDO_ACTION_MAC_SHORTCUT = "Cmd+Shift+Z";
 
-	public static final String MOVE_UP_ACTION_NAME = "Move Up";
-	public static final String MOVE_UP_ACTION_SHORTCUT = "Alt+Up";
+	private static final String MOVE_UP_ACTION_NAME = "Move Up";
+	private static final String MOVE_UP_ACTION_SHORTCUT = "Ctrl+Up";
+	private static final String MOVE_UP_ACTION_MAC_SHORTCUT = "Cmd+Up";
 
-	public static final String MOVE_DOWN_ACTION_NAME = "Move Down";
-	public static final String MOVE_DOWN_ACTION_SHORTCUT = "Alt+Down";
+	private static final String MOVE_DOWN_ACTION_NAME = "Move Down";
+	private static final String MOVE_DOWN_ACTION_SHORTCUT = "Ctrl+Down";
+	private static final String MOVE_DOWN_ACTION_MAC_SHORTCUT = "Cmd+Down";
 
-	public static final String EXPAND_ACTION_NAME = "Expand";
-	public static final String EXPAND_ACTION_SHORTCUT = "Ctrl+Shift+E";
-	public static final String EXPAND_ACTION_MAC_SHORTCUT = "Cmd+Shift+E";
+	private static final String EXPAND_ACTION_NAME = "Expand";
+	private static final String EXPAND_ACTION_SHORTCUT = "Ctrl+Shift+E";
+	private static final String EXPAND_ACTION_MAC_SHORTCUT = "Cmd+Shift+E";
 
-	public static final String COLLAPSE_ACTION_NAME = "Collapse";
-	public static final String COLLAPSE_ACTION_SHORTCUT = "Ctrl+Shift+W";
-	public static final String COLLAPSE_ACTION_MAC_SHORTCUT = "Cmd+Shift+W";
+	private static final String COLLAPSE_ACTION_NAME = "Collapse";
+	private static final String COLLAPSE_ACTION_SHORTCUT = "Ctrl+Shift+W";
+	private static final String COLLAPSE_ACTION_MAC_SHORTCUT = "Cmd+Shift+W";
 
-	public static final String EXPAND_COLLAPSE_ACTION_NAME = "Expand/Collapse";
-	public static final String EXPAND_COLLAPSE_ACTION_SHORTCUT = "Space";
+	private static final String EXPAND_COLLAPSE_ACTION_NAME = "Expand/Collapse";
+	private static final String EXPAND_COLLAPSE_ACTION_SHORTCUT = "Space";
 
-	public static final String JAVADOC_EXPORT_ACTION_NAME = "Export javadoc";
-	public static final String JAVADOC_IMPORT_ACTION_NAME = "Import javadoc";
-	public static final String JAVADOC_EXPORT_TYPE_ACTION_NAME = "javadoc.exportType";
-	public static final String JAVADOC_IMPORT_TYPE_ACTION_NAME = "javadoc.importType";
+	private static final String SAVE_ACTION_NAME = "Save";
+	private static final String SAVE_ACTION_SHORTCUT = "Ctrl+S";
+	private static final String SAVE_ACTION_MAC_SHORTCUT = "Cmd+S";
 
-	public static final String SAVE_ACTION_NAME = "Save";
-	public static final String SAVE_ACTION_SHORTCUT = "Ctrl+S";
-	public static final String SAVE_ACTION_MAC_SHORTCUT = "Cmd+S";
+	private static final String ABOUT_ACTION_NAME = "About ecFeed...";
+	private static final String CHECK_FOR_UPDATES_ACTION_NAME = "Check for updates...";
 
-	public static final String ABOUT_ACTION_NAME = "About ecFeed...";
-	public static final String CHECK_FOR_UPDATES_ACTION_NAME = "Check for updates...";
+	private static final char SPACE = ' ';
 
 	private static class ActionDescription {
 
@@ -149,17 +144,17 @@ public class ActionDescriptionProvider {
 
 	}
 
-	private static ActionDescriptionProvider fActionDescriptionProvider = null;
+	private static ActionDescriptionProvider fApplicationInstance = null;
 
 	private List<ActionDescription> fActionDescriptions;
 
-	public static ActionDescriptionProvider getInstance() {
+	public static ActionDescriptionProvider getApplicationInstance() {
 
-		if (fActionDescriptionProvider == null) {
-			fActionDescriptionProvider = new ActionDescriptionProvider();
+		if (fApplicationInstance == null) {
+			fApplicationInstance = new ActionDescriptionProvider();
 		}
 
-		return fActionDescriptionProvider;
+		return fApplicationInstance;
 	}
 
 	private static ImageDescriptor getImageDescriptor(String imageFilePath) {
@@ -212,9 +207,9 @@ public class ActionDescriptionProvider {
 						INSERT_ACTION_NAME, 
 						INSERT_ACTION_SHORTCUT, 
 						INSERT_ACTION_MAC_SHORTCUT, 
-						'i',
-						SWT.CTRL,
-						SWT.COMMAND,
+						SWT.INSERT,
+						SWT.NONE,
+						SWT.NONE,
 						null));
 
 		fActionDescriptions.add(
@@ -224,9 +219,9 @@ public class ActionDescriptionProvider {
 						DELETE_ACTION_NAME, 
 						DELETE_ACTION_SHORTCUT, 
 						DELETE_ACTION_MAC_SHORTCUT, 
-						'd',
-						SWT.CTRL,
-						SWT.COMMAND,
+						SWT.DEL,
+						SWT.NONE,
+						SWT.NONE,
 						null));
 
 		fActionDescriptions.add(
@@ -284,10 +279,10 @@ public class ActionDescriptionProvider {
 						MOVE_UP_ACTION_ID, 
 						MOVE_UP_ACTION_NAME, 
 						MOVE_UP_ACTION_SHORTCUT, 
-						MOVE_UP_ACTION_SHORTCUT, 
+						MOVE_UP_ACTION_MAC_SHORTCUT, 
 						SWT.ARROW_UP,
-						SWT.ALT,
-						SWT.ALT,
+						SWT.CTRL,
+						SWT.COMMAND,
 						null));
 
 		fActionDescriptions.add(
@@ -296,10 +291,10 @@ public class ActionDescriptionProvider {
 						MOVE_DOWN_ACTION_ID, 
 						MOVE_DOWN_ACTION_NAME, 
 						MOVE_DOWN_ACTION_SHORTCUT, 
-						MOVE_DOWN_ACTION_SHORTCUT,
+						MOVE_DOWN_ACTION_MAC_SHORTCUT,
 						SWT.ARROW_DOWN,
-						SWT.ALT,
-						SWT.ALT,
+						SWT.CTRL,
+						SWT.COMMAND,
 						null));
 
 		fActionDescriptions.add(
@@ -333,7 +328,7 @@ public class ActionDescriptionProvider {
 						EXPAND_COLLAPSE_ACTION_NAME, 
 						EXPAND_COLLAPSE_ACTION_SHORTCUT, 
 						EXPAND_COLLAPSE_ACTION_SHORTCUT,
-						SWT.NONE,
+						SPACE,
 						SWT.NONE,
 						SWT.NONE,
 						null));
@@ -343,6 +338,30 @@ public class ActionDescriptionProvider {
 						ActionId.ABOUT,
 						ABOUT_ACTION_ID, 
 						ABOUT_ACTION_NAME,
+						null, 
+						null,
+						SWT.NONE,
+						SWT.NONE,
+						SWT.NONE,
+						getImageDescriptor("icons/help.gif")));
+
+		fActionDescriptions.add(
+				new ActionDescription(
+						ActionId.IMPORT_MODEL,
+						"importModel", 
+						"Import model",
+						null, 
+						null,
+						SWT.NONE,
+						SWT.NONE,
+						SWT.NONE,
+						getImageDescriptor("icons/help.gif")));
+
+		fActionDescriptions.add(
+				new ActionDescription(
+						ActionId.EXPORT_MODEL,
+						"exportModel", 
+						"Export model",
 						null, 
 						null,
 						SWT.NONE,
@@ -507,6 +526,4 @@ public class ActionDescriptionProvider {
 	}
 
 }
-
-
 

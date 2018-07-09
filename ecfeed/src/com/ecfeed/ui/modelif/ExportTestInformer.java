@@ -10,12 +10,13 @@
 
 package com.ecfeed.ui.modelif;
 
+import com.ecfeed.ui.common.Messages;
 
 public class ExportTestInformer extends AbstractTestInformer {
 	
 	public ExportTestInformer()
 	{
-		super(null, null);
+		super(null, null, Messages.EXECUTING_EXPORT);
 	}
 
 	@Override

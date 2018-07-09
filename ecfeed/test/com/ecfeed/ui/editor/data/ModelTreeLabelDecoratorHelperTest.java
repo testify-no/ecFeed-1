@@ -1,11 +1,18 @@
 /*******************************************************************************
  *
+<<<<<<< HEAD
+=======
+ * Copyright (c) 2016 ecFeed AS.                                                
+>>>>>>> dev-rap_2
  * All rights reserved. This program and the accompanying materials              
  * are made available under the terms of the Eclipse Public License v1.0         
  * which accompanies this distribution, and is available at                      
  * http://www.eclipse.org/legal/epl-v10.html 
  *  
+<<<<<<< HEAD
  * Copyright (c) 2016 ecFeed AS.                                                
+=======
+>>>>>>> dev-rap_2
  *******************************************************************************/
 
 package com.ecfeed.ui.editor.data;
@@ -51,7 +58,7 @@ public class ModelTreeLabelDecoratorHelperTest {
 			Image imageToDecorate = createTestImage(display);
 
 			IModelUpdateContext modelUpdateContext = null;
-			IJavaProjectProvider javaProjectProvider = new DummyJavaProjectProvider();
+			IJavaProjectProvider javaProjectProvider = null;
 
 			RootNode rootNode = new RootNode("Root", ModelVersionDistributor.getCurrentSoftwareVersion());
 
@@ -217,7 +224,7 @@ public class ModelTreeLabelDecoratorHelperTest {
 
 		return true;
 	}
-
+	
 	private Image createTestImage(Display display) {
 
 		PaletteData paletteData = new PaletteData(0, 0, 0);
@@ -227,19 +234,5 @@ public class ModelTreeLabelDecoratorHelperTest {
 		Image imageToDecorate = new Image(display, imageData);
 		return imageToDecorate;
 	}
-
-	private class DummyJavaProjectProvider implements IJavaProjectProvider {
-
-		@Override
-		public Object getProject() {
-			return null;
-		}
-
-		@Override
-		public Object getPackageFragmentRoot() {
-			return null;
-		}
-
-	}	
 
 }

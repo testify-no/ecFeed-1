@@ -21,46 +21,61 @@ import org.eclipse.swt.graphics.Image;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 
+import com.ecfeed.application.SessionDataStore;
+import com.ecfeed.core.utils.CommonConstants;
+import com.ecfeed.core.utils.SessionAttributes;
+
 public class ImageManager {
 
-	public static final String ICONS_FOLDER_NAME = "icons";
-
-	private static ImageManager fInstance;
-	private Map<String, ImageDescriptor> fDescriptors;
-	private Map<String, Image> fImages;
-
-	public static ImageManager getInstance(){
-		if(fInstance == null){
-			fInstance = new ImageManager();
-		}
-		return fInstance;
-	}
-	
-	public static Image getImageFromFile(String file) {
-		return ImageManager.getInstance().getImage(file);
-	}
-
-	public ImageDescriptor getImageDescriptor(String fileName){
-		String path = CommonConstants.ICONS_FOLDER_NAME + "/" + fileName;
-		if(fDescriptors.containsKey(path) == false){
-			Bundle bundle = FrameworkUtil.getBundle(this.getClass());
-			URL url = FileLocator.find(bundle, new Path(path), null);
-			fDescriptors.put(path, ImageDescriptor.createFromURL(url));
-		}
-		return fDescriptors.get(path);
-	}
-
-	public Image getImage(String fileName){
-		Image image = fImages.get(fileName);
-		if(image == null){
-			fImages.put(fileName, getImageDescriptor(fileName).createImage());
-		}
-		return fImages.get(fileName);
-	}
+	private Map<String, ImageDescriptor> fDescriptorCache;
+	private Map<String, Image> fImageCache;
 
 	private ImageManager(){
-		fDescriptors = new HashMap<>();
-		fImages = new HashMap<>();
+		fDescriptorCache = new HashMap<>();
+		fImageCache = new HashMap<>();
 	}
-	
+
+	public static ImageManager getSessionInstance() {
+
+		ImageManager imageManager = (ImageManager)SessionDataStore.get(SessionAttributes.SA_IMAGE_MANAGER);
+
+		if (imageManager == null) {
+			imageManager = new ImageManager();
+			SessionDataStore.set(SessionAttributes.SA_IMAGE_MANAGER, imageManager);
+		}
+
+		return imageManager;
+	}
+
+	public static Image getImageFromFile(String file) {
+
+		return ImageManager.getSessionInstance().getImage(file);
+	}
+
+	public ImageDescriptor getImageDescriptor(String fileName) {
+
+		String path = CommonConstants.ICONS_FOLDER_NAME + "/" + fileName;
+
+		if (fDescriptorCache.containsKey(path) == false) {
+
+			Bundle bundle = FrameworkUtil.getBundle(this.getClass());
+			URL url = FileLocator.find(bundle, new Path(path), null);
+			fDescriptorCache.put(path, ImageDescriptor.createFromURL(url));
+		}
+
+		return fDescriptorCache.get(path);
+	}
+
+	public Image getImage(String fileName) {
+
+		Image imageInCache = fImageCache.get(fileName);
+
+		if (imageInCache == null) {
+			fImageCache.put(fileName, getImageDescriptor(fileName).createImage());
+		}
+
+		return fImageCache.get(fileName);
+	}
+
+
 }

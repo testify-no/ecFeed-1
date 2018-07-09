@@ -37,6 +37,7 @@ import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.core.utils.SystemHelper;
+import com.ecfeed.ui.common.AbstractSelectionAdapter;
 import com.ecfeed.ui.common.ColorConstants;
 import com.ecfeed.ui.common.ColorManager;
 import com.ecfeed.ui.common.Messages;

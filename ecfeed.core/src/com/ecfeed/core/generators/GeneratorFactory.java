@@ -19,7 +19,7 @@ import com.ecfeed.core.generators.api.IGenerator;
 
 public class GeneratorFactory<E> {
 
-	public static String GEN_TYPE_N_WISE = "N-wise generator";
+	public final static String GEN_TYPE_N_WISE = "N-wise generator";
 
 	private Map<String, Class<? extends IGenerator<E>>> fAvailableGenerators;
 

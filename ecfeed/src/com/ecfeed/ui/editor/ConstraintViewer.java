@@ -57,7 +57,7 @@ public class ConstraintViewer extends TreeViewerSection {
 			IModelUpdateContext updateContext, 
 			IJavaProjectProvider javaProjectProvider) {
 
-		super(sectionContext, updateContext, javaProjectProvider, STYLE);
+		super(sectionContext, updateContext, javaProjectProvider, STYLE, false);
 		getSection().setText("Constraint editor");
 
 		fAddStatementButton = addButton("Add statement", new AddStatementAdapter());
@@ -182,7 +182,7 @@ public class ConstraintViewer extends TreeViewerSection {
 		}
 
 		private Image getImage(String file) {
-			return ImageManager.getInstance().getImage(file);
+			return ImageManager.getSessionInstance().getImage(file);
 		}
 	}
 

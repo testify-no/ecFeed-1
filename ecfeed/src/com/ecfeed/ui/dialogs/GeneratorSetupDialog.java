@@ -65,12 +65,12 @@ import com.ecfeed.core.model.ModelHelper;
 import com.ecfeed.core.model.ModelSizeHelper;
 import com.ecfeed.core.serialization.export.ExportTemplateFactory;
 import com.ecfeed.core.serialization.export.IExportTemplate;
+import com.ecfeed.core.utils.CommonConstants;
 import com.ecfeed.core.utils.IValueApplier;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.MessageStack;
 import com.ecfeed.core.utils.StringHolder;
 import com.ecfeed.ui.common.ApplyValueMode;
-import com.ecfeed.ui.common.CommonConstants;
 import com.ecfeed.ui.common.EclipseImplementationStatusResolver;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.NodeNameColumnLabelProvider;
@@ -100,7 +100,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 	private Combo fExportFormatCombo;
 	private Text fTargetFileText;
 	private int fContent;
-	private String fTargetFile;
+	private String fTargetFileStr;
 	private ExportTemplateFactory fExportTemplateFactory;
 	private IExportTemplate fExportTemplate;
 	DialogObjectToolkit.FileSelectionComposite fExportFileSelectionComposite;
@@ -114,7 +114,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 
 	protected GeneratorSetupDialog(
 			Shell parentShell, 
-			MethodNode method,
+			MethodNode methodNode,
 			boolean generateExecutables, 
 			IJavaProjectProvider javaProjectProvider,
 			ExportTemplateFactory exportTemplateFactory,
@@ -125,13 +125,13 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		setHelpAvailable(false);
 		setShellStyle(SWT.BORDER | SWT.RESIZE | SWT.TITLE | SWT.APPLICATION_MODAL);
 
-		fMethod = method;
+		fMethod = methodNode;
 		fGeneratorFactory = new GeneratorFactory<ChoiceNode>();
 		fGenerateExecutableContent = generateExecutables;
 
 		fStatusResolver = new EclipseImplementationStatusResolver(javaProjectProvider);
 
-		fTargetFile = null;
+		fTargetFileStr = null;
 
 		fExportTemplateFactory = exportTemplateFactory;
 
@@ -139,7 +139,7 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 			fExportTemplate = exportTemplateFactory.createDefaultTemplate();
 		}
 
-		fTargetFile = targetFile;
+		fTargetFileStr = targetFile;
 	}
 
 	public static boolean canCreate(MethodNode methodNode) {
@@ -192,20 +192,53 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 
 	@Override
 	public void okPressed() {
-		if (fTargetFileText != null) {
-			fTargetFile = fTargetFileText.getText();
 
-			if (!TestCasesExportDialog.canOverwriteFile(fTargetFile)) {
+		if (isContentFlagOn(TEST_CASES_EXPORT_COMPOSITE)) {
+
+			String targetFileStr = getTargetFileStr();
+			if (targetFileStr ==  null) {
 				return;
 			}
 
-		} else {
-			fTargetFile = null;
+			fTargetFileStr = targetFileStr;
 		}
 
 		saveAlgorithmInput();
 		saveConstraints();
 		super.okPressed();
+	}
+
+	private String getTargetFileStr() {
+
+		if (ApplicationContext.isApplicationTypeLocal()) {
+			return getLocatTargetFileWithDialog();
+		}
+
+		return getTargetFileForRap();
+	}
+
+	private String getLocatTargetFileWithDialog() {
+
+		if (fTargetFileText == null) {
+			return null;
+		}
+
+		String targetFileStr = fTargetFileText.getText();
+
+		if (!TestCasesExportDialog.canOverwriteFile(targetFileStr)) {
+			return null;
+		}
+
+		return targetFileStr;
+	}
+
+	private String getTargetFileForRap() {
+
+		if (fExportTemplate == null) {
+			return fMethod.getName(); 
+		}
+
+		return fMethod.getName() + "." + fExportTemplate.getFileExtension();
 	}
 
 	@Override
@@ -608,9 +641,15 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 	}
 
 	private boolean validateTargetFileText(StringHolder message) {
+
 		if (!isContentFlagOn(TEST_CASES_EXPORT_COMPOSITE)) {
 			return true;
 		}
+
+		if (ApplicationContext.isApplicationTypeRemoteRap()) {
+			return true;
+		}
+
 		if (fTargetFileText == null || fTargetFileText.getText().isEmpty()) {
 			final String MSG_FILE_EMPTY = "Field: Export target file is empty.";
 			message.set(MSG_FILE_EMPTY);
@@ -650,7 +689,10 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 				"Advanced...", new ExportDefinitionSelectionAdapter());
 
 		createExportTemplateCombo(parentComposite);
-		createFileSelectionComposite(parentComposite);
+
+		if (ApplicationContext.isApplicationTypeLocal()) {
+			createFileSelectionComposite(parentComposite);
+		}
 	}
 
 	private void createExportTemplateCombo(Composite composite) {
@@ -681,13 +723,13 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 		fTargetFileText = fExportFileSelectionComposite.getTextField();
 
 
-		if (fTargetFile != null) {
-			fTargetFileText.setText(fTargetFile);
+		if (fTargetFileStr != null) {
+			fTargetFileText.setText(fTargetFileStr);
 		}
 	}
 
 	public String getTargetFile() {
-		return fTargetFile;
+		return fTargetFileStr;
 	}
 
 	private void createGeneratorViewer(final Composite parent) {
@@ -1094,8 +1136,8 @@ public abstract class GeneratorSetupDialog extends TitleAreaDialog {
 							FileCompositeVisibility.NOT_VISIBLE, 
 							fExportTemplateFactory,
 							fExportTemplate,
-							fTargetFile, 
-							fMethod.getParametersCount(),
+							fTargetFileStr, 
+							fMethod,
 							null);
 
 			if (dialog.open() != IDialogConstants.OK_ID) {

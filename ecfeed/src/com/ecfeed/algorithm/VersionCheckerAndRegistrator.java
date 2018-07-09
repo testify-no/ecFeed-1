@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ecfeed.application.ApplicationContext;
+import com.ecfeed.application.ApplicationVersionHelper;
 import com.ecfeed.core.net.HttpProperty;
 import com.ecfeed.core.net.IHttpCommunicator;
 import com.ecfeed.core.utils.SystemHelper;
@@ -76,7 +77,7 @@ public class VersionCheckerAndRegistrator {
 
 	private static HttpProperty createUserAgentProperty() {
 
-		String ecFeedVersion = ApplicationContext.getEcFeedVersion();
+		String ecFeedVersion = ApplicationVersionHelper.getEcFeedVersion();
 		if (ecFeedVersion == null) {
 			ecFeedVersion = "unknownVersion";
 		}

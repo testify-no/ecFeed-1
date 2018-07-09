@@ -15,8 +15,8 @@ import java.util.Collection;
 import com.ecfeed.core.adapter.operations.GenericOperationAddParameter;
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ParametersParentNode;
+import com.ecfeed.core.utils.CommonConstants;
 import com.ecfeed.core.utils.JavaTypeHelper;
-import com.ecfeed.ui.common.CommonConstants;
 import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 

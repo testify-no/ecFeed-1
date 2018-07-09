@@ -47,6 +47,7 @@ import com.ecfeed.core.model.StatementConditionHelper;
 import com.ecfeed.core.model.StaticStatement;
 import com.ecfeed.core.model.ValueCondition;
 import com.ecfeed.core.utils.SystemLogger;
+import com.ecfeed.ui.common.FocusLostListener;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.ecfeed.ui.modelif.AbstractStatementInterface;

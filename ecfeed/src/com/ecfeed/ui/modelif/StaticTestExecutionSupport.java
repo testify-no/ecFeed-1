@@ -35,6 +35,7 @@ import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.utils.ConsoleManager;
 import com.ecfeed.ui.common.utils.EclipseProjectHelper;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
+import com.ecfeed.ui.dialogs.TestResultsHolder;
 import com.ecfeed.ui.dialogs.basic.ErrorDialog;
 
 public class StaticTestExecutionSupport {

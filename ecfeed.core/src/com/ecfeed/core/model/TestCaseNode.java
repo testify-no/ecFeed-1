@@ -106,8 +106,15 @@ public class TestCaseNode extends AbstractNode {
 	}
 
 	public static boolean validateTestSuiteName(String newName) {
-		if(newName.length() < 1 || newName.length() > 64) return false;
-		if(newName.matches("[ ]+.*")) return false;
+		
+		if (newName.length() < 1 || newName.length() > 64) {
+			return false;
+		}
+		
+		if(newName.matches("[ ]+.*")) { 
+			return false;
+		}
+		
 		return true;
 	}
 

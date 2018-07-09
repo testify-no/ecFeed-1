@@ -24,24 +24,45 @@ import org.eclipse.ui.console.IConsoleView;
 import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.console.MessageConsoleStream;
 
+import com.ecfeed.application.SessionDataStore;
+import com.ecfeed.core.utils.SessionAttributes;
+
 public class ConsoleManager {
 
-	private static MessageConsole outputConsole;
-	private static MessageConsoleStream outputStream;
+	private MessageConsole outputConsole;
+	private MessageConsoleStream outputStream;
 
 	public static void prepareOutput() {
 		ConsoleManager.displayConsole();
 		ConsoleManager.redirectSystemOutputToStream(ConsoleManager.getOutputStream());
 	}
 
+	private static ConsoleManager getSessionInstance() {
+
+		ConsoleManager consoleManager = (ConsoleManager)SessionDataStore.get(
+				SessionAttributes.SA_CONSOLE_MANAGER);
+
+		if (consoleManager == null) {
+			consoleManager = new ConsoleManager();
+			SessionDataStore.set(SessionAttributes.SA_CONSOLE_MANAGER, consoleManager);
+		}
+
+		return consoleManager;
+	}
+
 	private static MessageConsole getOutputConsole() {
-		if (outputConsole == null) {
+
+		ConsoleManager sessionInstance = getSessionInstance();
+
+		if (sessionInstance.outputConsole == null) {
+
 			ConsolePlugin consolePlugin = ConsolePlugin.getDefault();
 			IConsoleManager consoleManager = consolePlugin.getConsoleManager();
-			outputConsole = new MessageConsole("Test output", null);
-			consoleManager.addConsoles(new IConsole[]{outputConsole});
+			sessionInstance.outputConsole = new MessageConsole("Test output", null);
+			consoleManager.addConsoles(new IConsole[]{sessionInstance.outputConsole});
 		}
-		return outputConsole;
+
+		return sessionInstance.outputConsole;
 	}
 
 	private static void displayConsole() {
@@ -55,10 +76,13 @@ public class ConsoleManager {
 	}
 
 	private static MessageConsoleStream getOutputStream() {
-		if (outputStream == null) {
-			outputStream = getOutputConsole().newMessageStream();
+
+		ConsoleManager sessionInstance = getSessionInstance();
+
+		if (sessionInstance.outputStream == null) {
+			sessionInstance.outputStream = getOutputConsole().newMessageStream();
 		}
-		return outputStream;
+		return sessionInstance.outputStream;
 	}
 
 	private static void redirectSystemOutputToStream(OutputStream outputStream) {

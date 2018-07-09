@@ -14,6 +14,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
 import com.ecfeed.application.ApplicationContext;
+import com.ecfeed.application.ApplicationVersionHelper;
 import com.ecfeed.core.utils.StringHelper;
 
 public class AboutDialog {
@@ -51,9 +52,9 @@ public class AboutDialog {
 
 		stringBuilder.append(
 				"     ecFeed for Eclipse, version " + 
-						ApplicationContext.getEcFeedVersion() + "\n");
+						ApplicationVersionHelper.getEcFeedVersion() + "\n");
 
-		String rapVersion = ApplicationContext.getRapVersion();
+		String rapVersion = ApplicationVersionHelper.getRapVersion();
 
 		if (!StringHelper.isNullOrEmpty(rapVersion)) {
 			stringBuilder.append("     "); 

@@ -12,83 +12,135 @@ package com.ecfeed.ui.editor.actions;
 
 import org.eclipse.jface.viewers.ISelectionProvider;
 
+import com.ecfeed.application.SessionDataStore;
+import com.ecfeed.core.utils.IWorker;
+import com.ecfeed.core.utils.SessionAttributes;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class ActionFactory {
 
-	private static AboutAction fAboutAction = null;
-	private static SaveAction fSaveAction = null;
-	private static UndoAction fUndoAction = null;
-	private static RedoAction fRedoAction = null;
-	private static CopyAction fCopyAction = null;
-	private static CopyToolbarAction fCopyToolbarAction = null;
-	private static PasteToolbarAction fPasteToolbarAction = null;
+	private AboutAction fAboutAction = null;
+	private ImportModelAction fImportModelAction = null;
+	private ExportModelAction fExportModelAction = null;
+	private SaveAction fSaveAction = null;
+	private UndoAction fUndoAction = null;
+	private RedoAction fRedoAction = null;
+	private CopyAction fCopyAction = null;
+	private CopyToolbarAction fCopyToolbarAction = null;
+	private PasteToolbarAction fPasteToolbarAction = null;
+
+	private static ActionFactory getSessionInstance() {
+
+		ActionFactory actionFactory = (ActionFactory)SessionDataStore.get(
+				SessionAttributes.SA_ACTION_FACTORY);
+
+		if (actionFactory == null) {
+			actionFactory = new ActionFactory();
+			SessionDataStore.set(SessionAttributes.SA_ACTION_FACTORY, actionFactory);
+		}
+
+		return actionFactory;
+	}
 
 	public static AboutAction getAboutAction() {
 
-		if (fAboutAction == null) {
-			fAboutAction = new AboutAction();
+		ActionFactory actionFactory = getSessionInstance();
+
+		if (actionFactory.fAboutAction == null) {
+			actionFactory.fAboutAction = new AboutAction();
 		}
 
-		return fAboutAction;
+		return actionFactory.fAboutAction;
 	}
+	
+	public static ImportModelAction getImportModelAction() {
 
-	public static SaveAction getSaveAction() {
+		ActionFactory actionFactory = getSessionInstance();
 
-		if (fSaveAction == null) {
-			fSaveAction = new SaveAction();
+		if (actionFactory.fImportModelAction == null) {
+			actionFactory.fImportModelAction = new ImportModelAction();
 		}
 
-		return fSaveAction;
+		return actionFactory.fImportModelAction;
+	}
+	
+	public static ExportModelAction getExportModelAction() {
+
+		ActionFactory actionFactory = getSessionInstance();
+
+		if (actionFactory.fExportModelAction == null) {
+			actionFactory.fExportModelAction = new ExportModelAction();
+		}
+
+		return actionFactory.fExportModelAction;
+	}	
+	
+	public static SaveAction getSaveAction(IWorker saveWorker) {
+
+		ActionFactory actionFactory = getSessionInstance();
+
+		if (actionFactory.fSaveAction == null) {
+			actionFactory.fSaveAction = new SaveAction(saveWorker);
+		}
+
+		return actionFactory.fSaveAction;
 	}
 
 	public static UndoAction getUndoAction() {
 
-		if (fUndoAction == null) {
-			fUndoAction = new UndoAction();
+		ActionFactory actionFactory = getSessionInstance();
+
+		if (actionFactory.fUndoAction == null) {
+			actionFactory.fUndoAction = new UndoAction();
 		}
 
-		return fUndoAction;
+		return actionFactory.fUndoAction;
 	}	
 
 	public static RedoAction getRedoAction() {
 
-		if (fRedoAction == null) {
-			fRedoAction = new RedoAction();
+		ActionFactory actionFactory = getSessionInstance();
+
+		if (actionFactory.fRedoAction == null) {
+			actionFactory.fRedoAction = new RedoAction();
 		}
 
-		return fRedoAction;
+		return actionFactory.fRedoAction;
 	}	
 
 	public static CopyAction getCopyAction() {
 
-		if (fCopyAction == null) {
-			fCopyAction = new CopyAction();
+		ActionFactory actionFactory = getSessionInstance();
+
+		if (actionFactory.fCopyAction == null) {
+			actionFactory.fCopyAction = new CopyAction();
 		}
 
-		return fCopyAction;
+		return actionFactory.fCopyAction;
 	}
-
 
 	public static CopyToolbarAction getCopyToolbarAction() {
 
-		if (fCopyToolbarAction == null) {
-			fCopyToolbarAction = new CopyToolbarAction();
+		ActionFactory actionFactory = getSessionInstance();
+
+		if (actionFactory.fCopyToolbarAction == null) {
+			actionFactory.fCopyToolbarAction = new CopyToolbarAction();
 		}
 
-		return fCopyToolbarAction;
+		return actionFactory.fCopyToolbarAction;
 	}
-	
+
 	public static PasteToolbarAction getPasteToolbarAction() {
 
-		if (fPasteToolbarAction == null) {
-			fPasteToolbarAction = new PasteToolbarAction();
+		ActionFactory actionFactory = getSessionInstance();
+
+		if (actionFactory.fPasteToolbarAction == null) {
+			actionFactory.fPasteToolbarAction = new PasteToolbarAction();
 		}
 
-		return fPasteToolbarAction;
+		return actionFactory.fPasteToolbarAction;
 	}
-	
 
 	public static void setContextForActions(
 			ISelectionProvider selectionProvider,

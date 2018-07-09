@@ -11,8 +11,8 @@ import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.TestCaseNode;
+import com.ecfeed.core.utils.CommonConstants;
 import com.ecfeed.core.utils.JavaTypeHelper;
-import com.ecfeed.ui.common.CommonConstants;
 
 public class ModelTreeContentProvider extends TreeNodeContentProvider implements ITreeContentProvider {
 

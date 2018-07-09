@@ -18,6 +18,7 @@ import org.eclipse.ui.PlatformUI;
 
 import com.ecfeed.application.ApplicationContext;
 
+
 public class Application implements IApplication {
 
 	public Object start(IApplicationContext context) {

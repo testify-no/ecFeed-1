@@ -30,7 +30,52 @@ import com.ecfeed.core.utils.SystemLogger;
 public abstract class CachedImplementationStatusResolver extends AbstractImplementationStatusResolver {
 
 	private static Map<AbstractNode, EImplementationStatus> fCache = new HashMap<>();
-	private static CacheCleaner fCacheCleaner = new CacheCleaner();
+
+
+	public CachedImplementationStatusResolver(IPrimitiveTypePredicate primitiveTypePredicate) {
+		super(primitiveTypePredicate);
+	}
+
+	@Override
+	public EImplementationStatus getImplementationStatus(AbstractNode node) {
+
+		EImplementationStatus status = fCache.get(node);
+
+		if (status == null) {
+			status = super.getImplementationStatus(node);
+			updateCache(node, status);
+		}
+
+		return status;
+	}
+
+	public static void clearCache(AbstractNode node) {
+
+		if (node == null) {
+			return;
+		}
+
+		try {
+			node.accept(new CacheCleaner());
+		} catch(Exception e) {
+			SystemLogger.logCatch(e.getMessage());
+		}
+
+		clearCache(node.getParent());
+	}
+
+	public void updateCache(AbstractNode node, EImplementationStatus status) {
+
+		fCache.put(node, status);
+
+		if (node != null && node.getParent() != null) {
+			clearCache(node.getParent());
+		}
+	}
+
+	public static void clearCache() {
+		fCache.clear();
+	}
 
 	private static class CacheCleaner implements IModelVisitor{
 
@@ -61,71 +106,42 @@ public abstract class CachedImplementationStatusResolver extends AbstractImpleme
 		@Override
 		public Object visit(GlobalParameterNode node) throws Exception {
 			fCache.remove(node);
-			for(MethodParameterNode parameter : node.getLinkers()){
+
+			for (MethodParameterNode parameter : node.getLinkers()) {
 				fCache.remove(parameter);
 			}
+
 			return null;
 		}
 
 		@Override
 		public Object visit(TestCaseNode node) throws Exception {
+
 			fCache.remove(node);
 			return null;
 		}
 
 		@Override
 		public Object visit(ConstraintNode node) throws Exception {
+
 			fCache.remove(node);
 			return null;
 		}
 
 		@Override
 		public Object visit(ChoiceNode node) throws Exception {
+
 			fCache.remove(node);
-			for(MethodNode method : node.getParameter().getMethods()){
-				for(TestCaseNode testCase : method.mentioningTestCases(node)){
+
+			for (MethodNode method : node.getParameter().getMethods()) {
+				for (TestCaseNode testCase : method.mentioningTestCases(node)) {
 					fCache.remove(testCase);
 				}
 			}
+
 			return null;
 		}
 
 	}
 
-	public CachedImplementationStatusResolver(IPrimitiveTypePredicate primitiveTypePredicate) {
-		super(primitiveTypePredicate);
-		fCacheCleaner = new CacheCleaner();
-	}
-
-	@Override
-	public EImplementationStatus getImplementationStatus(AbstractNode node){
-		EImplementationStatus status = fCache.get(node);
-
-		if(status == null){
-			status = super.getImplementationStatus(node);
-			updateCache(node, status);
-		}
-
-		return status;
-	}
-
-	public static void clearCache(AbstractNode node){
-		if(node != null){
-			try{
-				node.accept(fCacheCleaner);
-			}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
-			clearCache(node.getParent());
-		}
-	}
-
-	public void updateCache(AbstractNode node, EImplementationStatus status){
-		fCache.put(node, status);
-		if(node != null && node.getParent() != null){
-			clearCache(node.getParent());
-		}
-	}
-
-	public static void clearCache(){
-		fCache.clear();
-	}
 }

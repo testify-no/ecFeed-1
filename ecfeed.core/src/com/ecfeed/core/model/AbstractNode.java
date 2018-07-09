@@ -23,17 +23,10 @@ public abstract class AbstractNode{
 	private AbstractNode fParent;
 	private String fDescription;
 	private NodeProperties fProperties = new NodeProperties();
-	private final int fId;
-	private static int fLastId = 0;
 	protected final List<AbstractNode> EMPTY_CHILDREN_ARRAY = new ArrayList<AbstractNode>();
 
 	public AbstractNode(String name){
-		fId = ++fLastId;
 		this.fName = name;
-	}
-
-	public int getId(){
-		return fId;
 	}
 
 	public int getMyIndex(){
@@ -153,14 +146,6 @@ public abstract class AbstractNode{
 	@Override
 	public String toString(){
 		return getName();
-	}
-
-	@Override
-	public boolean equals(Object obj){
-		if(obj instanceof AbstractNode){
-			return ((AbstractNode)obj).getId() == fId;
-		}
-		return false;
 	}
 
 	public boolean isMatch(AbstractNode node){

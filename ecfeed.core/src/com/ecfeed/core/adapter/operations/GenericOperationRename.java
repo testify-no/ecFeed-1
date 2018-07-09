@@ -157,14 +157,10 @@ public class GenericOperationRename extends AbstractModelOperation {
 	protected void verifyNewName(String newName) throws ModelOperationException{
 	}
 
-	protected void verifyNameWithRegex() throws ModelOperationException{
-		if(fNewName.matches(fNameRegex) == false){
-			try {
-				ModelOperationException.pushLoggingState(false);
-				ModelOperationException.report(getRegexProblemMessage());
-			} finally {
-				ModelOperationException.popLoggingState();
-			}
+	protected void verifyNameWithRegex() throws ModelOperationException {
+		
+		if (fNewName.matches(fNameRegex) == false) {
+			ModelOperationException.report(getRegexProblemMessage());
 		}
 	}
 

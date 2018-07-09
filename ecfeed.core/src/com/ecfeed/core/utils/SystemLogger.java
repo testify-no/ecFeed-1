@@ -25,6 +25,11 @@ public class SystemLogger {
 	private static boolean fFirstLogError = true;
 
 	public static void setLogToFileAndOutput() {
+
+//		if (ApplicationContext.isApplicationTypeRemoteRap()) {
+//			return;
+//		}
+
 		fLogToFile = true;
 	}
 
@@ -107,6 +112,10 @@ public class SystemLogger {
 				System.out.println(MSG);
 			}
 		}
+	}
+
+	public static void logTimedLine(String line) {
+		logLine(TimeStringHelper.getTimeLongString() + " - " + line); 
 	}
 
 	public static <T> void logListOfElements(String message, List<T> list) {

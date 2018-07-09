@@ -36,6 +36,7 @@ import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.utils.IJavaProjectProvider;
 import com.ecfeed.ui.dialogs.GeneratorProgressMonitorDialog;
 import com.ecfeed.ui.dialogs.SetupDialogOnline;
+import com.ecfeed.ui.dialogs.TestResultsHolder;
 import com.ecfeed.ui.dialogs.basic.ErrorDialog;
 
 public abstract class AbstractOnlineSupport {
@@ -175,23 +176,23 @@ public abstract class AbstractOnlineSupport {
 		constraintList.addAll(dialog.getConstraints());
 		Map<String, Object> parameters = dialog.getGeneratorParameters();
 
-		runParametrizedTests(selectedGenerator, algorithmInput, constraintList, parameters);
+		Result result = runParametrizedTests(selectedGenerator, algorithmInput, constraintList, parameters);
 		displayRunSummary();
 
 		fTargetFile = dialog.getTargetFile();
 		fExportTemplate = dialog.getExportTemplateText();
 
-		return Result.OK;
+		return result;
 	}
 
-	private void runParametrizedTests(IGenerator<ChoiceNode> generator,
+	private Result runParametrizedTests(IGenerator<ChoiceNode> generator,
 			List<List<ChoiceNode>> input,
 			Collection<IConstraint<ChoiceNode>> constraints,
 			Map<String, Object> parameters) {
 
 		GeneratorProgressMonitorDialog progressDialog = new GeneratorProgressMonitorDialog(
 				Display.getCurrent().getActiveShell(), generator);
-
+		
 		ParametrizedTestRunnable runnable = new ParametrizedTestRunnable(
 				generator, input, constraints, parameters);
 		progressDialog.open();
@@ -202,6 +203,12 @@ public abstract class AbstractOnlineSupport {
 					Messages.DIALOG_TEST_EXECUTION_PROBLEM_TITLE,
 					e.getMessage());
 		}
+		
+		if (progressDialog.wasCancel()) {
+			return Result.CANCELED;
+		}
+		
+		return Result.OK;
 	}
 
 	protected void displayTestStatusDialog() {

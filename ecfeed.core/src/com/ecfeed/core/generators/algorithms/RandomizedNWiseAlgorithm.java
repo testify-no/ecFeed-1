@@ -21,6 +21,7 @@ import java.util.Set;
 
 import javax.management.RuntimeErrorException;
 
+import com.ecfeed.core.generators.DimensionedItem;
 import com.ecfeed.core.generators.api.GeneratorException;
 import com.ecfeed.core.generators.api.IConstraint;
 import com.ecfeed.core.generators.api.IGeneratorProgressMonitor;

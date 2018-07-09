@@ -36,9 +36,9 @@ import com.ecfeed.core.generators.TestResultDescription;
 import com.ecfeed.core.generators.TestResultsAnalysis;
 import com.ecfeed.core.generators.TestResultsAnalyzer;
 import com.ecfeed.core.model.MethodNode;
+import com.ecfeed.ui.common.utils.PagingContainer;
 import com.ecfeed.ui.dialogs.basic.DialogObjectToolkit;
 import com.ecfeed.ui.dialogs.basic.DialogObjectToolkit.GridButton;
-import com.ecfeed.ui.modelif.TestResultsHolder;
 
 
 public class CulpritAnalysisDialog extends TitleAreaDialog {

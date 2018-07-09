@@ -13,8 +13,6 @@ package com.ecfeed.core.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.codec.binary.StringUtils;
-
 import com.ecfeed.core.utils.EvaluationResult;
 import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.JavaTypeHelper;
@@ -34,7 +32,7 @@ public enum EStatementRelation{
 	EQUAL(StatementRelationNames.RELATION_EQUAL) {
 		@Override
 		public boolean isMatch(String typeName, String leftString, String rightString) {
-			return StringUtils.equals(leftString, rightString);
+			return StringHelper.isEqual(leftString, rightString);
 		}
 	}, 
 	NOT_EQUAL(StatementRelationNames.RELATION_NOT_EQUAL) {

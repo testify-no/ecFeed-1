@@ -50,20 +50,42 @@ public class TestCasesViewerLabelProvider extends LabelProvider implements IColo
 
 	@Override
 	public String getText(Object element) {
+
 		if (element instanceof String) {
+
 			String suiteName = (String)element;
 			int executable = 0;
-			if(fExecutableTestSuites.containsKey(suiteName)){
+
+			if (fExecutableTestSuites.containsKey(suiteName)) {
 				executable = fExecutableTestSuites.get(suiteName);
 			}
+
 			Collection<TestCaseNode> testCases = fMethod.getTestCases(suiteName);
 			String plural = testCases.size() != 1 ? "s" : "";
-			return suiteName + " [" + testCases.size() + " test case" + plural + ", " + executable + " executable]";   
+
+			return createSuiteLabel(suiteName, executable, testCases, plural);   
 		}
-		else if(element instanceof TestCaseNode){
+
+		if (element instanceof TestCaseNode) {
 			return fMethod.getName() + "(" + ((TestCaseNode)element).testDataString() + ")";
 		}
+
 		return null;
+	}
+
+	private String createSuiteLabel(String suiteName, int executable, Collection<TestCaseNode> testCases, String plural) {
+
+		StringBuilder sb = new StringBuilder();
+
+		sb.append(suiteName + " [" + testCases.size() + " test case" + plural);
+
+		if (ApplicationContext.isApplicationTypeLocalPlugin()) {
+			sb.append(", " + executable + " executable]");
+		} else {
+			sb.append("]");
+		}
+
+		return sb.toString();
 	}
 
 	@Override

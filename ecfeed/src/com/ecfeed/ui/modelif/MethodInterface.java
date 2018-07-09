@@ -23,7 +23,6 @@ import org.eclipse.swt.widgets.Shell;
 
 import com.ecfeed.android.external.TestMethodInvokerExt;
 import com.ecfeed.android.utils.AndroidBaseRunnerHelper;
-import com.ecfeed.application.ApplicationContext;
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.ITypeAdapterProvider;
 import com.ecfeed.core.adapter.operations.MethodOperationAddConstraint;
@@ -50,11 +49,10 @@ import com.ecfeed.core.runner.java.SeleniumTestMethodInvoker;
 import com.ecfeed.core.serialization.export.BasicExportTemplate;
 import com.ecfeed.core.serialization.export.ExportTemplateFactory;
 import com.ecfeed.core.serialization.export.IExportTemplate;
+import com.ecfeed.core.utils.CommonConstants;
 import com.ecfeed.core.utils.EcException;
 import com.ecfeed.core.utils.JavaTypeHelper;
 import com.ecfeed.core.utils.StringHelper;
-import com.ecfeed.serialization.export.TestCasesExporter;
-import com.ecfeed.ui.common.CommonConstants;
 import com.ecfeed.ui.common.EclipseTypeAdapterProvider;
 import com.ecfeed.ui.common.EclipseTypeHelper;
 import com.ecfeed.ui.common.ImplementationAdapter;
@@ -68,7 +66,6 @@ import com.ecfeed.ui.dialogs.SelectCompatibleMethodDialog;
 import com.ecfeed.ui.dialogs.TestCasesExportDialog;
 import com.ecfeed.ui.dialogs.TestCasesExportDialog.FileCompositeVisibility;
 import com.ecfeed.ui.dialogs.basic.ErrorDialog;
-import com.ecfeed.ui.dialogs.basic.InfoDialog;
 import com.ecfeed.utils.SeleniumHelper;
 
 public class MethodInterface extends ParametersParentInterface {
@@ -246,8 +243,8 @@ public class MethodInterface extends ParametersParentInterface {
 	}
 
 	public void executeOnlineTests(IJavaProjectProvider javaProjectProvider
-)
-			throws EcException {
+			)
+					throws EcException {
 		ClassNode classNode = getOwnNode().getClassNode();
 
 		if (!isValidClassConfiguration(classNode))
@@ -278,7 +275,7 @@ public class MethodInterface extends ParametersParentInterface {
 						getOwnNode(), 
 						methodInvoker, 
 						javaProjectProvider, 
-						ApplicationContext.getExportTargetFile());
+						ExportHelper.getExportTargetFile());
 
 		AbstractOnlineSupport.Result result = onlineExportSupport.proceed();
 
@@ -292,16 +289,17 @@ public class MethodInterface extends ParametersParentInterface {
 		}
 
 		String targetFile = onlineExportSupport.getTargetFile();
-		ApplicationContext.setExportTargetFile(targetFile);
+		ExportHelper.setExportTargetFile(targetFile);
 
 		IExportTemplate basicTemplate = 
 				new BasicExportTemplate(null);
 
 		basicTemplate.setTemplateText(onlineExportSupport.getExportTemplate());
 
-		runExport(methodInvoker.getTestCasesToExport(), basicTemplate, targetFile);
-	}
+		Collection<TestCaseNode> testCases = methodInvoker.getTestCasesToExport();
 
+		ExportHelper.runExport(getOwnNode(), testCases, basicTemplate, targetFile);
+	}
 
 	public void executeStaticTests(Collection<TestCaseNode> testCases,
 			IJavaProjectProvider javaProjectProvider) throws EcException {
@@ -335,39 +333,18 @@ public class MethodInterface extends ParametersParentInterface {
 						FileCompositeVisibility.VISIBLE, 
 						exportTemplateFactory,
 						exportTemplate,
-						ApplicationContext.getExportTargetFile(),
-						getOwnNode().getParametersCount(),
+						ExportHelper.getExportTargetFile(),
+						getOwnNode(),
 						checkedTestCases);
 
 		if (dialog.open() != IDialogConstants.OK_ID) {
 			return;
 		}
 
-		ApplicationContext.setExportTargetFile(dialog.getTargetFile());
+		ExportHelper.setExportTargetFile(dialog.getTargetFile());
 		IExportTemplate currentExportTemplate = dialog.getExportTemplate();
 
-		runExport(checkedTestCases, 
-				currentExportTemplate,
-				dialog.getTargetFile());
-	}
-
-	private void runExport(
-			Collection<TestCaseNode> testCases,
-			IExportTemplate exportTemplate,
-			String targetFile) {
-
-		try {
-			TestCasesExporter exporter = new TestCasesExporter(exportTemplate);
-
-			exporter.runExport(getOwnNode(), testCases, targetFile);
-
-		} catch (Exception e) {
-			ErrorDialog.open(e.getMessage());
-			return;
-		}
-
-		final String EXPORT_FINISHED = "Export finished.";
-		InfoDialog.open(EXPORT_FINISHED);
+		ExportHelper.runExport(getOwnNode(), checkedTestCases, currentExportTemplate, dialog.getTargetFile());
 	}
 
 	private boolean isValidClassConfiguration(ClassNode classNode) {
@@ -384,7 +361,7 @@ public class MethodInterface extends ParametersParentInterface {
 
 	private ITestMethodInvoker createTestMethodInvoker(
 			IJavaProjectProvider javaProjectProvider) throws EcException {
-		
+
 		MethodNode methodNode = getOwnNode();
 		ClassNode classNode = methodNode.getClassNode();
 
@@ -400,7 +377,7 @@ public class MethodInterface extends ParametersParentInterface {
 	}
 
 	ITestMethodInvoker createAndroidTestMethodInvoker(IJavaProjectProvider javaProjectProvider) throws EcException {
-		
+
 		String projectPath = new EclipseProjectHelper(javaProjectProvider).getProjectPath();
 		String androidRunner = AndroidBaseRunnerHelper.createFullAndroidRunnerName(projectPath);
 		return TestMethodInvokerExt.createInvoker(androidRunner);
@@ -447,6 +424,7 @@ public class MethodInterface extends ParametersParentInterface {
 			Object[] checkedElements, 
 			Object[] grayedElements, 
 			IJavaProjectProvider javaProjectProvider) throws InterruptedException {
+
 		Shell activeShell = Display.getDefault().getActiveShell();
 		new CalculateCoverageDialog(activeShell, getOwnNode(), checkedElements,
 				grayedElements, javaProjectProvider).open();

@@ -27,12 +27,16 @@ public class KeyRegistrator {
 	private Control fControl;
 	private IActionGrouppingProvider fActionGroupingProvider;
 	private Set<KeyListener> fKeyListeners;
+	private boolean fIsExpandableTreeControl;
 
-
-	public KeyRegistrator(Control control, IActionGrouppingProvider actionProvider) {
+	public KeyRegistrator(Control control,
+			boolean isExpandableTreeControl,
+			IActionGrouppingProvider actionProvider) {
+		
 		fControl = control;
+		fIsExpandableTreeControl = isExpandableTreeControl;
 		fActionGroupingProvider = actionProvider;
-		fKeyListeners = new HashSet<KeyListener>(); 
+		fKeyListeners = new HashSet<KeyListener>();
 	}
 
 	public void unregisterKeyListeners() {
@@ -68,6 +72,11 @@ public class KeyRegistrator {
 
 		addKeyListener(ActionId.UNDO);
 		addKeyListener(ActionId.REDO);
+
+		if (fIsExpandableTreeControl) {
+			addKeyListener(ActionId.EXPAND_COLLAPSE);
+		}
+
 	}
 
 	private void addKeyListener(ActionId actionId) {
@@ -86,10 +95,11 @@ public class KeyRegistrator {
 			return;
 		}
 
-		int keyCode = action.getKeyCode();;
+		int keyCode = action.getKeyCode();
 		int modifier = action.getKeyModifier();
 
 		KeyListener keyListener = new ActionKeyListener(keyCode, modifier, action);
+
 		fControl.addKeyListener(keyListener);
 
 		fKeyListeners.add(keyListener);

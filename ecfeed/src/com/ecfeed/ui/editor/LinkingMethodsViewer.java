@@ -105,7 +105,7 @@ public class LinkingMethodsViewer extends TreeViewerSection {
 			IModelUpdateContext updateContext,
 			IJavaProjectProvider javaProjectProvider) {
 
-		super(sectionContext, updateContext, javaProjectProvider, StyleDistributor.getSectionStyle());
+		super(sectionContext, updateContext, javaProjectProvider, StyleDistributor.getSectionStyle(), false);
 
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gd.minimumHeight = 250;
