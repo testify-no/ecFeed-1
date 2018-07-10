@@ -44,6 +44,10 @@ public class TypeAdapterForDouble extends TypeAdapterFloatingPoint<Double>{
 
 		String[] range = RangeHelper.splitToRange(rangeTxt);
 
+		if (StringHelper.isEqual(range[0], range[1])) {
+			return JavaTypeHelper.parseDoubleValue(range[0], EConversionMode.QUIET);
+		}		
+		
 		return ThreadLocalRandom.current().nextDouble(
 				JavaTypeHelper.parseDoubleValue(range[0], EConversionMode.QUIET),
 				JavaTypeHelper.parseDoubleValue(range[1], EConversionMode.QUIET));

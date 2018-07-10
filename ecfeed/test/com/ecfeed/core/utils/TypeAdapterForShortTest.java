@@ -126,6 +126,16 @@ public class TypeAdapterForShortTest {
 
 		checkRange(result, Short.MIN_VALUE, Short.MAX_VALUE);
 	}
+	
+	@Test
+	public void shouldGenerateValue3() {
+
+		TypeAdapterForShort typeAdapterForShort = new TypeAdapterForShort();
+
+		Short result = typeAdapterForShort.generateValue("-4:-4");		
+
+		checkRange(result, (short)-4, (short)-4);
+	}	
 
 	private void checkRange(Short result, Short min, Short max) {
 

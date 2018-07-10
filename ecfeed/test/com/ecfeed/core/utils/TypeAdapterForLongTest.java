@@ -51,6 +51,16 @@ public class TypeAdapterForLongTest {
 
 		checkRange(result, 0L, Long.MAX_VALUE);
 	}	
+	
+	@Test
+	public void shouldGenerateValue3() {
+
+		TypeAdapterForLong typeAdapterForLong = new TypeAdapterForLong();
+
+		Long result = typeAdapterForLong.generateValue("100:100");		
+
+		checkRange(result, 100L, 100L);
+	}	
 
 	private void checkRange(Long result, Long min, Long max) {
 

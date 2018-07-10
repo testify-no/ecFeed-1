@@ -48,6 +48,10 @@ public class TypeAdapterForByte extends TypeAdapterForNumericType<Byte>{
 	public Byte generateValue(String rangeTxt) {
 
 		String[] range = RangeHelper.splitToRange(rangeTxt);
+		
+		if (StringHelper.isEqual(range[0], range[1])) {
+			return JavaTypeHelper.parseByteValue(range[0], EConversionMode.QUIET);
+		}		
 
 		return (byte) ThreadLocalRandom.current().nextInt(
 				JavaTypeHelper.parseByteValue(range[0], EConversionMode.QUIET), 

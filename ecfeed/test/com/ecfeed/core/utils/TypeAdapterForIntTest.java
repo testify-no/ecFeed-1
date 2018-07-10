@@ -178,8 +178,19 @@ public class TypeAdapterForIntTest {
 
 		Integer result = typeAdapterForInt.generateValue("1:100");
 
-		checkRange(result, 0, 100);
+		checkRange(result, 1, 100);
 	}
+	
+	@Test
+	public void shouldGenerateValue5() {
+
+		TypeAdapterForInt typeAdapterForInt = new TypeAdapterForInt();
+
+		Integer result = typeAdapterForInt.generateValue("1:1");
+
+		checkRange(result, 1, 1);
+	}
+	
 
 	private void checkRange(Integer result, Integer min, Integer max) {
 
