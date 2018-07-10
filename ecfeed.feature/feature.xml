@@ -2,114 +2,150 @@
 <feature
       id="com.ecfeed"
       label="ecFeed"
-      version="1.12.10.qualifier"
+      version="1.13.0.qualifier"
       provider-name="ecFeed AS">
 
-   <description url="https://github.com/testify-no/ecFeed">
-      Test data generator and jUnit test execution framework based
-on Equivalence Class model.
-Changelog:
+   <description url="https://ecfeed.com">
+      #-------------------------------------------------------------------------------
+# Copyright (c) 2016 ecFeed AS.                                                   
+# All rights reserved. This program and the accompanying materials                 
+# are made available under the terms of the Eclipse Public License v1.0            
+# which accompanies this distribution, and is available at                         
+# http://www.eclipse.org/legal/epl-v10.html                                        
+#                                                                                  
+#-------------------------------------------------------------------------------
 
+Version 1.13.0
+- randomized choice values
+
+Version 1.12.11
+- fixed disappearing constraints on changing
+
+Version 1.12.10
+ - fixed image decorators on MacOS
+ - handling enums with String
+ 
 Version 1.12.9
  - image decorators are back
  - improved jUnit runner reporting
  - jUnit online runner uses all constraints by default
  - hover text on details page title bar 
+ 
 Version 1.12.8
  - hot bugfixes (pairwise generator, image file handlers leaks)
+ 
 Version 1.12.6
  - bugfixes (pairwise generator)
  - jUnit runner doesn&apos;t stop after first failure
  - configurable coverage measurement
+
 Version 1.12.4
  - remove default choices from parameters
  - fixed comments section in RCP
  - little improvements in menus
  - fixed dependencies problems reported from eclipse marketplace
+
 Version 1.12.2
  - bugfixes
+
 Version 1.12.0
  - Extended constraints (&lt;, &lt;=, &gt;, &gt;= relations, comparing values of two parameters of the same type, compare a parameter to a value)
  - Simplified export of test cases to cucumber&apos;s feature files (with a perspective to easily add more formats in the future)
  - Check for updates on startup
-
+ 
 Version 1.11.0
-- Web runner
-- added node properties (implementation detail)
+ - Web runner
+ - added node properties (implementation detail)
+
 Version 1.10.3
-- more bugfixes about global parameters
-- fixed label editor for standalone version
-- improved error reporting
+ - more bugfixes about global parameters
+ - fixed label editor for standalone version
+ - improved error reporting
+
 Version 1.10.2
-- bugfixes
+ - bugfixes
+
 Version 1.10.1
-- Fixes
-- Shortcut key (Insert) to add default node 
+ - minor fixes
+ - Insert shortcut key to add new subnode
+ - Simplified opening new file in standalone application
+
 Version 1.10.0
-- Export data to custom text format
-- minor bugfixes
+ - Export data to custom text format
+ - minor bugfixes
+
 Version 1.9.0
-- Android support for interactive test execution
-- &quot;source&quot; tab in the editor
-- Changed XML tag names in source to correspond with model node
-names
-- Fixed n-wise generation with global parameters
-- other bugfixes
+ - Android support for interactive test execution
+ - &quot;source&quot; tab in the editor
+ - Changed XML tag names in source to correspond with model node names
+ - Fixed n-wise generation with global parameters
+ - other bugfixes
+
 Version 1.8.2
-- bugfixes
+ - bugfixes
+
 Version 1.8.0
-- Global parameters
-- Model documentation
-- &quot;Go to implementation&quot; button
-- &quot;Browse...&quot; button for parameter type
-- minor fixes and improvements
+ - Global parameters
+ - Model documentation
+ - &quot;Go to implementation&quot; button
+ - &quot;Browse...&quot; button for parameter type
+ - minor fixes and improvements
+
 Version 1.7.0
-- Automatic stub implementation
-- Undo/Redo
-- Drag and drop
-- Improved copy and paste
-- Improved context menu
-- Multiselection in most viewers
+ - Automatic stub implementation
+ - Undo/Redo
+ - Drag and drop
+ - Improved copy and paste
+ - Improved context menu
+ - Multiselection in most viewers
+
 Version 1.6.0
-- Abstract models
-- Copy&amp;Paste
-- Introduced context menu for model viewer
-- Unified partitioned and expected (parameters)
-- User type parameters (enums)
-- Expected values constraining
+ - Abstract models
+ - Copy&amp;Paste
+ - Introduced context menu for model viewer
+ - Unified partitioned and expected (parameters)
+ - User type parameters (enums)
+ - Expected values constraining
+
 Version 1.5.0
-- Execute online and static tests from GUI
-- Calculate coverage dialog
-- Assertion exceptions point parameter configuration causing
-exception
+ - Execute online and static tests from GUI
+ - Calculate coverage dialog
+ - Assertion exceptions point parameter configuration causing exception
+
 Version 1.4.2
-- Fixed italic font style for inherited labels (Windows)
+ - Fixed italic font style for inherited labels (Windows)
+
 Version 1.4.1
-- Labels
-- Fixed resizing of viewers during resizing for editor part
-- fixed edit both partition name and value on Partition details
-page 
+ - Labels
+ - Fixed resizing of viewers during resizing for editor part
+ - fixed edit both partition name and value on Partition details page 
+
 Version 1.4.0
-- Adaptive random generator
-- hierarchical model 
-- removed possibility to define relations other than &apos;!=&quot; and
-&apos;=&apos;
+ - Adaptive random generator
+ - hierarchical model 
+ - removed possibility to define relations other than &apos;!=&quot; and &apos;=&apos;
+
 Version 1.3.1
-- Critical bugfixes
+ - Critical bugfixes
+
 Version 1.3.0
-- Random test generator
-- Online test generation and execution
+ - Random test generator
+ - Online test generation and execution
+
 Version 1.2.1
-- N-Wise test generator
-- Expected values
-- handling constraints by generators
+ - N-Wise test generator
+ - Expected values
+ - handling constraints by generators
+
 Version 1.1.0
-- Automatic test generation by Cartesian Product generator
+ - Automatic test generation by Cartesian Product generator
+
+
 Version 1.0.0
-- creating a model from source code
-- editing the model
-- manual creation of test cases
-- Executing test cases defined in the model
+ - creating a model from source code
+ - editing the model
+ - manual creation of test cases
+ - Executing test cases defined in the model
    </description>
 
    <copyright>
@@ -129,10 +165,16 @@ v1.0
 
    <license url="http://www.example.com/license">
       The ecFeed plugin is licensed under Eclipse Public License - v 1.0. 
+
 The plugin is distributed along with xom-1.2.10.jar library and its sources. The xom-1.2.9.jar is distributed under GNU Lesser General Public License, version 2.1. The sources of the xom-1.2.10.jar are distributed along the library.
+
 The plugin is distributed along with selenium-server-standalone-3.0.1.jar library. selenium-server-standalone-3.0.1.jar is distributed under Apache 2.0 License.
 
-Both, Eclipse Public License - v 1.0 and GNU Lesser General Public License, version 2.1 are available to read below:
+The plugin is distributed along with xeger-1.0-SNAPSHOT.jar library. xeger-1.0-SNAPSHOT.jar is distributed under Apache 2.0 License.
+
+The plugin is distributed along with automaton.jar library. automaton.jar is distributed under BSD License.
+
+Eclipse Public License - v 1.0, Apache 2.0 License, BSD License and GNU Lesser General Public License, version 2.1 are available to read below:
 
 Eclipse Public License - v 1.0
 
@@ -471,6 +513,21 @@ If the Library as you received it specifies that a proxy can decide whether futu
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
+   
+   
+===========================================================================================
+automaon.jar BSD License
+
+Copyright (c) 2001-2017 Anders Moeller
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
    </license>
 
    <url>
