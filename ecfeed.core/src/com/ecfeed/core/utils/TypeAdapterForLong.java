@@ -44,6 +44,10 @@ public class TypeAdapterForLong extends TypeAdapterForNumericType<Long>{
 
 		String[] range = RangeHelper.splitToRange(rangeTxt);
 
+		if (StringHelper.isEqual(range[0], range[1])) {
+			return JavaTypeHelper.parseLongValue(range[0], EConversionMode.QUIET);
+		}		
+		
 		return ThreadLocalRandom.current().nextLong(
 				JavaTypeHelper.parseLongValue(range[0], EConversionMode.QUIET),
 				JavaTypeHelper.parseLongValue(range[1], EConversionMode.QUIET));

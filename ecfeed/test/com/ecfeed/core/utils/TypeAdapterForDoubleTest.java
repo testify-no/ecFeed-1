@@ -168,6 +168,16 @@ public class TypeAdapterForDoubleTest {
 
 		checkRange(result, Double.MIN_VALUE, Double.MAX_VALUE);
 	}
+	
+	@Test
+	public void shouldGenerateValue3() {
+
+		TypeAdapterForDouble typeAdapterForDouble = new TypeAdapterForDouble();
+
+		Double result = typeAdapterForDouble.generateValue("5.0:5.0");		
+
+		checkRange(result, 5.0, 5.0);
+	}
 
 	private void checkRange(Double result, Double min, Double max) {
 

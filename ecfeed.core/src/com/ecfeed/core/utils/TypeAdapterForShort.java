@@ -44,6 +44,10 @@ public class TypeAdapterForShort extends TypeAdapterForNumericType<Short> {
 
 		String[] range = RangeHelper.splitToRange(rangeTxt);
 
+		if (StringHelper.isEqual(range[0], range[1])) {
+			return JavaTypeHelper.parseShortValue(range[0], EConversionMode.QUIET);
+		}
+		
 		return (short) ThreadLocalRandom.current().nextInt(
 				JavaTypeHelper.parseShortValue(range[0], EConversionMode.QUIET), 
 				JavaTypeHelper.parseShortValue(range[1], EConversionMode.QUIET));

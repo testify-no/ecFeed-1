@@ -128,6 +128,16 @@ public class TypeAdapterForFloatTest {
 
 		checkRange(result, Float.MIN_VALUE, Float.MAX_VALUE);
 	}
+	
+	@Test
+	public void shouldGenerateValue3() {
+
+		TypeAdapterForFloat typeAdapterForFloat = new TypeAdapterForFloat();
+
+		Float result = typeAdapterForFloat.generateValue("-5.1:-5.1");		
+
+		checkRange(result, (float)-5.1, (float)-5.1);
+	}	
 
 	private void checkRange(Float result, Float min, Float max) {
 

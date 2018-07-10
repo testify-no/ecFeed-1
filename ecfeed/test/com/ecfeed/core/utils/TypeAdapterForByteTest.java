@@ -135,6 +135,16 @@ public class TypeAdapterForByteTest {
 		checkRange(result, Byte.MIN_VALUE, Byte.MAX_VALUE);
 	}
 
+	@Test
+	public void shouldGenerateValue3() {
+
+		TypeAdapterForByte typeAdapterForInt = new TypeAdapterForByte();
+
+		Byte result = typeAdapterForInt.generateValue("3:3");
+
+		checkRange(result, (byte)3, (byte)3);
+	}
+	
 	private void checkRange(Byte result, Byte min, Byte max) {
 
 		if (result >= min && result <= max) {

@@ -44,6 +44,10 @@ public class TypeAdapterForFloat extends TypeAdapterFloatingPoint<Float>{
 
 		String[] range = RangeHelper.splitToRange(rangeTxt);
 
+		if (StringHelper.isEqual(range[0], range[1])) {
+			return JavaTypeHelper.parseFloatValue(range[0], EConversionMode.QUIET);
+		}
+		
 		return (float) ThreadLocalRandom.current().nextDouble(
 				JavaTypeHelper.parseFloatValue(range[0], EConversionMode.QUIET),
 				JavaTypeHelper.parseFloatValue(range[1], EConversionMode.QUIET));
